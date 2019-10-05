@@ -4,7 +4,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class Connect {
-
+    
+	public static String SESS_ID_;
 	public static String connectionURL_;
 	public static String userID_;
 	public static String userPassword_;

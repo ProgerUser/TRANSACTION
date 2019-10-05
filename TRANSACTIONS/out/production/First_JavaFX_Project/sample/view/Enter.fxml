@@ -7,27 +7,35 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="670.0" prefWidth="1030.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="sample.controller.EnterController">
-  <!-- TODO Add Nodes -->
-  <children>
-    <Label layoutX="374.0" layoutY="261.0" text="Логин:">
-      <font>
-        <Font name="Arial Bold" size="14.0" fx:id="x1" />
-      </font>
-    </Label>
-    <Label font="$x1" layoutX="362.0" layoutY="295.0" text="Пароль:" />
-    <PasswordField fx:id="pass" layoutX="432.0" layoutY="295.0" onKeyPressed="#enter_" prefHeight="25.0" prefWidth="194.0" />
-    <Label font="$x1" layoutX="371.0" layoutY="327.0" text="Схема:" />
-    <Button fx:id="enter_id" layoutX="432.0" layoutY="363.0" mnemonicParsing="false" onAction="#enter" text="Вход">
-      <font>
-        <Font size="14.0" />
-      </font>
-    </Button>
-    <ComboBox fx:id="conurl" layoutX="432.0" layoutY="327.0" prefHeight="25.000099999997474" prefWidth="194.0">
-    </ComboBox>
-    <ComboBox fx:id="login" layoutX="432.0" layoutY="261.0" prefHeight="25.000099999997474" prefWidth="194.0">
-      <items>
-      </items>
-    </ComboBox>
-  </children>
+<AnchorPane prefHeight="670.0" prefWidth="1030.0"
+	xmlns:fx="http://javafx.com/fxml/1"
+	xmlns="http://javafx.com/javafx/2.2"
+	fx:controller="sample.controller.EnterController">
+	<!-- TODO Add Nodes -->
+	<children>
+		<Label layoutX="374.0" layoutY="261.0" text="Логин:">
+			<font>
+				<Font name="Arial Bold" size="14.0" fx:id="x1" />
+			</font>
+		</Label>
+		<Label font="$x1" layoutX="362.0" layoutY="295.0" text="Пароль:" />
+		<PasswordField fx:id="pass" layoutX="432.0"
+			layoutY="295.0" onKeyPressed="#enter_" prefHeight="25.0"
+			prefWidth="194.0" />
+		<Label font="$x1" layoutX="371.0" layoutY="327.0" text="Схема:" />
+		<Button fx:id="enter_id" layoutX="432.0" layoutY="363.0"
+			mnemonicParsing="false" onAction="#enter" text="Вход">
+			<font>
+				<Font size="14.0" />
+			</font>
+		</Button>
+		<ComboBox fx:id="conurl" layoutX="432.0" layoutY="327.0"
+			prefHeight="25.000099999997474" prefWidth="194.0">
+		</ComboBox>
+		<ComboBox fx:id="login" layoutX="432.0" layoutY="261.0"
+			prefHeight="25.000099999997474" prefWidth="194.0">
+			<items>
+			</items>
+		</ComboBox>
+	</children>
 </AnchorPane>

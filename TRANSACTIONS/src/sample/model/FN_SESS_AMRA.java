@@ -1,19 +1,19 @@
 package sample.model;
 
+import java.sql.Date;
+
 import javafx.beans.property.*;
 
 public class FN_SESS_AMRA {
 	private StringProperty sess_id;
 	private StringProperty file_name;
 	private StringProperty date_time;
-	private StringProperty fileclob;
 
 	// Constructor
 	public FN_SESS_AMRA() {
 		this.sess_id = new SimpleStringProperty();
 		this.file_name = new SimpleStringProperty();
 		this.date_time = new SimpleStringProperty();
-		this.fileclob = new SimpleStringProperty();
 	}
 
 	// sess_id
@@ -47,25 +47,12 @@ public class FN_SESS_AMRA {
 		return date_time.get();
 	}
 
-	public void setdate_time(String date_time) {
-		this.date_time.set(date_time);
+	public void setdate_time(String date) {
+		this.date_time.set(date);
 	}
 
 	public StringProperty date_timeProperty() {
 		return date_time;
-	}
-
-	// fileclob
-	public String getfileclob() {
-		return fileclob.get();
-	}
-
-	public void setfileclob(String fileclob) {
-		this.fileclob.set(fileclob);
-	}
-
-	public StringProperty fileclobProperty() {
-		return fileclob;
 	}
 
 }

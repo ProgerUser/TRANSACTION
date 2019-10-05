@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import sample.model.Connect;
 
 import java.io.IOException;
 
@@ -18,7 +19,7 @@ public class Main extends Application {
 	private Stage primaryStage;
 
 	// This is the BorderPane of RootLayout
-	private static BorderPane rootLayout;
+	public static BorderPane rootLayout;
 
 	@Override
 	public void start(Stage primaryStage) throws IOException {
@@ -36,7 +37,15 @@ public class Main extends Application {
 
 		// 3) Display the EmployeeOperations View
 		// showEmployeeView();
-		Enter();
+		
+		
+		//Enter();
+		
+		Connect.connectionURL_ = "oradb-prm:1521/odb";
+		Connect.userID_ = "XXI";
+		Connect.userPassword_ = "ver8i";
+		
+		showFirst();
 	}
 
 	// Initializes the root layout.
@@ -92,6 +101,20 @@ public class Main extends Application {
 		}
 	}
 
+	public static void showAmTr() {
+		try {
+			// First, load EmployeeView from EmployeeView.fxml
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Main.class.getResource("view/Transact_Amra_viewer.fxml"));
+			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
+
+			// Set Employee Operations view into the center of root layout.
+			rootLayout.setCenter(employeeOperationsView);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void Load_Hist() {
 		try {
 			// First, load EmployeeView from EmployeeView.fxml
