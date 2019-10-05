@@ -113,6 +113,7 @@ public class RootLayoutController {
 			alert.show();
 		}
 	}
+
 	@FXML
 	void loadhistory(ActionEvent event) {
 		try {
@@ -120,7 +121,7 @@ public class RootLayoutController {
 			if (Connect.userPassword_.equals("")) {
 
 			} else {
-				Main.Transact();
+				Main.Show_Hist();
 			}
 
 		} catch (NullPointerException e) {
@@ -131,8 +132,7 @@ public class RootLayoutController {
 			alert.show();
 		}
 	}
-	
-	
+
 	@FXML
 	void amra_trans(ActionEvent event) {
 		try {

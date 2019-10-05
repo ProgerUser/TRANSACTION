@@ -9,19 +9,19 @@
 	minHeight="-Infinity" minWidth="-Infinity" prefHeight="649.0"
 	prefWidth="1017.0" xmlns:fx="http://javafx.com/fxml/1"
 	xmlns="http://javafx.com/javafx/2.2"
-	fx:controller="sample.controller.ViewerController">
+	fx:controller="sample.controller.ShowHistoryController">
 	<children>
 		<TextField fx:id="fio" layoutX="240.0" layoutY="45.0"
 			prefHeight="32.0" prefWidth="198.0" promptText="\%формат%" />
 		<Label layoutX="198.0" layoutY="53.0" text="ФИО:" />
-		<Button fx:id="searchEmpBtn" layoutX="240.0" layoutY="133.0"
+		<Button  layoutX="240.0" layoutY="133.0"
 			mnemonicParsing="false" onAction="#searchEmployee" prefHeight="25.0"
 			prefWidth="56.0" text="Поиск" />
 		<TextArea fx:id="resultArea" layoutX="16.0" layoutY="558.0"
 			prefHeight="83.0" prefWidth="994.0" wrapText="true" />
 		<Label layoutX="15.0" layoutY="541.0" text="Вывод">
 			<font>
-				<Font name="System Bold" size="12.0" fx:id="x1" />
+				<Font name="System Bold" size="12.0"  />
 			</font>
 		</Label>
 		<VBox layoutX="97.0" layoutY="24.0" spacing="4.0" />

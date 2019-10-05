@@ -1,18 +1,14 @@
 package sample.model;
 
 import javafx.beans.property.*;
-import java.sql.Date;
 
 
-@SuppressWarnings("unused")
 public class Transact {
-    //Declare Employees Table Columns
     private StringProperty PAYMENTNUMBER;
     private StringProperty FIO;
     private StringProperty DATETIMEPAYMENT;
     private StringProperty ACCOUNT;
     private StringProperty PAYMENTDATA;
-  
     private StringProperty INSUM;
     private StringProperty FEESUM;
     private StringProperty SESS_ID;

@@ -1,5 +1,6 @@
 package sample.controller;
 
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -13,6 +14,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import sample.model.Transact;
 import sample.model.EmployeeDAO;
+import sample.model.FN_SESS_AMRA;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -23,17 +25,12 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.Date;
 /**
  * Саид 04.04.2019.
  */
-@SuppressWarnings("unused")
-public class ShowHistory {
+
+public class ShowHistoryController {
 
 	@FXML
 	private TextField empIdText;
@@ -70,21 +67,21 @@ public class ShowHistory {
 	private MenuItem chekreport;
 
 	@FXML
-	private TableColumn<Transact, String> PAYMENTNUMBER;
+	private TableColumn<FN_SESS_AMRA, String> PAYMENTNUMBER;
 	@FXML
-	private TableColumn<Transact, String> FIO;
+	private TableColumn<FN_SESS_AMRA, String> FIO;
 	@FXML
-	private TableColumn<Transact, String> DATETIMEPAYMEN;
+	private TableColumn<FN_SESS_AMRA, String> DATETIMEPAYMEN;
 	@FXML
-	private TableColumn<Transact, String> ACCOUNT;
+	private TableColumn<FN_SESS_AMRA, String> ACCOUNT;
 	@FXML
-	private TableColumn<Transact, String> PAYMENTDATA;
+	private TableColumn<FN_SESS_AMRA, String> PAYMENTDATA;
 	@FXML
-	private TableColumn<Transact, String> INSUM;
+	private TableColumn<FN_SESS_AMRA, String> INSUM;
 	@FXML
-	private TableColumn<Transact, String> FEESUM;
+	private TableColumn<FN_SESS_AMRA, String> FEESUM;
 	@FXML
-	private TableColumn<Transact, String> SESS_ID;
+	private TableColumn<FN_SESS_AMRA, String> SESS_ID;
 
 	// For MultiThreading
 	private Executor exec;
@@ -97,35 +94,21 @@ public class ShowHistory {
 
 	@FXML
 	private void initialize() {
-		/*
-		 * The setCellValueFactory(...) that we set on the table columns are used to
-		 * determine which field inside the Employee objects should be used for the
-		 * particular column. The arrow -> indicates that we're using a Java 8 feature
-		 * called Lambdas. (Another option would be to use a PropertyValueFactory, but
-		 * this is not type-safe
-		 * 
-		 * We're only using StringProperty values for our table columns in this example.
-		 * When you want to use IntegerProperty or DoubleProperty, the
-		 * setCellValueFactory(...) must have an additional asObject():
-		 */
-
-		// For multithreading: Create executor that uses daemon threads:
 		exec = Executors.newCachedThreadPool((runnable) -> {
 			Thread t = new Thread(runnable);
 			t.setDaemon(true);
 			return t;
 		});
 
+		private StringProperty sess_id;
+		private StringProperty file_name;
+		private StringProperty date_time;
+		private StringProperty fileclob;
+		
 		PAYMENTNUMBER.setCellValueFactory(cellData -> cellData.getValue().PAYMENTNUMBERProperty());
 		FIO.setCellValueFactory(cellData -> cellData.getValue().FIOProperty());
 		DATETIMEPAYMEN.setCellValueFactory(cellData -> cellData.getValue().DATETIMEPAYMENTProperty());
 		ACCOUNT.setCellValueFactory(cellData -> cellData.getValue().ACCOUNTProperty());
-		PAYMENTDATA.setCellValueFactory(cellData -> cellData.getValue().PAYMENTDATAProperty());
-
-		INSUM.setCellValueFactory(cellData -> cellData.getValue().INSUMProperty());
-		FEESUM.setCellValueFactory(cellData -> cellData.getValue().FEESUMProperty());
-		SESS_ID.setCellValueFactory(cellData -> cellData.getValue().SESS_IDProperty());
-
 	}
 
 	// Search an transact
