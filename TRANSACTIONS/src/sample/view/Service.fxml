@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="649.0" prefWidth="1017.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="sample.controller.ServiceController">
+  <children>
+    <Button id="searchEmpBtn" fx:id="searchService" layoutX="19.0" layoutY="45.0" mnemonicParsing="false" onAction="#searchService" prefHeight="25.0" prefWidth="56.0" text="Поиск" />
+    <TextArea fx:id="resultArea" layoutX="18.0" layoutY="549.0" prefHeight="83.0" prefWidth="994.0" wrapText="true" />
+    <Label layoutX="16.0" layoutY="533.0" text="Вывод">
+      <font>
+        <Font name="System Bold" size="12.0" fx:id="x1" />
+      </font>
+    </Label>
+    <VBox layoutX="97.0" layoutY="24.0" spacing="4.0" />
+    <VBox layoutX="1.0" layoutY="45.0" prefWidth="67.0" spacing="12.0" />
+    <Separator layoutY="14.0" prefHeight="2.0" prefWidth="1007.0" />
+    <TableView fx:id="employeeTable" editable="false" layoutX="18.0" layoutY="99.0" prefHeight="366.0" prefWidth="994.0" tableMenuButtonVisible="true">
+      <columns>
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="240.0" text="Название" fx:id="name" />
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="84.0" text="Отделение" fx:id="idterm" />
+        <TableColumn maxWidth="5000.0" minWidth="0.0" prefWidth="196.0" text="Счет" fx:id="account" />
+        <TableColumn maxWidth="5000.0" minWidth="0.0" prefWidth="90.0" text="account2" fx:id="account2" />
+        <TableColumn maxWidth="5000.0" minWidth="7.0" prefWidth="85.0" text="account3" fx:id="account3" />
+        <TableColumn maxWidth="5000.0" minWidth="7.0" prefWidth="90.0" text="account4" fx:id="account4" />
+        <TableColumn maxWidth="5000.0" minWidth="7.0" prefWidth="96.0" text="account5" fx:id="account5" />
+        <TableColumn maxWidth="5000.0" minWidth="7.0" prefWidth="102.0" text="inn" fx:id="inn" />
+        <TableColumn minWidth="7.0" prefWidth="102.0" text="kpp" fx:id="kpp" />
+        <TableColumn minWidth="7.0" prefWidth="209.0" text="kor_bank_nbra" fx:id="kor_bank_nbra" />
+        <TableColumn minWidth="7.0" prefWidth="102.0" text="acc_rec" fx:id="acc_rec" />
+        <TableColumn minWidth="7.0" prefWidth="102.0" text="kbk" fx:id="kbk" />
+        <TableColumn minWidth="7.0" prefWidth="102.0" text="okato" fx:id="okato" />
+        <TableColumn minWidth="7.0" prefWidth="102.0" text="stat" fx:id="stat" />
+        <TableColumn minWidth="7.0" prefWidth="209.0" text="acc_name" fx:id="acc_name" />
+        <TableColumn minWidth="7.0" prefWidth="102.0" text="bo1" fx:id="bo1" />
+        <TableColumn minWidth="7.0" prefWidth="102.0" text="bo2" fx:id="bo2" />
+      </columns>
+    </TableView>
+    <Label font="$x1" layoutX="19.0" layoutY="82.0" prefHeight="17.0" prefWidth="137.0" text="Таблица значении" />
+    <Label font="$x1" layoutX="16.0" layoutY="16.0" text="Список сервисов" />
+    <Button id="searchEmpBtn" layoutX="716.0" layoutY="45.0" mnemonicParsing="false" onAction="#add" prefHeight="25.0" prefWidth="85.0" text="Добавить" />
+    <Button id="searchEmpBtn" layoutX="918.0" layoutY="45.0" mnemonicParsing="false" onAction="#UpdateService" prefHeight="25.0" prefWidth="85.0" text="Изменить" />
+    <Button id="searchEmpBtn" layoutX="19.0" layoutY="474.0" mnemonicParsing="false" onAction="#Delete" prefHeight="25.0" prefWidth="85.0" text="Удалить" />
+    <ComboBox fx:id="terms" layoutX="249.0" layoutY="41.0" prefHeight="24.999908447265625" prefWidth="137.0">
+      <!-- <items>
+        <FXCollections fx:factory="observableArrayList">
+          <String fx:value="Item 1" />
+          <String fx:value="Item 2" />
+          <String fx:value="Item 3" />
+        </FXCollections>
+      </items> -->
+    </ComboBox>
+  </children>
+</AnchorPane>

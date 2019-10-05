@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="677.0" prefWidth="1020.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="sample.controller.Amra_Transact">
+  <!-- TODO Add Nodes -->
+  <children>
+    <Button fx:id="browse" disable="false" layoutX="14.0" layoutY="31.0" mnemonicParsing="false" onAction="#Choose" prefHeight="34.0" prefWidth="99.0" text="Выбрать файл" />
+    <Button id="import" fx:id="import_" disable="false" layoutX="14.0" layoutY="89.0" mnemonicParsing="false" onAction="#Load_Transact" prefHeight="34.0" prefWidth="98.00009999999747" text="Загрузить" />
+    <TextField fx:id="textbox" layoutX="128.0" layoutY="31.0" prefHeight="34.0" prefWidth="878.0" />
+    <CheckBox fx:id="chk" disable="true" layoutX="128.0" layoutY="92.0" mnemonicParsing="false" onAction="#chk_p" prefHeight="28.0" selected="false" text="Статус загрузки" />
+    <Button id="import" fx:id="calc" disable="true" layoutX="14.0" layoutY="146.0" mnemonicParsing="false" onAction="#Calc_Transact" prefHeight="34.0" prefWidth="98.0" text="Расчитать" />
+    <Button fx:id="open_new" disable="false" layoutX="370.0" layoutY="119.0" mnemonicParsing="false" onAction="#view" text="Контроль" visible="false" />
+    <TextArea id="resultArea" fx:id="result" layoutX="16.0" layoutY="580.0" prefHeight="83.0" prefWidth="994.0" wrapText="true" />
+    <Label layoutX="14.0" layoutY="564.0" text="Вывод">
+      <font>
+        <Font name="System Bold" size="12.0" />
+      </font>
+    </Label>
+  </children>
+</AnchorPane>
