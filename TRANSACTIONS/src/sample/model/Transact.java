@@ -3,9 +3,6 @@ package sample.model;
 import javafx.beans.property.*;
 import java.sql.Date;
 
-/**
- * Created by ONUR BASKIRT on 27.02.2016.
- */
 
 @SuppressWarnings("unused")
 public class Transact {

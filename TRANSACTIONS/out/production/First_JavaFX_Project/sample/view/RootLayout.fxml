@@ -52,6 +52,8 @@
 						<MenuItem mnemonicParsing="false" onAction="#amra_trans"
 							text="Загрузка Транзакции" />
 					</items>
+					<MenuItem mnemonicParsing="false" onAction="#loadhistory"
+						text="История загрузок" />
 				</Menu>
 				<Menu mnemonicParsing="false" text="Помощь">
 					<items>

@@ -113,6 +113,24 @@ public class RootLayoutController {
 			alert.show();
 		}
 	}
+	@FXML
+	void loadhistory(ActionEvent event) {
+		try {
+
+			if (Connect.userPassword_.equals("")) {
+
+			} else {
+				Main.Transact();
+			}
+
+		} catch (NullPointerException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			// alert.setTitle("Error");
+			alert.setHeaderText("Error");
+			alert.setContentText("¬ведите учетные данные");
+			alert.show();
+		}
+	}
 	
 	
 	@FXML

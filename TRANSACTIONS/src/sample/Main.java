@@ -93,6 +93,21 @@ public class Main extends Application {
         }
     }
     
+    
+    public static void Load_Hist() {
+        try {
+            //First, load EmployeeView from EmployeeView.fxml
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Main.class.getResource("view/LoadHist.fxml"));
+            AnchorPane employeeOperationsView = (AnchorPane) loader.load();
+
+            // Set Employee Operations view into the center of root layout.
+            rootLayout.setCenter(employeeOperationsView);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
     //Shows the employee operations view inside the root layout.
     public static void showFirst() {
         try {
