@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -16,6 +17,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -23,6 +26,7 @@ import javafx.stage.Stage;
 import sample.model.Transact;
 import sample.model.TransactClass;
 import sample.Main;
+import sample.model.Amra_Trans;
 import sample.model.Connect;
 import sample.model.EmployeeDAO;
 import sample.model.FN_SESS_AMRA;
@@ -73,6 +77,8 @@ public class ShowHistoryController {
 
 	@FXML
 	private void initialize() {
+		
+		fn_sess_table.setEditable(true);
 		exec = Executors.newCachedThreadPool((runnable) -> {
 			Thread t = new Thread(runnable);
 			t.setDaemon(true);
@@ -81,6 +87,34 @@ public class ShowHistoryController {
 		SESS_ID.setCellValueFactory(cellData -> cellData.getValue().sess_idProperty());
 		FILE_NAME.setCellValueFactory(cellData -> cellData.getValue().file_nameProperty());
 		DATE_TIME.setCellValueFactory(cellData -> cellData.getValue().date_timeProperty());
+
+		DATE_TIME.setCellFactory(TextFieldTableCell.forTableColumn());
+		FILE_NAME.setCellFactory(TextFieldTableCell.forTableColumn());
+		SESS_ID.setCellFactory(TextFieldTableCell.forTableColumn());
+
+		DATE_TIME.setOnEditCommit(new EventHandler<CellEditEvent<FN_SESS_AMRA, String>>() {
+			@Override
+			public void handle(CellEditEvent<FN_SESS_AMRA, String> t) {
+				((FN_SESS_AMRA) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.setdate_time(t.getNewValue());
+			}
+		});
+
+		FILE_NAME.setOnEditCommit(new EventHandler<CellEditEvent<FN_SESS_AMRA, String>>() {
+			@Override
+			public void handle(CellEditEvent<FN_SESS_AMRA, String> t) {
+				((FN_SESS_AMRA) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.setfile_name(t.getNewValue());
+			}
+		});
+
+		SESS_ID.setOnEditCommit(new EventHandler<CellEditEvent<FN_SESS_AMRA, String>>() {
+			@Override
+			public void handle(CellEditEvent<FN_SESS_AMRA, String> t) {
+				((FN_SESS_AMRA) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.setsess_id(t.getNewValue());
+			}
+		});
 	}
 
 	// Найти загрузки
@@ -113,6 +147,7 @@ public class ShowHistoryController {
 					datestart.getText(), dateend.getText());
 			// Populate Employees on TableView
 			populate_fn_sess(empData);
+
 		} catch (SQLException | ParseException | ClassNotFoundException e) {
 			resultArea.setText(e.getMessage());
 		}

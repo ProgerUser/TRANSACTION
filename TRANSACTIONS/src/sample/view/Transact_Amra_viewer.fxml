@@ -16,7 +16,7 @@
 		<VBox layoutX="97.0" layoutY="24.0" spacing="4.0" />
 		<VBox layoutX="1.0" layoutY="45.0" prefWidth="67.0" spacing="12.0" />
 		<Separator layoutY="14.0" prefHeight="2.0" prefWidth="1007.0" />
-		<TableView fx:id="trans_table" layoutX="14.0" layoutY="74.0" prefHeight="457.0" prefWidth="994.0" tableMenuButtonVisible="true">
+		<TableView fx:id="trans_table" layoutX="14.0" layoutY="74.0" prefHeight="457.0" prefWidth="994.0" styleClass="jfx-rippler" stylesheets="@../../transact.css" tableMenuButtonVisible="true">
 			<columns>
 			<TableColumn fx:id="rownum" prefWidth="137.0" text="Номер строки" />
 				<TableColumn fx:id="recdate" prefWidth="137.0" text="recdate" />

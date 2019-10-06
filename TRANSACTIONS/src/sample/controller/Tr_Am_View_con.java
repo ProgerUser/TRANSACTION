@@ -5,20 +5,26 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -43,6 +49,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import com.sun.prism.impl.Disposer.Record;
+
 import java.util.Date;
 
 /**
@@ -240,6 +249,8 @@ public class Tr_Am_View_con {
 
 	@FXML
 	private void initialize() {
+		trans_table.setEditable(true);
+
 		exec = Executors.newCachedThreadPool((runnable) -> {
 			Thread t = new Thread(runnable);
 			t.setDaemon(true);
@@ -305,6 +316,469 @@ public class Tr_Am_View_con {
 		statusabs.setCellValueFactory(cellData -> cellData.getValue().statusabsProperty());
 		sess_id.setCellValueFactory(cellData -> cellData.getValue().sess_idProperty());
 
+		recdate.setCellFactory(TextFieldTableCell.forTableColumn());
+		paydate.setCellFactory(TextFieldTableCell.forTableColumn());
+		currency.setCellFactory(TextFieldTableCell.forTableColumn());
+		paymenttype.setCellFactory(TextFieldTableCell.forTableColumn());
+		vk.setCellFactory(TextFieldTableCell.forTableColumn());
+		dateofoperation.setCellFactory(TextFieldTableCell.forTableColumn());
+		dataps.setCellFactory(TextFieldTableCell.forTableColumn());
+		dateclearing.setCellFactory(TextFieldTableCell.forTableColumn());
+		dealer.setCellFactory(TextFieldTableCell.forTableColumn());
+		accountpayer.setCellFactory(TextFieldTableCell.forTableColumn());
+		cardnumber.setCellFactory(TextFieldTableCell.forTableColumn());
+		operationnumber.setCellFactory(TextFieldTableCell.forTableColumn());
+		operationnumberdelivery.setCellFactory(TextFieldTableCell.forTableColumn());
+		checknumber.setCellFactory(TextFieldTableCell.forTableColumn());
+		checkparent.setCellFactory(TextFieldTableCell.forTableColumn());
+		orderofprovidence.setCellFactory(TextFieldTableCell.forTableColumn());
+		provider.setCellFactory(TextFieldTableCell.forTableColumn());
+		owninown.setCellFactory(TextFieldTableCell.forTableColumn());
+		corrected.setCellFactory(TextFieldTableCell.forTableColumn());
+		commissionrate.setCellFactory(TextFieldTableCell.forTableColumn());
+		status.setCellFactory(TextFieldTableCell.forTableColumn());
+		stringfromfile.setCellFactory(TextFieldTableCell.forTableColumn());
+		rewardamount.setCellFactory(TextFieldTableCell.forTableColumn());
+		ownerincomeamount.setCellFactory(TextFieldTableCell.forTableColumn());
+		commissionamount.setCellFactory(TextFieldTableCell.forTableColumn());
+		nkamount.setCellFactory(TextFieldTableCell.forTableColumn());
+		maxcommissionamount.setCellFactory(TextFieldTableCell.forTableColumn());
+		mincommissionamount.setCellFactory(TextFieldTableCell.forTableColumn());
+		cashamount.setCellFactory(TextFieldTableCell.forTableColumn());
+		sumnalprimal.setCellFactory(TextFieldTableCell.forTableColumn());
+		amounttocheck.setCellFactory(TextFieldTableCell.forTableColumn());
+		amountofpayment.setCellFactory(TextFieldTableCell.forTableColumn());
+		sumofsplitting.setCellFactory(TextFieldTableCell.forTableColumn());
+		amountintermediary.setCellFactory(TextFieldTableCell.forTableColumn());
+		amountofscs.setCellFactory(TextFieldTableCell.forTableColumn());
+		amountwithchecks.setCellFactory(TextFieldTableCell.forTableColumn());
+		counter.setCellFactory(TextFieldTableCell.forTableColumn());
+		terminal.setCellFactory(TextFieldTableCell.forTableColumn());
+		terminalnetwork.setCellFactory(TextFieldTableCell.forTableColumn());
+		transactiontype.setCellFactory(TextFieldTableCell.forTableColumn());
+		service.setCellFactory(TextFieldTableCell.forTableColumn());
+		filetransactions.setCellFactory(TextFieldTableCell.forTableColumn());
+		fio.setCellFactory(TextFieldTableCell.forTableColumn());
+		checksincoming.setCellFactory(TextFieldTableCell.forTableColumn());
+		barcode.setCellFactory(TextFieldTableCell.forTableColumn());
+		isaresident.setCellFactory(TextFieldTableCell.forTableColumn());
+		valuenotfound.setCellFactory(TextFieldTableCell.forTableColumn());
+		providertariff.setCellFactory(TextFieldTableCell.forTableColumn());
+		counterchecks.setCellFactory(TextFieldTableCell.forTableColumn());
+		countercheck.setCellFactory(TextFieldTableCell.forTableColumn());
+		id_.setCellFactory(TextFieldTableCell.forTableColumn());
+		detailing.setCellFactory(TextFieldTableCell.forTableColumn());
+		walletpayer.setCellFactory(TextFieldTableCell.forTableColumn());
+		walletreceiver.setCellFactory(TextFieldTableCell.forTableColumn());
+		purposeofpayment.setCellFactory(TextFieldTableCell.forTableColumn());
+		dataprovider.setCellFactory(TextFieldTableCell.forTableColumn());
+		statusabs.setCellFactory(TextFieldTableCell.forTableColumn());
+		sess_id.setCellFactory(TextFieldTableCell.forTableColumn());
+
+		recdate.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_recdate(t.getNewValue());
+			}
+		});
+		paydate.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_paydate(t.getNewValue());
+			}
+		});
+		currency.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_currency(t.getNewValue());
+			}
+		});
+		paymenttype.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_paymenttype(t.getNewValue());
+			}
+		});
+		vk.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow())).set_vk(t.getNewValue());
+			}
+		});
+		dateofoperation.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_dateofoperation(t.getNewValue());
+			}
+		});
+		dataps.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_dataps(t.getNewValue());
+			}
+		});
+		dateclearing.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_dateclearing(t.getNewValue());
+			}
+		});
+		dealer.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_dealer(t.getNewValue());
+			}
+		});
+		accountpayer.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_accountpayer(t.getNewValue());
+			}
+		});
+		cardnumber.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_cardnumber(t.getNewValue());
+			}
+		});
+		operationnumber.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_operationnumber(t.getNewValue());
+			}
+		});
+		operationnumberdelivery.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_operationnumberdelivery(t.getNewValue());
+			}
+		});
+		checknumber.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_checknumber(t.getNewValue());
+			}
+		});
+		checkparent.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_checkparent(t.getNewValue());
+			}
+		});
+		orderofprovidence.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_orderofprovidence(t.getNewValue());
+			}
+		});
+		provider.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_provider(t.getNewValue());
+			}
+		});
+		owninown.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_owninown(t.getNewValue());
+			}
+		});
+		corrected.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_corrected(t.getNewValue());
+			}
+		});
+		commissionrate.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_commissionrate(t.getNewValue());
+			}
+		});
+		status.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_status(t.getNewValue());
+			}
+		});
+		stringfromfile.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_stringfromfile(t.getNewValue());
+			}
+		});
+		rewardamount.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_rewardamount(t.getNewValue());
+			}
+		});
+		ownerincomeamount.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_ownerincomeamount(t.getNewValue());
+			}
+		});
+		commissionamount.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_commissionamount(t.getNewValue());
+			}
+		});
+		nkamount.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_nkamount(t.getNewValue());
+			}
+		});
+		maxcommissionamount.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_maxcommissionamount(t.getNewValue());
+			}
+		});
+		mincommissionamount.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_mincommissionamount(t.getNewValue());
+			}
+		});
+		cashamount.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_cashamount(t.getNewValue());
+			}
+		});
+		sumnalprimal.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_sumnalprimal(t.getNewValue());
+			}
+		});
+		amounttocheck.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_amounttocheck(t.getNewValue());
+			}
+		});
+		amountofpayment.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_amountofpayment(t.getNewValue());
+			}
+		});
+		sumofsplitting.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_sumofsplitting(t.getNewValue());
+			}
+		});
+		amountintermediary.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_amountintermediary(t.getNewValue());
+			}
+		});
+		amountofscs.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_amountofscs(t.getNewValue());
+			}
+		});
+		amountwithchecks.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_amountwithchecks(t.getNewValue());
+			}
+		});
+		counter.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_counter(t.getNewValue());
+			}
+		});
+		terminal.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_terminal(t.getNewValue());
+			}
+		});
+		terminalnetwork.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_terminalnetwork(t.getNewValue());
+			}
+		});
+		transactiontype.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_transactiontype(t.getNewValue());
+			}
+		});
+		service.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_service(t.getNewValue());
+			}
+		});
+		filetransactions.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_filetransactions(t.getNewValue());
+			}
+		});
+		fio.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow())).set_fio(t.getNewValue());
+			}
+		});
+		checksincoming.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_checksincoming(t.getNewValue());
+			}
+		});
+		barcode.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_barcode(t.getNewValue());
+			}
+		});
+		isaresident.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_isaresident(t.getNewValue());
+			}
+		});
+		valuenotfound.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_valuenotfound(t.getNewValue());
+			}
+		});
+		providertariff.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_providertariff(t.getNewValue());
+			}
+		});
+		counterchecks.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_counterchecks(t.getNewValue());
+			}
+		});
+		countercheck.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_countercheck(t.getNewValue());
+			}
+		});
+		id_.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow())).set_id_(t.getNewValue());
+			}
+		});
+		detailing.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_detailing(t.getNewValue());
+			}
+		});
+		walletpayer.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_walletpayer(t.getNewValue());
+			}
+		});
+		walletreceiver.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_walletreceiver(t.getNewValue());
+			}
+		});
+		purposeofpayment.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_purposeofpayment(t.getNewValue());
+			}
+		});
+		dataprovider.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_dataprovider(t.getNewValue());
+			}
+		});
+		statusabs.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_statusabs(t.getNewValue());
+			}
+		});
+		sess_id.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_sess_id(t.getNewValue());
+			}
+		});
+
 		try {
 			ObservableList<Amra_Trans> empData = EmployeeDAO.Amra_Trans_(Connect.SESS_ID_);
 			populate_fn_sess(empData);
@@ -339,4 +813,5 @@ public class Tr_Am_View_con {
 		// Set items to the employeeTable
 		trans_table.setItems(trData);
 	}
+
 }

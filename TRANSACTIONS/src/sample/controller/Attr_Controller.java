@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -14,10 +15,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -76,6 +79,7 @@ public class Attr_Controller {
 
 	@FXML
 	private void initialize() {
+		trans_table.setEditable(true);
 		exec = Executors.newCachedThreadPool((runnable) -> {
 			Thread t = new Thread(runnable);
 			t.setDaemon(true);
@@ -85,6 +89,40 @@ public class Attr_Controller {
 		AttributeName.setCellValueFactory(cellData -> cellData.getValue().AttributeNameProperty());
 		CheckNumber.setCellValueFactory(cellData -> cellData.getValue().CheckNumberProperty());
 		AttributeValue.setCellValueFactory(cellData -> cellData.getValue().AttributeValueProperty());
+
+		Service.setCellFactory(TextFieldTableCell.forTableColumn());
+		AttributeName.setCellFactory(TextFieldTableCell.forTableColumn());
+		CheckNumber.setCellFactory(TextFieldTableCell.forTableColumn());
+		AttributeValue.setCellFactory(TextFieldTableCell.forTableColumn());
+
+		Service.setOnEditCommit(new EventHandler<CellEditEvent<Attributes, String>>() {
+			@Override
+			public void handle(CellEditEvent<Attributes, String> t) {
+				((Attributes) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_Service(t.getNewValue());
+			}
+		});
+		AttributeName.setOnEditCommit(new EventHandler<CellEditEvent<Attributes, String>>() {
+			@Override
+			public void handle(CellEditEvent<Attributes, String> t) {
+				((Attributes) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_AttributeName(t.getNewValue());
+			}
+		});
+		CheckNumber.setOnEditCommit(new EventHandler<CellEditEvent<Attributes, String>>() {
+			@Override
+			public void handle(CellEditEvent<Attributes, String> t) {
+				((Attributes) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_CheckNumber(t.getNewValue());
+			}
+		});
+		AttributeValue.setOnEditCommit(new EventHandler<CellEditEvent<Attributes, String>>() {
+			@Override
+			public void handle(CellEditEvent<Attributes, String> t) {
+				((Attributes) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_AttributeValue(t.getNewValue());
+			}
+		});
 
 		try {
 			ObservableList<Attributes> empData = EmployeeDAO.Attributes_();
