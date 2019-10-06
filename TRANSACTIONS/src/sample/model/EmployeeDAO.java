@@ -155,8 +155,8 @@ public class EmployeeDAO {
 	public static ObservableList<Amra_Trans> Amra_Trans_(String SESS_ID)
 			throws SQLException, ClassNotFoundException, ParseException {
 
-		String selectStmt = "select * from Z_SB_TRANSACT_AMRA_DBT t where sess_id = " + SESS_ID
-				+ " order by PAYDATE desc";
+		String selectStmt = " select rownum,t.* from (select rownum,t.* from Z_SB_TRANSACT_AMRA_DBT t where sess_id = "
+				+ SESS_ID + " order by PAYDATE desc) t";
 
 		// Execute SELECT statement
 		try {
@@ -165,6 +165,39 @@ public class EmployeeDAO {
 
 			// Send ResultSet to the getEmployeeList method and get employee object
 			ObservableList<Amra_Trans> empList = get_amra_trans(rsEmps);
+
+			// Return employee object
+			return empList;
+		} catch (SQLException e) {
+			System.out.println("ќпераци€ выбора SQL не удалась: " + e);
+			// Return exception
+			throw e;
+		}
+	}
+
+	// *******************************
+	// SELECT Attributes
+	// *******************************
+	public static ObservableList<Attributes> Attributes_()
+			throws SQLException, ClassNotFoundException, ParseException {
+
+		String selectStmt = "SELECT Service, CheckNumber, AttributeName, AttributeValue\n" + 
+				"  FROM (select ATTRIBUTES_\n" + 
+				"          from Z_SB_TRANSACT_AMRA_DBT\n" + 
+				"         where CHECKNUMBER = '"+Connect.PNMB_+"'),\n" + 
+				"       XMLTABLE('/јтрибуты/јтр' PASSING xmltype(ATTRIBUTES_) COLUMNS\n" + 
+				"                Service VARCHAR2(500) PATH '@”слуга',\n" + 
+				"                CheckNumber VARCHAR2(500) PATH '@Ќомер„ека',\n" + 
+				"                AttributeName VARCHAR2(500) PATH '@»м€јтрибута',\n" + 
+				"                AttributeValue VARCHAR2(500) PATH '@«начениејтрибута')";
+
+		// Execute SELECT statement
+		try {
+			// Get ResultSet from dbExecuteQuery method
+			ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
+
+			// Send ResultSet to the getEmployeeList method and get employee object
+			ObservableList<Attributes> empList = get_attr(rsEmps);
 
 			// Return employee object
 			return empList;
@@ -190,12 +223,27 @@ public class EmployeeDAO {
 	}
 
 	// Select * from fn_sess operation
+	private static ObservableList<Attributes> get_attr(ResultSet rs)
+			throws SQLException, ClassNotFoundException, ParseException {
+		ObservableList<Attributes> fn_list = FXCollections.observableArrayList();
+		while (rs.next()) {
+			Attributes fn = new Attributes();
+			fn.set_Service(rs.getString("Service"));
+			fn.set_AttributeName(rs.getString("AttributeName"));
+			fn.set_AttributeValue(rs.getString("AttributeValue"));
+			fn.set_CheckNumber(rs.getString("CheckNumber"));
+			fn_list.add(fn);
+		}
+		return fn_list;
+	}
+
+	// Select * from fn_sess operation
 	private static ObservableList<Amra_Trans> get_amra_trans(ResultSet rs)
 			throws SQLException, ClassNotFoundException, ParseException {
 		ObservableList<Amra_Trans> fn_list = FXCollections.observableArrayList();
 		while (rs.next()) {
 			Amra_Trans fn = new Amra_Trans();
-
+			fn.set_rownum(rs.getString("rownum"));
 			fn.set_recdate(rs.getString("recdate"));
 			fn.set_paydate(rs.getString("paydate"));
 			fn.set_currency(rs.getString("currency"));
@@ -252,7 +300,6 @@ public class EmployeeDAO {
 			fn.set_walletreceiver(rs.getString("walletreceiver"));
 			fn.set_purposeofpayment(rs.getString("purposeofpayment"));
 			fn.set_dataprovider(rs.getString("dataprovider"));
-			fn.set_attributes_(rs.getString("attributes_"));
 			fn.set_statusabs(rs.getString("statusabs"));
 			fn.set_sess_id(rs.getString("sess_id"));
 

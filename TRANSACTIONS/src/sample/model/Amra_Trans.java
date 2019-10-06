@@ -3,8 +3,11 @@ package sample.model;
 import java.sql.Date;
 
 import javafx.beans.property.*;
+import java.text.SimpleDateFormat;
 
 public class Amra_Trans {
+
+	private StringProperty rownum;
 	private StringProperty recdate;
 	private StringProperty paydate;
 	private StringProperty currency;
@@ -61,12 +64,12 @@ public class Amra_Trans {
 	private StringProperty walletreceiver;
 	private StringProperty purposeofpayment;
 	private StringProperty dataprovider;
-	private StringProperty attributes_;
 	private StringProperty statusabs;
 	private StringProperty sess_id;
 
 	// Constructor
 	public Amra_Trans() {
+		this.rownum = new SimpleStringProperty();
 		this.recdate = new SimpleStringProperty();
 		this.paydate = new SimpleStringProperty();
 		this.currency = new SimpleStringProperty();
@@ -123,242 +126,237 @@ public class Amra_Trans {
 		this.walletreceiver = new SimpleStringProperty();
 		this.purposeofpayment = new SimpleStringProperty();
 		this.dataprovider = new SimpleStringProperty();
-		this.attributes_ = new SimpleStringProperty();
 		this.statusabs = new SimpleStringProperty();
 		this.sess_id = new SimpleStringProperty();
 
 	}
 
 	public String get_recdate() {
-		return sess_id.get();
+		return recdate.get();
 	}
 
 	public String get_paydate() {
-		return sess_id.get();
+		return paydate.get();
 	}
 
 	public String get_currency() {
-		return sess_id.get();
+		return currency.get();
 	}
 
 	public String get_paymenttype() {
-		return sess_id.get();
+		return paymenttype.get();
 	}
 
 	public String get_vk() {
-		return sess_id.get();
+		return vk.get();
 	}
 
 	public String get_dateofoperation() {
-		return sess_id.get();
+		return dateofoperation.get();
 	}
 
 	public String get_dataps() {
-		return sess_id.get();
+		return dataps.get();
 	}
 
 	public String get_dateclearing() {
-		return sess_id.get();
+		return dateclearing.get();
 	}
 
 	public String get_dealer() {
-		return sess_id.get();
+		return dealer.get();
 	}
 
 	public String get_accountpayer() {
-		return sess_id.get();
+		return accountpayer.get();
 	}
 
 	public String get_cardnumber() {
-		return sess_id.get();
+		return cardnumber.get();
 	}
 
 	public String get_operationnumber() {
-		return sess_id.get();
+		return operationnumber.get();
 	}
 
 	public String get_operationnumberdelivery() {
-		return sess_id.get();
+		return operationnumberdelivery.get();
 	}
 
 	public String get_checknumber() {
-		return sess_id.get();
+		return checknumber.get();
 	}
 
 	public String get_checkparent() {
-		return sess_id.get();
+		return checkparent.get();
 	}
 
 	public String get_orderofprovidence() {
-		return sess_id.get();
+		return orderofprovidence.get();
 	}
 
 	public String get_provider() {
-		return sess_id.get();
+		return provider.get();
 	}
 
 	public String get_owninown() {
-		return sess_id.get();
+		return owninown.get();
 	}
 
 	public String get_corrected() {
-		return sess_id.get();
+		return corrected.get();
 	}
 
 	public String get_commissionrate() {
-		return sess_id.get();
+		return commissionrate.get();
 	}
 
 	public String get_status() {
-		return sess_id.get();
+		return status.get();
 	}
 
 	public String get_stringfromfile() {
-		return sess_id.get();
+		return stringfromfile.get();
 	}
 
 	public String get_rewardamount() {
-		return sess_id.get();
+		return rewardamount.get();
 	}
 
 	public String get_ownerincomeamount() {
-		return sess_id.get();
+		return ownerincomeamount.get();
 	}
 
 	public String get_commissionamount() {
-		return sess_id.get();
+		return commissionamount.get();
 	}
 
 	public String get_nkamount() {
-		return sess_id.get();
+		return nkamount.get();
 	}
 
 	public String get_maxcommissionamount() {
-		return sess_id.get();
+		return maxcommissionamount.get();
 	}
 
 	public String get_mincommissionamount() {
-		return sess_id.get();
+		return mincommissionamount.get();
 	}
 
 	public String get_cashamount() {
-		return sess_id.get();
+		return cashamount.get();
 	}
 
 	public String get_sumnalprimal() {
-		return sess_id.get();
+		return sumnalprimal.get();
 	}
 
 	public String get_amounttocheck() {
-		return sess_id.get();
+		return amounttocheck.get();
 	}
 
 	public String get_amountofpayment() {
-		return sess_id.get();
+		return amountofpayment.get();
 	}
 
 	public String get_sumofsplitting() {
-		return sess_id.get();
+		return sumofsplitting.get();
 	}
 
 	public String get_amountintermediary() {
-		return sess_id.get();
+		return amountintermediary.get();
 	}
 
 	public String get_amountofscs() {
-		return sess_id.get();
+		return amountofscs.get();
 	}
 
 	public String get_amountwithchecks() {
-		return sess_id.get();
+		return amountwithchecks.get();
 	}
 
 	public String get_counter() {
-		return sess_id.get();
+		return counter.get();
 	}
 
 	public String get_terminal() {
-		return sess_id.get();
+		return terminal.get();
 	}
 
 	public String get_terminalnetwork() {
-		return sess_id.get();
+		return terminalnetwork.get();
 	}
 
 	public String get_transactiontype() {
-		return sess_id.get();
+		return transactiontype.get();
 	}
 
 	public String get_service() {
-		return sess_id.get();
+		return service.get();
 	}
 
 	public String get_filetransactions() {
-		return sess_id.get();
+		return filetransactions.get();
 	}
 
 	public String get_fio() {
-		return sess_id.get();
+		return fio.get();
 	}
 
 	public String get_checksincoming() {
-		return sess_id.get();
+		return checksincoming.get();
 	}
 
 	public String get_barcode() {
-		return sess_id.get();
+		return barcode.get();
 	}
 
 	public String get_isaresident() {
-		return sess_id.get();
+		return isaresident.get();
 	}
 
 	public String get_valuenotfound() {
-		return sess_id.get();
+		return valuenotfound.get();
 	}
 
 	public String get_providertariff() {
-		return sess_id.get();
+		return providertariff.get();
 	}
 
 	public String get_counterchecks() {
-		return sess_id.get();
+		return counterchecks.get();
 	}
 
 	public String get_countercheck() {
-		return sess_id.get();
+		return countercheck.get();
 	}
 
 	public String get_id_() {
-		return sess_id.get();
+		return id_.get();
 	}
 
 	public String get_detailing() {
-		return sess_id.get();
+		return detailing.get();
 	}
 
 	public String get_walletpayer() {
-		return sess_id.get();
+		return walletpayer.get();
 	}
 
 	public String get_walletreceiver() {
-		return sess_id.get();
+		return walletreceiver.get();
 	}
 
 	public String get_purposeofpayment() {
-		return sess_id.get();
+		return purposeofpayment.get();
 	}
 
 	public String get_dataprovider() {
-		return sess_id.get();
-	}
-
-	public String get_attributes_() {
-		return sess_id.get();
+		return dataprovider.get();
 	}
 
 	public String get_statusabs() {
-		return sess_id.get();
+		return statusabs.get();
 	}
 
 	public String get_sess_id() {
@@ -423,6 +421,10 @@ public class Amra_Trans {
 
 	public void set_checkparent(String checkparent) {
 		this.checkparent.set(checkparent);
+	}
+
+	public void set_rownum(String rownum) {
+		this.rownum.set(rownum);
 	}
 
 	public void set_orderofprovidence(String orderofprovidence) {
@@ -587,10 +589,6 @@ public class Amra_Trans {
 
 	public void set_dataprovider(String dataprovider) {
 		this.dataprovider.set(dataprovider);
-	}
-
-	public void set_attributes_(String attributes_) {
-		this.attributes_.set(attributes_);
 	}
 
 	public void set_statusabs(String statusabs) {
@@ -825,16 +823,16 @@ public class Amra_Trans {
 		return dataprovider;
 	}
 
-	public StringProperty attributes_Property() {
-		return attributes_;
-	}
-
 	public StringProperty statusabsProperty() {
 		return statusabs;
 	}
 
 	public StringProperty sess_idProperty() {
 		return sess_id;
+	}
+
+	public StringProperty rownumProperty() {
+		return rownum;
 	}
 
 }

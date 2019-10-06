@@ -7,17 +7,27 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.util.Callback;
 import sample.model.Transact;
 import sample.model.TransactClass;
 import sample.Main;
 import sample.model.EmployeeDAO;
+import sample.model.FN_SESS_AMRA;
 import sample.model.Amra_Trans;
 import sample.model.Connect;
 
@@ -25,9 +35,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 //import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -125,6 +137,9 @@ public class Tr_Am_View_con {
 	private TableColumn<Amra_Trans, String> mincommissionamount;
 
 	@FXML
+	private TableColumn<Amra_Trans, String> rownum;
+
+	@FXML
 	private TableColumn<Amra_Trans, String> amounttocheck;
 
 	@FXML
@@ -194,9 +209,6 @@ public class Tr_Am_View_con {
 	private TableColumn<Amra_Trans, String> stringfromfile;
 
 	@FXML
-	private TableColumn<Amra_Trans, String> attributes_;
-
-	@FXML
 	private TableColumn<Amra_Trans, String> checkparent;
 
 	@FXML
@@ -212,7 +224,7 @@ public class Tr_Am_View_con {
 	private TableColumn<Amra_Trans, String> dealer;
 
 	@FXML
-	private TableView<Amra_Trans> fn_sess_table;
+	private TableView<Amra_Trans> trans_table;
 
 	@FXML
 	private TableColumn<Amra_Trans, String> paymenttype;
@@ -233,6 +245,7 @@ public class Tr_Am_View_con {
 			t.setDaemon(true);
 			return t;
 		});
+		rownum.setCellValueFactory(cellData -> cellData.getValue().rownumProperty());
 		recdate.setCellValueFactory(cellData -> cellData.getValue().recdateProperty());
 		paydate.setCellValueFactory(cellData -> cellData.getValue().paydateProperty());
 		currency.setCellValueFactory(cellData -> cellData.getValue().currencyProperty());
@@ -289,7 +302,6 @@ public class Tr_Am_View_con {
 		walletreceiver.setCellValueFactory(cellData -> cellData.getValue().walletreceiverProperty());
 		purposeofpayment.setCellValueFactory(cellData -> cellData.getValue().purposeofpaymentProperty());
 		dataprovider.setCellValueFactory(cellData -> cellData.getValue().dataproviderProperty());
-		attributes_.setCellValueFactory(cellData -> cellData.getValue().attributes_Property());
 		statusabs.setCellValueFactory(cellData -> cellData.getValue().statusabsProperty());
 		sess_id.setCellValueFactory(cellData -> cellData.getValue().sess_idProperty());
 
@@ -301,10 +313,30 @@ public class Tr_Am_View_con {
 		}
 	}
 
+	@FXML
+	private void view_attr(ActionEvent actionEvent) throws IOException {
+		if (trans_table.getSelectionModel().getSelectedItem() == null) {
+			resultArea.setText("Выберите сначала данные из таблицы!\n");
+		} else {
+			Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
+
+			Connect.PNMB_ = fn.get_checknumber();
+
+			Stage stage = new Stage();
+			Parent root = FXMLLoader.load(Main.class.getResource("view/Attributes.fxml"));
+			stage.setScene(new Scene(root));
+			stage.getIcons().add(new Image("icon.png"));
+			stage.setTitle("Атрибуты");
+			stage.initModality(Modality.WINDOW_MODAL);
+			stage.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
+			stage.show();
+		}
+	}
+
 	// Заполнить таблицу
 	@FXML
 	private void populate_fn_sess(ObservableList<Amra_Trans> trData) {
 		// Set items to the employeeTable
-		fn_sess_table.setItems(trData);
+		trans_table.setItems(trData);
 	}
 }

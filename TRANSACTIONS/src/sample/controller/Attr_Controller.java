@@ -12,28 +12,35 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import sample.model.Transact;
 import sample.model.TransactClass;
 import sample.Main;
-import sample.model.Connect;
 import sample.model.EmployeeDAO;
 import sample.model.FN_SESS_AMRA;
+import sample.model.Amra_Trans;
+import sample.model.Attributes;
+import sample.model.Connect;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 //import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -44,32 +51,28 @@ import java.util.Date;
  */
 
 @SuppressWarnings("unused")
-public class ShowHistoryController {
+public class Attr_Controller {
 
 	@FXML
-	private TableView<FN_SESS_AMRA> fn_sess_table;
+	private TableColumn<Attributes, String> AttributeValue;
+
 	@FXML
-	private TextField trnumber;
+	private TableColumn<Attributes, String> Service;
+
 	@FXML
-	private TextField sess_id_t;
+	private TableView<Attributes> trans_table;
+
 	@FXML
-	private TextField dateend;
-	@FXML
-	private TextField datestart;
+	private TableColumn<Attributes, String> AttributeName;
+
 	@FXML
 	private TextArea resultArea;
+
 	@FXML
-	private TableColumn<FN_SESS_AMRA, String> SESS_ID;
-	@FXML
-	private TableColumn<FN_SESS_AMRA, String> FILE_NAME;
-	@FXML
-	private TableColumn<FN_SESS_AMRA, String> DATE_TIME;
+	private TableColumn<Attributes, String> CheckNumber;
 
 	// For MultiThreading
 	private Executor exec;
-
-	// Initializing the controller class.
-	// This method is automatically called after the fxml file has been loaded.
 
 	@FXML
 	private void initialize() {
@@ -78,50 +81,41 @@ public class ShowHistoryController {
 			t.setDaemon(true);
 			return t;
 		});
-		SESS_ID.setCellValueFactory(cellData -> cellData.getValue().sess_idProperty());
-		FILE_NAME.setCellValueFactory(cellData -> cellData.getValue().file_nameProperty());
-		DATE_TIME.setCellValueFactory(cellData -> cellData.getValue().date_timeProperty());
+		Service.setCellValueFactory(cellData -> cellData.getValue().ServiceProperty());
+		AttributeName.setCellValueFactory(cellData -> cellData.getValue().AttributeNameProperty());
+		CheckNumber.setCellValueFactory(cellData -> cellData.getValue().CheckNumberProperty());
+		AttributeValue.setCellValueFactory(cellData -> cellData.getValue().AttributeValueProperty());
+
+		try {
+			ObservableList<Attributes> empData = EmployeeDAO.Attributes_();
+			populate_attr(empData);
+		} catch (SQLException | ParseException | ClassNotFoundException e) {
+			resultArea.setText(e.getMessage());
+		}
 	}
 
-	// Найти загрузки
 	@FXML
-	private void view_clob(ActionEvent actionEvent) throws IOException {
-		if (fn_sess_table.getSelectionModel().getSelectedItem() == null) {
+	private void view_attr(ActionEvent actionEvent) throws IOException {
+		if (trans_table.getSelectionModel().getSelectedItem() == null) {
 			resultArea.setText("Выберите сначала данные из таблицы!\n");
 		} else {
-			FN_SESS_AMRA fn = fn_sess_table.getSelectionModel().getSelectedItem();
-
-			Connect.SESS_ID_ = fn.getsess_id();
+			Attributes fn = trans_table.getSelectionModel().getSelectedItem();
 
 			Stage stage = new Stage();
-			Parent root = FXMLLoader.load(Main.class.getResource("view/Transact_Amra_viewer.fxml"));
+			Parent root = FXMLLoader.load(Main.class.getResource("view/Attributes.fxml"));
 			stage.setScene(new Scene(root));
 			stage.getIcons().add(new Image("icon.png"));
-			stage.setTitle("Транзакции");
+			stage.setTitle("Атрибуты");
 			stage.initModality(Modality.WINDOW_MODAL);
 			stage.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
 			stage.show();
 		}
 	}
 
-	// Найти загрузки
-	@FXML
-	private void fn_sess_search(ActionEvent actionEvent) {
-		try {
-			// Get all Employees information
-			ObservableList<FN_SESS_AMRA> empData = EmployeeDAO.srch_fn_sess(sess_id_t.getText(), trnumber.getText(),
-					datestart.getText(), dateend.getText());
-			// Populate Employees on TableView
-			populate_fn_sess(empData);
-		} catch (SQLException | ParseException | ClassNotFoundException e) {
-			resultArea.setText(e.getMessage());
-		}
-	}
-
 	// Заполнить таблицу
 	@FXML
-	private void populate_fn_sess(ObservableList<FN_SESS_AMRA> trData) {
+	private void populate_attr(ObservableList<Attributes> trData) {
 		// Set items to the employeeTable
-		fn_sess_table.setItems(trData);
+		trans_table.setItems(trData);
 	}
 }
