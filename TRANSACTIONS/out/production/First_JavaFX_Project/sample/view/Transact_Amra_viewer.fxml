@@ -83,5 +83,6 @@
 		</TableView>
 		<Label font="$x1" layoutX="14.0" layoutY="24.0" prefHeight="17.0" prefWidth="137.0" text="Таблица значении" />
       <Button layoutX="870.0" layoutY="41.0" mnemonicParsing="false" onAction="#view_attr" text="Просмотр Атрибутов" />
+      <Button layoutX="696.0" layoutY="41.0" mnemonicParsing="false" onAction="#excel_export" text="Выгрузить в EXCEL" />
 	</children>
 </AnchorPane>

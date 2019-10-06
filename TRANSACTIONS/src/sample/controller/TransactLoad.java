@@ -58,6 +58,7 @@ public class TransactLoad {
 	static String sessid_ = null;
 
 	@SuppressWarnings("resource")
+	
 	private static String readFile(String fileName) throws FileNotFoundException, IOException {
 		/*
 		 * FileInputStream fis = null; InputStreamReader isr = null; String

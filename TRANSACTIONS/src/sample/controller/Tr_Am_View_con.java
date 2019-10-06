@@ -26,6 +26,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -37,10 +38,28 @@ import sample.model.FN_SESS_AMRA;
 import sample.model.Amra_Trans;
 import sample.model.Connect;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-//import java.sql.Date;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -51,8 +70,6 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import com.sun.prism.impl.Disposer.Record;
-
-import java.util.Date;
 
 /**
  * Саид 04.04.2019.
@@ -783,6 +800,353 @@ public class Tr_Am_View_con {
 			ObservableList<Amra_Trans> empData = EmployeeDAO.Amra_Trans_(Connect.SESS_ID_);
 			populate_fn_sess(empData);
 		} catch (SQLException | ParseException | ClassNotFoundException e) {
+			resultArea.setText(e.getMessage());
+		}
+	}
+
+	@FXML
+	private void excel_export(ActionEvent actionEvent) {
+		try {
+			FileChooser fileChooser = new FileChooser();
+
+			// Set extension filter for text files
+			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel File", "*.xlsx");
+			fileChooser.getExtensionFilters().add(extFilter);
+
+			// Show save file dialog
+			File file = fileChooser.showSaveDialog(null);
+
+			if (file != null) {
+				
+				Date date = new Date();
+				DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH-mm-ss");
+				String strDate = dateFormat.format(date);
+				Workbook book = new XSSFWorkbook();
+				Sheet sheet = book.createSheet(strDate);
+				Row row_d = sheet.createRow(0);
+
+				Cell recdate_c = row_d.createCell(0);
+				recdate_c.setCellValue("Дата загрузки=RECDATE");
+				Cell paydate_c = row_d.createCell(1);
+				paydate_c.setCellValue("Дата транзакции=PAYDATE");
+				Cell currency_c = row_d.createCell(2);
+				currency_c.setCellValue("Валюта=CURRENCY");
+				Cell paymenttype_c = row_d.createCell(3);
+				paymenttype_c.setCellValue("ВидПлатежа=PAYMENTTYPE");
+				Cell vk_c = row_d.createCell(4);
+				vk_c.setCellValue("ВК=VK");
+				Cell dateofoperation_c = row_d.createCell(5);
+				dateofoperation_c.setCellValue("ДатаОперации=DATEOFOPERATION");
+				Cell dataps_c = row_d.createCell(6);
+				dataps_c.setCellValue("ДатаПС=DATAPS");
+				Cell dateclearing_c = row_d.createCell(7);
+				dateclearing_c.setCellValue("ДатаКлиринга=DATECLEARING");
+				Cell dealer_c = row_d.createCell(8);
+				dealer_c.setCellValue("Дилер=DEALER");
+				Cell accountpayer_c = row_d.createCell(9);
+				accountpayer_c.setCellValue("ЛСПлательщика=ACCOUNTPAYER");
+				Cell cardnumber_c = row_d.createCell(10);
+				cardnumber_c.setCellValue("НомерКарты=CARDNUMBER");
+				Cell operationnumber_c = row_d.createCell(11);
+				operationnumber_c.setCellValue("НомерОперации=OPERATIONNUMBER");
+				Cell operationnumberdelivery_c = row_d.createCell(12);
+				operationnumberdelivery_c.setCellValue("НомерОперацииСдача=OPERATIONNUMBERDELIVERY");
+				Cell checknumber_c = row_d.createCell(13);
+				checknumber_c.setCellValue("НомерЧека=CHECKNUMBER");
+				Cell checkparent_c = row_d.createCell(14);
+				checkparent_c.setCellValue("ЧекРодитель=CHECKPARENT");
+				Cell orderofprovidence_c = row_d.createCell(15);
+				orderofprovidence_c.setCellValue("ПорядокПровдения=ORDEROFPROVIDENCE");
+				Cell provider_c = row_d.createCell(16);
+				provider_c.setCellValue("Провайдер=PROVIDER");
+				Cell owninown_c = row_d.createCell(17);
+				owninown_c.setCellValue("СвойВСвоем=OWNINOWN");
+				Cell corrected_c = row_d.createCell(18);
+				corrected_c.setCellValue("Скорректирована=CORRECTED");
+				Cell commissionrate_c = row_d.createCell(19);
+				commissionrate_c.setCellValue("СтавкаКомиссии=COMMISSIONRATE");
+				Cell status_c = row_d.createCell(20);
+				status_c.setCellValue("Статус=STATUS");
+				Cell stringfromfile_c = row_d.createCell(21);
+				stringfromfile_c.setCellValue("СтрокаИзФайла=STRINGFROMFILE");
+				Cell rewardamount_c = row_d.createCell(22);
+				rewardamount_c.setCellValue("СуммаВознаграждения=REWARDAMOUNT");
+				Cell ownerincomeamount_c = row_d.createCell(23);
+				ownerincomeamount_c.setCellValue("СуммаДоходВладельца=OWNERINCOMEAMOUNT");
+				Cell commissionamount_c = row_d.createCell(24);
+				commissionamount_c.setCellValue("СуммаКомиссии=COMMISSIONAMOUNT");
+				Cell nkamount_c = row_d.createCell(25);
+				nkamount_c.setCellValue("СуммаНК=NKAMOUNT");
+				Cell maxcommissionamount_c = row_d.createCell(26);
+				maxcommissionamount_c.setCellValue("СуммаКомиссииМакс=MAXCOMMISSIONAMOUNT");
+				Cell mincommissionamount_c = row_d.createCell(27);
+				mincommissionamount_c.setCellValue("СуммаКомиссииМин=MINCOMMISSIONAMOUNT");
+				Cell cashamount_c = row_d.createCell(28);
+				cashamount_c.setCellValue("СуммаНаличных=CASHAMOUNT");
+				Cell sumnalprimal_c = row_d.createCell(29);
+				sumnalprimal_c.setCellValue("СуммаНалИзначальная=SUMNALPRIMAL");
+				Cell amounttocheck_c = row_d.createCell(30);
+				amounttocheck_c.setCellValue("СуммаНаЧек=AMOUNTTOCHECK");
+				Cell amountofpayment_c = row_d.createCell(31);
+				amountofpayment_c.setCellValue("СуммаПлатежа=AMOUNTOFPAYMENT");
+				Cell sumofsplitting_c = row_d.createCell(32);
+				sumofsplitting_c.setCellValue("СуммаНаРасщепление=SUMOFSPLITTING");
+				Cell amountintermediary_c = row_d.createCell(33);
+				amountintermediary_c.setCellValue("СуммаПосредника=AMOUNTINTERMEDIARY");
+				Cell amountofscs_c = row_d.createCell(34);
+				amountofscs_c.setCellValue("СуммаСКС=AMOUNTOFSCS");
+				Cell amountwithchecks_c = row_d.createCell(35);
+				amountwithchecks_c.setCellValue("СуммаСЧеков=AMOUNTWITHCHECKS");
+				Cell counter_c = row_d.createCell(36);
+				counter_c.setCellValue("Счетчик=COUNTER");
+				Cell terminal_c = row_d.createCell(37);
+				terminal_c.setCellValue("Терминал=TERMINAL");
+				Cell terminalnetwork_c = row_d.createCell(38);
+				terminalnetwork_c.setCellValue("ТерминальнаяСеть=TERMINALNETWORK");
+				Cell transactiontype_c = row_d.createCell(39);
+				transactiontype_c.setCellValue("ТипТранзакции=TRANSACTIONTYPE");
+				Cell service_c = row_d.createCell(40);
+				service_c.setCellValue("Услуга=SERVICE");
+				Cell filetransactions_c = row_d.createCell(41);
+				filetransactions_c.setCellValue("ФайлТранзакции=FILETRANSACTIONS");
+				Cell fio_c = row_d.createCell(42);
+				fio_c.setCellValue("ФИО=FIO");
+				Cell checksincoming_c = row_d.createCell(43);
+				checksincoming_c.setCellValue("ЧекиВходящие=CHECKSINCOMING");
+				Cell barcode_c = row_d.createCell(44);
+				barcode_c.setCellValue("ШтрихКод=BARCODE");
+				Cell isaresident_c = row_d.createCell(45);
+				isaresident_c.setCellValue("ЯвляетсяРезидентом=ISARESIDENT");
+				Cell valuenotfound_c = row_d.createCell(46);
+				valuenotfound_c.setCellValue("ЗначениеНеНайдено=VALUENOTFOUND");
+				Cell providertariff_c = row_d.createCell(47);
+				providertariff_c.setCellValue("ТарифПровайдера=PROVIDERTARIFF");
+				Cell counterchecks_c = row_d.createCell(48);
+				counterchecks_c.setCellValue("СчетчикСчеков=COUNTERCHECKS");
+				Cell countercheck_c = row_d.createCell(49);
+				countercheck_c.setCellValue("СчетчикНаЧек=COUNTERCHECK");
+				Cell id__c = row_d.createCell(50);
+				id__c.setCellValue("Id=ID_");
+				Cell detailing_c = row_d.createCell(51);
+				detailing_c.setCellValue("Деталировка=DETAILING");
+				Cell walletpayer_c = row_d.createCell(52);
+				walletpayer_c.setCellValue("КошелекПлательщик=WALLETPAYER");
+				Cell walletreceiver_c = row_d.createCell(53);
+				walletreceiver_c.setCellValue("КошелекПолучатель=WALLETRECEIVER");
+				Cell purposeofpayment_c = row_d.createCell(54);
+				purposeofpayment_c.setCellValue("НазначениеПлатежа=PURPOSEOFPAYMENT");
+				Cell dataprovider_c = row_d.createCell(55);
+				dataprovider_c.setCellValue("ДатаПровайдера=DATAPROVIDER");
+				Cell attributes__c = row_d.createCell(56);
+				attributes__c.setCellValue("Атрибуты=ATTRIBUTES_");
+				Cell statusabs_c = row_d.createCell(57);
+				statusabs_c.setCellValue("Статус проведения=STATUSABS");
+				Cell sess_id_c = row_d.createCell(58);
+				sess_id_c.setCellValue("ИД Сессии=SESS_ID");
+
+				Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
+						+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
+
+				Statement sqlStatement = conn.createStatement();
+				String readRecordSQL = "SELECT * FROM Z_SB_TRANSACT_AMRA_DBT WHERE sess_id = " + Connect.SESS_ID_ + "";
+				ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
+
+				int i = 1;
+
+				while (myResultSet.next()) {
+
+					Row row_d_ = sheet.createRow(i);
+
+					Cell RECDATE_c = row_d_.createCell(0);
+					RECDATE_c.setCellValue(myResultSet.getString("RECDATE"));
+					sheet.autoSizeColumn(0);
+					Cell PAYDATE_c = row_d_.createCell(1);
+					PAYDATE_c.setCellValue(myResultSet.getString("PAYDATE"));
+					sheet.autoSizeColumn(1);
+					Cell CURRENCY_c = row_d_.createCell(2);
+					CURRENCY_c.setCellValue(myResultSet.getString("CURRENCY"));
+					sheet.autoSizeColumn(2);
+					Cell PAYMENTTYPE_c = row_d_.createCell(3);
+					PAYMENTTYPE_c.setCellValue(myResultSet.getString("PAYMENTTYPE"));
+					sheet.autoSizeColumn(3);
+					Cell VK_c = row_d_.createCell(4);
+					VK_c.setCellValue(myResultSet.getString("VK"));
+					sheet.autoSizeColumn(4);
+					Cell DATEOFOPERATION_c = row_d_.createCell(5);
+					DATEOFOPERATION_c.setCellValue(myResultSet.getString("DATEOFOPERATION"));
+					sheet.autoSizeColumn(5);
+					Cell DATAPS_c = row_d_.createCell(6);
+					DATAPS_c.setCellValue(myResultSet.getString("DATAPS"));
+					sheet.autoSizeColumn(6);
+					Cell DATECLEARING_c = row_d_.createCell(7);
+					DATECLEARING_c.setCellValue(myResultSet.getString("DATECLEARING"));
+					sheet.autoSizeColumn(7);
+					Cell DEALER_c = row_d_.createCell(8);
+					DEALER_c.setCellValue(myResultSet.getString("DEALER"));
+					sheet.autoSizeColumn(8);
+					Cell ACCOUNTPAYER_c = row_d_.createCell(9);
+					ACCOUNTPAYER_c.setCellValue(myResultSet.getString("ACCOUNTPAYER"));
+					sheet.autoSizeColumn(9);
+					Cell CARDNUMBER_c = row_d_.createCell(10);
+					CARDNUMBER_c.setCellValue(myResultSet.getString("CARDNUMBER"));
+					sheet.autoSizeColumn(10);
+					Cell OPERATIONNUMBER_c = row_d_.createCell(11);
+					OPERATIONNUMBER_c.setCellValue(myResultSet.getString("OPERATIONNUMBER"));
+					sheet.autoSizeColumn(11);
+					Cell OPERATIONNUMBERDELIVERY_c = row_d_.createCell(12);
+					OPERATIONNUMBERDELIVERY_c.setCellValue(myResultSet.getString("OPERATIONNUMBERDELIVERY"));
+					sheet.autoSizeColumn(12);
+					Cell CHECKNUMBER_c = row_d_.createCell(13);
+					CHECKNUMBER_c.setCellValue(myResultSet.getString("CHECKNUMBER"));
+					sheet.autoSizeColumn(13);
+					Cell CHECKPARENT_c = row_d_.createCell(14);
+					CHECKPARENT_c.setCellValue(myResultSet.getString("CHECKPARENT"));
+					sheet.autoSizeColumn(14);
+					Cell ORDEROFPROVIDENCE_c = row_d_.createCell(15);
+					ORDEROFPROVIDENCE_c.setCellValue(myResultSet.getString("ORDEROFPROVIDENCE"));
+					sheet.autoSizeColumn(15);
+					Cell PROVIDER_c = row_d_.createCell(16);
+					PROVIDER_c.setCellValue(myResultSet.getString("PROVIDER"));
+					sheet.autoSizeColumn(16);
+					Cell OWNINOWN_c = row_d_.createCell(17);
+					OWNINOWN_c.setCellValue(myResultSet.getString("OWNINOWN"));
+					sheet.autoSizeColumn(17);
+					Cell CORRECTED_c = row_d_.createCell(18);
+					CORRECTED_c.setCellValue(myResultSet.getString("CORRECTED"));
+					sheet.autoSizeColumn(18);
+					Cell COMMISSIONRATE_c = row_d_.createCell(19);
+					COMMISSIONRATE_c.setCellValue(myResultSet.getString("COMMISSIONRATE"));
+					sheet.autoSizeColumn(19);
+					Cell STATUS_c = row_d_.createCell(20);
+					STATUS_c.setCellValue(myResultSet.getString("STATUS"));
+					sheet.autoSizeColumn(20);
+					Cell STRINGFROMFILE_c = row_d_.createCell(21);
+					STRINGFROMFILE_c.setCellValue(myResultSet.getString("STRINGFROMFILE"));
+					sheet.autoSizeColumn(21);
+					Cell REWARDAMOUNT_c = row_d_.createCell(22);
+					REWARDAMOUNT_c.setCellValue(myResultSet.getString("REWARDAMOUNT"));
+					sheet.autoSizeColumn(22);
+					Cell OWNERINCOMEAMOUNT_c = row_d_.createCell(23);
+					OWNERINCOMEAMOUNT_c.setCellValue(myResultSet.getString("OWNERINCOMEAMOUNT"));
+					sheet.autoSizeColumn(23);
+					Cell COMMISSIONAMOUNT_c = row_d_.createCell(24);
+					COMMISSIONAMOUNT_c.setCellValue(myResultSet.getString("COMMISSIONAMOUNT"));
+					sheet.autoSizeColumn(24);
+					Cell NKAMOUNT_c = row_d_.createCell(25);
+					NKAMOUNT_c.setCellValue(myResultSet.getString("NKAMOUNT"));
+					sheet.autoSizeColumn(25);
+					Cell MAXCOMMISSIONAMOUNT_c = row_d_.createCell(26);
+					MAXCOMMISSIONAMOUNT_c.setCellValue(myResultSet.getString("MAXCOMMISSIONAMOUNT"));
+					sheet.autoSizeColumn(26);
+					Cell MINCOMMISSIONAMOUNT_c = row_d_.createCell(27);
+					MINCOMMISSIONAMOUNT_c.setCellValue(myResultSet.getString("MINCOMMISSIONAMOUNT"));
+					sheet.autoSizeColumn(27);
+					Cell CASHAMOUNT_c = row_d_.createCell(28);
+					CASHAMOUNT_c.setCellValue(myResultSet.getString("CASHAMOUNT"));
+					sheet.autoSizeColumn(28);
+					Cell SUMNALPRIMAL_c = row_d_.createCell(29);
+					SUMNALPRIMAL_c.setCellValue(myResultSet.getString("SUMNALPRIMAL"));
+					sheet.autoSizeColumn(29);
+					Cell AMOUNTTOCHECK_c = row_d_.createCell(30);
+					AMOUNTTOCHECK_c.setCellValue(myResultSet.getString("AMOUNTTOCHECK"));
+					sheet.autoSizeColumn(30);
+					Cell AMOUNTOFPAYMENT_c = row_d_.createCell(31);
+					AMOUNTOFPAYMENT_c.setCellValue(myResultSet.getString("AMOUNTOFPAYMENT"));
+					sheet.autoSizeColumn(31);
+					Cell SUMOFSPLITTING_c = row_d_.createCell(32);
+					SUMOFSPLITTING_c.setCellValue(myResultSet.getString("SUMOFSPLITTING"));
+					sheet.autoSizeColumn(32);
+					Cell AMOUNTINTERMEDIARY_c = row_d_.createCell(33);
+					AMOUNTINTERMEDIARY_c.setCellValue(myResultSet.getString("AMOUNTINTERMEDIARY"));
+					sheet.autoSizeColumn(33);
+					Cell AMOUNTOFSCS_c = row_d_.createCell(34);
+					AMOUNTOFSCS_c.setCellValue(myResultSet.getString("AMOUNTOFSCS"));
+					sheet.autoSizeColumn(34);
+					Cell AMOUNTWITHCHECKS_c = row_d_.createCell(35);
+					AMOUNTWITHCHECKS_c.setCellValue(myResultSet.getString("AMOUNTWITHCHECKS"));
+					sheet.autoSizeColumn(35);
+					Cell COUNTER_c = row_d_.createCell(36);
+					COUNTER_c.setCellValue(myResultSet.getString("COUNTER"));
+					sheet.autoSizeColumn(36);
+					Cell TERMINAL_c = row_d_.createCell(37);
+					TERMINAL_c.setCellValue(myResultSet.getString("TERMINAL"));
+					sheet.autoSizeColumn(37);
+					Cell TERMINALNETWORK_c = row_d_.createCell(38);
+					TERMINALNETWORK_c.setCellValue(myResultSet.getString("TERMINALNETWORK"));
+					sheet.autoSizeColumn(38);
+					Cell TRANSACTIONTYPE_c = row_d_.createCell(39);
+					TRANSACTIONTYPE_c.setCellValue(myResultSet.getString("TRANSACTIONTYPE"));
+					sheet.autoSizeColumn(39);
+					Cell SERVICE_c = row_d_.createCell(40);
+					SERVICE_c.setCellValue(myResultSet.getString("SERVICE"));
+					sheet.autoSizeColumn(40);
+					Cell FILETRANSACTIONS_c = row_d_.createCell(41);
+					FILETRANSACTIONS_c.setCellValue(myResultSet.getString("FILETRANSACTIONS"));
+					sheet.autoSizeColumn(41);
+					Cell FIO_c = row_d_.createCell(42);
+					FIO_c.setCellValue(myResultSet.getString("FIO"));
+					sheet.autoSizeColumn(42);
+					Cell CHECKSINCOMING_c = row_d_.createCell(43);
+					CHECKSINCOMING_c.setCellValue(myResultSet.getString("CHECKSINCOMING"));
+					sheet.autoSizeColumn(43);
+					Cell BARCODE_c = row_d_.createCell(44);
+					BARCODE_c.setCellValue(myResultSet.getString("BARCODE"));
+					sheet.autoSizeColumn(44);
+					Cell ISARESIDENT_c = row_d_.createCell(45);
+					ISARESIDENT_c.setCellValue(myResultSet.getString("ISARESIDENT"));
+					sheet.autoSizeColumn(45);
+					Cell VALUENOTFOUND_c = row_d_.createCell(46);
+					VALUENOTFOUND_c.setCellValue(myResultSet.getString("VALUENOTFOUND"));
+					sheet.autoSizeColumn(46);
+					Cell PROVIDERTARIFF_c = row_d_.createCell(47);
+					PROVIDERTARIFF_c.setCellValue(myResultSet.getString("PROVIDERTARIFF"));
+					sheet.autoSizeColumn(47);
+					Cell COUNTERCHECKS_c = row_d_.createCell(48);
+					COUNTERCHECKS_c.setCellValue(myResultSet.getString("COUNTERCHECKS"));
+					sheet.autoSizeColumn(48);
+					Cell COUNTERCHECK_c = row_d_.createCell(49);
+					COUNTERCHECK_c.setCellValue(myResultSet.getString("COUNTERCHECK"));
+					sheet.autoSizeColumn(49);
+					Cell ID__c = row_d_.createCell(50);
+					ID__c.setCellValue(myResultSet.getString("ID_"));
+					sheet.autoSizeColumn(50);
+					Cell DETAILING_c = row_d_.createCell(51);
+					DETAILING_c.setCellValue(myResultSet.getString("DETAILING"));
+					sheet.autoSizeColumn(51);
+					Cell WALLETPAYER_c = row_d_.createCell(52);
+					WALLETPAYER_c.setCellValue(myResultSet.getString("WALLETPAYER"));
+					sheet.autoSizeColumn(52);
+					Cell WALLETRECEIVER_c = row_d_.createCell(53);
+					WALLETRECEIVER_c.setCellValue(myResultSet.getString("WALLETRECEIVER"));
+					sheet.autoSizeColumn(53);
+					Cell PURPOSEOFPAYMENT_c = row_d_.createCell(54);
+					PURPOSEOFPAYMENT_c.setCellValue(myResultSet.getString("PURPOSEOFPAYMENT"));
+					sheet.autoSizeColumn(54);
+					Cell DATAPROVIDER_c = row_d_.createCell(55);
+					DATAPROVIDER_c.setCellValue(myResultSet.getString("DATAPROVIDER"));
+					sheet.autoSizeColumn(55);
+					Cell ATTRIBUTES__c = row_d_.createCell(56);
+					ATTRIBUTES__c.setCellValue(myResultSet.getString("ATTRIBUTES_"));
+					sheet.autoSizeColumn(56);
+					Cell STATUSABS_c = row_d_.createCell(57);
+					STATUSABS_c.setCellValue(myResultSet.getString("STATUSABS"));
+					sheet.autoSizeColumn(57);
+					Cell SESS_ID_c = row_d_.createCell(58);
+					SESS_ID_c.setCellValue(myResultSet.getString("SESS_ID"));
+					sheet.autoSizeColumn(58);
+
+					i++;
+				}
+
+				myResultSet.close();
+				conn.close();
+				book.write(new FileOutputStream(file.getPath()));
+				book.close();
+			}
+		} catch (SQLException |
+
+				IOException e) {
+			// TODO Auto-generated catch block
 			resultArea.setText(e.getMessage());
 		}
 	}
