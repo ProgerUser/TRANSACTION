@@ -273,7 +273,8 @@ public class TerminalDAO {
 		ObservableList<Termdial> fn_list = FXCollections.observableArrayList();
 		while (rs.next()) {
 			Termdial td = new Termdial();
-			td.set_recdate(rs.getString("recdate"));
+			String format = new SimpleDateFormat("MM.dd.yyyy HH:mm:ss").format(rs.getTimestamp("recdate"));
+			td.set_recdate(format);
 			td.set_department(rs.getString("department"));
 			td.set_paymentnumber(rs.getString("paymentnumber"));
 			td.set_dealstartdate(rs.getString("dealstartdate"));
@@ -308,9 +309,13 @@ public class TerminalDAO {
 		ObservableList<Amra_Trans> fn_list = FXCollections.observableArrayList();
 		while (rs.next()) {
 			Amra_Trans fn = new Amra_Trans();
+
+			String recdate = new SimpleDateFormat("MM.dd.yyyy HH:mm:ss").format(rs.getTimestamp("recdate"));
+			String paydate = new SimpleDateFormat("MM.dd.yyyy HH:mm:ss").format(rs.getTimestamp("paydate"));
+
 			fn.set_rownum(rs.getString("rownum"));
-			fn.set_recdate(rs.getString("recdate"));
-			fn.set_paydate(rs.getString("paydate"));
+			fn.set_recdate(recdate);
+			fn.set_paydate(paydate);
 			fn.set_currency(rs.getString("currency"));
 			fn.set_paymenttype(rs.getString("paymenttype"));
 			fn.set_vk(rs.getString("vk"));

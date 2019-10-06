@@ -1,10 +1,11 @@
 package sample.model;
 
 import javafx.beans.property.*;
+import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Termdial {
 
-	private StringProperty recdate;
 	private StringProperty department;
 	private StringProperty paymentnumber;
 	private StringProperty dealstartdate;
@@ -14,8 +15,11 @@ public class Termdial {
 	private StringProperty status;
 	private StringProperty sess_id;
 
+	//private SimpleObjectProperty<Timestamp> recdate;
+	private StringProperty recdate;
 	// Constructor
 	public Termdial() {
+		//this.recdate = new SimpleObjectProperty<>();
 		this.recdate = new SimpleStringProperty();
 		this.department = new SimpleStringProperty();
 		this.paymentnumber = new SimpleStringProperty();
@@ -28,7 +32,7 @@ public class Termdial {
 
 	}
 
-	public String get_recdate() {
+	public Object get_recdate() {
 		return recdate.get();
 	}
 
@@ -67,6 +71,10 @@ public class Termdial {
 	public void set_recdate(String recdate) {
 		this.recdate.set(recdate);
 	}
+	
+	/*public void set_recdate(Timestamp recdate) {
+		this.recdate.set(recdate);
+	}*/
 
 	public void set_department(String department) {
 		this.department.set(department);
@@ -100,6 +108,9 @@ public class Termdial {
 		this.sess_id.set(sess_id);
 	}
 
+	/*public SimpleObjectProperty<Timestamp> recdateProperty() {
+		return recdate;
+	}*/
 	public StringProperty recdateProperty() {
 		return recdate;
 	}

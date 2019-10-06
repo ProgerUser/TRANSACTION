@@ -35,10 +35,11 @@ import sample.model.Termdial;
 import sample.model.Amra_Trans;
 import sample.model.Attributes;
 import sample.model.Connect;
+import sample.model.CustomDate;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-//import java.sql.Date;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -48,7 +49,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.Date;
 
 /**
  * Саид 04.04.2019.
@@ -132,12 +132,14 @@ public class Termdial_Controller {
 		sess_id.setCellFactory(TextFieldTableCell.forTableColumn());
 
 		recdate.setOnEditCommit(new EventHandler<CellEditEvent<Termdial, String>>() {
+
 			@Override
 			public void handle(CellEditEvent<Termdial, String> t) {
 				((Termdial) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.set_recdate(t.getNewValue());
 			}
 		});
+
 		department.setOnEditCommit(new EventHandler<CellEditEvent<Termdial, String>>() {
 			@Override
 			public void handle(CellEditEvent<Termdial, String> t) {
