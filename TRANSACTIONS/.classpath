@@ -7,5 +7,14 @@
 	<classpathentry kind="lib" path="D:/Users/saidp/git/TRANSACTION/TRANSACTIONS/commons-logging-1.2.jar"/>
 	<classpathentry kind="lib" path="D:/Users/saidp/git/TRANSACTION/TRANSACTIONS/commons-logging-1.2-javadoc.jar"/>
 	<classpathentry kind="lib" path="D:/Users/saidp/git/TRANSACTION/TRANSACTIONS/juniversalchardet-1.0.3.jar"/>
+	<classpathentry kind="lib" path="D:/Users/saidp/git/TRANSACTION/TRANSACTIONS/lib/commons-compress-1.18.jar"/>
+	<classpathentry kind="lib" path="D:/Users/saidp/git/TRANSACTION/TRANSACTIONS/lib/commons-collections4-4.1.jar"/>
+	<classpathentry kind="lib" path="D:/Users/saidp/git/TRANSACTION/TRANSACTIONS/lib/poi-ooxml-schemas-4.1.0.jar"/>
+	<classpathentry kind="lib" path="D:/Users/saidp/git/TRANSACTION/TRANSACTIONS/lib/poi-examples-4.1.0.jar"/>
+	<classpathentry kind="lib" path="D:/Users/saidp/git/TRANSACTION/TRANSACTIONS/lib/poi-excelant-4.1.0.jar"/>
+	<classpathentry kind="lib" path="D:/Users/saidp/git/TRANSACTION/TRANSACTIONS/lib/poi-ooxml-4.1.0.jar"/>
+	<classpathentry kind="lib" path="D:/Users/saidp/git/TRANSACTION/TRANSACTIONS/lib/poi-4.1.0.jar"/>
+	<classpathentry kind="lib" path="D:/Users/saidp/git/TRANSACTION/TRANSACTIONS/lib/poi-scratchpad-4.1.0.jar"/>
+	<classpathentry kind="lib" path="D:/Users/saidp/git/TRANSACTION/TRANSACTIONS/lib/xmlbeans-3.1.0.jar"/>
 	<classpathentry kind="output" path="out/production/First_JavaFX_Project"/>
 </classpath>

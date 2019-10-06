@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="649.0" prefWidth="1017.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.Tr_Am_View_con">
+	<children>
+		<TextArea fx:id="resultArea" layoutX="16.0" layoutY="561.0" prefHeight="80.0" prefWidth="994.0" wrapText="true" />
+		<Label layoutX="15.0" layoutY="541.0" text="Вывод">
+			<font>
+				<Font name="System Bold" size="12.0" fx:id="x1" />
+			</font>
+		</Label>
+		<VBox layoutX="97.0" layoutY="24.0" spacing="4.0" />
+		<VBox layoutX="1.0" layoutY="45.0" prefWidth="67.0" spacing="12.0" />
+		<Separator layoutY="14.0" prefHeight="2.0" prefWidth="1007.0" />
+		<TableView fx:id="trans_table" layoutX="14.0" layoutY="74.0" prefHeight="457.0" prefWidth="994.0" styleClass="jfx-rippler" stylesheets="@../../transact.css" tableMenuButtonVisible="true">
+			<columns>
+			<TableColumn fx:id="rownum" prefWidth="137.0" text="Номер строки" />
+				<TableColumn fx:id="recdate" prefWidth="137.0" text="recdate" />
+				<TableColumn fx:id="paydate" prefWidth="137.0" text="paydate" />
+				<TableColumn fx:id="currency" prefWidth="137.0" text="Валюта=CURRENCY" />
+<TableColumn fx:id="paymenttype" prefWidth="137.0" text="ВидПлатежа=PAYMENTTYPE" />
+<TableColumn fx:id="vk" prefWidth="137.0" text="ВК=VK" />
+<TableColumn fx:id="dateofoperation" prefWidth="137.0" text="ДатаОперации=DATEOFOPERATION" />
+<TableColumn fx:id="dataps" prefWidth="137.0" text="ДатаПС=DATAPS" />
+<TableColumn fx:id="dateclearing" prefWidth="137.0" text="ДатаКлиринга=DATECLEARING" />
+<TableColumn fx:id="dealer" prefWidth="137.0" text="Дилер=DEALER" />
+<TableColumn fx:id="accountpayer" prefWidth="137.0" text="ЛСПлательщика=ACCOUNTPAYER" />
+<TableColumn fx:id="cardnumber" prefWidth="137.0" text="НомерКарты=CARDNUMBER" />
+<TableColumn fx:id="operationnumber" prefWidth="137.0" text="НомерОперации=OPERATIONNUMBER" />
+<TableColumn fx:id="operationnumberdelivery" prefWidth="137.0" text="НомерОперацииСдача=OPERATIONNUMBERDELIVERY" />
+<TableColumn fx:id="checknumber" prefWidth="137.0" text="НомерЧека=CHECKNUMBER" />
+<TableColumn fx:id="checkparent" prefWidth="137.0" text="ЧекРодитель=CHECKPARENT" />
+<TableColumn fx:id="orderofprovidence" prefWidth="137.0" text="ПорядокПровдения=ORDEROFPROVIDENCE" />
+<TableColumn fx:id="provider" prefWidth="137.0" text="Провайдер=PROVIDER" />
+<TableColumn fx:id="owninown" prefWidth="137.0" text="СвойВСвоем=OWNINOWN" />
+<TableColumn fx:id="corrected" prefWidth="137.0" text="Скорректирована=CORRECTED" />
+<TableColumn fx:id="commissionrate" prefWidth="137.0" text="СтавкаКомиссии=COMMISSIONRATE" />
+<TableColumn fx:id="status" prefWidth="137.0" text="Статус=STATUS" />
+<TableColumn fx:id="stringfromfile" prefWidth="137.0" text="СтрокаИзФайла=STRINGFROMFILE" />
+<TableColumn fx:id="rewardamount" prefWidth="137.0" text="СуммаВознаграждения=REWARDAMOUNT" />
+<TableColumn fx:id="ownerincomeamount" prefWidth="137.0" text="СуммаДоходВладельца=OWNERINCOMEAMOUNT" />
+<TableColumn fx:id="commissionamount" prefWidth="137.0" text="СуммаКомиссии=COMMISSIONAMOUNT" />
+<TableColumn fx:id="nkamount" prefWidth="137.0" text="СуммаНК=NKAMOUNT" />
+<TableColumn fx:id="maxcommissionamount" prefWidth="137.0" text="СуммаКомиссииМакс=MAXCOMMISSIONAMOUNT" />
+<TableColumn fx:id="mincommissionamount" prefWidth="137.0" text="СуммаКомиссииМин=MINCOMMISSIONAMOUNT" />
+<TableColumn fx:id="cashamount" prefWidth="137.0" text="СуммаНаличных=CASHAMOUNT" />
+<TableColumn fx:id="sumnalprimal" prefWidth="137.0" text="СуммаНалИзначальная=SUMNALPRIMAL" />
+<TableColumn fx:id="amounttocheck" prefWidth="137.0" text="СуммаНаЧек=AMOUNTTOCHECK" />
+<TableColumn fx:id="amountofpayment" prefWidth="137.0" text="СуммаПлатежа=AMOUNTOFPAYMENT" />
+<TableColumn fx:id="sumofsplitting" prefWidth="137.0" text="СуммаНаРасщепление=SUMOFSPLITTING" />
+<TableColumn fx:id="amountintermediary" prefWidth="137.0" text="СуммаПосредника=AMOUNTINTERMEDIARY" />
+<TableColumn fx:id="amountofscs" prefWidth="137.0" text="СуммаСКС=AMOUNTOFSCS" />
+<TableColumn fx:id="amountwithchecks" prefWidth="137.0" text="СуммаСЧеков=AMOUNTWITHCHECKS" />
+<TableColumn fx:id="counter" prefWidth="137.0" text="Счетчик=COUNTER" />
+<TableColumn fx:id="terminal" prefWidth="137.0" text="Терминал=TERMINAL" />
+<TableColumn fx:id="terminalnetwork" prefWidth="137.0" text="ТерминальнаяСеть=TERMINALNETWORK" />
+<TableColumn fx:id="transactiontype" prefWidth="137.0" text="ТипТранзакции=TRANSACTIONTYPE" />
+<TableColumn fx:id="service" prefWidth="137.0" text="Услуга=SERVICE" />
+<TableColumn fx:id="filetransactions" prefWidth="137.0" text="ФайлТранзакции=FILETRANSACTIONS" />
+<TableColumn fx:id="fio" prefWidth="137.0" text="ФИО=FIO" />
+<TableColumn fx:id="checksincoming" prefWidth="200" text="ЧекиВходящие=CHECKSINCOMING" />
+<TableColumn fx:id="barcode" prefWidth="137.0" text="ШтрихКод=BARCODE" />
+<TableColumn fx:id="isaresident" prefWidth="137.0" text="ЯвляетсяРезидентом=ISARESIDENT" />
+<TableColumn fx:id="valuenotfound" prefWidth="137.0" text="ЗначениеНеНайдено=VALUENOTFOUND" />
+<TableColumn fx:id="providertariff" prefWidth="137.0" text="ТарифПровайдера=PROVIDERTARIFF" />
+<TableColumn fx:id="counterchecks" prefWidth="137.0" text="СчетчикСчеков=COUNTERCHECKS" />
+<TableColumn fx:id="countercheck" prefWidth="137.0" text="СчетчикНаЧек=COUNTERCHECK" />
+<TableColumn fx:id="id_" prefWidth="137.0" text="Id=ID_" />
+<TableColumn fx:id="detailing" prefWidth="137.0" text="Деталировка=DETAILING" />
+<TableColumn fx:id="walletpayer" prefWidth="137.0" text="КошелекПлательщик=WALLETPAYER" />
+<TableColumn fx:id="walletreceiver" prefWidth="137.0" text="КошелекПолучатель=WALLETRECEIVER" />
+<TableColumn fx:id="purposeofpayment" prefWidth="137.0" text="НазначениеПлатежа=PURPOSEOFPAYMENT" />
+<TableColumn fx:id="dataprovider" prefWidth="137.0" text="ДатаПровайдера=DATAPROVIDER" />
+
+				<TableColumn fx:id="statusabs" prefWidth="137.0" text="statusabs" />
+				<TableColumn fx:id="sess_id" prefWidth="137.0" text="sess_id" />
+
+			</columns>
+		</TableView>
+		<Label font="$x1" layoutX="14.0" layoutY="24.0" prefHeight="17.0" prefWidth="137.0" text="Таблица значении" />
+      <Button layoutX="870.0" layoutY="41.0" mnemonicParsing="false" onAction="#view_attr" text="Просмотр Атрибутов" />
+	</children>
+</AnchorPane>

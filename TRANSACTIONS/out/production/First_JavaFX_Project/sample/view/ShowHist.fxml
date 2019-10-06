@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="649.0" prefWidth="1017.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.ShowHistoryController">
+	<children>
+		<TextField fx:id="sess_id_t" layoutX="240.0" layoutY="45.0" prefHeight="32.0" prefWidth="198.0" />
+		<Label layoutX="181.0" layoutY="53.0" prefHeight="17.0" prefWidth="46.0" text="SESS_ID:" />
+		<Button fx:id="searchEmpBtn" layoutX="240.0" layoutY="133.0" mnemonicParsing="false" onAction="#fn_sess_search" prefHeight="25.0" prefWidth="56.0" text="Поиск" />
+		<TextArea fx:id="resultArea" layoutX="16.0" layoutY="558.0" prefHeight="83.0" prefWidth="994.0" wrapText="true" />
+		<Label layoutX="15.0" layoutY="541.0" text="Вывод">
+			<font>
+				<Font name="System Bold" size="12.0" fx:id="x1" />
+			</font>
+		</Label>
+		<VBox layoutX="97.0" layoutY="24.0" spacing="4.0" />
+		<VBox layoutX="1.0" layoutY="45.0" prefWidth="67.0" spacing="12.0" />
+		<Separator layoutY="14.0" prefHeight="2.0" prefWidth="1007.0" />
+		<TableView fx:id="fn_sess_table" layoutX="14.0" layoutY="191.0" prefHeight="326.0" prefWidth="994.0" tableMenuButtonVisible="true">
+			<columns>
+				<TableColumn fx:id="SESS_ID" prefWidth="137.0" text="SESS_ID" />
+				<TableColumn fx:id="FILE_NAME" prefWidth="554.0" text="FILE_NAME" />
+				<TableColumn fx:id="DATE_TIME" minWidth="0.0" prefWidth="188.0" text="DATE_TIME" />
+			</columns>
+		</TableView>
+		<Label layoutX="160.0" layoutY="90.0" text="Номер ТР%:" />
+		<TextField fx:id="trnumber" layoutX="240.0" layoutY="82.0" prefHeight="32.0" prefWidth="198.0" />
+		<Label layoutX="465.0" layoutY="53.0" text="Дата с:" />
+		<TextField fx:id="datestart" layoutX="512.0" layoutY="45.0" prefHeight="32.0" prefWidth="84.0" promptText="дд.мм.гггг" />
+		<Label layoutX="456.0" layoutY="90.0" text="Дата по:" />
+		<TextField fx:id="dateend" layoutX="512.0" layoutY="83.0" prefHeight="32.0" prefWidth="84.0" promptText="дд.мм.гггг" />
+		<Label font="$x1" layoutX="15.0" layoutY="174.0" prefHeight="17.0" prefWidth="137.0" text="Таблица значении" />
+		<Label font="$x1" layoutX="16.0" layoutY="16.0" text="Печать чеков" />
+      <Button layoutX="784.0" layoutY="158.0" mnemonicParsing="false" onAction="#view_clob" prefHeight="25.0" prefWidth="198.0" text="Просмотр содержимого файла" />
+	</children>
+</AnchorPane>
