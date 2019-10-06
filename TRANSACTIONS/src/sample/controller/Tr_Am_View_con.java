@@ -33,7 +33,7 @@ import javafx.util.Callback;
 import sample.model.Transact;
 import sample.model.TransactClass;
 import sample.Main;
-import sample.model.EmployeeDAO;
+import sample.model.TerminalDAO;
 import sample.model.FN_SESS_AMRA;
 import sample.model.Amra_Trans;
 import sample.model.Connect;
@@ -797,7 +797,7 @@ public class Tr_Am_View_con {
 		});
 
 		try {
-			ObservableList<Amra_Trans> empData = EmployeeDAO.Amra_Trans_(Connect.SESS_ID_);
+			ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(Connect.SESS_ID_);
 			populate_fn_sess(empData);
 		} catch (SQLException | ParseException | ClassNotFoundException e) {
 			resultArea.setText(e.getMessage());
@@ -817,7 +817,7 @@ public class Tr_Am_View_con {
 			File file = fileChooser.showSaveDialog(null);
 
 			if (file != null) {
-				
+
 				Date date = new Date();
 				DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH-mm-ss");
 				String strDate = dateFormat.format(date);
@@ -1134,7 +1134,6 @@ public class Tr_Am_View_con {
 					Cell SESS_ID_c = row_d_.createCell(58);
 					SESS_ID_c.setCellValue(myResultSet.getString("SESS_ID"));
 					sheet.autoSizeColumn(58);
-
 					i++;
 				}
 
@@ -1161,7 +1160,7 @@ public class Tr_Am_View_con {
 			Connect.PNMB_ = fn.get_checknumber();
 
 			Stage stage = new Stage();
-			Parent root = FXMLLoader.load(Main.class.getResource("view/Attributes.fxml"));
+			Parent root = FXMLLoader.load(Main.class.getResource("view/Attributes_.fxml"));
 			stage.setScene(new Scene(root));
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("Атрибуты");

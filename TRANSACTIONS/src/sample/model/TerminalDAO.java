@@ -11,7 +11,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class EmployeeDAO {
+public class TerminalDAO {
 
 	// *******************************
 	// SELECT an Employee
@@ -178,18 +178,16 @@ public class EmployeeDAO {
 	// *******************************
 	// SELECT Attributes
 	// *******************************
-	public static ObservableList<Attributes> Attributes_()
-			throws SQLException, ClassNotFoundException, ParseException {
+	public static ObservableList<Attributes> Attributes_() throws SQLException, ClassNotFoundException, ParseException {
 
-		String selectStmt = "SELECT Service, CheckNumber, AttributeName, AttributeValue\n" + 
-				"  FROM (select ATTRIBUTES_\n" + 
-				"          from Z_SB_TRANSACT_AMRA_DBT\n" + 
-				"         where CHECKNUMBER = '"+Connect.PNMB_+"'),\n" + 
-				"       XMLTABLE('/јтрибуты/јтр' PASSING xmltype(ATTRIBUTES_) COLUMNS\n" + 
-				"                Service VARCHAR2(500) PATH '@”слуга',\n" + 
-				"                CheckNumber VARCHAR2(500) PATH '@Ќомер„ека',\n" + 
-				"                AttributeName VARCHAR2(500) PATH '@»м€јтрибута',\n" + 
-				"                AttributeValue VARCHAR2(500) PATH '@«начениејтрибута')";
+		String selectStmt = "SELECT Service, CheckNumber, AttributeName, AttributeValue\n"
+				+ "  FROM (select ATTRIBUTES_\n" + "          from Z_SB_TRANSACT_AMRA_DBT\n"
+				+ "         where CHECKNUMBER = '" + Connect.PNMB_ + "'),\n"
+				+ "       XMLTABLE('/јтрибуты/јтр' PASSING xmltype(ATTRIBUTES_) COLUMNS\n"
+				+ "                Service VARCHAR2(500) PATH '@”слуга',\n"
+				+ "                CheckNumber VARCHAR2(500) PATH '@Ќомер„ека',\n"
+				+ "                AttributeName VARCHAR2(500) PATH '@»м€јтрибута',\n"
+				+ "                AttributeValue VARCHAR2(500) PATH '@«начениејтрибута')";
 
 		// Execute SELECT statement
 		try {
@@ -198,6 +196,53 @@ public class EmployeeDAO {
 
 			// Send ResultSet to the getEmployeeList method and get employee object
 			ObservableList<Attributes> empList = get_attr(rsEmps);
+
+			// Return employee object
+			return empList;
+		} catch (SQLException e) {
+			System.out.println("ќпераци€ выбора SQL не удалась: " + e);
+			// Return exception
+			throw e;
+		}
+	}
+
+	// *******************************
+	// SELECT Termdial_
+	// *******************************
+	public static ObservableList<Termdial> Termdial_(String dt1, String dt2, String pnmb, String sess_id)
+			throws SQLException, ClassNotFoundException, ParseException {
+
+		String dt_btw = "\n";
+		String pnmb_ = "\n";
+		String sess_id_ = "\n";
+
+		if (dt1.equals("") & dt1.equals("")) {
+
+		} else {
+			dt_btw = "and trunc(RECDATE) between  to_date('" + dt1 + "','dd.mm.yyyy') and to_date('" + dt2
+					+ "','dd.mm.yyyy')\n";
+		}
+
+		if (pnmb.equals("")) {
+
+		} else {
+			pnmb_ = "and PAYMENTNUMBER = '%" + pnmb + "%'\n";
+		}
+		if (sess_id.equals("")) {
+
+		} else {
+			sess_id_ = "and SESS_ID = '" + sess_id + "'\n";
+		}
+
+		String selectStmt = "select * from z_sb_termdeal_amra_dbt where 1=1" + dt_btw + pnmb_ + sess_id_;
+
+		// Execute SELECT statement
+		try {
+			// Get ResultSet from dbExecuteQuery method
+			ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
+
+			// Send ResultSet to the getEmployeeList method and get employee object
+			ObservableList<Termdial> empList = get_term(rsEmps);
 
 			// Return employee object
 			return empList;
@@ -218,6 +263,26 @@ public class EmployeeDAO {
 			fn.setfile_name(rs.getString("file_name"));
 			fn.setdate_time(rs.getString("date_time"));
 			fn_list.add(fn);
+		}
+		return fn_list;
+	}
+
+	// Select * from fn_sess operation
+	private static ObservableList<Termdial> get_term(ResultSet rs)
+			throws SQLException, ClassNotFoundException, ParseException {
+		ObservableList<Termdial> fn_list = FXCollections.observableArrayList();
+		while (rs.next()) {
+			Termdial td = new Termdial();
+			td.set_recdate(rs.getString("recdate"));
+			td.set_department(rs.getString("department"));
+			td.set_paymentnumber(rs.getString("paymentnumber"));
+			td.set_dealstartdate(rs.getString("dealstartdate"));
+			td.set_sum_(rs.getString("sum_"));
+			td.set_dealenddate(rs.getString("dealenddate"));
+			td.set_dealpaymentnumber(rs.getString("dealpaymentnumber"));
+			td.set_status(rs.getString("status"));
+			td.set_sess_id(rs.getString("sess_id"));
+			fn_list.add(td);
 		}
 		return fn_list;
 	}

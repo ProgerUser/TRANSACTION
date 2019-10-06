@@ -28,7 +28,7 @@ import sample.model.TransactClass;
 import sample.Main;
 import sample.model.Amra_Trans;
 import sample.model.Connect;
-import sample.model.EmployeeDAO;
+import sample.model.TerminalDAO;
 import sample.model.FN_SESS_AMRA;
 
 import java.io.IOException;
@@ -143,7 +143,7 @@ public class ShowHistoryController {
 	private void fn_sess_search(ActionEvent actionEvent) {
 		try {
 			// Get all Employees information
-			ObservableList<FN_SESS_AMRA> empData = EmployeeDAO.srch_fn_sess(sess_id_t.getText(), trnumber.getText(),
+			ObservableList<FN_SESS_AMRA> empData = TerminalDAO.srch_fn_sess(sess_id_t.getText(), trnumber.getText(),
 					datestart.getText(), dateend.getText());
 			// Populate Employees on TableView
 			populate_fn_sess(empData);

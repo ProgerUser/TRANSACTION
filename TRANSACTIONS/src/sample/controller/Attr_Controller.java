@@ -29,7 +29,7 @@ import javafx.util.Callback;
 import sample.model.Transact;
 import sample.model.TransactClass;
 import sample.Main;
-import sample.model.EmployeeDAO;
+import sample.model.TerminalDAO;
 import sample.model.FN_SESS_AMRA;
 import sample.model.Amra_Trans;
 import sample.model.Attributes;
@@ -125,7 +125,7 @@ public class Attr_Controller {
 		});
 
 		try {
-			ObservableList<Attributes> empData = EmployeeDAO.Attributes_();
+			ObservableList<Attributes> empData = TerminalDAO.Attributes_();
 			populate_attr(empData);
 		} catch (SQLException | ParseException | ClassNotFoundException e) {
 			resultArea.setText(e.getMessage());

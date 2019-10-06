@@ -12,7 +12,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import sample.model.Transact;
-import sample.model.EmployeeDAO;
+import sample.model.TerminalDAO;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -133,7 +133,7 @@ public class EmployeeController {
 	private void searchEmployees(ActionEvent actionEvent) throws ClassNotFoundException, SQLException {
 		try {
 			// Get Employee information
-			Transact emp = EmployeeDAO.searchTransact(fio.getText());
+			Transact emp = TerminalDAO.searchTransact(fio.getText());
 			// Populate Employee on TableView and Display on TextArea
 			populateAndShowEmployee(emp);
 		} catch (SQLException e) {
@@ -152,7 +152,7 @@ public class EmployeeController {
 				return;
 			}
 			// Get all Employees information
-			ObservableList<Transact> empData = EmployeeDAO.searchEmployees(fio.getText(), trnumber.getText(),
+			ObservableList<Transact> empData = TerminalDAO.searchEmployees(fio.getText(), trnumber.getText(),
 					datestart.getText(), dateend.getText());
 			// Populate Employees on TableView
 			populateEmployees(empData);
@@ -170,7 +170,7 @@ public class EmployeeController {
 		Task<List<Transact>> task = new Task<List<Transact>>() {
 			@Override
 			public ObservableList<Transact> call() throws Exception {
-				return EmployeeDAO.searchEmployees(fio.getText(), trnumber.getText(), datestart.getText(),
+				return TerminalDAO.searchEmployees(fio.getText(), trnumber.getText(), datestart.getText(),
 						dateend.getText());
 			}
 		};
@@ -220,7 +220,7 @@ public class EmployeeController {
 	@FXML
 	private void updateEmployeeEmail(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
 		try {
-			EmployeeDAO.updateEmpEmail(empIdText.getText(), newEmailText.getText());
+			TerminalDAO.updateEmpEmail(empIdText.getText(), newEmailText.getText());
 			resultArea.setText("Email has been updated for, employee id: " + empIdText.getText() + "\n");
 		} catch (SQLException e) {
 			resultArea.setText("Problem occurred while updating email: " + e);
@@ -231,7 +231,7 @@ public class EmployeeController {
 	@FXML
 	private void insertEmployee(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
 		try {
-			EmployeeDAO.insertEmp(nameText.getText(), surnameText.getText(), emailText.getText());
+			TerminalDAO.insertEmp(nameText.getText(), surnameText.getText(), emailText.getText());
 			resultArea.setText("Employee inserted! \n");
 		} catch (SQLException e) {
 			resultArea.setText("Problem occurred while inserting employee " + e);
@@ -243,7 +243,7 @@ public class EmployeeController {
 	@FXML
 	private void deleteEmployee(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
 		try {
-			EmployeeDAO.deleteEmpWithId(empIdText.getText());
+			TerminalDAO.deleteEmpWithId(empIdText.getText());
 			resultArea.setText("Employee deleted! Employee id: " + empIdText.getText() + "\n");
 		} catch (SQLException e) {
 			resultArea.setText("Problem occurred while deleting employee " + e);

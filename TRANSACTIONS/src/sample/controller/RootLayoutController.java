@@ -134,6 +134,25 @@ public class RootLayoutController {
 	}
 
 	@FXML
+	void Termdial_view(ActionEvent event) {
+		try {
+
+			if (Connect.userPassword_.equals("")) {
+
+			} else {
+				Main.Termdial_view_();
+			}
+
+		} catch (NullPointerException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			// alert.setTitle("Error");
+			alert.setHeaderText("Error");
+			alert.setContentText("¬ведите учетные данные");
+			alert.show();
+		}
+	}
+
+	@FXML
 	void amra_trans(ActionEvent event) {
 		try {
 
