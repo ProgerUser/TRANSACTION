@@ -1293,16 +1293,12 @@ public class Tr_Am_View_con {
 					ATTRIBUTES__c.setCellStyle(cellStyle_border);
 					STATUSABS_c.setCellStyle(cellStyle_border);
 					SESS_ID_c.setCellStyle(cellStyle_border);
-
 					i++;
 				}
-
 				sheet.setAutoFilter(CellRangeAddress.valueOf("A1:BG" + i + ""));
-
 				for (int j = 0; j <= 58; j++) {
 					sheet.autoSizeColumn(j);
 				}
-
 				myResultSet.close();
 				conn.close();
 				book.write(new FileOutputStream(file.getPath()));
