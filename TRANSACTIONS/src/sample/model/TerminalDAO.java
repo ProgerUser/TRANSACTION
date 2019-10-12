@@ -226,7 +226,7 @@ public class TerminalDAO {
 		if (pnmb.equals("")) {
 
 		} else {
-			pnmb_ = "and PAYMENTNUMBER = '%" + pnmb + "%'\n";
+			pnmb_ = "and PAYMENTNUMBER like '%" + pnmb + "%'\n";
 		}
 		if (sess_id.equals("")) {
 

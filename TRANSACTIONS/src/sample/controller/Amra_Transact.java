@@ -258,6 +258,7 @@ public class Amra_Transact {
 					alert.showAndWait();
 				}
 				callStmt.close();
+				conn.close();
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
 				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -525,7 +526,8 @@ public class Amra_Transact {
 				alert.setHeaderText(null);
 				alert.setContentText("Расчет прошел успешно!");
 				alert.showAndWait();
-
+				callStmt.close();
+				conn.close();
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
 				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
