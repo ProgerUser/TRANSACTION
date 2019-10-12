@@ -110,9 +110,6 @@ public class Amra_Transact {
 	private AnchorPane anchorpane;
 
 	@FXML
-	private TextArea result;
-
-	@FXML
 	private Button import_;
 
 	@FXML
@@ -268,11 +265,14 @@ public class Amra_Transact {
 				alert.setContentText("Выберите сначала файл для загрузки");
 				alert.showAndWait();
 			}
-		} catch (SQLException |
-
-				IOException e) {
-			// TODO Auto-generated catch block
-			result.setText(e.getMessage());
+		} catch (SQLException | IOException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
 		}
 	}
 
@@ -409,8 +409,13 @@ public class Amra_Transact {
 			pb.start();
 			myResultSet.close();
 		} catch (SQLException | IOException | ParserConfigurationException | SAXException e) {
-			// TODO Auto-generated catch block
-			result.setText(e.getMessage());
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
 		}
 	}
 
@@ -538,8 +543,13 @@ public class Amra_Transact {
 				alert.showAndWait();
 			}
 		} catch (SQLException | IOException e) {
-			// TODO Auto-generated catch block
-			result.setText(e.getMessage());
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
 		}
 	}
 
@@ -565,8 +575,13 @@ public class Amra_Transact {
 			stage.setScene(scene);
 			stage.show();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			result.setText(e.getMessage());
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
 		}
 	}
 

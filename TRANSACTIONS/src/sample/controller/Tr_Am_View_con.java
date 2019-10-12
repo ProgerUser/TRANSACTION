@@ -11,8 +11,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -136,9 +138,6 @@ public class Tr_Am_View_con {
 
 	@FXML
 	private TableColumn<Amra_Trans, String> amountintermediary;
-
-	@FXML
-	private TextArea resultArea;
 
 	@FXML
 	private TableColumn<Amra_Trans, String> commissionamount;
@@ -274,6 +273,12 @@ public class Tr_Am_View_con {
 
 	// For MultiThreading
 	private Executor exec;
+
+	@FXML
+	private DatePicker dt1;
+
+	@FXML
+	private DatePicker dt2;
 
 	@FXML
 	private void initialize() {
@@ -808,10 +813,17 @@ public class Tr_Am_View_con {
 		});
 
 		try {
-			ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(Connect.SESS_ID_);
+			ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(Connect.SESS_ID_, dt1.getValue(),
+					dt2.getValue());
 			populate_fn_sess(empData);
 		} catch (SQLException | ParseException | ClassNotFoundException e) {
-			resultArea.setText(e.getMessage());
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
 		}
 	}
 
@@ -1305,15 +1317,26 @@ public class Tr_Am_View_con {
 				book.close();
 			}
 		} catch (SQLException | IOException e) {
-			// TODO Auto-generated catch block
-			resultArea.setText(e.getMessage());
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
 		}
 	}
 
 	@FXML
 	private void view_attr(ActionEvent actionEvent) throws IOException {
 		if (trans_table.getSelectionModel().getSelectedItem() == null) {
-			resultArea.setText("Выберите сначала данные из таблицы!\n");
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText("Выберите сначала данные из таблицы!");
+			alert.showAndWait();
 		} else {
 			Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
 
@@ -1327,6 +1350,25 @@ public class Tr_Am_View_con {
 			stage.initModality(Modality.WINDOW_MODAL);
 			stage.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
 			stage.show();
+		}
+	}
+
+	// Найти загрузки
+	@FXML
+	private void filter(ActionEvent actionEvent) {
+		try {
+			ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(Connect.SESS_ID_, dt1.getValue(),
+					dt2.getValue());
+			populate_fn_sess(empData);
+
+		} catch (SQLException | ParseException | ClassNotFoundException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
 		}
 	}
 

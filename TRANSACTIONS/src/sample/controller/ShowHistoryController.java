@@ -11,7 +11,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -57,11 +59,10 @@ public class ShowHistoryController {
 	@FXML
 	private TextField sess_id_t;
 	@FXML
-	private TextField dateend;
+	private DatePicker dateend;
 	@FXML
-	private TextField datestart;
-	@FXML
-	private TextArea resultArea;
+	private DatePicker datestart;
+
 	@FXML
 	private TableColumn<FN_SESS_AMRA, String> SESS_ID;
 	@FXML
@@ -121,7 +122,13 @@ public class ShowHistoryController {
 	@FXML
 	private void view_clob(ActionEvent actionEvent) throws IOException {
 		if (fn_sess_table.getSelectionModel().getSelectedItem() == null) {
-			resultArea.setText("Выберите сначала данные из таблицы!\n");
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(("Выберите сначала данные из таблицы!\n"));
+			alert.showAndWait();
 		} else {
 			FN_SESS_AMRA fn = fn_sess_table.getSelectionModel().getSelectedItem();
 
@@ -144,12 +151,18 @@ public class ShowHistoryController {
 		try {
 			// Get all Employees information
 			ObservableList<FN_SESS_AMRA> empData = TerminalDAO.srch_fn_sess(sess_id_t.getText(), trnumber.getText(),
-					datestart.getText(), dateend.getText());
+					datestart.getValue(), dateend.getValue());
 			// Populate Employees on TableView
 			populate_fn_sess(empData);
 
 		} catch (SQLException | ParseException | ClassNotFoundException e) {
-			resultArea.setText(e.getMessage());
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
 		}
 	}
 

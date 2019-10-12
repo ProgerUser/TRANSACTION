@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class TerminalDAO {
@@ -104,12 +106,14 @@ public class TerminalDAO {
 	// *******************************
 	// SELECT FN_SESS
 	// *******************************
-	public static ObservableList<FN_SESS_AMRA> srch_fn_sess(String SESS_ID, String PAYMENTNUMBER, String DT1,
-			String DT2) throws SQLException, ClassNotFoundException, ParseException {
+	public static ObservableList<FN_SESS_AMRA> srch_fn_sess(String SESS_ID, String PAYMENTNUMBER, LocalDate dt1,
+			LocalDate dt2) throws SQLException, ClassNotFoundException, ParseException {
 		// Declare a SELECT statement
+
 		String dt_betw = "\n";
 		String p_n = "\n";
 		String clob = "\n";
+
 		if (PAYMENTNUMBER.equals("")) {
 
 		} else {
@@ -122,15 +126,29 @@ public class TerminalDAO {
 			p_n = "and SESS_ID = '" + SESS_ID + "'\n";
 		}
 
-		if (DT1.equals("") & DT2.equals("")) {
+		String ldt1 = null;
+		String ldt2 = null;
 
-		} else {
-			dt_betw = "and trunc(date_time)  between to_date('" + DT1 + "', 'dd.mm.yyyy') and to_date('" + DT2
-					+ "','dd.mm.yyyy')\n";
+		if (dt1 != null)
+			ldt1 = dt1.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+		if (dt2 != null)
+			ldt2 = dt2.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+
+		String ldt1_ = "\n";
+		String ldt2_ = "\n";
+		String bt = "\n";
+		if (dt1 != null & dt2 != null) {
+			bt = " and trunc(date_time) between to_date('" + ldt1 + "','dd.mm.yyyy') and to_date('" + ldt2
+					+ "','dd.mm.yyyy') \n";
+		} else if (dt1 != null & dt2 == null) {
+			ldt1_ = " and trunc(date_time) = to_date('" + ldt1 + "','dd.mm.yyyy')\n";
+		} else if (dt1 == null & dt2 != null) {
+			ldt2_ = " and trunc(date_time) = to_date('" + ldt2 + "','dd.mm.yyyy')\n";
 		}
 
 		String selectStmt = "" + "select sess_id,\n " + "file_name, \n" + "date_time, \n" + "fileclob \n"
-				+ "from Z_SB_FN_SESS_AMRA \n" + "where 1=1" + dt_betw + p_n + clob + "order by date_time desc";
+				+ "from Z_SB_FN_SESS_AMRA \n" + "where 1=1" + ldt1_ + ldt2_+p_n + bt + clob
+				+ "order by date_time desc";
 
 		// Execute SELECT statement
 		try {
@@ -152,11 +170,30 @@ public class TerminalDAO {
 	// *******************************
 	// SELECT FN_SESS
 	// *******************************
-	public static ObservableList<Amra_Trans> Amra_Trans_(String SESS_ID)
+	public static ObservableList<Amra_Trans> Amra_Trans_(String SESS_ID, LocalDate dt1, LocalDate dt2)
 			throws SQLException, ClassNotFoundException, ParseException {
+		String ldt1 = null;
+		String ldt2 = null;
+
+		if (dt1 != null)
+			ldt1 = dt1.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+		if (dt2 != null)
+			ldt2 = dt2.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+
+		String ldt1_ = "\n";
+		String ldt2_ = "\n";
+		String bt = "\n";
+		if (dt1 != null & dt2 != null) {
+			bt = " and trunc(paydate) between to_date('" + ldt1 + "','dd.mm.yyyy') and to_date('" + ldt2
+					+ "','dd.mm.yyyy') \n";
+		} else if (dt1 != null & dt2 == null) {
+			ldt1_ = " and trunc(paydate) = to_date('" + ldt1 + "','dd.mm.yyyy')\n";
+		} else if (dt1 == null & dt2 != null) {
+			ldt2_ = " and trunc(paydate) = to_date('" + ldt2 + "','dd.mm.yyyy')\n";
+		}
 
 		String selectStmt = " select rownum,t.* from (select rownum,t.* from Z_SB_TRANSACT_AMRA_DBT t where sess_id = "
-				+ SESS_ID + " order by PAYDATE desc) t";
+				+ SESS_ID + ldt1_ + ldt2_ + bt + " order by PAYDATE desc) t";
 
 		// Execute SELECT statement
 		try {
@@ -273,7 +310,8 @@ public class TerminalDAO {
 		ObservableList<Termdial> fn_list = FXCollections.observableArrayList();
 		while (rs.next()) {
 			Termdial td = new Termdial();
-			//String format = new SimpleDateFormat("MM.dd.yyyy HH:mm:ss").format(rs.getTimestamp("recdate"));
+			// String format = new SimpleDateFormat("MM.dd.yyyy
+			// HH:mm:ss").format(rs.getTimestamp("recdate"));
 			td.set_recdate(rs.getString("recdate"));
 			td.set_department(rs.getString("department"));
 			td.set_paymentnumber(rs.getString("paymentnumber"));
@@ -310,8 +348,10 @@ public class TerminalDAO {
 		while (rs.next()) {
 			Amra_Trans fn = new Amra_Trans();
 
-			//String recdate = new SimpleDateFormat("d.M.yyyy hh24:mm:ss").format(rs.getTimestamp("recdate"));
-			//String paydate = new SimpleDateFormat("dd.M.yyyy hh24:mm:ss").format(rs.getTimestamp("paydate"));
+			// String recdate = new SimpleDateFormat("d.M.yyyy
+			// hh24:mm:ss").format(rs.getTimestamp("recdate"));
+			// String paydate = new SimpleDateFormat("dd.M.yyyy
+			// hh24:mm:ss").format(rs.getTimestamp("paydate"));
 
 			fn.set_rownum(rs.getString("rownum"));
 			fn.set_recdate(rs.getString("recdate"));
