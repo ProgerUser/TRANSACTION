@@ -21,7 +21,7 @@ public class DBUtil {
 	// "jdbc:oracle:thin@10.111.64.21:1521/odb";
 
 	// static String connectionURL =
-	// "jdbc:oracle:thin:"++"/ver8i@10.111.64.21:1521/odb";
+	// "jdbc:oracle:thin:"++"/xxx@10.111.64.21:1521/odb";
 
 	// Connect to DB
 	public static void dbConnect() throws SQLException, ClassNotFoundException {
