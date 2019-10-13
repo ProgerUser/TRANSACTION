@@ -49,7 +49,7 @@ public class TransactLoad {
 	 * final static String driverClass = "oracle.jdbc.OracleDriver"; final
 	 * static String connectionURL = "jdbc:oracle:thin:@oradb-prm:1521/odb";
 	 * final static String userID = "xxi"; final static String userPassword =
-	 * "ver8i";
+	 * "xxx";
 	 */
 	static String sql = "{ ? = call Z_SB_CREATE_TR.load_pack(?,?)}";
 

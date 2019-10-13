@@ -54,15 +54,17 @@ import sample.model.Connect;
 import javafx.stage.Stage;
 
 @SuppressWarnings("unused")
-public class Amra_Transact {
+public class Amra_Transact_ {
+	/*
+	 * final static String driverClass = "oracle.jdbc.OracleDriver"; final static
+	 * String connectionURL = "jdbc:oracle:thin:@oradb-prm:1521/odb"; final static
+	 * String userID = "xxi"; final static String userPassword = "xxx";
+	 */
 	static String sql = "{ ? = call z_sb_create_tr_amra.load_pack(?,?)}";
 
 	static String sql_calc = "{ ? = call z_sb_calc_tr_amra.make(?)}";
 
 	static String sessid_ = null;
-
-	static int rcff = 0;
-	static int rcft = 0;
 
 	@SuppressWarnings("resource")
 	private static String readFile(String fileName) throws FileNotFoundException, IOException {
@@ -72,7 +74,7 @@ public class Amra_Transact {
 		 * name of the character encoding returned encoding = isr.getEncoding();
 		 */
 
-		// System.out.print("Character Encoding: "+s);
+// System.out.print("Character Encoding: "+s);
 		BufferedReader br = new BufferedReader(
 				new InputStreamReader(new FileInputStream(fileName), getFileCharset(fileName)));
 		String nextLine = "";
@@ -202,9 +204,9 @@ public class Amra_Transact {
 					String readRecordSQL = "SELECT * FROM Z_SB_LOG_AMRA WHERE sess_id = " + part2 + "";
 					ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
 
-					// String[] path =
-					// textbox.getText().toString().split("::_");
-					// String path1 = path[0].trim();
+// String[] path =
+// textbox.getText().toString().split("::_");
+// String path1 = path[0].trim();
 
 					DateFormat dateFormat_ = new SimpleDateFormat("dd.MM.yyyy HH");
 					String strDate_ = dateFormat_.format(date);
@@ -233,9 +235,9 @@ public class Amra_Transact {
 					myResultSet.close();
 					textbox.setText("");
 				} else {
-					// --------------------------------------
+// --------------------------------------
 					Protocol(part2);
-					// --------------------------------------
+// --------------------------------------
 					chk.setDisable(false);
 					chk.setSelected(true);
 					calc.setDisable(false);
@@ -249,8 +251,7 @@ public class Amra_Transact {
 					stage.getIcons().add(new Image("terminal.png"));
 					alert.setTitle("Внимание");
 					alert.setHeaderText(null);
-					alert.setContentText("Загрузка прошла успешна. Можете перейти к расчету.\r В файле =" + rcff
-							+ "\r Загружено = " + rcft);
+					alert.setContentText("Загрузка прошла успешна. Можете перейти к расчету");
 					alert.showAndWait();
 				}
 				callStmt.close();
@@ -292,105 +293,120 @@ public class Amra_Transact {
 		return encoding;
 	}
 
-	// запись в текстовый файл протокола загрузки
+// запись в текстовый файл протокола загрузки
 	void Protocol(String sessid) {
 		try {
+			System.out.println(sessid);
 			Date date = new Date();
 			DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH-mm-ss");
 			String strDate = dateFormat.format(date);
 			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
 					+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
 
+// String[] path = textbox.getText().toString().split("::_");
+// String path1 = path[0].trim();
+
 			Statement sqlStatement = conn.createStatement();
+// String count = "SELECT count(*) FROM Z_SB_TRANSACT_DBT WHERE
+// sess_id
+// = " + sessid + "";
 			String readRecordSQL = "SELECT * FROM z_sb_transact_amra_dbt WHERE sess_id = " + sessid + "";
 			ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
 
 			Integer rowid = 1;
 
-//			DateFormat dateFormat_ = new SimpleDateFormat("dd.MM.yyyy HH");
-//			String strDate_ = dateFormat_.format(date);
-//			String createfolder = System.getProperty("user.dir") + "\\" + strDate_ + "_SESSID_" + sessid;
-//
-//			File file = new File(createfolder);
-//			if (!file.exists()) {
-//				if (file.mkdir()) {
-//					System.out.println("Directory is created!");
-//				} else {
-//					System.out.println("Failed to create directory!");
-//				}
-//			}
-//
-//			String path_file = createfolder + "\\" + strDate + "_PROTOCOL.txt";
-//			writer = new PrintWriter(path_file);
-//			boolean chk = false;
+			DateFormat dateFormat_ = new SimpleDateFormat("dd.MM.yyyy HH");
+			String strDate_ = dateFormat_.format(date);
+			String createfolder = System.getProperty("user.dir") + "\\" + strDate_ + "_SESSID_" + sessid;
+
+			File file = new File(createfolder);
+			if (!file.exists()) {
+				if (file.mkdir()) {
+					System.out.println("Directory is created!");
+				} else {
+					System.out.println("Failed to create directory!");
+				}
+			}
+
+			String path_file = createfolder + "\\" + strDate + "_PROTOCOL.txt";
+
+			writer = new PrintWriter(path_file);
+
 			boolean chk = false;
 			while (myResultSet.next()) {
-				rcft++;
 				if (chk == false) {
+					/*
+					 * BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(new
+					 * FileInputStream(textbox.getText().replace("::_", "\\")),
+					 * getFileCharset(textbox.getText().replace("::_", "\\"))));
+					 */
+// System.out.println(getFileCharset(textbox.getText().replace("::_",
+// "\\")));
+					String line = null;
+					int rowcount = 0;
+					writer.write("Протокол загрузки файла.\r\n");
+					/*
+					 * while ((line = bufferedReader.readLine()) != null) { rowcount = rowcount + 1;
+					 * // System.out.println(line); writer.write("Номер строки: " + rowcount + ";" +
+					 * line + "\r\n"); }
+					 */
 
 					File fXmlFile = new File(textbox.getText().replace("::_", "\\"));
 					DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 					Document doc = dBuilder.parse(fXmlFile);
+// writer.write("Root element :" +
+// doc.getDocumentElement().getNodeName() + "\r\n");
 					if (doc.hasChildNodes()) {
 						printNote(doc.getChildNodes());
 					}
+					rowline = 0;
+
+// bufferedReader.close();
+					writer.write(
+							"\r\n-----------------------------------------------------------------------------------------\r\n\r\n");
+					writer.write("\r\nПротокол загрузки транзакции.\r\n\r\n");
 				}
-//				if (chk == false) {
-//					String line = null;
-//					int rowcount = 0;
-//					writer.write("Протокол загрузки файла.\r\n");
-//
-//					File fXmlFile = new File(textbox.getText().replace("::_", "\\"));
-//					DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-//					Document doc = dBuilder.parse(fXmlFile);
-//					if (doc.hasChildNodes()) {
-//						printNote(doc.getChildNodes());
-//					}
-//					rowline = 0;
-//
-//					writer.write(
-//							"\r\n-----------------------------------------------------------------------------------------\r\n\r\n");
-//					writer.write("\r\nПротокол загрузки транзакции.\r\n\r\n");
-//				}
-//				writer.write("Номер строки: " + rowid + "|\r\n" + myResultSet.getString("RECDATE") + "|"
-//						+ myResultSet.getString("PAYDATE") + "|" + myResultSet.getString("CURRENCY") + "|"
-//						+ myResultSet.getString("PAYMENTTYPE") + "|" + myResultSet.getString("VK") + "|"
-//						+ myResultSet.getString("DATEOFOPERATION") + "|" + myResultSet.getString("DATAPS") + "|"
-//						+ myResultSet.getString("DATECLEARING") + "|" + myResultSet.getString("DEALER") + "|"
-//						+ myResultSet.getString("ACCOUNTPAYER") + "|" + myResultSet.getString("CARDNUMBER") + "|"
-//						+ myResultSet.getString("OPERATIONNUMBER") + "|"
-//						+ myResultSet.getString("OPERATIONNUMBERDELIVERY") + "|" + myResultSet.getString("CHECKNUMBER")
-//						+ "|" + myResultSet.getString("CHECKPARENT") + "|" + myResultSet.getString("ORDEROFPROVIDENCE")
-//						+ "|" + myResultSet.getString("PROVIDER") + "|" + myResultSet.getString("OWNINOWN") + "|"
-//						+ myResultSet.getString("CORRECTED") + "|" + myResultSet.getString("COMMISSIONRATE") + "|"
-//						+ myResultSet.getString("STATUS") + "|" + myResultSet.getString("STRINGFROMFILE") + "|"
-//						+ myResultSet.getString("REWARDAMOUNT") + "|" + myResultSet.getString("OWNERINCOMEAMOUNT") + "|"
-//						+ myResultSet.getString("COMMISSIONAMOUNT") + "|" + myResultSet.getString("NKAMOUNT") + "|"
-//						+ myResultSet.getString("MAXCOMMISSIONAMOUNT") + "|"
-//						+ myResultSet.getString("MINCOMMISSIONAMOUNT") + "|" + myResultSet.getString("CASHAMOUNT") + "|"
-//						+ myResultSet.getString("SUMNALPRIMAL") + "|" + myResultSet.getString("AMOUNTTOCHECK") + "|"
-//						+ myResultSet.getString("AMOUNTOFPAYMENT") + "|" + myResultSet.getString("SUMOFSPLITTING") + "|"
-//						+ myResultSet.getString("AMOUNTINTERMEDIARY") + "|" + myResultSet.getString("AMOUNTOFSCS") + "|"
-//						+ myResultSet.getString("AMOUNTWITHCHECKS") + "|" + myResultSet.getString("COUNTER") + "|"
-//						+ myResultSet.getString("TERMINAL") + "|" + myResultSet.getString("TERMINALNETWORK") + "|"
-//						+ myResultSet.getString("TRANSACTIONTYPE") + "|" + myResultSet.getString("SERVICE") + "|"
-//						+ myResultSet.getString("FILETRANSACTIONS") + "|" + myResultSet.getString("FIO") + "|"
-//						+ myResultSet.getString("CHECKSINCOMING") + "|" + myResultSet.getString("BARCODE") + "|"
-//						+ myResultSet.getString("ISARESIDENT") + "|" + myResultSet.getString("VALUENOTFOUND") + "|"
-//						+ myResultSet.getString("PROVIDERTARIFF") + "|" + myResultSet.getString("COUNTERCHECKS") + "|"
-//						+ myResultSet.getString("COUNTERCHECK") + "|" + myResultSet.getString("ID_") + "|"
-//						+ myResultSet.getString("DETAILING") + "|" + myResultSet.getString("WALLETPAYER") + "|"
-//						+ myResultSet.getString("WALLETRECEIVER") + "|" + myResultSet.getString("PURPOSEOFPAYMENT")
-//						+ "|" + myResultSet.getString("DATAPROVIDER") + "|" + myResultSet.getString("STATUSABS") + "|"
-//						+ myResultSet.getString("SESS_ID") + "|" + "\r\n");
-//				rowid++;
+				writer.write("Номер строки: " + rowid + "|\r\n" + myResultSet.getString("RECDATE") + "|"
+						+ myResultSet.getString("PAYDATE") + "|" + myResultSet.getString("CURRENCY") + "|"
+						+ myResultSet.getString("PAYMENTTYPE") + "|" + myResultSet.getString("VK") + "|"
+						+ myResultSet.getString("DATEOFOPERATION") + "|" + myResultSet.getString("DATAPS") + "|"
+						+ myResultSet.getString("DATECLEARING") + "|" + myResultSet.getString("DEALER") + "|"
+						+ myResultSet.getString("ACCOUNTPAYER") + "|" + myResultSet.getString("CARDNUMBER") + "|"
+						+ myResultSet.getString("OPERATIONNUMBER") + "|"
+						+ myResultSet.getString("OPERATIONNUMBERDELIVERY") + "|" + myResultSet.getString("CHECKNUMBER")
+						+ "|" + myResultSet.getString("CHECKPARENT") + "|" + myResultSet.getString("ORDEROFPROVIDENCE")
+						+ "|" + myResultSet.getString("PROVIDER") + "|" + myResultSet.getString("OWNINOWN") + "|"
+						+ myResultSet.getString("CORRECTED") + "|" + myResultSet.getString("COMMISSIONRATE") + "|"
+						+ myResultSet.getString("STATUS") + "|" + myResultSet.getString("STRINGFROMFILE") + "|"
+						+ myResultSet.getString("REWARDAMOUNT") + "|" + myResultSet.getString("OWNERINCOMEAMOUNT") + "|"
+						+ myResultSet.getString("COMMISSIONAMOUNT") + "|" + myResultSet.getString("NKAMOUNT") + "|"
+						+ myResultSet.getString("MAXCOMMISSIONAMOUNT") + "|"
+						+ myResultSet.getString("MINCOMMISSIONAMOUNT") + "|" + myResultSet.getString("CASHAMOUNT") + "|"
+						+ myResultSet.getString("SUMNALPRIMAL") + "|" + myResultSet.getString("AMOUNTTOCHECK") + "|"
+						+ myResultSet.getString("AMOUNTOFPAYMENT") + "|" + myResultSet.getString("SUMOFSPLITTING") + "|"
+						+ myResultSet.getString("AMOUNTINTERMEDIARY") + "|" + myResultSet.getString("AMOUNTOFSCS") + "|"
+						+ myResultSet.getString("AMOUNTWITHCHECKS") + "|" + myResultSet.getString("COUNTER") + "|"
+						+ myResultSet.getString("TERMINAL") + "|" + myResultSet.getString("TERMINALNETWORK") + "|"
+						+ myResultSet.getString("TRANSACTIONTYPE") + "|" + myResultSet.getString("SERVICE") + "|"
+						+ myResultSet.getString("FILETRANSACTIONS") + "|" + myResultSet.getString("FIO") + "|"
+						+ myResultSet.getString("CHECKSINCOMING") + "|" + myResultSet.getString("BARCODE") + "|"
+						+ myResultSet.getString("ISARESIDENT") + "|" + myResultSet.getString("VALUENOTFOUND") + "|"
+						+ myResultSet.getString("PROVIDERTARIFF") + "|" + myResultSet.getString("COUNTERCHECKS") + "|"
+						+ myResultSet.getString("COUNTERCHECK") + "|" + myResultSet.getString("ID_") + "|"
+						+ myResultSet.getString("DETAILING") + "|" + myResultSet.getString("WALLETPAYER") + "|"
+						+ myResultSet
+								.getString("WALLETRECEIVER")
+						+ "|" + myResultSet.getString("PURPOSEOFPAYMENT") + "|" + myResultSet.getString("DATAPROVIDER")
+						+ "|" /* + myResultSet.getString("ATTRIBUTES_") + "|" */
+						+ myResultSet.getString("STATUSABS") + "|" + myResultSet.getString("SESS_ID") + "|" + "\r\n");
+				rowid++;
 				chk = true;
 			}
 			chk = false;
-//			writer.close();
-//			count_ = 1;
-//			ProcessBuilder pb = new ProcessBuilder("Notepad.exe", createfolder + "\\" + strDate + "_PROTOCOL.txt");
-//			pb.start();
+			writer.close();
+			count_ = 1;
+			ProcessBuilder pb = new ProcessBuilder("Notepad.exe", createfolder + "\\" + strDate + "_PROTOCOL.txt");
+			pb.start();
 			myResultSet.close();
 		} catch (SQLException | IOException | ParserConfigurationException | SAXException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -406,33 +422,44 @@ public class Amra_Transact {
 	private static void printNote(NodeList nodeList) {
 		for (int count = 0; count < nodeList.getLength(); count++) {
 			Node tempNode = nodeList.item(count);
-			// убедитесь, что это элемент узла.
+// убедитесь, что это элемент узла.
 			if (tempNode.getNodeType() == Node.ELEMENT_NODE) {
 				if (tempNode.getNodeName().toString().contains("Трн")) {
 					rowline++;
-					rcff++;
-					// writer.write("\r\nНомер строки_: " + rowline + "|\r\n");
+					writer.write("\r\nНомер строки_: " + rowline + "|\r\n");
 				}
-				// получить имя и значение узла
+// получить имя и значение узла
+// writer.write("\nNode Name =" +
+// tempNode.getNodeName().replaceAll("\\s+", "") + " [OPEN]" +
+// "\n");
 				if (tempNode.getNodeName().toString().contains("Трн")) {
 					count_ = count_ + 1;
 				}
+// writer.write("Node Value =" +
+// tempNode.getTextContent().replaceAll("\\s+", "") + "\r\n");
 				if (tempNode.hasAttributes()) {
-					// получить имена и значения атрибутов
+// получить имена и значения атрибутов
 					NamedNodeMap nodeMap = tempNode.getAttributes();
 					for (int i = 0; i < nodeMap.getLength(); i++) {
 						Node node = nodeMap.item(i);
-
+						/*
+						 * writer.write("attr name : " + node.getNodeName() + "\r\n");
+						 * writer.write("attr value : " + node.getNodeValue() + "\r\n");
+						 */
 						if (tempNode.getNodeName().toString().contains("Трн")) {
-//							writer.write(node.getNodeName().replaceAll("\\s+", "") + ":\""
-//									+ node.getNodeValue().replaceAll("\\s+", "") + "\"|");
-
+							writer.write(node.getNodeName().replaceAll("\\s+", "") + ":\""
+									+ node.getNodeValue().replaceAll("\\s+", "") + "\"|");
 						}
 					}
 				}
 				if (tempNode.hasChildNodes()) {
-					// цикл снова, если есть дочерние узлы
+// цикл снова, если есть дочерние узлы
 					printNote(tempNode.getChildNodes());
+				}
+// writer.write("Node Name =" + tempNode.getNodeName() + "
+// [CLOSE]" + "\r\n");
+				if (tempNode.getNodeName().toString().contains("Трн")) {
+					writer.write("\r\n");
 				}
 			}
 		}

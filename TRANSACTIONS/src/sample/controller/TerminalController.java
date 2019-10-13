@@ -23,6 +23,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -69,9 +70,6 @@ public class TerminalController {
 	Statement sqlStatement = null;
 
 	@FXML
-	private TextArea resultArea;
-
-	@FXML
 	private TableView<TerminalClass> employeeTable;
 
 	@FXML
@@ -116,14 +114,14 @@ public class TerminalController {
 	@FXML
 	private void initialize() {
 		/*
-		 * The setCellValueFactory(...) that we set on the table columns are
-		 * used to determine which field inside the Employee objects should be
-		 * used for the particular column. The arrow -> indicates that we're
-		 * using a Java 8 feature called Lambdas. (Another option would be to
-		 * use a PropertyValueFactory, but this is not type-safe
+		 * The setCellValueFactory(...) that we set on the table columns are used to
+		 * determine which field inside the Employee objects should be used for the
+		 * particular column. The arrow -> indicates that we're using a Java 8 feature
+		 * called Lambdas. (Another option would be to use a PropertyValueFactory, but
+		 * this is not type-safe
 		 * 
-		 * We're only using StringProperty values for our table columns in this
-		 * example. When you want to use IntegerProperty or DoubleProperty, the
+		 * We're only using StringProperty values for our table columns in this example.
+		 * When you want to use IntegerProperty or DoubleProperty, the
 		 * setCellValueFactory(...) must have an additional asObject():
 		 */
 
@@ -150,22 +148,55 @@ public class TerminalController {
 	 * @FXML private void searchEmployees(ActionEvent actionEvent) throws
 	 * ClassNotFoundException, SQLException { try { // Get Employee information
 	 * Transact emp = EmployeeDAO.searchTransact(fio.getText()); // Populate
-	 * Employee on TableView and Display on TextArea
-	 * populateAndShowEmployee(emp); } catch (SQLException e) {
-	 * e.printStackTrace(); resultArea.
-	 * setText("Произошла ошибка при получении информации о транзакциях из БД.\n"
-	 * + e); throw e; } }
+	 * Employee on TableView and Display on TextArea populateAndShowEmployee(emp); }
+	 * catch (SQLException e) { e.printStackTrace(); resultArea.
+	 * setText("Произошла ошибка при получении информации о транзакциях из БД.\n" +
+	 * e); throw e; } }
 	 */
+
+	public static void autoResizeColumns(TableView<?> table) {
+		// Set the right policy
+		table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+		table.getColumns().stream().forEach((column) -> {
+			// System.out.println(column.getText());
+			if (column.getText().equals("acc_70107")) {
+
+			} else {
+				// Minimal width = columnheader
+				Text t = new Text(column.getText());
+				double max = t.getLayoutBounds().getWidth();
+				for (int i = 0; i < table.getItems().size(); i++) {
+					// cell must not be empty
+					if (column.getCellData(i) != null) {
+						t = new Text(column.getCellData(i).toString());
+						double calcwidth = t.getLayoutBounds().getWidth();
+						// remember new max-width
+						if (calcwidth > max) {
+							max = calcwidth;
+						}
+					}
+				}
+				// set the new max-widht with some extra space
+				column.setPrefWidth(max + 10.0d);
+			}
+		});
+	}
 
 	// Search all transacts
 	@FXML
-	private void searchTerminal(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+	private void searchTerminal(ActionEvent actionEvent) {
 		try {
 			ObservableList<TerminalClass> empData = ViewerDAO.searchTerminal();
 			populateTerminal(empData);
-		} catch (SQLException e) {
-			resultArea.setText("Произошла ошибка при получении информации о транзакциях из БД.\n" + e);
-			throw e;
+			autoResizeColumns(employeeTable);
+		} catch (SQLException | ClassNotFoundException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
 		}
 	}
 
@@ -175,7 +206,13 @@ public class TerminalController {
 	@FXML
 	private void Delete(ActionEvent actionEvent_) throws SQLException, ClassNotFoundException, IOException {
 		if (employeeTable.getSelectionModel().getSelectedItem() == null) {
-			resultArea.setText("Выберите сначала данные из таблицы!\n");
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText("Выберите сначала данные из таблицы!\n");
+			alert.showAndWait();
 		} else {
 			TerminalClass tr = employeeTable.getSelectionModel().getSelectedItem();
 			Stage stage = (Stage) ap.getScene().getWindow();
@@ -210,23 +247,42 @@ public class TerminalController {
 				public void handle(ActionEvent event) {
 					try {
 						ViewerDAO.deleteTerminal(tr.getNAME());
-						resultArea.setText("Терминал: " + tr.getNAME() + " удален!\n");
+						Alert alert = new Alert(Alert.AlertType.INFORMATION);
+						Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+						stage.getIcons().add(new Image("terminal.png"));
+						alert.setTitle("Внимание");
+						alert.setHeaderText(null);
+						alert.setContentText("Терминал: " + tr.getNAME() + " удален!\n");
+						alert.showAndWait();
 						try {
 							ObservableList<TerminalClass> empData = ViewerDAO.searchTerminal();
 							populateTerminal(empData);
 							newWindow_yn.close();
 						} catch (SQLException e) {
-							resultArea.setText(
-									"Произошла ошибка при получении информации о транзакциях из БД.\n" + e);
-							throw e;
+							Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
+							Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
+							stage_.getIcons().add(new Image("terminal.png"));
+							alert_.setTitle("Внимание");
+							alert_.setHeaderText(null);
+							alert_.setContentText(e.getMessage());
+							alert_.showAndWait();
 						}
 					} catch (SQLException e) {
-						resultArea.setText("Есть проблемы: " + e);
+						Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
+						Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
+						stage_.getIcons().add(new Image("terminal.png"));
+						alert_.setTitle("Внимание");
+						alert_.setHeaderText(null);
+						alert_.setContentText(e.getMessage());
+						alert_.showAndWait();
 					} catch (ClassNotFoundException e) {
-						// TODO Auto-generated catch block
-						StringWriter errors = new StringWriter();
-						e.printStackTrace(new PrintWriter(errors));
-						resultArea.setText(errors.toString());
+						Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
+						Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
+						stage_.getIcons().add(new Image("terminal.png"));
+						alert_.setTitle("Внимание");
+						alert_.setHeaderText(null);
+						alert_.setContentText(e.getMessage());
+						alert_.showAndWait();
 					}
 				}
 			});
@@ -240,10 +296,17 @@ public class TerminalController {
 			newWindow_yn.show();
 		}
 	}
+
 	@FXML
 	private void UpdateTerminal(ActionEvent actionEvent_) throws SQLException, ClassNotFoundException, IOException {
 		if (employeeTable.getSelectionModel().getSelectedItem() == null) {
-			resultArea.setText("Выберите сначала данные из таблицы!\n");
+			Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
+			stage_.getIcons().add(new Image("terminal.png"));
+			alert_.setTitle("Внимание");
+			alert_.setHeaderText(null);
+			alert_.setContentText("Выберите сначала данные из таблицы!\n");
+			alert_.showAndWait();
 		} else {
 			TerminalClass tr = employeeTable.getSelectionModel().getSelectedItem();
 			Stage stage = (Stage) ap.getScene().getWindow();
@@ -408,24 +471,42 @@ public class TerminalController {
 										acc_30232_03_T.getText(), acc_30232_04_T.getText(), acc_30232_05_T.getText(),
 										acc_701071_T.getText(), tr.getNAME());
 
-								resultArea.setText("Данные терминала: " + tr.getNAME() + " обновлены!\n");
-
+								Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
+								Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
+								stage_.getIcons().add(new Image("terminal.png"));
+								alert_.setTitle("Внимание");
+								alert_.setHeaderText(null);
+								alert_.setContentText("Данные терминала: " + tr.getNAME() + " обновлены!\n");
+								alert_.showAndWait();
 								try {
 									ObservableList<TerminalClass> empData = ViewerDAO.searchTerminal();
 									populateTerminal(empData);
 									newWindow_yn.close();
 								} catch (SQLException e) {
-									resultArea.setText(
-											"Произошла ошибка при получении информации о транзакциях из БД.\n" + e);
-									throw e;
+									Alert alert = new Alert(Alert.AlertType.INFORMATION);
+									Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+									stage.getIcons().add(new Image("terminal.png"));
+									alert.setTitle("Внимание");
+									alert.setHeaderText(null);
+									alert.setContentText(e.getMessage());
+									alert.showAndWait();
 								}
 							} catch (SQLException e) {
-								resultArea.setText("Есть проблемы: " + e);
+								Alert alert = new Alert(Alert.AlertType.INFORMATION);
+								Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+								stage.getIcons().add(new Image("terminal.png"));
+								alert.setTitle("Внимание");
+								alert.setHeaderText(null);
+								alert.setContentText(e.getMessage());
+								alert.showAndWait();
 							} catch (ClassNotFoundException e) {
-								// TODO Auto-generated catch block
-								StringWriter errors = new StringWriter();
-								e.printStackTrace(new PrintWriter(errors));
-								resultArea.setText(errors.toString());
+								Alert alert = new Alert(Alert.AlertType.INFORMATION);
+								Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+								stage.getIcons().add(new Image("terminal.png"));
+								alert.setTitle("Внимание");
+								alert.setHeaderText(null);
+								alert.setContentText(e.getMessage());
+								alert.showAndWait();
 							}
 						}
 					});
@@ -625,23 +706,42 @@ public class TerminalController {
 									ADDRESS_T.getText(), acc_30232_01_T.getText(), acc_30232_02_T.getText(),
 									acc_30232_03_T.getText(), acc_30232_04_T.getText(), acc_30232_05_T.getText(),
 									acc_701071_T.getText());
-							resultArea.setText("Добавлен терминал: " + NAME.getText() + " !\n");
+							Alert alert = new Alert(Alert.AlertType.INFORMATION);
+							Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+							stage.getIcons().add(new Image("terminal.png"));
+							alert.setTitle("Внимание");
+							alert.setHeaderText(null);
+							alert.setContentText("Добавлен терминал: " + NAME.getText() + " !\n");
+							alert.showAndWait();
 							try {
 								ObservableList<TerminalClass> empData = ViewerDAO.searchTerminal();
 								populateTerminal(empData);
 								newWindow_yn.close();
 							} catch (SQLException e) {
-								resultArea.setText(
-										"Произошла ошибка при получении информации о транзакциях из БД.\n" + e);
-								throw e;
+								Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
+								Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
+								stage_.getIcons().add(new Image("terminal.png"));
+								alert_.setTitle("Внимание");
+								alert_.setHeaderText(null);
+								alert_.setContentText(e.getMessage());
+								alert_.showAndWait();
 							}
 						} catch (SQLException e) {
-							resultArea.setText("Есть проблемы: " + e);
+							Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
+							Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
+							stage_.getIcons().add(new Image("terminal.png"));
+							alert_.setTitle("Внимание");
+							alert_.setHeaderText(null);
+							alert_.setContentText(e.getMessage());
+							alert_.showAndWait();
 						} catch (ClassNotFoundException e) {
-							// TODO Auto-generated catch block
-							StringWriter errors = new StringWriter();
-							e.printStackTrace(new PrintWriter(errors));
-							resultArea.setText(errors.toString());
+							Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
+							Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
+							stage_.getIcons().add(new Image("terminal.png"));
+							alert_.setTitle("Внимание");
+							alert_.setHeaderText(null);
+							alert_.setContentText(e.getMessage());
+							alert_.showAndWait();
 						}
 					}
 				});

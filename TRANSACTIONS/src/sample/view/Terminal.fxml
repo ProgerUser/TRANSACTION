@@ -5,36 +5,25 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="649.0" prefWidth="1017.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="sample.controller.TerminalController">
+<AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="649.0" prefWidth="1017.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.TerminalController">
   <children>
-    <Button id="searchEmpBtn" fx:id="searchTerminal" layoutX="19.0" layoutY="45.0" mnemonicParsing="false" onAction="#searchTerminal" prefHeight="25.0" prefWidth="56.0" text="Поиск" />
-    <TextArea fx:id="resultArea" layoutX="18.0" layoutY="549.0" prefHeight="83.0" prefWidth="994.0" wrapText="true" />
-    <Label layoutX="16.0" layoutY="533.0" text="Вывод">
-      <font>
-        <Font name="System Bold" size="12.0" fx:id="x1" />
-      </font>
-    </Label>
-    <VBox layoutX="97.0" layoutY="24.0" spacing="4.0" />
-    <VBox layoutX="1.0" layoutY="45.0" prefWidth="67.0" spacing="12.0" />
-    <Separator layoutY="14.0" prefHeight="2.0" prefWidth="1007.0" />
-    <TableView fx:id="employeeTable" layoutX="18.0" layoutY="99.0" prefHeight="366.0" prefWidth="994.0" tableMenuButtonVisible="true">
+    <Button id="searchEmpBtn" layoutX="19.0" layoutY="20.0" mnemonicParsing="false" onAction="#searchTerminal" prefHeight="25.0" prefWidth="56.0" text="Поиск" />
+    <TableView fx:id="employeeTable" layoutX="18.0" layoutY="53.0" prefHeight="576.0" prefWidth="985.0" stylesheets="@../../transact.css" tableMenuButtonVisible="true">
       <columns>
-        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="101.0" text="Название" fx:id="NAME" />
-        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="84.0" text="Отделение" fx:id="DEPARTMENT" />
-        <TableColumn maxWidth="5000.0" minWidth="0.0" prefWidth="272.0" text="Адрес" fx:id="ADDRESS" />
-        <TableColumn maxWidth="5000.0" minWidth="0.0" prefWidth="209.0" text="Счет" fx:id="ACCOUNT" />
-        <TableColumn maxWidth="5000.0" minWidth="7.0" prefWidth="209.0" text="acc_30232_01" fx:id="acc_30232_01" />
-        <TableColumn maxWidth="5000.0" minWidth="7.0" prefWidth="209.0" text="acc_30232_02" fx:id="acc_30232_02" />
-        <TableColumn minWidth="7.0" prefWidth="209.0" text="acc_30232_03" fx:id="acc_30232_03" />
-        <TableColumn minWidth="7.0" prefWidth="209.0" text="acc_30232_04" fx:id="acc_30232_04" />
-        <TableColumn minWidth="7.0" prefWidth="209.0" text="acc_30232_05" fx:id="acc_30232_05" />
-        <TableColumn minWidth="7.0" prefWidth="209.0" text="acc_70107" fx:id="acc_70107" />
+        <TableColumn fx:id="NAME" maxWidth="5000.0" minWidth="10.0" prefWidth="101.0" text="Название" />
+        <TableColumn fx:id="DEPARTMENT" maxWidth="5000.0" minWidth="10.0" prefWidth="84.0" text="Отделение" />
+        <TableColumn fx:id="ADDRESS" maxWidth="5000.0" minWidth="0.0" prefWidth="272.0" text="Адрес" />
+        <TableColumn fx:id="ACCOUNT" maxWidth="5000.0" minWidth="0.0" prefWidth="209.0" text="Счет" />
+        <TableColumn fx:id="acc_30232_01" maxWidth="5000.0" minWidth="7.0" prefWidth="209.0" text="acc_30232_01" />
+        <TableColumn fx:id="acc_30232_02" maxWidth="5000.0" minWidth="7.0" prefWidth="209.0" text="acc_30232_02" />
+        <TableColumn fx:id="acc_30232_03" minWidth="7.0" prefWidth="209.0" text="acc_30232_03" />
+        <TableColumn fx:id="acc_30232_04" minWidth="7.0" prefWidth="209.0" text="acc_30232_04" />
+        <TableColumn fx:id="acc_30232_05" minWidth="7.0" prefWidth="209.0" text="acc_30232_05" />
+        <TableColumn fx:id="acc_70107" minWidth="7.0" prefWidth="209.0" text="acc_70107" />
       </columns>
     </TableView>
-    <Label font="$x1" layoutX="19.0" layoutY="82.0" prefHeight="17.0" prefWidth="137.0" text="Таблица значении" />
-    <Label font="$x1" layoutX="16.0" layoutY="16.0" text="Список терминалов" />
-    <Button id="searchEmpBtn" layoutX="716.0" layoutY="45.0" mnemonicParsing="false" onAction="#add" prefHeight="25.0" prefWidth="85.0" text="Добавить" />
-    <Button id="searchEmpBtn" layoutX="918.0" layoutY="45.0" mnemonicParsing="false" onAction="#UpdateTerminal" prefHeight="25.0" prefWidth="85.0" text="Изменить" />
-    <Button id="searchEmpBtn" layoutX="19.0" layoutY="474.0" mnemonicParsing="false" onAction="#Delete" prefHeight="25.0" prefWidth="85.0" text="Удалить" />
+    <Button id="searchEmpBtn" layoutX="710.0" layoutY="20.0" mnemonicParsing="false" onAction="#add" prefHeight="25.0" prefWidth="85.0" text="Добавить" />
+    <Button id="searchEmpBtn" layoutX="814.0" layoutY="20.0" mnemonicParsing="false" onAction="#UpdateTerminal" prefHeight="25.0" prefWidth="85.0" text="Изменить" />
+    <Button id="searchEmpBtn" layoutX="918.0" layoutY="20.0" mnemonicParsing="false" onAction="#Delete" prefHeight="25.0" prefWidth="85.0" text="Удалить" />
   </children>
 </AnchorPane>
