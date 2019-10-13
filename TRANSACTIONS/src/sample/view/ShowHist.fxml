@@ -1,28 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="649.0" prefWidth="1017.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.ShowHistoryController">
-	<children>		
-		<TableView fx:id="fn_sess_table" layoutX="14.0" layoutY="68.0" prefHeight="569.0" prefWidth="994.0" stylesheets="@../../transact.css" tableMenuButtonVisible="true">
-			<columns>
-				<TableColumn fx:id="SESS_ID" prefWidth="137.0" text="SESS_ID" />
-				<TableColumn fx:id="FILE_NAME" prefWidth="554.0" text="FILE_NAME" />
-				<TableColumn fx:id="DATE_TIME" minWidth="0.0" prefWidth="188.0" text="DATE_TIME" />
-			</columns>
-		</TableView>
-		<Label layoutX="14.0" layoutY="14.0" text="Номер ТР:" />
-		<TextField fx:id="trnumber" layoutX="14.0" layoutY="33.0" prefHeight="25.0" prefWidth="172.0" promptText="\%{123...}%" />
-		<Label layoutX="376.0" layoutY="14.0" text="Дата начала:" />
-		<Label layoutX="501.0" layoutY="14.0" text="Дата конца:" />
-		<TextField fx:id="sess_id_t" layoutX="197.0" layoutY="33.0" prefHeight="25.0" prefWidth="172.0" />
-		<Label layoutX="197.0" layoutY="14.0" prefHeight="17.0" prefWidth="46.0" text="SESS_ID:" />
-		<Button  layoutX="634.0" layoutY="34.0" mnemonicParsing="false" onAction="#fn_sess_search" prefHeight="17.0" prefWidth="56.0" text="Поиск" />
-      <Button layoutX="877.0" layoutY="34.0" mnemonicParsing="false" onAction="#view_clob" prefHeight="25.0" prefWidth="131.0" text="Просмотр загрузки" />
-      <DatePicker fx:id="datestart" layoutX="376.0" layoutY="33.0" prefHeight="25.0" prefWidth="117.0" />
-      <DatePicker fx:id="dateend" layoutX="501.0" layoutY="34.0" prefHeight="25.0" prefWidth="117.0" />
-	</children>
-</AnchorPane>
+<BorderPane prefHeight="526.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.ShowHistoryController">
+	<center>
+		<GridPane prefHeight="555.0" prefWidth="598.0">
+			<children>
+				<TableView fx:id="fn_sess_table" prefHeight="400.0" prefWidth="134.0" stylesheets="@../../transact.css" tableMenuButtonVisible="true" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS">
+					<columnResizePolicy>
+						<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+					</columnResizePolicy>
+					<columns>
+						<TableColumn fx:id="SESS_ID" prefWidth="137.0" text="SESS_ID" />
+						<TableColumn fx:id="FILE_NAME" prefWidth="554.0" text="FILE_NAME" />
+						<TableColumn fx:id="DATE_TIME" minWidth="0.0" prefWidth="188.0" text="DATE_TIME" />
+					</columns>
+				</TableView>
+			</children>
+			<columnConstraints>
+				<ColumnConstraints />
+			</columnConstraints>
+			<rowConstraints>
+				<RowConstraints />
+			</rowConstraints>
+		</GridPane>
+	</center>
+	<top>
+		<AnchorPane prefHeight="71.0" prefWidth="1008.0" BorderPane.alignment="CENTER">
+   <children>
+   			<Label layoutX="14.0" layoutY="14.0" text="Номер ТР:" />
+   			<TextField fx:id="trnumber" layoutX="14.0" layoutY="33.0" prefHeight="25.0" prefWidth="172.0" promptText="\%{123...}%" />
+   			<Label layoutX="376.0" layoutY="14.0" text="Дата начала:" />
+   			<Label layoutX="501.0" layoutY="14.0" text="Дата конца:" />
+   			<TextField fx:id="sess_id_t" layoutX="197.0" layoutY="33.0" prefHeight="25.0" prefWidth="172.0" />
+   			<Label layoutX="197.0" layoutY="14.0" prefHeight="17.0" prefWidth="46.0" text="SESS_ID:" />
+   			<Button layoutX="634.0" layoutY="34.0" mnemonicParsing="false" onAction="#fn_sess_search" prefHeight="17.0" prefWidth="56.0" text="Поиск" />
+   			<Button layoutX="877.0" layoutY="34.0" mnemonicParsing="false" onAction="#view_clob" prefHeight="25.0" prefWidth="131.0" text="Просмотр загрузки" />
+   			<DatePicker fx:id="datestart" layoutX="376.0" layoutY="33.0" prefHeight="25.0" prefWidth="117.0" />
+   			<DatePicker fx:id="dateend" layoutX="501.0" layoutY="34.0" prefHeight="25.0" prefWidth="117.0" />
+   </children>
+		</AnchorPane>
+	</top>
+</BorderPane>

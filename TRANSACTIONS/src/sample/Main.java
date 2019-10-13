@@ -40,11 +40,11 @@ public class Main extends Application {
 
 		 Enter();
 
-//		Connect.connectionURL_ = "oradb-prm:1521/odb";
-//		Connect.userID_ = "XXI";
-//		Connect.userPassword_ = "xxx";
+		Connect.connectionURL_ = "oradb-prm:1521/odb";
+		Connect.userID_ = "XXI";
+		Connect.userPassword_ = "ver8i";
 
-		//showFirst();
+		showFirst();
 	}
 
 	// Initializes the root layout.
@@ -88,7 +88,7 @@ public class Main extends Application {
 
 	public static void showKash() {
 		try {
-			// First, load EmployeeView from EmployeeView.fxml
+			// First, load EmployeeView from EmployeeView.fxml Kash AnchorPane
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Kash.fxml"));
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
@@ -119,7 +119,7 @@ public class Main extends Application {
 			// First, load EmployeeView from EmployeeView.fxml
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Transact_Amra_viewer.fxml"));
-			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
+			BorderPane employeeOperationsView = (BorderPane) loader.load();
 
 			// Set Employee Operations view into the center of root layout.
 			rootLayout.setCenter(employeeOperationsView);
@@ -196,7 +196,7 @@ public class Main extends Application {
 			// First, load EmployeeView from EmployeeView.fxml
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/ShowHist.fxml"));
-			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
+			BorderPane employeeOperationsView = (BorderPane) loader.load();
 
 			// Set Employee Operations view into the center of root layout.
 			rootLayout.setCenter(employeeOperationsView);
