@@ -11,7 +11,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -23,6 +25,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -73,9 +76,6 @@ public class Termdial_Controller {
 	private TableColumn<Termdial, String> dealenddate;
 
 	@FXML
-	private TextArea resultArea;
-
-	@FXML
 	private TableView<Termdial> termdeal_table;
 
 	@FXML
@@ -98,9 +98,9 @@ public class Termdial_Controller {
 	@FXML
 	private TextField trnumber;
 	@FXML
-	private TextField datestart;
+	private DatePicker datestart;
 	@FXML
-	private TextField dateend;
+	private DatePicker dateend;
 
 	@FXML
 	private void initialize() {
@@ -197,14 +197,49 @@ public class Termdial_Controller {
 
 	}
 
+	public static void autoResizeColumns(TableView<?> table) {
+		// Set the right policy
+		table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+		table.getColumns().stream().forEach((column) -> {
+			// System.out.println(column.getText());
+			if (column.getText().equals("sess_id")) {
+
+			} else {
+				// Minimal width = columnheader
+				Text t = new Text(column.getText());
+				double max = t.getLayoutBounds().getWidth();
+				for (int i = 0; i < table.getItems().size(); i++) {
+					// cell must not be empty
+					if (column.getCellData(i) != null) {
+						t = new Text(column.getCellData(i).toString());
+						double calcwidth = t.getLayoutBounds().getWidth();
+						// remember new max-width
+						if (calcwidth > max) {
+							max = calcwidth;
+						}
+					}
+				}
+				// set the new max-widht with some extra space
+				column.setPrefWidth(max + 10.0d);
+			}
+		});
+	}
+
 	@FXML
 	private void termdial_srch(ActionEvent actionEvent) throws IOException {
 		try {
-			ObservableList<Termdial> empData = TerminalDAO.Termdial_(datestart.getText(), dateend.getText(),
+			ObservableList<Termdial> empData = TerminalDAO.Termdial_(datestart.getValue(), dateend.getValue(),
 					trnumber.getText(), sess_id_t.getText());
 			populate_termdial(empData);
+			autoResizeColumns(termdeal_table);
 		} catch (SQLException | ParseException | ClassNotFoundException e) {
-			resultArea.setText(e.getMessage());
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
 		}
 	}
 

@@ -147,7 +147,7 @@ public class TerminalDAO {
 		}
 
 		String selectStmt = "" + "select sess_id,\n " + "file_name, \n" + "date_time, \n" + "fileclob \n"
-				+ "from Z_SB_FN_SESS_AMRA \n" + "where 1=1" + ldt1_ + ldt2_+p_n + bt + clob
+				+ "from Z_SB_FN_SESS_AMRA \n" + "where 1=1" + ldt1_ + ldt2_ + p_n + bt + clob
 				+ "order by date_time desc";
 
 		// Execute SELECT statement
@@ -246,18 +246,31 @@ public class TerminalDAO {
 	// *******************************
 	// SELECT Termdial_
 	// *******************************
-	public static ObservableList<Termdial> Termdial_(String dt1, String dt2, String pnmb, String sess_id)
+	public static ObservableList<Termdial> Termdial_(LocalDate dt1, LocalDate dt2, String pnmb, String sess_id)
 			throws SQLException, ClassNotFoundException, ParseException {
 
-		String dt_btw = "\n";
 		String pnmb_ = "\n";
 		String sess_id_ = "\n";
 
-		if (dt1.equals("") & dt1.equals("")) {
+		String ldt1 = null;
+		String ldt2 = null;
 
-		} else {
-			dt_btw = "and trunc(RECDATE) between  to_date('" + dt1 + "','dd.mm.yyyy') and to_date('" + dt2
-					+ "','dd.mm.yyyy')\n";
+		if (dt1 != null)
+			ldt1 = dt1.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+		if (dt2 != null)
+			ldt2 = dt2.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+
+		String ldt1_ = "\n";
+		String ldt2_ = "\n";
+		String bt = "\n";
+
+		if (dt1 != null & dt2 != null) {
+			bt = " and trunc(recdate) between to_date('" + ldt1 + "','dd.mm.yyyy') and to_date('" + ldt2
+					+ "','dd.mm.yyyy') \n";
+		} else if (dt1 != null & dt2 == null) {
+			ldt1_ = " and trunc(recdate) = to_date('" + ldt1 + "','dd.mm.yyyy')\n";
+		} else if (dt1 == null & dt2 != null) {
+			ldt2_ = " and trunc(recdate) = to_date('" + ldt2 + "','dd.mm.yyyy')\n";
 		}
 
 		if (pnmb.equals("")) {
@@ -271,7 +284,7 @@ public class TerminalDAO {
 			sess_id_ = "and SESS_ID = '" + sess_id + "'\n";
 		}
 
-		String selectStmt = "select * from z_sb_termdeal_amra_dbt where 1=1" + dt_btw + pnmb_ + sess_id_;
+		String selectStmt = "select * from z_sb_termdeal_amra_dbt where 1=1" + ldt1_ + bt + ldt2_ + pnmb_ + sess_id_;
 
 		// Execute SELECT statement
 		try {

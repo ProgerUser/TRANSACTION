@@ -23,6 +23,7 @@ import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sample.model.Transact;
@@ -32,6 +33,7 @@ import sample.model.Amra_Trans;
 import sample.model.Connect;
 import sample.model.TerminalDAO;
 import sample.model.FN_SESS_AMRA;
+import sample.model.GUIUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -78,7 +80,7 @@ public class ShowHistoryController {
 
 	@FXML
 	private void initialize() {
-		
+
 		fn_sess_table.setEditable(true);
 		exec = Executors.newCachedThreadPool((runnable) -> {
 			Thread t = new Thread(runnable);
@@ -120,29 +122,71 @@ public class ShowHistoryController {
 
 	// Найти загрузки
 	@FXML
-	private void view_clob(ActionEvent actionEvent) throws IOException {
-		if (fn_sess_table.getSelectionModel().getSelectedItem() == null) {
+	private void view_clob(ActionEvent actionEvent) {
+		try {
+			if (fn_sess_table.getSelectionModel().getSelectedItem() == null) {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText(("Выберите сначала данные из таблицы!\n"));
+				alert.showAndWait();
+			} else {
+				FN_SESS_AMRA fn = fn_sess_table.getSelectionModel().getSelectedItem();
+
+				Connect.SESS_ID_ = fn.getsess_id();
+
+				Stage stage = new Stage();
+				Parent root;
+
+				root = FXMLLoader.load(Main.class.getResource("view/Transact_Amra_viewer.fxml"));
+
+				stage.setScene(new Scene(root));
+				stage.getIcons().add(new Image("icon.png"));
+				stage.setTitle("Загруженные транзакции SESS_ID = " + fn.getsess_id());
+				stage.initModality(Modality.WINDOW_MODAL);
+				stage.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
+				stage.show();
+
+			}
+		} catch (IOException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText(("Выберите сначала данные из таблицы!\n"));
+			alert.setContentText(e.getMessage());
 			alert.showAndWait();
-		} else {
-			FN_SESS_AMRA fn = fn_sess_table.getSelectionModel().getSelectedItem();
-
-			Connect.SESS_ID_ = fn.getsess_id();
-
-			Stage stage = new Stage();
-			Parent root = FXMLLoader.load(Main.class.getResource("view/Transact_Amra_viewer.fxml"));
-			stage.setScene(new Scene(root));
-			stage.getIcons().add(new Image("icon.png"));
-			stage.setTitle("Транзакции");
-			stage.initModality(Modality.WINDOW_MODAL);
-			stage.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
-			stage.show();
 		}
+	}
+
+	public static void autoResizeColumns(TableView<?> table) {
+		// Set the right policy
+		table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+		table.getColumns().stream().forEach((column) -> {
+			// System.out.println(column.getText());
+			if (column.getText().equals("sess_id")) {
+
+			} else {
+				// Minimal width = columnheader
+				Text t = new Text(column.getText());
+				double max = t.getLayoutBounds().getWidth();
+				for (int i = 0; i < table.getItems().size(); i++) {
+					// cell must not be empty
+					if (column.getCellData(i) != null) {
+						t = new Text(column.getCellData(i).toString());
+						double calcwidth = t.getLayoutBounds().getWidth();
+						// remember new max-width
+						if (calcwidth > max) {
+							max = calcwidth;
+						}
+					}
+				}
+				// set the new max-widht with some extra space
+				column.setPrefWidth(max + 10.0d);
+			}
+		});
 	}
 
 	// Найти загрузки
@@ -154,6 +198,8 @@ public class ShowHistoryController {
 					datestart.getValue(), dateend.getValue());
 			// Populate Employees on TableView
 			populate_fn_sess(empData);
+			autoResizeColumns(fn_sess_table);
+			// GUIUtils.autoFitTable(fn_sess_table);
 
 		} catch (SQLException | ParseException | ClassNotFoundException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);

@@ -20,6 +20,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TableView.ResizeFeatures;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -28,6 +29,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -37,6 +39,7 @@ import sample.model.TransactClass;
 import sample.Main;
 import sample.model.TerminalDAO;
 import sample.model.FN_SESS_AMRA;
+import sample.model.GUIUtils;
 import sample.model.Amra_Trans;
 import sample.model.Connect;
 
@@ -816,6 +819,9 @@ public class Tr_Am_View_con {
 			ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(Connect.SESS_ID_, dt1.getValue(),
 					dt2.getValue());
 			populate_fn_sess(empData);
+
+			autoResizeColumns(trans_table);
+			// GUIUtils.autoFitTable(trans_table);
 		} catch (SQLException | ParseException | ClassNotFoundException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -825,6 +831,34 @@ public class Tr_Am_View_con {
 			alert.setContentText(e.getMessage());
 			alert.showAndWait();
 		}
+	}
+
+	public static void autoResizeColumns(TableView<?> table) {
+		// Set the right policy
+		table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+		table.getColumns().stream().forEach((column) -> {
+			//System.out.println(column.getText());
+			if (column.getText().equals("sess_id")) {
+
+			} else {
+				// Minimal width = columnheader
+				Text t = new Text(column.getText());
+				double max = t.getLayoutBounds().getWidth();
+				for (int i = 0; i < table.getItems().size(); i++) {
+					// cell must not be empty
+					if (column.getCellData(i) != null) {
+						t = new Text(column.getCellData(i).toString());
+						double calcwidth = t.getLayoutBounds().getWidth();
+						// remember new max-width
+						if (calcwidth > max) {
+							max = calcwidth;
+						}
+					}
+				}
+				// set the new max-widht with some extra space
+				column.setPrefWidth(max + 10.0d);
+			}
+		});
 	}
 
 	@FXML
@@ -1346,8 +1380,8 @@ public class Tr_Am_View_con {
 			Parent root = FXMLLoader.load(Main.class.getResource("view/Attributes_.fxml"));
 			stage.setScene(new Scene(root));
 			stage.getIcons().add(new Image("icon.png"));
-			stage.setTitle("Атрибуты");
-			stage.initModality(Modality.WINDOW_MODAL);
+			stage.setTitle("Атрибуты транзакции "+fn.get_checknumber());
+			//stage.initModality(Modality.WINDOW_MODAL);
 			stage.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
 			stage.show();
 		}
@@ -1360,6 +1394,7 @@ public class Tr_Am_View_con {
 			ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(Connect.SESS_ID_, dt1.getValue(),
 					dt2.getValue());
 			populate_fn_sess(empData);
+			// autoResizeColumns(trans_table);
 
 		} catch (SQLException | ParseException | ClassNotFoundException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);

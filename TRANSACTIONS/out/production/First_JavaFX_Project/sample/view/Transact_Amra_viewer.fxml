@@ -68,8 +68,6 @@
 				<TableColumn fx:id="dataprovider" prefWidth="137.0" text="ДатаПровайдера=DATAPROVIDER" />
 				<TableColumn fx:id="statusabs" prefWidth="137.0" text="statusabs" />
 				<TableColumn fx:id="sess_id" prefWidth="137.0" text="sess_id" />
-				<TableColumn fx:id="statusabs" prefWidth="137.0" text="statusabs" />
-				<TableColumn fx:id="sess_id" prefWidth="137.0" text="sess_id" />
 			</columns>
 		</TableView>
 		<Button layoutX="870.0" layoutY="41.0" mnemonicParsing="false" onAction="#view_attr" text="Просмотр Атрибутов" />

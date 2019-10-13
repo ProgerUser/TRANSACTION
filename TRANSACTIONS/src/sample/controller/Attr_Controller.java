@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableCell;
@@ -69,9 +70,6 @@ public class Attr_Controller {
 	private TableColumn<Attributes, String> AttributeName;
 
 	@FXML
-	private TextArea resultArea;
-
-	@FXML
 	private TableColumn<Attributes, String> CheckNumber;
 
 	// For MultiThreading
@@ -128,16 +126,38 @@ public class Attr_Controller {
 			ObservableList<Attributes> empData = TerminalDAO.Attributes_();
 			populate_attr(empData);
 		} catch (SQLException | ParseException | ClassNotFoundException e) {
-			resultArea.setText(e.getMessage());
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
 		}
 	}
 
 	@FXML
 	private void view_attr(ActionEvent actionEvent) throws IOException {
 		if (trans_table.getSelectionModel().getSelectedItem() == null) {
-			resultArea.setText("Выберите сначала данные из таблицы!\n");
-		} else {
-			Attributes fn = trans_table.getSelectionModel().getSelectedItem();
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText("Выберите сначала данные из таблицы!\n");
+			alert.showAndWait();
+
+		} else
+		{
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText("Не реализовано!\n");
+			alert.showAndWait();
+			
+			/*Attributes fn = trans_table.getSelectionModel().getSelectedItem();
 
 			Stage stage = new Stage();
 			Parent root = FXMLLoader.load(Main.class.getResource("view/Attributes.fxml"));
@@ -146,7 +166,7 @@ public class Attr_Controller {
 			stage.setTitle("Атрибуты");
 			stage.initModality(Modality.WINDOW_MODAL);
 			stage.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
-			stage.show();
+			stage.show();*/
 		}
 	}
 

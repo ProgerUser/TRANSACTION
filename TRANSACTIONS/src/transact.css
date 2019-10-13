@@ -39,7 +39,27 @@
     -fx-background-color: #005797;
     -fx-background-insets: 0;
     -fx-background-radius: 1;
-}*/
+}
+* 
+* .table-view .column-header, .table-view .filler {
+    -fx-border-width: 0 0 1 0;
+}
+
+
+.table-view .column-header,
+.table-view .column-header-background .filler {
+    -fx-background-color:  #d2e0e0; 
+}
+*/
+.table-view .column-header, .table-view .filler {
+    -fx-border-color: black;
+}
+
+.table-row-cell{
+-fx-table-cell-border-color:black;
+}
+
+
 .table-view > .virtual-flow > .scroll-bar {
     -fx-font-size: 15.0pt;
 }
