@@ -32,6 +32,7 @@ public class Main extends Application {
 
 		this.primaryStage.setTitle("Транзакции");
 
+		
 		// 2) Initialize RootLayout
 		initRootLayout();
 
@@ -163,7 +164,7 @@ public class Main extends Application {
 			// First, load EmployeeView from EmployeeView.fxml
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Enter.fxml"));
-			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
+			BorderPane employeeOperationsView = (BorderPane) loader.load();
 			// TabPane tp = (TabPane) loader.load();
 
 			// Set Employee Operations view into the center of root layout.

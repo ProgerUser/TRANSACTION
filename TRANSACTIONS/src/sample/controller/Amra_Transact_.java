@@ -36,6 +36,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -44,6 +45,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -119,6 +123,9 @@ public class Amra_Transact_ {
 	private CheckBox chk;
 
 	@FXML
+	private ProgressIndicator pb;
+
+	@FXML
 	private Label trsum;
 	@FXML
 	private Label txtfilecount;
@@ -149,131 +156,159 @@ public class Amra_Transact_ {
 		}
 	}
 
-	@FXML
-	void Load_Transact(ActionEvent event) {
-		try {
-			if (!textbox.getText().equals("") & textbox.getText().contains("\\")) {
+	/* create Runnable using anonymous inner class */
+	Thread t1 = new Thread(new Runnable() {
+		public void run() {
+			try {
+				if (!textbox.getText().equals("") & textbox.getText().contains("\\")) {
 
-				Date date = new Date();
+					Date date = new Date();
 
-				DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH-mm-ss");
+					DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH-mm-ss");
 
-				String strDate = dateFormat.format(date);
+					String strDate = dateFormat.format(date);
 
-				Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
-						+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
+					Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
+							+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
 
-				CallableStatement callStmt = null;
-				String reviewContent = null;
+					CallableStatement callStmt = null;
+					String reviewContent = null;
 
-				callStmt = conn.prepareCall(sql);
+					callStmt = conn.prepareCall(sql);
 
-				String reviewStr = readFile(textbox.getText().replace("::_", "\\"));
+					String reviewStr = readFile(textbox.getText().replace("::_", "\\"));
 
-				Clob clob = conn.createClob();
-				clob.setString(1, reviewStr);
+					Clob clob = conn.createClob();
+					clob.setString(1, reviewStr);
 
-				callStmt.registerOutParameter(1, Types.VARCHAR);
-				callStmt.setClob(2, clob);
-				callStmt.setString(3, textbox.getText());
+					callStmt.registerOutParameter(1, Types.VARCHAR);
+					callStmt.setClob(2, clob);
+					callStmt.setString(3, textbox.getText());
 
-				callStmt.execute();
+					callStmt.execute();
 
-				reviewContent = callStmt.getString(1);
+					reviewContent = callStmt.getString(1);
 
-				String[] parts = reviewContent.split(":");
-				String part1 = parts[0].trim();
-				String part2 = parts[1].trim();
+					String[] parts = reviewContent.split(":");
+					String part1 = parts[0].trim();
+					String part2 = parts[1].trim();
 
-				sessid_ = part2;
+					sessid_ = part2;
 
-				String[] path_ = textbox.getText().toString().split("::_");
-				String path1_ = path_[0].trim();
+					String[] path_ = textbox.getText().toString().split("::_");
+					String path1_ = path_[0].trim();
 
-				Integer rowid = 1;
-				if (part1.equals("1")) {
-					Alert alert = new Alert(Alert.AlertType.INFORMATION);
-					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-					stage.getIcons().add(new Image("terminal.png"));
-					alert.setTitle("Внимание");
-					alert.setHeaderText(null);
-					alert.setContentText("Найдены ошибки, скоро откроется файл с описанием.");
-					alert.showAndWait();
+					Integer rowid = 1;
+					if (part1.equals("1")) {
+						Alert alert = new Alert(Alert.AlertType.INFORMATION);
+						Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+						stage.getIcons().add(new Image("terminal.png"));
+						alert.setTitle("Внимание");
+						alert.setHeaderText(null);
+						alert.setContentText("Найдены ошибки, скоро откроется файл с описанием.");
+						alert.showAndWait();
 
-					Statement sqlStatement = conn.createStatement();
-					String readRecordSQL = "SELECT * FROM Z_SB_LOG_AMRA WHERE sess_id = " + part2 + "";
-					ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
+						Statement sqlStatement = conn.createStatement();
+						String readRecordSQL = "SELECT * FROM Z_SB_LOG_AMRA WHERE sess_id = " + part2 + "";
+						ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
 
-// String[] path =
-// textbox.getText().toString().split("::_");
-// String path1 = path[0].trim();
+						// String[] path =
+						// textbox.getText().toString().split("::_");
+						// String path1 = path[0].trim();
 
-					DateFormat dateFormat_ = new SimpleDateFormat("dd.MM.yyyy HH");
-					String strDate_ = dateFormat_.format(date);
-					String createfolder = System.getProperty("user.dir") + "\\" + strDate_ + "_SESSID_" + sessid_;
+						DateFormat dateFormat_ = new SimpleDateFormat("dd.MM.yyyy HH");
+						String strDate_ = dateFormat_.format(date);
+						String createfolder = System.getProperty("user.dir") + "\\" + strDate_ + "_SESSID_" + sessid_;
 
-					File file = new File(createfolder);
-					if (!file.exists()) {
-						if (file.mkdir()) {
-							System.out.println("Directory is created!");
-						} else {
-							System.out.println("Failed to create directory!");
+						File file = new File(createfolder);
+						if (!file.exists()) {
+							if (file.mkdir()) {
+								System.out.println("Directory is created!");
+							} else {
+								System.out.println("Failed to create directory!");
+							}
 						}
-					}
 
-					String path_file = createfolder + "\\" + strDate + "_ERROR.txt";
-					PrintWriter writer = new PrintWriter(path_file);
-					while (myResultSet.next()) {
-						writer.write(rowid + " ____ " + myResultSet.getString("recdate") + " ____ "
-								+ myResultSet.getString("paydate") + " ____ " + myResultSet.getString("desc_")
-								+ " ____ " + myResultSet.getString("sess_id") + "\r\n");
-						rowid++;
+						String path_file = createfolder + "\\" + strDate + "_ERROR.txt";
+						PrintWriter writer = new PrintWriter(path_file);
+						while (myResultSet.next()) {
+							writer.write(rowid + " ____ " + myResultSet.getString("recdate") + " ____ "
+									+ myResultSet.getString("paydate") + " ____ " + myResultSet.getString("desc_")
+									+ " ____ " + myResultSet.getString("sess_id") + "\r\n");
+							rowid++;
+						}
+						writer.close();
+						ProcessBuilder pb = new ProcessBuilder("Notepad.exe",
+								createfolder + "\\" + strDate + "_ERROR.txt");
+						pb.start();
+						myResultSet.close();
+						textbox.setText("");
+					} else {
+						// --------------------------------------
+						Protocol(part2);
+						// --------------------------------------
+						chk.setDisable(false);
+						chk.setSelected(true);
+						calc.setDisable(false);
+
+						full_pach = path1_;
+
+						textbox.setText("");
+						sess_id = Integer.parseInt(part2);
+						Alert alert = new Alert(Alert.AlertType.INFORMATION);
+						Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+						stage.getIcons().add(new Image("terminal.png"));
+						alert.setTitle("Внимание");
+						alert.setHeaderText(null);
+						alert.setContentText("Загрузка прошла успешна. Можете перейти к расчету");
+						alert.showAndWait();
 					}
-					writer.close();
-					ProcessBuilder pb = new ProcessBuilder("Notepad.exe", createfolder + "\\" + strDate + "_ERROR.txt");
-					pb.start();
-					myResultSet.close();
-					textbox.setText("");
+					callStmt.close();
+					conn.close();
 				} else {
-// --------------------------------------
-					Protocol(part2);
-// --------------------------------------
-					chk.setDisable(false);
-					chk.setSelected(true);
-					calc.setDisable(false);
-
-					full_pach = path1_;
-
-					textbox.setText("");
-					sess_id = Integer.parseInt(part2);
 					Alert alert = new Alert(Alert.AlertType.INFORMATION);
 					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 					stage.getIcons().add(new Image("terminal.png"));
 					alert.setTitle("Внимание");
 					alert.setHeaderText(null);
-					alert.setContentText("Загрузка прошла успешна. Можете перейти к расчету");
+					alert.setContentText("Выберите сначала файл для загрузки");
 					alert.showAndWait();
 				}
-				callStmt.close();
-				conn.close();
-			} else {
+			} catch (SQLException | IOException e) {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
 				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 				stage.getIcons().add(new Image("terminal.png"));
 				alert.setTitle("Внимание");
 				alert.setHeaderText(null);
-				alert.setContentText("Выберите сначала файл для загрузки");
+				alert.setContentText(e.getMessage());
 				alert.showAndWait();
 			}
-		} catch (SQLException | IOException e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
-			alert.showAndWait();
 		}
+	});
+
+	@FXML
+	void Load_Transact(ActionEvent event) {
+		/* start processing on new threads */
+//		ScrollPane scrollPane = new ScrollPane();
+//		
+//		progressbar.setVisible(true);
+//        scrollPane.setDisable(true);
+//        
+//        Task<Void> testTask = new Task<Void>() {
+//            @Override
+//            protected Void call() throws Exception {
+//                // Send the message
+//                return null;
+//            }
+//        };
+//        testTask.setOnFailed(event -> {
+//        	progressbar.setVisible(false);
+//            scrollPane.setDisable(false);
+//        });
+//        new Thread(testTask).start();
+        
+		pb.setVisible(true);
+		t1.start();
 	}
 
 	static int count_ = 1;
@@ -585,12 +620,4 @@ public class Amra_Transact_ {
 		}
 	}
 
-	@FXML
-	void initialize() {
-		assert browse != null : "fx:id=\"browse\" was not injected: check your FXML file 'TransactLoad.fxml'.";
-		assert import_ != null : "fx:id=\"import_\" was not injected: check your FXML file 'TransactLoad.fxml'.";
-		assert textbox != null : "fx:id=\"textbox\" was not injected: check your FXML file 'TransactLoad.fxml'.";
-		assert calc != null : "fx:id=\"calc\" was not injected: check your FXML file 'TransactLoad.fxml'.";
-		assert open_new != null : "fx:id=\"open_new\" was not injected: check your FXML file 'TransactLoad.fxml'.";
-	}
 }

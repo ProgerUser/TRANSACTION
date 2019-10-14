@@ -44,6 +44,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -124,6 +125,8 @@ public class Amra_Transact {
 	private Label sessid;
 	@FXML
 	private Label loadtrcount;
+	@FXML
+	private ProgressIndicator pb;
 	@FXML
 	private Label dealsum;
 	@FXML
@@ -249,8 +252,7 @@ public class Amra_Transact {
 					stage.getIcons().add(new Image("terminal.png"));
 					alert.setTitle("Внимание");
 					alert.setHeaderText(null);
-					alert.setContentText("Загрузка прошла успешна. Можете перейти к расчету.\r В файле =" + rcff
-							+ "\r Загружено = " + rcft);
+					alert.setContentText("Загрузка прошла успешна. Можете перейти к расчету");
 					alert.showAndWait();
 				}
 				callStmt.close();
