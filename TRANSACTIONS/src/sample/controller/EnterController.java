@@ -29,7 +29,7 @@ public class EnterController {
 
 	@FXML
 	private ResourceBundle resources;
-    
+
 	@FXML
 	private URL location;
 
@@ -82,7 +82,8 @@ public class EnterController {
 				alert_1.setHeaderText(null);
 				alert_1.setContentText("Ошибка ввода логина или пароля");
 				alert_1.showAndWait();
-			} else {
+			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("U146")
+					| Connect.userID_.equals("AMRA_IMPORT")) {
 				Main.showFirst();
 			}
 
@@ -121,8 +122,9 @@ public class EnterController {
 		/* Присвоить переменным значения для соединения с базой */
 		ent();
 	}
-    @FXML
-    void enter_(KeyEvent ke) throws SQLException {
+
+	@FXML
+	void enter_(KeyEvent ke) throws SQLException {
 		if (ke.getCode().equals(KeyCode.ENTER)) {
 			Connect.connectionURL_ = conurl.getValue().toString();
 			Connect.userID_ = login.getValue().toString();
@@ -130,27 +132,26 @@ public class EnterController {
 			/* Присвоить переменным значения для соединения с базой */
 			ent();
 		}
-    }
-    
+	}
+
 	@FXML
 	void upper_case(ActionEvent event) {
 	}
 
 	@FXML
 	void initialize() {
-		System.out.println(System.getProperty("user.dir")+"\\connect.properties");
-		try (InputStream input = new FileInputStream(System.getProperty("user.dir")+"\\connect.properties")) {
-			
-			
-            Properties prop = new Properties();
-            // load a properties file
-            prop.load(input);
-            login.getItems().addAll(prop.getProperty("user1"),prop.getProperty("user2"));
-            conurl.getItems().addAll(prop.getProperty("url1"),prop.getProperty("url2"));
-            
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }	
-		//conurl.getSelectionModel().select(0);		
+		System.out.println(System.getProperty("user.dir") + "\\connect.properties");
+		try (InputStream input = new FileInputStream(System.getProperty("user.dir") + "\\connect.properties")) {
+
+			Properties prop = new Properties();
+			// load a properties file
+			prop.load(input);
+			login.getItems().addAll(prop.getProperty("user1"), prop.getProperty("user2"));
+			conurl.getItems().addAll(prop.getProperty("url1"), prop.getProperty("url2"));
+
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		// conurl.getSelectionModel().select(0);
 	}
 }
