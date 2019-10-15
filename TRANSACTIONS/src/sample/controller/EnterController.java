@@ -140,8 +140,8 @@ public class EnterController {
 
 	@FXML
 	void initialize() {
-		System.out.println(System.getProperty("user.dir") + "\\connect.properties");
-		try (InputStream input = new FileInputStream(System.getProperty("user.dir") + "\\connect.properties")) {
+		System.out.println(System.getenv("TRANSACT_PATH")/* System.getProperty("user.dir") */ + "connect.properties");
+		try (InputStream input = new FileInputStream(System.getenv("TRANSACT_PATH") + "connect.properties")) {
 
 			Properties prop = new Properties();
 			// load a properties file
