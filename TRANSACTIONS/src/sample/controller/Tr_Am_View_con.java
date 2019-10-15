@@ -81,6 +81,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -270,6 +271,9 @@ public class Tr_Am_View_con {
 
 	@FXML
 	private TableColumn<Amra_Trans, String> dataprovider;
+
+	@FXML
+	private TextField id_sess;
 
 	@FXML
 	private TableColumn<Amra_Trans, String> orderofprovidence;
@@ -837,7 +841,7 @@ public class Tr_Am_View_con {
 		// Set the right policy
 		table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
 		table.getColumns().stream().forEach((column) -> {
-			//System.out.println(column.getText());
+			// System.out.println(column.getText());
 			if (column.getText().equals("sess_id")) {
 
 			} else {
@@ -1078,9 +1082,48 @@ public class Tr_Am_View_con {
 				Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
 						+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
 
+				// id_sess.getText(), dt1.getValue(),
+				// dt2.getValue()
+
+				// ------------------------
+				String ldt1 = null;
+				String ldt2 = null;
+
+				if (dt1.getValue() != null)
+					ldt1 = dt1.getValue().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+				if (dt2.getValue() != null)
+					ldt2 = dt2.getValue().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+
+				String sess = "\n";
+				String ldt1_ = "\n";
+				String ldt2_ = "\n";
+				String bt = "\n";
+				String rownum = "\n";
+				if (dt1.getValue() != null & dt2.getValue() != null) {
+					bt = " and trunc(paydate) between to_date('" + ldt1 + "','dd.mm.yyyy') and to_date('" + ldt2
+							+ "','dd.mm.yyyy') \n";
+				} else if (dt1.getValue() != null & dt2.getValue() == null) {
+					ldt1_ = " and trunc(paydate) = to_date('" + ldt1 + "','dd.mm.yyyy')\n";
+				} else if (dt1.getValue() == null & dt2.getValue() != null) {
+					ldt2_ = " and trunc(paydate) = to_date('" + ldt2 + "','dd.mm.yyyy')\n";
+				}
+
+				if (id_sess.getText() != null) {
+					if (id_sess.getText().equals("")) {
+
+					} else {
+						sess = " and sess_id = " + id_sess.getText() + "\n";
+					}
+				} else {
+					rownum = " and rownum < 10";
+				}
+				String selectStmt = " select rownum,t.* from (select rownum,t.* from Z_SB_TRANSACT_AMRA_DBT t where 1=1"
+						+ sess + ldt1_ + ldt2_ + bt + rownum + " order by PAYDATE desc) t";
+				// ----------------------------------------------------------------------------
+
 				Statement sqlStatement = conn.createStatement();
-				String readRecordSQL = "SELECT * FROM Z_SB_TRANSACT_AMRA_DBT WHERE sess_id = " + Connect.SESS_ID_ + "";
-				ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
+				//String readRecordSQL = "SELECT * FROM Z_SB_TRANSACT_AMRA_DBT WHERE sess_id = " + Connect.SESS_ID_ + "";
+				ResultSet myResultSet = sqlStatement.executeQuery(selectStmt);
 
 				int i = 1;
 
@@ -1362,28 +1405,61 @@ public class Tr_Am_View_con {
 	}
 
 	@FXML
-	private void view_attr(ActionEvent actionEvent) throws IOException {
-		if (trans_table.getSelectionModel().getSelectedItem() == null) {
+	private void term_view_(ActionEvent actionEvent) {
+		try {
+			ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(),
+					dt2.getValue());
+			populate_fn_sess(empData);
+
+			autoResizeColumns(trans_table);
+			// GUIUtils.autoFitTable(trans_table);
+		} catch (SQLException | ParseException | ClassNotFoundException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText("Выберите сначала данные из таблицы!");
+			alert.setContentText(e.getMessage());
 			alert.showAndWait();
-		} else {
-			Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
+		}
+	}
 
-			Connect.PNMB_ = fn.get_checknumber();
+	@FXML
+	private void view_attr(ActionEvent actionEvent) {
+		try {
+			if (trans_table.getSelectionModel().getSelectedItem() == null) {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText("Выберите сначала данные из таблицы!");
+				alert.showAndWait();
+			} else {
+				Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
 
-			Stage stage = new Stage();
-			Parent root = FXMLLoader.load(Main.class.getResource("view/Attributes_.fxml"));
-			stage.setScene(new Scene(root));
-			stage.getIcons().add(new Image("icon.png"));
-			stage.setTitle("Атрибуты транзакции "+fn.get_checknumber());
-			//stage.initModality(Modality.WINDOW_MODAL);
-			stage.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
-			stage.show();
+				Connect.PNMB_ = fn.get_checknumber();
+
+				Stage stage = new Stage();
+				Parent root;
+
+				root = FXMLLoader.load(Main.class.getResource("view/Attributes_.fxml"));
+
+				stage.setScene(new Scene(root));
+				stage.getIcons().add(new Image("icon.png"));
+				stage.setTitle("Атрибуты транзакции " + fn.get_checknumber());
+				// stage.initModality(Modality.WINDOW_MODAL);
+				stage.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
+				stage.show();
+			}
+		} catch (IOException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
 		}
 	}
 

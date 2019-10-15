@@ -90,7 +90,9 @@
    			<DatePicker fx:id="dt2" layoutX="164.0" layoutY="41.0" prefHeight="25.0" prefWidth="133.0" />
    			<Text layoutX="14.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Дата начала" />
    			<Text layoutX="164.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Дата конца" />
-   			<Button layoutX="309.0" layoutY="41.0" mnemonicParsing="false" onAction="#filter" text="Фильтр" />
+   			<Button layoutX="480.0" layoutY="41.0" mnemonicParsing="false" onAction="#filter" text="Фильтр" />
+            <TextField fx:id="id_sess" layoutX="323.0" layoutY="41.0" prefHeight="25.0" prefWidth="111.0" />
+            <Text layoutX="323.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID Сессии" />
    </children>
 		</AnchorPane>
 	</top>

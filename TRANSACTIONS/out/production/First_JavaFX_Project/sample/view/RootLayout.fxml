@@ -53,8 +53,10 @@
 							text="Загрузка Транзакции" />
 						<MenuItem mnemonicParsing="false" onAction="#loadhistory"
 							text="История загрузок" />
-						<MenuItem mnemonicParsing="false" onAction="#Termdial_view"
-							text="Сдачи" />
+						<MenuItem mnemonicParsing="false"
+							onAction="#term_view_" text="Загруженные транзакции" />
+						<MenuItem mnemonicParsing="false"
+							onAction="#Termdial_view" text="Сдачи" />
 					</items>
 				</Menu>
 				<Menu mnemonicParsing="false" text="Помощь">

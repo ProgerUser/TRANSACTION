@@ -55,10 +55,10 @@ public class RootLayoutController {
 	@FXML
 	void chektransact(ActionEvent event) {
 		try {
-
 			if (Connect.userPassword_.equals("")) {
 
-			} else {
+			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("U146")
+					| Connect.userID_.equals("AMRA_IMPORT")) {
 				Main.showEmployeeView();
 			}
 
@@ -77,7 +77,8 @@ public class RootLayoutController {
 
 			if (Connect.userPassword_.equals("")) {
 
-			} else {
+			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("U146")
+					| Connect.userID_.equals("AMRA_IMPORT")) {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
 				alert.setTitle("Program Information");
 				alert.setHeaderText("Информация о DB");
@@ -96,12 +97,33 @@ public class RootLayoutController {
 	}
 
 	@FXML
+	void term_view_(ActionEvent event) {
+		try {
+
+			if (Connect.userPassword_.equals("")) {
+
+			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("U146")
+					| Connect.userID_.equals("AMRA_IMPORT")) {
+				Main.All_TR();
+			}
+
+		} catch (NullPointerException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			// alert.setTitle("Error");
+			alert.setHeaderText("Error");
+			alert.setContentText("Введите учетные данные");
+			alert.show();
+		}
+	}
+
+	@FXML
 	void loadtransact(ActionEvent event) {
 		try {
 
 			if (Connect.userPassword_.equals("")) {
 
-			} else {
+			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("U146")
+					| Connect.userID_.equals("AMRA_IMPORT")) {
 				Main.Transact();
 			}
 
@@ -120,7 +142,8 @@ public class RootLayoutController {
 
 			if (Connect.userPassword_.equals("")) {
 
-			} else {
+			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("U146")
+					| Connect.userID_.equals("AMRA_IMPORT")) {
 				Main.Show_Hist();
 			}
 
@@ -139,7 +162,8 @@ public class RootLayoutController {
 
 			if (Connect.userPassword_.equals("")) {
 
-			} else {
+			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("U146")
+					| Connect.userID_.equals("AMRA_IMPORT")) {
 				Main.Termdial_view_();
 			}
 
@@ -158,7 +182,8 @@ public class RootLayoutController {
 
 			if (Connect.userPassword_.equals("")) {
 
-			} else {
+			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("U146")
+					| Connect.userID_.equals("AMRA_IMPORT")) {
 				Main.Transact_Amra();
 			}
 
@@ -177,7 +202,8 @@ public class RootLayoutController {
 
 			if (Connect.userPassword_.equals("")) {
 
-			} else {
+			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("U146")
+					| Connect.userID_.equals("AMRA_IMPORT")) {
 				Main.Terminal();
 			}
 
@@ -195,7 +221,8 @@ public class RootLayoutController {
 		try {
 			if (Connect.userPassword_.equals("")) {
 
-			} else {
+			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("U146")
+					| Connect.userID_.equals("AMRA_IMPORT")) {
 				Main.showKash();
 			}
 
@@ -213,7 +240,8 @@ public class RootLayoutController {
 		try {
 			if (Connect.userPassword_.equals("")) {
 
-			} else {
+			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("U146")
+					| Connect.userID_.equals("AMRA_IMPORT")) {
 				Main.Service();
 			}
 

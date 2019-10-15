@@ -252,7 +252,7 @@ public class Amra_Transact {
 					stage.getIcons().add(new Image("terminal.png"));
 					alert.setTitle("Внимание");
 					alert.setHeaderText(null);
-					alert.setContentText("Загрузка прошла успешна. Можете перейти к расчету");
+					alert.setContentText("Загрузка прошла успешна. Можете перейти к расчету\r File="+rcff+"\r Table="+rcft);
 					alert.showAndWait();
 				}
 				callStmt.close();

@@ -180,9 +180,11 @@ public class TerminalDAO {
 		if (dt2 != null)
 			ldt2 = dt2.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
+		String sess = "\n";
 		String ldt1_ = "\n";
 		String ldt2_ = "\n";
 		String bt = "\n";
+		String rownum = "\n";
 		if (dt1 != null & dt2 != null) {
 			bt = " and trunc(paydate) between to_date('" + ldt1 + "','dd.mm.yyyy') and to_date('" + ldt2
 					+ "','dd.mm.yyyy') \n";
@@ -192,8 +194,17 @@ public class TerminalDAO {
 			ldt2_ = " and trunc(paydate) = to_date('" + ldt2 + "','dd.mm.yyyy')\n";
 		}
 
-		String selectStmt = " select rownum,t.* from (select rownum,t.* from Z_SB_TRANSACT_AMRA_DBT t where sess_id = "
-				+ SESS_ID + ldt1_ + ldt2_ + bt + " order by PAYDATE desc) t";
+		if (SESS_ID != null) {
+			if (SESS_ID.equals("")) {
+
+			} else {
+				sess = " and sess_id = " + SESS_ID + "\n";
+			}
+		} else {
+			rownum = " and rownum < 10";
+		}
+		String selectStmt = " select rownum,t.* from (select rownum,t.* from Z_SB_TRANSACT_AMRA_DBT t where 1=1" + sess
+				+ ldt1_ + ldt2_ + bt + rownum + " order by PAYDATE desc) t";
 
 		// Execute SELECT statement
 		try {

@@ -32,7 +32,6 @@ public class Main extends Application {
 
 		this.primaryStage.setTitle("Транзакции");
 
-		
 		// 2) Initialize RootLayout
 		initRootLayout();
 
@@ -45,7 +44,7 @@ public class Main extends Application {
 //		Connect.userID_ = "XXI";
 //		Connect.userPassword_ = "xxx";
 
-		//showFirst();
+		// showFirst();
 	}
 
 	// Initializes the root layout.
@@ -93,6 +92,20 @@ public class Main extends Application {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Kash.fxml"));
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
+
+			// Set Employee Operations view into the center of root layout.
+			rootLayout.setCenter(employeeOperationsView);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void All_TR() {
+		try {
+			// First, load EmployeeView from EmployeeView.fxml Kash AnchorPane
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Main.class.getResource("view/Transact_Amra_viewer.fxml"));
+			BorderPane employeeOperationsView = (BorderPane) loader.load();
 
 			// Set Employee Operations view into the center of root layout.
 			rootLayout.setCenter(employeeOperationsView);
