@@ -2,10 +2,13 @@ package sample;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sample.model.Connect;
 
@@ -103,12 +106,27 @@ public class Main extends Application {
 	public static void All_TR() {
 		try {
 			// First, load EmployeeView from EmployeeView.fxml Kash AnchorPane
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("view/Transact_Amra_viewer.fxml"));
-			BorderPane employeeOperationsView = (BorderPane) loader.load();
+//			FXMLLoader loader = new FXMLLoader();
+//			loader.setLocation(Main.class.getResource("view/Transact_Amra_viewer.fxml"));
+//			BorderPane employeeOperationsView = (BorderPane) loader.load();
+//
+//			// Set Employee Operations view into the center of root layout.
+//			rootLayout.setCenter(employeeOperationsView);
+			
+			
+			
+			Stage stage = new Stage();
+			Parent root;
 
-			// Set Employee Operations view into the center of root layout.
-			rootLayout.setCenter(employeeOperationsView);
+			root = FXMLLoader.load(Main.class.getResource("view/Transact_Amra_viewer.fxml"));
+
+			stage.setScene(new Scene(root));
+			stage.getIcons().add(new Image("icon.png"));
+			stage.setTitle("Загруженные транзакции");
+			stage.initModality(Modality.WINDOW_MODAL);
+			//stage.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
+			stage.show();
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
