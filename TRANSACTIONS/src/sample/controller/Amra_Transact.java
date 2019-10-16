@@ -275,6 +275,8 @@ public class Amra_Transact {
 			alert.setContentText(e.getMessage());
 			alert.showAndWait();
 		}
+		rcff = 0;
+		rcft = 0;
 	}
 
 	static int count_ = 1;
