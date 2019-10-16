@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.10.0.final using JasperReports Library version 6.10.0-unknown  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="29008019-95d3-47f1-9874-1f6c52fd8c82">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter "/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="receipt_no" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="name" class="java.lang.String"/>
+	<field name="date" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="amount" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="company" class="java.lang.String"/>
+	<field name="contact" class="java.lang.String"/>
+	<field name="receipt_for" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="84" splitType="Stretch">
+			<staticText>
+				<reportElement x="264" y="40" width="53" height="22" uuid="84818b4a-33b1-48fa-849d-894357f2b768"/>
+				<text><![CDATA[Receipt]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="240" y="10" width="140" height="30" uuid="5c4dc4cf-c8c1-4948-a672-0381c80f7473"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{company}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="150" splitType="Stretch">
+			<textField>
+				<reportElement x="120" y="40" width="80" height="19" uuid="ae89d17e-f435-4eac-8820-6259bb8bd062"/>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="50" y="40" width="44" height="19" uuid="bfad0c4a-1813-42bd-8a1a-3768e44c08da"/>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<line>
+				<reportElement x="358" y="60" width="125" height="1" uuid="9175f6d0-13af-4f0f-959d-eb7c7d2e6675"/>
+			</line>
+			<staticText>
+				<reportElement x="430" y="6" width="30" height="14" uuid="031bb1a8-9f59-4796-a078-8e6de4f0edc3"/>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="470" y="6" width="105" height="24" uuid="af90c68e-2427-43f8-91ef-5bfb2f7a7a25"/>
+				<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="9" width="110" height="22" uuid="6bbbb36a-a6e2-4a2f-8c42-51656d3b1379"/>
+				<textFieldExpression><![CDATA[$F{receipt_no}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="8" width="49" height="12" uuid="a3081367-14e2-4f8d-9b7d-14b6b8ad9eff"/>
+				<text><![CDATA[Receipt No]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="69" y="94" width="152" height="46" uuid="02612f2f-783b-4f5e-a882-5921bfa41c07"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="353" y="94" width="185" height="46" uuid="be5fef9e-d30a-4fcc-a82c-c8d8ee7c0ff3"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="110" width="55" height="20" uuid="6b4854f5-2ea0-47e1-9f7f-d20f18c70414"/>
+				<text><![CDATA[AMOUNT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="290" y="110" width="58" height="20" uuid="1989d69b-5835-47fa-a088-e4b25fdb5e02"/>
+				<text><![CDATA[Signature]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="358" y="30" width="100" height="20" uuid="44aee21a-d330-4e34-a6b2-dfa1f44a7ad5"/>
+				<textFieldExpression><![CDATA[$F{receipt_for}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="90" y="105" width="100" height="30" uuid="ec687656-bf30-4d40-ac8f-4f2d7897d57f"/>
+				<textFieldExpression><![CDATA[$F{amount}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="115" y="64" width="125" height="1" uuid="9be5e630-0197-48e9-807a-ee7586c720b4"/>
+			</line>
+			<staticText>
+				<reportElement x="282" y="33" width="68" height="13" uuid="056ce23b-33b1-4924-b383-3372412d159e"/>
+				<text><![CDATA[Receipt For]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="70" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

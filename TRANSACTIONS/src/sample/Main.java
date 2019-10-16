@@ -41,13 +41,13 @@ public class Main extends Application {
 		// 3) Display the EmployeeOperations View
 		// showEmployeeView();
 
-		Enter();
+		//Enter();
 
-//		Connect.connectionURL_ = "oradb-prm:1521/odb";
-//		Connect.userID_ = "XXI";
-//		Connect.userPassword_ = "xxx";
+		Connect.connectionURL_ = "oradb-prm:1521/odb";
+		Connect.userID_ = "XXI";
+		Connect.userPassword_ = "xxx";
 
-		// showFirst();
+		 showFirst();
 	}
 
 	// Initializes the root layout.

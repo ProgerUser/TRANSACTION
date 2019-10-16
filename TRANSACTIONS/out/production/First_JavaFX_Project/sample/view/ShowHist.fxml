@@ -42,6 +42,7 @@
    			<Button layoutX="877.0" layoutY="34.0" mnemonicParsing="false" onAction="#view_clob" prefHeight="25.0" prefWidth="131.0" text="Просмотр загрузки" />
    			<DatePicker fx:id="datestart" layoutX="376.0" layoutY="33.0" prefHeight="25.0" prefWidth="117.0" />
    			<DatePicker fx:id="dateend" layoutX="501.0" layoutY="34.0" prefHeight="25.0" prefWidth="117.0" />
+            <Button layoutX="772.0" layoutY="33.0" mnemonicParsing="false" onAction="#trn_doc" text="Проводки" />
    </children>
 		</AnchorPane>
 	</top>

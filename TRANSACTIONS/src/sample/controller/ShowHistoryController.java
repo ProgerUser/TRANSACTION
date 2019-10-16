@@ -1,5 +1,19 @@
 package sample.controller;
 
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.swing.JRViewer;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import javax.swing.JFrame;
+
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -187,6 +201,52 @@ public class ShowHistoryController {
 				column.setPrefWidth(max + 10.0d);
 			}
 		});
+	}
+
+	@FXML
+	private void trn_doc(ActionEvent actionEvent) {
+		try {
+			// --- Show Jasper Report on click-----
+			new PrintReport().showReport();
+		} catch (ClassNotFoundException | JRException | SQLException e1) {
+			e1.printStackTrace();
+		}
+//		try {
+//			if (fn_sess_table.getSelectionModel().getSelectedItem() == null) {
+//				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+//				stage.getIcons().add(new Image("terminal.png"));
+//				alert.setTitle("Внимание");
+//				alert.setHeaderText(null);
+//				alert.setContentText(("Выберите сначала данные из таблицы!\n"));
+//				alert.showAndWait();
+//			} else {
+//				FN_SESS_AMRA fn = fn_sess_table.getSelectionModel().getSelectedItem();
+//
+//				Connect.SESS_ID_ = fn.getsess_id();
+//
+//				Stage stage = new Stage();
+//				Parent root;
+//
+//				root = FXMLLoader.load(Main.class.getResource("view/Transact_Amra_viewer.fxml"));
+//
+//				stage.setScene(new Scene(root));
+//				stage.getIcons().add(new Image("icon.png"));
+//				stage.setTitle("Загруженные транзакции SESS_ID = " + fn.getsess_id());
+//				stage.initModality(Modality.WINDOW_MODAL);
+//				stage.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
+//				stage.show();
+//
+//			}
+//		} catch (IOException e) {
+//			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+//			stage.getIcons().add(new Image("terminal.png"));
+//			alert.setTitle("Внимание");
+//			alert.setHeaderText(null);
+//			alert.setContentText(e.getMessage());
+//			alert.showAndWait();
+//		}
 	}
 
 	// Найти загрузки
