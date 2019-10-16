@@ -9,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Enumeration;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -140,14 +141,27 @@ public class EnterController {
 
 	@FXML
 	void initialize() {
-		System.out.println(System.getenv("TRANSACT_PATH")/* System.getProperty("user.dir") */ + "connect.properties");
+		//System.out.println(System.getenv("TRANSACT_PATH")/* System.getProperty("user.dir") */ + "connect.properties");
 		try (InputStream input = new FileInputStream(System.getenv("TRANSACT_PATH") + "connect.properties")) {
 
 			Properties prop = new Properties();
 			// load a properties file
 			prop.load(input);
-			login.getItems().addAll(prop.getProperty("user1"), prop.getProperty("user2"));
-			conurl.getItems().addAll(prop.getProperty("url1"), prop.getProperty("url2"));
+
+			@SuppressWarnings("unchecked")
+			Enumeration<String> enums = (Enumeration<String>) prop.propertyNames();
+			while (enums.hasMoreElements()) {
+				String key = enums.nextElement();
+				String value = prop.getProperty(key);
+				if (key.contains("user")) {
+					login.getItems().addAll(value);
+				} else if (key.contains("url")) {
+					conurl.getItems().addAll(value);
+				}
+			}
+
+//			login.getItems().addAll(prop.getProperty("user1"), prop.getProperty("user2"));
+//			conurl.getItems().addAll(prop.getProperty("url1"), prop.getProperty("url2"));
 
 		} catch (IOException ex) {
 			ex.printStackTrace();

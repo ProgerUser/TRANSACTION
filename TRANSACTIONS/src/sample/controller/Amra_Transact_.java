@@ -533,7 +533,7 @@ public class Amra_Transact_ {
 
 				DateFormat dateFormat_ = new SimpleDateFormat("dd.MM.yyyy HH");
 				String strDate_ = dateFormat_.format(date);
-				String createfolder = System.getenv("TRANSACT_PATH")/*System.getProperty("user.dir") + "\\"*/ + "\\" + strDate_ + "_SESSID_" + sessid_;
+				String createfolder = System.getenv("TRANSACT_PATH")/*System.getProperty("user.dir") + "\\"*/ + strDate_ + "_SESSID_" + sessid_;
 
 				File file = new File(createfolder);
 				if (!file.exists()) {
