@@ -206,8 +206,20 @@ public class ShowHistoryController {
 	@FXML
 	private void trn_doc(ActionEvent actionEvent) {
 		try {
-			// --- Show Jasper Report on click-----
-			new PrintReport().showReport();
+			if (fn_sess_table.getSelectionModel().getSelectedItem() == null) {
+
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText(("Выберите сначала данные из таблицы!\n"));
+				alert.showAndWait();
+
+			} else {
+				FN_SESS_AMRA fn = fn_sess_table.getSelectionModel().getSelectedItem();
+				new PrintReport().showReport(fn.getsess_id());
+			}
 		} catch (ClassNotFoundException | JRException | SQLException e1) {
 			e1.printStackTrace();
 		}

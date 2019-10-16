@@ -45,7 +45,7 @@ public class Main extends Application {
 
 		Connect.connectionURL_ = "oradb-prm:1521/odb";
 		Connect.userID_ = "XXI";
-		Connect.userPassword_ = "xxx";
+		Connect.userPassword_ = "ver8i";
 
 		 showFirst();
 	}
