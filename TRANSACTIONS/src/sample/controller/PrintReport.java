@@ -22,6 +22,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.swing.JRViewer;
 import sample.model.Connect;
 import sample.model.Item;
+import sample.model.Transact;
 
 public class PrintReport extends JFrame {
 
@@ -39,21 +40,20 @@ public class PrintReport extends JFrame {
 		/* User home directory location */
 
 		/* List to hold Items */
-        List<Item> listItems = new ArrayList<Item>();
+		List<Item> listItems = new ArrayList<Item>();
 
-        /* Create Items */
-        Item list = new Item();
-        
+		/* Create Items */
+		Item list = null;
 
-        Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
+		Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
 				+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
 
 		Statement sqlStatement = conn.createStatement();
 		String readRecordSQL = "select acc,\r\n" + "        debet,\r\n" + "       credit,\r\n" + "       case\r\n"
 				+ "         when debet < credit then\r\n" + "          credit - debet\r\n" + "         else\r\n"
-				+ "          debet - credit\r\n" + "       end razn\r\n" + "  from (select distinct acc,\r\n"
+				+ "          debet - credit\r\n" + "       end razn , date_\r\n" + "  from (select distinct acc,\r\n"
 				+ "                        BALANCE.AccCredTO(date_, date_ + 1, acc, 'RUR') credit,\r\n"
-				+ "                        BALANCE.AccDebTO(date_, date_ + 1, acc, 'RUR') debet\r\n"
+				+ "                        BALANCE.AccDebTO(date_, date_ + 1, acc, 'RUR') debet , date_\r\n"
 				+ "          from (select DEBET acc, DTRNCREATE date_\r\n"
 				+ "                  from (select DTRNCREATE,\r\n"
 				+ "                               ITRNDOCNUM DOC_NUM,\r\n"
@@ -93,10 +93,15 @@ public class PrintReport extends JFrame {
 		ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
 
 		while (myResultSet.next()) {
+			list = new Item();
 			list.setacc(myResultSet.getString("acc"));
 			list.setdebet(myResultSet.getDouble("debet"));
+			list.setcredit(myResultSet.getDouble("credit"));
+			list.setd_c(myResultSet.getDouble("razn"));
+			list.setdate_(myResultSet.getDate("date_"));
+
+			// System.out.println(myResultSet.getInt("debet"));
 			listItems.add(list);
-	        System.out.println(myResultSet.getInt("debet"));
 		}
 		myResultSet.close();
 		conn.close();
@@ -108,9 +113,8 @@ public class PrintReport extends JFrame {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("ItemDataSource", itemsJRBean);
 
-
 		JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
-		
+
 		JRViewer viewer = new JRViewer(print);
 		viewer.setOpaque(true);
 		viewer.setVisible(true);
