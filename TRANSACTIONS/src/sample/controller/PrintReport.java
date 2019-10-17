@@ -33,7 +33,7 @@ public class PrintReport extends JFrame {
 
 	public void showReport(String sess_id) throws JRException, ClassNotFoundException, SQLException {
 
-		String reportSrcFile = System.getProperty("user.dir") + "\\" + "src\\sample\\view\\QUERY.jrxml";
+		String reportSrcFile = System.getenv("TRANSACT_PATH") + "\\" + "report\\QUERY.jrxml";
 
 		// First, compile jrxml file.
 		JasperReport jasperReport = JasperCompileManager.compileReport(reportSrcFile);
