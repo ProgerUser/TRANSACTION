@@ -93,7 +93,7 @@ import com.sun.prism.impl.Disposer.Record;
  */
 
 @SuppressWarnings("unused")
-public class Tr_Am_View_con {
+public class Tr_Am_View_con_from_show {
 
 	@FXML
 	private TableColumn<Amra_Trans, String> filetransactions;
@@ -290,6 +290,7 @@ public class Tr_Am_View_con {
 	@FXML
 	private void initialize() {
 		trans_table.setEditable(true);
+
 		exec = Executors.newCachedThreadPool((runnable) -> {
 			Thread t = new Thread(runnable);
 			t.setDaemon(true);
@@ -817,6 +818,41 @@ public class Tr_Am_View_con {
 						.set_sess_id(t.getNewValue());
 			}
 		});
+
+		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(Connect.SESS_ID_, dt1.getValue(),
+				dt2.getValue());
+		populate_fn_sess(empData);
+
+		autoResizeColumns(trans_table);
+		// GUIUtils.autoFitTable(trans_table);
+	}
+
+	public static void autoResizeColumns(TableView<?> table) {
+		// Set the right policy
+		table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+		table.getColumns().stream().forEach((column) -> {
+			// System.out.println(column.getText());
+			if (column.getText().equals("sess_id")) {
+
+			} else {
+				// Minimal width = columnheader
+				Text t = new Text(column.getText());
+				double max = t.getLayoutBounds().getWidth();
+				for (int i = 0; i < table.getItems().size(); i++) {
+					// cell must not be empty
+					if (column.getCellData(i) != null) {
+						t = new Text(column.getCellData(i).toString());
+						double calcwidth = t.getLayoutBounds().getWidth();
+						// remember new max-width
+						if (calcwidth > max) {
+							max = calcwidth;
+						}
+					}
+				}
+				// set the new max-widht with some extra space
+				column.setPrefWidth(max + 10.0d);
+			}
+		});
 	}
 
 	@FXML
@@ -824,9 +860,8 @@ public class Tr_Am_View_con {
 		try {
 			FileChooser fileChooser = new FileChooser();
 
-			System.setProperty("javax.xml.transform.TransformerFactory",
-					"com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl");
-
+			System.setProperty("javax.xml.transform.TransformerFactory", "com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl");
+			
 			// Set extension filter for text files
 			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel File", "*.xlsx");
 			fileChooser.getExtensionFilters().add(extFilter);
@@ -1055,7 +1090,6 @@ public class Tr_Am_View_con {
 				String ldt1_ = "\n";
 				String ldt2_ = "\n";
 				String bt = "\n";
-				String rownum = "\n";
 				if (dt1.getValue() != null & dt2.getValue() != null) {
 					bt = " and trunc(paydate) between to_date('" + ldt1 + "','dd.mm.yyyy') and to_date('" + ldt2
 							+ "','dd.mm.yyyy') \n";
@@ -1065,6 +1099,14 @@ public class Tr_Am_View_con {
 					ldt2_ = " and trunc(paydate) <= to_date('" + ldt2 + "','dd.mm.yyyy')\n";
 				}
 
+				if (Connect.SESS_ID_ != null) {
+					if (Connect.SESS_ID_.equals("")) {
+						
+					} else {
+						sess = " and sess_id = " + Connect.SESS_ID_ + "\n";
+					}
+				} 
+				
 				if (id_sess.getText().equals("")) {
 
 				} else {
@@ -1410,38 +1452,11 @@ public class Tr_Am_View_con {
 	// Найти загрузки
 	@FXML
 	private void filter(ActionEvent actionEvent) {
+		trans_table.setEditable(true);
 		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(),
 				dt2.getValue());
 		populate_fn_sess(empData);
-		autoResizeColumns(trans_table);
-	}
-
-	public static void autoResizeColumns(TableView<?> table) {
-		// Set the right policy
-		table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
-		table.getColumns().stream().forEach((column) -> {
-			// System.out.println(column.getText());
-			if (column.getText().equals("sess_id")) {
-
-			} else {
-				// Minimal width = columnheader
-				Text t = new Text(column.getText());
-				double max = t.getLayoutBounds().getWidth();
-				for (int i = 0; i < table.getItems().size(); i++) {
-					// cell must not be empty
-					if (column.getCellData(i) != null) {
-						t = new Text(column.getCellData(i).toString());
-						double calcwidth = t.getLayoutBounds().getWidth();
-						// remember new max-width
-						if (calcwidth > max) {
-							max = calcwidth;
-						}
-					}
-				}
-				// set the new max-widht with some extra space
-				column.setPrefWidth(max + 10.0d);
-			}
-		});
+		// autoResizeColumns(trans_table);
 	}
 
 	// Заполнить таблицу

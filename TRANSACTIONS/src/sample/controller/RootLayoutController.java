@@ -95,14 +95,14 @@ public class RootLayoutController {
 	}
 
 	@FXML
-	void term_view_(ActionEvent event) {
+	void term_view(ActionEvent event) {
 		try {
 
 			if (Connect.userPassword_.equals("")) {
 
 			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("U146")
 					| Connect.userID_.equals("AMRA_IMPORT")) {
-				Main.All_TR();
+				Main.showAmTr();
 			}
 
 		} catch (NullPointerException e) {
@@ -113,7 +113,6 @@ public class RootLayoutController {
 			alert.show();
 		}
 	}
-
 	@FXML
 	void loadtransact(ActionEvent event) {
 		try {

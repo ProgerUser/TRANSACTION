@@ -82,10 +82,9 @@ public class KashController {
 	@FXML
 	private Button report;
 
-
 	@FXML
 	private void initialize() {
-		
+
 		exec = Executors.newCachedThreadPool((runnable) -> {
 			Thread t = new Thread(runnable);
 			t.setDaemon(true);
@@ -98,7 +97,7 @@ public class KashController {
 
 	// Search all transacts
 	@FXML
-	private void create_psevdo(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+	private void create_psevdo(ActionEvent actionEvent) {
 		try {
 			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
 					+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
@@ -118,15 +117,20 @@ public class KashController {
 			}
 			rs.close();
 		} catch (SQLException e) {
-			resultArea.setText("Произошла ошибка при получении информации о транзакциях из БД.\n" + e.getMessage());
-			throw e;
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
 		}
 	}
 
 	@FXML
 	private AnchorPane ap;
 
-	private void populateKash(ObservableList<KashClass> trData) throws ClassNotFoundException {
+	private void populateKash(ObservableList<KashClass> trData) {
 		employeeTable.setItems(trData);
 	}
 }

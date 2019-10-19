@@ -25,7 +25,7 @@ public class Main extends Application {
 	public static BorderPane rootLayout;
 
 	@Override
-	public void start(Stage primaryStage) throws IOException {
+	public void start(Stage primaryStage) {
 
 		// 1) Declare a primary stage (Everything will be on this stage)
 		this.primaryStage = primaryStage;
@@ -41,13 +41,13 @@ public class Main extends Application {
 		// 3) Display the EmployeeOperations View
 		// showEmployeeView();
 
-		Enter();
+		//Enter();
 
-//		Connect.connectionURL_ = "oradb-prm:1521/odb";
-//		Connect.userID_ = "XXI";
-//		Connect.userPassword_ = "xxx";
+		Connect.connectionURL_ = "oradb-prm:1521/odb";
+		Connect.userID_ = "XXI";
+		Connect.userPassword_ = "ver8i";
 
-		 //showFirst();
+		 showFirst();
 	}
 
 	// Initializes the root layout.
@@ -102,36 +102,6 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
-
-	public static void All_TR() {
-		try {
-			// First, load EmployeeView from EmployeeView.fxml Kash AnchorPane
-//			FXMLLoader loader = new FXMLLoader();
-//			loader.setLocation(Main.class.getResource("view/Transact_Amra_viewer.fxml"));
-//			BorderPane employeeOperationsView = (BorderPane) loader.load();
-//
-//			// Set Employee Operations view into the center of root layout.
-//			rootLayout.setCenter(employeeOperationsView);
-			
-			
-			
-			Stage stage = new Stage();
-			Parent root;
-
-			root = FXMLLoader.load(Main.class.getResource("view/Transact_Amra_viewer.fxml"));
-
-			stage.setScene(new Scene(root));
-			stage.getIcons().add(new Image("icon.png"));
-			stage.setTitle("Загруженные транзакции");
-			stage.initModality(Modality.WINDOW_MODAL);
-			//stage.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
-			stage.show();
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 	public static void Termdial_view_() {
 		try {
 			// First, load EmployeeView from EmployeeView.fxml
@@ -214,7 +184,7 @@ public class Main extends Application {
 			// First, load EmployeeView from EmployeeView.fxml
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Terminal.fxml"));
-			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
+			BorderPane employeeOperationsView = (BorderPane) loader.load();
 
 			// Set Employee Operations view into the center of root layout.
 			rootLayout.setCenter(employeeOperationsView);

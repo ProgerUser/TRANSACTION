@@ -1,6 +1,10 @@
 package sample.util;
 
 import com.sun.rowset.CachedRowSetImpl;
+
+import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import sample.model.Connect;
 import java.sql.*;
 
@@ -24,45 +28,50 @@ public class DBUtil {
 	// "jdbc:oracle:thin:"++"/xxx@10.111.64.21:1521/odb";
 
 	// Connect to DB
-	public static void dbConnect() throws SQLException, ClassNotFoundException {
-		@SuppressWarnings("unused")
-		Connect con = new Connect();
-
-		// Setting Oracle JDBC Driver
+	public static void dbConnect() {
 		try {
+			@SuppressWarnings("unused")
+			Connect con = new Connect();
+
+			// Setting Oracle JDBC Driver
 			Class.forName(JDBC_DRIVER);
-		} catch (ClassNotFoundException e) {
-			System.out.println("Где находится ваш драйвер Oracle JDBC?");
-			e.printStackTrace();
-			throw e;
-		}
 
-		System.out.println("Драйвер Oracle JDBC зарегистрирован!");
+			System.out.println("Драйвер Oracle JDBC зарегистрирован!");
 
-		// Establish the Oracle Connection using Connection String
-		try {
+			// Establish the Oracle Connection using Connection String
 			conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_ + "@"
 					+ Connect.connectionURL_ + "");
-		} catch (SQLException e) {
-			System.out.println("Соединение не установлено! Проверьте вывод консоли" + e);
-			e.printStackTrace();
-			throw e;
+
+		} catch (SQLException | ClassNotFoundException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
 		}
 	}
 
 	// Close Connection
-	public static void dbDisconnect() throws SQLException {
+	public static void dbDisconnect() {
 		try {
 			if (conn != null && !conn.isClosed()) {
 				conn.close();
 			}
-		} catch (Exception e) {
-			throw e;
+		} catch (SQLException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
 		}
 	}
 
 	// DB Execute Query Operation
-	public static ResultSet dbExecuteQuery(String queryStmt) throws SQLException, ClassNotFoundException {
+	public static ResultSet dbExecuteQuery(String queryStmt) {
 		// Declare statement, resultSet and CachedResultSet as null
 		Statement stmt = null;
 		ResultSet resultSet = null;
@@ -85,16 +94,43 @@ public class DBUtil {
 			crs = new CachedRowSetImpl();
 			crs.populate(resultSet);
 		} catch (SQLException e) {
-			System.out.println("Проблема возникла при выполнении executeQuery : " + e);
-			throw e;
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
 		} finally {
 			if (resultSet != null) {
 				// Close resultSet
-				resultSet.close();
+				try {
+					resultSet.close();
+				} catch (SQLException e) {
+					Alert alert = new Alert(Alert.AlertType.INFORMATION);
+					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+					stage.getIcons().add(new Image("terminal.png"));
+					alert.setTitle("Внимание");
+					alert.setHeaderText(null);
+					alert.setContentText(e.getMessage());
+					alert.showAndWait();
+
+				}
 			}
 			if (stmt != null) {
 				// Close Statement
-				stmt.close();
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					Alert alert = new Alert(Alert.AlertType.INFORMATION);
+					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+					stage.getIcons().add(new Image("terminal.png"));
+					alert.setTitle("Внимание");
+					alert.setHeaderText(null);
+					alert.setContentText(e.getMessage());
+					alert.showAndWait();
+
+				}
 			}
 			// Close connection
 			dbDisconnect();
@@ -104,7 +140,7 @@ public class DBUtil {
 	}
 
 	// DB Execute Update (For Update/Insert/Delete) Operation
-	public static void dbExecuteUpdate(String sqlStmt) throws SQLException, ClassNotFoundException {
+	public static void dbExecuteUpdate(String sqlStmt) {
 		// Declare statement as null
 		Statement stmt = null;
 		try {
@@ -115,12 +151,27 @@ public class DBUtil {
 			// Run executeUpdate operation with given sql statement
 			stmt.executeUpdate(sqlStmt);
 		} catch (SQLException e) {
-			System.out.println("Проблема возникла при выполнении executeUpdate : " + e);
-			throw e;
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
 		} finally {
 			if (stmt != null) {
 				// Close statement
-				stmt.close();
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					Alert alert = new Alert(Alert.AlertType.INFORMATION);
+					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+					stage.getIcons().add(new Image("terminal.png"));
+					alert.setTitle("Внимание");
+					alert.setHeaderText(null);
+					alert.setContentText(e.getMessage());
+					alert.showAndWait();
+				}
 			}
 			// Close connection
 			dbDisconnect();

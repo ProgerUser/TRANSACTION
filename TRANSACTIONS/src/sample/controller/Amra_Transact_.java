@@ -71,24 +71,35 @@ public class Amra_Transact_ {
 	static String sessid_ = null;
 
 	@SuppressWarnings("resource")
-	private static String readFile(String fileName) throws FileNotFoundException, IOException {
-		/*
-		 * FileInputStream fis = null; InputStreamReader isr = null; String encoding;
-		 * fis = new FileInputStream(fileName); isr = new InputStreamReader(fis); // the
-		 * name of the character encoding returned encoding = isr.getEncoding();
-		 */
+	private static String readFile(String fileName) {
+		try {
+			/*
+			 * FileInputStream fis = null; InputStreamReader isr = null; String encoding;
+			 * fis = new FileInputStream(fileName); isr = new InputStreamReader(fis); // the
+			 * name of the character encoding returned encoding = isr.getEncoding();
+			 */
 
 // System.out.print("Character Encoding: "+s);
-		BufferedReader br = new BufferedReader(
-				new InputStreamReader(new FileInputStream(fileName), getFileCharset(fileName)));
-		String nextLine = "";
-		StringBuffer sb = new StringBuffer();
-		while ((nextLine = br.readLine()) != null) {
-			sb.append(nextLine);
-			sb.append(System.lineSeparator());
+			BufferedReader br = new BufferedReader(
+					new InputStreamReader(new FileInputStream(fileName), getFileCharset(fileName)));
+			String nextLine = "";
+			StringBuffer sb = new StringBuffer();
+			while ((nextLine = br.readLine()) != null) {
+				sb.append(nextLine);
+				sb.append(System.lineSeparator());
+			}
+			String clobData = sb.toString();
+			return clobData;
+		} catch (IOException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
 		}
-		String clobData = sb.toString();
-		return clobData;
+		return null;
 	}
 
 	private Integer sess_id = null;
@@ -218,7 +229,8 @@ public class Amra_Transact_ {
 
 						DateFormat dateFormat_ = new SimpleDateFormat("dd.MM.yyyy HH");
 						String strDate_ = dateFormat_.format(date);
-						String createfolder = System.getenv("TRANSACT_PATH")/*System.getProperty("user.dir") + "\\"*/ + strDate_ + "_SESSID_" + sessid_;
+						String createfolder = System.getenv("TRANSACT_PATH")
+								/* System.getProperty("user.dir") + "\\" */ + strDate_ + "_SESSID_" + sessid_;
 
 						File file = new File(createfolder);
 						if (!file.exists()) {
@@ -288,44 +300,37 @@ public class Amra_Transact_ {
 
 	@FXML
 	void Load_Transact(ActionEvent event) {
-		/* start processing on new threads */
-//		ScrollPane scrollPane = new ScrollPane();
-//		
-//		progressbar.setVisible(true);
-//        scrollPane.setDisable(true);
-//        
-//        Task<Void> testTask = new Task<Void>() {
-//            @Override
-//            protected Void call() throws Exception {
-//                // Send the message
-//                return null;
-//            }
-//        };
-//        testTask.setOnFailed(event -> {
-//        	progressbar.setVisible(false);
-//            scrollPane.setDisable(false);
-//        });
-//        new Thread(testTask).start();
-        
 		pb.setVisible(true);
 		t1.start();
 	}
 
 	static int count_ = 1;
 
-	public static String getFileCharset(String file) throws IOException {
-		byte[] buf = new byte[4096];
-		BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
-		final UniversalDetector universalDetector = new UniversalDetector(null);
-		int numberOfBytesRead;
-		while ((numberOfBytesRead = bufferedInputStream.read(buf)) > 0 && !universalDetector.isDone()) {
-			universalDetector.handleData(buf, 0, numberOfBytesRead);
+	public static String getFileCharset(String file) {
+		try {
+			byte[] buf = new byte[4096];
+			BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
+			final UniversalDetector universalDetector = new UniversalDetector(null);
+			int numberOfBytesRead;
+			while ((numberOfBytesRead = bufferedInputStream.read(buf)) > 0 && !universalDetector.isDone()) {
+				universalDetector.handleData(buf, 0, numberOfBytesRead);
+			}
+			universalDetector.dataEnd();
+			String encoding = universalDetector.getDetectedCharset();
+			universalDetector.reset();
+			bufferedInputStream.close();
+			return encoding;
+		} catch (IOException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+
 		}
-		universalDetector.dataEnd();
-		String encoding = universalDetector.getDetectedCharset();
-		universalDetector.reset();
-		bufferedInputStream.close();
-		return encoding;
+		return null;
 	}
 
 // запись в текстовый файл протокола загрузки
@@ -352,7 +357,8 @@ public class Amra_Transact_ {
 
 			DateFormat dateFormat_ = new SimpleDateFormat("dd.MM.yyyy HH");
 			String strDate_ = dateFormat_.format(date);
-			String createfolder = System.getenv("TRANSACT_PATH")/*System.getProperty("user.dir") + "\\"*/ + strDate_ + "_SESSID_" + sessid;
+			String createfolder = System.getenv("TRANSACT_PATH")/* System.getProperty("user.dir") + "\\" */ + strDate_
+					+ "_SESSID_" + sessid;
 
 			File file = new File(createfolder);
 			if (!file.exists()) {
@@ -533,7 +539,8 @@ public class Amra_Transact_ {
 
 				DateFormat dateFormat_ = new SimpleDateFormat("dd.MM.yyyy HH");
 				String strDate_ = dateFormat_.format(date);
-				String createfolder = System.getenv("TRANSACT_PATH")/*System.getProperty("user.dir") + "\\"*/ + strDate_ + "_SESSID_" + sessid_;
+				String createfolder = System.getenv("TRANSACT_PATH")
+						/* System.getProperty("user.dir") + "\\" */ + strDate_ + "_SESSID_" + sessid_;
 
 				File file = new File(createfolder);
 				if (!file.exists()) {

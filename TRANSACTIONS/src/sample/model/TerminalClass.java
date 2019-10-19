@@ -15,6 +15,7 @@ public class TerminalClass {
 	private StringProperty acc_30232_04;
 	private StringProperty acc_30232_05;
 	private StringProperty acc_70107;
+	private StringProperty ACC_30232_06;
 
 	// Constructor
 	public TerminalClass() {
@@ -28,6 +29,20 @@ public class TerminalClass {
 		this.acc_30232_04 = new SimpleStringProperty();
 		this.acc_30232_05 = new SimpleStringProperty();
 		this.acc_70107 = new SimpleStringProperty();
+		this.ACC_30232_06 = new SimpleStringProperty();
+	}
+
+	// ACC_30232_06
+	public String getACC_30232_06() {
+		return ACC_30232_06.get();
+	}
+
+	public void setACC_30232_06(String ACC_30232_06) {
+		this.ACC_30232_06.set(ACC_30232_06);
+	}
+
+	public StringProperty ACC_30232_06Property() {
+		return ACC_30232_06;
 	}
 
 	// NAME

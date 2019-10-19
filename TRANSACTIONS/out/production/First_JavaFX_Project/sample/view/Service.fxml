@@ -35,7 +35,7 @@
     <Button id="searchEmpBtn" layoutX="696.0" layoutY="21.0" mnemonicParsing="false" onAction="#add" prefHeight="25.0" prefWidth="85.0" text="Добавить" />
     <Button id="searchEmpBtn" layoutX="806.0" layoutY="21.0" mnemonicParsing="false" onAction="#UpdateService" prefHeight="25.0" prefWidth="85.0" text="Изменить" />
     <Button id="searchEmpBtn" layoutX="918.0" layoutY="21.0" mnemonicParsing="false" onAction="#Delete" prefHeight="25.0" prefWidth="85.0" text="Удалить" />
-    <ComboBox fx:id="terms" layoutX="18.0" layoutY="21.0" prefHeight="24.999908447265625" prefWidth="137.0">
+    <ComboBox fx:id="terms" editable="true" layoutX="18.0" layoutY="21.0" prefHeight="24.999908447265625" prefWidth="137.0">
     </ComboBox>
   </children>
 </AnchorPane>

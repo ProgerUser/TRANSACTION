@@ -28,6 +28,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import net.sf.jasperreports.engine.JRException;
 import sample.Main;
 import sample.model.Connect;
 import sample.model.ServiceClass;
@@ -132,72 +133,72 @@ public class ServiceController {
 	// This method is automatically called after the fxml file has been loaded.
 
 	@FXML
-	private void initialize() throws SQLException {
-		/*
-		 * The setCellValueFactory(...) that we set on the table columns are used to
-		 * determine which field inside the Employee objects should be used for the
-		 * particular column. The arrow -> indicates that we're using a Java 8 feature
-		 * called Lambdas. (Another option would be to use a PropertyValueFactory, but
-		 * this is not type-safe
-		 * 
-		 * We're only using StringProperty values for our table columns in this example.
-		 * When you want to use IntegerProperty or DoubleProperty, the
-		 * setCellValueFactory(...) must have an additional asObject():
-		 */
+	private void initialize() {
+		try {
+			/*
+			 * The setCellValueFactory(...) that we set on the table columns are used to
+			 * determine which field inside the Employee objects should be used for the
+			 * particular column. The arrow -> indicates that we're using a Java 8 feature
+			 * called Lambdas. (Another option would be to use a PropertyValueFactory, but
+			 * this is not type-safe
+			 * 
+			 * We're only using StringProperty values for our table columns in this example.
+			 * When you want to use IntegerProperty or DoubleProperty, the
+			 * setCellValueFactory(...) must have an additional asObject():
+			 */
 
-		// For multithreading: Create executor that uses daemon threads:
-		exec = Executors.newCachedThreadPool((runnable) -> {
-			Thread t = new Thread(runnable);
-			t.setDaemon(true);
-			return t;
-		});
-		acc_name.setCellValueFactory(cellData -> cellData.getValue().acc_nameProperty());
-		acc_rec.setCellValueFactory(cellData -> cellData.getValue().acc_recProperty());
-		account.setCellValueFactory(cellData -> cellData.getValue().accountProperty());
-		account2.setCellValueFactory(cellData -> cellData.getValue().account2Property());
-		account3.setCellValueFactory(cellData -> cellData.getValue().account3Property());
-		account4.setCellValueFactory(cellData -> cellData.getValue().account4Property());
-		account5.setCellValueFactory(cellData -> cellData.getValue().account5Property());
-		idterm.setCellValueFactory(cellData -> cellData.getValue().idtermProperty());
-		inn.setCellValueFactory(cellData -> cellData.getValue().innProperty());
-		kbk.setCellValueFactory(cellData -> cellData.getValue().kbkProperty());
-		kor_bank_nbra.setCellValueFactory(cellData -> cellData.getValue().kor_bank_nbraProperty());
-		kpp.setCellValueFactory(cellData -> cellData.getValue().kppProperty());
-		name.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-		okato.setCellValueFactory(cellData -> cellData.getValue().okatoProperty());
-		bo1.setCellValueFactory(cellData -> cellData.getValue().bo1Property());
-		bo2.setCellValueFactory(cellData -> cellData.getValue().bo2Property());
-		stat.setCellValueFactory(cellData -> cellData.getValue().statProperty());
+			// For multithreading: Create executor that uses daemon threads:
+			exec = Executors.newCachedThreadPool((runnable) -> {
+				Thread t = new Thread(runnable);
+				t.setDaemon(true);
+				return t;
+			});
+			acc_name.setCellValueFactory(cellData -> cellData.getValue().acc_nameProperty());
+			acc_rec.setCellValueFactory(cellData -> cellData.getValue().acc_recProperty());
+			account.setCellValueFactory(cellData -> cellData.getValue().accountProperty());
+			account2.setCellValueFactory(cellData -> cellData.getValue().account2Property());
+			account3.setCellValueFactory(cellData -> cellData.getValue().account3Property());
+			account4.setCellValueFactory(cellData -> cellData.getValue().account4Property());
+			account5.setCellValueFactory(cellData -> cellData.getValue().account5Property());
+			idterm.setCellValueFactory(cellData -> cellData.getValue().idtermProperty());
+			inn.setCellValueFactory(cellData -> cellData.getValue().innProperty());
+			kbk.setCellValueFactory(cellData -> cellData.getValue().kbkProperty());
+			kor_bank_nbra.setCellValueFactory(cellData -> cellData.getValue().kor_bank_nbraProperty());
+			kpp.setCellValueFactory(cellData -> cellData.getValue().kppProperty());
+			name.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+			okato.setCellValueFactory(cellData -> cellData.getValue().okatoProperty());
+			bo1.setCellValueFactory(cellData -> cellData.getValue().bo1Property());
+			bo2.setCellValueFactory(cellData -> cellData.getValue().bo2Property());
+			stat.setCellValueFactory(cellData -> cellData.getValue().statProperty());
 
-		Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
-				+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
+			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
+					+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
 
-		Statement sqlStatement = conn.createStatement();
-		String readRecordSQL = "select NAME from Z_SB_TERMINAL_DBT t";
-		ResultSet rs = sqlStatement.executeQuery(readRecordSQL);
-		ObservableList<String> combolist = FXCollections.observableArrayList();
-		while (rs.next()) {
-			TerminalForCombo tr = new TerminalForCombo();
-			tr.setTERMS(rs.getString("NAME"));
-			// System.out.println(tr.getTERMS());
-			combolist.add(rs.getString("NAME"));
+			Statement sqlStatement = conn.createStatement();
+			String readRecordSQL = "select NAME from Z_SB_TERMINAL_DBT t";
+			ResultSet rs = sqlStatement.executeQuery(readRecordSQL);
+			ObservableList<String> combolist = FXCollections.observableArrayList();
+			while (rs.next()) {
+				TerminalForCombo tr = new TerminalForCombo();
+				tr.setTERMS(rs.getString("NAME"));
+				// System.out.println(tr.getTERMS());
+				combolist.add(rs.getString("NAME"));
+			}
+			terms.setItems(combolist);
+			terms.getSelectionModel().select(0);
+			// System.out.println(terms.getValue().toString());
+			rs.close();
+
+		} catch (SQLException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
 		}
-		terms.setItems(combolist);
-		terms.getSelectionModel().select(0);
-		// System.out.println(terms.getValue().toString());
-		rs.close();
 	}
-
-	// Search an transact
-	/*
-	 * @FXML private void searchEmployees(ActionEvent actionEvent) throws
-	 * ClassNotFoundException, SQLException { try { // Get Employee information
-	 * Transact emp = EmployeeDAO.searchTransact(fio.getText()); // Populate
-	 * Employee on TableView and Display on TextArea populateAndShowEmployee(emp); }
-	 * catch (SQLException e) { e.printStackTrace(); resultArea.
-	 * setText("Произошла ошибка при получении информации о транзакциях из БД.\n" +
-	 * e); throw e; } }
-	 */
 
 	public static void autoResizeColumns(TableView<?> table) {
 		// Set the right policy
@@ -229,20 +230,10 @@ public class ServiceController {
 
 	// Search all transacts
 	@FXML
-	private void searchService(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
-		try {
-			ObservableList<ServiceClass> empData = ViewerDAO.searchService(terms.getValue().toString());
-			populateService(empData);
-			autoResizeColumns(employeeTable);
-		} catch (SQLException e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
-			alert.showAndWait();
-		}
+	private void searchService(ActionEvent actionEvent) {
+		ObservableList<ServiceClass> empData = ViewerDAO.searchService(terms.getValue().toString());
+		populateService(empData);
+		autoResizeColumns(employeeTable);
 	}
 
 	@FXML
@@ -267,13 +258,14 @@ public class ServiceController {
 			alert.setPrefHeight(17.0);
 			Button no = new Button();
 			no.setText("Нет");
-			no.setLayoutX(14.0);
+			no.setLayoutX(111.0);
 			no.setLayoutY(56.0);
 			no.setPrefWidth(72.0);
 			no.setPrefHeight(21.0);
+
 			Button yes = new Button();
 			yes.setText("Да");
-			yes.setLayoutX(111.0);
+			yes.setLayoutX(14.0);
 			yes.setLayoutY(56.0);
 			yes.setPrefWidth(72.0);
 			yes.setPrefHeight(21.0);
@@ -290,48 +282,17 @@ public class ServiceController {
 			});
 			yes.setOnAction(new EventHandler<ActionEvent>() {
 				public void handle(ActionEvent event) {
-					try {
-						ViewerDAO.deleteService(tr.getidterm(), tr.getaccount(), tr.getname());
-						Alert alert = new Alert(Alert.AlertType.INFORMATION);
-						Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-						stage.getIcons().add(new Image("terminal.png"));
-						alert.setTitle("Внимание");
-						alert.setHeaderText(null);
-						alert.setContentText("Сервис: " + tr.getname() + " удален!\n");
-						alert.showAndWait();
-						try {
-							ObservableList<ServiceClass> empData = ViewerDAO.searchService(terms.getValue().toString());
-							populateService(empData);
-							newWindow_yn.close();
-						} catch (SQLException e) {
-							Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
-							Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
-							stage_.getIcons().add(new Image("terminal.png"));
-							alert_.setTitle("Внимание");
-							alert_.setHeaderText(null);
-							alert_.setContentText(e.getMessage());
-							alert_.showAndWait();
-						}
-					} catch (SQLException e) {
-						Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
-						Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
-						stage_.getIcons().add(new Image("terminal.png"));
-						alert_.setTitle("Внимание");
-						alert_.setHeaderText(null);
-						alert_.setContentText(e.getMessage());
-						alert_.showAndWait();
-					} catch (ClassNotFoundException e) {
-						// TODO Auto-generated catch block
-						StringWriter errors = new StringWriter();
-						e.printStackTrace(new PrintWriter(errors));
-						Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
-						Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
-						stage_.getIcons().add(new Image("terminal.png"));
-						alert_.setTitle("Внимание");
-						alert_.setHeaderText(null);
-						alert_.setContentText(e.getMessage());
-						alert_.showAndWait();
-					}
+					ViewerDAO.deleteService(tr.getidterm(), tr.getaccount(), tr.getname());
+					Alert alert = new Alert(Alert.AlertType.INFORMATION);
+					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+					stage.getIcons().add(new Image("terminal.png"));
+					alert.setTitle("Внимание");
+					alert.setHeaderText(null);
+					alert.setContentText("Сервис: " + tr.getname() + " удален!\n");
+					alert.showAndWait();
+					ObservableList<ServiceClass> empData = ViewerDAO.searchService(terms.getValue().toString());
+					populateService(empData);
+					newWindow_yn.close();
 				}
 			});
 			newWindow_yn.setTitle("Внимание");
@@ -346,7 +307,7 @@ public class ServiceController {
 	}
 
 	@FXML
-	private void UpdateService(ActionEvent actionEvent_) throws SQLException, ClassNotFoundException, IOException {
+	private void UpdateService(ActionEvent actionEvent_) {
 		if (employeeTable.getSelectionModel().getSelectedItem() == null) {
 			Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
@@ -565,13 +526,14 @@ public class ServiceController {
 					alert.setPrefHeight(17.0);
 					Button no = new Button();
 					no.setText("Нет");
-					no.setLayoutX(14.0);
+					no.setLayoutX(111.0);
 					no.setLayoutY(56.0);
 					no.setPrefWidth(72.0);
 					no.setPrefHeight(21.0);
+
 					Button yes = new Button();
 					yes.setText("Да");
-					yes.setLayoutX(111.0);
+					yes.setLayoutX(14.0);
 					yes.setLayoutY(56.0);
 					yes.setPrefWidth(72.0);
 					yes.setPrefHeight(21.0);
@@ -588,52 +550,24 @@ public class ServiceController {
 					});
 					yes.setOnAction(new EventHandler<ActionEvent>() {
 						public void handle(ActionEvent event) {
-							try {
-								ViewerDAO.updateService(acc_name_T.getText(), acc_rec_T.getText(), account_T.getText(),
-										account2_T.getText(), account3_T.getText(), account4_T.getText(),
-										account5_T.getText(), idterm_T.getText(), inn_T.getText(), kbk_T.getText(),
-										kor_bank_nbra_T.getText(), kpp_T.getText(), name_T.getText(), okato_T.getText(),
-										bo1_T.getText(), bo2_T.getText(), stat_T.getText(), tr.getaccount(),
-										tr.getidterm(), tr.getname());
-								Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
-								Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
-								stage_.getIcons().add(new Image("terminal.png"));
-								alert_.setTitle("Внимание");
-								alert_.setHeaderText(null);
-								alert_.setContentText("Данные сервиса: " + tr.getname() + " обновлены!\n");
-								alert_.showAndWait();
+							ViewerDAO.updateService(acc_name_T.getText(), acc_rec_T.getText(), account_T.getText(),
+									account2_T.getText(), account3_T.getText(), account4_T.getText(),
+									account5_T.getText(), idterm_T.getText(), inn_T.getText(), kbk_T.getText(),
+									kor_bank_nbra_T.getText(), kpp_T.getText(), name_T.getText(), okato_T.getText(),
+									bo1_T.getText(), bo2_T.getText(), stat_T.getText(), tr.getaccount(),
+									tr.getidterm(), tr.getname());
+							Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
+							Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
+							stage_.getIcons().add(new Image("terminal.png"));
+							alert_.setTitle("Внимание");
+							alert_.setHeaderText(null);
+							alert_.setContentText("Данные сервиса: " + tr.getname() + " обновлены!\n");
+							alert_.showAndWait();
 
-								try {
-									ObservableList<ServiceClass> empData = ViewerDAO
-											.searchService(terms.getValue().toString());
-									populateService(empData);
-									newWindow_yn.close();
-								} catch (SQLException e) {
-									Alert alert = new Alert(Alert.AlertType.INFORMATION);
-									Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-									stage.getIcons().add(new Image("terminal.png"));
-									alert.setTitle("Внимание");
-									alert.setHeaderText(null);
-									alert.setContentText(e.getMessage());
-									alert.showAndWait();
-								}
-							} catch (SQLException e) {
-								Alert alert = new Alert(Alert.AlertType.INFORMATION);
-								Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-								stage.getIcons().add(new Image("terminal.png"));
-								alert.setTitle("Внимание");
-								alert.setHeaderText(null);
-								alert.setContentText(e.getMessage());
-								alert.showAndWait();
-							} catch (ClassNotFoundException e) {
-								Alert alert = new Alert(Alert.AlertType.INFORMATION);
-								Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-								stage.getIcons().add(new Image("terminal.png"));
-								alert.setTitle("Внимание");
-								alert.setHeaderText(null);
-								alert.setContentText(e.getMessage());
-								alert.showAndWait();
-							}
+							ObservableList<ServiceClass> empData = ViewerDAO
+									.searchService(terms.getValue().toString());
+							populateService(empData);
+							newWindow_yn.close();
 						}
 					});
 					newWindow_yn.setTitle("Внимание");
@@ -659,7 +593,7 @@ public class ServiceController {
 	}
 
 	@FXML
-	private void add(ActionEvent actionEvent_) throws SQLException, ClassNotFoundException, IOException {
+	private void add(ActionEvent actionEvent_) {
 		ServiceClass tr = employeeTable.getSelectionModel().getSelectedItem();
 		Stage stage = (Stage) ap.getScene().getWindow();
 		Label name = new Label("Название Сервиса:");
@@ -871,13 +805,14 @@ public class ServiceController {
 				alert.setPrefHeight(17.0);
 				Button no = new Button();
 				no.setText("Нет");
-				no.setLayoutX(14.0);
+				no.setLayoutX(111.0);
 				no.setLayoutY(56.0);
 				no.setPrefWidth(72.0);
 				no.setPrefHeight(21.0);
+
 				Button yes = new Button();
 				yes.setText("Да");
-				yes.setLayoutX(111.0);
+				yes.setLayoutX(14.0);
 				yes.setLayoutY(56.0);
 				yes.setPrefWidth(72.0);
 				yes.setPrefHeight(21.0);
@@ -925,29 +860,11 @@ public class ServiceController {
 							terms.getSelectionModel().select(0);
 							// System.out.println(terms.getValue().toString());
 							rs.close();
-							try {
-								ObservableList<ServiceClass> empData = ViewerDAO
-										.searchService(terms.getValue().toString());
-								populateService(empData);
-								newWindow_yn.close();
-							} catch (SQLException e) {
-								Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
-								Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
-								stage_.getIcons().add(new Image("terminal.png"));
-								alert_.setTitle("Внимание");
-								alert_.setHeaderText(null);
-								alert_.setContentText(e.getMessage());
-								alert_.showAndWait();
-							}
+							ObservableList<ServiceClass> empData = ViewerDAO
+									.searchService(terms.getValue().toString());
+							populateService(empData);
+							newWindow_yn.close();
 						} catch (SQLException e) {
-							Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
-							Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
-							stage_.getIcons().add(new Image("terminal.png"));
-							alert_.setTitle("Внимание");
-							alert_.setHeaderText(null);
-							alert_.setContentText(e.getMessage());
-							alert_.showAndWait();
-						} catch (ClassNotFoundException e) {
 							Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
 							Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
 							stage_.getIcons().add(new Image("terminal.png"));
@@ -978,7 +895,7 @@ public class ServiceController {
 		newWindow.show();
 	}
 
-	private void populateService(ObservableList<ServiceClass> trData) throws ClassNotFoundException {
+	private void populateService(ObservableList<ServiceClass> trData) {
 		employeeTable.setItems(trData);
 	}
 }

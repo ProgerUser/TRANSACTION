@@ -22,6 +22,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -82,6 +83,8 @@ public class TerminalController {
 	private Menu menu;
 
 	@FXML
+	private TableColumn<TerminalClass, String> ACC_30232_06;
+	@FXML
 	private TableColumn<TerminalClass, String> ACCOUNT;
 	@FXML
 	private TableColumn<TerminalClass, String> ADDRESS;
@@ -141,25 +144,16 @@ public class TerminalController {
 		acc_30232_04.setCellValueFactory(cellData -> cellData.getValue().acc_30232_04Property());
 		acc_30232_05.setCellValueFactory(cellData -> cellData.getValue().acc_30232_05Property());
 		acc_70107.setCellValueFactory(cellData -> cellData.getValue().acc_70107Property());
-	}
+		ACC_30232_06.setCellValueFactory(cellData -> cellData.getValue().ACC_30232_06Property());
 
-	// Search an transact
-	/*
-	 * @FXML private void searchEmployees(ActionEvent actionEvent) throws
-	 * ClassNotFoundException, SQLException { try { // Get Employee information
-	 * Transact emp = EmployeeDAO.searchTransact(fio.getText()); // Populate
-	 * Employee on TableView and Display on TextArea populateAndShowEmployee(emp); }
-	 * catch (SQLException e) { e.printStackTrace(); resultArea.
-	 * setText("Произошла ошибка при получении информации о транзакциях из БД.\n" +
-	 * e); throw e; } }
-	 */
+	}
 
 	public static void autoResizeColumns(TableView<?> table) {
 		// Set the right policy
 		table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
 		table.getColumns().stream().forEach((column) -> {
 			// System.out.println(column.getText());
-			if (column.getText().equals("acc_70107")) {
+			if (column.getText().equals("11ACC_30232_06")) {
 
 			} else {
 				// Minimal width = columnheader
@@ -185,26 +179,18 @@ public class TerminalController {
 	// Search all transacts
 	@FXML
 	private void searchTerminal(ActionEvent actionEvent) {
-		try {
-			ObservableList<TerminalClass> empData = ViewerDAO.searchTerminal();
-			populateTerminal(empData);
-			autoResizeColumns(employeeTable);
-		} catch (SQLException | ClassNotFoundException e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
-			alert.showAndWait();
-		}
+		ObservableList<TerminalClass> empData = ViewerDAO.searchTerminal();
+		populateTerminal(empData);
+		autoResizeColumns(employeeTable);
 	}
 
+	@FXML
+	private BorderPane bp;
 	@FXML
 	private AnchorPane ap;
 
 	@FXML
-	private void Delete(ActionEvent actionEvent_) throws SQLException, ClassNotFoundException, IOException {
+	private void Delete(ActionEvent actionEvent_) {
 		if (employeeTable.getSelectionModel().getSelectedItem() == null) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -220,18 +206,21 @@ public class TerminalController {
 			alert.setLayoutX(75.0);
 			alert.setLayoutY(11.0);
 			alert.setPrefHeight(17.0);
+
 			Button no = new Button();
 			no.setText("Нет");
-			no.setLayoutX(14.0);
+			no.setLayoutX(111.0);
 			no.setLayoutY(56.0);
 			no.setPrefWidth(72.0);
 			no.setPrefHeight(21.0);
+
 			Button yes = new Button();
 			yes.setText("Да");
-			yes.setLayoutX(111.0);
+			yes.setLayoutX(14.0);
 			yes.setLayoutY(56.0);
 			yes.setPrefWidth(72.0);
 			yes.setPrefHeight(21.0);
+
 			AnchorPane yn = new AnchorPane();
 			yn.getChildren().add(alert);
 			yn.getChildren().add(no);
@@ -245,45 +234,17 @@ public class TerminalController {
 			});
 			yes.setOnAction(new EventHandler<ActionEvent>() {
 				public void handle(ActionEvent event) {
-					try {
-						ViewerDAO.deleteTerminal(tr.getNAME());
-						Alert alert = new Alert(Alert.AlertType.INFORMATION);
-						Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-						stage.getIcons().add(new Image("terminal.png"));
-						alert.setTitle("Внимание");
-						alert.setHeaderText(null);
-						alert.setContentText("Терминал: " + tr.getNAME() + " удален!\n");
-						alert.showAndWait();
-						try {
-							ObservableList<TerminalClass> empData = ViewerDAO.searchTerminal();
-							populateTerminal(empData);
-							newWindow_yn.close();
-						} catch (SQLException e) {
-							Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
-							Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
-							stage_.getIcons().add(new Image("terminal.png"));
-							alert_.setTitle("Внимание");
-							alert_.setHeaderText(null);
-							alert_.setContentText(e.getMessage());
-							alert_.showAndWait();
-						}
-					} catch (SQLException e) {
-						Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
-						Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
-						stage_.getIcons().add(new Image("terminal.png"));
-						alert_.setTitle("Внимание");
-						alert_.setHeaderText(null);
-						alert_.setContentText(e.getMessage());
-						alert_.showAndWait();
-					} catch (ClassNotFoundException e) {
-						Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
-						Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
-						stage_.getIcons().add(new Image("terminal.png"));
-						alert_.setTitle("Внимание");
-						alert_.setHeaderText(null);
-						alert_.setContentText(e.getMessage());
-						alert_.showAndWait();
-					}
+					ViewerDAO.deleteTerminal(tr.getNAME());
+					Alert alert = new Alert(Alert.AlertType.INFORMATION);
+					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+					stage.getIcons().add(new Image("terminal.png"));
+					alert.setTitle("Внимание");
+					alert.setHeaderText(null);
+					alert.setContentText("Терминал: " + tr.getNAME() + " удален!\n");
+					alert.showAndWait();
+					ObservableList<TerminalClass> empData = ViewerDAO.searchTerminal();
+					populateTerminal(empData);
+					newWindow_yn.close();
 				}
 			});
 			newWindow_yn.setTitle("Внимание");
@@ -298,7 +259,7 @@ public class TerminalController {
 	}
 
 	@FXML
-	private void UpdateTerminal(ActionEvent actionEvent_) throws SQLException, ClassNotFoundException, IOException {
+	private void UpdateTerminal(ActionEvent actionEvent_) {
 		if (employeeTable.getSelectionModel().getSelectedItem() == null) {
 			Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
@@ -337,9 +298,14 @@ public class TerminalController {
 			Label acc_30232_05 = new Label("acc_30232_05:");
 			acc_30232_05.setLayoutX(60.0);
 			acc_30232_05.setLayoutY(328.0);
+
 			Label acc_701071 = new Label("acc_701071:");
 			acc_701071.setLayoutX(72.0);
 			acc_701071.setLayoutY(366.0);
+
+			Label ACC_30232_06 = new Label("ACC_30232_06:");
+			ACC_30232_06.setLayoutX(55.0);
+			ACC_30232_06.setLayoutY(404.0);
 
 			TextField NAME_T = new TextField();
 			NAME_T.setPrefHeight(28.0);
@@ -402,10 +368,17 @@ public class TerminalController {
 			acc_701071_T.setLayoutY(368.0);
 			acc_701071_T.setText(tr.getacc_70107());
 
+			TextField ACC_30232_06_T = new TextField();
+			ACC_30232_06_T.setPrefHeight(28.0);
+			ACC_30232_06_T.setPrefWidth(198.0);
+			ACC_30232_06_T.setLayoutX(150.0);
+			ACC_30232_06_T.setLayoutY(404.0);
+			ACC_30232_06_T.setText(tr.getACC_30232_06());
+
 			Button Update = new Button();
 			Update.setText("Обновить");
 			Update.setLayoutX(80.0);
-			Update.setLayoutY(422.0);
+			Update.setLayoutY(460.0);
 			AnchorPane secondaryLayout = new AnchorPane();
 			secondaryLayout.getChildren().add(NAME);
 			secondaryLayout.getChildren().add(DEPARTMENT);
@@ -417,6 +390,7 @@ public class TerminalController {
 			secondaryLayout.getChildren().add(acc_30232_04);
 			secondaryLayout.getChildren().add(acc_30232_05);
 			secondaryLayout.getChildren().add(acc_701071);
+			secondaryLayout.getChildren().add(ACC_30232_06);
 
 			secondaryLayout.getChildren().add(NAME_T);
 			secondaryLayout.getChildren().add(DEPARTMENT_T);
@@ -428,6 +402,7 @@ public class TerminalController {
 			secondaryLayout.getChildren().add(acc_30232_04_T);
 			secondaryLayout.getChildren().add(acc_30232_05_T);
 			secondaryLayout.getChildren().add(acc_701071_T);
+			secondaryLayout.getChildren().add(ACC_30232_06_T);
 			secondaryLayout.getChildren().add(Update);
 
 			Scene secondScene = new Scene(secondaryLayout, 499, 500);
@@ -442,13 +417,14 @@ public class TerminalController {
 					alert.setPrefHeight(17.0);
 					Button no = new Button();
 					no.setText("Нет");
-					no.setLayoutX(14.0);
+					no.setLayoutX(111.0);
 					no.setLayoutY(56.0);
 					no.setPrefWidth(72.0);
 					no.setPrefHeight(21.0);
+
 					Button yes = new Button();
 					yes.setText("Да");
-					yes.setLayoutX(111.0);
+					yes.setLayoutX(14.0);
 					yes.setLayoutY(56.0);
 					yes.setPrefWidth(72.0);
 					yes.setPrefHeight(21.0);
@@ -465,49 +441,21 @@ public class TerminalController {
 					});
 					yes.setOnAction(new EventHandler<ActionEvent>() {
 						public void handle(ActionEvent event) {
-							try {
-								ViewerDAO.updateTerminal(NAME_T.getText(), ACCOUNT_T.getText(), DEPARTMENT_T.getText(),
-										ADDRESS_T.getText(), acc_30232_01_T.getText(), acc_30232_02_T.getText(),
-										acc_30232_03_T.getText(), acc_30232_04_T.getText(), acc_30232_05_T.getText(),
-										acc_701071_T.getText(), tr.getNAME());
+							ViewerDAO.updateTerminal(NAME_T.getText(), ACCOUNT_T.getText(), DEPARTMENT_T.getText(),
+									ADDRESS_T.getText(), acc_30232_01_T.getText(), acc_30232_02_T.getText(),
+									acc_30232_03_T.getText(), acc_30232_04_T.getText(), acc_30232_05_T.getText(),
+									acc_701071_T.getText(), tr.getNAME(), ACC_30232_06_T.getText());
 
-								Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
-								Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
-								stage_.getIcons().add(new Image("terminal.png"));
-								alert_.setTitle("Внимание");
-								alert_.setHeaderText(null);
-								alert_.setContentText("Данные терминала: " + tr.getNAME() + " обновлены!\n");
-								alert_.showAndWait();
-								try {
-									ObservableList<TerminalClass> empData = ViewerDAO.searchTerminal();
-									populateTerminal(empData);
-									newWindow_yn.close();
-								} catch (SQLException e) {
-									Alert alert = new Alert(Alert.AlertType.INFORMATION);
-									Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-									stage.getIcons().add(new Image("terminal.png"));
-									alert.setTitle("Внимание");
-									alert.setHeaderText(null);
-									alert.setContentText(e.getMessage());
-									alert.showAndWait();
-								}
-							} catch (SQLException e) {
-								Alert alert = new Alert(Alert.AlertType.INFORMATION);
-								Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-								stage.getIcons().add(new Image("terminal.png"));
-								alert.setTitle("Внимание");
-								alert.setHeaderText(null);
-								alert.setContentText(e.getMessage());
-								alert.showAndWait();
-							} catch (ClassNotFoundException e) {
-								Alert alert = new Alert(Alert.AlertType.INFORMATION);
-								Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-								stage.getIcons().add(new Image("terminal.png"));
-								alert.setTitle("Внимание");
-								alert.setHeaderText(null);
-								alert.setContentText(e.getMessage());
-								alert.showAndWait();
-							}
+							Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
+							Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
+							stage_.getIcons().add(new Image("terminal.png"));
+							alert_.setTitle("Внимание");
+							alert_.setHeaderText(null);
+							alert_.setContentText("Данные терминала: " + tr.getNAME() + " обновлены!\n");
+							alert_.showAndWait();
+							ObservableList<TerminalClass> empData = ViewerDAO.searchTerminal();
+							populateTerminal(empData);
+							newWindow_yn.close();
 						}
 					});
 					newWindow_yn.setTitle("Внимание");
@@ -533,7 +481,7 @@ public class TerminalController {
 	}
 
 	@FXML
-	private void add(ActionEvent actionEvent_) throws SQLException, ClassNotFoundException, IOException {
+	private void add(ActionEvent actionEvent_) {
 		TerminalClass tr = employeeTable.getSelectionModel().getSelectedItem();
 		Stage stage = (Stage) ap.getScene().getWindow();
 		Label NAME = new Label("Название терминала:");
@@ -566,6 +514,10 @@ public class TerminalController {
 		Label acc_701071 = new Label("acc_701071:");
 		acc_701071.setLayoutX(72.0);
 		acc_701071.setLayoutY(366.0);
+
+		Label ACC_30232_06 = new Label("ACC_30232_06:");
+		ACC_30232_06.setLayoutX(55.0);
+		ACC_30232_06.setLayoutY(404.0);
 
 		TextField NAME_T = new TextField();
 		NAME_T.setPrefHeight(28.0);
@@ -638,10 +590,19 @@ public class TerminalController {
 		acc_701071_T.setPromptText("Обязательно!");
 		// acc_701071_T.setText(tr.getacc_70107());
 
+		TextField ACC_30232_06_T = new TextField();
+		ACC_30232_06_T.setPrefHeight(28.0);
+		ACC_30232_06_T.setPrefWidth(198.0);
+		ACC_30232_06_T.setLayoutX(150.0);
+		ACC_30232_06_T.setLayoutY(404.0);
+		// ACC_30232_06_T.setText(tr.getACC_30232_06());
+		ACC_30232_06_T.setPromptText("Обязательно!");
+
 		Button Add = new Button();
 		Add.setText("Добавить");
 		Add.setLayoutX(80.0);
-		Add.setLayoutY(422.0);
+		Add.setLayoutY(460.0);
+
 		AnchorPane secondaryLayout = new AnchorPane();
 		secondaryLayout.getChildren().add(NAME);
 		secondaryLayout.getChildren().add(DEPARTMENT);
@@ -653,6 +614,7 @@ public class TerminalController {
 		secondaryLayout.getChildren().add(acc_30232_04);
 		secondaryLayout.getChildren().add(acc_30232_05);
 		secondaryLayout.getChildren().add(acc_701071);
+		secondaryLayout.getChildren().add(ACC_30232_06);
 
 		secondaryLayout.getChildren().add(NAME_T);
 		secondaryLayout.getChildren().add(DEPARTMENT_T);
@@ -664,6 +626,7 @@ public class TerminalController {
 		secondaryLayout.getChildren().add(acc_30232_04_T);
 		secondaryLayout.getChildren().add(acc_30232_05_T);
 		secondaryLayout.getChildren().add(acc_701071_T);
+		secondaryLayout.getChildren().add(ACC_30232_06_T);
 		secondaryLayout.getChildren().add(Add);
 
 		Scene secondScene = new Scene(secondaryLayout, 499, 500);
@@ -678,13 +641,14 @@ public class TerminalController {
 				alert.setPrefHeight(17.0);
 				Button no = new Button();
 				no.setText("Нет");
-				no.setLayoutX(14.0);
+				no.setLayoutX(111.0);
 				no.setLayoutY(56.0);
 				no.setPrefWidth(72.0);
 				no.setPrefHeight(21.0);
+
 				Button yes = new Button();
 				yes.setText("Да");
-				yes.setLayoutX(111.0);
+				yes.setLayoutX(14.0);
 				yes.setLayoutY(56.0);
 				yes.setPrefWidth(72.0);
 				yes.setPrefHeight(21.0);
@@ -701,48 +665,20 @@ public class TerminalController {
 				});
 				yes.setOnAction(new EventHandler<ActionEvent>() {
 					public void handle(ActionEvent event) {
-						try {
-							ViewerDAO.InsertTerminal(NAME_T.getText(), ACCOUNT_T.getText(), DEPARTMENT_T.getText(),
-									ADDRESS_T.getText(), acc_30232_01_T.getText(), acc_30232_02_T.getText(),
-									acc_30232_03_T.getText(), acc_30232_04_T.getText(), acc_30232_05_T.getText(),
-									acc_701071_T.getText());
-							Alert alert = new Alert(Alert.AlertType.INFORMATION);
-							Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-							stage.getIcons().add(new Image("terminal.png"));
-							alert.setTitle("Внимание");
-							alert.setHeaderText(null);
-							alert.setContentText("Добавлен терминал: " + NAME.getText() + " !\n");
-							alert.showAndWait();
-							try {
-								ObservableList<TerminalClass> empData = ViewerDAO.searchTerminal();
-								populateTerminal(empData);
-								newWindow_yn.close();
-							} catch (SQLException e) {
-								Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
-								Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
-								stage_.getIcons().add(new Image("terminal.png"));
-								alert_.setTitle("Внимание");
-								alert_.setHeaderText(null);
-								alert_.setContentText(e.getMessage());
-								alert_.showAndWait();
-							}
-						} catch (SQLException e) {
-							Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
-							Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
-							stage_.getIcons().add(new Image("terminal.png"));
-							alert_.setTitle("Внимание");
-							alert_.setHeaderText(null);
-							alert_.setContentText(e.getMessage());
-							alert_.showAndWait();
-						} catch (ClassNotFoundException e) {
-							Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
-							Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
-							stage_.getIcons().add(new Image("terminal.png"));
-							alert_.setTitle("Внимание");
-							alert_.setHeaderText(null);
-							alert_.setContentText(e.getMessage());
-							alert_.showAndWait();
-						}
+						ViewerDAO.InsertTerminal(NAME_T.getText(), ACCOUNT_T.getText(), DEPARTMENT_T.getText(),
+								ADDRESS_T.getText(), acc_30232_01_T.getText(), acc_30232_02_T.getText(),
+								acc_30232_03_T.getText(), acc_30232_04_T.getText(), acc_30232_05_T.getText(),
+								acc_701071_T.getText(), ACC_30232_06_T.getText());
+						Alert alert = new Alert(Alert.AlertType.INFORMATION);
+						Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+						stage.getIcons().add(new Image("terminal.png"));
+						alert.setTitle("Внимание");
+						alert.setHeaderText(null);
+						alert.setContentText("Добавлен терминал: " + NAME.getText() + " !\n");
+						alert.showAndWait();
+						ObservableList<TerminalClass> empData = ViewerDAO.searchTerminal();
+						populateTerminal(empData);
+						newWindow_yn.close();
 					}
 				});
 				newWindow_yn.setTitle("Внимание");
@@ -765,7 +701,7 @@ public class TerminalController {
 		newWindow.show();
 	}
 
-	private void populateTerminal(ObservableList<TerminalClass> trData) throws ClassNotFoundException {
+	private void populateTerminal(ObservableList<TerminalClass> trData) {
 		employeeTable.setItems(trData);
 	}
 }

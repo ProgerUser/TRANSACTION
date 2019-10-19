@@ -80,6 +80,8 @@ public class ShowHistoryController {
 	private DatePicker datestart;
 
 	@FXML
+	private TableColumn<FN_SESS_AMRA, String> DATE_;
+	@FXML
 	private TableColumn<FN_SESS_AMRA, String> SESS_ID;
 	@FXML
 	private TableColumn<FN_SESS_AMRA, String> FILE_NAME;
@@ -104,11 +106,21 @@ public class ShowHistoryController {
 		SESS_ID.setCellValueFactory(cellData -> cellData.getValue().sess_idProperty());
 		FILE_NAME.setCellValueFactory(cellData -> cellData.getValue().file_nameProperty());
 		DATE_TIME.setCellValueFactory(cellData -> cellData.getValue().date_timeProperty());
-
+		//DATE_.setCellValueFactory(cellData -> cellData.getValue().date_Property());
+		
 		DATE_TIME.setCellFactory(TextFieldTableCell.forTableColumn());
 		FILE_NAME.setCellFactory(TextFieldTableCell.forTableColumn());
 		SESS_ID.setCellFactory(TextFieldTableCell.forTableColumn());
-
+		//DATE_.setCellFactory(TextFieldTableCell.forTableColumn());
+		
+//		DATE_.setOnEditCommit(new EventHandler<CellEditEvent<FN_SESS_AMRA, String>>() {
+//			@Override
+//			public void handle(CellEditEvent<FN_SESS_AMRA, String> t) {
+//				((FN_SESS_AMRA) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+//						.setdate_time(t.getNewValue());
+//			}
+//		});
+		
 		DATE_TIME.setOnEditCommit(new EventHandler<CellEditEvent<FN_SESS_AMRA, String>>() {
 			@Override
 			public void handle(CellEditEvent<FN_SESS_AMRA, String> t) {
@@ -154,7 +166,7 @@ public class ShowHistoryController {
 				Stage stage = new Stage();
 				Parent root;
 
-				root = FXMLLoader.load(Main.class.getResource("view/Transact_Amra_viewer.fxml"));
+				root = FXMLLoader.load(Main.class.getResource("view/Transact_Amra_viewer_from_show.fxml"));
 
 				stage.setScene(new Scene(root));
 				stage.getIcons().add(new Image("icon.png"));
@@ -205,83 +217,32 @@ public class ShowHistoryController {
 
 	@FXML
 	private void trn_doc(ActionEvent actionEvent) {
-		try {
-			if (fn_sess_table.getSelectionModel().getSelectedItem() == null) {
+		if (fn_sess_table.getSelectionModel().getSelectedItem() == null) {
 
-				Alert alert = new Alert(Alert.AlertType.INFORMATION);
-				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-				stage.getIcons().add(new Image("terminal.png"));
-				alert.setTitle("Внимание");
-				alert.setHeaderText(null);
-				alert.setContentText(("Выберите сначала данные из таблицы!\n"));
-				alert.showAndWait();
-
-			} else {
-				FN_SESS_AMRA fn = fn_sess_table.getSelectionModel().getSelectedItem();
-				new PrintReport().showReport(fn.getsess_id());
-			}
-		} catch (ClassNotFoundException | JRException | SQLException e1) {
-			e1.printStackTrace();
-		}
-//		try {
-//			if (fn_sess_table.getSelectionModel().getSelectedItem() == null) {
-//				Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-//				stage.getIcons().add(new Image("terminal.png"));
-//				alert.setTitle("Внимание");
-//				alert.setHeaderText(null);
-//				alert.setContentText(("Выберите сначала данные из таблицы!\n"));
-//				alert.showAndWait();
-//			} else {
-//				FN_SESS_AMRA fn = fn_sess_table.getSelectionModel().getSelectedItem();
-//
-//				Connect.SESS_ID_ = fn.getsess_id();
-//
-//				Stage stage = new Stage();
-//				Parent root;
-//
-//				root = FXMLLoader.load(Main.class.getResource("view/Transact_Amra_viewer.fxml"));
-//
-//				stage.setScene(new Scene(root));
-//				stage.getIcons().add(new Image("icon.png"));
-//				stage.setTitle("Загруженные транзакции SESS_ID = " + fn.getsess_id());
-//				stage.initModality(Modality.WINDOW_MODAL);
-//				stage.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
-//				stage.show();
-//
-//			}
-//		} catch (IOException e) {
-//			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-//			stage.getIcons().add(new Image("terminal.png"));
-//			alert.setTitle("Внимание");
-//			alert.setHeaderText(null);
-//			alert.setContentText(e.getMessage());
-//			alert.showAndWait();
-//		}
-	}
-
-	// Найти загрузки
-	@FXML
-	private void fn_sess_search(ActionEvent actionEvent) {
-		try {
-			// Get all Employees information
-			ObservableList<FN_SESS_AMRA> empData = TerminalDAO.srch_fn_sess(sess_id_t.getText(), trnumber.getText(),
-					datestart.getValue(), dateend.getValue());
-			// Populate Employees on TableView
-			populate_fn_sess(empData);
-			autoResizeColumns(fn_sess_table);
-			// GUIUtils.autoFitTable(fn_sess_table);
-
-		} catch (SQLException | ParseException | ClassNotFoundException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
+			alert.setContentText(("Выберите сначала данные из таблицы!\n"));
 			alert.showAndWait();
+
+		} else {
+			FN_SESS_AMRA fn = fn_sess_table.getSelectionModel().getSelectedItem();
+			new PrintReport().showReport(fn.getsess_id());
 		}
+	}
+
+	// Найти загрузки
+	@FXML
+	private void fn_sess_search(ActionEvent actionEvent) {
+		// Get all Employees information
+		ObservableList<FN_SESS_AMRA> empData = TerminalDAO.srch_fn_sess(sess_id_t.getText(), trnumber.getText(),
+				datestart.getValue(), dateend.getValue());
+		// Populate Employees on TableView
+		populate_fn_sess(empData);
+		autoResizeColumns(fn_sess_table);
+		// GUIUtils.autoFitTable(fn_sess_table);
 	}
 
 	// Заполнить таблицу

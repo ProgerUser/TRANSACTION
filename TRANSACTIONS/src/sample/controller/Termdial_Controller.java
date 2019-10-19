@@ -226,21 +226,11 @@ public class Termdial_Controller {
 	}
 
 	@FXML
-	private void termdial_srch(ActionEvent actionEvent) throws IOException {
-		try {
-			ObservableList<Termdial> empData = TerminalDAO.Termdial_(datestart.getValue(), dateend.getValue(),
-					trnumber.getText(), sess_id_t.getText());
-			populate_termdial(empData);
-			autoResizeColumns(termdeal_table);
-		} catch (SQLException | ParseException | ClassNotFoundException e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
-			alert.showAndWait();
-		}
+	private void termdial_srch(ActionEvent actionEvent) {
+		ObservableList<Termdial> empData = TerminalDAO.Termdial_(datestart.getValue(), dateend.getValue(),
+				trnumber.getText(), sess_id_t.getText());
+		populate_termdial(empData);
+		autoResizeColumns(termdeal_table);
 	}
 
 	// Заполнить таблицу

@@ -8,12 +8,27 @@ public class FN_SESS_AMRA {
 	private StringProperty sess_id;
 	private StringProperty file_name;
 	private StringProperty date_time;
+	private StringProperty date_;
 
 	// Constructor
 	public FN_SESS_AMRA() {
 		this.sess_id = new SimpleStringProperty();
 		this.file_name = new SimpleStringProperty();
 		this.date_time = new SimpleStringProperty();
+		this.date_ = new SimpleStringProperty();
+	}
+
+	// date
+	public String getdate_() {
+		return date_.get();
+	}
+
+	public void setdate_(String date_) {
+		this.date_.set(date_);
+	}
+
+	public StringProperty date_Property() {
+		return date_;
 	}
 
 	// sess_id

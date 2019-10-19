@@ -5,15 +5,19 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import sample.model.Transact;
 import sample.model.TerminalDAO;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 //import java.sql.Date;
@@ -29,6 +33,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+
 /**
  * Саид 04.04.2019.
  */
@@ -130,46 +135,34 @@ public class EmployeeController {
 
 	// Search an transact
 	@FXML
-	private void searchEmployees(ActionEvent actionEvent) throws ClassNotFoundException, SQLException {
-		try {
-			// Get Employee information
-			Transact emp = TerminalDAO.searchTransact(fio.getText());
-			// Populate Employee on TableView and Display on TextArea
-			populateAndShowEmployee(emp);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			resultArea.setText("Произошла ошибка при получении информации о транзакциях из БД.\n" + e);
-			throw e;
-		}
+	private void searchEmployees(ActionEvent actionEvent) {
+		// Get Employee information
+		Transact emp = TerminalDAO.searchTransact(fio.getText());
+		// Populate Employee on TableView and Display on TextArea
+		populateAndShowEmployee(emp);
 	}
 
 	// Search all transacts
 	@FXML
-	private void searchEmployee(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
-		try {
-			if (fio.getText().equals("")) {
-				resultArea.setText("Поле ФИО пустое, введите значение!\n");
-				return;
-			}
-			// Get all Employees information
-			ObservableList<Transact> empData = TerminalDAO.searchEmployees(fio.getText(), trnumber.getText(),
-					datestart.getText(), dateend.getText());
-			// Populate Employees on TableView
-			populateEmployees(empData);
-		} catch (SQLException e) {
-			// System.out.println("Произошла ошибка при получении информации о транзакциях
-			// из БД.\n" + e);
-			resultArea.setText("Произошла ошибка при получении информации о транзакциях из БД.\n" + e);
-			throw e;
+	private void searchEmployee(ActionEvent actionEvent) {
+		if (fio.getText().equals("")) {
+			resultArea.setText("Поле ФИО пустое, введите значение!\n");
+			return;
 		}
+		// Get all Employees information
+		ObservableList<Transact> empData = TerminalDAO.searchEmployees(fio.getText(), trnumber.getText(),
+				datestart.getText(), dateend.getText());
+		// Populate Employees on TableView
+		populateEmployees(empData);
+
 	}
 
 	// Populate Employees for TableView with MultiThreading (This is for example
 	// usage)
-	private void fillEmployeeTable(ActionEvent event) throws SQLException, ClassNotFoundException {
+	private void fillEmployeeTable(ActionEvent event) {
 		Task<List<Transact>> task = new Task<List<Transact>>() {
 			@Override
-			public ObservableList<Transact> call() throws Exception {
+			public ObservableList<Transact> call() {
 				return TerminalDAO.searchEmployees(fio.getText(), trnumber.getText(), datestart.getText(),
 						dateend.getText());
 			}
@@ -182,7 +175,7 @@ public class EmployeeController {
 
 	// Populate Employee
 	@FXML
-	private void populateEmployee(Transact emp) throws ClassNotFoundException {
+	private void populateEmployee(Transact emp) {
 		// Declare and ObservableList for table view
 		ObservableList<Transact> empData = FXCollections.observableArrayList();
 		// Add employee to the ObservableList
@@ -200,7 +193,7 @@ public class EmployeeController {
 
 	// Populate Employee for TableView and Display Employee on TextArea
 	@FXML
-	private void populateAndShowEmployee(Transact emp) throws ClassNotFoundException {
+	private void populateAndShowEmployee(Transact emp) {
 		if (emp != null) {
 			populateEmployee(emp);
 			setEmpInfoToTextArea(emp);
@@ -211,44 +204,9 @@ public class EmployeeController {
 
 	// Populate Employees for TableView
 	@FXML
-	private void populateEmployees(ObservableList<Transact> trData) throws ClassNotFoundException {
+	private void populateEmployees(ObservableList<Transact> trData) {
 		// Set items to the employeeTable
 		employeeTable.setItems(trData);
-	}
-
-	// Update employee's email with the email which is written on newEmailText field
-	@FXML
-	private void updateEmployeeEmail(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
-		try {
-			TerminalDAO.updateEmpEmail(empIdText.getText(), newEmailText.getText());
-			resultArea.setText("Email has been updated for, employee id: " + empIdText.getText() + "\n");
-		} catch (SQLException e) {
-			resultArea.setText("Problem occurred while updating email: " + e);
-		}
-	}
-
-	// Insert an employee to the DB
-	@FXML
-	private void insertEmployee(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
-		try {
-			TerminalDAO.insertEmp(nameText.getText(), surnameText.getText(), emailText.getText());
-			resultArea.setText("Employee inserted! \n");
-		} catch (SQLException e) {
-			resultArea.setText("Problem occurred while inserting employee " + e);
-			throw e;
-		}
-	}
-
-	// Delete an employee with a given employee Id from DB
-	@FXML
-	private void deleteEmployee(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
-		try {
-			TerminalDAO.deleteEmpWithId(empIdText.getText());
-			resultArea.setText("Employee deleted! Employee id: " + empIdText.getText() + "\n");
-		} catch (SQLException e) {
-			resultArea.setText("Problem occurred while deleting employee " + e);
-			throw e;
-		}
 	}
 
 	@FXML
@@ -262,38 +220,39 @@ public class EmployeeController {
 	}
 
 	@FXML
-	void report(ActionEvent event) throws IOException {
-		Date date = new Date();
-		DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH-mm-ss");
-		String strDate = dateFormat.format(date);
-		/* 
-		if (employeeTable.getSelectionModel().getSelectedItem() == null) {
-			resultArea.setText("Выберите сначала данные из таблицы!\n");
-		} else {*/
+	void report(ActionEvent event) {
+		try {
+			Date date = new Date();
+			DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH-mm-ss");
+			String strDate = dateFormat.format(date);
+			/*
+			 * if (employeeTable.getSelectionModel().getSelectedItem() == null) {
+			 * resultArea.setText("Выберите сначала данные из таблицы!\n"); } else {
+			 */
 			Transact tr = employeeTable.getSelectionModel().getSelectedItem();
-			
-			PrintWriter writer = new PrintWriter(System.getProperty("user.dir").toString() +"\\" + strDate + "CHEK.txt"); 
-			  writer.write("*********************************\r\n"
-					  +"*****СБЕРБАНК  АБХАЗИИ (ОАО)*****\r\n"
-					  +"*********************************\r\n"
-					  +"Терминал N: СБ 0002\r\n"
-					  +"Адрес терминала:\r\n"
-					  +"г. Сухум, ул. Аидгылара 10/12\r\n"
-					  +"Чек N: "+tr.getACCOUNT()+"\r\n"
-					  +"Дата: 2019.02.07 13.35.41\r\n"
-					  +"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n"
-					  +"~~~~~~~~~ КОПИЯ КЛИЕНТА~~~~~~~~~\r\n"
-					  +"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n"
-					  +"Детский сад: Амра \r\n"
-					  +"Группа: Младшая группа\r\n"
-					  +"Период: февраль , март,апрель\r\n"
-					  +"ФИО ребенка: "+tr.getFIO()+"\r\n"
-					  +"Контактный телефон: +7(940)"+tr.getACCOUNT()+"\r\n"
-	                  +"\r\n"
-					  +"Сумма платежа: "+tr.getINSUM()+"  р\r\n"
-					  +"Комиссия: 50 p.\r\n"); 
-			  writer.close();
-			ProcessBuilder pb = new ProcessBuilder("Notepad.exe", System.getProperty("user.dir").toString() + "\\" + strDate + "CHEK.txt");
-			pb.start();	
+
+			PrintWriter writer = new PrintWriter(
+					System.getProperty("user.dir").toString() + "\\" + strDate + "CHEK.txt");
+			writer.write("*********************************\r\n" + "*****СБЕРБАНК  АБХАЗИИ (ОАО)*****\r\n"
+					+ "*********************************\r\n" + "Терминал N: СБ 0002\r\n" + "Адрес терминала:\r\n"
+					+ "г. Сухум, ул. Аидгылара 10/12\r\n" + "Чек N: " + tr.getACCOUNT() + "\r\n"
+					+ "Дата: 2019.02.07 13.35.41\r\n" + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n"
+					+ "~~~~~~~~~ КОПИЯ КЛИЕНТА~~~~~~~~~\r\n" + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n"
+					+ "Детский сад: Амра \r\n" + "Группа: Младшая группа\r\n" + "Период: февраль , март,апрель\r\n"
+					+ "ФИО ребенка: " + tr.getFIO() + "\r\n" + "Контактный телефон: +7(940)" + tr.getACCOUNT() + "\r\n"
+					+ "\r\n" + "Сумма платежа: " + tr.getINSUM() + "  р\r\n" + "Комиссия: 50 p.\r\n");
+			writer.close();
+			ProcessBuilder pb = new ProcessBuilder("Notepad.exe",
+					System.getProperty("user.dir").toString() + "\\" + strDate + "CHEK.txt");
+			pb.start();
+		} catch (IOException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+		}
 	}
 }

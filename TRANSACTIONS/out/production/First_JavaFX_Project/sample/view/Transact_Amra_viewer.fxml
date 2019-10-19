@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="649.0" prefWidth="1017.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.Tr_Am_View_con">
+<BorderPane  prefHeight="649.0" prefWidth="1017.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.Tr_Am_View_con">
 	<center>
 		<GridPane prefHeight="555.0" prefWidth="598.0">
 			<children>
@@ -84,9 +84,9 @@
 	<top>
 		<AnchorPane prefHeight="89.0" prefWidth="1017.0" BorderPane.alignment="CENTER">
    <children>
-   			<Button layoutX="870.0" layoutY="41.0" mnemonicParsing="false" onAction="#view_attr" text="Просмотр Атрибутов" />
+   			<Button layoutX="870.0" layoutY="41.0" mnemonicParsing="false" onAction="#view_attr" prefHeight="25.0" prefWidth="129.0" text="Просмотр Атрибутов" />
    			<Button layoutX="742.0" layoutY="41.0" mnemonicParsing="false" onAction="#excel_export" text="Выгрузить в EXCEL" />
-   			<DatePicker fx:id="dt1" layoutX="14.0" layoutY="41.0" prefHeight="25.0" prefWidth="133.0" />
+   			<DatePicker fx:id="dt1" layoutX="18.0" layoutY="41.0" prefHeight="25.0" prefWidth="129.0" />
    			<DatePicker fx:id="dt2" layoutX="164.0" layoutY="41.0" prefHeight="25.0" prefWidth="133.0" />
    			<Text layoutX="14.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Дата начала" />
    			<Text layoutX="164.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Дата конца" />
@@ -96,4 +96,13 @@
    </children>
 		</AnchorPane>
 	</top>
+	<left>
+		<AnchorPane prefHeight="455.0" prefWidth="17.0" BorderPane.alignment="CENTER" />
+	</left>
+	<right>
+		<AnchorPane prefHeight="455.0" prefWidth="17.0" BorderPane.alignment="CENTER" />
+	</right>
+	<bottom>
+		<AnchorPane prefHeight="17.0" prefWidth="1008.0" BorderPane.alignment="CENTER" />
+	</bottom>
 </BorderPane>

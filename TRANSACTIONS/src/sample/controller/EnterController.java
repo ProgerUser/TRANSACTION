@@ -66,7 +66,7 @@ public class EnterController {
 	Connection conn = null;
 	Statement sqlStatement = null;
 
-	void ent() throws SQLException {
+	void ent() {
 		/* Выполнить проверку соединения с базой */
 		try {
 			conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_ + "@"
@@ -98,10 +98,31 @@ public class EnterController {
 			alert_2.showAndWait();
 		} finally {
 			if (sqlStatement != null) {
-				sqlStatement.close();
+				try {
+					sqlStatement.close();
+				} catch (SQLException e) {
+					Alert alert = new Alert(Alert.AlertType.INFORMATION);
+					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+					stage.getIcons().add(new Image("terminal.png"));
+					alert.setTitle("Внимание");
+					alert.setHeaderText(null);
+					alert.setContentText(e.getMessage());
+					alert.showAndWait();
+				}
+
 			}
 			if (conn != null) {
-				conn.close();
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					Alert alert = new Alert(Alert.AlertType.INFORMATION);
+					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+					stage.getIcons().add(new Image("terminal.png"));
+					alert.setTitle("Внимание");
+					alert.setHeaderText(null);
+					alert.setContentText(e.getMessage());
+					alert.showAndWait();
+				}
 			}
 			/* Закрыть текущую форму */
 			// Stage stage_ = (Stage) enter_id.getScene().getWindow();
@@ -111,7 +132,7 @@ public class EnterController {
 	}
 
 	@FXML
-	void enter(ActionEvent event) throws IOException, SQLException {
+	void enter(ActionEvent event) {
 		/* Присвоить переменным значения для соединения с базой */
 		// Connect con = new Connect();
 		// con.setconnectionURL(conurl.getText());
@@ -125,7 +146,7 @@ public class EnterController {
 	}
 
 	@FXML
-	void enter_(KeyEvent ke) throws SQLException {
+	void enter_(KeyEvent ke) {
 		if (ke.getCode().equals(KeyCode.ENTER)) {
 			Connect.connectionURL_ = conurl.getValue().toString();
 			Connect.userID_ = login.getValue().toString();
@@ -141,7 +162,8 @@ public class EnterController {
 
 	@FXML
 	void initialize() {
-		//System.out.println(System.getenv("TRANSACT_PATH")/* System.getProperty("user.dir") */ + "connect.properties");
+		// System.out.println(System.getenv("TRANSACT_PATH")/*
+		// System.getProperty("user.dir") */ + "connect.properties");
 		try (InputStream input = new FileInputStream(System.getenv("TRANSACT_PATH") + "connect.properties")) {
 
 			Properties prop = new Properties();
