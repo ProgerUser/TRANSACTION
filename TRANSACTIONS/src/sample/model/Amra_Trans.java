@@ -1,12 +1,13 @@
 package sample.model;
 
-import java.sql.Date;
+
+import java.util.Date;
 
 import javafx.beans.property.*;
-import java.text.SimpleDateFormat;
 
 public class Amra_Trans {
 
+    //private SimpleObjectProperty<Date> paydate;
 	private StringProperty rownum;
 	private StringProperty recdate;
 	private StringProperty paydate;
@@ -69,8 +70,11 @@ public class Amra_Trans {
 
 	// Constructor
 	public Amra_Trans() {
+		
+		
 		this.rownum = new SimpleStringProperty();
 		this.recdate = new SimpleStringProperty();
+		//this.paydate = new SimpleObjectProperty<>();
 		this.paydate = new SimpleStringProperty();
 		this.currency = new SimpleStringProperty();
 		this.paymenttype = new SimpleStringProperty();
@@ -135,9 +139,16 @@ public class Amra_Trans {
 		return recdate.get();
 	}
 
-	public String get_paydate() {
-		return paydate.get();
-	}
+//	public String get_paydate() {
+//		return paydate.get();
+//	}
+
+    //hire_date
+    public Object get_paydate(){
+        return paydate.get();
+    }
+
+
 
 	public String get_currency() {
 		return currency.get();
@@ -370,6 +381,10 @@ public class Amra_Trans {
 	public void set_paydate(String paydate) {
 		this.paydate.set(paydate);
 	}
+	
+//    public void set_paydate(Date paydate){
+//        this.paydate.set(paydate);
+//    }
 
 	public void set_currency(String currency) {
 		this.currency.set(currency);
@@ -606,6 +621,10 @@ public class Amra_Trans {
 	public StringProperty paydateProperty() {
 		return paydate;
 	}
+//    public SimpleObjectProperty<Date> paydateProperty(){
+//        return paydate;
+//    }
+
 
 	public StringProperty currencyProperty() {
 		return currency;

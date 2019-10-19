@@ -356,7 +356,7 @@ public class Tr_Am_View_con {
 		sess_id.setCellValueFactory(cellData -> cellData.getValue().sess_idProperty());
 
 		recdate.setCellFactory(TextFieldTableCell.forTableColumn());
-		paydate.setCellFactory(TextFieldTableCell.forTableColumn());
+		//paydate.setCellFactory(TextFieldTableCell.forTableColumn());
 		currency.setCellFactory(TextFieldTableCell.forTableColumn());
 		paymenttype.setCellFactory(TextFieldTableCell.forTableColumn());
 		vk.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -421,13 +421,13 @@ public class Tr_Am_View_con {
 						.set_recdate(t.getNewValue());
 			}
 		});
-		paydate.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
-			@Override
-			public void handle(CellEditEvent<Amra_Trans, String> t) {
-				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-						.set_paydate(t.getNewValue());
-			}
-		});
+//		paydate.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+//			@Override
+//			public void handle(CellEditEvent<Amra_Trans, String> t) {
+//				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+//						.set_paydate(t.getNewValue());
+//			}
+//		});
 		currency.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
 			@Override
 			public void handle(CellEditEvent<Amra_Trans, String> t) {

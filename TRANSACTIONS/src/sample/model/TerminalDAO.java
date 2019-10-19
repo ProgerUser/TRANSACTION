@@ -92,8 +92,8 @@ public class TerminalDAO {
 
 		String selectStmt = "select PAYMENTNUMBER,\n" + "FIO,\n" + "DATETIMEPAYMENT,\n" + "ACCOUNT,\n"
 				+ "decode(PAYMENTDATA, null, COMPOSITEDATA, PAYMENTDATA) PAYMENTDATA,\n" + "INSUM,\n" + "FEESUM,\n"
-				+ "SESS_ID\n" + "from Z_SB_TRANSACT_DBT t\n" + "where lower(fio) like '" + FIO + "'\n" + p_n
-				+ dt_betw + "order by to_date(DATETIMEPAYMENT, 'dd-mm-rrrr HH24:MI:SS') desc\n";
+				+ "SESS_ID\n" + "from Z_SB_TRANSACT_DBT t\n" + "where lower(fio) like '" + FIO + "'\n" + p_n + dt_betw
+				+ "order by to_date(DATETIMEPAYMENT, 'dd-mm-rrrr HH24:MI:SS') desc\n";
 
 		// Execute SELECT statement
 
@@ -221,8 +221,8 @@ public class TerminalDAO {
 
 		}
 
-		String selectStmt = " select rownum,t.* from (select rownum,t.* from Z_SB_TRANSACT_AMRA_DBT t where 1=1"
-				+ sess + ldt1_ + ldt2_ + bt + " order by PAYDATE desc) t";
+		String selectStmt = " select rownum,t.* from (select rownum,t.* from Z_SB_TRANSACT_AMRA_DBT t where 1=1" + sess
+				+ ldt1_ + ldt2_ + bt + " order by PAYDATE desc) t";
 
 		// Execute SELECT statement
 
@@ -300,8 +300,7 @@ public class TerminalDAO {
 			sess_id_ = "and SESS_ID = '" + sess_id + "'\n";
 		}
 
-		String selectStmt = "select * from z_sb_termdeal_amra_dbt where 1=1" + ldt1_ + bt + ldt2_ + pnmb_
-				+ sess_id_;
+		String selectStmt = "select * from z_sb_termdeal_amra_dbt where 1=1" + ldt1_ + bt + ldt2_ + pnmb_ + sess_id_;
 
 		// Execute SELECT statement
 
@@ -404,14 +403,12 @@ public class TerminalDAO {
 			while (rs.next()) {
 				Amra_Trans fn = new Amra_Trans();
 
-				// String recdate = new SimpleDateFormat("d.M.yyyy
-				// hh24:mm:ss").format(rs.getTimestamp("recdate"));
-				// String paydate = new SimpleDateFormat("dd.M.yyyy
-				// hh24:mm:ss").format(rs.getTimestamp("paydate"));
+				String recdate = new SimpleDateFormat("dd.MM.yy HH:mm:ss").format(rs.getTimestamp("recdate"));
+				String paydate = new SimpleDateFormat("dd.MM.yy HH:mm:ss").format(rs.getTimestamp("paydate"));
 
 				fn.set_rownum(rs.getString("rownum"));
-				fn.set_recdate(rs.getString("recdate"));
-				fn.set_paydate(rs.getString("paydate"));
+				fn.set_recdate(recdate);
+				fn.set_paydate(paydate);
 				fn.set_currency(rs.getString("currency"));
 				fn.set_paymenttype(rs.getString("paymenttype"));
 				fn.set_vk(rs.getString("vk"));
