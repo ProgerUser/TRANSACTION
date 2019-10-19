@@ -143,6 +143,8 @@ public class TransactLoad {
 		fileChooser.setTitle("Выбрать файл");
 		fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Comma separated", "*.csv"),
 				new ExtensionFilter("Text Files", "*.txt"));
+		fileChooser.setInitialDirectory(
+				new File(System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
 		File file = fileChooser.showOpenDialog(null);
 		if (file != null) {
 			textbox.setText(file.getParent() + "::_" + file.getName());
