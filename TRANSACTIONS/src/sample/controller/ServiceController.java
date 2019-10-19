@@ -23,6 +23,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -237,7 +238,7 @@ public class ServiceController {
 	}
 
 	@FXML
-	private AnchorPane ap;
+	private BorderPane ap;
 
 	@FXML
 	private void Delete(ActionEvent actionEvent_) {

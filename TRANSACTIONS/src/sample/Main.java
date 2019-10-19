@@ -41,13 +41,13 @@ public class Main extends Application {
 		// 3) Display the EmployeeOperations View
 		// showEmployeeView();
 
-		//Enter();
+		// Enter();
 
 		Connect.connectionURL_ = "oradb-prm:1521/odb";
 		Connect.userID_ = "XXI";
 		Connect.userPassword_ = "ver8i";
 
-		 showFirst();
+		showFirst();
 	}
 
 	// Initializes the root layout.
@@ -102,6 +102,7 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
+
 	public static void Termdial_view_() {
 		try {
 			// First, load EmployeeView from EmployeeView.fxml
@@ -212,7 +213,7 @@ public class Main extends Application {
 			// First, load EmployeeView from EmployeeView.fxml
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Service.fxml"));
-			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
+			BorderPane employeeOperationsView = (BorderPane) loader.load();
 
 			// Set Employee Operations view into the center of root layout.
 			rootLayout.setCenter(employeeOperationsView);
