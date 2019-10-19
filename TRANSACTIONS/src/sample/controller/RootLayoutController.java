@@ -59,6 +59,14 @@ public class RootLayoutController {
 
 			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("AMRA_IMPORT")) {
 				Main.showEmployeeView();
+			} else {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText("Нет прав!");
+				alert.showAndWait();
 			}
 
 		} catch (NullPointerException e) {
@@ -83,6 +91,14 @@ public class RootLayoutController {
 				alert.setContentText(
 						"Схема: " + Connect.connectionURL_ + "\r\n" + "Пользователь: " + Connect.userID_ + "\r\n");
 				alert.show();
+			} else {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText("Нет прав!");
+				alert.showAndWait();
 			}
 
 		} catch (NullPointerException e) {
@@ -103,6 +119,14 @@ public class RootLayoutController {
 			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("U146")
 					| Connect.userID_.equals("AMRA_IMPORT")) {
 				Main.showAmTr();
+			} else {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText("Нет прав!");
+				alert.showAndWait();
 			}
 
 		} catch (NullPointerException e) {
@@ -113,6 +137,7 @@ public class RootLayoutController {
 			alert.show();
 		}
 	}
+
 	@FXML
 	void loadtransact(ActionEvent event) {
 		try {
@@ -121,6 +146,14 @@ public class RootLayoutController {
 
 			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("AMRA_IMPORT")) {
 				Main.Transact();
+			} else {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText("Нет прав!");
+				alert.showAndWait();
 			}
 
 		} catch (NullPointerException e) {
@@ -138,8 +171,17 @@ public class RootLayoutController {
 
 			if (Connect.userPassword_.equals("")) {
 
-			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("AMRA_IMPORT")) {
+			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("AMRA_IMPORT")
+					|| Connect.userID_.equals("U146")) {
 				Main.Show_Hist();
+			} else {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText("Нет прав!");
+				alert.showAndWait();
 			}
 
 		} catch (NullPointerException e) {
@@ -159,6 +201,14 @@ public class RootLayoutController {
 
 			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("AMRA_IMPORT")) {
 				Main.Termdial_view_();
+			} else {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText("Нет прав!");
+				alert.showAndWait();
 			}
 
 		} catch (NullPointerException e) {
@@ -178,6 +228,14 @@ public class RootLayoutController {
 
 			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("AMRA_IMPORT")) {
 				Main.Transact_Amra();
+			} else {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText("Нет прав!");
+				alert.showAndWait();
 			}
 
 		} catch (NullPointerException e) {
@@ -197,6 +255,14 @@ public class RootLayoutController {
 
 			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("AMRA_IMPORT")) {
 				Main.Terminal();
+			} else {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText("Нет прав!");
+				alert.showAndWait();
 			}
 
 		} catch (NullPointerException e) {
@@ -215,6 +281,14 @@ public class RootLayoutController {
 
 			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("AMRA_IMPORT")) {
 				Main.showKash();
+			} else {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText("Нет прав!");
+				alert.showAndWait();
 			}
 
 		} catch (NullPointerException e) {
@@ -233,12 +307,20 @@ public class RootLayoutController {
 
 			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("AMRA_IMPORT")) {
 				Main.Service();
+			} else {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText("Нет прав!");
+				alert.showAndWait();
 			}
 
 		} catch (NullPointerException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			// alert.setTitle("Error");
-			alert.setHeaderText("Error");
+			alert.setHeaderText("Ошибка!");
 			alert.setContentText("Введите учетные данные");
 			alert.show();
 		}
@@ -247,9 +329,11 @@ public class RootLayoutController {
 	// Help Menu button behavior
 	public void handleHelp(ActionEvent actionEvent) {
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-		alert.setTitle("Program Information");
-		alert.setHeaderText("Работа с терминалами 1.0");
-		alert.setContentText("Загрузка транзакции, администрирование терминалов");
+		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+		stage.getIcons().add(new Image("terminal.png"));
+		alert.setTitle("Информация");
+		alert.setHeaderText("Работа с терминалами 1.3.0");
+		alert.setContentText("Загрузка транзакции, администрирование терминалов\n PACHULIYA_S_V 2018");
 		alert.show();
 	}
 

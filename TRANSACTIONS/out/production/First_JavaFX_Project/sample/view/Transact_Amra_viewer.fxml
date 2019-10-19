@@ -12,8 +12,8 @@
 				<TableView fx:id="trans_table" layoutX="14.0" prefWidth="994.0" stylesheets="transact.css" tableMenuButtonVisible="true" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS">
 					<columns>
 						<TableColumn fx:id="rownum" prefWidth="137.0" text="Номер строки" />
-						<TableColumn fx:id="recdate" prefWidth="137.0" text="recdate" />
-						<TableColumn fx:id="paydate" prefWidth="137.0" text="paydate" />
+						<TableColumn fx:id="recdate" prefWidth="137.0" text="Дата Загрузки" />
+						<TableColumn fx:id="paydate" prefWidth="137.0" text="Дата Платежа" />
 						<TableColumn fx:id="currency" prefWidth="137.0" text="Валюта=CURRENCY" />
 						<TableColumn fx:id="paymenttype" prefWidth="137.0" text="ВидПлатежа=PAYMENTTYPE" />
 						<TableColumn fx:id="vk" prefWidth="137.0" text="ВК=VK" />
