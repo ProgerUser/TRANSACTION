@@ -9,7 +9,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="677.0" prefWidth="1020.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.Amra_Transact">
+<AnchorPane fx:id="ap" stylesheets="@../../borderpane.css" prefHeight="677.0" prefWidth="1020.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.Amra_Transact">
 	<!-- TODO Add Nodes -->
 	<children>
 		<Button fx:id="browse" disable="false" layoutX="14.0" layoutY="31.0" mnemonicParsing="false" onAction="#Choose" prefHeight="34.0" prefWidth="99.0" text="Выбрать файл" />
