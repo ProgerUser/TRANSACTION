@@ -112,7 +112,6 @@ public class TerminalDAO {
 	// *******************************
 	public static ObservableList<FN_SESS_AMRA> srch_fn_sess(String SESS_ID, String PAYMENTNUMBER, LocalDate dt1,
 			LocalDate dt2) {
-		String dt_betw = "\n";
 		String p_n = "\n";
 		String clob = "\n";
 
@@ -143,9 +142,9 @@ public class TerminalDAO {
 			bt = " and trunc(date_time) between to_date('" + ldt1 + "','dd.mm.yyyy') and to_date('" + ldt2
 					+ "','dd.mm.yyyy') \n";
 		} else if (dt1 != null & dt2 == null) {
-			ldt1_ = " and trunc(date_time) = to_date('" + ldt1 + "','dd.mm.yyyy')\n";
+			ldt1_ = " and trunc(date_time) >= to_date('" + ldt1 + "','dd.mm.yyyy')\n";
 		} else if (dt1 == null & dt2 != null) {
-			ldt2_ = " and trunc(date_time) = to_date('" + ldt2 + "','dd.mm.yyyy')\n";
+			ldt2_ = " and trunc(date_time) <= to_date('" + ldt2 + "','dd.mm.yyyy')\n";
 		}
 
 		String selectStmt = "select sess_id,\n " + "file_name, \n" + "date_time, \n" + "fileclob \n"
@@ -320,9 +319,11 @@ public class TerminalDAO {
 			ObservableList<FN_SESS_AMRA> fn_list = FXCollections.observableArrayList();
 			while (rs.next()) {
 				FN_SESS_AMRA fn = new FN_SESS_AMRA();
+				String date_time = new SimpleDateFormat("dd.MM.yy HH:mm:ss").format(rs.getTimestamp("date_time"));
+
 				fn.setsess_id(rs.getString("sess_id"));
 				fn.setfile_name(rs.getString("file_name"));
-				fn.setdate_time(rs.getString("date_time"));
+				fn.setdate_time(date_time);
 				// fn.setdate_(rs.getString("date_"));
 				fn_list.add(fn);
 			}
