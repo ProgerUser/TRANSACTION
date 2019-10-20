@@ -36,6 +36,16 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -356,15 +366,41 @@ public class Amra_Transact {
 			boolean chk = false;
 			while (myResultSet.next()) {
 				rcft++;
-				if (chk == false) {
 
-					File fXmlFile = new File(textbox.getText().replace("::_", "\\"));
-					DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-					Document doc = dBuilder.parse(fXmlFile);
-					if (doc.hasChildNodes()) {
-						printNote(doc.getChildNodes());
+				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+				DocumentBuilder builder = factory.newDocumentBuilder();
+
+				// Build Document
+				Document document = builder.parse(new File(textbox.getText().replace("::_", "\\")));
+
+				// Normalize the XML Structure; It's just too important !!
+				document.getDocumentElement().normalize();
+
+				// Here comes the root node
+				Element root = document.getDocumentElement();
+				System.out.println(root.getNodeName());
+
+				// Get all employees
+				NodeList nList = root.getElementsByTagName("Трн");
+				for (int temp = 0; temp < nList.getLength(); temp++) {
+					Node node = nList.item(temp);
+					if (node.getNodeType() == Node.ELEMENT_NODE) {
+						// Print each employee's detail
+						Element eElement = (Element) node;
+						rcff++;
+						// System.out.println(i + "|ДатаОперации : " +
+						// eElement.getAttribute("ДатаОперации"));
 					}
 				}
+
+				/*
+				 * File fXmlFile = new File(textbox.getText().replace("::_", "\\"));
+				 * DocumentBuilder dBuilder =
+				 * DocumentBuilderFactory.newInstance().newDocumentBuilder(); Document doc =
+				 * dBuilder.parse(fXmlFile); if (doc.hasChildNodes()) {
+				 * printNote(doc.getChildNodes()); }
+				 */
+
 //				if (chk == false) {
 //					String line = null;
 //					int rowcount = 0;
