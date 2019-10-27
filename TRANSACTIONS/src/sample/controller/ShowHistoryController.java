@@ -84,7 +84,13 @@ public class ShowHistoryController {
 	@FXML
 	private TableColumn<FN_SESS_AMRA, String> SESS_ID;
 	@FXML
+	private TableColumn<FN_SESS_AMRA, String> user_;
+	@FXML
+	private TableColumn<FN_SESS_AMRA, String> status;
+	@FXML
 	private TableColumn<FN_SESS_AMRA, String> FILE_NAME;
+	@FXML
+	private TableColumn<FN_SESS_AMRA, String> path_;
 	@FXML
 	private TableColumn<FN_SESS_AMRA, String> DATE_TIME;
 
@@ -106,20 +112,32 @@ public class ShowHistoryController {
 		SESS_ID.setCellValueFactory(cellData -> cellData.getValue().sess_idProperty());
 		FILE_NAME.setCellValueFactory(cellData -> cellData.getValue().file_nameProperty());
 		DATE_TIME.setCellValueFactory(cellData -> cellData.getValue().date_timeProperty());
+		path_.setCellValueFactory(cellData -> cellData.getValue().path_Property());
+		status.setCellValueFactory(cellData -> cellData.getValue().statusProperty());
+		user_.setCellValueFactory(cellData -> cellData.getValue().userProperty());
 		//DATE_.setCellValueFactory(cellData -> cellData.getValue().date_Property());
 		
 		DATE_TIME.setCellFactory(TextFieldTableCell.forTableColumn());
 		FILE_NAME.setCellFactory(TextFieldTableCell.forTableColumn());
 		SESS_ID.setCellFactory(TextFieldTableCell.forTableColumn());
-		//DATE_.setCellFactory(TextFieldTableCell.forTableColumn());
+		path_.setCellFactory(TextFieldTableCell.forTableColumn());
+		user_.setCellFactory(TextFieldTableCell.forTableColumn());
 		
-//		DATE_.setOnEditCommit(new EventHandler<CellEditEvent<FN_SESS_AMRA, String>>() {
-//			@Override
-//			public void handle(CellEditEvent<FN_SESS_AMRA, String> t) {
-//				((FN_SESS_AMRA) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-//						.setdate_time(t.getNewValue());
-//			}
-//		});
+		user_.setOnEditCommit(new EventHandler<CellEditEvent<FN_SESS_AMRA, String>>() {
+			@Override
+			public void handle(CellEditEvent<FN_SESS_AMRA, String> t) {
+				((FN_SESS_AMRA) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.setuser(t.getNewValue());
+			}
+		});
+		
+		path_.setOnEditCommit(new EventHandler<CellEditEvent<FN_SESS_AMRA, String>>() {
+			@Override
+			public void handle(CellEditEvent<FN_SESS_AMRA, String> t) {
+				((FN_SESS_AMRA) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.setpath_(t.getNewValue());
+			}
+		});
 		
 		DATE_TIME.setOnEditCommit(new EventHandler<CellEditEvent<FN_SESS_AMRA, String>>() {
 			@Override
@@ -218,7 +236,6 @@ public class ShowHistoryController {
 	@FXML
 	private void trn_doc(ActionEvent actionEvent) {
 		if (fn_sess_table.getSelectionModel().getSelectedItem() == null) {
-
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 			stage.getIcons().add(new Image("terminal.png"));

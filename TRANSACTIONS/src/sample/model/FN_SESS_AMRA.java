@@ -9,6 +9,9 @@ public class FN_SESS_AMRA {
 	private StringProperty file_name;
 	private StringProperty date_time;
 	private StringProperty date_;
+	private StringProperty path_;
+	private StringProperty status;
+	private StringProperty user;
 
 	// Constructor
 	public FN_SESS_AMRA() {
@@ -16,8 +19,48 @@ public class FN_SESS_AMRA {
 		this.file_name = new SimpleStringProperty();
 		this.date_time = new SimpleStringProperty();
 		this.date_ = new SimpleStringProperty();
+		this.status = new SimpleStringProperty();
+		this.user = new SimpleStringProperty();
+		this.path_ = new SimpleStringProperty();
 	}
 
+	public String getuser() {
+		return user.get();
+	}
+
+	public void setuser(String user) {
+		this.user.set(user);
+	}
+	
+	public StringProperty userProperty() {
+		return user;
+	}
+	
+	public String getstatus_() {
+		return status.get();
+	}
+
+	public void setstatus(String status) {
+		this.status.set(status);
+	}
+	
+	public StringProperty statusProperty() {
+		return status;
+	}
+	
+	
+	public String getpath_() {
+		return path_.get();
+	}
+
+	public void setpath_(String path_) {
+		this.path_.set(path_);
+	}
+	
+	public StringProperty path_Property() {
+		return path_;
+	}
+	
 	// date
 	public String getdate_() {
 		return date_.get();
@@ -26,7 +69,7 @@ public class FN_SESS_AMRA {
 	public void setdate_(String date_) {
 		this.date_.set(date_);
 	}
-
+	
 	public StringProperty date_Property() {
 		return date_;
 	}
@@ -43,6 +86,7 @@ public class FN_SESS_AMRA {
 	public StringProperty sess_idProperty() {
 		return sess_id;
 	}
+	
 
 	// file_name
 	public String getfile_name() {

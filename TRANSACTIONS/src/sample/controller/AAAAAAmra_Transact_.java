@@ -58,7 +58,7 @@ import sample.model.Connect;
 import javafx.stage.Stage;
 
 @SuppressWarnings("unused")
-public class Amra_Transact_ {
+public class AAAAAAmra_Transact_ {
 	/*
 	 * final static String driverClass = "oracle.jdbc.OracleDriver"; final static
 	 * String connectionURL = "jdbc:oracle:thin:@oradb-prm:1521/odb"; final static

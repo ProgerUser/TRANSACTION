@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane prefHeight="526.0" prefWidth="800.0"  xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.ShowHistoryController">
+<BorderPane prefHeight="526.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.ShowHistoryController">
 	<center>
 		<GridPane prefHeight="555.0" prefWidth="598.0">
 			<children>
@@ -16,9 +16,12 @@
 					</columnResizePolicy>
 					<columns>
 						<TableColumn fx:id="SESS_ID" prefWidth="137.0" text="ID Сессии" />
-						<TableColumn fx:id="FILE_NAME" prefWidth="554.0" text="Путь загрузки" />
+						<TableColumn fx:id="FILE_NAME" prefWidth="554.0" text="Имя файла" />
 						<TableColumn fx:id="DATE_TIME" minWidth="0.0" prefWidth="188.0" text="Дата и время загрузки" />
 						<TableColumn fx:id="DATE_" minWidth="0.0" prefWidth="188.0" text="Дата файла" />
+                  <TableColumn fx:id="path_" prefWidth="554.0" text="Путь загрузки" />
+                  <TableColumn fx:id="user_" prefWidth="554.0" text="Пользователь" />
+                  <TableColumn fx:id="status" prefWidth="554.0" text="Статус" />
 					</columns>
 				</TableView>
 			</children>
@@ -33,7 +36,7 @@
 	<top>
 		<BorderPane prefHeight="71.0" prefWidth="1008.0" BorderPane.alignment="CENTER">
 			<center>
-				<AnchorPane fx:id="anch_b" stylesheets="@../../borderpane.css" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+				<AnchorPane fx:id="anch_b" prefHeight="200.0" prefWidth="200.0" stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER">
 					<children>
 						<Label layoutX="14.0" layoutY="14.0" text="Номер ТР:" />
 						<TextField fx:id="trnumber" layoutY="33.0" prefHeight="25.0" prefWidth="172.0" promptText="\%{123...}%" />
@@ -50,20 +53,20 @@
 				</AnchorPane>
 			</center>
 			<left>
-				<AnchorPane fx:id="anch_b4" stylesheets="@../../borderpane.css" prefHeight="71.0" prefWidth="17.0" BorderPane.alignment="CENTER" />
+				<AnchorPane fx:id="anch_b4" prefHeight="71.0" prefWidth="17.0" stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER" />
 			</left>
 			<right>
-				<AnchorPane fx:id="anch_b5" stylesheets="@../../borderpane.css" prefHeight="71.0" prefWidth="17.0" BorderPane.alignment="CENTER" />
+				<AnchorPane fx:id="anch_b5" prefHeight="71.0" prefWidth="17.0" stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER" />
 			</right>
 		</BorderPane>
 	</top>
 	<left>
-		<AnchorPane fx:id="anch_b1" stylesheets="@../../borderpane.css" prefHeight="455.0" prefWidth="17.0" BorderPane.alignment="CENTER" />
+		<AnchorPane fx:id="anch_b1" prefHeight="455.0" prefWidth="17.0" stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER" />
 	</left>
 	<right>
-		<AnchorPane fx:id="anch_b2" stylesheets="@../../borderpane.css" prefHeight="455.0" prefWidth="17.0" BorderPane.alignment="CENTER" />
+		<AnchorPane fx:id="anch_b2" prefHeight="455.0" prefWidth="17.0" stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER" />
 	</right>
 	<bottom>
-		<AnchorPane fx:id="anch_b3" stylesheets="@../../borderpane.css" prefHeight="17.0" prefWidth="1008.0" BorderPane.alignment="CENTER" />
+		<AnchorPane fx:id="anch_b3" prefHeight="17.0" prefWidth="1008.0" stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER" />
 	</bottom>
 </BorderPane>

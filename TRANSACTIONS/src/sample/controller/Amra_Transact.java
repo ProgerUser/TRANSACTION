@@ -5,7 +5,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-//import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -22,8 +21,13 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -46,31 +50,42 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import sample.model.Connect;
+import sample.model.FN_SESS_AMRA;
+import sample.model.TerminalDAO;
+import sample.model.Add_File;
 import javafx.stage.Stage;
 
 @SuppressWarnings("unused")
 public class Amra_Transact {
-	static String sql = "{ ? = call z_sb_create_tr_amra.load_pack(?,?)}";
+	static String sql = "{ ? = call z_sb_create_tr_amra.load_pack(?)}";
 
 	static String sql_calc = "{ ? = call z_sb_calc_tr_amra.make(?)}";
 
-	static String sessid_ = null;
+	static String sql_snsess = "{ ? = call z_sb_create_tr_amra.fn_sess_add(?,?,?)}";
 
 	static int rcff = 0;
 	static int rcft = 0;
@@ -78,13 +93,6 @@ public class Amra_Transact {
 	@SuppressWarnings("resource")
 	private static String readFile(String fileName) {
 		try {
-			/*
-			 * FileInputStream fis = null; InputStreamReader isr = null; String encoding;
-			 * fis = new FileInputStream(fileName); isr = new InputStreamReader(fis); // the
-			 * name of the character encoding returned encoding = isr.getEncoding();
-			 */
-
-			// System.out.print("Character Encoding: "+s);
 			BufferedReader br = new BufferedReader(
 					new InputStreamReader(new FileInputStream(fileName), getFileCharset(fileName)));
 			String nextLine = "";
@@ -107,18 +115,11 @@ public class Amra_Transact {
 		return null;
 	}
 
-	private Integer sess_id = null;
-
-	private String full_pach = null;
-
 	@FXML
 	private Button open_new;
 
 	@FXML
 	private ResourceBundle resources;
-
-	@FXML
-	private Button calc;
 
 	@FXML
 	private URL location;
@@ -133,25 +134,19 @@ public class Amra_Transact {
 	private Button import_;
 
 	@FXML
-	private TextField textbox;
-
+	private TableColumn<Add_File, String> DateFile;
 	@FXML
-	private CheckBox chk;
-
+	private TableColumn<Add_File, String> FileName;
 	@FXML
-	private Label trsum;
+	private TableColumn<Add_File, String> StatusFile;
 	@FXML
-	private Label txtfilecount;
+	private TableColumn<Add_File, String> UserFile;
 	@FXML
-	private Label sessid;
+	private TableColumn<Add_File, String> IdFile;
 	@FXML
-	private Label loadtrcount;
+	private TableColumn<Add_File, String> PathFile;
 	@FXML
-	private ProgressIndicator pb;
-	@FXML
-	private Label dealsum;
-	@FXML
-	private Label deal;
+	private TableView<Add_File> load_file;
 
 	static PrintWriter writer;
 
@@ -159,129 +154,307 @@ public class Amra_Transact {
 
 	@FXML
 	void Choose(ActionEvent event) {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Выбрать файл");
-		fileChooser.getExtensionFilters().addAll(new ExtensionFilter("eXtensible Markup Language",
-				"*.xml")/*
-						 * , new ExtensionFilter("Text Files", "*.txt")
-						 */);
-		fileChooser.setInitialDirectory(
-				new File(System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
-		File file = fileChooser.showOpenDialog(null);
-		if (file != null) {
-			textbox.setText(file.getParent() + "::_" + file.getName());
-		}
-	}
-
-	@FXML
-	void Load_Transact(ActionEvent event) {
 		try {
-			if (!textbox.getText().equals("") & textbox.getText().contains("\\")) {
-
-				Date date = new Date();
-
-				DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH-mm-ss");
-
-				String strDate = dateFormat.format(date);
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("Выбрать файл");
+			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("eXtensible Markup Language",
+					"*.xml")/*
+							 * , new ExtensionFilter("Text Files", "*.txt")
+							 */);
+			fileChooser.setInitialDirectory(
+					new File(System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
+			File file = fileChooser.showOpenDialog(null);
+			if (file != null) {
+				// textbox.setText(file.getParent() + "::_" + file.getName());
 
 				Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
 						+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
 
 				CallableStatement callStmt = null;
 				String reviewContent = null;
-
-				callStmt = conn.prepareCall(sql);
-
-				String reviewStr = readFile(textbox.getText().replace("::_", "\\"));
-
+				callStmt = conn.prepareCall(sql_snsess);
+				String reviewStr = readFile(file.getParent() + "\\" + file.getName());
 				Clob clob = conn.createClob();
 				clob.setString(1, reviewStr);
-
 				callStmt.registerOutParameter(1, Types.VARCHAR);
 				callStmt.setClob(2, clob);
-				callStmt.setString(3, textbox.getText());
-
+				callStmt.setString(3, file.getParent());
+				callStmt.setString(4, file.getName());
 				callStmt.execute();
-
 				reviewContent = callStmt.getString(1);
 
-				String[] parts = reviewContent.split(":");
+				String[] parts = reviewContent.split(";");
 				String part1 = parts[0].trim();
 				String part2 = parts[1].trim();
-
-				sessid_ = part2;
-
-				String[] path_ = textbox.getText().toString().split("::_");
-				String path1_ = path_[0].trim();
-
-				Integer rowid = 1;
-				if (part1.equals("1")) {
+				if (part1.equals("Exception")) {
 					Alert alert = new Alert(Alert.AlertType.INFORMATION);
 					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 					stage.getIcons().add(new Image("terminal.png"));
 					alert.setTitle("Внимание");
 					alert.setHeaderText(null);
-					alert.setContentText("Найдены ошибки, скоро откроется файл с описанием.");
+					alert.setContentText(part2);
 					alert.showAndWait();
+				} else if (part1.equals("Inserted")) {
+					// Get all Employees information
+					ObservableList<Add_File> empData = TerminalDAO.add_file(part2, null);
+					// Populate Employees on TableView
+					populate_fn_sess(empData);
+					autoResizeColumns(load_file);
 
-					Statement sqlStatement = conn.createStatement();
-					String readRecordSQL = "SELECT * FROM Z_SB_LOG_AMRA WHERE sess_id = " + part2 + "";
-					ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
-
-					// String[] path =
-					// textbox.getText().toString().split("::_");
-					// String path1 = path[0].trim();
-
-					DateFormat dateFormat_ = new SimpleDateFormat("dd.MM.yyyy HH");
-					String strDate_ = dateFormat_.format(date);
-					String createfolder = System.getenv("TRANSACT_PATH")
-							/* System.getProperty("user.dir") + "\\" */ + strDate_ + "_SESSID_" + sessid_;
-
-					File file = new File(createfolder);
-					if (!file.exists()) {
-						if (file.mkdir()) {
-							System.out.println("Directory is created!");
-						} else {
-							System.out.println("Failed to create directory!");
-						}
-					}
-
-					String path_file = createfolder + "\\" + strDate + "_ERROR.txt";
-					PrintWriter writer = new PrintWriter(path_file);
-					while (myResultSet.next()) {
-						writer.write(rowid + " ____ " + myResultSet.getString("recdate") + " ____ "
-								+ myResultSet.getString("paydate") + " ____ " + myResultSet.getString("desc_")
-								+ " ____ " + myResultSet.getString("sess_id") + "\r\n");
-						rowid++;
-					}
-					writer.close();
-					ProcessBuilder pb = new ProcessBuilder("Notepad.exe", createfolder + "\\" + strDate + "_ERROR.txt");
-					pb.start();
-					myResultSet.close();
-					textbox.setText("");
-				} else {
-					// --------------------------------------
-					Protocol(part2);
-					// --------------------------------------
-					chk.setDisable(false);
-					chk.setSelected(true);
-					calc.setDisable(false);
-
-					full_pach = path1_;
-
-					textbox.setText("");
-					sess_id = Integer.parseInt(part2);
 					Alert alert = new Alert(Alert.AlertType.INFORMATION);
 					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 					stage.getIcons().add(new Image("terminal.png"));
 					alert.setTitle("Внимание");
 					alert.setHeaderText(null);
-					alert.setContentText(
-							"Загрузка прошла успешна. Можете перейти к расчету\r File=" + rcff + "\r Table=" + rcft);
+					alert.setContentText("Добавлен файл с ID = " + part2);
+					alert.showAndWait();
+				} else if (part1.equals("Dublicate")) {
+					Alert alert = new Alert(Alert.AlertType.INFORMATION);
+					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+					stage.getIcons().add(new Image("terminal.png"));
+					alert.setTitle("Внимание");
+					alert.setHeaderText(null);
+					alert.setContentText("Файл был уже загружен!");
 					alert.showAndWait();
 				}
-				callStmt.close();
-				conn.close();
+			}
+
+		} catch (SQLException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+		}
+	}
+
+	@FXML
+	private void populate_fn_sess(ObservableList<Add_File> trData) {
+		// Set items to the employeeTable
+		load_file.setItems(trData);
+	}
+
+	public static void autoResizeColumns(TableView<?> table) {
+		// Set the right policy
+		table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+		table.getColumns().stream().forEach((column) -> {
+			// System.out.println(column.getText());
+			if (column.getText().equals("sess_id")) {
+
+			} else {
+				// Minimal width = columnheader
+				Text t = new Text(column.getText());
+				double max = t.getLayoutBounds().getWidth();
+				for (int i = 0; i < table.getItems().size(); i++) {
+					// cell must not be empty
+					if (column.getCellData(i) != null) {
+						t = new Text(column.getCellData(i).toString());
+						double calcwidth = t.getLayoutBounds().getWidth();
+						// remember new max-width
+						if (calcwidth > max) {
+							max = calcwidth;
+						}
+					}
+				}
+				// set the new max-widht with some extra space
+				column.setPrefWidth(max + 10.0d);
+			}
+		});
+	}
+
+	// For MultiThreading
+	private Executor exec;
+
+	@FXML
+	private DatePicker date_load;
+
+	@FXML
+	private void initialize() {
+
+		load_file.setEditable(true);
+		exec = Executors.newCachedThreadPool((runnable) -> {
+			Thread t = new Thread(runnable);
+			t.setDaemon(true);
+			return t;
+		});
+
+		DateFile.setCellValueFactory(cellData -> cellData.getValue().DateProperty());
+		FileName.setCellValueFactory(cellData -> cellData.getValue().FileNameProperty());
+		StatusFile.setCellValueFactory(cellData -> cellData.getValue().StatusProperty());
+		UserFile.setCellValueFactory(cellData -> cellData.getValue().UserProperty());
+		IdFile.setCellValueFactory(cellData -> cellData.getValue().FileIdProperty());
+		PathFile.setCellValueFactory(cellData -> cellData.getValue().PathProperty());
+
+		DateFile.setCellFactory(TextFieldTableCell.forTableColumn());
+		FileName.setCellFactory(TextFieldTableCell.forTableColumn());
+		StatusFile.setCellFactory(TextFieldTableCell.forTableColumn());
+		UserFile.setCellFactory(TextFieldTableCell.forTableColumn());
+		IdFile.setCellFactory(TextFieldTableCell.forTableColumn());
+		PathFile.setCellFactory(TextFieldTableCell.forTableColumn());
+
+		DateFile.setOnEditCommit(new EventHandler<CellEditEvent<Add_File, String>>() {
+			@Override
+			public void handle(CellEditEvent<Add_File, String> t) {
+				((Add_File) t.getTableView().getItems().get(t.getTablePosition().getRow())).set_Date(t.getNewValue());
+			}
+		});
+
+		FileName.setOnEditCommit(new EventHandler<CellEditEvent<Add_File, String>>() {
+			@Override
+			public void handle(CellEditEvent<Add_File, String> t) {
+				((Add_File) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_FileName(t.getNewValue());
+			}
+		});
+
+		StatusFile.setOnEditCommit(new EventHandler<CellEditEvent<Add_File, String>>() {
+			@Override
+			public void handle(CellEditEvent<Add_File, String> t) {
+				((Add_File) t.getTableView().getItems().get(t.getTablePosition().getRow())).set_Status(t.getNewValue());
+			}
+		});
+		UserFile.setOnEditCommit(new EventHandler<CellEditEvent<Add_File, String>>() {
+			@Override
+			public void handle(CellEditEvent<Add_File, String> t) {
+				((Add_File) t.getTableView().getItems().get(t.getTablePosition().getRow())).set_User(t.getNewValue());
+			}
+		});
+		IdFile.setOnEditCommit(new EventHandler<CellEditEvent<Add_File, String>>() {
+			@Override
+			public void handle(CellEditEvent<Add_File, String> t) {
+				((Add_File) t.getTableView().getItems().get(t.getTablePosition().getRow())).set_FileId(t.getNewValue());
+			}
+		});
+		PathFile.setOnEditCommit(new EventHandler<CellEditEvent<Add_File, String>>() {
+			@Override
+			public void handle(CellEditEvent<Add_File, String> t) {
+				((Add_File) t.getTableView().getItems().get(t.getTablePosition().getRow())).set_Path(t.getNewValue());
+			}
+		});
+		date_load.setValue(NOW_LOCAL_DATE());
+		ObservableList<Add_File> empData = TerminalDAO.add_file("", date_load.getValue());
+		// Populate Employees on TableView
+		populate_fn_sess(empData);
+		autoResizeColumns(load_file);
+
+	}
+
+	public static final LocalDate NOW_LOCAL_DATE() {
+		String date = new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance().getTime());
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+		LocalDate localDate = LocalDate.parse(date, formatter);
+		return localDate;
+	}
+
+	@FXML
+	void view_fn(ActionEvent event) {
+		LocalDate date = date_load.getValue();
+		ObservableList<Add_File> empData = TerminalDAO.add_file_d(date);
+		// Populate Employees on TableView
+		populate_fn_sess(empData);
+		autoResizeColumns(load_file);
+	}
+
+	@FXML
+	void Load_Transact(ActionEvent event) {
+		try {
+			if (load_file.getSelectionModel().getSelectedItem() != null) {
+				Add_File af = load_file.getSelectionModel().getSelectedItem();
+				if (af.get_Status().equals("Загружен")) {
+					Date date = new Date();
+
+					DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH-mm-ss");
+
+					String strDate = dateFormat.format(date);
+
+					Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
+							+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
+
+					CallableStatement callStmt = null;
+					String reviewContent = null;
+
+					Integer a = Integer.valueOf(af.get_FileId());
+					callStmt = conn.prepareCall(sql);
+					callStmt.registerOutParameter(1, Types.VARCHAR);
+					callStmt.setInt(2, Integer.valueOf(af.get_FileId()));
+					callStmt.execute();
+					reviewContent = callStmt.getString(1);
+
+					String[] parts = reviewContent.split(":");
+					String part1 = parts[0].trim();
+					String part2 = parts[1].trim();
+					Integer rowid = 1;
+					if (part1.equals("1")) {
+						Alert alert = new Alert(Alert.AlertType.INFORMATION);
+						Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+						stage.getIcons().add(new Image("terminal.png"));
+						alert.setTitle("Внимание");
+						alert.setHeaderText(null);
+						alert.setContentText("Найдены ошибки, скоро откроется файл с описанием.");
+						alert.showAndWait();
+
+						Statement sqlStatement = conn.createStatement();
+						String readRecordSQL = "SELECT * FROM Z_SB_LOG_AMRA WHERE sess_id = " + part2 + "";
+						ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
+
+						DateFormat dateFormat_ = new SimpleDateFormat("dd.MM.yyyy HH");
+						String strDate_ = dateFormat_.format(date);
+						String createfolder = System.getenv("TRANSACT_PATH") + strDate_ + "_SESSID_" + af.get_FileId();
+
+						File file = new File(createfolder);
+						if (!file.exists()) {
+							if (file.mkdir()) {
+								System.out.println("Directory is created!");
+							} else {
+								System.out.println("Failed to create directory!");
+							}
+						}
+
+						String path_file = createfolder + "\\" + strDate + "_ERROR.txt";
+						PrintWriter writer = new PrintWriter(path_file);
+						while (myResultSet.next()) {
+							writer.write(rowid + " | " + myResultSet.getString("recdate") + " | "
+									+ myResultSet.getString("paydate") + " | " + myResultSet.getString("desc_") + " | "
+									+ myResultSet.getString("sess_id") + "\r\n");
+							rowid++;
+						}
+						writer.close();
+						ProcessBuilder pb = new ProcessBuilder("Notepad.exe",
+								createfolder + "\\" + strDate + "_ERROR.txt");
+						pb.start();
+						myResultSet.close();
+					} else {
+						// --------------------------------------
+						Protocol(part2, af.get_Path() + "\\" + af.get_FileName());
+						// --------------------------------------
+
+						Alert alert = new Alert(Alert.AlertType.INFORMATION);
+						Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+						stage.getIcons().add(new Image("terminal.png"));
+						alert.setTitle("Внимание");
+						alert.setHeaderText(null);
+						alert.setContentText("Загрузка прошла успешна. Можете перейти к расчету\r File=" + rcff
+								+ "\r Table=" + rcft);
+						alert.showAndWait();
+					}
+					callStmt.close();
+					conn.close();
+
+					ObservableList<Add_File> empData = TerminalDAO.add_file(af.get_FileId(), null);
+					// Populate Employees on TableView
+					populate_fn_sess(empData);
+					autoResizeColumns(load_file);
+				} else {
+					Alert alert = new Alert(Alert.AlertType.INFORMATION);
+					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+					stage.getIcons().add(new Image("terminal.png"));
+					alert.setTitle("Внимание");
+					alert.setHeaderText(null);
+					alert.setContentText("Файле уже " + af.get_Status());
+					alert.showAndWait();
+				}
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
 				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -303,8 +476,6 @@ public class Amra_Transact {
 		rcff = 0;
 		rcft = 0;
 	}
-
-	static int count_ = 1;
 
 	public static String getFileCharset(String file) {
 		try {
@@ -333,7 +504,7 @@ public class Amra_Transact {
 	}
 
 	// запись в текстовый файл протокола загрузки
-	void Protocol(String sessid) {
+	void Protocol(String sessid, String path) {
 		try {
 			Date date = new Date();
 			DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH-mm-ss");
@@ -345,118 +516,32 @@ public class Amra_Transact {
 			String readRecordSQL = "SELECT * FROM z_sb_transact_amra_dbt WHERE sess_id = " + sessid + "";
 			ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
 
-			Integer rowid = 1;
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
 
-//			DateFormat dateFormat_ = new SimpleDateFormat("dd.MM.yyyy HH");
-//			String strDate_ = dateFormat_.format(date);
-//			String createfolder = System.getProperty("user.dir") + "\\" + strDate_ + "_SESSID_" + sessid;
-//
-//			File file = new File(createfolder);
-//			if (!file.exists()) {
-//				if (file.mkdir()) {
-//					System.out.println("Directory is created!");
-//				} else {
-//					System.out.println("Failed to create directory!");
-//				}
-//			}
-//
-//			String path_file = createfolder + "\\" + strDate + "_PROTOCOL.txt";
-//			writer = new PrintWriter(path_file);
-//			boolean chk = false;
-			boolean chk = false;
+			// Build Document
+			Document document = builder.parse(new File(path));
+
+			// Normalize the XML Structure; It's just too important !!
+			document.getDocumentElement().normalize();
+
+			// Here comes the root node
+			Element root = document.getDocumentElement();
+			System.out.println(root.getNodeName());
+
+			// Get all employees
+			NodeList nList = root.getElementsByTagName("Трн");
+			for (int temp = 0; temp < nList.getLength(); temp++) {
+				Node node = nList.item(temp);
+				if (node.getNodeType() == Node.ELEMENT_NODE) {
+					// Print each employee's detail
+					Element eElement = (Element) node;
+					rcff++;
+				}
+			}
 			while (myResultSet.next()) {
 				rcft++;
-
-				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-				DocumentBuilder builder = factory.newDocumentBuilder();
-
-				// Build Document
-				Document document = builder.parse(new File(textbox.getText().replace("::_", "\\")));
-
-				// Normalize the XML Structure; It's just too important !!
-				document.getDocumentElement().normalize();
-
-				// Here comes the root node
-				Element root = document.getDocumentElement();
-				System.out.println(root.getNodeName());
-
-				// Get all employees
-				NodeList nList = root.getElementsByTagName("Трн");
-				for (int temp = 0; temp < nList.getLength(); temp++) {
-					Node node = nList.item(temp);
-					if (node.getNodeType() == Node.ELEMENT_NODE) {
-						// Print each employee's detail
-						Element eElement = (Element) node;
-						rcff++;
-						// System.out.println(i + "|ДатаОперации : " +
-						// eElement.getAttribute("ДатаОперации"));
-					}
-				}
-
-				/*
-				 * File fXmlFile = new File(textbox.getText().replace("::_", "\\"));
-				 * DocumentBuilder dBuilder =
-				 * DocumentBuilderFactory.newInstance().newDocumentBuilder(); Document doc =
-				 * dBuilder.parse(fXmlFile); if (doc.hasChildNodes()) {
-				 * printNote(doc.getChildNodes()); }
-				 */
-
-//				if (chk == false) {
-//					String line = null;
-//					int rowcount = 0;
-//					writer.write("Протокол загрузки файла.\r\n");
-//
-//					File fXmlFile = new File(textbox.getText().replace("::_", "\\"));
-//					DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-//					Document doc = dBuilder.parse(fXmlFile);
-//					if (doc.hasChildNodes()) {
-//						printNote(doc.getChildNodes());
-//					}
-//					rowline = 0;
-//
-//					writer.write(
-//							"\r\n-----------------------------------------------------------------------------------------\r\n\r\n");
-//					writer.write("\r\nПротокол загрузки транзакции.\r\n\r\n");
-//				}
-//				writer.write("Номер строки: " + rowid + "|\r\n" + myResultSet.getString("RECDATE") + "|"
-//						+ myResultSet.getString("PAYDATE") + "|" + myResultSet.getString("CURRENCY") + "|"
-//						+ myResultSet.getString("PAYMENTTYPE") + "|" + myResultSet.getString("VK") + "|"
-//						+ myResultSet.getString("DATEOFOPERATION") + "|" + myResultSet.getString("DATAPS") + "|"
-//						+ myResultSet.getString("DATECLEARING") + "|" + myResultSet.getString("DEALER") + "|"
-//						+ myResultSet.getString("ACCOUNTPAYER") + "|" + myResultSet.getString("CARDNUMBER") + "|"
-//						+ myResultSet.getString("OPERATIONNUMBER") + "|"
-//						+ myResultSet.getString("OPERATIONNUMBERDELIVERY") + "|" + myResultSet.getString("CHECKNUMBER")
-//						+ "|" + myResultSet.getString("CHECKPARENT") + "|" + myResultSet.getString("ORDEROFPROVIDENCE")
-//						+ "|" + myResultSet.getString("PROVIDER") + "|" + myResultSet.getString("OWNINOWN") + "|"
-//						+ myResultSet.getString("CORRECTED") + "|" + myResultSet.getString("COMMISSIONRATE") + "|"
-//						+ myResultSet.getString("STATUS") + "|" + myResultSet.getString("STRINGFROMFILE") + "|"
-//						+ myResultSet.getString("REWARDAMOUNT") + "|" + myResultSet.getString("OWNERINCOMEAMOUNT") + "|"
-//						+ myResultSet.getString("COMMISSIONAMOUNT") + "|" + myResultSet.getString("NKAMOUNT") + "|"
-//						+ myResultSet.getString("MAXCOMMISSIONAMOUNT") + "|"
-//						+ myResultSet.getString("MINCOMMISSIONAMOUNT") + "|" + myResultSet.getString("CASHAMOUNT") + "|"
-//						+ myResultSet.getString("SUMNALPRIMAL") + "|" + myResultSet.getString("AMOUNTTOCHECK") + "|"
-//						+ myResultSet.getString("AMOUNTOFPAYMENT") + "|" + myResultSet.getString("SUMOFSPLITTING") + "|"
-//						+ myResultSet.getString("AMOUNTINTERMEDIARY") + "|" + myResultSet.getString("AMOUNTOFSCS") + "|"
-//						+ myResultSet.getString("AMOUNTWITHCHECKS") + "|" + myResultSet.getString("COUNTER") + "|"
-//						+ myResultSet.getString("TERMINAL") + "|" + myResultSet.getString("TERMINALNETWORK") + "|"
-//						+ myResultSet.getString("TRANSACTIONTYPE") + "|" + myResultSet.getString("SERVICE") + "|"
-//						+ myResultSet.getString("FILETRANSACTIONS") + "|" + myResultSet.getString("FIO") + "|"
-//						+ myResultSet.getString("CHECKSINCOMING") + "|" + myResultSet.getString("BARCODE") + "|"
-//						+ myResultSet.getString("ISARESIDENT") + "|" + myResultSet.getString("VALUENOTFOUND") + "|"
-//						+ myResultSet.getString("PROVIDERTARIFF") + "|" + myResultSet.getString("COUNTERCHECKS") + "|"
-//						+ myResultSet.getString("COUNTERCHECK") + "|" + myResultSet.getString("ID_") + "|"
-//						+ myResultSet.getString("DETAILING") + "|" + myResultSet.getString("WALLETPAYER") + "|"
-//						+ myResultSet.getString("WALLETRECEIVER") + "|" + myResultSet.getString("PURPOSEOFPAYMENT")
-//						+ "|" + myResultSet.getString("DATAPROVIDER") + "|" + myResultSet.getString("STATUSABS") + "|"
-//						+ myResultSet.getString("SESS_ID") + "|" + "\r\n");
-//				rowid++;
-				chk = true;
 			}
-			chk = false;
-//			writer.close();
-//			count_ = 1;
-//			ProcessBuilder pb = new ProcessBuilder("Notepad.exe", createfolder + "\\" + strDate + "_PROTOCOL.txt");
-//			pb.start();
 			myResultSet.close();
 		} catch (SQLException | IOException | ParserConfigurationException | SAXException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -469,117 +554,98 @@ public class Amra_Transact {
 		}
 	}
 
-	private static void printNote(NodeList nodeList) {
-		for (int count = 0; count < nodeList.getLength(); count++) {
-			Node tempNode = nodeList.item(count);
-			// убедитесь, что это элемент узла.
-			if (tempNode.getNodeType() == Node.ELEMENT_NODE) {
-				if (tempNode.getNodeName().toString().contains("Трн")) {
-					rowline++;
-					rcff++;
-					// writer.write("\r\nНомер строки_: " + rowline + "|\r\n");
-				}
-				// получить имя и значение узла
-				if (tempNode.getNodeName().toString().contains("Трн")) {
-					count_ = count_ + 1;
-				}
-				if (tempNode.hasAttributes()) {
-					// получить имена и значения атрибутов
-					NamedNodeMap nodeMap = tempNode.getAttributes();
-					for (int i = 0; i < nodeMap.getLength(); i++) {
-						Node node = nodeMap.item(i);
-
-						if (tempNode.getNodeName().toString().contains("Трн")) {
-//							writer.write(node.getNodeName().replaceAll("\\s+", "") + ":\""
-//									+ node.getNodeValue().replaceAll("\\s+", "") + "\"|");
-
-						}
-					}
-				}
-				if (tempNode.hasChildNodes()) {
-					// цикл снова, если есть дочерние узлы
-					printNote(tempNode.getChildNodes());
-				}
-			}
-		}
-	}
-
 	@FXML
 	void Calc_Transact(ActionEvent event) {
 		try {
-			if (sess_id != null & full_pach != null) {
-				Date date = new Date();
+			if (load_file.getSelectionModel().getSelectedItem() != null) {
+				Add_File af = load_file.getSelectionModel().getSelectedItem();
+				String aa = af.get_Status();
+				if (af.get_Status().equals("Разобран")) {
+					Date date = new Date();
 
-				DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH-mm-ss");
+					DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH-mm-ss");
 
-				String strDate = dateFormat.format(date);
+					String strDate = dateFormat.format(date);
 
-				CallableStatement callStmt = null;
-				Clob reviewContent = null;
-				Connection conn;
+					CallableStatement callStmt = null;
+					Clob reviewContent = null;
+					Connection conn;
 
-				conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_
-						+ "@" + Connect.connectionURL_ + "");
-				callStmt = conn.prepareCall(sql_calc);
+					conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
+							+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
+					callStmt = conn.prepareCall(sql_calc);
 
-				callStmt.registerOutParameter(1, Types.CLOB);
-				callStmt.setInt(2, sess_id);
+					callStmt.registerOutParameter(1, Types.CLOB);
+					callStmt.setInt(2, Integer.parseInt(af.get_FileId()));
 
-				callStmt.execute();
+					callStmt.execute();
 
-				reviewContent = callStmt.getClob(1);
+					reviewContent = callStmt.getClob(1);
 
-				char clobVal[] = new char[(int) reviewContent.length()];
-				Reader r = reviewContent.getCharacterStream();
-				r.read(clobVal);
-				StringWriter sw = new StringWriter();
-				sw.write(clobVal);
+					char clobVal[] = new char[(int) reviewContent.length()];
+					Reader r = reviewContent.getCharacterStream();
+					r.read(clobVal);
+					StringWriter sw = new StringWriter();
+					sw.write(clobVal);
 
-				DateFormat dateFormat_ = new SimpleDateFormat("dd.MM.yyyy HH");
-				String strDate_ = dateFormat_.format(date);
-				String createfolder = System.getenv("TRANSACT_PATH")
-						/* System.getProperty("user.dir") + "\\" */ + strDate_ + "_SESSID_" + sessid_;
+					DateFormat dateFormat_ = new SimpleDateFormat("dd.MM.yyyy HH");
+					String strDate_ = dateFormat_.format(date);
+					String createfolder = System.getenv("TRANSACT_PATH") + strDate_ + "_SESSID_" + af.get_FileId();
 
-				File file = new File(createfolder);
-				if (!file.exists()) {
-					if (file.mkdir()) {
-						System.out.println("Directory is created!");
-					} else {
-						System.out.println("Failed to create directory!");
+					File file = new File(createfolder);
+					if (!file.exists()) {
+						if (file.mkdir()) {
+							System.out.println("Directory is created!");
+						} else {
+							System.out.println("Failed to create directory!");
+						}
 					}
+					PrintWriter writer = new PrintWriter(createfolder + "\\" + strDate + "_CLOB_.txt");
+					writer.write(sw.toString());
+					writer.close();
+					r.close();
+
+					callStmt.close();
+					ProcessBuilder pb = new ProcessBuilder("Notepad.exe", createfolder + "\\" + strDate + "_CLOB_.txt");
+					pb.start();
+
+					Alert alert = new Alert(Alert.AlertType.INFORMATION);
+					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+					stage.getIcons().add(new Image("terminal.png"));
+					alert.setTitle("Внимание");
+					alert.setHeaderText(null);
+					alert.setContentText("Расчет прошел успешно!");
+					alert.showAndWait();
+					callStmt.close();
+					conn.close();
+					ObservableList<Add_File> empData = TerminalDAO.add_file(af.get_FileId(), null);
+					// Populate Employees on TableView
+					populate_fn_sess(empData);
+					autoResizeColumns(load_file);
+				} else if (af.get_Status().equals("Загружен")) {
+					Alert alert = new Alert(Alert.AlertType.INFORMATION);
+					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+					stage.getIcons().add(new Image("terminal.png"));
+					alert.setTitle("Внимание");
+					alert.setHeaderText(null);
+					alert.setContentText("Файл не разобран!");
+					alert.showAndWait();
+				} else if (af.get_Status().equals("Рассчитан")) {
+					Alert alert = new Alert(Alert.AlertType.INFORMATION);
+					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+					stage.getIcons().add(new Image("terminal.png"));
+					alert.setTitle("Внимание");
+					alert.setHeaderText(null);
+					alert.setContentText("Файл уже " + af.get_Status() + "!");
+					alert.showAndWait();
 				}
-				PrintWriter writer = new PrintWriter(createfolder + "\\" + strDate + "_CLOB_.txt");
-				writer.write(sw.toString());
-				writer.close();
-				r.close();
-
-				callStmt.close();
-				ProcessBuilder pb = new ProcessBuilder("Notepad.exe", createfolder + "\\" + strDate + "_CLOB_.txt");
-				pb.start();
-
-				sess_id = null;
-				full_pach = null;
-
-				chk.setDisable(true);
-				chk.setSelected(false);
-				calc.setDisable(true);
-
-				Alert alert = new Alert(Alert.AlertType.INFORMATION);
-				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-				stage.getIcons().add(new Image("terminal.png"));
-				alert.setTitle("Внимание");
-				alert.setHeaderText(null);
-				alert.setContentText("Расчет прошел успешно!");
-				alert.showAndWait();
-				callStmt.close();
-				conn.close();
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
 				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 				stage.getIcons().add(new Image("terminal.png"));
 				alert.setTitle("Внимание");
 				alert.setHeaderText(null);
-				alert.setContentText("Все плохо");
+				alert.setContentText("Выберите строку из таблицы!");
 				alert.showAndWait();
 			}
 		} catch (SQLException | IOException e) {
@@ -591,46 +657,5 @@ public class Amra_Transact {
 			alert.setContentText(e.getMessage());
 			alert.showAndWait();
 		}
-	}
-
-	@FXML
-	void chk_p(ActionEvent event) {
-		if (!chk.isSelected()) {
-			chk.setSelected(true);
-		}
-	}
-
-	@FXML
-	void view(ActionEvent event) {
-		try {
-			FXMLLoader fxmlLoader = new FXMLLoader();
-			fxmlLoader.setLocation(getClass().getResource("View.fxml"));
-			/*
-			 * if "fx:controller" is not set in fxml
-			 * fxmlLoader.setController(NewWindowController);
-			 */
-			Scene scene = new Scene(fxmlLoader.load());
-			Stage stage = new Stage();
-			stage.setTitle("New Window");
-			stage.setScene(scene);
-			stage.show();
-		} catch (IOException e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
-			alert.showAndWait();
-		}
-	}
-
-	@FXML
-	void initialize() {
-		assert browse != null : "fx:id=\"browse\" was not injected: check your FXML file 'TransactLoad.fxml'.";
-		assert import_ != null : "fx:id=\"import_\" was not injected: check your FXML file 'TransactLoad.fxml'.";
-		assert textbox != null : "fx:id=\"textbox\" was not injected: check your FXML file 'TransactLoad.fxml'.";
-		assert calc != null : "fx:id=\"calc\" was not injected: check your FXML file 'TransactLoad.fxml'.";
-		assert open_new != null : "fx:id=\"open_new\" was not injected: check your FXML file 'TransactLoad.fxml'.";
 	}
 }

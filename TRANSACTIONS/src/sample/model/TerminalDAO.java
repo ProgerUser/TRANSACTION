@@ -147,31 +147,21 @@ public class TerminalDAO {
 			ldt2_ = " and trunc(date_time) <= to_date('" + ldt2 + "','dd.mm.yyyy')\n";
 		}
 
-		String selectStmt = "select sess_id,\n " + "file_name, \n" + "date_time, \n" + "fileclob \n"
-				+ "from Z_SB_FN_SESS_AMRA \n" + "where 1=1" + ldt1_ + ldt2_ + p_n + bt + clob
+		String selectStmt = "select sess_id,\n" + 
+				"       file_name,\n" + 
+				"       date_time,\n" + 
+				"       fileclob,\n" + 
+				"       case\n" + 
+				"         when status = 0 then\n" + 
+				"          'Загружен'\n" + 
+				"         when status = 1 then\n" + 
+				"          'Разобран'\n" + 
+				"         when status = 2 then\n" + 
+				"          'Рассчитан'\n" + 
+				"       end status,\n" + 
+				"       path,\n" + 
+				"       user_ from Z_SB_FN_SESS_AMRA \n" + "where 1=1" + ldt1_ + ldt2_ + p_n + bt + clob
 				+ "order by date_time desc";
-		/*
-		 * "select distinct to_date(substr(substr(g.date_f, instr(g.date_f, '-') + 1),\n"
-		 * + "                               1,\n" +
-		 * "                               8),\n" +
-		 * "                        'yyyy.mm.dd') date_,\n" +
-		 * "                t.file_name,\n" + "                t.date_time,\n" +
-		 * "                t.sess_id\n" + "  from Z_SB_FN_SESS_AMRA t,\n" +
-		 * "       (Select Regexp_Substr(FILE_NAME, '[^\\]+', 1, Level) date_f,\n" +
-		 * "               level lvl,\n" + "               sess_id,\n" +
-		 * "               date_time\n" + "          From Z_SB_FN_SESS_AMRA\n" +
-		 * "        Connect By Regexp_Substr(FILE_NAME, '[^\\]+', 1, Level) Is Not Null) g,\n"
-		 * + "       (select max(lvl) maxx, sess_id, date_time\n" +
-		 * "          from (Select level lvl, sess_id, date_time\n" +
-		 * "                  From Z_SB_FN_SESS_AMRA\n" +
-		 * "                Connect By Regexp_Substr(FILE_NAME, '[^\\]+', 1, Level) Is Not Null)\n"
-		 * + "         group by sess_id, date_time) h\n" +
-		 * " where t.sess_id = g.sess_id\n" + "   and g.sess_id = h.sess_id\n" +
-		 * "   and g.lvl = h.maxx\n" + "   and t.date_time = g.date_time\n" +
-		 * "   and g.date_time = h.date_time\n" +ldt1_+ldt2_+bt +
-		 * " order by date_ desc\n";
-		 * 
-		 */
 
 		// Execute SELECT statement
 
@@ -185,6 +175,89 @@ public class TerminalDAO {
 		return empList;
 	}
 
+	// *******************************
+	// SELECT FN_SESS
+	// *******************************
+	public static ObservableList<Add_File> add_file(String SESS_ID,LocalDate dt) {
+		
+		String ldt = "\n";
+		String ldt_ = "\n";
+		String p_n = "\n";
+		if (SESS_ID.equals("")) {
+
+		} else {
+			p_n = "and SESS_ID = '" + SESS_ID + "'\n";
+		}
+		if (dt != null)
+			ldt_ = dt.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+		
+		if (dt != null ) {
+			ldt = " and trunc(date_time) = to_date('" + ldt_ + "','dd.mm.yyyy')\n";
+		}
+		String selectStmt = "select sess_id,\n" + 
+				"       file_name,\n" + 
+				"       date_time,\n" + 
+				"       fileclob,\n" + 
+				"       case\n" + 
+				"         when status = 0 then\n" + 
+				"          'Загружен'\n" + 
+				"         when status = 1 then\n" + 
+				"          'Разобран'\n" + 
+				"         when status = 2 then\n" + 
+				"          'Рассчитан'\n" + 
+				"       end status,\n" + 
+				"       path,\n" + 
+				"       user_ from Z_SB_FN_SESS_AMRA \n" + "where 1=1" + p_n + ldt+"order by date_time desc";
+
+		// Get ResultSet from dbExecuteQuery method
+		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
+
+		// Send ResultSet to the getEmployeeList method and get employee object
+		ObservableList<Add_File> empList = get_file(rsEmps);
+
+		// Return employee object
+		return empList;
+	}
+
+	// *******************************
+		// SELECT FN_SESS
+		// *******************************
+		public static ObservableList<Add_File> add_file_d(LocalDate Date) {
+			String p_n = "\n";
+			String dd = "\n";
+			if (Date != null)
+				dd = Date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+
+			if (Date != null ) {
+				p_n = "and trunc(DATE_TIME) = to_date('" + dd + "','dd.mm.yyyy')\n";
+			}
+
+			String selectStmt = "select sess_id,\n" + 
+					"       file_name,\n" + 
+					"       date_time,\n" + 
+					"       fileclob,\n" + 
+					"       case\n" + 
+					"         when status = 0 then\n" + 
+					"          'Загружен'\n" + 
+					"         when status = 1 then\n" + 
+					"          'Разобран'\n" + 
+					"         when status = 2 then\n" + 
+					"          'Рассчитан'\n" + 
+					"       end status,\n" + 
+					"       path,\n" + 
+					"       user_ from Z_SB_FN_SESS_AMRA \n" + "where 1=1" + p_n + "order by date_time desc";
+
+			// Get ResultSet from dbExecuteQuery method
+			ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
+
+			// Send ResultSet to the getEmployeeList method and get employee object
+			ObservableList<Add_File> empList = get_file(rsEmps);
+
+			// Return employee object
+			return empList;
+		}
+
+		
 	// *******************************
 	// SELECT FN_SESS
 	// *******************************
@@ -320,12 +393,41 @@ public class TerminalDAO {
 			while (rs.next()) {
 				FN_SESS_AMRA fn = new FN_SESS_AMRA();
 				String date_time = new SimpleDateFormat("dd.MM.yy HH:mm:ss").format(rs.getTimestamp("date_time"));
-
 				fn.setsess_id(rs.getString("sess_id"));
 				fn.setfile_name(rs.getString("file_name"));
 				fn.setdate_time(date_time);
-				// fn.setdate_(rs.getString("date_"));
+				fn.setpath_(rs.getString("path"));
+				fn.setuser(rs.getString("user_"));
+				fn.setstatus(rs.getString("status"));
 				fn_list.add(fn);
+			}
+			return fn_list;
+		} catch (SQLException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+		}
+		return null;
+	}
+
+	// Select * from fn_sess operation
+	private static ObservableList<Add_File> get_file(ResultSet rs) {
+		try {
+			ObservableList<Add_File> fn_list = FXCollections.observableArrayList();
+			while (rs.next()) {
+				Add_File adf = new Add_File();
+				String date_ = new SimpleDateFormat("dd.MM.yy HH:mm:ss").format(rs.getTimestamp("date_time"));
+				adf.set_FileName(rs.getString("file_name"));
+				adf.set_Status(rs.getString("status"));
+				adf.set_Date(date_);
+				adf.set_User(rs.getString("user_"));
+				adf.set_FileId(rs.getString("sess_id"));
+				adf.set_Path(rs.getString("path"));
+				fn_list.add(adf);
 			}
 			return fn_list;
 		} catch (SQLException e) {
