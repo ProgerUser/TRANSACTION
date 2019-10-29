@@ -196,7 +196,7 @@ public class Amra_Transact {
 					alert.showAndWait();
 				} else if (part1.equals("Inserted")) {
 					// Get all Employees information
-					ObservableList<Add_File> empData = TerminalDAO.add_file(part2, null);
+					ObservableList<Add_File> empData = TerminalDAO.add_file(/*part2*/"", date_load.getValue());
 					// Populate Employees on TableView
 					populate_fn_sess(empData);
 					autoResizeColumns(load_file);
@@ -442,7 +442,7 @@ public class Amra_Transact {
 					callStmt.close();
 					conn.close();
 
-					ObservableList<Add_File> empData = TerminalDAO.add_file(af.get_FileId(), null);
+					ObservableList<Add_File> empData = TerminalDAO.add_file(/*af.get_FileId()*/"", date_load.getValue());
 					// Populate Employees on TableView
 					populate_fn_sess(empData);
 					autoResizeColumns(load_file);
@@ -618,7 +618,7 @@ public class Amra_Transact {
 					alert.showAndWait();
 					callStmt.close();
 					conn.close();
-					ObservableList<Add_File> empData = TerminalDAO.add_file(af.get_FileId(), null);
+					ObservableList<Add_File> empData = TerminalDAO.add_file(/*af.get_FileId()*/"", date_load.getValue());
 					// Populate Employees on TableView
 					populate_fn_sess(empData);
 					autoResizeColumns(load_file);
