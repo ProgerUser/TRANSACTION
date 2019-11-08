@@ -64,7 +64,7 @@ public class PrintReport extends JFrame {
 					+ "                               ITRNDOCNUM DOC_NUM,\r\n"
 					+ "                               CTRNACCD   debet,\r\n"
 					+ "                               CTRNACCC   credit,\r\n"
-					+ "                               MTRNRSUM   summ\r\n" + "                          from trn t\r\n"
+					+ "                               MTRNRSUM   summ\r\n" + "                          from xxi.trn t\r\n"
 					+ "                         where CTRNIDOPEN = (select upper(user) from dual)\r\n"
 					+ "                           AND (DTRNCREATE, CTRNACCD, CTRNACCC, MTRNRSUM,\r\n"
 					+ "                                CTRNPURP) in\r\n"
@@ -73,7 +73,7 @@ public class PrintReport extends JFrame {
 					+ "                                       ACCOUNT_RECEIVER,\r\n"
 					+ "                                       SUM,\r\n"
 					+ "                                       GROUND\r\n"
-					+ "                                  from z_sb_postdoc_amra_dbt\r\n"
+					+ "                                  from xxi.z_sb_postdoc_amra_dbt\r\n"
 					+ "                                 where sess_id = " + sess_id + ")\r\n"
 					+ "                         order by DOC_NUM)\r\n"
 					+ "                 group by DEBET, CREDIT, DTRNCREATE\r\n" + "                union all\r\n"
@@ -82,7 +82,7 @@ public class PrintReport extends JFrame {
 					+ "                               ITRNDOCNUM DOC_NUM,\r\n"
 					+ "                               CTRNACCD   debet,\r\n"
 					+ "                               CTRNACCC   credit,\r\n"
-					+ "                               MTRNRSUM   summ\r\n" + "                          from trn t\r\n"
+					+ "                               MTRNRSUM   summ\r\n" + "                          from xxi.trn t\r\n"
 					+ "                         where CTRNIDOPEN = (select upper(user) from dual)\r\n"
 					+ "                           AND (DTRNCREATE, CTRNACCD, CTRNACCC, MTRNRSUM,\r\n"
 					+ "                                CTRNPURP) in\r\n"
@@ -91,12 +91,11 @@ public class PrintReport extends JFrame {
 					+ "                                       ACCOUNT_RECEIVER,\r\n"
 					+ "                                       SUM,\r\n"
 					+ "                                       GROUND\r\n"
-					+ "                                  from z_sb_postdoc_amra_dbt\r\n"
+					+ "                                  from xxi.z_sb_postdoc_amra_dbt\r\n"
 					+ "                                 where sess_id = " + sess_id + ")\r\n"
 					+ "                         order by DOC_NUM)\r\n"
 					+ "                 group by DEBET, CREDIT, DTRNCREATE)\r\n" + "         order by ACC asc)";
 			ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
-
 			while (myResultSet.next()) {
 				list = new Item();
 				list.setacc(myResultSet.getString("acc"));
@@ -105,7 +104,7 @@ public class PrintReport extends JFrame {
 				list.setd_c(myResultSet.getDouble("razn"));
 				list.setdate_(myResultSet.getDate("date_"));
 
-				// System.out.println(myResultSet.getInt("debet"));
+				System.out.println(myResultSet.getDate("date_"));
 				listItems.add(list);
 			}
 			myResultSet.close();

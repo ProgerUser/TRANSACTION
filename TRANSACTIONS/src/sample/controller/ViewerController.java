@@ -218,7 +218,7 @@ public class ViewerController {
 			} else {
 				TransactClass tr = employeeTable.getSelectionModel().getSelectedItem();
 				PrintWriter writer = new PrintWriter(
-						System.getProperty("user.dir").toString() + "\\" + strDate + "CHEK.txt");
+						System.getenv("TRANSACT_PATH").toString() + "\\" + strDate + "CHEK.txt");
 				writer.write("*********************************\r\n" + "*****СБЕРБАНК  АБХАЗИИ (ОАО)*****\r\n"
 						+ "*********************************\r\n" + "Терминал N: " + tr.getIDTERM() + "\r\n"
 						+ "Адрес терминала:\r\n" + "" + tr.getADDRESS() + "\r\n" + "Чек N: " + tr.getPAYMENTNUMBER()
