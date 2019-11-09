@@ -37,6 +37,37 @@ create or replace package z_sb_calc_tr_amra is
                         PAYDATE_        date,
                         chk_            VARCHAR2 DEFAULT NULL,
                         for_nbra        boolean DEFAULT false);
+  PROCEDURE POST(id_sess_        NUMBER,
+                 department_     VARCHAR2 default 0,
+                 real_payer_     VARCHAR2,
+                 real_receiver_  VARCHAR2,
+                 payer_          VARCHAR2,
+                 receiver_       VARCHAR2,
+                 okpo_receiver   VARCHAR2,
+                 sum_            number,
+                 ground_         VARCHAR2,
+                 payment_number  VARCHAR2 DEFAULT NULL,
+                 coracc_payer    VARCHAR2 DEFAULT NULL,
+                 CORACC_PAYER_2  VARCHAR2 DEFAULT NULL,
+                 mfo_receiver    VARCHAR2 DEFAULT NULL,
+                 bank_receiver   VARCHAR2 DEFAULT NULL,
+                 kpp_receiver    VARCHAR2 DEFAULT NULL,
+                 composerstatus  VARCHAR2 DEFAULT NULL,
+                 budjclassifcode VARCHAR2 DEFAULT NULL,
+                 okato           VARCHAR2 DEFAULT NULL,
+                 taxground       VARCHAR2 DEFAULT NULL,
+                 taxperiod       VARCHAR2 DEFAULT NULL,
+                 taxnumber       VARCHAR2 DEFAULT NULL,
+                 taxdate         VARCHAR2 DEFAULT NULL,
+                 taxpaymenttype  VARCHAR2 DEFAULT NULL,
+                 i1_status       VARCHAR2 DEFAULT NULL,
+                 bo1_            VARCHAR2 DEFAULT '1',
+                 bo2_            VARCHAR2 DEFAULT NULL,
+                 okpo_payer      VARCHAR2 DEFAULT NULL,
+                 numb            number,
+                 PAYDATE_        date,
+                 chk_            VARCHAR2 DEFAULT NULL,
+                 for_nbra        boolean DEFAULT false);
 end z_sb_calc_tr_amra;
 /
 create or replace package body z_sb_calc_tr_amra is
@@ -257,6 +288,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                     mfo_receiver_    varchar2 DEFAULT null,
                     OKPO_PAYER_      varchar2 DEFAULT null,
                     CORACC_PAYER_    varchar2 DEFAULT null,
+                    CORACC_PAYER_2   varchar2 DEFAULT null,
                     PAYER            varchar2 DEFAULT null,
                     BUDJCLASSIFCODE_ varchar2 DEFAULT null,
                     BANK_RECEIVER_   varchar2 DEFAULT null,
@@ -292,25 +324,8 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                                           KPPA          => kpp_receiver_,
                                           Client_KPP    => '111000171',
                                           Client_INN    => OKPO_RECEIVER_,
-                                          rDeptInfo     => tts /*,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-                                          
-                                          
-                                                                                                                                                                                                                                                                                                                                                                                                                      
-                                                                                                                                                                                                                                                                                                                                                                                                                                                              
-                                                                                                                                                                                                                                                                                                                                                                                                                                                              
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-                                          
-                                          
-                                                                                                                                                                                                                                                           Client_Name => */
-                                          
-                                          /*CorAccA => CORACC_PAYER_*/); -- Тип операции 2-го порядка
+                                          rDeptInfo     => tts,
+                                          CorAccA       => CORACC_PAYER_2); -- Тип операции 2-го порядка
       null;
     elsif for_nbra_ = false then
       idoc_reg.SetUpRegisterParams('2TRN');
@@ -470,6 +485,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                  ground_         VARCHAR2,
                  payment_number  VARCHAR2 DEFAULT NULL,
                  coracc_payer    VARCHAR2 DEFAULT NULL,
+                 CORACC_PAYER_2  VARCHAR2 DEFAULT NULL,
                  mfo_receiver    VARCHAR2 DEFAULT NULL,
                  bank_receiver   VARCHAR2 DEFAULT NULL,
                  kpp_receiver    VARCHAR2 DEFAULT NULL,
@@ -513,6 +529,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                 budjclassifcode_ => budjclassifcode,
                 BANK_RECEIVER_   => BANK_RECEIVER,
                 RECEIVER_        => receiver_,
+                CORACC_PAYER_2   => CORACC_PAYER_2,
                 kpp_receiver_    => kpp_receiver,
                 OKPO_RECEIVER_   => OKPO_RECEIVER,
                 OKPO_PAYER_      => OKPO_PAYER,
@@ -610,6 +627,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
     search_termdeal   number;
     bnk_deal_for_chek number;
     comis_rate        number;
+    all_chek_sum      number;
   
     cursor loop_474 is
       select sum(summ) summ, TRUNC(PAYDATE) date_ --, checknumber
@@ -908,6 +926,33 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                 from z_sb_termserv_dbt t
                where t.IDTERM = r.idterm
                  and t.NAME = r.service;
+            
+              --Нахождение суммы оплаты с чеков
+              /*select sum(to_number(replace(replace((Select Regexp_Substr(chk,
+                                                                      '[^/]+',
+                                                                      1,
+                                                                      Level)
+                                                   from dual
+                                                  where level = 2
+                                                 Connect By Regexp_Substr(chk,
+                                                                          '[^/]+',
+                                                                          1,
+                                                                          Level) Is Not Null),
+                                                 ' ',
+                                                 ''),
+                                         '.',
+                                         ','))) summ
+              into all_chek_sum
+              from (Select Regexp_Substr(r.CHECKSINCOMING,
+                                         '[^|]+',
+                                         1,
+                                         Level) chk
+                      From dual
+                    Connect By Regexp_Substr(r.CHECKSINCOMING,
+                                             '[^|]+',
+                                             1,
+                                             Level) Is Not Null);*/
+            
               num := num + 1;
               POST(id_sess_       => r.SESS_ID,
                    department_    => r.department,
@@ -919,7 +964,8 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                    receiver_      => 'Транзитный счет  ' || r.idterm ||
                                      ' отделения ' || r.department,
                    okpo_receiver  => '11000572',
-                   sum_           => r.AMOUNTOFPAYMENT - comis_rate -
+                   sum_           => (r.Cashamount + r.AMOUNTWITHCHECKS) -
+                                     comis_rate -
                                      to_number(replace(replace(r.AMOUNTTOCHECK,
                                                                '.',
                                                                ','),
@@ -942,12 +988,13 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                    receiver_      => 'Транзитный счет  ' || r.idterm ||
                                      ' отделения ' || r.department,
                    okpo_receiver  => '11000572',
-                   sum_           => r.AMOUNTOFPAYMENT - comis_rate -
-                                     -to_number(replace(replace(r.AMOUNTTOCHECK,
-                                                                '.',
-                                                                ','),
-                                                        ' ',
-                                                        '')),
+                   sum_           => (r.Cashamount + r.AMOUNTWITHCHECKS) -
+                                     comis_rate -
+                                     to_number(replace(replace(r.AMOUNTTOCHECK,
+                                                               '.',
+                                                               ','),
+                                                       ' ',
+                                                       '')),
                    ground_        => r.ground,
                    payment_number => r.CHECKNUMBER,
                    kpp_receiver   => '111000171',
@@ -968,12 +1015,18 @@ DOC_NUM: <xsl:value-of select="ABC"/>
               POST(id_sess_        => r.SESS_ID,
                    department_     => r.department,
                    real_payer_     => r.acc40911,
-                   real_receiver_  => '30102810900000000017' /*r.ACC_REC*/,
+                   real_receiver_  => r.ACC_REC,
                    payer_          => 'Транзитный счет ' || r.idterm ||
                                       ' отделения ' || r.department,
                    receiver_       => r.acc_name,
-                   okpo_receiver   => r.inn,
-                   sum_            => r.AMOUNTOFPAYMENT - comis_rate,
+                   okpo_receiver   => r.bank_inn,
+                   sum_            => (r.Cashamount + r.AMOUNTWITHCHECKS) -
+                                      comis_rate -
+                                      to_number(replace(replace(r.AMOUNTTOCHECK,
+                                                                '.',
+                                                                ','),
+                                                        ' ',
+                                                        '')),
                    ground_         => r.ground,
                    payment_number  => r.CHECKNUMBER,
                    kpp_receiver    => r.kpp,
@@ -981,15 +1034,15 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                    PAYDATE_        => r.PAYDATE,
                    bo1_            => '4',
                    bo2_            => '0',
-                   okpo_payer      => r.bank_inn,
-                   coracc_payer    => r.bank_cor_acc,
+                   okpo_payer      => r.inn,
+                   coracc_payer    => '30102810900000000017',
                    mfo_receiver    => r.bank_cor_bic,
                    bank_receiver   => 'Банк Абхазии',
                    BUDJCLASSIFCODE => r.kbk_payer,
                    okato           => r.OKATO,
                    for_nbra        => true);
             end if;
-          
+            /*r.bank_cor_acc,CORACC_PAYER_2  => '30102810900000000017'*/
             /*
             Если СуммаНаЧек не равно 0    
             30232810700000010009/ACC_30232_06
@@ -1264,7 +1317,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
       8
       30232810100000010010/70107810000001720109
       */
-      for r in (select COMMISSIONAMOUNT - decode(substr(NKAMOUNT, 1, 1),
+      /*for r in (select COMMISSIONAMOUNT - decode(substr(NKAMOUNT, 1, 1),
                                                  '-',
                                                  to_number(replace(replace(replace(NKAMOUNT,
                                                                                    '-',
@@ -1288,7 +1341,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                       --and t.checknumber = input_number
                       --and trunc(PAYDATE) = input_date
                    and t.TERMINAL in (select NAME from Z_SB_TERMINAL_DBT)
-                /*group by SERVICE, trunc(PAYDATE)*/
+                \*group by SERVICE, trunc(PAYDATE)*\
                 ) loop
         num := num + 1;
         POST(id_sess_       => id_sess,
@@ -1304,7 +1357,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
              kpp_receiver   => '111000171',
              numb           => num,
              PAYDATE_       => r.PAYDATE);
-      end loop;
+      end loop;*/
     
       /* 
       Группировка по направлениям если нет верхней комиссии
@@ -1793,7 +1846,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                okpo_receiver  => '11000572',
                sum_           => r.summ,
                ground_        => 'Урегулирование расчетов за ' || r.date_ || /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               'TR:' || r.checknumber ||*/
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               'TR:' || r.checknumber ||*/
                                  ';SID:' || id_sess,
                kpp_receiver   => '111000171',
                numb           => num,
@@ -1828,7 +1881,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                                                             trunc(sysdate) + 1,
                                                             'R'),
                ground_        => 'Урегулирование расчетов за ' || r.date_ || /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             'TR:' || r.checknumber ||*/
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             'TR:' || r.checknumber ||*/
                                  ';SID:' || id_sess,
                kpp_receiver   => '111000171',
                numb           => num,
@@ -2130,7 +2183,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
       for r in (select sum(AMOUNTOFPAYMENT) summ,
                        trunc(PAYDATE) PAYDATE,
                        SERVICE /*,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       t.checknumber*/
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       t.checknumber*/
                   from Z_SB_TRANSACT_AMRA_DBT t
                  where t.SESS_ID = id_sess
                    and t.TRANSACTIONTYPE not in
@@ -2152,7 +2205,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
              sum_           => r.summ,
              ground_        => 'Расчеты с дилером потерминальной сети по усл. ' ||
                                r.SERVICE || ' за ' || r.PAYDATE || /*'TR:' ||
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   r.checknumber || */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         r.checknumber || */
                                ';SID:' || id_sess,
              kpp_receiver   => '111000171',
              numb           => num,
@@ -2243,7 +2296,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
     
       --10
       for r in (select sum(NKAMOUNT) summ, trunc(PAYDATE) PAYDATE, SERVICE /*,
-                                                                                                                                                                                                                                                                                                                                                                                                                                       t.checknumber*/
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       t.checknumber*/
                   from Z_SB_TRANSACT_AMRA_DBT t
                  where t.SESS_ID = id_sess
                    and t.TRANSACTIONTYPE not in
