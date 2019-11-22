@@ -112,7 +112,7 @@ public class EnterController {
 			}
 			Date date2 = sdf.parse("2019-11-25");
 
-			if (startDate.after(date2)) {
+			/*if (startDate.after(date2)) {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
 				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 				stage.getIcons().add(new Image("terminal.png"));
@@ -120,7 +120,7 @@ public class EnterController {
 				alert.setHeaderText(null);
 				alert.setContentText("Дата больше чем 2019-11-25, ищи исходник ;)");
 				alert.showAndWait();
-			} else {
+			} else {*/
 
 				/* Выполнить проверку соединения с базой */
 				try {
@@ -185,7 +185,7 @@ public class EnterController {
 					// stage_.close();
 					/* Закрыть текущую форму */
 				}
-			}
+			/*}*/
 		} catch (ParseException | IOException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
