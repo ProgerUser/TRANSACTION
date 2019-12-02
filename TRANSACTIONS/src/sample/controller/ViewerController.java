@@ -230,7 +230,7 @@ public class ViewerController {
 						+ tr.getRECEIVERSUM() + " р\r\n" + "Комиссия: " + tr.getFEESUM() + "p.\r\n");
 				writer.close();
 				ProcessBuilder pb = new ProcessBuilder("Notepad.exe",
-						System.getProperty("user.dir").toString() + "\\" + strDate + "CHEK.txt");
+						System.getenv("TRANSACT_PATH").toString() + "\\" + strDate + "CHEK.txt");
 				pb.start();
 			}
 		} catch (IOException e) {
