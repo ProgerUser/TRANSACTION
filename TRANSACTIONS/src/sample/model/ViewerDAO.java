@@ -150,11 +150,7 @@ public class ViewerDAO {
 	// SELECT Service
 	// *******************************
 	public static ObservableList<ServiceClass> searchService(String idterm) {
-		String selectStmt = "select name,\n\r" + "       idterm,\n\r" + "       account,\n\r" + "       account2,\n\r"
-				+ "       account3,\n\r" + "       account4,\n\r" + "       account5,\n\r" + "       inn,\n\r"
-				+ "       kpp,\n\r" + "       kor_bank_nbra,\n\r" + "       acc_rec,\n\r" + "       kbk,\n\r"
-				+ "       okato,\n\r" + "       stat,\n\r" + "       acc_name,\n\r" + "       bo1,\n\r"
-				+ "       bo2\n\r" + "  from Z_SB_TERMSERV_DBT t\n\r" + "where idterm = '" + idterm + "'\n\r";
+		String selectStmt = "select * from Z_SB_TERMSERV_DBT t\n\r" + "where idterm = '" + idterm + "'\n\r";
 		// Get ResultSet from dbExecuteQuery method
 		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
 		// Send ResultSet to the getEmployeeList method and get employee object
@@ -224,6 +220,7 @@ public class ViewerDAO {
 				sr.setbo1(rs.getString("bo1"));
 				sr.setbo2(rs.getString("bo2"));
 				sr.setstat(rs.getString("stat"));
+				sr.setcomission(rs.getString("comission"));
 				empList.add(sr);
 			}
 		} catch (SQLException e) {
@@ -394,7 +391,7 @@ public class ViewerDAO {
 	public static void updateService(String acc_name, String acc_rec, String account, String account2, String account3,
 			String account4, String account5, String idterm, String inn, String kbk, String kor_bank_nbra, String kpp,
 			String name, String okato, String bo1, String bo2, String stat, String BeforeAcc, String Beforeidterm,
-			String Beforename) {
+			String Beforename,String comission) {
 		// Declare a UPDATE statement
 		String acc_name_ = "";
 		String acc_rec_ = "";
@@ -413,6 +410,7 @@ public class ViewerDAO {
 		String bo1_ = "";
 		String bo2_ = "";
 		String stat_ = "";
+		String comission_="";
 
 		if (isNullOrEmpty(acc_name)) {
 
@@ -499,6 +497,12 @@ public class ViewerDAO {
 		} else {
 			stat_ = stat;
 		}
+		if (isNullOrEmpty(comission)) {
+
+		} else {
+			comission_ = comission;
+		}
+		
 		String acc_name_C = isNullOrEmpty(acc_name) ? "" : "acc_name = '" + acc_name + "',";
 		String acc_rec_C = isNullOrEmpty(acc_rec) ? "" : "acc_rec = '" + acc_rec + "',";
 		String account_C = isNullOrEmpty(account) ? "" : "account = '" + account + "',";
@@ -516,9 +520,10 @@ public class ViewerDAO {
 		String bo1_C = isNullOrEmpty(bo1) ? "" : "bo1 = '" + bo1 + "',";
 		String bo2_C = isNullOrEmpty(bo2) ? "" : "bo2 = '" + bo2 + "',";
 		String stat_C = isNullOrEmpty(stat) ? "" : "stat = '" + stat + "',";
+		String comission_C = isNullOrEmpty(comission) ? "" : "comission = '" + comission + "',";
 
 		String param = acc_name_C + acc_rec_C + account_C + account2_C + account3_C + account4_C + account5_C + idterm_C
-				+ inn_C + kbk_C + kor_bank_nbra_C + kpp_C + name_C + okato_C + bo1_C + bo2_C + stat_C;
+				+ inn_C + kbk_C + kor_bank_nbra_C + kpp_C + name_C + okato_C + bo1_C + bo2_C + stat_C+comission_C;
 
 		String updateStmt = "BEGIN\n" + "   UPDATE Z_SB_TERMSERV_DBT\n" + "SET " + "acc_name = '" + acc_name_ + "', "
 				+ "acc_rec = '" + acc_rec_ + "', " + "account = '" + account_ + "', " + "account2 = '" + account2_
@@ -526,7 +531,7 @@ public class ViewerDAO {
 				+ account5_ + "', " + "idterm = '" + idterm_ + "', " + "inn = '" + inn_ + "', " + "kbk = '" + kbk_
 				+ "', " + "kor_bank_nbra = '" + kor_bank_nbra_ + "', " + "kpp = '" + kpp_ + "', " + "name = '" + name_
 				+ "', " + "okato = '" + okato_ + "', " + "bo1 = '" + bo1_ + "', " + "bo2 = '" + bo2_ + "', "
-				+ "stat = '" + stat_ + "'" + " WHERE ACCOUNT = '" + BeforeAcc + "' and idterm = '" + Beforeidterm
+				+ "stat = '" + stat_ + "',"+ "comission = " + comission_ + " WHERE ACCOUNT = '" + BeforeAcc + "' and idterm = '" + Beforeidterm
 				+ "' and name = '" + Beforename + "';\n" + "   COMMIT;\n" + "END;";
 		System.out.println(updateStmt);
 		DBUtil.dbExecuteUpdate(updateStmt);
@@ -534,7 +539,7 @@ public class ViewerDAO {
 
 	public static void InsertService(String acc_name, String acc_rec, String account, String account2, String account3,
 			String account4, String account5, String idterm, String inn, String kbk, String kor_bank_nbra, String kpp,
-			String name, String okato, String bo1, String bo2, String stat) {
+			String name, String okato, String bo1, String bo2, String stat,String comission) {
 		// Declare a UPDATE statement
 		String acc_name_ = "";
 		String acc_rec_ = "";
@@ -553,6 +558,7 @@ public class ViewerDAO {
 		String bo1_ = "";
 		String bo2_ = "";
 		String stat_ = "";
+		String comission_="";
 
 		if (isNullOrEmpty(acc_name)) {
 
@@ -639,6 +645,12 @@ public class ViewerDAO {
 		} else {
 			stat_ = "'" + stat + "',";
 		}
+		if (isNullOrEmpty(comission_)) {
+
+		} else {
+			comission_ = "'" + comission+ "',";
+		}
+		
 		String acc_name_C = isNullOrEmpty(acc_name) ? "" : "acc_name,";
 		String acc_rec_C = isNullOrEmpty(acc_rec) ? "" : "acc_rec,";
 		String account_C = isNullOrEmpty(account) ? "" : "account,";
@@ -656,12 +668,13 @@ public class ViewerDAO {
 		String bo1_C = isNullOrEmpty(bo1) ? "" : "bo1,";
 		String bo2_C = isNullOrEmpty(bo2) ? "" : "bo2,";
 		String stat_C = isNullOrEmpty(stat) ? "" : "stat,";
+		String comission_C = isNullOrEmpty(comission) ? "" : "comission,";
 
 		String Values = "(" + acc_name_ + acc_rec_ + account_ + account2_ + account3_ + account4_ + account5_ + idterm_
-				+ inn_ + kbk_ + kor_bank_nbra_ + kpp_ + name_ + okato_ + bo1_ + bo2_ + stat_ + ");\n";
+				+ inn_ + kbk_ + kor_bank_nbra_ + kpp_ + name_ + okato_ + bo1_ + bo2_ + stat_ + comission_+");\n";
 		String Columns = "(" + acc_name_C + acc_rec_C + account_C + account2_C + account3_C + account4_C + account5_C
 				+ idterm_C + inn_C + kbk_C + kor_bank_nbra_C + kpp_C + name_C + okato_C + bo1_C + bo2_C + stat_C
-				+ ")\n ";
+				+ comission_C+ ")\n ";
 		String insertStmt = "BEGIN\n" + "   insert into  Z_SB_TERMSERV_DBT \n" + Columns.replace(",)", ")")
 				+ "      values \n" + Values.replace(",)", ")") + "   COMMIT;\n" + "END;";
 		System.out.println(insertStmt);

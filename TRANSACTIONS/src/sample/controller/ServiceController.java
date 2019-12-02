@@ -124,6 +124,8 @@ public class ServiceController {
 	private TableColumn<ServiceClass, String> bo2;
 	@FXML
 	private TableColumn<ServiceClass, String> stat;
+	@FXML
+	private TableColumn<ServiceClass, String> comission;
 	// For MultiThreading
 	private Executor exec;
 
@@ -171,7 +173,8 @@ public class ServiceController {
 			bo1.setCellValueFactory(cellData -> cellData.getValue().bo1Property());
 			bo2.setCellValueFactory(cellData -> cellData.getValue().bo2Property());
 			stat.setCellValueFactory(cellData -> cellData.getValue().statProperty());
-
+			comission.setCellValueFactory(cellData -> cellData.getValue().comissionProperty());
+			
 			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
 					+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
 
@@ -371,6 +374,9 @@ public class ServiceController {
 			Label bo2 = new Label("bo2:");
 			bo2.setLayoutX(112.0);
 			bo2.setLayoutY(634.0);
+			Label comission_ = new Label("Комисиия:");
+			comission_.setLayoutX(82.0);
+			comission_.setLayoutY(672.0);
 
 			TextField name_T = new TextField();
 			name_T.setPrefHeight(28.0);
@@ -474,6 +480,12 @@ public class ServiceController {
 			bo2_T.setLayoutX(150.0);
 			bo2_T.setLayoutY(634.0);
 			bo2_T.setText(tr.getbo2());
+			TextField comission_T = new TextField();
+			comission_T.setPrefHeight(28.0);
+			comission_T.setPrefWidth(198.0);
+			comission_T.setLayoutX(150.0);
+			comission_T.setLayoutY(672.0);
+			comission_T.setText(tr.getcomission());
 			Button Update = new Button();
 			Update.setText("Обновить");
 			Update.setLayoutX(29.0);
@@ -514,6 +526,9 @@ public class ServiceController {
 			secondaryLayout.getChildren().add(bo1_T);
 			secondaryLayout.getChildren().add(bo2_T);
 			secondaryLayout.getChildren().add(stat_T);
+			secondaryLayout.getChildren().add(comission_T);
+			secondaryLayout.getChildren().add(comission_);
+			
 			secondaryLayout.getChildren().add(Update);
 			Scene secondScene = new Scene(secondaryLayout, 518, 751);
 			// New window (Stage)
@@ -556,7 +571,7 @@ public class ServiceController {
 									account5_T.getText(), idterm_T.getText(), inn_T.getText(), kbk_T.getText(),
 									kor_bank_nbra_T.getText(), kpp_T.getText(), name_T.getText(), okato_T.getText(),
 									bo1_T.getText(), bo2_T.getText(), stat_T.getText(), tr.getaccount(),
-									tr.getidterm(), tr.getname());
+									tr.getidterm(), tr.getname(),comission_T.getText());
 							Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
 							Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
 							stage_.getIcons().add(new Image("terminal.png"));
@@ -648,7 +663,10 @@ public class ServiceController {
 		Label bo2 = new Label("bo2:");
 		bo2.setLayoutX(112.0);
 		bo2.setLayoutY(634.0);
-
+		Label comission_ = new Label("Комисиия:");
+		comission_.setLayoutX(82.0);
+		comission_.setLayoutY(672.0);
+		
 		TextField name_T = new TextField();
 		name_T.setPrefHeight(28.0);
 		name_T.setPrefWidth(274.0);
@@ -752,6 +770,12 @@ public class ServiceController {
 		bo2_T.setLayoutX(150.0);
 		bo2_T.setLayoutY(634.0);
 		bo2_T.setPromptText("Обязательно!");
+		TextField comission_T = new TextField();
+		comission_T.setPrefHeight(28.0);
+		comission_T.setPrefWidth(198.0);
+		comission_T.setLayoutX(150.0);
+		comission_T.setLayoutY(672.0);
+		comission_T.setPromptText("Обязательно!");
 		Button add = new Button();
 		add.setText("Добавить");
 		add.setLayoutX(29.0);
@@ -793,6 +817,8 @@ public class ServiceController {
 		secondaryLayout.getChildren().add(bo2_T);
 		secondaryLayout.getChildren().add(stat_T);
 		secondaryLayout.getChildren().add(add);
+		secondaryLayout.getChildren().add(comission_T);
+		secondaryLayout.getChildren().add(comission_);
 		Scene secondScene = new Scene(secondaryLayout, 518, 751);
 
 		// New window (Stage)
@@ -835,7 +861,7 @@ public class ServiceController {
 									account2_T.getText(), account3_T.getText(), account4_T.getText(),
 									account5_T.getText(), idterm_T.getText(), inn_T.getText(), kbk_T.getText(),
 									kor_bank_nbra_T.getText(), kpp_T.getText(), name_T.getText(), okato_T.getText(),
-									bo1_T.getText(), bo2_T.getText(), stat_T.getText());
+									bo1_T.getText(), bo2_T.getText(), stat_T.getText(),comission_T.getText());
 							Alert alert = new Alert(Alert.AlertType.INFORMATION);
 							Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 							stage.getIcons().add(new Image("terminal.png"));

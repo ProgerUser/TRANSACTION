@@ -56,6 +56,8 @@
 							prefWidth="102.0" text="bo1" />
 						<TableColumn fx:id="bo2" minWidth="7.0"
 							prefWidth="102.0" text="bo2" />
+						<TableColumn fx:id="comission" minWidth="7.0"
+							prefWidth="102.0" text="комиссия" />
 					</columns>
 				</TableView>
 			</children>

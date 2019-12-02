@@ -20,6 +20,7 @@ public class ServiceClass {
 	private StringProperty acc_name;
 	private StringProperty bo1;
 	private StringProperty bo2;
+	private StringProperty comission;
 
 	// Constructor
 	public ServiceClass() {
@@ -40,7 +41,22 @@ public class ServiceClass {
 		this.acc_name = new SimpleStringProperty();
 		this.bo1 = new SimpleStringProperty();
 		this.bo2 = new SimpleStringProperty();
+		this.comission = new SimpleStringProperty();
 	}
+
+	// comission
+	public String getcomission() {
+		return comission.get();
+	}
+
+	public void setcomission(String comission) {
+		this.comission.set(comission);
+	}
+
+	public StringProperty comissionProperty() {
+		return comission;
+	}
+
 	// acc_name
 	public String getbo2() {
 		return bo2.get();
@@ -53,7 +69,7 @@ public class ServiceClass {
 	public StringProperty bo2Property() {
 		return bo2;
 	}
-	
+
 	// acc_name
 	public String getbo1() {
 		return bo1.get();
@@ -66,7 +82,7 @@ public class ServiceClass {
 	public StringProperty bo1Property() {
 		return bo1;
 	}
-	
+
 	// acc_name
 	public String getacc_name() {
 		return acc_name.get();
@@ -79,6 +95,7 @@ public class ServiceClass {
 	public StringProperty acc_nameProperty() {
 		return acc_name;
 	}
+
 	// stat
 	public String getstat() {
 		return stat.get();
@@ -91,7 +108,7 @@ public class ServiceClass {
 	public StringProperty statProperty() {
 		return stat;
 	}
-	
+
 	// okato
 	public String getokato() {
 		return okato.get();
@@ -104,6 +121,7 @@ public class ServiceClass {
 	public StringProperty okatoProperty() {
 		return okato;
 	}
+
 	// kbk
 	public String getkbk() {
 		return kbk.get();
@@ -116,6 +134,7 @@ public class ServiceClass {
 	public StringProperty kbkProperty() {
 		return kbk;
 	}
+
 	// acc_rec
 	public String getacc_rec() {
 		return acc_rec.get();
