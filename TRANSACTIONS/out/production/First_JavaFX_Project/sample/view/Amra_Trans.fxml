@@ -134,7 +134,7 @@
 						<Text layoutX="24.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Загруженные файлы" />
             <Button id="del" fx:id="delete_log" layoutX="959.0" layoutY="13.0" mnemonicParsing="false" onAction="#del_log" prefHeight="35" prefWidth="35">
                <tooltip>
-                  <Tooltip text="Сформировать проводки" />
+                  <Tooltip text="Удалить лог" />
                </tooltip>
             </Button>
 					</children>
