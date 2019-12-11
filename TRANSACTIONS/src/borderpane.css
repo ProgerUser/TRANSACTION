@@ -45,3 +45,9 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }
+#del {          
+    -fx-background-image: url("delete_log.png");
+    -fx-background-size: 35 35;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position:center;
+}

@@ -196,7 +196,7 @@ public class Amra_Transact {
 					alert.showAndWait();
 				} else if (part1.equals("Inserted")) {
 					// Get all Employees information
-					ObservableList<Add_File> empData = TerminalDAO.add_file(/*part2*/"", date_load.getValue());
+					ObservableList<Add_File> empData = TerminalDAO.add_file(/* part2 */"", date_load.getValue());
 					// Populate Employees on TableView
 					populate_fn_sess(empData);
 					autoResizeColumns(load_file);
@@ -349,6 +349,48 @@ public class Amra_Transact {
 	}
 
 	@FXML
+	void del_log(ActionEvent event) {
+		try {
+			if (load_file.getSelectionModel().getSelectedItem() != null) {
+				Add_File af = load_file.getSelectionModel().getSelectedItem();
+				Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
+						+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
+				
+				String sql_txt = "delete from z_sb_log_amra where sess_id = ?"; 
+				CallableStatement cs = conn.prepareCall(sql_txt);
+		        cs.setString(1, af.get_FileId());
+		        cs.execute();
+				
+		        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText("Лог файл с ID = "+af.get_FileId()+" удален!");
+				alert.showAndWait();
+				cs.close();
+				conn.close();
+			} else {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText("Выберите строку!");
+				alert.showAndWait();
+			}
+		} catch (SQLException  e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+		}
+	}
+
+	@FXML
 	void view_fn(ActionEvent event) {
 		LocalDate date = date_load.getValue();
 		ObservableList<Add_File> empData = TerminalDAO.add_file_d(date);
@@ -427,7 +469,7 @@ public class Amra_Transact {
 						myResultSet.close();
 					} else {
 						// --------------------------------------
-						Protocol(part2, af.get_Path() + "\\" + af.get_FileName());
+						//Protocol(part2, af.get_Path() + "\\" + af.get_FileName());
 						// --------------------------------------
 
 						Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -442,7 +484,8 @@ public class Amra_Transact {
 					callStmt.close();
 					conn.close();
 
-					ObservableList<Add_File> empData = TerminalDAO.add_file(/*af.get_FileId()*/"", date_load.getValue());
+					ObservableList<Add_File> empData = TerminalDAO.add_file(/* af.get_FileId() */"",
+							date_load.getValue());
 					// Populate Employees on TableView
 					populate_fn_sess(empData);
 					autoResizeColumns(load_file);
@@ -618,7 +661,8 @@ public class Amra_Transact {
 					alert.showAndWait();
 					callStmt.close();
 					conn.close();
-					ObservableList<Add_File> empData = TerminalDAO.add_file(/*af.get_FileId()*/"", date_load.getValue());
+					ObservableList<Add_File> empData = TerminalDAO.add_file(/* af.get_FileId() */"",
+							date_load.getValue());
 					// Populate Employees on TableView
 					populate_fn_sess(empData);
 					autoResizeColumns(load_file);

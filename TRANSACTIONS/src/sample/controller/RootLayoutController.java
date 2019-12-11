@@ -253,7 +253,8 @@ public class RootLayoutController {
 
 			if (Connect.userPassword_.equals("")) {
 
-			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("AMRA_IMPORT")) {
+			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("AMRA_IMPORT")
+					| Connect.userID_.equals("U146")) {
 				Main.Terminal();
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -305,7 +306,8 @@ public class RootLayoutController {
 		try {
 			if (Connect.userPassword_.equals("")) {
 
-			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("AMRA_IMPORT")) {
+			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("AMRA_IMPORT")
+					| Connect.userID_.equals("U146")) {
 				Main.Service();
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);

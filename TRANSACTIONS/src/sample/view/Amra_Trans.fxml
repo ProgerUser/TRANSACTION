@@ -132,6 +132,11 @@
 						<Text layoutX="201.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Дата загрузки" />
 						<DatePicker fx:id="date_load" layoutX="291.0" layoutY="18.0" onAction="#view_fn" prefHeight="23.0" prefWidth="144.0" />
 						<Text layoutX="24.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Загруженные файлы" />
+            <Button id="del" fx:id="delete_log" layoutX="959.0" layoutY="13.0" mnemonicParsing="false" onAction="#del_log" prefHeight="35" prefWidth="35">
+               <tooltip>
+                  <Tooltip text="Сформировать проводки" />
+               </tooltip>
+            </Button>
 					</children>
 				</AnchorPane>
    </top>
