@@ -36,7 +36,8 @@ create or replace package z_sb_calc_tr_amra is
                         numb            number,
                         PAYDATE_        date,
                         chk_            VARCHAR2 DEFAULT NULL,
-                        for_nbra        boolean DEFAULT false);
+                        for_nbra        boolean DEFAULT false,
+                        trnnum_         number);
   PROCEDURE POST(id_sess_        NUMBER,
                  department_     VARCHAR2 default 0,
                  real_payer_     VARCHAR2,
@@ -87,17 +88,19 @@ create or replace package body z_sb_calc_tr_amra is
   END;
   /*ѕроцедура записи лога*/
 
-  PROCEDURE write_deal(sump_    number,
-                       paydate_ date,
-                       service_ VARCHAR2,
-                       vector_  number,
-                       chk      varchar2) IS
+  PROCEDURE write_deal(sump_        number,
+                       paydate_     date,
+                       service_     VARCHAR2,
+                       vector_      number,
+                       chk          varchar2,
+                       DEAL_ACC_    varchar2,
+                       GENERAL_ACC_ varchar2) IS
     PRAGMA AUTONOMOUS_TRANSACTION;
   BEGIN
     insert into Z_SB_CALC_DEAL_
-      (summ, date_, service_, vector, CHECKNUMBER)
+      (summ, date_, service_, vector, CHECKNUMBER, DEAL_ACC, GENERAL_ACC)
     values
-      (sump_, paydate_, service_, vector_, chk);
+      (sump_, paydate_, service_, vector_, chk, DEAL_ACC_, GENERAL_ACC_);
     COMMIT;
   END;
 
@@ -277,29 +280,30 @@ DOC_NUM: <xsl:value-of select="ABC"/>
     RETURN ret;
   END;
 
-  procedure DOC_REG(real_payer1      varchar2,
-                    real_receiver1   varchar2,
-                    PAYDATE1         date,
-                    numb1            number,
-                    ground1          varchar2,
-                    sum1             number,
-                    id_sess1         number,
-                    for_nbra_        boolean DEFAULT false,
-                    mfo_receiver_    varchar2 DEFAULT null,
-                    OKPO_PAYER_      varchar2 DEFAULT null,
-                    CORACC_PAYER_    varchar2 DEFAULT null,
-                    CORACC_PAYER_2   varchar2 DEFAULT null,
-                    PAYER            varchar2 DEFAULT null,
-                    BUDJCLASSIFCODE_ varchar2 DEFAULT null,
-                    BANK_RECEIVER_   varchar2 DEFAULT null,
-                    RECEIVER_        varchar2 DEFAULT null,
-                    kpp_receiver_    varchar2 DEFAULT null,
-                    OKPO_RECEIVER_   varchar2 DEFAULT null,
-                    OKATO            varchar2 DEFAULT null) is
+  function DOC_REG(real_payer1      varchar2,
+                   real_receiver1   varchar2,
+                   PAYDATE1         date,
+                   numb1            number,
+                   ground1          varchar2,
+                   sum1             number,
+                   id_sess1         number,
+                   for_nbra_        boolean DEFAULT false,
+                   mfo_receiver_    varchar2 DEFAULT null,
+                   OKPO_PAYER_      varchar2 DEFAULT null,
+                   CORACC_PAYER_    varchar2 DEFAULT null,
+                   CORACC_PAYER_2   varchar2 DEFAULT null,
+                   PAYER            varchar2 DEFAULT null,
+                   BUDJCLASSIFCODE_ varchar2 DEFAULT null,
+                   BANK_RECEIVER_   varchar2 DEFAULT null,
+                   RECEIVER_        varchar2 DEFAULT null,
+                   kpp_receiver_    varchar2 DEFAULT null,
+                   OKPO_RECEIVER_   varchar2 DEFAULT null,
+                   OKATO            varchar2 DEFAULT null) return number is
     PRAGMA AUTONOMOUS_TRANSACTION;
-    err2 varchar2(2000);
-    b    varchar2(60);
-    tts  TS.T_DeptInfo;
+    err2    varchar2(2000);
+    b       varchar2(60);
+    tts     TS.T_DeptInfo;
+    itrnnum number;
   begin
     if for_nbra_ = true then
       idoc_reg.SetUpRegisterParams('2TRN');
@@ -348,11 +352,12 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                err2 || b,
                id_sess1,
                DC => 'ѕроводка ' || real_payer1 || '->' || real_receiver1);
-      return;
     else
       commit;
+      itrnnum := IDOC_REG.GetLastDocID;
       null;
     end if;
+    return itrnnum;
   end;
 
   procedure insert_post(id_sess_        NUMBER,
@@ -384,7 +389,8 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                         numb            number,
                         PAYDATE_        date,
                         chk_            VARCHAR2 DEFAULT NULL,
-                        for_nbra        boolean DEFAULT false) is
+                        for_nbra        boolean DEFAULT false,
+                        trnnum_         number) is
     PRAGMA AUTONOMOUS_TRANSACTION;
     res number;
   begin
@@ -431,7 +437,8 @@ DOC_NUM: <xsl:value-of select="ABC"/>
          sess_id,
          userfield1,
          userfield2,
-         NUMB_PAYDOC)
+         NUMB_PAYDOC,
+         KINDPAYMENT)
       VALUES
         (PAYDATE_,
          PAYDATE_,
@@ -469,7 +476,8 @@ DOC_NUM: <xsl:value-of select="ABC"/>
          id_sess_,
          bo1_,
          bo2_,
-         numb);
+         numb,
+         trnnum_);
       commit;
     end if;
   end;
@@ -505,8 +513,9 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                  PAYDATE_        date,
                  chk_            VARCHAR2 DEFAULT NULL,
                  for_nbra        boolean DEFAULT false) IS
-    pnmb varchar2(50);
-    res  number;
+    pnmb   varchar2(50);
+    res    number;
+    trnnum number;
   BEGIN
     begin
       /*зарегать проводки*/
@@ -515,25 +524,25 @@ DOC_NUM: <xsl:value-of select="ABC"/>
         FROM Z_SB_LOG_AMRA lg
        WHERE lg.sess_id = id_sess_;
       if res = 0 then
-        DOC_REG(real_payer1      => real_payer_,
-                real_receiver1   => real_receiver_,
-                PAYDATE1         => PAYDATE_,
-                numb1            => numb,
-                ground1          => ground_,
-                sum1             => sum_,
-                id_sess1         => id_sess_,
-                for_nbra_        => for_nbra,
-                mfo_receiver_    => mfo_receiver,
-                CORACC_PAYER_    => CORACC_PAYER,
-                Payer            => Payer_,
-                budjclassifcode_ => budjclassifcode,
-                BANK_RECEIVER_   => BANK_RECEIVER,
-                RECEIVER_        => receiver_,
-                CORACC_PAYER_2   => CORACC_PAYER_2,
-                kpp_receiver_    => kpp_receiver,
-                OKPO_RECEIVER_   => OKPO_RECEIVER,
-                OKPO_PAYER_      => OKPO_PAYER,
-                okato            => okato);
+        trnnum := DOC_REG(real_payer1      => real_payer_,
+                          real_receiver1   => real_receiver_,
+                          PAYDATE1         => PAYDATE_,
+                          numb1            => numb,
+                          ground1          => ground_,
+                          sum1             => sum_,
+                          id_sess1         => id_sess_,
+                          for_nbra_        => for_nbra,
+                          mfo_receiver_    => mfo_receiver,
+                          CORACC_PAYER_    => CORACC_PAYER,
+                          Payer            => Payer_,
+                          budjclassifcode_ => budjclassifcode,
+                          BANK_RECEIVER_   => BANK_RECEIVER,
+                          RECEIVER_        => receiver_,
+                          CORACC_PAYER_2   => CORACC_PAYER_2,
+                          kpp_receiver_    => kpp_receiver,
+                          OKPO_RECEIVER_   => OKPO_RECEIVER,
+                          OKPO_PAYER_      => OKPO_PAYER,
+                          okato            => okato);
         --null;
         --commit;
       end if;
@@ -574,7 +583,8 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                     numb            => numb,
                     PAYDATE_        => PAYDATE_,
                     chk_            => chk_,
-                    for_nbra        => for_nbra);
+                    for_nbra        => for_nbra,
+                    trnnum_         => trnnum);
       
         if payment_number is not null then
           update Z_SB_TRANSACT_AMRA_DBT t
@@ -679,15 +689,29 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                     /*and PROVIDER <> '—берЅанк'*/
                     --and t.checknumber = input_number
                     --and trunc(PAYDATE) = input_date
-                 and t.TERMINAL in (select NAME from Z_SB_TERMINAL_DBT))
+                 and t.TERMINAL in (select NAME from Z_SB_TERMINAL_AMRA_DBT))
        group by TRUNC(PAYDATE);
   
     CHEK_302326_3023211 BOOLEAN := FALSE;
     cursor sbra_pr is
-      select (select ACCOUNT from Z_SB_TERMINAL_DBT where NAME = t.TERMINAL) acc_20208,
-             (select ACC_30232_06
-                from Z_SB_TERMINAL_DBT
-               where NAME = t.TERMINAL) ACC_30232_06,
+      select (select ACCOUNT
+                from Z_SB_TERMINAL_AMRA_DBT
+               where NAME = t.TERMINAL) acc_20208,
+             (select DEAL_ACC
+                from Z_SB_TERMINAL_AMRA_DBT
+               where NAME = t.TERMINAL) DEAL_ACC,
+             (select GENERAL_ACC
+                from Z_SB_TERMINAL_AMRA_DBT
+               where NAME = t.TERMINAL) GENERAL_ACC,
+             (select GENERAL_COMIS
+                from Z_SB_TERMINAL_AMRA_DBT
+               where NAME = t.TERMINAL) GENERAL_COMIS,
+             (select CLEAR_SUM
+                from Z_SB_TERMINAL_AMRA_DBT
+               where NAME = t.TERMINAL) CLEAR_SUM,
+             (select CRASH_ACC
+                from Z_SB_TERMINAL_AMRA_DBT
+               where NAME = t.TERMINAL) CRASH_ACC,
              (select ACCOUNT
                 from z_Sb_Termserv_Dbt h
                where idterm = t.TERMINAL
@@ -720,7 +744,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
              (select CSMRKORACC from smr) bank_cor_acc,
              (select CSMRRCSNAME from smr) bank_cor_bic,
              (select DEPARTMENT
-                from Z_SB_TERMINAL_DBT
+                from Z_SB_TERMINAL_AMRA_DBT
                where NAME = t.TERMINAL) DEPARTMENT,
              '”слуга "' || SERVICE || '" - ' ||
              upper((SELECT AttributeValue
@@ -776,15 +800,29 @@ DOC_NUM: <xsl:value-of select="ABC"/>
              ('»нкассаци€', 'ƒокаткаѕлатежа')
          and PROVIDER = '—берЅанк'
             --and t.checknumber = input_number
-         and t.TERMINAL in (select NAME from Z_SB_TERMINAL_DBT);
+         and t.TERMINAL in (select NAME from Z_SB_TERMINAL_AMRA_DBT);
   
     cursor amra_pr is
-      select (select ACCOUNT from Z_SB_TERMINAL_DBT where NAME = t.TERMINAL) acc_20208,
-             (select ACC_30232_06
-                from Z_SB_TERMINAL_DBT
-               where NAME = t.TERMINAL) ACC_30232_06,
+      select (select ACCOUNT
+                from Z_SB_TERMINAL_AMRA_DBT
+               where NAME = t.TERMINAL) acc_20208,
+             (select DEAL_ACC
+                from Z_SB_TERMINAL_AMRA_DBT
+               where NAME = t.TERMINAL) DEAL_ACC,
+             (select CLEAR_SUM
+                from Z_SB_TERMINAL_AMRA_DBT
+               where NAME = t.TERMINAL) CLEAR_SUM,
+             (select GENERAL_ACC
+                from Z_SB_TERMINAL_AMRA_DBT
+               where NAME = t.TERMINAL) GENERAL_ACC,
+             (select GENERAL_COMIS
+                from Z_SB_TERMINAL_AMRA_DBT
+               where NAME = t.TERMINAL) GENERAL_COMIS,
+             (select CRASH_ACC
+                from Z_SB_TERMINAL_AMRA_DBT
+               where NAME = t.TERMINAL) CRASH_ACC,
              (select DEPARTMENT
-                from Z_SB_TERMINAL_DBT
+                from Z_SB_TERMINAL_AMRA_DBT
                where NAME = t.TERMINAL) DEPARTMENT,
              'ѕлатеж по услуге ' || SERVICE || ' за ' ||
              trunc(DATEOFOPERATION) || ' TR:' || CHECKNUMBER || ';SID:' ||
@@ -811,7 +849,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
          and PROVIDER <> '—берЅанк'
             --and t.checknumber = input_number
             --and trunc(PAYDATE) = input_date
-         and t.TERMINAL in (select NAME from Z_SB_TERMINAL_DBT);
+         and t.TERMINAL in (select NAME from Z_SB_TERMINAL_AMRA_DBT);
   BEGIN
     begin
       DBMS_LOB.createtemporary(ret, TRUE);
@@ -821,7 +859,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
           /*
           1 
           ≈сли —уммаѕлатежа не равна 0
-          20208/ACC_30232_06
+          20208/GENERAL_ACC
           */
           if r.AMOUNTOFPAYMENT <> 0 then
             /*¬ыбираем сумму комиссии по услуге и терминалу (наше направление)*/
@@ -836,7 +874,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
               POST(id_sess_       => r.SESS_ID,
                    department_    => r.department,
                    real_payer_    => r.acc_20208,
-                   real_receiver_ => r.ACC_30232_06,
+                   real_receiver_ => r.GENERAL_ACC,
                    payer_         => '—чет терминала ' || r.idterm ||
                                      ' отделени€ ' || r.department,
                    receiver_      => '—чет общей суммы транзакции ' ||
@@ -853,14 +891,14 @@ DOC_NUM: <xsl:value-of select="ABC"/>
             end if;
             /*
             ”бираем —дачу
-            ACC_30232_06/30232810700000010009
+            GENERAL_ACC/30232810700000010009
             */
             if r.AMOUNTTOCHECK <> 0 then
               num := num + 1;
               POST(id_sess_       => r.SESS_ID,
                    department_    => r.department,
-                   real_payer_    => r.ACC_30232_06,
-                   real_receiver_ => '30232810700000010009',
+                   real_payer_    => r.GENERAL_ACC,
+                   real_receiver_ => r.DEAL_ACC,
                    payer_         => '—чет общей суммы транзакции ' ||
                                      r.idterm || ' отделени€ ' ||
                                      r.department,
@@ -892,8 +930,8 @@ DOC_NUM: <xsl:value-of select="ABC"/>
               num := num + 1;
               POST(id_sess_       => r.SESS_ID,
                    department_    => r.department,
-                   real_payer_    => r.ACC_30232_06,
-                   real_receiver_ => '30232810100000010010',
+                   real_payer_    => r.GENERAL_ACC,
+                   real_receiver_ => r.GENERAL_COMIS,
                    payer_         => '—чет общей суммы транзакции ' ||
                                      r.idterm || ' отделени€ ' ||
                                      r.department,
@@ -918,7 +956,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
             /*
             5 
             ≈сли —уммаѕлатежа не равно 0
-            ACC_30232_06/acc40911
+            GENERAL_ACC/acc40911
             */
             if r.AMOUNTOFPAYMENT <> 0 and r.AMOUNTWITHCHECKS = 0 then
               select COMISSION
@@ -956,7 +994,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
               num := num + 1;
               POST(id_sess_       => r.SESS_ID,
                    department_    => r.department,
-                   real_payer_    => r.ACC_30232_06,
+                   real_payer_    => r.GENERAL_ACC,
                    real_receiver_ => r.acc40911,
                    payer_         => '—чет общей суммы транзакции ' ||
                                      r.idterm || ' отделени€ ' ||
@@ -980,7 +1018,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
               num := num + 1;
               POST(id_sess_       => r.SESS_ID,
                    department_    => r.department,
-                   real_payer_    => r.ACC_30232_06,
+                   real_payer_    => r.GENERAL_ACC,
                    real_receiver_ => r.acc40911,
                    payer_         => '—чет общей суммы транзакции ' ||
                                      r.idterm || ' отделени€ ' ||
@@ -1005,7 +1043,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
             6 
             acc40911/ACC_REC
             */
-            if r.AMOUNTOFPAYMENT <> 0 then
+            if r.AMOUNTOFPAYMENT <> 0 and r.kbk_payer is not null then
               select COMISSION
                 into comis_rate
                 from z_sb_termserv_dbt t
@@ -1045,7 +1083,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
             /*r.bank_cor_acc,CORACC_PAYER_2  => '30102810900000000017'*/
             /*
             ≈сли —уммаЌа„ек не равно 0    
-            30232810700000010009/ACC_30232_06
+            30232810700000010009/GENERAL_ACC
             30110810100000000003/30232810700000010012
             */
             /*ќплата со сдачи
@@ -1097,7 +1135,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                   /*наш или нет терминал*/
                   select count(*)
                     into bnk_deal
-                    from z_sb_terminal_dbt t
+                    from Z_SB_TERMINAL_AMRA_DBT t
                    where t.name = pnmb;
                   /*наш или нет терминал*/
                 
@@ -1112,8 +1150,8 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                       num := num + 1;
                       POST(id_sess_       => r.SESS_ID,
                            department_    => r.department,
-                           real_payer_    => '30232810700000010009',
-                           real_receiver_ => r.ACC_30232_06,
+                           real_payer_    => r.DEAL_ACC,
+                           real_receiver_ => r.GENERAL_ACC,
                            payer_         => '—чет общей суммы транзакции ' ||
                                              r.idterm || ' отделени€ ' ||
                                              r.department,
@@ -1166,7 +1204,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                     POST(id_sess_       => r.SESS_ID,
                          department_    => r.department,
                          real_payer_    => '30232810700000010012',
-                         real_receiver_ => '30232810400000010011',
+                         real_receiver_ => r.CLEAR_SUM,
                          payer_         => '—чет общей суммы транзакции ' ||
                                            r.idterm || ' отделени€ ' ||
                                            r.department,
@@ -1196,11 +1234,11 @@ DOC_NUM: <xsl:value-of select="ABC"/>
           
           ≈сли аварийна€ сумма
           
-          acc_20208/ACC_30232_06
+          acc_20208/GENERAL_ACC
           
-          ACC_30232_06/30232810400000010008
+          GENERAL_ACC/30232810400000010008
           
-          ACC_30232_06/30232810700000010009
+          GENERAL_ACC/30232810700000010009
           
           */
         
@@ -1216,7 +1254,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
             POST(id_sess_       => r.SESS_ID,
                  department_    => r.department,
                  real_payer_    => r.acc_20208,
-                 real_receiver_ => r.ACC_30232_06,
+                 real_receiver_ => r.GENERAL_ACC,
                  payer_         => '—чет терминала ' || r.idterm ||
                                    ' отделени€ ' || r.department,
                  receiver_      => '—чет аварийного платежа ' || r.idterm ||
@@ -1233,8 +1271,8 @@ DOC_NUM: <xsl:value-of select="ABC"/>
           num := num + 1;
           POST(id_sess_       => r.SESS_ID,
                department_    => r.department,
-               real_payer_    => r.ACC_30232_06,
-               real_receiver_ => '30232810400000010008',
+               real_payer_    => r.GENERAL_ACC,
+               real_receiver_ => r.CRASH_ACC,
                payer_         => '—чет общей суммы транзакции ' || r.idterm ||
                                  ' отделени€ ' || r.department,
                receiver_      => '—чет аварийного платежа ' || r.idterm ||
@@ -1251,8 +1289,8 @@ DOC_NUM: <xsl:value-of select="ABC"/>
             num := num + 1;
             POST(id_sess_       => r.SESS_ID,
                  department_    => r.department,
-                 real_payer_    => r.ACC_30232_06,
-                 real_receiver_ => '30232810700000010009',
+                 real_payer_    => r.GENERAL_ACC,
+                 real_receiver_ => r.DEAL_ACC,
                  payer_         => '—чет общей суммы транзакции ' ||
                                    r.idterm || ' отделени€ ' || r.department,
                  receiver_      => '—чет оплаты со сдачи' || r.idterm ||
@@ -1274,31 +1312,35 @@ DOC_NUM: <xsl:value-of select="ABC"/>
       7
       30232810100000010010/30110810100000000003
       */
-      for r in (select sum(to_number(replace(replace(replace(NKAMOUNT,
-                                                             '-',
-                                                             ''),
-                                                     '.',
-                                                     ','),
-                                             '†',
-                                             ''))) summ,
-                       trunc(PAYDATE) PAYDATE,
-                       --t.checknumber,
-                       SERVICE
-                  from Z_SB_TRANSACT_AMRA_DBT t
-                 where t.SESS_ID = id_sess
-                   and t.TRANSACTIONTYPE not in
-                       ('»нкассаци€',
-                        'ƒокаткаѕлатежа')
-                   and substr(NKAMOUNT, 1, 1) = '-'
-                   and STATUS = '00'
-                      --and t.checknumber = input_number
-                      --and trunc(PAYDATE) = input_date
-                   and PROVIDER = '—берЅанк'
-                   and t.TERMINAL in (select NAME from Z_SB_TERMINAL_DBT)
-                 group by SERVICE, trunc(PAYDATE)) loop
+      for r in (select sum(summ) summ, PAYDATE, GENERAL_COMIS, SERVICE
+                  from (select to_number(replace(replace(replace(NKAMOUNT,
+                                                                 '-',
+                                                                 ''),
+                                                         '.',
+                                                         ','),
+                                                 '†',
+                                                 '')) summ,
+                               trunc(PAYDATE) PAYDATE,
+                               (select GENERAL_COMIS
+                                  from Z_SB_TERMINAL_AMRA_DBT
+                                 where NAME = t.TERMINAL) GENERAL_COMIS,
+                               SERVICE
+                          from Z_SB_TRANSACT_AMRA_DBT t
+                         where t.SESS_ID = id_sess
+                           and t.TRANSACTIONTYPE not in
+                               ('»нкассаци€',
+                                'ƒокаткаѕлатежа')
+                           and substr(NKAMOUNT, 1, 1) = '-'
+                           and STATUS = '00'
+                              --and t.checknumber = input_number
+                              --and trunc(PAYDATE) = input_date
+                           and PROVIDER = '—берЅанк'
+                           and t.TERMINAL in
+                               (select NAME from Z_SB_TERMINAL_AMRA_DBT))
+                 group by SERVICE, PAYDATE, GENERAL_COMIS) loop
         num := num + 1;
         POST(id_sess_       => id_sess,
-             real_payer_    => '30232810100000010010',
+             real_payer_    => r.GENERAL_COMIS,
              real_receiver_ => '30110810100000000003',
              payer_         => 'ќбща€ сумма комиссии',
              receiver_      => ' орсчет јмра',
@@ -1340,12 +1382,12 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                    and PROVIDER = '—берЅанк'
                       --and t.checknumber = input_number
                       --and trunc(PAYDATE) = input_date
-                   and t.TERMINAL in (select NAME from Z_SB_TERMINAL_DBT)
+                   and t.TERMINAL in (select NAME from Z_SB_TERMINAL_AMRA_DBT)
                 \*group by SERVICE, trunc(PAYDATE)*\
                 ) loop
         num := num + 1;
         POST(id_sess_       => id_sess,
-             real_payer_    => '30232810100000010010',
+             real_payer_    => r.GENERAL_COMIS,
              real_receiver_ => '70107810000001720109',
              payer_         => 'ќбща€ сумма комиссии',
              receiver_      => '—чет комиссии ',
@@ -1381,6 +1423,12 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                                          '†',
                                          '')) summ,
                        trunc(PAYDATE) PAYDATE,
+                       (select GENERAL_COMIS
+                          from Z_SB_TERMINAL_AMRA_DBT
+                         where NAME = t.TERMINAL) GENERAL_COMIS,
+                       (select INCOME
+                          from Z_SB_TERMINAL_AMRA_DBT
+                         where NAME = t.TERMINAL) INCOME,
                        t.checknumber,
                        SERVICE
                   from Z_SB_TRANSACT_AMRA_DBT t
@@ -1392,13 +1440,14 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                    and PROVIDER = '—берЅанк'
                       --and t.checknumber = input_number
                       --and trunc(PAYDATE) = input_date
-                   and t.TERMINAL in (select NAME from Z_SB_TERMINAL_DBT)
+                   and t.TERMINAL in
+                       (select NAME from Z_SB_TERMINAL_AMRA_DBT)
                 /*group by SERVICE, trunc(PAYDATE)*/
                 ) loop
         num := num + 1;
         POST(id_sess_       => id_sess,
-             real_payer_    => '30232810100000010010',
-             real_receiver_ => '70107810000001720109',
+             real_payer_    => r.GENERAL_COMIS,
+             real_receiver_ => r.INCOME,
              payer_         => 'ќбща€ сумма комиссии',
              receiver_      => '—чет комиссии ',
              okpo_receiver  => '11000572',
@@ -1427,7 +1476,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
               POST(id_sess_       => r.SESS_ID,
                    department_    => r.department,
                    real_payer_    => r.acc_20208,
-                   real_receiver_ => r.ACC_30232_06,
+                   real_receiver_ => r.GENERAL_ACC,
                    payer_         => '—чет терминала ' || r.idterm ||
                                      ' отделени€ ' || r.department,
                    receiver_      => '—чет общей суммы транзакции ' ||
@@ -1447,8 +1496,8 @@ DOC_NUM: <xsl:value-of select="ABC"/>
               num := num + 1;
               POST(id_sess_       => r.SESS_ID,
                    department_    => r.department,
-                   real_payer_    => r.ACC_30232_06,
-                   real_receiver_ => '30232810700000010009',
+                   real_payer_    => r.GENERAL_ACC,
+                   real_receiver_ => r.DEAL_ACC,
                    payer_         => '—чет общей суммы транзакции ' ||
                                      r.idterm || ' отделени€ ' ||
                                      r.department,
@@ -1468,8 +1517,8 @@ DOC_NUM: <xsl:value-of select="ABC"/>
               num := num + 1;
               POST(id_sess_       => r.SESS_ID,
                    department_    => r.department,
-                   real_payer_    => r.ACC_30232_06,
-                   real_receiver_ => '30232810100000010010',
+                   real_payer_    => r.GENERAL_ACC,
+                   real_receiver_ => r.GENERAL_COMIS,
                    payer_         => '—чет общей суммы транзакции ' ||
                                      r.idterm || ' отделени€ ' ||
                                      r.department,
@@ -1488,8 +1537,8 @@ DOC_NUM: <xsl:value-of select="ABC"/>
               num := num + 1;
               POST(id_sess_       => r.SESS_ID,
                    department_    => r.department,
-                   real_payer_    => r.ACC_30232_06,
-                   real_receiver_ => '30232810400000010011',
+                   real_payer_    => r.GENERAL_ACC,
+                   real_receiver_ => r.CLEAR_SUM,
                    payer_         => '—чет общей суммы транзакции ' ||
                                      r.idterm || ' отделени€ ' ||
                                      r.department,
@@ -1507,8 +1556,8 @@ DOC_NUM: <xsl:value-of select="ABC"/>
               num := num + 1;
               POST(id_sess_       => r.SESS_ID,
                    department_    => r.department,
-                   real_payer_    => r.ACC_30232_06,
-                   real_receiver_ => '30232810400000010011',
+                   real_payer_    => r.GENERAL_ACC,
+                   real_receiver_ => r.CLEAR_SUM,
                    payer_         => '—чет общей суммы транзакции ' ||
                                      r.idterm || ' отделени€ ' ||
                                      r.department,
@@ -1570,7 +1619,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                   \*наш или нет терминал*\
                   select count(*)
                     into bnk_deal
-                    from z_sb_terminal_dbt t
+                    from Z_SB_TERMINAL_AMRA_DBT t
                    where t.name = pnmb;
                   \*наш или нет терминал*\
                 
@@ -1587,8 +1636,8 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                         num := num + 1;
                         POST(id_sess_       => r.SESS_ID,
                              department_    => r.department,
-                             real_payer_    => r.ACC_30232_06,
-                             real_receiver_ => '30232810400000010011',
+                             real_payer_    => r.GENERAL_ACC,
+                             real_receiver_ => r.CLEAN_SUM,
                              payer_         => '—чет общей суммы транзакции ' ||
                                                r.idterm || ' отделени€ ' ||
                                                r.department,
@@ -1608,8 +1657,8 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                         num := num + 1;
                         POST(id_sess_       => r.SESS_ID,
                              department_    => r.department,
-                             real_payer_    => r.ACC_30232_06,
-                             real_receiver_ => '30232810400000010011',
+                             real_payer_    => r.GENERAL_ACC,
+                             real_receiver_ => r.CLEAN_SUM,
                              payer_         => '—чет общей суммы транзакции ' ||
                                                r.idterm || ' отделени€ ' ||
                                                r.department,
@@ -1689,7 +1738,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                   /*наш или нет терминал*/
                   select count(*)
                     into bnk_deal
-                    from z_sb_terminal_dbt t
+                    from Z_SB_TERMINAL_AMRA_DBT t
                    where t.name = pnmb;
                   /*наш или нет терминал*/
                 
@@ -1738,7 +1787,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                     POST(id_sess_       => r.SESS_ID,
                          department_    => r.department,
                          real_payer_    => '30232810700000010012',
-                         real_receiver_ => '30232810400000010011',
+                         real_receiver_ => r.CLEAR_SUM,
                          payer_         => '—чет общей суммы транзакции ' ||
                                            r.idterm || ' отделени€ ' ||
                                            r.department,
@@ -1769,7 +1818,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
             POST(id_sess_       => r.SESS_ID,
                  department_    => r.department,
                  real_payer_    => r.acc_20208,
-                 real_receiver_ => r.ACC_30232_06,
+                 real_receiver_ => r.GENERAL_ACC,
                  payer_         => '—чет терминала ' || r.idterm ||
                                    ' отделени€ ' || r.department,
                  receiver_      => '—чет аварийного платежа ' || r.idterm ||
@@ -1786,8 +1835,8 @@ DOC_NUM: <xsl:value-of select="ABC"/>
           num := num + 1;
           POST(id_sess_       => r.SESS_ID,
                department_    => r.department,
-               real_payer_    => r.ACC_30232_06,
-               real_receiver_ => '30232810400000010008',
+               real_payer_    => r.GENERAL_ACC,
+               real_receiver_ => r.CRASH_ACC,
                payer_         => '—чет общей суммы транзакции ' || r.idterm ||
                                  ' отделени€ ' || r.department,
                receiver_      => '—чет аварийного платежа ' || r.idterm ||
@@ -1804,8 +1853,8 @@ DOC_NUM: <xsl:value-of select="ABC"/>
             num := num + 1;
             POST(id_sess_       => r.SESS_ID,
                  department_    => r.department,
-                 real_payer_    => r.ACC_30232_06,
-                 real_receiver_ => '30232810700000010009',
+                 real_payer_    => r.GENERAL_ACC,
+                 real_receiver_ => r.DEAL_ACC,
                  payer_         => '—чет общей суммы транзакции ' ||
                                    r.idterm || ' отделени€ ' || r.department,
                  receiver_      => '—чет оплаты со сдачи' || r.idterm ||
@@ -1846,7 +1895,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                okpo_receiver  => '11000572',
                sum_           => r.summ,
                ground_        => '”регулирование расчетов за ' || r.date_ || /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               'TR:' || r.checknumber ||*/
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               'TR:' || r.checknumber ||*/
                                  ';SID:' || id_sess,
                kpp_receiver   => '111000171',
                numb           => num,
@@ -1880,8 +1929,8 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                                                             'RUR',
                                                             trunc(sysdate) + 1,
                                                             'R'),
-               ground_        => '”регулирование расчетов за ' || r.date_ || /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             'TR:' || r.checknumber ||*/
+               ground_        => '”регулирование расчетов за ' || r.date_ ||
+                                /*'TR:' || r.checknumber ||*/
                                  ';SID:' || id_sess,
                kpp_receiver   => '111000171',
                numb           => num,
@@ -1898,8 +1947,14 @@ DOC_NUM: <xsl:value-of select="ABC"/>
       3) наша сдача в чужом*
       */
       for r in (select (select DEPARTMENT
-                          from Z_SB_TERMINAL_DBT
+                          from Z_SB_TERMINAL_AMRA_DBT
                          where NAME = t.TERMINAL) DEPARTMENT,
+                       (select DEAL_ACC
+                          from Z_SB_TERMINAL_AMRA_DBT
+                         where NAME = t.TERMINAL) DEAL_ACC,
+                       (select GENERAL_ACC
+                          from Z_SB_TERMINAL_AMRA_DBT
+                         where NAME = t.TERMINAL) GENERAL_ACC,
                        t.*
                   from Z_SB_TRANSACT_AMRA_DBT t
                  where t.SESS_ID = id_sess
@@ -1915,7 +1970,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
         /*наш или нет терминал*/
         select count(*)
           into bnk_deal_for_chek
-          from z_sb_terminal_dbt t
+          from Z_SB_TERMINAL_AMRA_DBT t
          where t.name = r.terminal;
       
         /*наш или нет терминал*/
@@ -1969,7 +2024,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
               /*наш или нет терминал*/
               select count(*)
                 into bnk_deal
-                from z_sb_terminal_dbt t
+                from Z_SB_TERMINAL_AMRA_DBT t
                where t.name = pnmb;
               /*наш или нет терминал*/
             
@@ -1988,11 +2043,13 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                              trunc(r.paydate),
                              r.service,
                              1,
-                             r.checknumber);
+                             r.checknumber,
+                             r.DEAL_ACC,
+                             r.GENERAL_ACC);
                   /*num := num + 1;
                   POST(id_sess_       => id_sess,
-                       real_payer_    => '30232810700000010009',
-                       real_receiver_ => '30232810400000010011',
+                       real_payer_    => r.DEAL_ACC,
+                       real_receiver_ => r.CLEAN_SUM,
                        payer_         => '—чет оплаты со сдачи ',
                        receiver_      => '„истый платеж',
                        okpo_receiver  => '11000572',
@@ -2085,7 +2142,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
               /*наш или нет терминал*/
               select count(*)
                 into bnk_deal
-                from z_sb_terminal_dbt t
+                from Z_SB_TERMINAL_AMRA_DBT t
                where t.name = pnmb;
               /*наш или нет терминал*/
             
@@ -2103,10 +2160,12 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                              trunc(r.paydate),
                              r.service,
                              2,
-                             r.checknumber);
+                             r.checknumber,
+                             r.DEAL_ACC,
+                             r.GENERAL_ACC);
                   /*num := num + 1;
                   POST(id_sess_       => id_sess,
-                       real_payer_    => '30232810700000010009',
+                       real_payer_    => r.DEAL_ACC,
                        real_receiver_ => '30110810100000000003',
                        payer_         => '—чет оплаты со сдачи ',
                        receiver_      => ' орсчет јмра',
@@ -2133,14 +2192,18 @@ DOC_NUM: <xsl:value-of select="ABC"/>
       end loop;
     
       --јгрегаци€
-      for r in (select sum(summ) summ, t.date_, t.service_ --, t.checknumber
+      for r in (select sum(summ) summ,
+                       t.date_,
+                       t.service_,
+                       t.deal_acc,
+                       t.general_acc --, t.checknumber
                   from Z_SB_CALC_DEAL_ t
                  where t.vector = 1
-                 group by t.date_, t.service_) loop
+                 group by t.date_, t.service_, deal_acc, general_acc) loop
         num := num + 1;
         POST(id_sess_       => id_sess,
-             real_payer_    => '30232810700000010009',
-             real_receiver_ => '30232810800000010006',
+             real_payer_    => r.DEAL_ACC,
+             real_receiver_ => r.general_acc,
              payer_         => '—чет оплаты со сдачи ',
              receiver_      => '„истый платеж',
              okpo_receiver  => '11000572',
@@ -2152,13 +2215,13 @@ DOC_NUM: <xsl:value-of select="ABC"/>
              numb           => num,
              PAYDATE_       => r.date_);
       end loop;
-      for r in (select sum(summ) summ, t.date_, t.service_ --, t.checknumber
+      for r in (select sum(summ) summ, t.date_, t.service_, t.deal_acc --, t.checknumber
                   from Z_SB_CALC_DEAL_ t
                  where t.vector = 2
-                 group by t.date_, t.service_) loop
+                 group by t.date_, t.service_, t.deal_acc) loop
         num := num + 1;
         POST(id_sess_       => id_sess,
-             real_payer_    => '30232810700000010009',
+             real_payer_    => r.DEAL_ACC,
              real_receiver_ => '30110810100000000003',
              payer_         => '—чет оплаты со сдачи ',
              receiver_      => ' орсчет јмра',
@@ -2180,24 +2243,29 @@ DOC_NUM: <xsl:value-of select="ABC"/>
       */
     
       --7
-      for r in (select sum(AMOUNTOFPAYMENT) summ,
-                       trunc(PAYDATE) PAYDATE,
-                       SERVICE /*,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       t.checknumber*/
-                  from Z_SB_TRANSACT_AMRA_DBT t
-                 where t.SESS_ID = id_sess
-                   and t.TRANSACTIONTYPE not in
-                       ('»нкассаци€',
-                        'ƒокаткаѕлатежа')
-                   and STATUS = '00'
-                   and PROVIDER <> '—берЅанк'
-                      --and t.checknumber = input_number
-                      --and trunc(PAYDATE) = input_date
-                   and t.TERMINAL in (select NAME from Z_SB_TERMINAL_DBT)
-                 group by SERVICE, trunc(PAYDATE)) loop
+      for r in (select sum(summ) summ, PAYDATE, SERVICE, CLEAR_SUM
+                  from (select AMOUNTOFPAYMENT summ,
+                               trunc(PAYDATE) PAYDATE,
+                               SERVICE,
+                               (select CLEAR_SUM
+                                  from Z_SB_TERMINAL_AMRA_DBT
+                                 where NAME = t.TERMINAL) CLEAR_SUM
+                        /*t.checknumber */
+                          from Z_SB_TRANSACT_AMRA_DBT t
+                         where t.SESS_ID = id_sess
+                           and t.TRANSACTIONTYPE not in
+                               ('»нкассаци€',
+                                'ƒокаткаѕлатежа')
+                           and STATUS = '00'
+                           and PROVIDER <> '—берЅанк'
+                              --and t.checknumber = input_number
+                              --and trunc(PAYDATE) = input_date
+                           and t.TERMINAL in
+                               (select NAME from Z_SB_TERMINAL_AMRA_DBT))
+                 group by SERVICE, PAYDATE, CLEAR_SUM) loop
         num := num + 1;
         POST(id_sess_       => id_sess,
-             real_payer_    => '30232810400000010011',
+             real_payer_    => r.CLEAR_SUM,
              real_receiver_ => '30110810100000000003',
              payer_         => '—чет чистого платежа ',
              receiver_      => ' орсчет јмра',
@@ -2205,38 +2273,43 @@ DOC_NUM: <xsl:value-of select="ABC"/>
              sum_           => r.summ,
              ground_        => '–асчеты с дилером потерминальной сети по усл. ' ||
                                r.SERVICE || ' за ' || r.PAYDATE || /*'TR:' ||
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         r.checknumber || */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   r.checknumber || */
                                ';SID:' || id_sess,
              kpp_receiver   => '111000171',
              numb           => num,
              PAYDATE_       => r.PAYDATE);
       end loop;
       --8
-      for r in (select sum(to_number(replace(replace(replace(NKAMOUNT,
-                                                             '-',
-                                                             ''),
-                                                     '.',
-                                                     ','),
-                                             '†',
-                                             ''))) summ,
-                       trunc(PAYDATE) PAYDATE,
-                       --t.checknumber,
-                       SERVICE
-                  from Z_SB_TRANSACT_AMRA_DBT t
-                 where t.SESS_ID = id_sess
-                   and t.TRANSACTIONTYPE not in
-                       ('»нкассаци€',
-                        'ƒокаткаѕлатежа')
-                   and substr(NKAMOUNT, 1, 1) = '-'
-                   and STATUS = '00'
-                   and PROVIDER <> '—берЅанк'
-                      --and t.checknumber = input_number
-                      --and trunc(PAYDATE) = input_date
-                   and t.TERMINAL in (select NAME from Z_SB_TERMINAL_DBT)
-                 group by SERVICE, trunc(PAYDATE)) loop
+      for r in (select sum(summ) summ, PAYDATE, GENERAL_COMIS, SERVICE
+                  from (select to_number(replace(replace(replace(NKAMOUNT,
+                                                                 '-',
+                                                                 ''),
+                                                         '.',
+                                                         ','),
+                                                 '†',
+                                                 '')) summ,
+                               trunc(PAYDATE) PAYDATE,
+                               (select GENERAL_COMIS
+                                  from Z_SB_TERMINAL_AMRA_DBT
+                                 where NAME = t.TERMINAL) GENERAL_COMIS,
+                               --t.checknumber,
+                               SERVICE
+                          from Z_SB_TRANSACT_AMRA_DBT t
+                         where t.SESS_ID = id_sess
+                           and t.TRANSACTIONTYPE not in
+                               ('»нкассаци€',
+                                'ƒокаткаѕлатежа')
+                           and substr(NKAMOUNT, 1, 1) = '-'
+                           and STATUS = '00'
+                           and PROVIDER <> '—берЅанк'
+                              --and t.checknumber = input_number
+                              --and trunc(PAYDATE) = input_date
+                           and t.TERMINAL in
+                               (select NAME from Z_SB_TERMINAL_AMRA_DBT)) 
+                 group by SERVICE, PAYDATE, GENERAL_COMIS) loop
         num := num + 1;
         POST(id_sess_       => id_sess,
-             real_payer_    => '30232810100000010010',
+             real_payer_    => r.GENERAL_COMIS,
              real_receiver_ => '30110810100000000003',
              payer_         => 'ќбща€ сумма комиссии',
              receiver_      => ' орсчет јмра',
@@ -2262,6 +2335,12 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                                                                    '')),
                                                  0) summ,
                        trunc(PAYDATE) PAYDATE,
+                       (select GENERAL_COMIS
+                          from Z_SB_TERMINAL_AMRA_DBT
+                         where NAME = t.TERMINAL) GENERAL_COMIS,
+                       (select INCOME
+                          from Z_SB_TERMINAL_AMRA_DBT
+                         where NAME = t.TERMINAL) INCOME,
                        t.checknumber,
                        SERVICE
                   from Z_SB_TRANSACT_AMRA_DBT t
@@ -2274,13 +2353,14 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                    and PROVIDER <> '—берЅанк'
                       --and t.checknumber = input_number
                       --and trunc(PAYDATE) = input_date
-                   and t.TERMINAL in (select NAME from Z_SB_TERMINAL_DBT)
+                   and t.TERMINAL in
+                       (select NAME from Z_SB_TERMINAL_AMRA_DBT)
                 /*group by SERVICE, trunc(PAYDATE)*/
                 ) loop
         num := num + 1;
         POST(id_sess_       => id_sess,
-             real_payer_    => '30232810100000010010',
-             real_receiver_ => '70107810000001720109',
+             real_payer_    => r.GENERAL_COMIS,
+             real_receiver_ => r.INCOME,
              payer_         => 'ќбща€ сумма комиссии',
              receiver_      => '—чет комиссии ',
              okpo_receiver  => '11000572',
@@ -2295,25 +2375,32 @@ DOC_NUM: <xsl:value-of select="ABC"/>
       end loop;
     
       --10
-      for r in (select sum(NKAMOUNT) summ, trunc(PAYDATE) PAYDATE, SERVICE /*,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       t.checknumber*/
-                  from Z_SB_TRANSACT_AMRA_DBT t
-                 where t.SESS_ID = id_sess
-                   and t.TRANSACTIONTYPE not in
-                       ('»нкассаци€',
-                        'ƒокаткаѕлатежа')
-                   and substr(NKAMOUNT, 1, 1) <> '-'
-                   and NKAMOUNT <> '0'
-                   and STATUS = '00'
-                      --and trunc(PAYDATE) = input_date
-                      --and t.checknumber = input_number
-                   and PROVIDER <> '—берЅанк'
-                   and t.TERMINAL in (select NAME from Z_SB_TERMINAL_DBT)
-                 group by SERVICE, trunc(PAYDATE)) loop
+      for r in (select sum(summ) summ, PAYDATE, SERVICE, INCOME
+                  from (select NKAMOUNT summ,
+                               trunc(PAYDATE) PAYDATE,
+                               SERVICE,
+                               (select INCOME
+                                  from Z_SB_TERMINAL_AMRA_DBT
+                                 where NAME = t.TERMINAL) INCOME
+                        /*,t.checknumber*/
+                          from Z_SB_TRANSACT_AMRA_DBT t
+                         where t.SESS_ID = id_sess
+                           and t.TRANSACTIONTYPE not in
+                               ('»нкассаци€',
+                                'ƒокаткаѕлатежа')
+                           and substr(NKAMOUNT, 1, 1) <> '-'
+                           and NKAMOUNT <> '0'
+                           and STATUS = '00'
+                              --and trunc(PAYDATE) = input_date
+                              --and t.checknumber = input_number
+                           and PROVIDER <> '—берЅанк'
+                           and t.TERMINAL in
+                               (select NAME from Z_SB_TERMINAL_AMRA_DBT)) 
+                 group by SERVICE, PAYDATE, INCOME) loop
         num := num + 1;
         POST(id_sess_       => id_sess,
              real_payer_    => '30110810100000000003',
-             real_receiver_ => '70107810000001720109',
+             real_receiver_ => r.INCOME,
              payer_         => 'ќбща€ сумма комиссии',
              receiver_      => '—чет комиссии ',
              okpo_receiver  => '11000572',

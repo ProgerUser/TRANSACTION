@@ -17,7 +17,7 @@ create or replace package body z_sb_create_tr_amra is
     BEGIN
       SELECT LOWER(department)
         INTO ret
-        FROM z_sb_terminal_dbt
+        FROM z_sb_terminal_amra_dbt
        WHERE LOWER(TRIM(name)) = LOWER(TRIM(str));
     
       RETURN ret;
@@ -29,7 +29,7 @@ create or replace package body z_sb_create_tr_amra is
   END makedprt;
   /*Функция нахождения отделения из наименования терминала оплаты*/
 
-  /*Функция добавления файл*/
+  /*Функция добавления файла*/
   FUNCTION fn_sess_add(fileclob_ clob, path varchar2, file_name_ VARCHAR2)
     RETURN VARCHAR IS
     ret     varchar(500);
@@ -57,10 +57,10 @@ create or replace package body z_sb_create_tr_amra is
       when others then
         rollback;
         ret := 'Exception;' || SQLERRM;
-    END makedprt;
+    END;
     return ret;
   end fn_sess_add;
-  /*Функция добавления файл*/
+  /*Функция добавления файла*/
 
   /*Процедура записи лога*/
   PROCEDURE writelog(datetimepayment_ VARCHAR2 default sysdate,
@@ -320,7 +320,7 @@ create or replace package body z_sb_create_tr_amra is
         if r.provider = 'СберБанк' then
           select count(*)
             into serch_service
-            from z_sb_termserv_dbt t
+            from z_sb_termserv_amra_dbt t
            where t.idterm = r.terminal
              and t.name = r.service;
           if serch_service > 0 then
@@ -373,7 +373,7 @@ create or replace package body z_sb_create_tr_amra is
             /*наш или нет терминал*/
             select count(*)
               into bnk_deal
-              from z_sb_terminal_dbt t
+              from z_sb_terminal_amra_dbt t
              where t.name = term_deal;
           
             /*если наш терминал*/
