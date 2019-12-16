@@ -53,49 +53,49 @@ public class PrintReport extends JFrame {
 					+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
 
 			Statement sqlStatement = conn.createStatement();
-			String readRecordSQL = "select acc,\r\n" + "        debet,\r\n" + "       credit,\r\n" + "       case\r\n"
-					+ "         when debet < credit then\r\n" + "          credit - debet\r\n" + "         else\r\n"
-					+ "          debet - credit\r\n" + "       end razn , date_\r\n"
-					+ "  from (select distinct acc,\r\n"
-					+ "                        BALANCE.AccCredTO(date_, date_ + 1, acc, 'RUR') credit,\r\n"
-					+ "                        BALANCE.AccDebTO(date_, date_ + 1, acc, 'RUR') debet , date_\r\n"
-					+ "          from (select DEBET acc, DTRNCREATE date_\r\n"
-					+ "                  from (select DTRNCREATE,\r\n"
-					+ "                               ITRNDOCNUM DOC_NUM,\r\n"
-					+ "                               CTRNACCD   debet,\r\n"
-					+ "                               CTRNACCC   credit,\r\n"
-					+ "                               MTRNRSUM   summ\r\n" + "                          from xxi.trn t\r\n"
-					+ "                         where CTRNIDOPEN = (select upper(user) from dual)\r\n"
-					+ "                           AND (DTRNCREATE, CTRNACCD, CTRNACCC, MTRNRSUM,\r\n"
-					+ "                                CTRNPURP) in\r\n"
-					+ "                               (select DATE_VALUE,\r\n"
-					+ "                                       ACCOUNT_PAYER,\r\n"
-					+ "                                       ACCOUNT_RECEIVER,\r\n"
-					+ "                                       SUM,\r\n"
-					+ "                                       GROUND\r\n"
-					+ "                                  from xxi.z_sb_postdoc_amra_dbt\r\n"
-					+ "                                 where sess_id = " + sess_id + ")\r\n"
-					+ "                         order by DOC_NUM)\r\n"
-					+ "                 group by DEBET, CREDIT, DTRNCREATE\r\n" + "                union all\r\n"
-					+ "                select CREDIT acc, DTRNCREATE date_\r\n"
-					+ "                  from (select DTRNCREATE,\r\n"
-					+ "                               ITRNDOCNUM DOC_NUM,\r\n"
-					+ "                               CTRNACCD   debet,\r\n"
-					+ "                               CTRNACCC   credit,\r\n"
-					+ "                               MTRNRSUM   summ\r\n" + "                          from xxi.trn t\r\n"
-					+ "                         where CTRNIDOPEN = (select upper(user) from dual)\r\n"
-					+ "                           AND (DTRNCREATE, CTRNACCD, CTRNACCC, MTRNRSUM,\r\n"
-					+ "                                CTRNPURP) in\r\n"
-					+ "                               (select DATE_VALUE,\r\n"
-					+ "                                       ACCOUNT_PAYER,\r\n"
-					+ "                                       ACCOUNT_RECEIVER,\r\n"
-					+ "                                       SUM,\r\n"
-					+ "                                       GROUND\r\n"
-					+ "                                  from xxi.z_sb_postdoc_amra_dbt\r\n"
-					+ "                                 where sess_id = " + sess_id + ")\r\n"
-					+ "                         order by DOC_NUM)\r\n"
-					+ "                 group by DEBET, CREDIT, DTRNCREATE)\r\n" + "         order by ACC asc)";
+			String readRecordSQL = "select acc,\r\n" + 
+					"       debet,\r\n" + 
+					"       credit,\r\n" + 
+					"       case\r\n" + 
+					"         when debet < credit then\r\n" + 
+					"          credit - debet\r\n" + 
+					"         else\r\n" + 
+					"          debet - credit\r\n" + 
+					"       end razn,\r\n" + 
+					"       date_\r\n" + 
+					"  from (select distinct acc,\r\n" + 
+					"                        BALANCE.AccCredTO(date_, date_ + 1, acc, 'RUR') credit,\r\n" + 
+					"                        BALANCE.AccDebTO(date_, date_ + 1, acc, 'RUR') debet,\r\n" + 
+					"                        date_\r\n" + 
+					"          from (select DEBET acc, DTRNCREATE date_\r\n" + 
+					"                  from (select DTRNCREATE,\r\n" + 
+					"                               ITRNDOCNUM DOC_NUM,\r\n" + 
+					"                               CTRNACCD   debet,\r\n" + 
+					"                               CTRNACCC   credit,\r\n" + 
+					"                               MTRNRSUM   summ\r\n" + 
+					"                          from xxi.trn t\r\n" + 
+					"                         where ITRNNUM in (select KINDPAYMENT\r\n" + 
+					"                                             from xxi.z_sb_postdoc_amra_dbt\r\n" + 
+					"                                            where sess_id = "+sess_id+")\r\n" + 
+					"                         order by DOC_NUM)\r\n" + 
+					"                 group by DEBET, CREDIT, DTRNCREATE\r\n" + 
+					"                union all\r\n" + 
+					"                select CREDIT acc, DTRNCREATE date_\r\n" + 
+					"                  from (select DTRNCREATE,\r\n" + 
+					"                               ITRNDOCNUM DOC_NUM,\r\n" + 
+					"                               CTRNACCD   debet,\r\n" + 
+					"                               CTRNACCC   credit,\r\n" + 
+					"                               MTRNRSUM   summ\r\n" + 
+					"                          from xxi.trn t\r\n" + 
+					"                         where ITRNNUM in (select KINDPAYMENT\r\n" + 
+					"                                             from xxi.z_sb_postdoc_amra_dbt\r\n" + 
+					"                                            where sess_id = "+sess_id+")\r\n" + 
+					"                         order by DOC_NUM)\r\n" + 
+					"                 group by DEBET, CREDIT, DTRNCREATE)\r\n" + 
+					"         order by ACC asc)\r\n" + 
+					"";
 			ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
+			System.out.println(readRecordSQL);
 			while (myResultSet.next()) {
 				list = new Item();
 				list.setacc(myResultSet.getString("acc"));
