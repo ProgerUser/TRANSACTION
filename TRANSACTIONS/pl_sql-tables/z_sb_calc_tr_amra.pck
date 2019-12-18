@@ -219,9 +219,8 @@ select DTRNCREATE PAYDATE,
        CTRNACCC || '|' || MTRNRSUM DESC_,
        ' ' DEB_CRED
   from trn
- where CTRNIDOPEN = (select upper(user) from dual)
-   AND (DTRNCREATE, CTRNACCD, CTRNACCC, MTRNRSUM, CTRNPURP) in
-       (select DATE_VALUE, ACCOUNT_PAYER, ACCOUNT_RECEIVER, SUM, GROUND
+ where ITRNNUM in
+       (select KINDPAYMENT
           from z_sb_postdoc_amra_dbt
          where sess_id =
          ~' || sessid || ')');
@@ -258,9 +257,8 @@ select DTRNCREATE PAYDATE,
        MTRNRSUM,
        CTRNPURP
   from trn
- where CTRNIDOPEN = (select upper(user) from dual)
-   AND (DTRNCREATE, CTRNACCD, MTRNRSUM, CTRNPURP) in
-       (select DATE_VALUE, ACCOUNT_PAYER, SUM, GROUND
+ where ITRNNUM in
+       (select KINDPAYMENT
           from z_sb_postdoc_amra_dbt
          where sess_id = ~' || sessid ||
                                 ') order by ITRNDOCNUM');
@@ -299,37 +297,47 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                    kpp_receiver_    varchar2 DEFAULT null,
                    OKPO_RECEIVER_   varchar2 DEFAULT null,
                    OKATO            varchar2 DEFAULT null) return number is
-    PRAGMA AUTONOMOUS_TRANSACTION;
+    --PRAGMA AUTONOMOUS_TRANSACTION;
     err2    varchar2(2000);
     b       varchar2(60);
     tts     TS.T_DeptInfo;
     itrnnum number;
   begin
     if for_nbra_ = true then
+    
       idoc_reg.SetUpRegisterParams('2TRN');
-      tts.cBudCode   := BUDJCLASSIFCODE_;
-      tts.cOKATOCode := OKATO;
-      b              := Idoc_Reg.Register(ErrorMsg      => err2, -- Сообщение об ошибке для возврата
-                                          PayerAcc      => real_payer1, -- Счет дебета
-                                          RecipientAcc  => real_receiver1, -- Счет получателя
-                                          Summa         => sum1, -- Сумма, если документ нац.вал. то это сумма в рублях
-                                          OpType        => 4, -- Тип операции
-                                          RegDate       => PAYDATE1, -- Дата регистрации
-                                          DocNum        => numb1, -- Номер документа
-                                          BatNum        => 1500, -- Номер пачки
-                                          bIgnoreRB     => true, -- Флаг: игнорировать возникновение красного сальдо
-                                          Purpose       => ground1, -- Назначение платежа
-                                          SubOpType     => 0,
-                                          INNA          => OKPO_PAYER_,
-                                          CorAccO       => CORACC_PAYER_, /*Client_RBIC   => MFO_RECEIVER_*/
-                                          CorAccAName   => BANK_RECEIVER_,
-                                          RecipientName => RECEIVER_,
-                                          MFOa          => MFO_RECEIVER_,
-                                          KPPA          => kpp_receiver_,
-                                          Client_KPP    => '111000171',
-                                          Client_INN    => OKPO_RECEIVER_,
-                                          rDeptInfo     => tts,
-                                          CorAccA       => CORACC_PAYER_2); -- Тип операции 2-го порядка
+      tts.cBudCode     := BUDJCLASSIFCODE_;
+      tts.cOKATOCode   := OKATO;
+      tts.cCreatStatus := '15';
+      tts.cNalPurp     := '0';
+      tts.cNalPeriod   := '0';
+      tts.cNalDocNum   := '0';
+      tts.cNalDocDate  := '0';
+      tts.cNalType     := '0';
+      tts.cDocIndex    := '0';
+    
+      b := Idoc_Reg.Register(ErrorMsg      => err2, -- Сообщение об ошибке для возврата
+                             PayerAcc      => real_payer1, -- Счет дебета
+                             RecipientAcc  => real_receiver1, -- Счет получателя
+                             Summa         => sum1, -- Сумма, если документ нац.вал. то это сумма в рублях
+                             OpType        => 4, -- Тип операции
+                             RegDate       => PAYDATE1, -- Дата регистрации
+                             DocDate       => PAYDATE1, --Дата документа
+                             DocNum        => numb1, -- Номер документа
+                             BatNum        => 1500, -- Номер пачки
+                             bIgnoreRB     => true, -- Флаг: игнорировать возникновение красного сальдо
+                             Purpose       => ground1, -- Назначение платежа
+                             SubOpType     => 0,
+                             INNA          => OKPO_PAYER_,
+                             CorAccO       => CORACC_PAYER_, /*Client_RBIC   => MFO_RECEIVER_*/
+                             CorAccAName   => BANK_RECEIVER_,
+                             RecipientName => RECEIVER_,
+                             MFOa          => MFO_RECEIVER_,
+                             KPPA          => kpp_receiver_,
+                             Client_KPP    => '111000171',
+                             Client_INN    => OKPO_RECEIVER_,
+                             rDeptInfo     => tts,
+                             CorAccA       => CORACC_PAYER_2); -- Тип операции 2-го порядка
       null;
     elsif for_nbra_ = false then
       idoc_reg.SetUpRegisterParams('2TRN');
@@ -353,7 +361,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                id_sess1,
                DC => 'Проводка ' || real_payer1 || '->' || real_receiver1);
     else
-      commit;
+      --commit;
       itrnnum := IDOC_REG.GetLastDocID;
       null;
     end if;
@@ -391,7 +399,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                         chk_            VARCHAR2 DEFAULT NULL,
                         for_nbra        boolean DEFAULT false,
                         trnnum_         number) is
-    PRAGMA AUTONOMOUS_TRANSACTION;
+    --PRAGMA AUTONOMOUS_TRANSACTION;
     res number;
   begin
     SELECT count(lg.sess_id)
@@ -478,7 +486,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
          bo2_,
          numb,
          trnnum_);
-      commit;
+      --commit;
     end if;
   end;
 
@@ -693,6 +701,524 @@ DOC_NUM: <xsl:value-of select="ABC"/>
        group by TRUNC(PAYDATE);
   
     CHEK_302326_3023211 BOOLEAN := FALSE;
+    cursor sbra_with_attr(sid varchar2, numb varchar2) is
+      with dat as
+       (SELECT rownum rn,
+               g.AttributeName,
+               g.AttributeValue,
+               t.recdate,
+               t.paydate,
+               t.currency,
+               t.paymenttype,
+               t.vk,
+               t.dateofoperation,
+               t.dataps,
+               t.dateclearing,
+               t.dealer,
+               t.accountpayer,
+               t.cardnumber,
+               t.operationnumber,
+               t.operationnumberdelivery,
+               t.checknumber,
+               t.checkparent,
+               t.orderofprovidence,
+               t.provider,
+               t.owninown,
+               t.corrected,
+               t.commissionrate,
+               t.status,
+               t.stringfromfile,
+               t.rewardamount,
+               t.ownerincomeamount,
+               t.commissionamount,
+               t.nkamount,
+               t.maxcommissionamount,
+               t.mincommissionamount,
+               t.cashamount,
+               t.sumnalprimal,
+               t.amounttocheck,
+               t.amountofpayment,
+               t.sumofsplitting,
+               t.amountintermediary,
+               t.amountofscs,
+               t.amountwithchecks,
+               t.counter,
+               t.terminal,
+               t.terminalnetwork,
+               t.transactiontype,
+               t.service,
+               t.filetransactions,
+               t.fio,
+               t.checksincoming,
+               t.barcode,
+               t.isaresident,
+               t.valuenotfound,
+               t.providertariff,
+               t.counterchecks,
+               t.countercheck,
+               t.id_,
+               t.detailing,
+               t.walletpayer,
+               t.walletreceiver,
+               t.purposeofpayment,
+               t.dataprovider,
+               t.statusabs,
+               t.sess_id
+          FROM z_sb_transact_amra_dbt t,
+               XMLTABLE('/Атрибуты/Атр' PASSING xmltype(t.attributes_)
+                        COLUMNS Service VARCHAR2(500) PATH '@Услуга',
+                        CheckNumber VARCHAR2(500) PATH '@НомерЧека',
+                        AttributeName VARCHAR2(500) PATH '@ИмяАтрибута',
+                        AttributeValue VARCHAR2(500) PATH '@ЗначениеАтрибута') g
+         where t.SESS_ID = sid
+           and t.checknumber = numb),
+      ATTR_VIEW as
+       (select recdate,
+               paydate,
+               currency,
+               paymenttype,
+               vk,
+               dateofoperation,
+               dataps,
+               dateclearing,
+               dealer,
+               accountpayer,
+               cardnumber,
+               operationnumber,
+               operationnumberdelivery,
+               checkparent,
+               orderofprovidence,
+               provider,
+               owninown,
+               corrected,
+               commissionrate,
+               status,
+               stringfromfile,
+               rewardamount,
+               ownerincomeamount,
+               commissionamount,
+               nkamount,
+               maxcommissionamount,
+               mincommissionamount,
+               cashamount,
+               sumnalprimal,
+               amounttocheck,
+               amountofpayment,
+               sumofsplitting,
+               amountintermediary,
+               amountofscs,
+               amountwithchecks,
+               counter,
+               terminal,
+               terminalnetwork,
+               transactiontype,
+               service,
+               filetransactions,
+               fio,
+               checksincoming,
+               barcode,
+               isaresident,
+               valuenotfound,
+               providertariff,
+               counterchecks,
+               countercheck,
+               id_,
+               detailing,
+               walletpayer,
+               walletreceiver,
+               purposeofpayment,
+               dataprovider,
+               statusabs,
+               sess_id,
+               CHECKNUMBER,
+               "CountPay",
+               "DetailCheque",
+               "HeadCheque",
+               "Id_Платежа",
+               "Price",
+               "account",
+               "БанкПолучатель",
+               "Бик",
+               "ВидПлатежа",
+               "ВидПлатежаНаименование",
+               "ДатаОперации",
+               "ИннПлательщик",
+               "ИннПолучатель",
+               "КБК",
+               "КппБанкПолучатель",
+               "КппПлательщика",
+               "ЛицевойСчетПолучателя",
+               "НомерСтроки",
+               "Номера чеков",
+               "Основание",
+               "Плательщик",
+               "Получатель",
+               "РасчетныйСчет",
+               "Сумма",
+               fio_children,
+               period
+        
+          from dat
+        PIVOT(listagg(AttributeValue, '@~@') within
+         group(
+         order by rn)
+           FOR ATTRIBUTENAME IN('CountPay' "CountPay",
+                               'DetailCheque' "DetailCheque",
+                               'HeadCheque' "HeadCheque",
+                               'Id_Платежа' "Id_Платежа",
+                               'Price' "Price",
+                               'account' "account",
+                               'БанкПолучатель' "БанкПолучатель",
+                               'Бик' "Бик",
+                               'ВидПлатежа' "ВидПлатежа",
+                               'ВидПлатежаНаименование'
+                               "ВидПлатежаНаименование",
+                               'ДатаОперации' "ДатаОперации",
+                               'ИннПлательщик' "ИннПлательщик",
+                               'ИннПолучатель' "ИннПолучатель",
+                               'КБК' "КБК",
+                               'КппБанкПолучатель' "КппБанкПолучатель",
+                               'КппПлательщика' "КппПлательщика",
+                               'ЛицевойСчетПолучателя'
+                               "ЛицевойСчетПолучателя",
+                               'НомерСтроки' "НомерСтроки",
+                               'Номера чеков' "Номера чеков",
+                               'Основание' "Основание",
+                               'Плательщик' "Плательщик",
+                               'Получатель' "Получатель",
+                               'РасчетныйСчет' "РасчетныйСчет",
+                               'Сумма' "Сумма",
+                               'fio_children' fio_children,
+                               'period' period))),
+      aggr_attr as
+       (select t1.l,
+               CHECKNUMBER,
+               "CountPay",
+               "DetailCheque",
+               "HeadCheque",
+               trim((SELECT REGEXP_SUBSTR("Id_Платежа",
+                                         '[^@~@]+',
+                                         1,
+                                         t1.l)
+                      FROM DUAL)) "Id_Платежа",
+               "Price",
+               "account",
+               trim((SELECT REGEXP_SUBSTR("БанкПолучатель",
+                                         '[^@~@]+',
+                                         1,
+                                         t1.l)
+                      FROM DUAL)) "БанкПолучатель",
+               trim((SELECT REGEXP_SUBSTR(fio_children, '[^@~@]+', 1, t1.l)
+                      FROM DUAL)) fio_children,
+               trim((SELECT REGEXP_SUBSTR(period, '[^@~@]+', 1, t1.l)
+                      FROM DUAL)) period,
+               trim((SELECT REGEXP_SUBSTR("Бик", '[^@~@]+', 1, t1.l)
+                      FROM DUAL)) "Бик",
+               trim((SELECT REGEXP_SUBSTR("ВидПлатежа",
+                                         '[^@~@]+',
+                                         1,
+                                         t1.l)
+                      FROM DUAL)) "ВидПлатежа",
+               trim((SELECT REGEXP_SUBSTR("ВидПлатежаНаименование",
+                                         '[^@~@]+',
+                                         1,
+                                         t1.l)
+                      FROM DUAL)) "ВидПлатежаНаименование",
+               trim((SELECT REGEXP_SUBSTR("ДатаОперации",
+                                         '[^@~@]+',
+                                         1,
+                                         t1.l)
+                      FROM DUAL)) "ДатаОперации",
+               trim((SELECT REGEXP_SUBSTR("ИннПлательщик",
+                                         '[^@~@]+',
+                                         1,
+                                         t1.l)
+                      FROM DUAL)) "ИннПлательщик",
+               trim((SELECT REGEXP_SUBSTR("ИннПолучатель",
+                                         '[^@~@]+',
+                                         1,
+                                         t1.l)
+                      FROM DUAL)) "ИннПолучатель",
+               trim((SELECT REGEXP_SUBSTR("КБК", '[^@~@]+', 1, t1.l)
+                      FROM DUAL)) "КБК",
+               trim((SELECT REGEXP_SUBSTR("КппБанкПолучатель",
+                                         '[^@~@]+',
+                                         1,
+                                         t1.l)
+                      FROM DUAL)) "КппБанкПолучатель",
+               trim((SELECT REGEXP_SUBSTR("КппПлательщика",
+                                         '[^@~@]+',
+                                         1,
+                                         t1.l)
+                      FROM DUAL)) "КппПлательщика",
+               trim((SELECT REGEXP_SUBSTR("ЛицевойСчетПолучателя",
+                                         '[^@~@]+',
+                                         1,
+                                         t1.l)
+                      FROM DUAL)) "ЛицевойСчетПолучателя",
+               trim((SELECT REGEXP_SUBSTR("НомерСтроки",
+                                         '[^@~@]+',
+                                         1,
+                                         t1.l)
+                      FROM DUAL)) "НомерСтроки",
+               trim((SELECT REGEXP_SUBSTR("Номера чеков",
+                                         '[^@~@]+',
+                                         1,
+                                         t1.l)
+                      FROM DUAL)) "Номера чеков",
+               trim((SELECT REGEXP_SUBSTR("Основание",
+                                         '[^@~@]+',
+                                         1,
+                                         t1.l)
+                      FROM DUAL)) "Основание",
+               trim((SELECT REGEXP_SUBSTR("Плательщик",
+                                         '[^@~@]+',
+                                         1,
+                                         t1.l)
+                      FROM DUAL)) "Плательщик",
+               trim((SELECT REGEXP_SUBSTR("Получатель",
+                                         '[^@~@]+',
+                                         1,
+                                         t1.l)
+                      FROM DUAL)) "Получатель",
+               trim((SELECT REGEXP_SUBSTR("РасчетныйСчет",
+                                         '[^@~@]+',
+                                         1,
+                                         t1.l)
+                      FROM DUAL)) "РасчетныйСчет",
+               to_number(replace(replace(trim((SELECT REGEXP_SUBSTR("Сумма",
+                                                                   '[^@~@]+',
+                                                                   1,
+                                                                   t1.l)
+                                                FROM DUAL)),
+                                         ' ',
+                                         ''),
+                                 '.',
+                                 ',')) "Сумма",
+               recdate,
+               paydate,
+               currency,
+               paymenttype,
+               vk,
+               dateofoperation,
+               dataps,
+               dateclearing,
+               dealer,
+               accountpayer,
+               cardnumber,
+               operationnumber,
+               operationnumberdelivery,
+               checkparent,
+               orderofprovidence,
+               provider,
+               owninown,
+               corrected,
+               commissionrate,
+               status,
+               stringfromfile,
+               rewardamount,
+               ownerincomeamount,
+               commissionamount,
+               nkamount,
+               maxcommissionamount,
+               mincommissionamount,
+               cashamount,
+               sumnalprimal,
+               amounttocheck,
+               amountofpayment,
+               sumofsplitting,
+               amountintermediary,
+               amountofscs,
+               amountwithchecks,
+               counter,
+               terminal,
+               terminalnetwork,
+               transactiontype,
+               service,
+               filetransactions,
+               fio,
+               checksincoming,
+               barcode,
+               isaresident,
+               valuenotfound,
+               providertariff,
+               counterchecks,
+               countercheck,
+               id_,
+               detailing,
+               walletpayer,
+               walletreceiver,
+               purposeofpayment,
+               dataprovider,
+               statusabs,
+               sess_id
+          from ATTR_VIEW t,
+               (SELECT LEVEL l FROM DUAL CONNECT BY LEVEL <= 10) t1
+         WHERE ((t1.l <= t."CountPay") OR (t1.l = 1)))
+      select L,
+             /* CHECKNUMBER,*/
+             "CountPay" CountPay,
+             "DetailCheque" DetailCheque,
+             "HeadCheque" HeadCheque,
+             "Id_Платежа" id_payment,
+             "Price" Price,
+             "account" account_,
+             "БанкПолучатель" bank_poluchatel,
+             "Бик" BIK_,
+             "ВидПлатежа" VId_platezha,
+             "ВидПлатежаНаименование" VId_platezha_naimenovanie,
+             "ДатаОперации" data_operacii,
+             "ИннПлательщик" INN_platelshik,
+             "ИннПолучатель" INN_poluchatel,
+             "КБК" KBK_,
+             "КппБанкПолучатель" kpp_bank_poluchat,
+             "КппПлательщика" kpp_platelshika,
+             "ЛицевойСчетПолучателя" ls_poluchatelia,
+             "НомерСтроки" nomer_stroki,
+             "Номера чеков" nomera_chekov,
+             "Основание" osnovanie,
+             "Плательщик" platelshik,
+             "Получатель" poluchatel,
+             "РасчетныйСчет" rasche_chet,
+             "Сумма" summa,
+             fio_children,
+             period,
+             (select ACCOUNT
+                from Z_SB_TERMINAL_AMRA_DBT
+               where NAME = t.TERMINAL) acc_20208,
+             (select DEAL_ACC
+                from Z_SB_TERMINAL_AMRA_DBT
+               where NAME = t.TERMINAL) DEAL_ACC,
+             (select GENERAL_ACC
+                from Z_SB_TERMINAL_AMRA_DBT
+               where NAME = t.TERMINAL) GENERAL_ACC,
+             (select GENERAL_COMIS
+                from Z_SB_TERMINAL_AMRA_DBT
+               where NAME = t.TERMINAL) GENERAL_COMIS,
+             (select CLEAR_SUM
+                from Z_SB_TERMINAL_AMRA_DBT
+               where NAME = t.TERMINAL) CLEAR_SUM,
+             (select CRASH_ACC
+                from Z_SB_TERMINAL_AMRA_DBT
+               where NAME = t.TERMINAL) CRASH_ACC,
+             case
+               when SERVICE = 'Таможня РА' then
+                (select ACCOUNT
+                   from z_sb_termserv_amra_dbt h
+                  where idterm = t.TERMINAL
+                    and h.NAME = "ВидПлатежаНаименование")
+               else
+                (select ACCOUNT
+                   from z_sb_termserv_amra_dbt h
+                  where idterm = t.TERMINAL
+                    and h.NAME = t.service)
+             end acc40911,
+             case
+               when SERVICE = 'Таможня РА' then
+                (select INN
+                   from z_sb_termserv_amra_dbt h
+                  where idterm = t.TERMINAL
+                    and h.NAME = "ВидПлатежаНаименование")
+               else
+                (select INN
+                   from z_sb_termserv_amra_dbt h
+                  where idterm = t.TERMINAL
+                    and h.NAME = t.service)
+             end inn,
+             case
+               when SERVICE = 'Таможня РА' then
+                (select KBK
+                   from z_sb_termserv_amra_dbt h
+                  where idterm = t.TERMINAL
+                    and h.NAME = "ВидПлатежаНаименование")
+               else
+                (select KBK
+                   from z_sb_termserv_amra_dbt h
+                  where idterm = t.TERMINAL
+                    and h.NAME = t.service)
+             end kbk_payer,
+             case
+               when SERVICE = 'Таможня РА' then
+                (select kpp
+                   from z_sb_termserv_amra_dbt h
+                  where idterm = t.TERMINAL
+                    and h.NAME = "ВидПлатежаНаименование")
+               else
+                (select kpp
+                   from z_sb_termserv_amra_dbt h
+                  where idterm = t.TERMINAL
+                    and h.NAME = t.service)
+             end kpp,
+             case
+               when SERVICE = 'Таможня РА' then
+                (select ACC_NAME
+                   from z_sb_termserv_amra_dbt h
+                  where idterm = t.TERMINAL
+                    and h.NAME = "ВидПлатежаНаименование")
+               else
+                (select ACC_NAME
+                   from z_sb_termserv_amra_dbt h
+                  where idterm = t.TERMINAL
+                    and h.NAME = t.service)
+             end ACC_NAME,
+             case
+               when SERVICE = 'Таможня РА' then
+                (select ACC_REC
+                   from z_sb_termserv_amra_dbt h
+                  where idterm = t.TERMINAL
+                    and h.NAME = "ВидПлатежаНаименование")
+               else
+                (select ACC_REC
+                   from z_sb_termserv_amra_dbt h
+                  where idterm = t.TERMINAL
+                    and h.NAME = t.service)
+             end ACC_REC,
+             case
+               when SERVICE = 'Таможня РА' then
+                (select OKATO
+                   from z_sb_termserv_amra_dbt h
+                  where idterm = t.TERMINAL
+                    and h.NAME = "ВидПлатежаНаименование")
+               else
+                (select OKATO
+                   from z_sb_termserv_amra_dbt h
+                  where idterm = t.TERMINAL
+                    and h.NAME = t.service)
+             end OKATO,
+             (select ISMRINN from smr) bank_inn,
+             (select CSMRKORACC from smr) bank_cor_acc,
+             (select CSMRRCSNAME from smr) bank_cor_bic,
+             (select DEPARTMENT
+                from Z_SB_TERMINAL_AMRA_DBT
+               where NAME = t.TERMINAL) DEPARTMENT,
+             case
+               when SERVICE = 'Таможня РА' then
+                '"' || "ВидПлатежаНаименование" || '",' ||
+                upper("Плательщик") || ', ' || "Основание"
+               when SERVICE = 'Дет.сад СБЕРБАНК' then
+                'Услуга "' || SERVICE || '" - ' || upper(fio_children) ||
+                ' За ' || upper(period)
+             end ground,
+             (select COMISSION
+                from z_sb_termserv_amra_dbt h
+               where idterm = t.TERMINAL
+                 and h.NAME = "ВидПлатежаНаименование") comissia,
+             t.CHECKNUMBER,
+             t.AMOUNTOFPAYMENT,
+             t.CASHAMOUNT,
+             t.TERMINAL idterm,
+             t.COMMISSIONAMOUNT,
+             t.NKAMOUNT,
+             t.AMOUNTTOCHECK,
+             t.SESS_ID,
+             t.STATUS,
+             SUMNALPRIMAL,
+             AMOUNTWITHCHECKS,
+             CHECKSINCOMING,
+             trunc(PAYDATE) PAYDATE,
+             service
+        from aggr_attr t;
+    r_sbra_with_attr sbra_with_attr%rowtype;
     cursor sbra_pr is
       select (select ACCOUNT
                 from Z_SB_TERMINAL_AMRA_DBT
@@ -713,33 +1239,40 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                 from Z_SB_TERMINAL_AMRA_DBT
                where NAME = t.TERMINAL) CRASH_ACC,
              (select ACCOUNT
-                from z_Sb_Termserv_Dbt h
+                from z_sb_termserv_amra_dbt h
                where idterm = t.TERMINAL
-                 and h.NAME = t.service) acc40911,
+                 and h.NAME = t.service
+                 and rownum = 1) acc40911,
              (select INN
-                from z_Sb_Termserv_Dbt h
+                from z_sb_termserv_amra_dbt h
                where idterm = t.TERMINAL
-                 and h.NAME = t.service) inn,
+                 and h.NAME = t.service
+                 and rownum = 1) inn,
              (select KBK
-                from z_Sb_Termserv_Dbt h
+                from z_sb_termserv_amra_dbt h
                where idterm = t.TERMINAL
-                 and h.NAME = t.service) kbk_payer,
+                 and h.NAME = t.service
+                 and rownum = 1) kbk_payer,
              (select kpp
-                from z_Sb_Termserv_Dbt h
+                from z_sb_termserv_amra_dbt h
                where idterm = t.TERMINAL
-                 and h.NAME = t.service) kpp,
+                 and h.NAME = t.service
+                 and rownum = 1) kpp,
              (select ACC_NAME
-                from z_Sb_Termserv_Dbt h
+                from z_sb_termserv_amra_dbt h
                where idterm = t.TERMINAL
-                 and h.NAME = t.service) ACC_NAME,
+                 and h.NAME = t.service
+                 and rownum = 1) ACC_NAME,
              (select ACC_REC
-                from z_Sb_Termserv_Dbt h
+                from z_sb_termserv_amra_dbt h
                where idterm = t.TERMINAL
-                 and h.NAME = t.service) ACC_REC,
+                 and h.NAME = t.service
+                 and rownum = 1) ACC_REC,
              (select OKATO
-                from z_Sb_Termserv_Dbt h
+                from z_sb_termserv_amra_dbt h
                where idterm = t.TERMINAL
-                 and h.NAME = t.service) OKATO,
+                 and h.NAME = t.service
+                 and rownum = 1) OKATO,
              (select ISMRINN from smr) bank_inn,
              (select CSMRKORACC from smr) bank_cor_acc,
              (select CSMRRCSNAME from smr) bank_cor_bic,
@@ -863,11 +1396,25 @@ DOC_NUM: <xsl:value-of select="ABC"/>
           */
           if r.AMOUNTOFPAYMENT <> 0 then
             /*Выбираем сумму комиссии по услуге и терминалу (наше направление)*/
-            select COMISSION
-              into comis_rate
-              from z_sb_termserv_dbt t
-             where t.IDTERM = r.idterm
-               and t.NAME = r.service;
+          
+            if r.service = 'Таможня РА' then
+              OPEN sbra_with_attr(r.SESS_ID, r.CHECKNUMBER);
+              LOOP
+                FETCH sbra_with_attr
+                  INTO r_sbra_with_attr;
+                EXIT WHEN sbra_with_attr%notfound;
+                /*dbms_output.put_line(r_sbra_with_attr.VID_PLATEZHA_NAIMENOVANIE);*/
+                comis_rate := r_sbra_with_attr.comissia;
+              end loop;
+              CLOSE sbra_with_attr;
+            else
+              select COMISSION
+                into comis_rate
+                from z_sb_termserv_amra_dbt t
+               where t.IDTERM = r.idterm
+                 and t.NAME = r.service;
+            end if;
+          
             /*Выбираем сумму комиссии по услуге и терминалу (наше направление)*/
             if r.CASHAMOUNT <> 0 then
               num := num + 1;
@@ -918,11 +1465,23 @@ DOC_NUM: <xsl:value-of select="ABC"/>
             /*4 Если СуммаКомиссии не равна 0*/
           
             /*Выбираем сумму комиссии по услуге и терминалу (наше направление)*/
-            select COMISSION
-              into comis_rate
-              from z_sb_termserv_dbt t
-             where t.IDTERM = r.idterm
-               and t.NAME = r.service;
+            if r.service = 'Таможня РА' then
+              OPEN sbra_with_attr(r.SESS_ID, r.CHECKNUMBER);
+              LOOP
+                FETCH sbra_with_attr
+                  INTO r_sbra_with_attr;
+                EXIT WHEN sbra_with_attr%notfound;
+                /*dbms_output.put_line(r_sbra_with_attr.VID_PLATEZHA_NAIMENOVANIE);*/
+                comis_rate := r_sbra_with_attr.comissia;
+              end loop;
+              CLOSE sbra_with_attr;
+            else
+              select COMISSION
+                into comis_rate
+                from z_sb_termserv_amra_dbt t
+               where t.IDTERM = r.idterm
+                 and t.NAME = r.service;
+            end if;
             /*Выбираем сумму комиссии по услуге и терминалу (наше направление)*/
           
             /*Если нашли комиссию*/
@@ -958,97 +1517,153 @@ DOC_NUM: <xsl:value-of select="ABC"/>
             Если СуммаПлатежа не равно 0
             GENERAL_ACC/acc40911
             */
-            if r.AMOUNTOFPAYMENT <> 0 and r.AMOUNTWITHCHECKS = 0 then
+          
+            if r.service = 'Таможня РА' then
+              OPEN sbra_with_attr(r.SESS_ID, r.CHECKNUMBER);
+              LOOP
+                FETCH sbra_with_attr
+                  INTO r_sbra_with_attr;
+                EXIT WHEN sbra_with_attr%notfound;
+                /*dbms_output.put_line(r_sbra_with_attr.VID_PLATEZHA_NAIMENOVANIE);*/
+                comis_rate := r_sbra_with_attr.comissia;
+              end loop;
+              CLOSE sbra_with_attr;
+            else
               select COMISSION
                 into comis_rate
-                from z_sb_termserv_dbt t
+                from z_sb_termserv_amra_dbt t
                where t.IDTERM = r.idterm
                  and t.NAME = r.service;
-            
+            end if;
+          
+            if r.AMOUNTOFPAYMENT <> 0 and r.AMOUNTWITHCHECKS = 0 then
               --Нахождение суммы оплаты с чеков
-              /*select sum(to_number(replace(replace((Select Regexp_Substr(chk,
-                                                                      '[^/]+',
-                                                                      1,
-                                                                      Level)
-                                                   from dual
-                                                  where level = 2
-                                                 Connect By Regexp_Substr(chk,
-                                                                          '[^/]+',
-                                                                          1,
-                                                                          Level) Is Not Null),
-                                                 ' ',
-                                                 ''),
-                                         '.',
-                                         ','))) summ
-              into all_chek_sum
-              from (Select Regexp_Substr(r.CHECKSINCOMING,
-                                         '[^|]+',
-                                         1,
-                                         Level) chk
-                      From dual
-                    Connect By Regexp_Substr(r.CHECKSINCOMING,
-                                             '[^|]+',
-                                             1,
-                                             Level) Is Not Null);*/
             
-              num := num + 1;
-              POST(id_sess_       => r.SESS_ID,
-                   department_    => r.department,
-                   real_payer_    => r.GENERAL_ACC,
-                   real_receiver_ => r.acc40911,
-                   payer_         => 'Счет общей суммы транзакции ' ||
-                                     r.idterm || ' отделения ' ||
-                                     r.department,
-                   receiver_      => 'Транзитный счет  ' || r.idterm ||
-                                     ' отделения ' || r.department,
-                   okpo_receiver  => '11000572',
-                   sum_           => (r.Cashamount + r.AMOUNTWITHCHECKS) -
-                                     comis_rate -
-                                     to_number(replace(replace(r.AMOUNTTOCHECK,
-                                                               '.',
-                                                               ','),
-                                                       ' ',
-                                                       '')),
-                   ground_        => r.ground,
-                   payment_number => r.CHECKNUMBER,
-                   kpp_receiver   => '111000171',
-                   numb           => num,
-                   PAYDATE_       => r.PAYDATE);
+              if r.service = 'Таможня РА' then
+                OPEN sbra_with_attr(r.SESS_ID, r.CHECKNUMBER);
+                LOOP
+                  FETCH sbra_with_attr
+                    INTO r_sbra_with_attr;
+                  EXIT WHEN sbra_with_attr%notfound;
+                  num := num + 1;
+                  POST(id_sess_       => r.SESS_ID,
+                       department_    => r.department,
+                       real_payer_    => r.GENERAL_ACC,
+                       real_receiver_ => r_sbra_with_attr.acc40911,
+                       payer_         => 'Счет общей суммы транзакции ' ||
+                                         r.idterm || ' отделения ' ||
+                                         r.department,
+                       receiver_      => 'Транзитный счет  ' || r.idterm ||
+                                         ' отделения ' || r.department,
+                       okpo_receiver  => '11000572',
+                       sum_           => r_sbra_with_attr.SUMMA,
+                       ground_        => r_sbra_with_attr.ground,
+                       payment_number => r.CHECKNUMBER,
+                       kpp_receiver   => '111000171',
+                       numb           => num,
+                       PAYDATE_       => r.PAYDATE);
+                end loop;
+                CLOSE sbra_with_attr;
+              else
+                num := num + 1;
+                POST(id_sess_       => r.SESS_ID,
+                     department_    => r.department,
+                     real_payer_    => r.GENERAL_ACC,
+                     real_receiver_ => r.acc40911,
+                     payer_         => 'Счет общей суммы транзакции ' ||
+                                       r.idterm || ' отделения ' ||
+                                       r.department,
+                     receiver_      => 'Транзитный счет  ' || r.idterm ||
+                                       ' отделения ' || r.department,
+                     okpo_receiver  => '11000572',
+                     sum_           => (r.Cashamount + r.AMOUNTWITHCHECKS) -
+                                       comis_rate -
+                                       to_number(replace(replace(r.AMOUNTTOCHECK,
+                                                                 '.',
+                                                                 ','),
+                                                         ' ',
+                                                         '')),
+                     ground_        => r.ground,
+                     payment_number => r.CHECKNUMBER,
+                     kpp_receiver   => '111000171',
+                     numb           => num,
+                     PAYDATE_       => r.PAYDATE);
+              end if;
             elsif r.AMOUNTOFPAYMENT <> 0 and r.AMOUNTWITHCHECKS <> 0 then
-              num := num + 1;
-              POST(id_sess_       => r.SESS_ID,
-                   department_    => r.department,
-                   real_payer_    => r.GENERAL_ACC,
-                   real_receiver_ => r.acc40911,
-                   payer_         => 'Счет общей суммы транзакции ' ||
-                                     r.idterm || ' отделения ' ||
-                                     r.department,
-                   receiver_      => 'Транзитный счет  ' || r.idterm ||
-                                     ' отделения ' || r.department,
-                   okpo_receiver  => '11000572',
-                   sum_           => (r.Cashamount + r.AMOUNTWITHCHECKS) -
-                                     comis_rate -
-                                     to_number(replace(replace(r.AMOUNTTOCHECK,
-                                                               '.',
-                                                               ','),
-                                                       ' ',
-                                                       '')),
-                   ground_        => r.ground,
-                   payment_number => r.CHECKNUMBER,
-                   kpp_receiver   => '111000171',
-                   numb           => num,
-                   PAYDATE_       => r.PAYDATE);
+              if r.service = 'Таможня РА' then
+                OPEN sbra_with_attr(r.SESS_ID, r.CHECKNUMBER);
+                LOOP
+                  FETCH sbra_with_attr
+                    INTO r_sbra_with_attr;
+                  EXIT WHEN sbra_with_attr%notfound;
+                  num := num + 1;
+                  POST(id_sess_       => r.SESS_ID,
+                       department_    => r.department,
+                       real_payer_    => r.GENERAL_ACC,
+                       real_receiver_ => r_sbra_with_attr.acc40911,
+                       payer_         => 'Счет общей суммы транзакции ' ||
+                                         r.idterm || ' отделения ' ||
+                                         r.department,
+                       receiver_      => 'Транзитный счет  ' || r.idterm ||
+                                         ' отделения ' || r.department,
+                       okpo_receiver  => '11000572',
+                       sum_           => r_sbra_with_attr.SUMMA,
+                       ground_        => r_sbra_with_attr.ground,
+                       payment_number => r.CHECKNUMBER,
+                       kpp_receiver   => '111000171',
+                       numb           => num,
+                       PAYDATE_       => r.PAYDATE);
+                end loop;
+                CLOSE sbra_with_attr;
+              else
+                num := num + 1;
+                POST(id_sess_       => r.SESS_ID,
+                     department_    => r.department,
+                     real_payer_    => r.GENERAL_ACC,
+                     real_receiver_ => r.acc40911,
+                     payer_         => 'Счет общей суммы транзакции ' ||
+                                       r.idterm || ' отделения ' ||
+                                       r.department,
+                     receiver_      => 'Транзитный счет  ' || r.idterm ||
+                                       ' отделения ' || r.department,
+                     okpo_receiver  => '11000572',
+                     sum_           => (r.Cashamount + r.AMOUNTWITHCHECKS) -
+                                       comis_rate -
+                                       to_number(replace(replace(r.AMOUNTTOCHECK,
+                                                                 '.',
+                                                                 ','),
+                                                         ' ',
+                                                         '')),
+                     ground_        => r.ground,
+                     payment_number => r.CHECKNUMBER,
+                     kpp_receiver   => '111000171',
+                     numb           => num,
+                     PAYDATE_       => r.PAYDATE);
+              end if;
             end if;
             /*
             6 
             acc40911/ACC_REC
             */
             if r.AMOUNTOFPAYMENT <> 0 and r.kbk_payer is not null then
-              select COMISSION
-                into comis_rate
-                from z_sb_termserv_dbt t
-               where t.IDTERM = r.idterm
-                 and t.NAME = r.service;
+              if r.service = 'Таможня РА' then
+                OPEN sbra_with_attr(r.SESS_ID, r.CHECKNUMBER);
+                LOOP
+                  FETCH sbra_with_attr
+                    INTO r_sbra_with_attr;
+                  EXIT WHEN sbra_with_attr%notfound;
+                  /*dbms_output.put_line(r_sbra_with_attr.VID_PLATEZHA_NAIMENOVANIE);*/
+                  comis_rate := r_sbra_with_attr.comissia;
+                end loop;
+                CLOSE sbra_with_attr;
+              else
+                select COMISSION
+                  into comis_rate
+                  from z_sb_termserv_amra_dbt t
+                 where t.IDTERM = r.idterm
+                   and t.NAME = r.service;
+              end if;
+            
               num := num + 1;
               POST(id_sess_        => r.SESS_ID,
                    department_     => r.department,
@@ -1079,6 +1694,41 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                    BUDJCLASSIFCODE => r.kbk_payer,
                    okato           => r.OKATO,
                    for_nbra        => true);
+            elsif r.AMOUNTOFPAYMENT <> 0 and r.service = 'Таможня РА' then
+              OPEN sbra_with_attr(r.SESS_ID, r.CHECKNUMBER);
+              LOOP
+                FETCH sbra_with_attr
+                  INTO r_sbra_with_attr;
+                EXIT WHEN sbra_with_attr%notfound;
+              
+                if r_sbra_with_attr.KBK_PAYER is not null then
+                  num := num + 1;
+                  POST(id_sess_        => r.SESS_ID,
+                       department_     => r.department,
+                       real_payer_     => r_sbra_with_attr.acc40911,
+                       real_receiver_  => r_sbra_with_attr.ACC_REC,
+                       payer_          => 'Транзитный счет ' || r.idterm ||
+                                          ' отделения ' || r.department,
+                       receiver_       => r_sbra_with_attr.acc_name,
+                       okpo_receiver   => r_sbra_with_attr.bank_inn,
+                       sum_            => r_sbra_with_attr.SUMMA,
+                       ground_         => r_sbra_with_attr.ground,
+                       payment_number  => r.CHECKNUMBER,
+                       kpp_receiver    => r_sbra_with_attr.kpp,
+                       numb            => num,
+                       PAYDATE_        => r.PAYDATE,
+                       bo1_            => '4',
+                       bo2_            => '0',
+                       okpo_payer      => r_sbra_with_attr.inn,
+                       coracc_payer    => '30102810900000000017',
+                       mfo_receiver    => r_sbra_with_attr.bank_cor_bic,
+                       bank_receiver   => 'Банк Абхазии',
+                       BUDJCLASSIFCODE => r_sbra_with_attr.kbk_payer,
+                       okato           => r_sbra_with_attr.OKATO,
+                       for_nbra        => true);
+                end if;
+              end loop;
+              CLOSE sbra_with_attr;
             end if;
             /*r.bank_cor_acc,CORACC_PAYER_2  => '30102810900000000017'*/
             /*
@@ -1243,11 +1893,23 @@ DOC_NUM: <xsl:value-of select="ABC"/>
           */
         
           /*Выбираем сумму комиссии по услуге и терминалу (наше направление)*/
-          select COMISSION
-            into comis_rate
-            from z_sb_termserv_dbt t
-           where t.IDTERM = r.idterm
-             and t.NAME = r.service;
+          if r.service = 'Таможня РА' then
+            OPEN sbra_with_attr(r.SESS_ID, r.CHECKNUMBER);
+            LOOP
+              FETCH sbra_with_attr
+                INTO r_sbra_with_attr;
+              EXIT WHEN sbra_with_attr%notfound;
+              /*dbms_output.put_line(r_sbra_with_attr.VID_PLATEZHA_NAIMENOVANIE);*/
+              comis_rate := r_sbra_with_attr.comissia;
+            end loop;
+            CLOSE sbra_with_attr;
+          else
+            select COMISSION
+              into comis_rate
+              from z_sb_termserv_amra_dbt t
+             where t.IDTERM = r.idterm
+               and t.NAME = r.service;
+          end if;
           /*Выбираем сумму комиссии по услуге и терминалу (наше направление)*/
           if r.CASHAMOUNT <> 0 then
             num := num + 1;
@@ -1407,7 +2069,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
       30232810100000010010/70107810000001720109
       */
       for r in (select (select COMISSION
-                          from z_sb_termserv_dbt t
+                          from z_sb_termserv_amra_dbt t
                          where t.IDTERM = terminal
                            and t.NAME = service) -
                        to_number(replace(replace(replace(decode(substr(NKAMOUNT,
@@ -1895,7 +2557,8 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                okpo_receiver  => '11000572',
                sum_           => r.summ,
                ground_        => 'Урегулирование расчетов за ' || r.date_ || /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               'TR:' || r.checknumber ||*/
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                                                                                               'TR:' || r.checknumber ||*/
                                  ';SID:' || id_sess,
                kpp_receiver   => '111000171',
                numb           => num,
@@ -2039,7 +2702,9 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                 /*Поиск сдачи*/
                 --Если нашли сдачу
                 if search_termdeal > 0 then
-                  write_deal(sump,
+                  write_deal(to_number(replace(replace(sump, '.', ','),
+                                               ' ',
+                                               '')),
                              trunc(r.paydate),
                              r.service,
                              1,
@@ -2273,7 +2938,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
              sum_           => r.summ,
              ground_        => 'Расчеты с дилером потерминальной сети по усл. ' ||
                                r.SERVICE || ' за ' || r.PAYDATE || /*'TR:' ||
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   r.checknumber || */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         r.checknumber || */
                                ';SID:' || id_sess,
              kpp_receiver   => '111000171',
              numb           => num,
@@ -2305,7 +2970,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                               --and t.checknumber = input_number
                               --and trunc(PAYDATE) = input_date
                            and t.TERMINAL in
-                               (select NAME from Z_SB_TERMINAL_AMRA_DBT)) 
+                               (select NAME from Z_SB_TERMINAL_AMRA_DBT))
                  group by SERVICE, PAYDATE, GENERAL_COMIS) loop
         num := num + 1;
         POST(id_sess_       => id_sess,
@@ -2395,7 +3060,7 @@ DOC_NUM: <xsl:value-of select="ABC"/>
                               --and t.checknumber = input_number
                            and PROVIDER <> 'СберБанк'
                            and t.TERMINAL in
-                               (select NAME from Z_SB_TERMINAL_AMRA_DBT)) 
+                               (select NAME from Z_SB_TERMINAL_AMRA_DBT))
                  group by SERVICE, PAYDATE, INCOME) loop
         num := num + 1;
         POST(id_sess_       => id_sess,

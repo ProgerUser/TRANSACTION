@@ -35,12 +35,26 @@ create or replace package body z_sb_create_tr_amra is
     ret     varchar(500);
     dubl    number;
     session number;
+    c1      clob;
   BEGIN
     begin
+      /*
       select count(*)
-        into dubl
-        from Z_SB_FN_SESS_AMRA t
-       where t.FILECLOB like fileclob_;
+       into dubl
+       from Z_SB_FN_SESS_AMRA t
+      where t.FILECLOB like fileclob_;
+      */
+    
+      /*select FILECLOB into c1 from Z_SB_FN_SESS_AMRA where sess_id = 17207;*/
+      for r in (select * from Z_SB_FN_SESS_AMRA t) loop
+        if dbms_lob.compare(r.fileclob, fileclob_) = 0 then
+          /*dbms_output.put_line(r.sess_id);*/
+          dubl := 1;
+          /*        else
+          dubl := 0;*/
+        end if;
+      end loop;
+      dubl := 0;
       if dubl = 0 then
         session := z_sb_sq_sess_id.NEXTVAL;
         insert into Z_SB_FN_SESS_AMRA
@@ -49,7 +63,7 @@ create or replace package body z_sb_create_tr_amra is
           (session, file_name_, sysdate, fileclob_, 0, path, user);
         ret := 'Inserted;' || session;
         commit;
-      elsif dubl > 0 then
+      elsif dubl = 1 then
         rollback;
         ret := 'Dublicate;0';
       end if;
@@ -418,7 +432,7 @@ create or replace package body z_sb_create_tr_amra is
                          idfile);
               end if;
               /*если терминал Амра*/
-            elsif bnk_deal = 0 and substr(term_deal, 1, 2) = 'АБ' then
+            elsif bnk_deal = 0 and substr(term_deal, 1, 2) in ('АБ', 'IV') then
               /*ищем совпадения сдачи*/
               select count(*)
                 into deal_dubl_num
@@ -426,6 +440,29 @@ create or replace package body z_sb_create_tr_amra is
                where t.PAYMENTNUMBER = pnmb;
               /*если нет совпадении*/
               if deal_dubl_num = 0 then
+                /*output*/
+                /*
+                dbms_output.put_line(SYSDATE);
+                dbms_output.put_line(TO_NUMBER(REPLACE(makedprt(r.TERMINAL),
+                                                       '.',
+                                                       ',')));
+                dbms_output.put_line(pnmb);
+                dbms_output.put_line(to_date(recdp,
+                                             'DD-MM-RRRR HH24:MI:SS'));
+                dbms_output.put_line(to_date(r.DateOfOperation,
+                                             'DD-MM-RRRR HH24:MI:SS'));
+                dbms_output.put_line(r.CheckNumber);
+                dbms_output.put_line(to_number(replace(replace(sump,
+                                                               ' ',
+                                                               ''),
+                                                       '.',
+                                                       ',')));
+                dbms_output.put_line(1);
+                dbms_output.put_line(idfile);
+                dbms_output.put_line(term_deal || '->' || r.TERMINAL);
+                dbms_output.put_line('<----------------------------->');
+                */
+                /*output*/
                 INSERT INTO Z_SB_TERMDEAL_AMRA_FEB
                   (recdate,
                    department,
@@ -445,7 +482,6 @@ create or replace package body z_sb_create_tr_amra is
                    to_date(r.DateOfOperation, 'DD-MM-RRRR HH24:MI:SS'),
                    r.CheckNumber,
                    to_number(replace(replace(sump, ' ', ''), '.', ',')),
-                   
                    1,
                    idfile,
                    term_deal || '->' || r.TERMINAL);
@@ -459,7 +495,8 @@ create or replace package body z_sb_create_tr_amra is
                          idfile);
               end if;
               /*если терминал не амра*/
-            elsif substr(term_deal, 1, 2) <> 'АБ' and bnk_deal = 0 then
+            elsif substr(term_deal, 1, 2) not in ('АБ', 'IV') and
+                  bnk_deal = 0 then
               writelog(r.DATEOFOPERATION,
                        'Внимание! Чек CheckNumber = ' || r.CheckNumber ||
                        ' дата ' || recdp || ' не является АБ или SB! ' ||
@@ -809,6 +846,7 @@ create or replace package body z_sb_create_tr_amra is
         
           if to_number(replace(replace(r.AMOUNTTOCHECK, ' ', ''), '.', ',')) <> 0 then
             if deal_dubl_number = 0 then
+            
               INSERT INTO Z_SB_TERMDEAL_AMRA_DBT
                 (recdate,
                  department,
