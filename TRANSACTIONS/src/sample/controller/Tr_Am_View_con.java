@@ -66,6 +66,7 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.controlsfx.control.table.TableFilter;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -1360,8 +1361,7 @@ public class Tr_Am_View_con {
 
 	@FXML
 	private void term_view_(ActionEvent actionEvent) {
-		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(),
-				dt2.getValue());
+		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue());
 		populate_fn_sess(empData);
 
 		autoResizeColumns(trans_table);
@@ -1410,10 +1410,10 @@ public class Tr_Am_View_con {
 	// Найти загрузки
 	@FXML
 	private void filter(ActionEvent actionEvent) {
-		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(),
-				dt2.getValue());
+		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue());
 		populate_fn_sess(empData);
 		autoResizeColumns(trans_table);
+		TableFilter<Amra_Trans> filter = new TableFilter<>(trans_table);
 	}
 
 	public static void autoResizeColumns(TableView<?> table) {
