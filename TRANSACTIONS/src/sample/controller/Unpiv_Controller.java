@@ -30,6 +30,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import sample.model.Transact;
 import sample.model.TransactClass;
+import sample.model.Unpiv;
 import sample.Main;
 import sample.model.TerminalDAO;
 import sample.model.FN_SESS_AMRA;
@@ -56,22 +57,16 @@ import java.util.Date;
  */
 
 @SuppressWarnings("unused")
-public class Attr_Controller {
+public class Unpiv_Controller {
 
 	@FXML
-	private TableColumn<Attributes, String> AttributeValue;
+	private TableColumn<Unpiv, String> COL;
 
 	@FXML
-	private TableColumn<Attributes, String> Service;
+	private TableColumn<Unpiv, String> COLVALUE;
 
 	@FXML
-	private TableView<Attributes> trans_table;
-
-	@FXML
-	private TableColumn<Attributes, String> AttributeName;
-
-	@FXML
-	private TableColumn<Attributes, String> CheckNumber;
+	private TableView<Unpiv> trans_table;
 
 	// For MultiThreading
 	private Executor exec;
@@ -84,46 +79,27 @@ public class Attr_Controller {
 			t.setDaemon(true);
 			return t;
 		});
-		Service.setCellValueFactory(cellData -> cellData.getValue().ServiceProperty());
-		AttributeName.setCellValueFactory(cellData -> cellData.getValue().AttributeNameProperty());
-		CheckNumber.setCellValueFactory(cellData -> cellData.getValue().CheckNumberProperty());
-		AttributeValue.setCellValueFactory(cellData -> cellData.getValue().AttributeValueProperty());
+		COL.setCellValueFactory(cellData -> cellData.getValue().COLProperty());
+		COLVALUE.setCellValueFactory(cellData -> cellData.getValue().COLVALUEProperty());
 
-		Service.setCellFactory(TextFieldTableCell.forTableColumn());
-		AttributeName.setCellFactory(TextFieldTableCell.forTableColumn());
-		CheckNumber.setCellFactory(TextFieldTableCell.forTableColumn());
-		AttributeValue.setCellFactory(TextFieldTableCell.forTableColumn());
+		COL.setCellFactory(TextFieldTableCell.forTableColumn());
+		COLVALUE.setCellFactory(TextFieldTableCell.forTableColumn());
 
-		Service.setOnEditCommit(new EventHandler<CellEditEvent<Attributes, String>>() {
+		COL.setOnEditCommit(new EventHandler<CellEditEvent<Unpiv, String>>() {
 			@Override
-			public void handle(CellEditEvent<Attributes, String> t) {
-				((Attributes) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-						.set_Service(t.getNewValue());
+			public void handle(CellEditEvent<Unpiv, String> t) {
+				((Unpiv) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_COL(t.getNewValue());
 			}
 		});
-		AttributeName.setOnEditCommit(new EventHandler<CellEditEvent<Attributes, String>>() {
+		COLVALUE.setOnEditCommit(new EventHandler<CellEditEvent<Unpiv, String>>() {
 			@Override
-			public void handle(CellEditEvent<Attributes, String> t) {
-				((Attributes) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-						.set_AttributeName(t.getNewValue());
+			public void handle(CellEditEvent<Unpiv, String> t) {
+				((Unpiv) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_COLVALUE(t.getNewValue());
 			}
 		});
-		CheckNumber.setOnEditCommit(new EventHandler<CellEditEvent<Attributes, String>>() {
-			@Override
-			public void handle(CellEditEvent<Attributes, String> t) {
-				((Attributes) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-						.set_CheckNumber(t.getNewValue());
-			}
-		});
-		AttributeValue.setOnEditCommit(new EventHandler<CellEditEvent<Attributes, String>>() {
-			@Override
-			public void handle(CellEditEvent<Attributes, String> t) {
-				((Attributes) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-						.set_AttributeValue(t.getNewValue());
-			}
-		});
-
-		ObservableList<Attributes> empData = TerminalDAO.Attributes_();
+		ObservableList<Unpiv> empData = TerminalDAO.Unpiv_View();
 		populate_attr(empData);
 		autoResizeColumns(trans_table);
 	}
@@ -161,7 +137,6 @@ public class Attr_Controller {
 		}
 
 	}
-
 	public static void autoResizeColumns(TableView<?> table) {
 		// Set the right policy
 		table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
@@ -192,7 +167,7 @@ public class Attr_Controller {
 
 	// Заполнить таблицу
 	@FXML
-	private void populate_attr(ObservableList<Attributes> trData) {
+	private void populate_attr(ObservableList<Unpiv> trData) {
 		// Set items to the employeeTable
 		trans_table.setItems(trData);
 	}

@@ -1450,5 +1450,44 @@ public class Tr_Am_View_con {
 		// Set items to the employeeTable
 		trans_table.setItems(trData);
 	}
+	@FXML
+	private void view_unpivot(ActionEvent actionEvent) {
+		try {
+			if (trans_table.getSelectionModel().getSelectedItem() == null) {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText("Выберите сначала данные из таблицы!");
+				alert.showAndWait();
+			} else {
+				Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
+
+				Connect.PNMB_ = fn.get_checknumber();
+
+				Stage stage = new Stage();
+				Parent root;
+
+				root = FXMLLoader.load(Main.class.getResource("view/Transact_Unpiv.fxml"));
+
+				stage.setScene(new Scene(root));
+				stage.getIcons().add(new Image("icon.png"));
+				stage.setTitle("Подробно " + fn.get_checknumber());
+				// stage.initModality(Modality.WINDOW_MODAL);
+				stage.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
+				stage.show();
+			}
+		} catch (IOException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+		}
+	}
+	
 
 }
