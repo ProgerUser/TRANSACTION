@@ -200,7 +200,8 @@ public class Amra_Transact {
 					// Populate Employees on TableView
 					populate_fn_sess(empData);
 					autoResizeColumns(load_file);
-
+                    
+					/*
 					Alert alert = new Alert(Alert.AlertType.INFORMATION);
 					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 					stage.getIcons().add(new Image("terminal.png"));
@@ -208,6 +209,7 @@ public class Amra_Transact {
 					alert.setHeaderText(null);
 					alert.setContentText("Добавлен файл с ID = " + part2);
 					alert.showAndWait();
+					*/
 				} else if (part1.equals("Dublicate")) {
 					Alert alert = new Alert(Alert.AlertType.INFORMATION);
 					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -471,15 +473,15 @@ public class Amra_Transact {
 						// --------------------------------------
 						//Protocol(part2, af.get_Path() + "\\" + af.get_FileName());
 						// --------------------------------------
-
+                       /*
 						Alert alert = new Alert(Alert.AlertType.INFORMATION);
 						Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 						stage.getIcons().add(new Image("terminal.png"));
 						alert.setTitle("Внимание");
 						alert.setHeaderText(null);
-						alert.setContentText("Загрузка прошла успешна. Можете перейти к расчету\r File=" + rcff
-								+ "\r Table=" + rcft);
+						alert.setContentText("Загрузка прошла успешна. Можете перейти к расчету");
 						alert.showAndWait();
+						*/
 					}
 					callStmt.close();
 					conn.close();
@@ -651,7 +653,8 @@ public class Amra_Transact {
 					callStmt.close();
 					ProcessBuilder pb = new ProcessBuilder("Notepad.exe", createfolder + "\\" + strDate + "_CLOB_.txt");
 					pb.start();
-
+                    
+					/*
 					Alert alert = new Alert(Alert.AlertType.INFORMATION);
 					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 					stage.getIcons().add(new Image("terminal.png"));
@@ -659,6 +662,7 @@ public class Amra_Transact {
 					alert.setHeaderText(null);
 					alert.setContentText("Расчет прошел успешно!");
 					alert.showAndWait();
+					*/
 					callStmt.close();
 					conn.close();
 					ObservableList<Add_File> empData = TerminalDAO.add_file(/* af.get_FileId() */"",
