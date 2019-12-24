@@ -13,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuItem;
@@ -98,6 +99,9 @@ public class Tr_Am_View_con {
 
 	@FXML
 	private TableColumn<Amra_Trans, String> filetransactions;
+
+	@FXML
+	private CheckBox inkass;
 
 	@FXML
 	private TableColumn<Amra_Trans, String> fio;
@@ -1361,7 +1365,7 @@ public class Tr_Am_View_con {
 
 	@FXML
 	private void term_view_(ActionEvent actionEvent) {
-		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue());
+		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(),false);
 		populate_fn_sess(empData);
 
 		autoResizeColumns(trans_table);
@@ -1410,7 +1414,12 @@ public class Tr_Am_View_con {
 	// Найти загрузки
 	@FXML
 	private void filter(ActionEvent actionEvent) {
-		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue());
+		ObservableList<Amra_Trans> empData = null;
+		if (inkass.isSelected()) {
+			empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(),false);
+		} else {
+			empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(),true);
+		}
 		populate_fn_sess(empData);
 		autoResizeColumns(trans_table);
 		TableFilter<Amra_Trans> filter = new TableFilter<>(trans_table);
@@ -1450,6 +1459,7 @@ public class Tr_Am_View_con {
 		// Set items to the employeeTable
 		trans_table.setItems(trData);
 	}
+
 	@FXML
 	private void view_unpivot(ActionEvent actionEvent) {
 		try {
@@ -1488,6 +1498,5 @@ public class Tr_Am_View_con {
 			alert.showAndWait();
 		}
 	}
-	
 
 }

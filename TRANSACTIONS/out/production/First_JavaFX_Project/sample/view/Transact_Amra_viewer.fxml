@@ -14,12 +14,13 @@
 						<TableColumn fx:id="rownum" prefWidth="137.0" text="Номер строки" />
 						<TableColumn fx:id="recdate" prefWidth="137.0" text="Дата Загрузки" />
 						<TableColumn fx:id="paydate" prefWidth="137.0" text="Дата Платежа" />
-					    <TableColumn fx:id="status" prefWidth="137.0" text="Статус=STATUS" />
-					    <TableColumn fx:id="checknumber" prefWidth="137.0" text="НомерЧека=CHECKNUMBER" />
-					    <TableColumn fx:id="service" prefWidth="137.0" text="Услуга=SERVICE" />
-					    <TableColumn fx:id="provider" prefWidth="137.0" text="Провайдер=PROVIDER" />
+						<TableColumn fx:id="status" prefWidth="137.0" text="Статус=STATUS" />
+						<TableColumn fx:id="checknumber" prefWidth="137.0" text="НомерЧека=CHECKNUMBER" />
+						<TableColumn fx:id="service" prefWidth="137.0" text="Услуга=SERVICE" />
+						<TableColumn fx:id="provider" prefWidth="137.0" text="Провайдер=PROVIDER" />
 						<TableColumn fx:id="checkparent" prefWidth="137.0" text="ЧекРодитель=CHECKPARENT" />
-					    <TableColumn fx:id="commissionamount" prefWidth="137.0" text="СуммаКомиссии=COMMISSIONAMOUNT" />
+					    <TableColumn fx:id="amountofpayment" prefWidth="137.0" text="СуммаПлатежа=AMOUNTOFPAYMENT" />
+						<TableColumn fx:id="commissionamount" prefWidth="137.0" text="СуммаКомиссии=COMMISSIONAMOUNT" />
 						<TableColumn fx:id="nkamount" prefWidth="137.0" text="СуммаНК=NKAMOUNT" />
 						<TableColumn fx:id="cashamount" prefWidth="137.0" text="СуммаНаличных=CASHAMOUNT" />
 						<TableColumn fx:id="amountwithchecks" prefWidth="137.0" text="СуммаСЧеков=AMOUNTWITHCHECKS" />
@@ -45,7 +46,6 @@
 						<TableColumn fx:id="mincommissionamount" prefWidth="137.0" text="СуммаКомиссииМин=MINCOMMISSIONAMOUNT" />
 						<TableColumn fx:id="sumnalprimal" prefWidth="137.0" text="СуммаНалИзначальная=SUMNALPRIMAL" />
 						<TableColumn fx:id="amounttocheck" prefWidth="137.0" text="СуммаНаЧек=AMOUNTTOCHECK" />
-						<TableColumn fx:id="amountofpayment" prefWidth="137.0" text="СуммаПлатежа=AMOUNTOFPAYMENT" />
 						<TableColumn fx:id="sumofsplitting" prefWidth="137.0" text="СуммаНаРасщепление=SUMOFSPLITTING" />
 						<TableColumn fx:id="amountintermediary" prefWidth="137.0" text="СуммаПосредника=AMOUNTINTERMEDIARY" />
 						<TableColumn fx:id="amountofscs" prefWidth="137.0" text="СуммаСКС=AMOUNTOFSCS" />
@@ -82,19 +82,20 @@
 		</GridPane>
 	</center>
 	<top>
-		<AnchorPane prefHeight="89.0" prefWidth="1017.0" BorderPane.alignment="CENTER">
-   <children>
-   			<Button layoutX="856.0" layoutY="41.0" mnemonicParsing="false" onAction="#view_attr" prefHeight="25.0" prefWidth="148.0" text="Просмотр Атрибутов" />
-   			<Button layoutX="698.0" layoutY="41.0" mnemonicParsing="false" onAction="#excel_export" text="Выгрузить в EXCEL" />
-   			<DatePicker fx:id="dt1" layoutX="18.0" layoutY="41.0" prefHeight="25.0" prefWidth="129.0" />
-   			<DatePicker fx:id="dt2" layoutX="164.0" layoutY="41.0" prefHeight="25.0" prefWidth="133.0" />
-   			<Text layoutX="14.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Дата начала" />
-   			<Text layoutX="164.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Дата конца" />
-   			<Button layoutX="480.0" layoutY="41.0" mnemonicParsing="false" onAction="#filter" text="Фильтр" />
-            <TextField fx:id="id_sess" layoutX="323.0" layoutY="41.0" prefHeight="25.0" prefWidth="111.0" />
-            <Text layoutX="323.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID Сессии" />
-            <Button layoutX="570.0" layoutY="41.0" mnemonicParsing="false" onAction="#view_unpivot" text="Подробно" />
-   </children>
+		<AnchorPane prefHeight="97.0" prefWidth="1017.0" BorderPane.alignment="CENTER">
+			<children>
+				<Button layoutX="856.0" layoutY="41.0" mnemonicParsing="false" onAction="#view_attr" prefHeight="25.0" prefWidth="148.0" text="Просмотр Атрибутов" />
+				<Button layoutX="698.0" layoutY="41.0" mnemonicParsing="false" onAction="#excel_export" text="Выгрузить в EXCEL" />
+				<DatePicker fx:id="dt1" layoutX="18.0" layoutY="41.0" prefHeight="25.0" prefWidth="129.0" />
+				<DatePicker fx:id="dt2" layoutX="164.0" layoutY="41.0" prefHeight="25.0" prefWidth="133.0" />
+				<Text layoutX="14.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Дата начала" />
+				<Text layoutX="164.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Дата конца" />
+				<Button layoutX="480.0" layoutY="41.0" mnemonicParsing="false" onAction="#filter" text="Фильтр" />
+				<TextField fx:id="id_sess" layoutX="323.0" layoutY="41.0" prefHeight="25.0" prefWidth="111.0" />
+				<Text layoutX="323.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID Сессии" />
+				<Button layoutX="570.0" layoutY="41.0" mnemonicParsing="false" onAction="#view_unpivot" text="Подробно" />
+            <CheckBox fx:id="inkass" layoutX="18.0" layoutY="75.0" mnemonicParsing="false" text="Инкассация" />
+			</children>
 		</AnchorPane>
 	</top>
 	<left>

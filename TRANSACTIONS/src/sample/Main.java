@@ -108,7 +108,7 @@ public class Main extends Application {
 			// First, load EmployeeView from EmployeeView.fxml
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Termdial.fxml"));
-			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
+			BorderPane employeeOperationsView = (BorderPane) loader.load();
 
 			// Set Employee Operations view into the center of root layout.
 			rootLayout.setCenter(employeeOperationsView);

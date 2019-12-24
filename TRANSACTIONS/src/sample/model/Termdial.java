@@ -14,6 +14,7 @@ public class Termdial {
 	private StringProperty dealpaymentnumber;
 	private StringProperty status;
 	private StringProperty sess_id;
+	private StringProperty VECTOR;
 
 	//private SimpleObjectProperty<Timestamp> recdate;
 	private StringProperty recdate;
@@ -29,13 +30,18 @@ public class Termdial {
 		this.dealpaymentnumber = new SimpleStringProperty();
 		this.status = new SimpleStringProperty();
 		this.sess_id = new SimpleStringProperty();
+		this.VECTOR = new SimpleStringProperty();
 
+	}
+
+	public Object get_VECTOR() {
+		return VECTOR.get();
 	}
 
 	public Object get_recdate() {
 		return recdate.get();
 	}
-
+	
 	public String get_department() {
 		return department.get();
 	}
@@ -76,10 +82,14 @@ public class Termdial {
 		this.recdate.set(recdate);
 	}*/
 
+	public void set_VECTOR(String VECTOR) {
+		this.VECTOR.set(VECTOR);
+	}
+	
 	public void set_department(String department) {
 		this.department.set(department);
 	}
-
+	
 	public void set_paymentnumber(String paymentnumber) {
 		this.paymentnumber.set(paymentnumber);
 	}
@@ -111,6 +121,10 @@ public class Termdial {
 	/*public SimpleObjectProperty<Timestamp> recdateProperty() {
 		return recdate;
 	}*/
+	
+	public StringProperty VECTORProperty() {
+		return VECTOR;
+	}
 	public StringProperty recdateProperty() {
 		return recdate;
 	}

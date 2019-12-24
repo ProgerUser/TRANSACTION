@@ -13,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableCell;
@@ -53,6 +54,8 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import org.controlsfx.control.table.TableFilter;
+
 /**
  * Саид 04.04.2019.
  */
@@ -88,6 +91,9 @@ public class Termdial_Controller {
 	private TableColumn<Termdial, String> recdate;
 
 	@FXML
+	private TableColumn<Termdial, String> vector;
+
+	@FXML
 	private TableColumn<Termdial, String> status;
 
 	// For MultiThreading
@@ -101,6 +107,8 @@ public class Termdial_Controller {
 	private DatePicker datestart;
 	@FXML
 	private DatePicker dateend;
+	@FXML
+	private CheckBox feb;
 
 	@FXML
 	private void initialize() {
@@ -120,6 +128,7 @@ public class Termdial_Controller {
 		dealpaymentnumber.setCellValueFactory(cellData -> cellData.getValue().dealpaymentnumberProperty());
 		status.setCellValueFactory(cellData -> cellData.getValue().statusProperty());
 		sess_id.setCellValueFactory(cellData -> cellData.getValue().sess_idProperty());
+		vector.setCellValueFactory(cellData -> cellData.getValue().VECTORProperty());
 
 		recdate.setCellFactory(TextFieldTableCell.forTableColumn());
 		department.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -130,6 +139,7 @@ public class Termdial_Controller {
 		dealpaymentnumber.setCellFactory(TextFieldTableCell.forTableColumn());
 		status.setCellFactory(TextFieldTableCell.forTableColumn());
 		sess_id.setCellFactory(TextFieldTableCell.forTableColumn());
+		vector.setCellFactory(TextFieldTableCell.forTableColumn());
 
 		recdate.setOnEditCommit(new EventHandler<CellEditEvent<Termdial, String>>() {
 
@@ -194,7 +204,13 @@ public class Termdial_Controller {
 						.set_sess_id(t.getNewValue());
 			}
 		});
-
+		vector.setOnEditCommit(new EventHandler<CellEditEvent<Termdial, String>>() {
+			@Override
+			public void handle(CellEditEvent<Termdial, String> t) {
+				((Termdial) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_sess_id(t.getNewValue());
+			}
+		});
 	}
 
 	public static void autoResizeColumns(TableView<?> table) {
@@ -227,10 +243,18 @@ public class Termdial_Controller {
 
 	@FXML
 	private void termdial_srch(ActionEvent actionEvent) {
-		ObservableList<Termdial> empData = TerminalDAO.Termdial_(datestart.getValue(), dateend.getValue(),
-				trnumber.getText(), sess_id_t.getText());
+
+		ObservableList<Termdial> empData = null;
+		if (feb.isSelected()) {
+			empData = TerminalDAO.Termdial_(datestart.getValue(), dateend.getValue(), trnumber.getText(),
+					sess_id_t.getText(), false);
+		} else {
+			empData = TerminalDAO.Termdial_(datestart.getValue(), dateend.getValue(), trnumber.getText(),
+					sess_id_t.getText(), true);
+		}
 		populate_termdial(empData);
 		autoResizeColumns(termdeal_table);
+		TableFilter<Termdial> filter = new TableFilter<>(termdeal_table);
 	}
 
 	// Заполнить таблицу

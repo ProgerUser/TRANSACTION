@@ -147,20 +147,11 @@ public class TerminalDAO {
 			ldt2_ = " and trunc(date_time) <= to_date('" + ldt2 + "','dd.mm.yyyy')\n";
 		}
 
-		String selectStmt = "select sess_id,\n" + 
-				"       file_name,\n" + 
-				"       date_time,\n" + 
-				"       fileclob,\n" + 
-				"       case\n" + 
-				"         when status = 0 then\n" + 
-				"          'Загружен'\n" + 
-				"         when status = 1 then\n" + 
-				"          'Разобран'\n" + 
-				"         when status = 2 then\n" + 
-				"          'Рассчитан'\n" + 
-				"       end status,\n" + 
-				"       path,\n" + 
-				"       user_ from Z_SB_FN_SESS_AMRA \n" + "where 1=1" + ldt1_ + ldt2_ + p_n + bt + clob
+		String selectStmt = "select sess_id,\n" + "       file_name,\n" + "       date_time,\n" + "       fileclob,\n"
+				+ "       case\n" + "         when status = 0 then\n" + "          'Загружен'\n"
+				+ "         when status = 1 then\n" + "          'Разобран'\n" + "         when status = 2 then\n"
+				+ "          'Рассчитан'\n" + "       end status,\n" + "       path,\n"
+				+ "       user_ from Z_SB_FN_SESS_AMRA \n" + "where 1=1" + ldt1_ + ldt2_ + p_n + bt + clob
 				+ "order by date_time desc";
 
 		// Execute SELECT statement
@@ -178,8 +169,8 @@ public class TerminalDAO {
 	// *******************************
 	// SELECT FN_SESS
 	// *******************************
-	public static ObservableList<Add_File> add_file(String SESS_ID,LocalDate dt) {
-		
+	public static ObservableList<Add_File> add_file(String SESS_ID, LocalDate dt) {
+
 		String ldt = "\n";
 		String ldt_ = "\n";
 		String p_n = "\n";
@@ -190,24 +181,15 @@ public class TerminalDAO {
 		}
 		if (dt != null)
 			ldt_ = dt.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-		
-		if (dt != null ) {
+
+		if (dt != null) {
 			ldt = " and trunc(date_time) = to_date('" + ldt_ + "','dd.mm.yyyy')\n";
 		}
-		String selectStmt = "select sess_id,\n" + 
-				"       file_name,\n" + 
-				"       date_time,\n" + 
-				"       fileclob,\n" + 
-				"       case\n" + 
-				"         when status = 0 then\n" + 
-				"          'Загружен'\n" + 
-				"         when status = 1 then\n" + 
-				"          'Разобран'\n" + 
-				"         when status = 2 then\n" + 
-				"          'Рассчитан'\n" + 
-				"       end status,\n" + 
-				"       path,\n" + 
-				"       user_ from Z_SB_FN_SESS_AMRA \n" + "where 1=1" + p_n + ldt+"order by date_time desc";
+		String selectStmt = "select sess_id,\n" + "       file_name,\n" + "       date_time,\n" + "       fileclob,\n"
+				+ "       case\n" + "         when status = 0 then\n" + "          'Загружен'\n"
+				+ "         when status = 1 then\n" + "          'Разобран'\n" + "         when status = 2 then\n"
+				+ "          'Рассчитан'\n" + "       end status,\n" + "       path,\n"
+				+ "       user_ from Z_SB_FN_SESS_AMRA \n" + "where 1=1" + p_n + ldt + "order by date_time desc";
 
 		// Get ResultSet from dbExecuteQuery method
 		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
@@ -220,51 +202,48 @@ public class TerminalDAO {
 	}
 
 	// *******************************
-		// SELECT FN_SESS
-		// *******************************
-		public static ObservableList<Add_File> add_file_d(LocalDate Date) {
-			String p_n = "\n";
-			String dd = "\n";
-			if (Date != null)
-				dd = Date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+	// SELECT FN_SESS
+	// *******************************
+	public static ObservableList<Add_File> add_file_d(LocalDate Date) {
+		String p_n = "\n";
+		String dd = "\n";
+		if (Date != null)
+			dd = Date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
-			if (Date != null ) {
-				p_n = "and trunc(DATE_TIME) = to_date('" + dd + "','dd.mm.yyyy')\n";
-			}
-
-			String selectStmt = "select sess_id,\n" + 
-					"       file_name,\n" + 
-					"       date_time,\n" + 
-					"       fileclob,\n" + 
-					"       case\n" + 
-					"         when status = 0 then\n" + 
-					"          'Загружен'\n" + 
-					"         when status = 1 then\n" + 
-					"          'Разобран'\n" + 
-					"         when status = 2 then\n" + 
-					"          'Рассчитан'\n" + 
-					"       end status,\n" + 
-					"       path,\n" + 
-					"       user_ from Z_SB_FN_SESS_AMRA \n" + "where 1=1" + p_n + "order by date_time desc";
-
-			// Get ResultSet from dbExecuteQuery method
-			ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
-
-			// Send ResultSet to the getEmployeeList method and get employee object
-			ObservableList<Add_File> empList = get_file(rsEmps);
-
-			// Return employee object
-			return empList;
+		if (Date != null) {
+			p_n = "and trunc(DATE_TIME) = to_date('" + dd + "','dd.mm.yyyy')\n";
 		}
 
-		
+		String selectStmt = "select sess_id,\n" + "       file_name,\n" + "       date_time,\n" + "       fileclob,\n"
+				+ "       case\n" + "         when status = 0 then\n" + "          'Загружен'\n"
+				+ "         when status = 1 then\n" + "          'Разобран'\n" + "         when status = 2 then\n"
+				+ "          'Рассчитан'\n" + "       end status,\n" + "       path,\n"
+				+ "       user_ from Z_SB_FN_SESS_AMRA \n" + "where 1=1" + p_n + "order by date_time desc";
+
+		// Get ResultSet from dbExecuteQuery method
+		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
+
+		// Send ResultSet to the getEmployeeList method and get employee object
+		ObservableList<Add_File> empList = get_file(rsEmps);
+
+		// Return employee object
+		return empList;
+	}
+
 	// *******************************
 	// SELECT FN_SESS
 	// *******************************
-	public static ObservableList<Amra_Trans> Amra_Trans_(String SESS_ID, LocalDate dt1, LocalDate dt2) {
+	public static ObservableList<Amra_Trans> Amra_Trans_(String SESS_ID, LocalDate dt1, LocalDate dt2, boolean chk) {
+
 		String ldt1 = null;
 		String ldt2 = null;
 
+		String table = null;
+		if (chk == true) {
+			table = "Z_SB_TRANSACT_AMRA_DBT";
+		} else {
+			table = "z_sb_transact_amra_inkas";
+		}
 		if (dt1 != null)
 			ldt1 = dt1.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 		if (dt2 != null)
@@ -293,8 +272,8 @@ public class TerminalDAO {
 
 		}
 
-		String selectStmt = " select rownum,t.* from (select rownum,t.* from Z_SB_TRANSACT_AMRA_DBT t where 1=1" + sess
-				+ ldt1_ + ldt2_ + bt + " order by PAYDATE desc) t";
+		String selectStmt = " select rownum,t.* from (select rownum,t.* from " + table + " t where 1=1" + sess + ldt1_
+				+ ldt2_ + bt + " order by PAYDATE desc) t";
 
 		// Execute SELECT statement
 
@@ -337,249 +316,151 @@ public class TerminalDAO {
 	// SELECT Unpiv
 	// *******************************
 	public static ObservableList<Unpiv> Unpiv_View() {
-		String selectStmt = "with dat as\n" + 
-				" (select to_char(recdate, 'DD-MM-RRRR HH24:MI:SS') recdate,\n" + 
-				"         to_char(paydate, 'DD-MM-RRRR HH24:MI:SS') paydate,\n" + 
-				"         currency,\n" + 
-				"         paymenttype,\n" + 
-				"         vk,\n" + 
-				"         to_char(dateofoperation, 'DD-MM-RRRR HH24:MI:SS') dateofoperation,\n" + 
-				"         dataps,\n" + 
-				"         dateclearing,\n" + 
-				"         dealer,\n" + 
-				"         accountpayer,\n" + 
-				"         cardnumber,\n" + 
-				"         operationnumber,\n" + 
-				"         operationnumberdelivery,\n" + 
-				"         checknumber,\n" + 
-				"         checkparent,\n" + 
-				"         orderofprovidence,\n" + 
-				"         provider,\n" + 
-				"         owninown,\n" + 
-				"         corrected,\n" + 
-				"         commissionrate,\n" + 
-				"         status,\n" + 
-				"         stringfromfile,\n" + 
-				"         rewardamount,\n" + 
-				"         ownerincomeamount,\n" + 
-				"         to_char(commissionamount) commissionamount,\n" + 
-				"         nkamount,\n" + 
-				"         maxcommissionamount,\n" + 
-				"         mincommissionamount,\n" + 
-				"         to_char(cashamount) cashamount,\n" + 
-				"         sumnalprimal,\n" + 
-				"         to_char(amounttocheck) amounttocheck,\n" + 
-				"         to_char(amountofpayment) amountofpayment,\n" + 
-				"         sumofsplitting,\n" + 
-				"         amountintermediary,\n" + 
-				"         amountofscs,\n" + 
-				"         to_char(amountwithchecks) amountwithchecks,\n" + 
-				"         counter,\n" + 
-				"         terminal,\n" + 
-				"         terminalnetwork,\n" + 
-				"         transactiontype,\n" + 
-				"         service,\n" + 
-				"         filetransactions,\n" + 
-				"         fio,\n" + 
-				"         checksincoming,\n" + 
-				"         barcode,\n" + 
-				"         isaresident,\n" + 
-				"         valuenotfound,\n" + 
-				"         providertariff,\n" + 
-				"         counterchecks,\n" + 
-				"         countercheck,\n" + 
-				"         id_,\n" + 
-				"         detailing,\n" + 
-				"         walletpayer,\n" + 
-				"         walletreceiver,\n" + 
-				"         purposeofpayment,\n" + 
-				"         dataprovider,\n" + 
-				"         to_char(statusabs) statusabs,\n" + 
-				"         to_char(sess_id) sess_id\n" + 
-				"    from z_sb_transact_amra_dbt t\n" + 
-				"   where t.checknumber = '"+Connect.PNMB_+"'),\n" + 
-				"unpiv as\n" + 
-				" (select *\n" + 
-				"    from dat unpivot(colvalue for col in(recdate,\n" + 
-				"                                         paydate,\n" + 
-				"                                         currency,\n" + 
-				"                                         paymenttype,\n" + 
-				"                                         vk,\n" + 
-				"                                         dateofoperation,\n" + 
-				"                                         dataps,\n" + 
-				"                                         dateclearing,\n" + 
-				"                                         dealer,\n" + 
-				"                                         accountpayer,\n" + 
-				"                                         cardnumber,\n" + 
-				"                                         operationnumber,\n" + 
-				"                                         operationnumberdelivery,\n" + 
-				"                                         checknumber,\n" + 
-				"                                         checkparent,\n" + 
-				"                                         orderofprovidence,\n" + 
-				"                                         provider,\n" + 
-				"                                         owninown,\n" + 
-				"                                         corrected,\n" + 
-				"                                         commissionrate,\n" + 
-				"                                         status,\n" + 
-				"                                         stringfromfile,\n" + 
-				"                                         rewardamount,\n" + 
-				"                                         ownerincomeamount,\n" + 
-				"                                         commissionamount,\n" + 
-				"                                         nkamount,\n" + 
-				"                                         maxcommissionamount,\n" + 
-				"                                         mincommissionamount,\n" + 
-				"                                         cashamount,\n" + 
-				"                                         sumnalprimal,\n" + 
-				"                                         amounttocheck,\n" + 
-				"                                         amountofpayment,\n" + 
-				"                                         sumofsplitting,\n" + 
-				"                                         amountintermediary,\n" + 
-				"                                         amountofscs,\n" + 
-				"                                         amountwithchecks,\n" + 
-				"                                         counter,\n" + 
-				"                                         terminal,\n" + 
-				"                                         terminalnetwork,\n" + 
-				"                                         transactiontype,\n" + 
-				"                                         service,\n" + 
-				"                                         filetransactions,\n" + 
-				"                                         fio,\n" + 
-				"                                         checksincoming,\n" + 
-				"                                         barcode,\n" + 
-				"                                         isaresident,\n" + 
-				"                                         valuenotfound,\n" + 
-				"                                         providertariff,\n" + 
-				"                                         counterchecks,\n" + 
-				"                                         countercheck,\n" + 
-				"                                         id_,\n" + 
-				"                                         detailing,\n" + 
-				"                                         walletpayer,\n" + 
-				"                                         walletreceiver,\n" + 
-				"                                         purposeofpayment,\n" + 
-				"                                         dataprovider,\n" + 
-				"                                         statusabs,\n" + 
-				"                                         sess_id)))\n" + 
-				"\n" + 
-				"select case\n" + 
-				"         when COL = 'RECDATE' then\n" + 
-				"          'Дата Загрузки'\n" + 
-				"         when COL = 'PAYDATE' then\n" + 
-				"          'Дата Платежа'\n" + 
-				"         when COL = 'CURRENCY' then\n" + 
-				"          'Валюта=CURRENCY'\n" + 
-				"         when COL = 'PAYMENTTYPE' then\n" + 
-				"          'ВидПлатежа=PAYMENTTYPE'\n" + 
-				"         when COL = 'VK' then\n" + 
-				"          'ВК=VK'\n" + 
-				"         when COL = 'DATEOFOPERATION' then\n" + 
-				"          'ДатаОперации=DATEOFOPERATION'\n" + 
-				"         when COL = 'DATAPS' then\n" + 
-				"          'ДатаПС=DATAPS'\n" + 
-				"         when COL = 'DATECLEARING' then\n" + 
-				"          'ДатаКлиринга=DATECLEARING'\n" + 
-				"         when COL = 'DEALER' then\n" + 
-				"          'Дилер=DEALER'\n" + 
-				"         when COL = 'ACCOUNTPAYER' then\n" + 
-				"          'ЛСПлательщика=ACCOUNTPAYER'\n" + 
-				"         when COL = 'CARDNUMBER' then\n" + 
-				"          'НомерКарты=CARDNUMBER'\n" + 
-				"         when COL = 'OPERATIONNUMBER' then\n" + 
-				"          'НомерОперации=OPERATIONNUMBER'\n" + 
-				"         when COL = 'OPERATIONNUMBERDELIVERY' then\n" + 
-				"          'НомерОперацииСдача=OPERATIONNUMBERDELIVERY'\n" + 
-				"         when COL = 'CHECKNUMBER' then\n" + 
-				"          'НомерЧека=CHECKNUMBER'\n" + 
-				"         when COL = 'CHECKPARENT' then\n" + 
-				"          'ЧекРодитель=CHECKPARENT'\n" + 
-				"         when COL = 'ORDEROFPROVIDENCE' then\n" + 
-				"          'ПорядокПровдения=ORDEROFPROVIDENCE'\n" + 
-				"         when COL = 'PROVIDER' then\n" + 
-				"          'Провайдер=PROVIDER'\n" + 
-				"         when COL = 'OWNINOWN' then\n" + 
-				"          'СвойВСвоем=OWNINOWN'\n" + 
-				"         when COL = 'CORRECTED' then\n" + 
-				"          'Скорректирована=CORRECTED'\n" + 
-				"         when COL = 'COMMISSIONRATE' then\n" + 
-				"          'СтавкаКомиссии=COMMISSIONRATE'\n" + 
-				"         when COL = 'STATUS' then\n" + 
-				"          'Статус=STATUS'\n" + 
-				"         when COL = 'STRINGFROMFILE' then\n" + 
-				"          'СтрокаИзФайла=STRINGFROMFILE'\n" + 
-				"         when COL = 'REWARDAMOUNT' then\n" + 
-				"          'СуммаВознаграждения=REWARDAMOUNT'\n" + 
-				"         when COL = 'OWNERINCOMEAMOUNT' then\n" + 
-				"          'СуммаДоходВладельца=OWNERINCOMEAMOUNT'\n" + 
-				"         when COL = 'COMMISSIONAMOUNT' then\n" + 
-				"          'СуммаКомиссии=COMMISSIONAMOUNT'\n" + 
-				"         when COL = 'NKAMOUNT' then\n" + 
-				"          'СуммаНК=NKAMOUNT'\n" + 
-				"         when COL = 'MAXCOMMISSIONAMOUNT' then\n" + 
-				"          'СуммаКомиссииМакс=MAXCOMMISSIONAMOUNT'\n" + 
-				"         when COL = 'MINCOMMISSIONAMOUNT' then\n" + 
-				"          'СуммаКомиссииМин=MINCOMMISSIONAMOUNT'\n" + 
-				"         when COL = 'CASHAMOUNT' then\n" + 
-				"          'СуммаНаличных=CASHAMOUNT'\n" + 
-				"         when COL = 'SUMNALPRIMAL' then\n" + 
-				"          'СуммаНалИзначальная=SUMNALPRIMAL'\n" + 
-				"         when COL = 'AMOUNTTOCHECK' then\n" + 
-				"          'СуммаНаЧек=AMOUNTTOCHECK'\n" + 
-				"         when COL = 'AMOUNTOFPAYMENT' then\n" + 
-				"          'СуммаПлатежа=AMOUNTOFPAYMENT'\n" + 
-				"         when COL = 'SUMOFSPLITTING' then\n" + 
-				"          'СуммаНаРасщепление=SUMOFSPLITTING'\n" + 
-				"         when COL = 'AMOUNTINTERMEDIARY' then\n" + 
-				"          'СуммаПосредника=AMOUNTINTERMEDIARY'\n" + 
-				"         when COL = 'AMOUNTOFSCS' then\n" + 
-				"          'СуммаСКС=AMOUNTOFSCS'\n" + 
-				"         when COL = 'AMOUNTWITHCHECKS' then\n" + 
-				"          'СуммаСЧеков=AMOUNTWITHCHECKS'\n" + 
-				"         when COL = 'COUNTER' then\n" + 
-				"          'Счетчик=COUNTER'\n" + 
-				"         when COL = 'TERMINAL' then\n" + 
-				"          'Терминал=TERMINAL'\n" + 
-				"         when COL = 'TERMINALNETWORK' then\n" + 
-				"          'ТерминальнаяСеть=TERMINALNETWORK'\n" + 
-				"         when COL = 'TRANSACTIONTYPE' then\n" + 
-				"          'ТипТранзакции=TRANSACTIONTYPE'\n" + 
-				"         when COL = 'SERVICE' then\n" + 
-				"          'Услуга=SERVICE'\n" + 
-				"         when COL = 'FILETRANSACTIONS' then\n" + 
-				"          'ФайлТранзакции=FILETRANSACTIONS'\n" + 
-				"         when COL = 'FIO' then\n" + 
-				"          'ФИО=FIO'\n" + 
-				"         when COL = 'CHECKSINCOMING' then\n" + 
-				"          'ЧекиВходящие=CHECKSINCOMING'\n" + 
-				"         when COL = 'BARCODE' then\n" + 
-				"          'ШтрихКод=BARCODE'\n" + 
-				"         when COL = 'ISARESIDENT' then\n" + 
-				"          'ЯвляетсяРезидентом=ISARESIDENT'\n" + 
-				"         when COL = 'VALUENOTFOUND' then\n" + 
-				"          'ЗначениеНеНайдено=VALUENOTFOUND'\n" + 
-				"         when COL = 'PROVIDERTARIFF' then\n" + 
-				"          'ТарифПровайдера=PROVIDERTARIFF'\n" + 
-				"         when COL = 'COUNTERCHECKS' then\n" + 
-				"          'СчетчикСчеков=COUNTERCHECKS'\n" + 
-				"         when COL = 'COUNTERCHECK' then\n" + 
-				"          'СчетчикНаЧек=COUNTERCHECK'\n" + 
-				"         when COL = 'ID_' then\n" + 
-				"          'Id=ID_'\n" + 
-				"         when COL = 'DETAILING' then\n" + 
-				"          'Деталировка=DETAILING'\n" + 
-				"         when COL = 'WALLETPAYER' then\n" + 
-				"          'КошелекПлательщик=WALLETPAYER'\n" + 
-				"         when COL = 'WALLETRECEIVER' then\n" + 
-				"          'КошелекПолучатель=WALLETRECEIVER'\n" + 
-				"         when COL = 'PURPOSEOFPAYMENT' then\n" + 
-				"          'НазначениеПлатежа=PURPOSEOFPAYMENT'\n" + 
-				"         when COL = 'DATAPROVIDER' then\n" + 
-				"          'ДатаПровайдера=DATAPROVIDER'\n" + 
-				"         when COL = 'STATUSABS' then\n" + 
-				"          'statusabs'\n" + 
-				"         when COL = 'SESS_ID' then\n" + 
-				"          'sess_id'\n" + 
-				"       end col,\n" + 
-				"       COLVALUE\n" + 
-				"  from unpiv\n" + 
-				"";
+		String selectStmt = "with dat as\n" + " (select to_char(recdate, 'DD-MM-RRRR HH24:MI:SS') recdate,\n"
+				+ "         to_char(paydate, 'DD-MM-RRRR HH24:MI:SS') paydate,\n" + "         currency,\n"
+				+ "         paymenttype,\n" + "         vk,\n"
+				+ "         to_char(dateofoperation, 'DD-MM-RRRR HH24:MI:SS') dateofoperation,\n" + "         dataps,\n"
+				+ "         dateclearing,\n" + "         dealer,\n" + "         accountpayer,\n"
+				+ "         cardnumber,\n" + "         operationnumber,\n" + "         operationnumberdelivery,\n"
+				+ "         checknumber,\n" + "         checkparent,\n" + "         orderofprovidence,\n"
+				+ "         provider,\n" + "         owninown,\n" + "         corrected,\n"
+				+ "         commissionrate,\n" + "         status,\n" + "         stringfromfile,\n"
+				+ "         rewardamount,\n" + "         ownerincomeamount,\n"
+				+ "         to_char(commissionamount) commissionamount,\n" + "         nkamount,\n"
+				+ "         maxcommissionamount,\n" + "         mincommissionamount,\n"
+				+ "         to_char(cashamount) cashamount,\n" + "         sumnalprimal,\n"
+				+ "         to_char(amounttocheck) amounttocheck,\n"
+				+ "         to_char(amountofpayment) amountofpayment,\n" + "         sumofsplitting,\n"
+				+ "         amountintermediary,\n" + "         amountofscs,\n"
+				+ "         to_char(amountwithchecks) amountwithchecks,\n" + "         counter,\n"
+				+ "         terminal,\n" + "         terminalnetwork,\n" + "         transactiontype,\n"
+				+ "         service,\n" + "         filetransactions,\n" + "         fio,\n"
+				+ "         checksincoming,\n" + "         barcode,\n" + "         isaresident,\n"
+				+ "         valuenotfound,\n" + "         providertariff,\n" + "         counterchecks,\n"
+				+ "         countercheck,\n" + "         id_,\n" + "         detailing,\n" + "         walletpayer,\n"
+				+ "         walletreceiver,\n" + "         purposeofpayment,\n" + "         dataprovider,\n"
+				+ "         to_char(statusabs) statusabs,\n" + "         to_char(sess_id) sess_id\n"
+				+ "    from z_sb_transact_amra_dbt t\n" + "   where t.checknumber = '" + Connect.PNMB_ + "'),\n"
+				+ "unpiv as\n" + " (select *\n" + "    from dat unpivot(colvalue for col in(recdate,\n"
+				+ "                                         paydate,\n"
+				+ "                                         currency,\n"
+				+ "                                         paymenttype,\n"
+				+ "                                         vk,\n"
+				+ "                                         dateofoperation,\n"
+				+ "                                         dataps,\n"
+				+ "                                         dateclearing,\n"
+				+ "                                         dealer,\n"
+				+ "                                         accountpayer,\n"
+				+ "                                         cardnumber,\n"
+				+ "                                         operationnumber,\n"
+				+ "                                         operationnumberdelivery,\n"
+				+ "                                         checknumber,\n"
+				+ "                                         checkparent,\n"
+				+ "                                         orderofprovidence,\n"
+				+ "                                         provider,\n"
+				+ "                                         owninown,\n"
+				+ "                                         corrected,\n"
+				+ "                                         commissionrate,\n"
+				+ "                                         status,\n"
+				+ "                                         stringfromfile,\n"
+				+ "                                         rewardamount,\n"
+				+ "                                         ownerincomeamount,\n"
+				+ "                                         commissionamount,\n"
+				+ "                                         nkamount,\n"
+				+ "                                         maxcommissionamount,\n"
+				+ "                                         mincommissionamount,\n"
+				+ "                                         cashamount,\n"
+				+ "                                         sumnalprimal,\n"
+				+ "                                         amounttocheck,\n"
+				+ "                                         amountofpayment,\n"
+				+ "                                         sumofsplitting,\n"
+				+ "                                         amountintermediary,\n"
+				+ "                                         amountofscs,\n"
+				+ "                                         amountwithchecks,\n"
+				+ "                                         counter,\n"
+				+ "                                         terminal,\n"
+				+ "                                         terminalnetwork,\n"
+				+ "                                         transactiontype,\n"
+				+ "                                         service,\n"
+				+ "                                         filetransactions,\n"
+				+ "                                         fio,\n"
+				+ "                                         checksincoming,\n"
+				+ "                                         barcode,\n"
+				+ "                                         isaresident,\n"
+				+ "                                         valuenotfound,\n"
+				+ "                                         providertariff,\n"
+				+ "                                         counterchecks,\n"
+				+ "                                         countercheck,\n"
+				+ "                                         id_,\n"
+				+ "                                         detailing,\n"
+				+ "                                         walletpayer,\n"
+				+ "                                         walletreceiver,\n"
+				+ "                                         purposeofpayment,\n"
+				+ "                                         dataprovider,\n"
+				+ "                                         statusabs,\n"
+				+ "                                         sess_id)))\n" + "\n" + "select case\n"
+				+ "         when COL = 'RECDATE' then\n" + "          'Дата Загрузки'\n"
+				+ "         when COL = 'PAYDATE' then\n" + "          'Дата Платежа'\n"
+				+ "         when COL = 'CURRENCY' then\n" + "          'Валюта=CURRENCY'\n"
+				+ "         when COL = 'PAYMENTTYPE' then\n" + "          'ВидПлатежа=PAYMENTTYPE'\n"
+				+ "         when COL = 'VK' then\n" + "          'ВК=VK'\n"
+				+ "         when COL = 'DATEOFOPERATION' then\n" + "          'ДатаОперации=DATEOFOPERATION'\n"
+				+ "         when COL = 'DATAPS' then\n" + "          'ДатаПС=DATAPS'\n"
+				+ "         when COL = 'DATECLEARING' then\n" + "          'ДатаКлиринга=DATECLEARING'\n"
+				+ "         when COL = 'DEALER' then\n" + "          'Дилер=DEALER'\n"
+				+ "         when COL = 'ACCOUNTPAYER' then\n" + "          'ЛСПлательщика=ACCOUNTPAYER'\n"
+				+ "         when COL = 'CARDNUMBER' then\n" + "          'НомерКарты=CARDNUMBER'\n"
+				+ "         when COL = 'OPERATIONNUMBER' then\n" + "          'НомерОперации=OPERATIONNUMBER'\n"
+				+ "         when COL = 'OPERATIONNUMBERDELIVERY' then\n"
+				+ "          'НомерОперацииСдача=OPERATIONNUMBERDELIVERY'\n"
+				+ "         when COL = 'CHECKNUMBER' then\n" + "          'НомерЧека=CHECKNUMBER'\n"
+				+ "         when COL = 'CHECKPARENT' then\n" + "          'ЧекРодитель=CHECKPARENT'\n"
+				+ "         when COL = 'ORDEROFPROVIDENCE' then\n" + "          'ПорядокПровдения=ORDEROFPROVIDENCE'\n"
+				+ "         when COL = 'PROVIDER' then\n" + "          'Провайдер=PROVIDER'\n"
+				+ "         when COL = 'OWNINOWN' then\n" + "          'СвойВСвоем=OWNINOWN'\n"
+				+ "         when COL = 'CORRECTED' then\n" + "          'Скорректирована=CORRECTED'\n"
+				+ "         when COL = 'COMMISSIONRATE' then\n" + "          'СтавкаКомиссии=COMMISSIONRATE'\n"
+				+ "         when COL = 'STATUS' then\n" + "          'Статус=STATUS'\n"
+				+ "         when COL = 'STRINGFROMFILE' then\n" + "          'СтрокаИзФайла=STRINGFROMFILE'\n"
+				+ "         when COL = 'REWARDAMOUNT' then\n" + "          'СуммаВознаграждения=REWARDAMOUNT'\n"
+				+ "         when COL = 'OWNERINCOMEAMOUNT' then\n"
+				+ "          'СуммаДоходВладельца=OWNERINCOMEAMOUNT'\n"
+				+ "         when COL = 'COMMISSIONAMOUNT' then\n" + "          'СуммаКомиссии=COMMISSIONAMOUNT'\n"
+				+ "         when COL = 'NKAMOUNT' then\n" + "          'СуммаНК=NKAMOUNT'\n"
+				+ "         when COL = 'MAXCOMMISSIONAMOUNT' then\n"
+				+ "          'СуммаКомиссииМакс=MAXCOMMISSIONAMOUNT'\n"
+				+ "         when COL = 'MINCOMMISSIONAMOUNT' then\n"
+				+ "          'СуммаКомиссииМин=MINCOMMISSIONAMOUNT'\n" + "         when COL = 'CASHAMOUNT' then\n"
+				+ "          'СуммаНаличных=CASHAMOUNT'\n" + "         when COL = 'SUMNALPRIMAL' then\n"
+				+ "          'СуммаНалИзначальная=SUMNALPRIMAL'\n" + "         when COL = 'AMOUNTTOCHECK' then\n"
+				+ "          'СуммаНаЧек=AMOUNTTOCHECK'\n" + "         when COL = 'AMOUNTOFPAYMENT' then\n"
+				+ "          'СуммаПлатежа=AMOUNTOFPAYMENT'\n" + "         when COL = 'SUMOFSPLITTING' then\n"
+				+ "          'СуммаНаРасщепление=SUMOFSPLITTING'\n" + "         when COL = 'AMOUNTINTERMEDIARY' then\n"
+				+ "          'СуммаПосредника=AMOUNTINTERMEDIARY'\n" + "         when COL = 'AMOUNTOFSCS' then\n"
+				+ "          'СуммаСКС=AMOUNTOFSCS'\n" + "         when COL = 'AMOUNTWITHCHECKS' then\n"
+				+ "          'СуммаСЧеков=AMOUNTWITHCHECKS'\n" + "         when COL = 'COUNTER' then\n"
+				+ "          'Счетчик=COUNTER'\n" + "         when COL = 'TERMINAL' then\n"
+				+ "          'Терминал=TERMINAL'\n" + "         when COL = 'TERMINALNETWORK' then\n"
+				+ "          'ТерминальнаяСеть=TERMINALNETWORK'\n" + "         when COL = 'TRANSACTIONTYPE' then\n"
+				+ "          'ТипТранзакции=TRANSACTIONTYPE'\n" + "         when COL = 'SERVICE' then\n"
+				+ "          'Услуга=SERVICE'\n" + "         when COL = 'FILETRANSACTIONS' then\n"
+				+ "          'ФайлТранзакции=FILETRANSACTIONS'\n" + "         when COL = 'FIO' then\n"
+				+ "          'ФИО=FIO'\n" + "         when COL = 'CHECKSINCOMING' then\n"
+				+ "          'ЧекиВходящие=CHECKSINCOMING'\n" + "         when COL = 'BARCODE' then\n"
+				+ "          'ШтрихКод=BARCODE'\n" + "         when COL = 'ISARESIDENT' then\n"
+				+ "          'ЯвляетсяРезидентом=ISARESIDENT'\n" + "         when COL = 'VALUENOTFOUND' then\n"
+				+ "          'ЗначениеНеНайдено=VALUENOTFOUND'\n" + "         when COL = 'PROVIDERTARIFF' then\n"
+				+ "          'ТарифПровайдера=PROVIDERTARIFF'\n" + "         when COL = 'COUNTERCHECKS' then\n"
+				+ "          'СчетчикСчеков=COUNTERCHECKS'\n" + "         when COL = 'COUNTERCHECK' then\n"
+				+ "          'СчетчикНаЧек=COUNTERCHECK'\n" + "         when COL = 'ID_' then\n"
+				+ "          'Id=ID_'\n" + "         when COL = 'DETAILING' then\n"
+				+ "          'Деталировка=DETAILING'\n" + "         when COL = 'WALLETPAYER' then\n"
+				+ "          'КошелекПлательщик=WALLETPAYER'\n" + "         when COL = 'WALLETRECEIVER' then\n"
+				+ "          'КошелекПолучатель=WALLETRECEIVER'\n" + "         when COL = 'PURPOSEOFPAYMENT' then\n"
+				+ "          'НазначениеПлатежа=PURPOSEOFPAYMENT'\n" + "         when COL = 'DATAPROVIDER' then\n"
+				+ "          'ДатаПровайдера=DATAPROVIDER'\n" + "         when COL = 'STATUSABS' then\n"
+				+ "          'statusabs'\n" + "         when COL = 'SESS_ID' then\n" + "          'sess_id'\n"
+				+ "       end col,\n" + "       COLVALUE\n" + "  from unpiv\n" + "";
 
 		// Execute SELECT statement
 
@@ -592,17 +473,24 @@ public class TerminalDAO {
 		// Return employee object
 		return empList;
 	}
-	
+
 	// *******************************
 	// SELECT Termdial_
 	// *******************************
-	public static ObservableList<Termdial> Termdial_(LocalDate dt1, LocalDate dt2, String pnmb, String sess_id) {
+	public static ObservableList<Termdial> Termdial_(LocalDate dt1, LocalDate dt2, String pnmb, String sess_id,boolean chk) {
 		String pnmb_ = "\n";
 		String sess_id_ = "\n";
 
 		String ldt1 = null;
 		String ldt2 = null;
 
+		String table = null;
+		if (chk == true) {
+			table = "z_sb_termdeal_amra_dbt";
+		} else {
+			table = "Z_SB_TERMDEAL_AMRA_FEB";
+		}
+		
 		if (dt1 != null)
 			ldt1 = dt1.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 		if (dt2 != null)
@@ -632,7 +520,7 @@ public class TerminalDAO {
 			sess_id_ = "and SESS_ID = '" + sess_id + "'\n";
 		}
 
-		String selectStmt = "select * from z_sb_termdeal_amra_dbt where 1=1" + ldt1_ + bt + ldt2_ + pnmb_ + sess_id_;
+		String selectStmt = "select * from "+table+" t where 1=1" + ldt1_ + bt + ldt2_ + pnmb_ + sess_id_;
 
 		// Execute SELECT statement
 
@@ -640,8 +528,13 @@ public class TerminalDAO {
 		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
 
 		// Send ResultSet to the getEmployeeList method and get employee object
-		ObservableList<Termdial> empList = get_term(rsEmps);
-
+		ObservableList<Termdial> empList = null; 
+		
+		if (chk == true) {
+			empList = get_term(rsEmps);
+		} else {
+			empList = get_term_2(rsEmps);
+		}
 		// Return employee object
 		return empList;
 	}
@@ -710,12 +603,21 @@ public class TerminalDAO {
 				Termdial td = new Termdial();
 				// String format = new SimpleDateFormat("MM.dd.yyyy
 				// HH:mm:ss").format(rs.getTimestamp("recdate"));
-				td.set_recdate(rs.getString("recdate"));
+				String recdate = new SimpleDateFormat("dd.MM.yy HH:mm:ss").format(rs.getTimestamp("recdate"));
+				String dealstartdate = new SimpleDateFormat("dd.MM.yy HH:mm:ss")
+						.format(rs.getTimestamp("dealstartdate"));
+				String dealenddate = null;
+				if (rs.getString("dealenddate") == null) {
+					dealenddate = rs.getString("dealenddate");
+				} else {
+					dealenddate = new SimpleDateFormat("dd.MM.yy HH:mm:ss").format(rs.getTimestamp("dealenddate"));
+				}
+				td.set_recdate(recdate);
 				td.set_department(rs.getString("department"));
 				td.set_paymentnumber(rs.getString("paymentnumber"));
-				td.set_dealstartdate(rs.getString("dealstartdate"));
+				td.set_dealstartdate(dealstartdate);
 				td.set_sum_(rs.getString("sum_"));
-				td.set_dealenddate(rs.getString("dealenddate"));
+				td.set_dealenddate(dealenddate);
 				td.set_dealpaymentnumber(rs.getString("dealpaymentnumber"));
 				td.set_status(rs.getString("status"));
 				td.set_sess_id(rs.getString("sess_id"));
@@ -734,6 +636,47 @@ public class TerminalDAO {
 		return null;
 	}
 
+	// Select * from fn_sess operation
+		private static ObservableList<Termdial> get_term_2(ResultSet rs) {
+			try {
+				ObservableList<Termdial> fn_list = FXCollections.observableArrayList();
+				while (rs.next()) {
+					Termdial td = new Termdial();
+					// String format = new SimpleDateFormat("MM.dd.yyyy
+					// HH:mm:ss").format(rs.getTimestamp("recdate"));
+					String recdate = new SimpleDateFormat("dd.MM.yy HH:mm:ss").format(rs.getTimestamp("recdate"));
+					String dealstartdate = new SimpleDateFormat("dd.MM.yy HH:mm:ss")
+							.format(rs.getTimestamp("dealstartdate"));
+					String dealenddate = null;
+					if (rs.getString("dealenddate") == null) {
+						dealenddate = rs.getString("dealenddate");
+					} else {
+						dealenddate = new SimpleDateFormat("dd.MM.yy HH:mm:ss").format(rs.getTimestamp("dealenddate"));
+					}
+					td.set_recdate(recdate);
+					td.set_department(rs.getString("department"));
+					td.set_VECTOR(rs.getString("VECTOR"));
+					td.set_paymentnumber(rs.getString("paymentnumber"));
+					td.set_dealstartdate(dealstartdate);
+					td.set_sum_(rs.getString("sum_"));
+					td.set_dealenddate(dealenddate);
+					td.set_dealpaymentnumber(rs.getString("dealpaymentnumber"));
+					td.set_status(rs.getString("status"));
+					td.set_sess_id(rs.getString("sess_id"));
+					fn_list.add(td);
+				}
+				return fn_list;
+			} catch (SQLException e) {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText(e.getMessage());
+				alert.showAndWait();
+			}
+			return null;
+		}
 	// Select * from fn_sess operation
 	private static ObservableList<Attributes> get_attr(ResultSet rs) {
 		try {
@@ -760,27 +703,28 @@ public class TerminalDAO {
 	}
 
 	// Select * from fn_sess operation
-		private static ObservableList<Unpiv> get_unpiv(ResultSet rs) {
-			try {
-				ObservableList<Unpiv> fn_list = FXCollections.observableArrayList();
-				while (rs.next()) {
-					Unpiv fn = new Unpiv();
-					fn.set_COL(rs.getString("COL"));
-					fn.set_COLVALUE(rs.getString("COLVALUE"));
-					fn_list.add(fn);
-				}
-				return fn_list;
-			} catch (SQLException e) {
-				Alert alert = new Alert(Alert.AlertType.INFORMATION);
-				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-				stage.getIcons().add(new Image("terminal.png"));
-				alert.setTitle("Внимание");
-				alert.setHeaderText(null);
-				alert.setContentText(e.getMessage());
-				alert.showAndWait();
+	private static ObservableList<Unpiv> get_unpiv(ResultSet rs) {
+		try {
+			ObservableList<Unpiv> fn_list = FXCollections.observableArrayList();
+			while (rs.next()) {
+				Unpiv fn = new Unpiv();
+				fn.set_COL(rs.getString("COL"));
+				fn.set_COLVALUE(rs.getString("COLVALUE"));
+				fn_list.add(fn);
 			}
-			return null;
+			return fn_list;
+		} catch (SQLException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
 		}
+		return null;
+	}
+
 	// Select * from fn_sess operation
 	private static ObservableList<Amra_Trans> get_amra_trans(ResultSet rs) {
 		try {
