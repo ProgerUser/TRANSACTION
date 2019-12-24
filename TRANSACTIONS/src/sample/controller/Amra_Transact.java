@@ -200,16 +200,14 @@ public class Amra_Transact {
 					// Populate Employees on TableView
 					populate_fn_sess(empData);
 					autoResizeColumns(load_file);
-                    
+
 					/*
-					Alert alert = new Alert(Alert.AlertType.INFORMATION);
-					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-					stage.getIcons().add(new Image("terminal.png"));
-					alert.setTitle("Внимание");
-					alert.setHeaderText(null);
-					alert.setContentText("Добавлен файл с ID = " + part2);
-					alert.showAndWait();
-					*/
+					 * Alert alert = new Alert(Alert.AlertType.INFORMATION); Stage stage = (Stage)
+					 * alert.getDialogPane().getScene().getWindow(); stage.getIcons().add(new
+					 * Image("terminal.png")); alert.setTitle("Внимание");
+					 * alert.setHeaderText(null); alert.setContentText("Добавлен файл с ID = " +
+					 * part2); alert.showAndWait();
+					 */
 				} else if (part1.equals("Dublicate")) {
 					Alert alert = new Alert(Alert.AlertType.INFORMATION);
 					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -357,18 +355,18 @@ public class Amra_Transact {
 				Add_File af = load_file.getSelectionModel().getSelectedItem();
 				Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
 						+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
-				
-				String sql_txt = "delete from z_sb_log_amra where sess_id = ?"; 
+
+				String sql_txt = "delete from z_sb_log_amra where sess_id = ?";
 				CallableStatement cs = conn.prepareCall(sql_txt);
-		        cs.setString(1, af.get_FileId());
-		        cs.execute();
-				
-		        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				cs.setString(1, af.get_FileId());
+				cs.execute();
+
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
 				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 				stage.getIcons().add(new Image("terminal.png"));
 				alert.setTitle("Внимание");
 				alert.setHeaderText(null);
-				alert.setContentText("Лог файл с ID = "+af.get_FileId()+" удален!");
+				alert.setContentText("Лог файл с ID = " + af.get_FileId() + " удален!");
 				alert.showAndWait();
 				cs.close();
 				conn.close();
@@ -381,7 +379,7 @@ public class Amra_Transact {
 				alert.setContentText("Выберите строку!");
 				alert.showAndWait();
 			}
-		} catch (SQLException  e) {
+		} catch (SQLException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 			stage.getIcons().add(new Image("terminal.png"));
@@ -445,7 +443,8 @@ public class Amra_Transact {
 
 						DateFormat dateFormat_ = new SimpleDateFormat("dd.MM.yyyy HH");
 						String strDate_ = dateFormat_.format(date);
-						String createfolder = System.getenv("TRANSACT_PATH") + strDate_ + "_SESSID_" + af.get_FileId();
+						String createfolder = System.getenv("TRANSACT_PATH") + "Files/" + strDate_ + "_SESSID_"
+								+ af.get_FileId();
 
 						File file = new File(createfolder);
 						if (!file.exists()) {
@@ -471,17 +470,16 @@ public class Amra_Transact {
 						myResultSet.close();
 					} else {
 						// --------------------------------------
-						//Protocol(part2, af.get_Path() + "\\" + af.get_FileName());
+						// Protocol(part2, af.get_Path() + "\\" + af.get_FileName());
 						// --------------------------------------
-                       /*
-						Alert alert = new Alert(Alert.AlertType.INFORMATION);
-						Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-						stage.getIcons().add(new Image("terminal.png"));
-						alert.setTitle("Внимание");
-						alert.setHeaderText(null);
-						alert.setContentText("Загрузка прошла успешна. Можете перейти к расчету");
-						alert.showAndWait();
-						*/
+						/*
+						 * Alert alert = new Alert(Alert.AlertType.INFORMATION); Stage stage = (Stage)
+						 * alert.getDialogPane().getScene().getWindow(); stage.getIcons().add(new
+						 * Image("terminal.png")); alert.setTitle("Внимание");
+						 * alert.setHeaderText(null);
+						 * alert.setContentText("Загрузка прошла успешна. Можете перейти к расчету");
+						 * alert.showAndWait();
+						 */
 					}
 					callStmt.close();
 					conn.close();
@@ -635,7 +633,8 @@ public class Amra_Transact {
 
 					DateFormat dateFormat_ = new SimpleDateFormat("dd.MM.yyyy HH");
 					String strDate_ = dateFormat_.format(date);
-					String createfolder = System.getenv("TRANSACT_PATH") + strDate_ + "_SESSID_" + af.get_FileId();
+					String createfolder = System.getenv("TRANSACT_PATH") + "Files/" + strDate_ + "_SESSID_"
+							+ af.get_FileId();
 
 					File file = new File(createfolder);
 					if (!file.exists()) {
@@ -653,16 +652,14 @@ public class Amra_Transact {
 					callStmt.close();
 					ProcessBuilder pb = new ProcessBuilder("Notepad.exe", createfolder + "\\" + strDate + "_CLOB_.txt");
 					pb.start();
-                    
+
 					/*
-					Alert alert = new Alert(Alert.AlertType.INFORMATION);
-					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-					stage.getIcons().add(new Image("terminal.png"));
-					alert.setTitle("Внимание");
-					alert.setHeaderText(null);
-					alert.setContentText("Расчет прошел успешно!");
-					alert.showAndWait();
-					*/
+					 * Alert alert = new Alert(Alert.AlertType.INFORMATION); Stage stage = (Stage)
+					 * alert.getDialogPane().getScene().getWindow(); stage.getIcons().add(new
+					 * Image("terminal.png")); alert.setTitle("Внимание");
+					 * alert.setHeaderText(null); alert.setContentText("Расчет прошел успешно!");
+					 * alert.showAndWait();
+					 */
 					callStmt.close();
 					conn.close();
 					ObservableList<Add_File> empData = TerminalDAO.add_file(/* af.get_FileId() */"",
