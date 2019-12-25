@@ -15,17 +15,16 @@
 						<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
 					</columnResizePolicy>
 					<columns>
-						<TableColumn fx:id="NAME" prefWidth="53.0" text="Название" />
-						<TableColumn fx:id="DEPARTMENT" prefWidth="45.0" text="Отделение" />
-						<TableColumn fx:id="ADDRESS" prefWidth="133.0" text="Адрес" />
-						<TableColumn fx:id="ACCOUNT" text="Счет" />
-						<TableColumn fx:id="acc_30232_01" text="acc_30232_01" />
-						<TableColumn fx:id="acc_30232_02" minWidth="0.0" prefWidth="0.0" text="acc_30232_02" />
-						<TableColumn fx:id="acc_30232_03" prefWidth="170.0" text="acc_30232_03" />
-						<TableColumn fx:id="acc_30232_04" text="acc_30232_04" />
-						<TableColumn fx:id="acc_30232_05" text="acc_30232_05" />
-						<TableColumn fx:id="acc_70107" minWidth="0.0" prefWidth="0.0" text="acc_70107" />
-						<TableColumn fx:id="ACC_30232_06" prefWidth="500" text="ACC_30232_06" />
+						<TableColumn fx:id="NAME" prefWidth="53.0" text="NAME" />
+						<TableColumn fx:id="DEPARTMENT" prefWidth="45.0" text="DEPARTMENT" />
+						<TableColumn fx:id="ADDRESS" prefWidth="133.0" text="ADDRESS" />
+						<TableColumn fx:id="ACCOUNT" text="ACCOUNT" />
+						<TableColumn fx:id="GENERAL_ACC" text="GENERAL_ACC" />
+						<TableColumn fx:id="CRASH_ACC" minWidth="0.0" prefWidth="0.0" text="CRASH_ACC" />
+						<TableColumn fx:id="DEAL_ACC" prefWidth="170.0" text="DEAL_ACC" />
+						<TableColumn fx:id="GENERAL_COMIS" text="GENERAL_COMIS" />
+						<TableColumn fx:id="CLEAR_SUM" text="CLEAR_SUM" />
+						<TableColumn fx:id="INCOME" minWidth="0.0" prefWidth="0.0" text="INCOME" />
 					</columns>
 				</TableView>
 			</children>

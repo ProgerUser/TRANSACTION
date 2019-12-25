@@ -31,6 +31,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import net.sf.jasperreports.engine.JRException;
 import sample.Main;
+import sample.model.Amra_Trans;
 import sample.model.Connect;
 import sample.model.ServiceClass;
 import sample.model.TerminalForCombo;
@@ -49,6 +50,9 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import org.controlsfx.control.table.TableFilter;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -97,21 +101,11 @@ public class ServiceController {
 	@FXML
 	private TableColumn<ServiceClass, String> account;
 	@FXML
-	private TableColumn<ServiceClass, String> account2;
-	@FXML
-	private TableColumn<ServiceClass, String> account3;
-	@FXML
-	private TableColumn<ServiceClass, String> account4;
-	@FXML
-	private TableColumn<ServiceClass, String> account5;
-	@FXML
 	private TableColumn<ServiceClass, String> idterm;
 	@FXML
 	private TableColumn<ServiceClass, String> inn;
 	@FXML
 	private TableColumn<ServiceClass, String> kbk;
-	@FXML
-	private TableColumn<ServiceClass, String> kor_bank_nbra;
 	@FXML
 	private TableColumn<ServiceClass, String> kpp;
 	@FXML
@@ -122,8 +116,6 @@ public class ServiceController {
 	private TableColumn<ServiceClass, String> bo1;
 	@FXML
 	private TableColumn<ServiceClass, String> bo2;
-	@FXML
-	private TableColumn<ServiceClass, String> stat;
 	@FXML
 	private TableColumn<ServiceClass, String> comission;
 	// For MultiThreading
@@ -159,27 +151,21 @@ public class ServiceController {
 			acc_name.setCellValueFactory(cellData -> cellData.getValue().acc_nameProperty());
 			acc_rec.setCellValueFactory(cellData -> cellData.getValue().acc_recProperty());
 			account.setCellValueFactory(cellData -> cellData.getValue().accountProperty());
-			account2.setCellValueFactory(cellData -> cellData.getValue().account2Property());
-			account3.setCellValueFactory(cellData -> cellData.getValue().account3Property());
-			account4.setCellValueFactory(cellData -> cellData.getValue().account4Property());
-			account5.setCellValueFactory(cellData -> cellData.getValue().account5Property());
 			idterm.setCellValueFactory(cellData -> cellData.getValue().idtermProperty());
 			inn.setCellValueFactory(cellData -> cellData.getValue().innProperty());
 			kbk.setCellValueFactory(cellData -> cellData.getValue().kbkProperty());
-			kor_bank_nbra.setCellValueFactory(cellData -> cellData.getValue().kor_bank_nbraProperty());
 			kpp.setCellValueFactory(cellData -> cellData.getValue().kppProperty());
 			name.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 			okato.setCellValueFactory(cellData -> cellData.getValue().okatoProperty());
 			bo1.setCellValueFactory(cellData -> cellData.getValue().bo1Property());
 			bo2.setCellValueFactory(cellData -> cellData.getValue().bo2Property());
-			stat.setCellValueFactory(cellData -> cellData.getValue().statProperty());
 			comission.setCellValueFactory(cellData -> cellData.getValue().comissionProperty());
 			
 			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
 					+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
 
 			Statement sqlStatement = conn.createStatement();
-			String readRecordSQL = "select NAME from Z_SB_TERMINAL_DBT t";
+			String readRecordSQL = "select NAME from Z_SB_TERMINAL_AMRA_DBT t";
 			ResultSet rs = sqlStatement.executeQuery(readRecordSQL);
 			ObservableList<String> combolist = FXCollections.observableArrayList();
 			while (rs.next()) {
@@ -238,6 +224,7 @@ public class ServiceController {
 		ObservableList<ServiceClass> empData = ViewerDAO.searchService(terms.getValue().toString());
 		populateService(empData);
 		autoResizeColumns(employeeTable);
+		TableFilter<ServiceClass> filter = new TableFilter<>(employeeTable);
 	}
 
 	@FXML
@@ -332,27 +319,12 @@ public class ServiceController {
 			Label account = new Label("Счет:");
 			account.setLayoutX(108.0);
 			account.setLayoutY(102.0);
-			Label account2 = new Label("account2:");
-			account2.setLayoutX(86.0);
-			account2.setLayoutY(139.0);
-			Label account3 = new Label("account3:");
-			account3.setLayoutX(86.0);
-			account3.setLayoutY(176.0);
-			Label account4 = new Label("account4:");
-			account4.setLayoutX(86.0);
-			account4.setLayoutY(212.0);
-			Label account5 = new Label("account5:");
-			account5.setLayoutX(86.0);
-			account5.setLayoutY(252.0);
 			Label inn = new Label("inn:");
 			inn.setLayoutX(117);
 			inn.setLayoutY(291.0);
 			Label kpp = new Label("kpp:");
 			kpp.setLayoutX(114.0);
 			kpp.setLayoutY(330.0);
-			Label kor_bank_nbra = new Label("kor_bank_nbra:");
-			kor_bank_nbra.setLayoutX(57.0);
-			kor_bank_nbra.setLayoutY(368.0);
 			Label acc_rec = new Label("acc_rec:");
 			acc_rec.setLayoutX(96.0);
 			acc_rec.setLayoutY(405.0);
@@ -362,9 +334,6 @@ public class ServiceController {
 			Label okato = new Label("okato:");
 			okato.setLayoutX(104.0);
 			okato.setLayoutY(478.0);
-			Label stat = new Label("stat:");
-			stat.setLayoutX(116.0);
-			stat.setLayoutY(518.0);
 			Label acc_name = new Label("acc_name:");
 			acc_name.setLayoutX(82.0);
 			acc_name.setLayoutY(557.0);
@@ -396,30 +365,6 @@ public class ServiceController {
 			account_T.setLayoutX(150.0);
 			account_T.setLayoutY(102.0);
 			account_T.setText(tr.getaccount());
-			TextField account2_T = new TextField();
-			account2_T.setPrefHeight(28.0);
-			account2_T.setPrefWidth(198.0);
-			account2_T.setLayoutX(150.0);
-			account2_T.setLayoutY(139.0);
-			account2_T.setText(tr.getaccount2());
-			TextField account3_T = new TextField();
-			account3_T.setPrefHeight(28.0);
-			account3_T.setPrefWidth(198.0);
-			account3_T.setLayoutX(150.0);
-			account3_T.setLayoutY(176.0);
-			account3_T.setText(tr.getaccount3());
-			TextField account4_T = new TextField();
-			account4_T.setPrefHeight(28.0);
-			account4_T.setPrefWidth(198.0);
-			account4_T.setLayoutX(150.0);
-			account4_T.setLayoutY(212.0);
-			account4_T.setText(tr.getaccount4());
-			TextField account5_T = new TextField();
-			account5_T.setPrefHeight(28.0);
-			account5_T.setPrefWidth(198.0);
-			account5_T.setLayoutX(150.0);
-			account5_T.setLayoutY(252.0);
-			account5_T.setText(tr.getaccount5());
 			TextField inn_T = new TextField();
 			inn_T.setPrefHeight(28.0);
 			inn_T.setPrefWidth(198.0);
@@ -432,12 +377,6 @@ public class ServiceController {
 			kpp_T.setLayoutX(150.0);
 			kpp_T.setLayoutY(330.0);
 			kpp_T.setText(tr.getkpp());
-			TextField kor_bank_nbra_T = new TextField();
-			kor_bank_nbra_T.setPrefHeight(28.0);
-			kor_bank_nbra_T.setPrefWidth(198.0);
-			kor_bank_nbra_T.setLayoutX(150.0);
-			kor_bank_nbra_T.setLayoutY(368.0);
-			kor_bank_nbra_T.setText(tr.getkor_bank_nbra());
 			TextField acc_rec_T = new TextField();
 			acc_rec_T.setPrefHeight(28.0);
 			acc_rec_T.setPrefWidth(198.0);
@@ -456,12 +395,6 @@ public class ServiceController {
 			okato_T.setLayoutX(150.0);
 			okato_T.setLayoutY(478.0);
 			okato_T.setText(tr.getokato());
-			TextField stat_T = new TextField();
-			stat_T.setPrefHeight(28.0);
-			stat_T.setPrefWidth(198.0);
-			stat_T.setLayoutX(150.0);
-			stat_T.setLayoutY(518.0);
-			stat_T.setText(tr.getstat());
 			TextField acc_name_T = new TextField();
 			acc_name_T.setPrefHeight(28.0);
 			acc_name_T.setPrefWidth(198.0);
@@ -495,37 +428,25 @@ public class ServiceController {
 			secondaryLayout.getChildren().add(acc_name);
 			secondaryLayout.getChildren().add(acc_rec);
 			secondaryLayout.getChildren().add(account);
-			secondaryLayout.getChildren().add(account2);
-			secondaryLayout.getChildren().add(account3);
-			secondaryLayout.getChildren().add(account4);
-			secondaryLayout.getChildren().add(account5);
 			secondaryLayout.getChildren().add(idterm);
 			secondaryLayout.getChildren().add(inn);
 			secondaryLayout.getChildren().add(kbk);
-			secondaryLayout.getChildren().add(kor_bank_nbra);
 			secondaryLayout.getChildren().add(kpp);
 			secondaryLayout.getChildren().add(name);
 			secondaryLayout.getChildren().add(okato);
 			secondaryLayout.getChildren().add(bo1);
 			secondaryLayout.getChildren().add(bo2);
-			secondaryLayout.getChildren().add(stat);
 			secondaryLayout.getChildren().add(acc_name_T);
 			secondaryLayout.getChildren().add(acc_rec_T);
 			secondaryLayout.getChildren().add(account_T);
-			secondaryLayout.getChildren().add(account2_T);
-			secondaryLayout.getChildren().add(account3_T);
-			secondaryLayout.getChildren().add(account4_T);
-			secondaryLayout.getChildren().add(account5_T);
 			secondaryLayout.getChildren().add(idterm_T);
 			secondaryLayout.getChildren().add(inn_T);
 			secondaryLayout.getChildren().add(kbk_T);
-			secondaryLayout.getChildren().add(kor_bank_nbra_T);
 			secondaryLayout.getChildren().add(kpp_T);
 			secondaryLayout.getChildren().add(name_T);
 			secondaryLayout.getChildren().add(okato_T);
 			secondaryLayout.getChildren().add(bo1_T);
 			secondaryLayout.getChildren().add(bo2_T);
-			secondaryLayout.getChildren().add(stat_T);
 			secondaryLayout.getChildren().add(comission_T);
 			secondaryLayout.getChildren().add(comission_);
 			
@@ -566,12 +487,23 @@ public class ServiceController {
 					});
 					yes.setOnAction(new EventHandler<ActionEvent>() {
 						public void handle(ActionEvent event) {
-							ViewerDAO.updateService(acc_name_T.getText(), acc_rec_T.getText(), account_T.getText(),
-									account2_T.getText(), account3_T.getText(), account4_T.getText(),
-									account5_T.getText(), idterm_T.getText(), inn_T.getText(), kbk_T.getText(),
-									kor_bank_nbra_T.getText(), kpp_T.getText(), name_T.getText(), okato_T.getText(),
-									bo1_T.getText(), bo2_T.getText(), stat_T.getText(), tr.getaccount(),
-									tr.getidterm(), tr.getname(),comission_T.getText());
+							ViewerDAO.updateService(
+									acc_name_T.getText(),
+									acc_rec_T.getText(),
+									account_T.getText(),
+									idterm_T.getText(),
+									inn_T.getText(),
+									kbk_T.getText(),
+									kpp_T.getText(),
+									name_T.getText(),
+									okato_T.getText(),
+									bo1_T.getText(),
+									bo2_T.getText(),
+									tr.getaccount(),
+									tr.getidterm(),
+									tr.getname(),
+									comission_T.getText()
+									);
 							Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
 							Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
 							stage_.getIcons().add(new Image("terminal.png"));
@@ -621,27 +553,12 @@ public class ServiceController {
 		Label account = new Label("Счет:");
 		account.setLayoutX(108.0);
 		account.setLayoutY(102.0);
-		Label account2 = new Label("account2:");
-		account2.setLayoutX(86.0);
-		account2.setLayoutY(139.0);
-		Label account3 = new Label("account3:");
-		account3.setLayoutX(86.0);
-		account3.setLayoutY(176.0);
-		Label account4 = new Label("account4:");
-		account4.setLayoutX(86.0);
-		account4.setLayoutY(212.0);
-		Label account5 = new Label("account5:");
-		account5.setLayoutX(86.0);
-		account5.setLayoutY(252.0);
 		Label inn = new Label("inn:");
 		inn.setLayoutX(117);
 		inn.setLayoutY(291.0);
 		Label kpp = new Label("kpp:");
 		kpp.setLayoutX(114.0);
 		kpp.setLayoutY(330.0);
-		Label kor_bank_nbra = new Label("kor_bank_nbra:");
-		kor_bank_nbra.setLayoutX(57.0);
-		kor_bank_nbra.setLayoutY(368.0);
 		Label acc_rec = new Label("acc_rec:");
 		acc_rec.setLayoutX(96.0);
 		acc_rec.setLayoutY(405.0);
@@ -651,9 +568,6 @@ public class ServiceController {
 		Label okato = new Label("okato:");
 		okato.setLayoutX(104.0);
 		okato.setLayoutY(478.0);
-		Label stat = new Label("stat:");
-		stat.setLayoutX(116.0);
-		stat.setLayoutY(518.0);
 		Label acc_name = new Label("acc_name:");
 		acc_name.setLayoutX(82.0);
 		acc_name.setLayoutY(557.0);
@@ -686,30 +600,6 @@ public class ServiceController {
 		account_T.setLayoutX(150.0);
 		account_T.setLayoutY(102.0);
 		account_T.setPromptText("Обязательно!");
-		TextField account2_T = new TextField();
-		account2_T.setPrefHeight(28.0);
-		account2_T.setPrefWidth(198.0);
-		account2_T.setLayoutX(150.0);
-		account2_T.setLayoutY(139.0);
-		account2_T.setPromptText("Не обязательно!");
-		TextField account3_T = new TextField();
-		account3_T.setPrefHeight(28.0);
-		account3_T.setPrefWidth(198.0);
-		account3_T.setLayoutX(150.0);
-		account3_T.setLayoutY(176.0);
-		account3_T.setPromptText("Не обязательно!");
-		TextField account4_T = new TextField();
-		account4_T.setPrefHeight(28.0);
-		account4_T.setPrefWidth(198.0);
-		account4_T.setLayoutX(150.0);
-		account4_T.setLayoutY(212.0);
-		account4_T.setPromptText("Не обязательно!");
-		TextField account5_T = new TextField();
-		account5_T.setPrefHeight(28.0);
-		account5_T.setPrefWidth(198.0);
-		account5_T.setLayoutX(150.0);
-		account5_T.setLayoutY(252.0);
-		account5_T.setPromptText("Не обязательно!");
 		TextField inn_T = new TextField();
 		inn_T.setPrefHeight(28.0);
 		inn_T.setPrefWidth(198.0);
@@ -722,12 +612,6 @@ public class ServiceController {
 		kpp_T.setLayoutX(150.0);
 		kpp_T.setLayoutY(330.0);
 		kpp_T.setPromptText("Обязательно!");
-		TextField kor_bank_nbra_T = new TextField();
-		kor_bank_nbra_T.setPrefHeight(28.0);
-		kor_bank_nbra_T.setPrefWidth(198.0);
-		kor_bank_nbra_T.setLayoutX(150.0);
-		kor_bank_nbra_T.setLayoutY(368.0);
-		kor_bank_nbra_T.setPromptText("Не обязательно!");
 		TextField acc_rec_T = new TextField();
 		acc_rec_T.setPrefHeight(28.0);
 		acc_rec_T.setPrefWidth(198.0);
@@ -746,12 +630,6 @@ public class ServiceController {
 		okato_T.setLayoutX(150.0);
 		okato_T.setLayoutY(478.0);
 		okato_T.setPromptText("Обязательно!");
-		TextField stat_T = new TextField();
-		stat_T.setPrefHeight(28.0);
-		stat_T.setPrefWidth(198.0);
-		stat_T.setLayoutX(150.0);
-		stat_T.setLayoutY(518.0);
-		stat_T.setPromptText("Обязательно!");
 		TextField acc_name_T = new TextField();
 		acc_name_T.setPrefHeight(28.0);
 		acc_name_T.setPrefWidth(198.0);
@@ -785,37 +663,25 @@ public class ServiceController {
 		secondaryLayout.getChildren().add(acc_name);
 		secondaryLayout.getChildren().add(acc_rec);
 		secondaryLayout.getChildren().add(account);
-		secondaryLayout.getChildren().add(account2);
-		secondaryLayout.getChildren().add(account3);
-		secondaryLayout.getChildren().add(account4);
-		secondaryLayout.getChildren().add(account5);
 		secondaryLayout.getChildren().add(idterm);
 		secondaryLayout.getChildren().add(inn);
 		secondaryLayout.getChildren().add(kbk);
-		secondaryLayout.getChildren().add(kor_bank_nbra);
 		secondaryLayout.getChildren().add(kpp);
 		secondaryLayout.getChildren().add(name);
 		secondaryLayout.getChildren().add(okato);
 		secondaryLayout.getChildren().add(bo1);
 		secondaryLayout.getChildren().add(bo2);
-		secondaryLayout.getChildren().add(stat);
 		secondaryLayout.getChildren().add(acc_name_T);
 		secondaryLayout.getChildren().add(acc_rec_T);
 		secondaryLayout.getChildren().add(account_T);
-		secondaryLayout.getChildren().add(account2_T);
-		secondaryLayout.getChildren().add(account3_T);
-		secondaryLayout.getChildren().add(account4_T);
-		secondaryLayout.getChildren().add(account5_T);
 		secondaryLayout.getChildren().add(idterm_T);
 		secondaryLayout.getChildren().add(inn_T);
 		secondaryLayout.getChildren().add(kbk_T);
-		secondaryLayout.getChildren().add(kor_bank_nbra_T);
 		secondaryLayout.getChildren().add(kpp_T);
 		secondaryLayout.getChildren().add(name_T);
 		secondaryLayout.getChildren().add(okato_T);
 		secondaryLayout.getChildren().add(bo1_T);
 		secondaryLayout.getChildren().add(bo2_T);
-		secondaryLayout.getChildren().add(stat_T);
 		secondaryLayout.getChildren().add(add);
 		secondaryLayout.getChildren().add(comission_T);
 		secondaryLayout.getChildren().add(comission_);
@@ -857,11 +723,19 @@ public class ServiceController {
 				yes.setOnAction(new EventHandler<ActionEvent>() {
 					public void handle(ActionEvent event) {
 						try {
-							ViewerDAO.InsertService(acc_name_T.getText(), acc_rec_T.getText(), account_T.getText(),
-									account2_T.getText(), account3_T.getText(), account4_T.getText(),
-									account5_T.getText(), idterm_T.getText(), inn_T.getText(), kbk_T.getText(),
-									kor_bank_nbra_T.getText(), kpp_T.getText(), name_T.getText(), okato_T.getText(),
-									bo1_T.getText(), bo2_T.getText(), stat_T.getText(),comission_T.getText());
+							ViewerDAO.InsertService(
+									acc_name_T.getText(),
+									acc_rec_T.getText(),
+									account_T.getText(),
+									idterm_T.getText(), 
+									inn_T.getText(),
+									kbk_T.getText(),
+									kpp_T.getText(),
+									name_T.getText(), 
+									okato_T.getText(),
+									bo1_T.getText(), 
+									bo2_T.getText(),
+									comission_T.getText());
 							Alert alert = new Alert(Alert.AlertType.INFORMATION);
 							Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 							stage.getIcons().add(new Image("terminal.png"));

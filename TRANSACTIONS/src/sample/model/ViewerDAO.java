@@ -119,7 +119,7 @@ public class ViewerDAO {
 	// SELECT Terminal
 	// *******************************
 	public static ObservableList<TerminalClass> searchTerminal() {
-		String selectStmt = "select * from Z_SB_TERMINAL_DBT order by name";
+		String selectStmt = "select * from Z_SB_TERMINAL_AMRA_DBT order by name";
 		// Get ResultSet from dbExecuteQuery method
 		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
 
@@ -150,7 +150,7 @@ public class ViewerDAO {
 	// SELECT Service
 	// *******************************
 	public static ObservableList<ServiceClass> searchService(String idterm) {
-		String selectStmt = "select * from Z_SB_TERMSERV_DBT t\n\r" + "where idterm = '" + idterm + "'\n\r";
+		String selectStmt = "select * from Z_SB_TERMSERV_AMRA_DBT t\n\r" + "where idterm = '" + idterm + "'\n\r";
 		// Get ResultSet from dbExecuteQuery method
 		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
 		// Send ResultSet to the getEmployeeList method and get employee object
@@ -207,19 +207,13 @@ public class ViewerDAO {
 				sr.setacc_name(rs.getString("acc_name"));
 				sr.setacc_rec(rs.getString("acc_rec"));
 				sr.setaccount(rs.getString("account"));
-				sr.setaccount2(rs.getString("account2"));
-				sr.setaccount3(rs.getString("account3"));
-				sr.setaccount4(rs.getString("account4"));
-				sr.setaccount5(rs.getString("account5"));
 				sr.setidterm(rs.getString("idterm"));
 				sr.setinn(rs.getString("inn"));
 				sr.setkbk(rs.getString("kbk"));
-				sr.setkor_bank_nbra(rs.getString("kor_bank_nbra"));
 				sr.setkpp(rs.getString("kpp"));
 				sr.setokato(rs.getString("okato"));
 				sr.setbo1(rs.getString("bo1"));
 				sr.setbo2(rs.getString("bo2"));
-				sr.setstat(rs.getString("stat"));
 				sr.setcomission(rs.getString("comission"));
 				empList.add(sr);
 			}
@@ -247,14 +241,12 @@ public class ViewerDAO {
 				tr.setDEPARTMENT(rs.getString("DEPARTMENT"));
 				tr.setADDRESS(rs.getString("ADDRESS"));
 				tr.setNAME(rs.getString("NAME"));
-				tr.setacc_30232_01(rs.getString("acc_30232_01"));
-				tr.setacc_30232_02(rs.getString("acc_30232_02"));
-				tr.setacc_30232_03(rs.getString("acc_30232_03"));
-				tr.setacc_30232_03(rs.getString("acc_30232_03"));
-				tr.setacc_30232_04(rs.getString("acc_30232_04"));
-				tr.setacc_30232_05(rs.getString("acc_30232_05"));
-				tr.setacc_70107(rs.getString("acc_70107"));
-				tr.setACC_30232_06(rs.getString("ACC_30232_06"));
+				tr.setGENERAL_ACC(rs.getString("general_acc"));
+				tr.setCRASH_ACC(rs.getString("crash_acc"));
+				tr.setDEAL_ACC(rs.getString("deal_acc"));
+				tr.setGENERAL_COMIS(rs.getString("general_comis"));
+				tr.setCLEAR_SUM(rs.getString("clear_sum"));
+				tr.setINCOME(rs.getString("income"));
 				empList.add(tr);
 			}
 		} catch (SQLException e) {
@@ -306,21 +298,31 @@ public class ViewerDAO {
 		return true;
 	}
 
-	public static void updateTerminal(String NAME, String ACCOUNT, String DEPARTMENT, String ADDRESS,
-			String acc_30232_01, String acc_30232_02, String acc_30232_03, String acc_30232_04, String acc_30232_05,
-			String acc_70107, String BeforeName, String ACC_30232_06) {
+	public static void updateTerminal(
+			String NAME,
+			String ACCOUNT, 
+			String DEPARTMENT,
+			String ADDRESS,
+			String general_acc,
+			String crash_acc,
+			String deal_acc,
+			String general_comis,
+			String clear_sum,
+			String income,
+			String BeforeName) {
+		
 		// Declare a UPDATE statement
 		String NAME_ = "";
 		String ACCOUNT_ = "";
 		String DEPARTMENT_ = "";
 		String ADDRESS_ = "";
-		String acc_30232_01_ = "";
-		String acc_30232_02_ = "";
-		String acc_30232_03_ = "";
-		String acc_30232_04_ = "";
-		String acc_30232_05_ = "";
-		String acc_70107_ = "";
-		String ACC_30232_06_ = "";
+		String general_acc_ = "";
+		String crash_acc_ = "";
+		String deal_acc_ = "";
+		String general_comis_ = "";
+		String clear_sum_ = "";
+		String income_ = "";
+
 		if (isNullOrEmpty(NAME)) {
 
 		} else {
@@ -341,75 +343,84 @@ public class ViewerDAO {
 		} else {
 			ADDRESS_ = ADDRESS;
 		}
-		if (isNullOrEmpty(acc_30232_01)) {
+		if (isNullOrEmpty(general_acc)) {
 
 		} else {
-			acc_30232_01_ = acc_30232_01;
+			general_acc_ = general_acc;
 		}
-		if (isNullOrEmpty(acc_30232_02)) {
+		if (isNullOrEmpty(crash_acc)) {
 
 		} else {
-			acc_30232_02_ = acc_30232_02;
+			crash_acc_ = crash_acc;
 		}
-		if (isNullOrEmpty(acc_30232_03)) {
+		if (isNullOrEmpty(deal_acc)) {
 
 		} else {
-			acc_30232_03_ = acc_30232_03;
+			deal_acc_ = deal_acc;
 		}
-		if (isNullOrEmpty(acc_30232_04)) {
+		if (isNullOrEmpty(general_comis)) {
 
 		} else {
-			acc_30232_04_ = acc_30232_04;
+			general_comis_ = general_comis;
 		}
-		if (isNullOrEmpty(acc_30232_05)) {
+		if (isNullOrEmpty(clear_sum)) {
 
 		} else {
-			acc_30232_05_ = acc_30232_05;
+			clear_sum_ = clear_sum;
 		}
-		if (isNullOrEmpty(acc_70107)) {
+		if (isNullOrEmpty(income)) {
 
 		} else {
-			acc_70107_ = acc_70107;
+			income_ = income;
 		}
-		if (isNullOrEmpty(ACC_30232_06)) {
-
-		} else {
-			ACC_30232_06_ = ACC_30232_06;
-		}
-
-		String updateStmt = "BEGIN\n" + "   UPDATE Z_SB_TERMINAL_DBT\n" + "      SET NAME = '" + NAME_ + "',\n"
-				+ "ACCOUNT = '" + ACCOUNT_ + "',\n" + "DEPARTMENT = '" + DEPARTMENT_ + "',\n" + "ADDRESS = '" + ADDRESS_
-				+ "',\n" + "acc_30232_01 = '" + acc_30232_01_ + "',\n" + "acc_30232_02 = '" + acc_30232_02_ + "',\n"
-				+ "acc_30232_03 = '" + acc_30232_03_ + "',\n" + "acc_30232_04 = '" + acc_30232_04_ + "',\n"
-				+ "acc_30232_05 = '" + acc_30232_05_ + "',\n" + "acc_70107 = '" + acc_70107_ + "'\n" + "',\n"
-				+ "ACC_30232_06 = '" + ACC_30232_06_ + "'\n" + "    WHERE NAME = '" + BeforeName + "';\n"
+		
+		String updateStmt = "BEGIN\n" 
+		        + "   "
+				+ "UPDATE Z_SB_TERMINAL_DBT\n" 
+		        + "      SET NAME = '" + NAME_ + "',\n"
+				+ "ACCOUNT = '" + ACCOUNT_ + "',\n" 
+		        + "DEPARTMENT = '" + DEPARTMENT_ + "',\n" 
+				+ "ADDRESS = '" + ADDRESS_+ "',\n" 
+		        + "general_acc = '" + general_acc_ + "',\n" 
+				+ "crash_acc = '" + crash_acc_ + "',\n"
+				+ "deal_acc = '" + deal_acc_ + "',\n" 
+				+ "general_comis = '" + general_comis_ + "',\n"
+				+ "clear_sum = '" + clear_sum_ + "',\n" 
+				+ "income = '" + income_ + "'\n" + "',\n"
+				+ " WHERE NAME = '" + BeforeName + "';\n"
 				+ "   COMMIT;\n" + "END;";
 		System.out.println(updateStmt);
 		DBUtil.dbExecuteUpdate(updateStmt);
 	}
 
-	public static void updateService(String acc_name, String acc_rec, String account, String account2, String account3,
-			String account4, String account5, String idterm, String inn, String kbk, String kor_bank_nbra, String kpp,
-			String name, String okato, String bo1, String bo2, String stat, String BeforeAcc, String Beforeidterm,
-			String Beforename,String comission) {
+	public static void updateService(
+			String acc_name,
+			String acc_rec,
+			String account,
+			String idterm,
+			String inn, 
+			String kbk, 
+			String kpp,
+			String name,
+			String okato,
+			String bo1,
+			String bo2,
+			String BeforeAcc,
+			String Beforeidterm,
+			String Beforename,
+			String comission) {
 		// Declare a UPDATE statement
 		String acc_name_ = "";
 		String acc_rec_ = "";
 		String account_ = "";
-		String account2_ = "";
-		String account3_ = "";
-		String account4_ = "";
-		String account5_ = "";
 		String idterm_ = "";
 		String inn_ = "";
 		String kbk_ = "";
-		String kor_bank_nbra_ = "";
 		String kpp_ = "";
 		String name_ = "";
 		String okato_ = "";
 		String bo1_ = "";
 		String bo2_ = "";
-		String stat_ = "";
 		String comission_="";
 
 		if (isNullOrEmpty(acc_name)) {
@@ -427,26 +438,6 @@ public class ViewerDAO {
 		} else {
 			account_ = account;
 		}
-		if (isNullOrEmpty(account2)) {
-
-		} else {
-			account2_ = account2;
-		}
-		if (isNullOrEmpty(account3)) {
-
-		} else {
-			account3_ = account3;
-		}
-		if (isNullOrEmpty(account4)) {
-
-		} else {
-			account4_ = account4;
-		}
-		if (isNullOrEmpty(account5)) {
-
-		} else {
-			account5_ = account5;
-		}
 		if (isNullOrEmpty(idterm)) {
 
 		} else {
@@ -461,11 +452,6 @@ public class ViewerDAO {
 
 		} else {
 			kbk_ = kbk;
-		}
-		if (isNullOrEmpty(kor_bank_nbra)) {
-
-		} else {
-			kor_bank_nbra_ = kor_bank_nbra;
 		}
 		if (isNullOrEmpty(kpp)) {
 
@@ -492,11 +478,6 @@ public class ViewerDAO {
 		} else {
 			bo2_ = bo2;
 		}
-		if (isNullOrEmpty(stat)) {
-
-		} else {
-			stat_ = stat;
-		}
 		if (isNullOrEmpty(comission)) {
 
 		} else {
@@ -506,58 +487,55 @@ public class ViewerDAO {
 		String acc_name_C = isNullOrEmpty(acc_name) ? "" : "acc_name = '" + acc_name + "',";
 		String acc_rec_C = isNullOrEmpty(acc_rec) ? "" : "acc_rec = '" + acc_rec + "',";
 		String account_C = isNullOrEmpty(account) ? "" : "account = '" + account + "',";
-		String account2_C = isNullOrEmpty(account2) ? "" : "account2 = '" + account2 + "',";
-		String account3_C = isNullOrEmpty(account3) ? "" : "account3 = '" + account3 + "',";
-		String account4_C = isNullOrEmpty(account4) ? "" : "account4 = '" + account4 + "',";
-		String account5_C = isNullOrEmpty(account5) ? "" : "account5 = '" + account5 + "',";
 		String idterm_C = isNullOrEmpty(idterm) ? "" : "idterm = '" + idterm + "',";
 		String inn_C = isNullOrEmpty(inn) ? "" : "inn = '" + inn + "',";
 		String kbk_C = isNullOrEmpty(kbk) ? "" : "kbk = '" + kbk + "',";
-		String kor_bank_nbra_C = isNullOrEmpty(kor_bank_nbra) ? "" : "kor_bank_nbra = '" + kor_bank_nbra + "',";
 		String kpp_C = isNullOrEmpty(kpp) ? "" : "kpp = '" + kpp + "',";
 		String name_C = isNullOrEmpty(name) ? "" : "name = '" + name + "',";
 		String okato_C = isNullOrEmpty(okato) ? "" : "okato = '" + okato + "',";
 		String bo1_C = isNullOrEmpty(bo1) ? "" : "bo1 = '" + bo1 + "',";
 		String bo2_C = isNullOrEmpty(bo2) ? "" : "bo2 = '" + bo2 + "',";
-		String stat_C = isNullOrEmpty(stat) ? "" : "stat = '" + stat + "',";
 		String comission_C = isNullOrEmpty(comission) ? "" : "comission = '" + comission + "',";
 
-		String param = acc_name_C + acc_rec_C + account_C + account2_C + account3_C + account4_C + account5_C + idterm_C
-				+ inn_C + kbk_C + kor_bank_nbra_C + kpp_C + name_C + okato_C + bo1_C + bo2_C + stat_C+comission_C;
+		String param = acc_name_C + acc_rec_C + account_C  + idterm_C
+				+ inn_C + kbk_C  + kpp_C + name_C + okato_C + bo1_C + bo2_C +comission_C;
 
-		String updateStmt = "BEGIN\n" + "   UPDATE Z_SB_TERMSERV_DBT\n" + "SET " + "acc_name = '" + acc_name_ + "', "
-				+ "acc_rec = '" + acc_rec_ + "', " + "account = '" + account_ + "', " + "account2 = '" + account2_
-				+ "', " + "account3 = '" + account3_ + "', " + "account4 = '" + account4_ + "', " + "account5 = '"
-				+ account5_ + "', " + "idterm = '" + idterm_ + "', " + "inn = '" + inn_ + "', " + "kbk = '" + kbk_
-				+ "', " + "kor_bank_nbra = '" + kor_bank_nbra_ + "', " + "kpp = '" + kpp_ + "', " + "name = '" + name_
-				+ "', " + "okato = '" + okato_ + "', " + "bo1 = '" + bo1_ + "', " + "bo2 = '" + bo2_ + "', "
-				+ "stat = '" + stat_ + "',"+ "comission = " + comission_ + " WHERE ACCOUNT = '" + BeforeAcc + "' and idterm = '" + Beforeidterm
+		String updateStmt = "BEGIN\n" + "   UPDATE Z_SB_TERMSERV_AMRA_DBT\n" + "SET " + "acc_name = '" + acc_name_ + "', "
+				+ "acc_rec = '" + acc_rec_ + "', " + "account = '" + account_ + "', " 
+				+ "idterm = '" + idterm_ + "', " + "inn = '" + inn_ + "', " + "kbk = '" + kbk_
+				+ "', " + "kpp = '" + kpp_ + "', " + "name = '" + name_
+				+ "', " + "okato = '" + okato_ + "', " + "bo1 = '" + bo1_ + "', " + "bo2 = '" 
+				+ bo2_  + "',"+ "comission = " + comission_ + " WHERE ACCOUNT = '" + BeforeAcc + "' and idterm = '" + Beforeidterm
 				+ "' and name = '" + Beforename + "';\n" + "   COMMIT;\n" + "END;";
 		System.out.println(updateStmt);
 		DBUtil.dbExecuteUpdate(updateStmt);
 	}
 
-	public static void InsertService(String acc_name, String acc_rec, String account, String account2, String account3,
-			String account4, String account5, String idterm, String inn, String kbk, String kor_bank_nbra, String kpp,
-			String name, String okato, String bo1, String bo2, String stat,String comission) {
+	public static void InsertService(
+			String acc_name, 
+			String acc_rec,
+			String account,
+			String idterm,
+			String inn,
+			String kbk,
+			String kpp,
+			String name,
+			String okato,
+			String bo1, 
+			String bo2, 
+			String comission) {
 		// Declare a UPDATE statement
 		String acc_name_ = "";
 		String acc_rec_ = "";
 		String account_ = "";
-		String account2_ = "";
-		String account3_ = "";
-		String account4_ = "";
-		String account5_ = "";
 		String idterm_ = "";
 		String inn_ = "";
 		String kbk_ = "";
-		String kor_bank_nbra_ = "";
 		String kpp_ = "";
 		String name_ = "";
 		String okato_ = "";
 		String bo1_ = "";
 		String bo2_ = "";
-		String stat_ = "";
 		String comission_="";
 
 		if (isNullOrEmpty(acc_name)) {
@@ -575,26 +553,6 @@ public class ViewerDAO {
 		} else {
 			account_ = "'" + account + "',";
 		}
-		if (isNullOrEmpty(account2)) {
-
-		} else {
-			account2_ = "'" + account2 + "',";
-		}
-		if (isNullOrEmpty(account3)) {
-
-		} else {
-			account3_ = "'" + account3 + "',";
-		}
-		if (isNullOrEmpty(account4)) {
-
-		} else {
-			account4_ = "'" + account4 + "',";
-		}
-		if (isNullOrEmpty(account5)) {
-
-		} else {
-			account5_ = "'" + account5 + "',";
-		}
 		if (isNullOrEmpty(idterm)) {
 
 		} else {
@@ -610,11 +568,7 @@ public class ViewerDAO {
 		} else {
 			kbk_ = "'" + kbk + "',";
 		}
-		if (isNullOrEmpty(kor_bank_nbra)) {
-
-		} else {
-			kor_bank_nbra_ = "'" + kor_bank_nbra + "',";
-		}
+		
 		if (isNullOrEmpty(kpp)) {
 
 		} else {
@@ -640,11 +594,6 @@ public class ViewerDAO {
 		} else {
 			bo2_ = "'" + bo2 + "',";
 		}
-		if (isNullOrEmpty(stat)) {
-
-		} else {
-			stat_ = "'" + stat + "',";
-		}
 		if (isNullOrEmpty(comission_)) {
 
 		} else {
@@ -654,28 +603,22 @@ public class ViewerDAO {
 		String acc_name_C = isNullOrEmpty(acc_name) ? "" : "acc_name,";
 		String acc_rec_C = isNullOrEmpty(acc_rec) ? "" : "acc_rec,";
 		String account_C = isNullOrEmpty(account) ? "" : "account,";
-		String account2_C = isNullOrEmpty(account2) ? "" : "account2,";
-		String account3_C = isNullOrEmpty(account3) ? "" : "account3,";
-		String account4_C = isNullOrEmpty(account4) ? "" : "account4,";
-		String account5_C = isNullOrEmpty(account5) ? "" : "account5,";
 		String idterm_C = isNullOrEmpty(idterm) ? "" : "idterm,";
 		String inn_C = isNullOrEmpty(inn) ? "" : "inn,";
 		String kbk_C = isNullOrEmpty(kbk) ? "" : "kbk,";
-		String kor_bank_nbra_C = isNullOrEmpty(kor_bank_nbra) ? "" : "kor_bank_nbra,";
 		String kpp_C = isNullOrEmpty(kpp) ? "" : "kpp,";
 		String name_C = isNullOrEmpty(name) ? "" : "name,";
 		String okato_C = isNullOrEmpty(okato) ? "" : "okato,";
 		String bo1_C = isNullOrEmpty(bo1) ? "" : "bo1,";
 		String bo2_C = isNullOrEmpty(bo2) ? "" : "bo2,";
-		String stat_C = isNullOrEmpty(stat) ? "" : "stat,";
 		String comission_C = isNullOrEmpty(comission) ? "" : "comission,";
 
-		String Values = "(" + acc_name_ + acc_rec_ + account_ + account2_ + account3_ + account4_ + account5_ + idterm_
-				+ inn_ + kbk_ + kor_bank_nbra_ + kpp_ + name_ + okato_ + bo1_ + bo2_ + stat_ + comission_+");\n";
-		String Columns = "(" + acc_name_C + acc_rec_C + account_C + account2_C + account3_C + account4_C + account5_C
-				+ idterm_C + inn_C + kbk_C + kor_bank_nbra_C + kpp_C + name_C + okato_C + bo1_C + bo2_C + stat_C
+		String Values = "(" + acc_name_ + acc_rec_ + account_  + idterm_
+				+ inn_ + kbk_  + kpp_ + name_ + okato_ + bo1_ + bo2_  + comission_+");\n";
+		String Columns = "(" + acc_name_C + acc_rec_C + account_C 
+				+ idterm_C + inn_C + kbk_C  + kpp_C + name_C + okato_C + bo1_C + bo2_C 
 				+ comission_C+ ")\n ";
-		String insertStmt = "BEGIN\n" + "   insert into  Z_SB_TERMSERV_DBT \n" + Columns.replace(",)", ")")
+		String insertStmt = "BEGIN\n" + "   insert into  Z_SB_TERMSERV_AMRA_DBT \n" + Columns.replace(",)", ")")
 				+ "      values \n" + Values.replace(",)", ")") + "   COMMIT;\n" + "END;";
 		System.out.println(insertStmt);
 		DBUtil.dbExecuteUpdate(insertStmt);
@@ -686,7 +629,7 @@ public class ViewerDAO {
 	// *************************************
 	public static void deleteTerminal(String NAME) {
 		// Declare a DELETE statement
-		String updateStmt = "BEGIN\n" + "   DELETE FROM Z_SB_TERMINAL_DBT\n" + "         WHERE NAME ='" + NAME + "';\n"
+		String updateStmt = "BEGIN\n" + "   DELETE FROM Z_SB_TERMINAL_AMRA_DBT\n" + "         WHERE NAME ='" + NAME + "';\n"
 				+ "   COMMIT;\n" + "END;";
 
 		System.out.print(updateStmt);
@@ -709,7 +652,7 @@ public class ViewerDAO {
 
 	public static void deleteService(String idterm, String ACCOUNT, String name) {
 		// Declare a DELETE statement
-		String updateStmt = "BEGIN\n" + "   DELETE FROM Z_SB_TERMSERV_DBT\n" + "         WHERE idterm ='" + idterm
+		String updateStmt = "BEGIN\n" + "   DELETE FROM Z_SB_TERMSERV_AMRA_DBT\n" + "         WHERE idterm ='" + idterm
 				+ "' and account = '" + ACCOUNT + "' and name = '" + name + "';\n" + "   COMMIT;\n" + "END;";
 
 		System.out.print(updateStmt);
@@ -719,22 +662,29 @@ public class ViewerDAO {
 	// *************************************
 	// INSERT an employee
 	// *************************************
-	public static void InsertTerminal(String NAME, String ACCOUNT, String DEPARTMENT, String ADDRESS,
-			String acc_30232_01, String acc_30232_02, String acc_30232_03, String acc_30232_04, String acc_30232_05,
-			String acc_70107, String ACC_30232_06) {
+	public static void InsertTerminal(
+			String NAME,
+			String ACCOUNT, 
+			String DEPARTMENT,
+			String ADDRESS,
+			String general_acc,
+			String crash_acc,
+			String deal_acc,
+			String general_comis,
+			String clear_sum,
+			String income
+			) {
 		// Declare a INSET statement
 		String NAME_ = "";
 		String ACCOUNT_ = "";
 		String DEPARTMENT_ = "";
 		String ADDRESS_ = "";
-		String acc_30232_01_ = "";
-		String acc_30232_02_ = "";
-		String acc_30232_03_ = "";
-		String acc_30232_04_ = "";
-		String acc_30232_05_ = "";
-		String acc_70107_ = "";
-
-		String ACC_30232_06_ = "";
+		String general_acc_ = "";
+		String crash_acc_ = "";
+		String deal_acc_ = "";
+		String general_comis_ = "";
+		String clear_sum_ = "";
+		String income_ = "";
 
 		if (isNullOrEmpty(NAME)) {
 
@@ -756,60 +706,60 @@ public class ViewerDAO {
 		} else {
 			ADDRESS_ = "'" + ADDRESS + "',";
 		}
-		if (isNullOrEmpty(acc_30232_01)) {
+		if (isNullOrEmpty(general_acc)) {
 
 		} else {
-			acc_30232_01_ = "'" + acc_30232_01 + "',";
+			general_acc_ = "'" + general_acc + "',";
 		}
-		if (isNullOrEmpty(acc_30232_02)) {
+		if (isNullOrEmpty(crash_acc)) {
 
 		} else {
-			acc_30232_02_ = "'" + acc_30232_02 + "',";
+			crash_acc_ = "'" + crash_acc + "',";
 		}
-		if (isNullOrEmpty(acc_30232_03)) {
+		if (isNullOrEmpty(deal_acc)) {
 
 		} else {
-			acc_30232_03_ = "'" + acc_30232_03 + "',";
+			deal_acc_ = "'" + deal_acc + "',";
 		}
-		if (isNullOrEmpty(acc_30232_04)) {
+		if (isNullOrEmpty(general_comis)) {
 
 		} else {
-			acc_30232_04_ = "'" + acc_30232_04 + "',";
+			general_comis_ = "'" + general_comis + "',";
 		}
-		if (isNullOrEmpty(acc_30232_05)) {
+		if (isNullOrEmpty(clear_sum)) {
 
 		} else {
-			acc_30232_05_ = "'" + acc_30232_05 + "',";
+			clear_sum_ = "'" + clear_sum + "',";
 		}
-		if (isNullOrEmpty(acc_70107)) {
-
-		} else {
-			acc_70107_ = "'" + acc_70107 + "',";
+		if (isNullOrEmpty(income)) {
+		} 
+		 else {
+			income_ = "'" + income + "',";
 		}
-		if (isNullOrEmpty(ACC_30232_06)) {
-
-		} else {
-			ACC_30232_06_ = "'" + ACC_30232_06 + "',";
-		}
+		
 
 		String NAME_C = isNullOrEmpty(NAME) ? "" : "NAME,";
 		String ACCOUNT_C = isNullOrEmpty(ACCOUNT) ? "" : "ACCOUNT,";
 		String DEPARTMENT_C = isNullOrEmpty(DEPARTMENT) ? "" : "DEPARTMENT,";
 		String ADDRESS_C = isNullOrEmpty(ADDRESS) ? "" : "ADDRESS,";
-		String acc_30232_01_C = isNullOrEmpty(acc_30232_01) ? "" : "acc_30232_01,";
-		String acc_30232_02_C = isNullOrEmpty(acc_30232_02) ? "" : "acc_30232_02,";
-		String acc_30232_03_C = isNullOrEmpty(acc_30232_03) ? "" : "acc_30232_03,";
-		String acc_30232_04_C = isNullOrEmpty(acc_30232_04) ? "" : "acc_30232_04,";
-		String acc_30232_05_C = isNullOrEmpty(acc_30232_05) ? "" : "acc_30232_05,";
-		String acc_70107_C = isNullOrEmpty(acc_70107) ? "" : "acc_70107,";
-		String ACC_30232_06_C = isNullOrEmpty(ACC_30232_06) ? "" : "ACC_30232_06,";
+		String general_acc_C = isNullOrEmpty(general_acc) ? "" : "general_acc,";
+		String crash_acc_C = isNullOrEmpty(crash_acc) ? "" : "crash_acc,";
+		String deal_acc_C = isNullOrEmpty(deal_acc) ? "" : "deal_acc,";
+		String general_comis_C = isNullOrEmpty(general_comis) ? "" : "general_comis,";
+		String clear_sum_C = isNullOrEmpty(clear_sum) ? "" : "clear_sum,";
+		String income_C = isNullOrEmpty(income) ? "" : "income,";
 
-		String Values = "(" + NAME_ + ACCOUNT_ + DEPARTMENT_ + ADDRESS_ + acc_30232_01_ + acc_30232_02_ + acc_30232_03_
-				+ acc_30232_04_ + acc_30232_05_ + acc_70107_ + ACC_30232_06 + ");\n ";
-		String Columns = "(" + NAME_C + ACCOUNT_C + DEPARTMENT_C + ADDRESS_C + acc_30232_01_C + acc_30232_02_C
-				+ acc_30232_03_C + acc_30232_04_C + acc_30232_05_C + acc_70107_C + ACC_30232_06_C + ")\n ";
-		String insertStmt = "BEGIN\n" + "   insert into  Z_SB_TERMINAL_DBT \n" + Columns.replace(",)", ")")
-				+ "      values \n" + Values.replace(",)", ")") + "   COMMIT;\n" + "END;";
+		
+		String Values = "(" + NAME_ + ACCOUNT_ + DEPARTMENT_ + ADDRESS_ + general_acc_ + crash_acc_ + deal_acc_
+				+ general_comis_ + clear_sum_ + income_ + ");\n ";
+		String Columns = "(" + NAME_C + ACCOUNT_C + DEPARTMENT_C + ADDRESS_C + general_acc_C + crash_acc_C
+				+ deal_acc_C + general_comis_C + clear_sum_C + income_C  + ")\n ";
+		
+		String insertStmt = "BEGIN\n"
+				+ "insert into  Z_SB_TERMINAL_AMRA_DBT \n" 
+				+ Columns.replace(",)", ")")
+				+ "      values \n" + Values.replace(",)", ")") 
+				+ "   COMMIT;\n" + "END;";
 		System.out.println(insertStmt);
 		DBUtil.dbExecuteUpdate(insertStmt);
 	}

@@ -28,6 +28,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import sample.model.Amra_Trans;
 import sample.model.TerminalClass;
 import sample.Main;
 import sample.model.ViewerDAO;
@@ -44,6 +45,9 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import org.controlsfx.control.table.TableFilter;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -81,9 +85,6 @@ public class TerminalController {
 
 	@FXML
 	private Menu menu;
-
-	@FXML
-	private TableColumn<TerminalClass, String> ACC_30232_06;
 	@FXML
 	private TableColumn<TerminalClass, String> ACCOUNT;
 	@FXML
@@ -93,17 +94,17 @@ public class TerminalController {
 	@FXML
 	private TableColumn<TerminalClass, String> NAME;
 	@FXML
-	private TableColumn<TerminalClass, String> acc_30232_01;
+	private TableColumn<TerminalClass, String> GENERAL_ACC;
 	@FXML
-	private TableColumn<TerminalClass, String> acc_30232_02;
+	private TableColumn<TerminalClass, String> CRASH_ACC;
 	@FXML
-	private TableColumn<TerminalClass, String> acc_30232_03;
+	private TableColumn<TerminalClass, String> DEAL_ACC;
 	@FXML
-	private TableColumn<TerminalClass, String> acc_30232_04;
+	private TableColumn<TerminalClass, String> GENERAL_COMIS;
 	@FXML
-	private TableColumn<TerminalClass, String> acc_30232_05;
+	private TableColumn<TerminalClass, String> CLEAR_SUM;
 	@FXML
-	private TableColumn<TerminalClass, String> acc_70107;
+	private TableColumn<TerminalClass, String> INCOME;
 
 	// For MultiThreading
 	private Executor exec;
@@ -134,17 +135,18 @@ public class TerminalController {
 			t.setDaemon(true);
 			return t;
 		});
+		
+
 		ACCOUNT.setCellValueFactory(cellData -> cellData.getValue().ACCOUNTProperty());
 		ADDRESS.setCellValueFactory(cellData -> cellData.getValue().ADDRESSProperty());
 		DEPARTMENT.setCellValueFactory(cellData -> cellData.getValue().DEPARTMENTProperty());
 		NAME.setCellValueFactory(cellData -> cellData.getValue().NAMEProperty());
-		acc_30232_01.setCellValueFactory(cellData -> cellData.getValue().acc_30232_01Property());
-		acc_30232_02.setCellValueFactory(cellData -> cellData.getValue().acc_30232_02Property());
-		acc_30232_03.setCellValueFactory(cellData -> cellData.getValue().acc_30232_03Property());
-		acc_30232_04.setCellValueFactory(cellData -> cellData.getValue().acc_30232_04Property());
-		acc_30232_05.setCellValueFactory(cellData -> cellData.getValue().acc_30232_05Property());
-		acc_70107.setCellValueFactory(cellData -> cellData.getValue().acc_70107Property());
-		ACC_30232_06.setCellValueFactory(cellData -> cellData.getValue().ACC_30232_06Property());
+		GENERAL_ACC.setCellValueFactory(cellData -> cellData.getValue().GENERAL_ACCProperty());
+		CRASH_ACC.setCellValueFactory(cellData -> cellData.getValue().CRASH_ACCProperty());
+		DEAL_ACC.setCellValueFactory(cellData -> cellData.getValue().DEAL_ACCProperty());
+		GENERAL_COMIS.setCellValueFactory(cellData -> cellData.getValue().GENERAL_COMISProperty());
+		CLEAR_SUM.setCellValueFactory(cellData -> cellData.getValue().CLEAR_SUMProperty());
+		INCOME.setCellValueFactory(cellData -> cellData.getValue().INCOMEProperty());
 
 	}
 
@@ -182,6 +184,7 @@ public class TerminalController {
 		ObservableList<TerminalClass> empData = ViewerDAO.searchTerminal();
 		populateTerminal(empData);
 		autoResizeColumns(employeeTable);
+		TableFilter<TerminalClass> filter = new TableFilter<>(employeeTable);
 	}
 
 	@FXML
@@ -283,29 +286,24 @@ public class TerminalController {
 			Label ACCOUNT = new Label("Счет:");
 			ACCOUNT.setLayoutX(107.0);
 			ACCOUNT.setLayoutY(139.0);
-			Label acc_30232_01 = new Label("acc_30232_01:");
-			acc_30232_01.setLayoutX(60.0);
-			acc_30232_01.setLayoutY(174.0);
-			Label acc_30232_02 = new Label("acc_30232_02:");
-			acc_30232_02.setLayoutX(60.0);
-			acc_30232_02.setLayoutY(210.0);
-			Label acc_30232_03 = new Label("acc_30232_03:");
-			acc_30232_03.setLayoutX(60.0);
-			acc_30232_03.setLayoutY(250.0);
-			Label acc_30232_04 = new Label("acc_30232_04:");
-			acc_30232_04.setLayoutX(60.0);
-			acc_30232_04.setLayoutY(289.0);
-			Label acc_30232_05 = new Label("acc_30232_05:");
-			acc_30232_05.setLayoutX(60.0);
-			acc_30232_05.setLayoutY(328.0);
-
-			Label acc_701071 = new Label("acc_701071:");
-			acc_701071.setLayoutX(72.0);
-			acc_701071.setLayoutY(366.0);
-
-			Label ACC_30232_06 = new Label("ACC_30232_06:");
-			ACC_30232_06.setLayoutX(55.0);
-			ACC_30232_06.setLayoutY(404.0);
+			Label general_acc_l = new Label("general_acc:");
+			general_acc_l.setLayoutX(60.0);
+			general_acc_l.setLayoutY(174.0);
+			Label crash_acc_l = new Label("crash_acc:");
+			crash_acc_l.setLayoutX(60.0);
+			crash_acc_l.setLayoutY(210.0);
+			Label deal_acc_l = new Label("deal_acc:");
+			deal_acc_l.setLayoutX(60.0);
+			deal_acc_l.setLayoutY(250.0);
+			Label general_comis_l = new Label("general_comis:");
+			general_comis_l.setLayoutX(60.0);
+			general_comis_l.setLayoutY(289.0);
+			Label clear_sum_l = new Label("clear_sum:");
+			clear_sum_l.setLayoutX(60.0);
+			clear_sum_l.setLayoutY(328.0);
+			Label income_l = new Label("income:");
+			income_l.setLayoutX(72.0);
+			income_l.setLayoutY(366.0);
 
 			TextField NAME_T = new TextField();
 			NAME_T.setPrefHeight(28.0);
@@ -331,49 +329,50 @@ public class TerminalController {
 			ACCOUNT_T.setLayoutX(150.0);
 			ACCOUNT_T.setLayoutY(139.0);
 			ACCOUNT_T.setText(tr.getACCOUNT());
-			TextField acc_30232_01_T = new TextField();
-			acc_30232_01_T.setPrefHeight(28.0);
-			acc_30232_01_T.setPrefWidth(198.0);
-			acc_30232_01_T.setLayoutX(150.0);
-			acc_30232_01_T.setLayoutY(176.0);
-			acc_30232_01_T.setText(tr.getacc_30232_01());
-			TextField acc_30232_02_T = new TextField();
-			acc_30232_02_T.setPrefHeight(28.0);
-			acc_30232_02_T.setPrefWidth(198.0);
-			acc_30232_02_T.setLayoutX(150.0);
-			acc_30232_02_T.setLayoutY(212.0);
-			acc_30232_02_T.setText(tr.getacc_30232_02());
-			TextField acc_30232_03_T = new TextField();
-			acc_30232_03_T.setPrefHeight(28.0);
-			acc_30232_03_T.setPrefWidth(198.0);
-			acc_30232_03_T.setLayoutX(150.0);
-			acc_30232_03_T.setLayoutY(252.0);
-			acc_30232_03_T.setText(tr.getacc_30232_03());
-			TextField acc_30232_04_T = new TextField();
-			acc_30232_04_T.setPrefHeight(28.0);
-			acc_30232_04_T.setPrefWidth(198.0);
-			acc_30232_04_T.setLayoutX(150.0);
-			acc_30232_04_T.setLayoutY(291.0);
-			acc_30232_04_T.setText(tr.getacc_30232_04());
-			TextField acc_30232_05_T = new TextField();
-			acc_30232_05_T.setPrefHeight(28.0);
-			acc_30232_05_T.setPrefWidth(198.0);
-			acc_30232_05_T.setLayoutX(150.0);
-			acc_30232_05_T.setLayoutY(330.0);
-			acc_30232_05_T.setText(tr.getacc_30232_05());
-			TextField acc_701071_T = new TextField();
-			acc_701071_T.setPrefHeight(28.0);
-			acc_701071_T.setPrefWidth(198.0);
-			acc_701071_T.setLayoutX(150.0);
-			acc_701071_T.setLayoutY(368.0);
-			acc_701071_T.setText(tr.getacc_70107());
+			
+			TextField general_acc_T = new TextField();
+			general_acc_T.setPrefHeight(28.0);
+			general_acc_T.setPrefWidth(198.0);
+			general_acc_T.setLayoutX(150.0);
+			general_acc_T.setLayoutY(176.0);
+			general_acc_T.setText(tr.getGENERAL_ACC());
 
-			TextField ACC_30232_06_T = new TextField();
-			ACC_30232_06_T.setPrefHeight(28.0);
-			ACC_30232_06_T.setPrefWidth(198.0);
-			ACC_30232_06_T.setLayoutX(150.0);
-			ACC_30232_06_T.setLayoutY(404.0);
-			ACC_30232_06_T.setText(tr.getACC_30232_06());
+			TextField crash_acc_T = new TextField();
+			crash_acc_T.setPrefHeight(28.0);
+			crash_acc_T.setPrefWidth(198.0);
+			crash_acc_T.setLayoutX(150.0);
+			crash_acc_T.setLayoutY(212.0);
+			crash_acc_T.setText(tr.getCRASH_ACC());
+			
+			
+			TextField deal_acc_T = new TextField();
+			deal_acc_T.setPrefHeight(28.0);
+			deal_acc_T.setPrefWidth(198.0);
+			deal_acc_T.setLayoutX(150.0);
+			deal_acc_T.setLayoutY(252.0);
+			deal_acc_T.setText(tr.getDEAL_ACC());
+			
+			TextField general_comis_T = new TextField();
+			general_comis_T.setPrefHeight(28.0);
+			general_comis_T.setPrefWidth(198.0);
+			general_comis_T.setLayoutX(150.0);
+			general_comis_T.setLayoutY(291.0);
+			general_comis_T.setText(tr.getGENERAL_COMIS());
+			
+			TextField clear_sum_T = new TextField();
+			clear_sum_T.setPrefHeight(28.0);
+			clear_sum_T.setPrefWidth(198.0);
+			clear_sum_T.setLayoutX(150.0);
+			clear_sum_T.setLayoutY(330.0);
+			clear_sum_T.setText(tr.getCLEAR_SUM());
+			
+			TextField income_T = new TextField();
+			income_T.setPrefHeight(28.0);
+			income_T.setPrefWidth(198.0);
+			income_T.setLayoutX(150.0);
+			income_T.setLayoutY(368.0);
+			income_T.setText(tr.getINCOME());
+
 
 			Button Update = new Button();
 			Update.setText("Обновить");
@@ -384,25 +383,23 @@ public class TerminalController {
 			secondaryLayout.getChildren().add(DEPARTMENT);
 			secondaryLayout.getChildren().add(ADDRESS);
 			secondaryLayout.getChildren().add(ACCOUNT);
-			secondaryLayout.getChildren().add(acc_30232_01);
-			secondaryLayout.getChildren().add(acc_30232_02);
-			secondaryLayout.getChildren().add(acc_30232_03);
-			secondaryLayout.getChildren().add(acc_30232_04);
-			secondaryLayout.getChildren().add(acc_30232_05);
-			secondaryLayout.getChildren().add(acc_701071);
-			secondaryLayout.getChildren().add(ACC_30232_06);
-
+			secondaryLayout.getChildren().add(general_acc_l);
+			secondaryLayout.getChildren().add(crash_acc_l);
+			secondaryLayout.getChildren().add(deal_acc_l);
+			secondaryLayout.getChildren().add(general_comis_l);
+			secondaryLayout.getChildren().add(clear_sum_l);
+			secondaryLayout.getChildren().add(income_l);
+			
 			secondaryLayout.getChildren().add(NAME_T);
 			secondaryLayout.getChildren().add(DEPARTMENT_T);
 			secondaryLayout.getChildren().add(ADDRESS_T);
 			secondaryLayout.getChildren().add(ACCOUNT_T);
-			secondaryLayout.getChildren().add(acc_30232_01_T);
-			secondaryLayout.getChildren().add(acc_30232_02_T);
-			secondaryLayout.getChildren().add(acc_30232_03_T);
-			secondaryLayout.getChildren().add(acc_30232_04_T);
-			secondaryLayout.getChildren().add(acc_30232_05_T);
-			secondaryLayout.getChildren().add(acc_701071_T);
-			secondaryLayout.getChildren().add(ACC_30232_06_T);
+			secondaryLayout.getChildren().add(general_acc_T);
+			secondaryLayout.getChildren().add(crash_acc_T);
+			secondaryLayout.getChildren().add(deal_acc_T);
+			secondaryLayout.getChildren().add(general_comis_T);
+			secondaryLayout.getChildren().add(clear_sum_T);
+			secondaryLayout.getChildren().add(income_T);
 			secondaryLayout.getChildren().add(Update);
 
 			Scene secondScene = new Scene(secondaryLayout, 499, 500);
@@ -441,10 +438,19 @@ public class TerminalController {
 					});
 					yes.setOnAction(new EventHandler<ActionEvent>() {
 						public void handle(ActionEvent event) {
-							ViewerDAO.updateTerminal(NAME_T.getText(), ACCOUNT_T.getText(), DEPARTMENT_T.getText(),
-									ADDRESS_T.getText(), acc_30232_01_T.getText(), acc_30232_02_T.getText(),
-									acc_30232_03_T.getText(), acc_30232_04_T.getText(), acc_30232_05_T.getText(),
-									acc_701071_T.getText(), tr.getNAME(), ACC_30232_06_T.getText());
+							ViewerDAO.updateTerminal(
+									NAME_T.getText(),
+									ACCOUNT_T.getText(),
+									DEPARTMENT_T.getText(),
+									ADDRESS_T.getText(),
+									general_acc_T.getText(),
+									crash_acc_T.getText(),
+									deal_acc_T.getText(),
+									general_comis_T.getText(),
+									clear_sum_T.getText(),
+									income_T.getText(),
+									tr.getNAME()
+									);
 
 							Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
 							Stage stage_ = (Stage) alert_.getDialogPane().getScene().getWindow();
@@ -496,28 +502,25 @@ public class TerminalController {
 		Label ACCOUNT = new Label("Счет:");
 		ACCOUNT.setLayoutX(107.0);
 		ACCOUNT.setLayoutY(139.0);
-		Label acc_30232_01 = new Label("acc_30232_01:");
-		acc_30232_01.setLayoutX(60.0);
-		acc_30232_01.setLayoutY(174.0);
-		Label acc_30232_02 = new Label("acc_30232_02:");
-		acc_30232_02.setLayoutX(60.0);
-		acc_30232_02.setLayoutY(210.0);
-		Label acc_30232_03 = new Label("acc_30232_03:");
-		acc_30232_03.setLayoutX(60.0);
-		acc_30232_03.setLayoutY(250.0);
-		Label acc_30232_04 = new Label("acc_30232_04:");
-		acc_30232_04.setLayoutX(60.0);
-		acc_30232_04.setLayoutY(289.0);
-		Label acc_30232_05 = new Label("acc_30232_05:");
-		acc_30232_05.setLayoutX(60.0);
-		acc_30232_05.setLayoutY(328.0);
-		Label acc_701071 = new Label("acc_701071:");
-		acc_701071.setLayoutX(72.0);
-		acc_701071.setLayoutY(366.0);
+		Label general_acc_l = new Label("general_acc:");
+		general_acc_l.setLayoutX(60.0);
+		general_acc_l.setLayoutY(174.0);
+		Label crash_acc_l = new Label("crash_acc:");
+		crash_acc_l.setLayoutX(60.0);
+		crash_acc_l.setLayoutY(210.0);
+		Label deal_acc_l = new Label("deal_acc:");
+		deal_acc_l.setLayoutX(60.0);
+		deal_acc_l.setLayoutY(250.0);
+		Label general_comis_l = new Label("general_comis:");
+		general_comis_l.setLayoutX(60.0);
+		general_comis_l.setLayoutY(289.0);
+		Label clear_sum_l = new Label("clear_sum:");
+		clear_sum_l.setLayoutX(60.0);
+		clear_sum_l.setLayoutY(328.0);
+		Label income_l = new Label("income:");
+		income_l.setLayoutX(72.0);
+		income_l.setLayoutY(366.0);
 
-		Label ACC_30232_06 = new Label("ACC_30232_06:");
-		ACC_30232_06.setLayoutX(55.0);
-		ACC_30232_06.setLayoutY(404.0);
 
 		TextField NAME_T = new TextField();
 		NAME_T.setPrefHeight(28.0);
@@ -547,56 +550,49 @@ public class TerminalController {
 		ACCOUNT_T.setLayoutY(139.0);
 		ACCOUNT_T.setPromptText("Обязательно!");
 		// ACCOUNT_T.setText(tr.getACCOUNT());
-		TextField acc_30232_01_T = new TextField();
-		acc_30232_01_T.setPrefHeight(28.0);
-		acc_30232_01_T.setPrefWidth(198.0);
-		acc_30232_01_T.setLayoutX(150.0);
-		acc_30232_01_T.setLayoutY(176.0);
-		acc_30232_01_T.setPromptText("Обязательно!");
+		TextField general_acc_T = new TextField();
+		general_acc_T.setPrefHeight(28.0);
+		general_acc_T.setPrefWidth(198.0);
+		general_acc_T.setLayoutX(150.0);
+		general_acc_T.setLayoutY(176.0);
+		general_acc_T.setPromptText("Обязательно!");
 		// acc_30232_01_T.setText(tr.getacc_30232_01());
-		TextField acc_30232_02_T = new TextField();
-		acc_30232_02_T.setPrefHeight(28.0);
-		acc_30232_02_T.setPrefWidth(198.0);
-		acc_30232_02_T.setLayoutX(150.0);
-		acc_30232_02_T.setLayoutY(212.0);
-		acc_30232_02_T.setPromptText("Обязательно!");
+		TextField crash_acc_T = new TextField();
+		crash_acc_T.setPrefHeight(28.0);
+		crash_acc_T.setPrefWidth(198.0);
+		crash_acc_T.setLayoutX(150.0);
+		crash_acc_T.setLayoutY(212.0);
+		crash_acc_T.setPromptText("Обязательно!");
 		// acc_30232_02_T.setText(tr.getacc_30232_02());
-		TextField acc_30232_03_T = new TextField();
-		acc_30232_03_T.setPrefHeight(28.0);
-		acc_30232_03_T.setPrefWidth(198.0);
-		acc_30232_03_T.setLayoutX(150.0);
-		acc_30232_03_T.setLayoutY(252.0);
-		acc_30232_03_T.setPromptText("Обязательно!");
+		TextField deal_acc_T = new TextField();
+		deal_acc_T.setPrefHeight(28.0);
+		deal_acc_T.setPrefWidth(198.0);
+		deal_acc_T.setLayoutX(150.0);
+		deal_acc_T.setLayoutY(252.0);
+		deal_acc_T.setPromptText("Обязательно!");
 		// acc_30232_03_T.setText(tr.getacc_30232_03());
-		TextField acc_30232_04_T = new TextField();
-		acc_30232_04_T.setPrefHeight(28.0);
-		acc_30232_04_T.setPrefWidth(198.0);
-		acc_30232_04_T.setLayoutX(150.0);
-		acc_30232_04_T.setLayoutY(291.0);
-		acc_30232_04_T.setPromptText("Не обязательно!");
+		TextField general_comis_T = new TextField();
+		general_comis_T.setPrefHeight(28.0);
+		general_comis_T.setPrefWidth(198.0);
+		general_comis_T.setLayoutX(150.0);
+		general_comis_T.setLayoutY(291.0);
+		general_comis_T.setPromptText("Не обязательно!");
 		// acc_30232_04_T.setText(tr.getacc_30232_04());
-		TextField acc_30232_05_T = new TextField();
-		acc_30232_05_T.setPrefHeight(28.0);
-		acc_30232_05_T.setPrefWidth(198.0);
-		acc_30232_05_T.setLayoutX(150.0);
-		acc_30232_05_T.setLayoutY(330.0);
-		acc_30232_05_T.setPromptText("Обязательно!");
+		TextField clear_sum_T = new TextField();
+		clear_sum_T.setPrefHeight(28.0);
+		clear_sum_T.setPrefWidth(198.0);
+		clear_sum_T.setLayoutX(150.0);
+		clear_sum_T.setLayoutY(330.0);
+		clear_sum_T.setPromptText("Обязательно!");
 		// acc_30232_05_T.setText(tr.getacc_30232_05());
-		TextField acc_701071_T = new TextField();
-		acc_701071_T.setPrefHeight(28.0);
-		acc_701071_T.setPrefWidth(198.0);
-		acc_701071_T.setLayoutX(150.0);
-		acc_701071_T.setLayoutY(368.0);
-		acc_701071_T.setPromptText("Обязательно!");
+		TextField income_T = new TextField();
+		income_T.setPrefHeight(28.0);
+		income_T.setPrefWidth(198.0);
+		income_T.setLayoutX(150.0);
+		income_T.setLayoutY(368.0);
+		income_T.setPromptText("Обязательно!");
 		// acc_701071_T.setText(tr.getacc_70107());
 
-		TextField ACC_30232_06_T = new TextField();
-		ACC_30232_06_T.setPrefHeight(28.0);
-		ACC_30232_06_T.setPrefWidth(198.0);
-		ACC_30232_06_T.setLayoutX(150.0);
-		ACC_30232_06_T.setLayoutY(404.0);
-		// ACC_30232_06_T.setText(tr.getACC_30232_06());
-		ACC_30232_06_T.setPromptText("Обязательно!");
 
 		Button Add = new Button();
 		Add.setText("Добавить");
@@ -608,25 +604,23 @@ public class TerminalController {
 		secondaryLayout.getChildren().add(DEPARTMENT);
 		secondaryLayout.getChildren().add(ADDRESS);
 		secondaryLayout.getChildren().add(ACCOUNT);
-		secondaryLayout.getChildren().add(acc_30232_01);
-		secondaryLayout.getChildren().add(acc_30232_02);
-		secondaryLayout.getChildren().add(acc_30232_03);
-		secondaryLayout.getChildren().add(acc_30232_04);
-		secondaryLayout.getChildren().add(acc_30232_05);
-		secondaryLayout.getChildren().add(acc_701071);
-		secondaryLayout.getChildren().add(ACC_30232_06);
-
+		secondaryLayout.getChildren().add(general_acc_l);
+		secondaryLayout.getChildren().add(crash_acc_l);
+		secondaryLayout.getChildren().add(deal_acc_l);
+		secondaryLayout.getChildren().add(general_comis_l);
+		secondaryLayout.getChildren().add(clear_sum_l);
+		secondaryLayout.getChildren().add(income_l);
+		
 		secondaryLayout.getChildren().add(NAME_T);
 		secondaryLayout.getChildren().add(DEPARTMENT_T);
 		secondaryLayout.getChildren().add(ADDRESS_T);
 		secondaryLayout.getChildren().add(ACCOUNT_T);
-		secondaryLayout.getChildren().add(acc_30232_01_T);
-		secondaryLayout.getChildren().add(acc_30232_02_T);
-		secondaryLayout.getChildren().add(acc_30232_03_T);
-		secondaryLayout.getChildren().add(acc_30232_04_T);
-		secondaryLayout.getChildren().add(acc_30232_05_T);
-		secondaryLayout.getChildren().add(acc_701071_T);
-		secondaryLayout.getChildren().add(ACC_30232_06_T);
+		secondaryLayout.getChildren().add(general_acc_T);
+		secondaryLayout.getChildren().add(crash_acc_T);
+		secondaryLayout.getChildren().add(deal_acc_T);
+		secondaryLayout.getChildren().add(general_comis_T);
+		secondaryLayout.getChildren().add(clear_sum_T);
+		secondaryLayout.getChildren().add(income_T);
 		secondaryLayout.getChildren().add(Add);
 
 		Scene secondScene = new Scene(secondaryLayout, 499, 500);
@@ -665,10 +659,18 @@ public class TerminalController {
 				});
 				yes.setOnAction(new EventHandler<ActionEvent>() {
 					public void handle(ActionEvent event) {
-						ViewerDAO.InsertTerminal(NAME_T.getText(), ACCOUNT_T.getText(), DEPARTMENT_T.getText(),
-								ADDRESS_T.getText(), acc_30232_01_T.getText(), acc_30232_02_T.getText(),
-								acc_30232_03_T.getText(), acc_30232_04_T.getText(), acc_30232_05_T.getText(),
-								acc_701071_T.getText(), ACC_30232_06_T.getText());
+						ViewerDAO.InsertTerminal(
+								NAME_T.getText(),
+								ACCOUNT_T.getText(),
+								DEPARTMENT_T.getText(),
+								ADDRESS_T.getText(),
+								general_acc_T.getText(),
+								crash_acc_T.getText(),
+								deal_acc_T.getText(),
+								general_comis_T.getText(),
+								clear_sum_T.getText(),
+								income_T.getText()
+								);
 						Alert alert = new Alert(Alert.AlertType.INFORMATION);
 						Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 						stage.getIcons().add(new Image("terminal.png"));

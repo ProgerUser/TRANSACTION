@@ -6,17 +6,11 @@ public class ServiceClass {
 	private StringProperty name;
 	private StringProperty idterm;
 	private StringProperty account;
-	private StringProperty account2;
-	private StringProperty account3;
-	private StringProperty account4;
-	private StringProperty account5;
 	private StringProperty inn;
 	private StringProperty kpp;
-	private StringProperty kor_bank_nbra;
 	private StringProperty acc_rec;
 	private StringProperty kbk;
 	private StringProperty okato;
-	private StringProperty stat;
 	private StringProperty acc_name;
 	private StringProperty bo1;
 	private StringProperty bo2;
@@ -27,17 +21,11 @@ public class ServiceClass {
 		this.name = new SimpleStringProperty();
 		this.idterm = new SimpleStringProperty();
 		this.account = new SimpleStringProperty();
-		this.account2 = new SimpleStringProperty();
-		this.account3 = new SimpleStringProperty();
-		this.account4 = new SimpleStringProperty();
-		this.account5 = new SimpleStringProperty();
 		this.inn = new SimpleStringProperty();
 		this.kpp = new SimpleStringProperty();
-		this.kor_bank_nbra = new SimpleStringProperty();
 		this.acc_rec = new SimpleStringProperty();
 		this.kbk = new SimpleStringProperty();
 		this.okato = new SimpleStringProperty();
-		this.stat = new SimpleStringProperty();
 		this.acc_name = new SimpleStringProperty();
 		this.bo1 = new SimpleStringProperty();
 		this.bo2 = new SimpleStringProperty();
@@ -96,18 +84,6 @@ public class ServiceClass {
 		return acc_name;
 	}
 
-	// stat
-	public String getstat() {
-		return stat.get();
-	}
-
-	public void setstat(String stat) {
-		this.stat.set(stat);
-	}
-
-	public StringProperty statProperty() {
-		return stat;
-	}
 
 	// okato
 	public String getokato() {
@@ -148,19 +124,6 @@ public class ServiceClass {
 		return acc_rec;
 	}
 
-	// kor_bank_nbra
-	public String getkor_bank_nbra() {
-		return kor_bank_nbra.get();
-	}
-
-	public void setkor_bank_nbra(String kor_bank_nbra) {
-		this.kor_bank_nbra.set(kor_bank_nbra);
-	}
-
-	public StringProperty kor_bank_nbraProperty() {
-		return kor_bank_nbra;
-	}
-
 	// kpp
 	public String getkpp() {
 		return kpp.get();
@@ -185,58 +148,6 @@ public class ServiceClass {
 
 	public StringProperty innProperty() {
 		return inn;
-	}
-
-	// account5
-	public String getaccount5() {
-		return account5.get();
-	}
-
-	public void setaccount5(String account5) {
-		this.account5.set(account5);
-	}
-
-	public StringProperty account5Property() {
-		return account5;
-	}
-
-	// account4
-	public String getaccount4() {
-		return account4.get();
-	}
-
-	public void setaccount4(String account4) {
-		this.account4.set(account4);
-	}
-
-	public StringProperty account4Property() {
-		return account4;
-	}
-
-	// account3
-	public String getaccount3() {
-		return account3.get();
-	}
-
-	public void setaccount3(String account3) {
-		this.account3.set(account3);
-	}
-
-	public StringProperty account3Property() {
-		return account3;
-	}
-
-	// account2
-	public String getaccount2() {
-		return account2.get();
-	}
-
-	public void setaccount2(String account2) {
-		this.account2.set(account2);
-	}
-
-	public StringProperty account2Property() {
-		return account2;
 	}
 
 	// account

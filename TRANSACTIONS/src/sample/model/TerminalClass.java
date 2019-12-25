@@ -9,13 +9,12 @@ public class TerminalClass {
 	private StringProperty DEPARTMENT;
 	private StringProperty ADDRESS;
 	private StringProperty ACCOUNT;
-	private StringProperty acc_30232_01;
-	private StringProperty acc_30232_02;
-	private StringProperty acc_30232_03;
-	private StringProperty acc_30232_04;
-	private StringProperty acc_30232_05;
-	private StringProperty acc_70107;
-	private StringProperty ACC_30232_06;
+	private StringProperty GENERAL_ACC;
+	private StringProperty CRASH_ACC;
+	private StringProperty DEAL_ACC;
+	private StringProperty GENERAL_COMIS;
+	private StringProperty CLEAR_SUM;
+	private StringProperty INCOME;
 
 	// Constructor
 	public TerminalClass() {
@@ -23,26 +22,25 @@ public class TerminalClass {
 		this.DEPARTMENT = new SimpleStringProperty();
 		this.ADDRESS = new SimpleStringProperty();
 		this.ACCOUNT = new SimpleStringProperty();
-		this.acc_30232_01 = new SimpleStringProperty();
-		this.acc_30232_02 = new SimpleStringProperty();
-		this.acc_30232_03 = new SimpleStringProperty();
-		this.acc_30232_04 = new SimpleStringProperty();
-		this.acc_30232_05 = new SimpleStringProperty();
-		this.acc_70107 = new SimpleStringProperty();
-		this.ACC_30232_06 = new SimpleStringProperty();
+		this.GENERAL_ACC = new SimpleStringProperty();
+		this.CRASH_ACC = new SimpleStringProperty();
+		this.DEAL_ACC = new SimpleStringProperty();
+		this.GENERAL_COMIS = new SimpleStringProperty();
+		this.CLEAR_SUM = new SimpleStringProperty();
+		this.INCOME = new SimpleStringProperty();
 	}
 
 	// ACC_30232_06
-	public String getACC_30232_06() {
-		return ACC_30232_06.get();
+	public String getGENERAL_ACC() {
+		return GENERAL_ACC.get();
 	}
 
-	public void setACC_30232_06(String ACC_30232_06) {
-		this.ACC_30232_06.set(ACC_30232_06);
+	public void setGENERAL_ACC(String GENERAL_ACC) {
+		this.GENERAL_ACC.set(GENERAL_ACC);
 	}
 
-	public StringProperty ACC_30232_06Property() {
-		return ACC_30232_06;
+	public StringProperty GENERAL_ACCProperty() {
+		return GENERAL_ACC;
 	}
 
 	// NAME
@@ -97,81 +95,68 @@ public class TerminalClass {
 		return ACCOUNT;
 	}
 
-	// acc_30232_01
-	public String getacc_30232_01() {
-		return acc_30232_01.get();
+
+	public String getCRASH_ACC() {
+		return CRASH_ACC.get();
 	}
 
-	public void setacc_30232_01(String acc_30232_01) {
-		this.acc_30232_01.set(acc_30232_01);
+	public void setCRASH_ACC(String CRASH_ACC) {
+		this.CRASH_ACC.set(CRASH_ACC);
 	}
 
-	public StringProperty acc_30232_01Property() {
-		return acc_30232_01;
+	public StringProperty CRASH_ACCProperty() {
+		return CRASH_ACC;
 	}
 
-	// acc_30232_02
-	public String getacc_30232_02() {
-		return acc_30232_02.get();
+
+	public String getDEAL_ACC() {
+		return DEAL_ACC.get();
 	}
 
-	public void setacc_30232_02(String acc_30232_02) {
-		this.acc_30232_02.set(acc_30232_02);
+	public void setDEAL_ACC(String DEAL_ACC) {
+		this.DEAL_ACC.set(DEAL_ACC);
 	}
 
-	public StringProperty acc_30232_02Property() {
-		return acc_30232_02;
+	public StringProperty DEAL_ACCProperty() {
+		return DEAL_ACC;
 	}
 
-	// acc_30232_03
-	public String getacc_30232_03() {
-		return acc_30232_03.get();
+
+	public String getGENERAL_COMIS() {
+		return GENERAL_COMIS.get();
 	}
 
-	public void setacc_30232_03(String acc_30232_03) {
-		this.acc_30232_03.set(acc_30232_03);
+	public void setGENERAL_COMIS(String GENERAL_COMIS) {
+		this.GENERAL_COMIS.set(GENERAL_COMIS);
 	}
 
-	public StringProperty acc_30232_03Property() {
-		return acc_30232_03;
+	public StringProperty GENERAL_COMISProperty() {
+		return GENERAL_COMIS;
 	}
 
-	// acc_30232_04
-	public String getacc_30232_04() {
-		return acc_30232_04.get();
+
+	public String getCLEAR_SUM() {
+		return CLEAR_SUM.get();
 	}
 
-	public void setacc_30232_04(String acc_30232_04) {
-		this.acc_30232_04.set(acc_30232_04);
+	public void setCLEAR_SUM(String CLEAR_SUM) {
+		this.CLEAR_SUM.set(CLEAR_SUM);
 	}
 
-	public StringProperty acc_30232_04Property() {
-		return acc_30232_04;
+	public StringProperty CLEAR_SUMProperty() {
+		return CLEAR_SUM;
 	}
 
-	// acc_30232_05
-	public String getacc_30232_05() {
-		return acc_30232_05.get();
+
+	public String getINCOME() {
+		return INCOME.get();
 	}
 
-	public void setacc_30232_05(String acc_30232_05) {
-		this.acc_30232_05.set(acc_30232_05);
+	public void setINCOME(String INCOME) {
+		this.INCOME.set(INCOME);
 	}
 
-	public StringProperty acc_30232_05Property() {
-		return acc_30232_05;
-	}
-
-	// acc_70107
-	public String getacc_70107() {
-		return acc_70107.get();
-	}
-
-	public void setacc_70107(String acc_70107) {
-		this.acc_70107.set(acc_70107);
-	}
-
-	public StringProperty acc_70107Property() {
-		return acc_70107;
+	public StringProperty INCOMEProperty() {
+		return INCOME;
 	}
 }
