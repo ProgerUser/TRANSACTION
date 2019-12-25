@@ -16,7 +16,7 @@
 					</columnResizePolicy>
 					<columns>
 						<TableColumn fx:id="name" maxWidth="5000.0" minWidth="10.0" prefWidth="240.0" text="Название" />
-						<TableColumn fx:id="idterm" maxWidth="5000.0" minWidth="10.0" prefWidth="84.0" text="Отделение" />
+						<TableColumn fx:id="idterm" maxWidth="5000.0" minWidth="10.0" prefWidth="84.0" text="Терминал" />
 						<TableColumn fx:id="account" maxWidth="5000.0" minWidth="0.0" prefWidth="196.0" text="Транзитный счет" />
 						<TableColumn fx:id="inn" maxWidth="5000.0" minWidth="7.0" prefWidth="102.0" text="ИНН" />
 						<TableColumn fx:id="kpp" minWidth="7.0" prefWidth="102.0" text="КПП" />
