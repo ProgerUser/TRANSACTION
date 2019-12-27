@@ -82,7 +82,7 @@
 		</GridPane>
 	</center>
 	<top>
-		<AnchorPane prefHeight="97.0" prefWidth="1017.0" BorderPane.alignment="CENTER">
+		<AnchorPane prefHeight="112.0" prefWidth="1017.0" BorderPane.alignment="CENTER">
 			<children>
 				<Button layoutX="856.0" layoutY="41.0" mnemonicParsing="false" onAction="#view_attr" prefHeight="25.0" prefWidth="148.0" text="Просмотр Атрибутов" />
 				<Button layoutX="698.0" layoutY="41.0" mnemonicParsing="false" onAction="#excel_export" text="Выгрузить в EXCEL" />
@@ -95,6 +95,7 @@
 				<Text layoutX="323.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID Сессии" />
 				<Button layoutX="570.0" layoutY="41.0" mnemonicParsing="false" onAction="#view_unpivot" text="Подробно" />
             <CheckBox fx:id="inkass" layoutX="18.0" layoutY="75.0" mnemonicParsing="false" text="Инкассация" />
+            <ProgressIndicator fx:id="pb" layoutX="147.0" layoutY="68.0" prefHeight="32.0" prefWidth="53.0" visible="false" />
 			</children>
 		</AnchorPane>
 	</top>

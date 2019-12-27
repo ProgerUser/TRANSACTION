@@ -16,6 +16,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
+import org.controlsfx.control.table.TableFilter;
+
 public class TerminalDAO {
 
 	// *******************************
@@ -283,6 +285,7 @@ public class TerminalDAO {
 		// Send ResultSet to the getEmployeeList method and get employee object
 		ObservableList<Amra_Trans> empList = get_amra_trans(rsEmps);
 
+		
 		// Return employee object
 		return empList;
 	}

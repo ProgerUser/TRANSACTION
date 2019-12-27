@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -50,7 +51,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -77,6 +80,7 @@ import sample.model.Connect;
 import sample.model.FN_SESS_AMRA;
 import sample.model.TerminalDAO;
 import sample.model.Add_File;
+import sample.model.Amra_Trans;
 import javafx.stage.Stage;
 
 @SuppressWarnings("unused")
@@ -147,6 +151,12 @@ public class Amra_Transact {
 	private TableColumn<Add_File, String> PathFile;
 	@FXML
 	private TableView<Add_File> load_file;
+
+	// For MultiThreading
+	private Executor exec;
+
+	@FXML
+	private ProgressIndicator progress;
 
 	static PrintWriter writer;
 
@@ -263,9 +273,6 @@ public class Amra_Transact {
 			}
 		});
 	}
-
-	// For MultiThreading
-	private Executor exec;
 
 	@FXML
 	private DatePicker date_load;
@@ -399,12 +406,45 @@ public class Amra_Transact {
 		autoResizeColumns(load_file);
 	}
 
+	/*
+	 * @FXML void Calc_Transact(ActionEvent event) { progress.setVisible(true);
+	 * Task<Add_File> task = new Task<Add_File>() {
+	 * 
+	 * @Override public Add_File call() throws Exception { Calc_Transact_(); return
+	 * null; } }; task.setOnFailed(e -> print_mess(task.getException().toString()));
+	 * // task.setOnSucceeded(e -> Load_Transact()); exec.execute(task);
+	 * progress.setVisible(false); }
+	 */
+	/*
+	 * @FXML void Load_Transact(ActionEvent event) { progress.setVisible(true);
+	 * Task<Add_File> task = new Task<Add_File>() {
+	 * 
+	 * @Override public Add_File call() throws Exception { Load_Transact_(); return
+	 * null; } }; task.setOnFailed(e -> print_mess(task.getException().toString()));
+	 * // task.setOnSucceeded(e -> Load_Transact()); exec.execute(task);
+	 * progress.setVisible(false); }
+	 */
+	void print_mess(String text) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText(text);
+				alert.showAndWait();
+			}
+		});
+	}
 	@FXML
 	void Load_Transact(ActionEvent event) {
 		try {
 			if (load_file.getSelectionModel().getSelectedItem() != null) {
 				Add_File af = load_file.getSelectionModel().getSelectedItem();
 				if (af.get_Status().equals("Загружен")) {
+
 					Date date = new Date();
 
 					DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH-mm-ss");
@@ -429,6 +469,7 @@ public class Amra_Transact {
 					String part2 = parts[1].trim();
 					Integer rowid = 1;
 					if (part1.equals("1")) {
+
 						Alert alert = new Alert(Alert.AlertType.INFORMATION);
 						Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 						stage.getIcons().add(new Image("terminal.png"));
@@ -497,8 +538,10 @@ public class Amra_Transact {
 					alert.setHeaderText(null);
 					alert.setContentText("Файле уже " + af.get_Status());
 					alert.showAndWait();
+
 				}
 			} else {
+
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
 				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 				stage.getIcons().add(new Image("terminal.png"));
@@ -506,6 +549,7 @@ public class Amra_Transact {
 				alert.setHeaderText(null);
 				alert.setContentText("Выберите сначала файл для загрузки");
 				alert.showAndWait();
+
 			}
 		} catch (SQLException | IOException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
