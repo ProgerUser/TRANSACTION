@@ -53,12 +53,17 @@ public class PrintReport2 extends JFrame {
 					+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
 
 			Statement sqlStatement = conn.createStatement();
-			String readRecordSQL = "select CTRNACCD,\r\n" + 
-					"       CTRNACCC,\r\n" + 
-					"       MTRNRSUM,\r\n" + 
-					"       CTRNPURP,\r\n" + 
-					"       DTRNTRAN,\r\n" + 
-					"       t.DTRNCREATE,\r\n" + 
+			String readRecordSQL = "select CTRNACCD debet,\r\n" + 
+					"       CTRNACCC credit,\r\n" + 
+					"       MTRNRSUM summ,\r\n" + 
+					"       CTRNPURP ground,\r\n" + 
+					"       case\r\n" + 
+					"         when trunc(DTRNTRAN) is null then\r\n" + 
+					"          to_date('01.01.2000', 'dd.mm.yyyy')\r\n" + 
+					"         else\r\n" + 
+					"          trunc(DTRNTRAN)\r\n" + 
+					"       end date_reg,\r\n" + 
+					"       t.DTRNCREATE date_,\r\n" + 
 					"       case\r\n" + 
 					"         when ITRNNUM is null then\r\n" + 
 					"          'Отсутствует в главной книге'\r\n" + 
@@ -69,19 +74,21 @@ public class PrintReport2 extends JFrame {
 					" where t.ITRNNUM(+) = g.KINDPAYMENT\r\n" + 
 					"   and PAYMENTNUMBERS like '%"+paymnt_number+"%'\r\n" + 
 					"   and sess_id = "+sess_id+"\r\n" + 
-					"   order by CTRNACCD,MTRNRSUM desc";
+					" order by CTRNACCD, MTRNRSUM desc\r\n" + 
+					"";
 			ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
 			System.out.println(readRecordSQL);
 			while (myResultSet.next()) {
 				list = new Item2();
-				list.setdebet(myResultSet.getString("CTRNACCD"));
-				list.setcredit(myResultSet.getString("CTRNACCC"));
-				list.setsumm(myResultSet.getDouble("MTRNRSUM"));
-				list.setstat(myResultSet.getString("STAT"));
-				list.setdate_(myResultSet.getDate("DTRNCREATE"));
-				list.setdate_reg(myResultSet.getDate("DTRNTRAN"));
+				list.setdebet(myResultSet.getString("debet"));
+				list.setcredit(myResultSet.getString("credit"));
+				list.setsumm(myResultSet.getDouble("summ"));
+				list.setstat(myResultSet.getString("stat"));
+				list.setdate_(myResultSet.getDate("date_"));
+				list.setground(myResultSet.getString("ground"));
+				list.setdate_reg(myResultSet.getDate("date_reg"));
 
-				System.out.println(myResultSet.getDate("CTRNACCD"));
+				//System.out.println(myResultSet.getDate("CTRNACCD"));
 				listItems.add(list);
 			}
 			myResultSet.close();

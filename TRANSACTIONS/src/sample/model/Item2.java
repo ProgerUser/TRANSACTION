@@ -31,6 +31,7 @@ public class Item2 {
 		this.stat = new SimpleStringProperty();
 		this.summ = new SimpleDoubleProperty();
 		this.date_ = new SimpleObjectProperty<>();
+		this.date_reg = new SimpleObjectProperty<>();
 	}
 
 	// credit

@@ -84,44 +84,44 @@
 	<top>
 		<AnchorPane prefHeight="112.0" prefWidth="1017.0" stylesheets="borderpane.css" BorderPane.alignment="CENTER">
 			<children>
-				<Button fx:id="attributes" layoutX="805.0" layoutY="31.0" mnemonicParsing="false" onAction="#view_attr" prefHeight="35.0" prefWidth="35.0">
+				<Button fx:id="attributes" layoutX="735.0" layoutY="31.0" mnemonicParsing="false" onAction="#view_attr" prefHeight="35.0" prefWidth="35.0">
 				<tooltip>
 						<Tooltip text="Показать дополнительные атрибуты" />
 					</tooltip>
 			    </Button>
-				<Button layoutX="860.0" layoutY="31.0" mnemonicParsing="false" onAction="#excel_export" prefHeight="35.0" prefWidth="35.0" fx:id="xlsx">
+				<Button layoutX="790.0" layoutY="31.0" mnemonicParsing="false" onAction="#excel_export" prefHeight="35.0" prefWidth="35.0" fx:id="xlsx">
 				<tooltip>
 						<Tooltip text="Выгрузка в Excel" />
 					</tooltip>
 			    </Button>
-				<DatePicker fx:id="dt1" layoutX="18.0" layoutY="31.0" prefHeight="35.0" prefWidth="129.0" />
-				<DatePicker fx:id="dt2" layoutX="164.0" layoutY="31.0" prefHeight="35.0" prefWidth="133.0" />
+				<DatePicker fx:id="dt1" layoutX="18.0" layoutY="31.0" prefHeight="35.0" prefWidth="100.0" />
+				<DatePicker fx:id="dt2" layoutX="135.0" layoutY="31.0" prefHeight="35.0" prefWidth="100.0" />
 				<Text layoutX="18.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Дата начала" />
-				<Text layoutX="164.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Дата конца" />
-				<Button fx:id="search" layoutX="697.0" layoutY="31.0" mnemonicParsing="false" onAction="#filter" prefHeight="35" prefWidth="35">
+				<Text layoutX="135.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Дата конца" />
+				<Button fx:id="search" layoutX="627.0" layoutY="31.0" mnemonicParsing="false" onAction="#filter" prefHeight="35" prefWidth="35">
 					<tooltip>
 						<Tooltip text="Поиск" />
 					</tooltip>
 			    </Button>
-				<TextField fx:id="id_sess" layoutX="323.0" layoutY="31.0" prefHeight="35.0" prefWidth="99.0">
+				<TextField fx:id="id_sess" layoutX="253.0" layoutY="31.0" prefHeight="35.0" prefWidth="99.0">
                <font>
                   <Font size="14.0" />
                </font></TextField>
-				<Text layoutX="323.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID Сессии" />
-				<Button fx:id="view" layoutX="752.0" layoutY="31.0" mnemonicParsing="false" onAction="#view_unpivot" prefHeight="35.0" prefWidth="35.0">
+				<Text layoutX="253.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID Сессии" />
+				<Button fx:id="view" layoutX="682.0" layoutY="31.0" mnemonicParsing="false" onAction="#view_unpivot" prefHeight="35.0" prefWidth="35.0">
 					<tooltip>
 						<Tooltip text="Показать транзакцию" />
 					</tooltip>
 			    </Button>
             <CheckBox fx:id="inkass" layoutX="18.0" layoutY="75.0" mnemonicParsing="false" text="Инкассация" />
             <ProgressIndicator fx:id="pb" layoutX="147.0" layoutY="68.0" prefHeight="32.0" prefWidth="53.0" visible="false" />
-            <TextField fx:id="FIO" layoutX="434.0" layoutY="31.0" prefHeight="35.0" prefWidth="243.0" promptText="\%...%">
+            <TextField fx:id="FIO" layoutX="364.0" layoutY="31.0" prefHeight="35.0" prefWidth="243.0" promptText="\%...%">
                <font>
                   <Font size="14.0" />
                </font>
             </TextField>
-            <Text layoutX="434.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ФИО, тел., и т.д." />
-            <Button fx:id="post" layoutX="916.0" layoutY="31.0" mnemonicParsing="false" onAction="#view_post" prefHeight="35.0" prefWidth="35.0">
+            <Text layoutX="364.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ФИО, тел., и т.д." />
+            <Button fx:id="post" layoutX="846.0" layoutY="31.0" mnemonicParsing="false" onAction="#view_post" prefHeight="35.0" prefWidth="35.0">
             <tooltip>
 				<Tooltip text="Показать проводки" />
 			</tooltip>
