@@ -25,7 +25,7 @@
 }
 
 #browse {          
-    -fx-background-image: url("Add.png");
+    -fx-background-image: url("add_file.png");
     -fx-background-size: 35 35;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
@@ -33,14 +33,14 @@
 
 
 #import {          
-    -fx-background-image: url("Load.png");
+    -fx-background-image: url("process.png");
     -fx-background-size: 35 35;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }
 
 #calc {          
-    -fx-background-image: url("Trn.png");
+    -fx-background-image: url("post.png");
     -fx-background-size: 35 35;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
