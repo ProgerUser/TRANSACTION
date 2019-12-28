@@ -235,7 +235,12 @@ public class TerminalDAO {
 	// *******************************
 	// SELECT FN_SESS
 	// *******************************
-	public static ObservableList<Amra_Trans> Amra_Trans_(String SESS_ID, LocalDate dt1, LocalDate dt2, boolean chk) {
+	public static ObservableList<Amra_Trans> Amra_Trans_(
+			String SESS_ID,
+			LocalDate dt1,
+			LocalDate dt2,
+			String FIO,
+			boolean chk) {
 
 		String ldt1 = null;
 		String ldt2 = null;
@@ -255,6 +260,7 @@ public class TerminalDAO {
 		String ldt1_ = "\n";
 		String ldt2_ = "\n";
 		String bt = "\n";
+		String FIO_ = "\n";
 		if (dt1 != null & dt2 != null) {
 			bt = " and trunc(paydate) between to_date('" + ldt1 + "','dd.mm.yyyy') and to_date('" + ldt2
 					+ "','dd.mm.yyyy') \n";
@@ -274,8 +280,17 @@ public class TerminalDAO {
 
 		}
 
+		if (FIO != null) {
+			if (FIO.equals("")) {
+
+			} else {
+				FIO_ = " and lower(attributes_) like '" + FIO + "'\n";
+			}
+		} else {
+
+		}
 		String selectStmt = " select rownum,t.* from (select rownum,t.* from " + table + " t where 1=1" + sess + ldt1_
-				+ ldt2_ + bt + " order by PAYDATE desc) t";
+				+ ldt2_ + bt + FIO_+" order by PAYDATE desc) t";
 
 		// Execute SELECT statement
 

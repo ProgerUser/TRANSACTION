@@ -26,7 +26,7 @@ import net.sf.jasperreports.swing.JRViewer;
 import sample.model.Connect;
 import sample.model.Item;
 
-public class PrintReport extends JFrame {
+public class PrintReport2 extends JFrame {
 
 	/**
 	 * 
@@ -35,7 +35,7 @@ public class PrintReport extends JFrame {
 
 	public void showReport(String sess_id) {
 		try {
-			String reportSrcFile = System.getenv("TRANSACT_PATH") + "\\" + "report\\QUERY.jrxml";
+			String reportSrcFile = System.getenv("TRANSACT_PATH") + "\\" + "report\\postdoc.jrxml";
 
 			// First, compile jrxml file.
 			JasperReport jasperReport;

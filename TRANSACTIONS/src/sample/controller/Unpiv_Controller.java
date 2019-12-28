@@ -50,6 +50,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import org.controlsfx.control.table.TableFilter;
+
 import java.util.Date;
 
 /**
@@ -102,6 +105,7 @@ public class Unpiv_Controller {
 		ObservableList<Unpiv> empData = TerminalDAO.Unpiv_View();
 		populate_attr(empData);
 		autoResizeColumns(trans_table);
+		TableFilter<Unpiv> filter = new TableFilter<>(trans_table);
 	}
 
 	@FXML

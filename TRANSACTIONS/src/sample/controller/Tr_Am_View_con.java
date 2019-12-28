@@ -281,6 +281,9 @@ public class Tr_Am_View_con {
 
 	@FXML
 	private TextField id_sess;
+	
+	@FXML
+	private TextField FIO;
 
 	@FXML
 	private TableColumn<Amra_Trans, String> orderofprovidence;
@@ -1419,8 +1422,25 @@ public class Tr_Am_View_con {
 	}
 
 	@FXML
+	private void view_post(ActionEvent actionEvent) {
+		if (trans_table.getSelectionModel().getSelectedItem() == null) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(("Выберите сначала данные из таблицы!\n"));
+			alert.showAndWait();
+
+		} else {
+			Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
+			new PrintReport().showReport(fn.get_checknumber());
+		}
+	}
+	
+	@FXML
 	private void term_view_(ActionEvent actionEvent) {
-		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(),
+		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(),"",
 				false);
 		populate_fn_sess(empData);
 
@@ -1474,9 +1494,9 @@ public class Tr_Am_View_con {
 
 		ObservableList<Amra_Trans> empData = null;
 		if (inkass.isSelected()) {
-			empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(), false);
+			empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(),FIO.getText(), false);
 		} else {
-			empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(), true);
+			empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(),FIO.getText(), true);
 		}
 		populate_fn_sess(empData);
 		autoResizeColumns(trans_table);

@@ -51,3 +51,34 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }
+#search {          
+    -fx-background-image: url("search.png");
+    -fx-background-size: 35 35;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position:center;
+}
+#xlsx {          
+    -fx-background-image: url("xlsx.png");
+    -fx-background-size: 35 35;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position:center;
+}
+#attributes {          
+    -fx-background-image: url("attributes.png");
+    -fx-background-size: 35 35;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position:center;
+}
+
+#view {          
+    -fx-background-image: url("view.png");
+    -fx-background-size: 35 35;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position:center;
+}
+#post {          
+    -fx-background-image: url("post.png");
+    -fx-background-size: 35 35;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position:center;
+}
