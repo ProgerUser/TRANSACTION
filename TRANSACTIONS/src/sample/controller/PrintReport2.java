@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,12 +58,7 @@ public class PrintReport2 extends JFrame {
 					"       CTRNACCC credit,\r\n" + 
 					"       MTRNRSUM summ,\r\n" + 
 					"       CTRNPURP ground,\r\n" + 
-					"       case\r\n" + 
-					"         when trunc(DTRNTRAN) is null then\r\n" + 
-					"          to_date('01.01.2000', 'dd.mm.yyyy')\r\n" + 
-					"         else\r\n" + 
-					"          trunc(DTRNTRAN)\r\n" + 
-					"       end date_reg,\r\n" + 
+					"       DTRNTRAN date_reg_,"+
 					"       t.DTRNCREATE date_,\r\n" + 
 					"       case\r\n" + 
 					"         when ITRNNUM is null then\r\n" + 
@@ -86,7 +82,17 @@ public class PrintReport2 extends JFrame {
 				list.setstat(myResultSet.getString("stat"));
 				list.setdate_(myResultSet.getDate("date_"));
 				list.setground(myResultSet.getString("ground"));
-				list.setdate_reg(myResultSet.getDate("date_reg"));
+				//list.setdate_reg(myResultSet.getTimestamp("date_reg"));
+				String date_reg_ = null;
+				if(myResultSet.getString("date_reg_") != null) {
+					date_reg_ = new SimpleDateFormat("dd.MM.yy HH:mm:ss").format(myResultSet.getTimestamp("date_reg_"));
+				}else
+				{
+					date_reg_ = "Не проведена!"/*myResultSet.getString("date_reg_")*/;
+				}
+				
+				list.setdate_reg_(date_reg_);
+				
 
 				//System.out.println(myResultSet.getDate("CTRNACCD"));
 				listItems.add(list);

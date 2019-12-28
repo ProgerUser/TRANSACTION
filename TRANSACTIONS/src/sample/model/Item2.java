@@ -1,6 +1,7 @@
 package sample.model;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -21,19 +22,32 @@ public class Item2 {
 	private DoubleProperty summ;
 
 	private SimpleObjectProperty<Date> date_;
-	private SimpleObjectProperty<Date> date_reg;
+	private SimpleObjectProperty<Timestamp> date_reg;
+	private StringProperty date_reg_;
 
 	// Constructor
 	public Item2() {
 		this.debet = new SimpleStringProperty();
 		this.credit = new SimpleStringProperty();
 		this.ground = new SimpleStringProperty();
+		this.date_reg_ = new SimpleStringProperty();
 		this.stat = new SimpleStringProperty();
 		this.summ = new SimpleDoubleProperty();
 		this.date_ = new SimpleObjectProperty<>();
 		this.date_reg = new SimpleObjectProperty<>();
 	}
+	//date_reg_
+	public String getdate_reg_() {
+		return date_reg_.get();
+	}
 
+	public void setdate_reg_(String date_reg_) {
+		this.date_reg_.set(date_reg_);
+	}
+
+	public StringProperty date_reg_Property() {
+		return date_reg_;
+	}
 	// credit
 	public String getcredit() {
 		return credit.get();
@@ -104,11 +118,11 @@ public class Item2 {
 		return date_reg.get();
 	}
 
-	public void setdate_reg(Date date_reg) {
+	public void setdate_reg(Timestamp date_reg) {
 		this.date_reg.set(date_reg);
 	}
 
-	public SimpleObjectProperty<Date> date_regProperty() {
+	public SimpleObjectProperty<Timestamp> date_regProperty() {
 		return date_reg;
 	}
 	
