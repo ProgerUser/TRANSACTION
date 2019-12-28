@@ -59,11 +59,13 @@
 		<queryString>
 			<![CDATA[]]>
 		</queryString>
-		<field name="acc" class="java.lang.String"/>
-		<field name="debet" class="java.lang.Double"/>
-		<field name="credit" class="java.lang.Double"/>
-		<field name="d_c" class="java.lang.Double"/>
+		<field name="debet" class="java.lang.String"/>
+		<field name="credit" class="java.lang.String"/>
+		<field name="stat" class="java.lang.String"/>
+		<field name="ground" class="java.lang.String"/>
+		<field name="summ" class="java.lang.Double"/>
 		<field name="date_" class="java.sql.Date"/>
+		<field name="date_reg" class="java.sql.Date"/>
 	</subDataset>
 	<parameter name="ItemDataSource" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
 	<queryString>
@@ -75,7 +77,7 @@
 	<detail>
 		<band height="256" splitType="Stretch">
 			<componentElement>
-				<reportElement x="0" y="0" width="555" height="200" uuid="7786bb05-503a-4b6a-991a-a7bcf3abad07">
+				<reportElement x="0" y="0" width="1000" height="240" uuid="7786bb05-503a-4b6a-991a-a7bcf3abad07">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 1_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 1_CH"/>
@@ -90,28 +92,28 @@
 						<jr:tableHeader style="Table 1_TH" height="30" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="130" height="30" uuid="f60d1675-6fb6-4569-93ca-de32b3a8e861"/>
-								<text><![CDATA[Счета]]></text>
-							</staticText>
-						</jr:tableHeader>
-						<jr:detailCell style="Table 1_TD" height="30">
-							<textField>
-								<reportElement x="0" y="0" width="130" height="30" uuid="f1de366a-b36f-4200-9b1e-7a0009be5373"/>
-								<textFieldExpression><![CDATA[$F{acc}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="90" uuid="980fffb5-1088-47a6-b00f-b5d08b7093c9">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
-						<jr:tableHeader style="Table 1_TH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="90" height="30" uuid="16679b95-2e6e-4ca1-b8b6-dd7b74267c56"/>
 								<text><![CDATA[Дебет]]></text>
 							</staticText>
 						</jr:tableHeader>
 						<jr:detailCell style="Table 1_TD" height="30">
 							<textField>
-								<reportElement x="0" y="0" width="90" height="30" uuid="341e7faf-9680-4941-a9a4-ac78b8f4aae0"/>
+								<reportElement x="0" y="0" width="130" height="30" uuid="f1de366a-b36f-4200-9b1e-7a0009be5373"/>
 								<textFieldExpression><![CDATA[$F{debet}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="120" uuid="980fffb5-1088-47a6-b00f-b5d08b7093c9">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+						<jr:tableHeader style="Table 1_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="120" height="30" uuid="16679b95-2e6e-4ca1-b8b6-dd7b74267c56"/>
+								<text><![CDATA[Кредит]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="Table 1_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="120" height="30" uuid="341e7faf-9680-4941-a9a4-ac78b8f4aae0"/>
+								<textFieldExpression><![CDATA[$F{credit}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -120,28 +122,28 @@
 						<jr:tableHeader style="Table 1_TH" height="30" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="90" height="30" uuid="40d042c1-41d7-4a96-9b46-06fed3f3a9c8"/>
-								<text><![CDATA[Кредит]]></text>
+								<text><![CDATA[Сумма]]></text>
 							</staticText>
 						</jr:tableHeader>
 						<jr:detailCell style="Table 1_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="90" height="30" uuid="87df341f-f9f0-46be-96d8-f076475197b5"/>
-								<textFieldExpression><![CDATA[$F{credit}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{summ}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="80" uuid="e9f50f54-bacb-4431-a304-ad6d22ac29c6">
+					<jr:column width="330" uuid="e9f50f54-bacb-4431-a304-ad6d22ac29c6">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
 						<jr:tableHeader style="Table 1_TH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="80" height="30" uuid="a137cee3-3fee-4f31-af84-eb72d17fde62"/>
-								<text><![CDATA[Разность]]></text>
+								<reportElement x="0" y="0" width="330" height="30" uuid="a137cee3-3fee-4f31-af84-eb72d17fde62"/>
+								<text><![CDATA[Основание]]></text>
 							</staticText>
 						</jr:tableHeader>
 						<jr:detailCell style="Table 1_TD" height="30">
 							<textField>
-								<reportElement x="0" y="0" width="80" height="30" uuid="589d21df-e19f-409c-a816-717e787a55fa"/>
-								<textFieldExpression><![CDATA[$F{d_c}]]></textFieldExpression>
+								<reportElement x="0" y="0" width="330" height="30" uuid="589d21df-e19f-409c-a816-717e787a55fa"/>
+								<textFieldExpression><![CDATA[$F{ground}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -150,13 +152,43 @@
 						<jr:tableHeader style="Table 1_TH" height="30" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="70" height="30" uuid="227d6a83-d02f-49e0-82cd-2fbbb1affbc7"/>
-								<text><![CDATA[Дата проводки]]></text>
+								<text><![CDATA[Дата регистрации]]></text>
 							</staticText>
 						</jr:tableHeader>
 						<jr:detailCell style="Table 1_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="70" height="30" uuid="8c57d10c-eea0-47e7-b4e4-5cb811b59b01"/>
 								<textFieldExpression><![CDATA[$F{date_}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="100" uuid="5b996cac-98f2-4c5e-a08b-46ccdd3773dc">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column6"/>
+						<jr:tableHeader style="Table 1_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="100" height="30" uuid="252a36ed-7f44-4679-b1d6-12b38905d267"/>
+								<text><![CDATA[Дата проведения]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="Table 1_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="100" height="30" uuid="d35b7a9f-55ed-48ab-b39b-1c78d7d30b72"/>
+								<textFieldExpression><![CDATA[$F{date_reg}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="e5a40ede-e91b-4295-b0fe-e9986408498f">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column7"/>
+						<jr:tableHeader style="Table 1_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="0303e39b-f80b-4426-8556-b8a8448a610f"/>
+								<text><![CDATA[Наличие в XXI]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="Table 1_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="30" uuid="01299229-4bdc-4328-ab6f-bd54064c6f45"/>
+								<textFieldExpression><![CDATA[$F{stat}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

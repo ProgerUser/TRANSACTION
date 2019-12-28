@@ -1434,7 +1434,7 @@ public class Tr_Am_View_con {
 
 		} else {
 			Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
-			new PrintReport().showReport(fn.get_checknumber());
+			new PrintReport2().showReport(fn.get_checknumber(),fn.get_sess_id());
 		}
 	}
 	
