@@ -43,8 +43,8 @@
 				<Button id="searchEmpBtn" layoutX="19.0" layoutY="20.0" mnemonicParsing="false" onAction="#searchTerminal" prefHeight="25.0" prefWidth="56.0" text="Поиск" />
 
 				<Button id="searchEmpBtn" layoutX="710.0" layoutY="20.0" mnemonicParsing="false" onAction="#add" prefHeight="25.0" prefWidth="85.0" text="Добавить" />
-				<Button id="searchEmpBtn" layoutX="814.0" layoutY="20.0" mnemonicParsing="false" onAction="#UpdateTerminal" prefHeight="25.0" prefWidth="85.0" text="Изменить" />
-				<Button id="searchEmpBtn" layoutX="918.0" layoutY="20.0" mnemonicParsing="false" onAction="#Delete" prefHeight="25.0" prefWidth="85.0" text="Удалить" />
+				<Button id="searchEmpBtn" disable="true" layoutX="814.0" layoutY="20.0" mnemonicParsing="false" onAction="#UpdateTerminal" prefHeight="25.0" prefWidth="85.0" text="Изменить" />
+				<Button id="searchEmpBtn" disable="true" layoutX="918.0" layoutY="20.0" mnemonicParsing="false" onAction="#Delete" prefHeight="25.0" prefWidth="85.0" text="Удалить" />
 			</children>
 		</AnchorPane>
 	</top>

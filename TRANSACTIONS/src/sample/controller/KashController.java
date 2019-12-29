@@ -20,12 +20,16 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import sample.model.Amra_Trans;
 import sample.model.Connect;
 import sample.model.KashClass;
 import sample.model.TerminalClass;
@@ -44,6 +48,9 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import org.controlsfx.control.table.TableFilter;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -63,8 +70,6 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public class KashController {
 
-	@FXML
-	private TextArea resultArea;
 
 	@FXML
 	private TableView<KashClass> employeeTable;
@@ -75,6 +80,8 @@ public class KashController {
 	private TableColumn<KashClass, String> ckbk;
 	@FXML
 	private TableColumn<KashClass, String> cpsevdo;
+	@FXML
+	private TableColumn<KashClass, String> C_CASHNAME;
 
 	// For MultiThreading
 	private Executor exec;
@@ -84,7 +91,7 @@ public class KashController {
 
 	@FXML
 	private void initialize() {
-
+		employeeTable.setEditable(true);
 		exec = Executors.newCachedThreadPool((runnable) -> {
 			Thread t = new Thread(runnable);
 			t.setDaemon(true);
@@ -93,8 +100,73 @@ public class KashController {
 		cnameoper.setCellValueFactory(cellData -> cellData.getValue().cnameoperProperty());
 		ckbk.setCellValueFactory(cellData -> cellData.getValue().ckbkProperty());
 		cpsevdo.setCellValueFactory(cellData -> cellData.getValue().cpsevdoProperty());
+		C_CASHNAME.setCellValueFactory(cellData -> cellData.getValue().C_CASHNAMEProperty());
+		
+		cnameoper.setCellFactory(TextFieldTableCell.forTableColumn());
+		ckbk.setCellFactory(TextFieldTableCell.forTableColumn());
+		cpsevdo.setCellFactory(TextFieldTableCell.forTableColumn());
+		C_CASHNAME.setCellFactory(TextFieldTableCell.forTableColumn());
+		
+		cnameoper.setOnEditCommit(new EventHandler<CellEditEvent<KashClass, String>>() {
+			@Override
+			public void handle(CellEditEvent<KashClass, String> t) {
+				((KashClass) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.setcnameoper(t.getNewValue());
+			}
+		});
+		
+		ckbk.setOnEditCommit(new EventHandler<CellEditEvent<KashClass, String>>() {
+			@Override
+			public void handle(CellEditEvent<KashClass, String> t) {
+				((KashClass) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.setckbk(t.getNewValue());
+			}
+		});
+		
+		cpsevdo.setOnEditCommit(new EventHandler<CellEditEvent<KashClass, String>>() {
+			@Override
+			public void handle(CellEditEvent<KashClass, String> t) {
+				((KashClass) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.setcpsevdo(t.getNewValue());
+			}
+		});
+		
+		C_CASHNAME.setOnEditCommit(new EventHandler<CellEditEvent<KashClass, String>>() {
+			@Override
+			public void handle(CellEditEvent<KashClass, String> t) {
+				((KashClass) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.setC_CASHNAME(t.getNewValue());
+			}
+		});
 	}
 
+	public static void autoResizeColumns(TableView<?> table) {
+		// Set the right policy
+		table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+		table.getColumns().stream().forEach((column) -> {
+			// System.out.println(column.getText());
+			if (column.getText().equals("sess_id")) {
+
+			} else {
+				// Minimal width = columnheader
+				Text t = new Text(column.getText());
+				double max = t.getLayoutBounds().getWidth();
+				for (int i = 0; i < table.getItems().size(); i++) {
+					// cell must not be empty
+					if (column.getCellData(i) != null) {
+						t = new Text(column.getCellData(i).toString());
+						double calcwidth = t.getLayoutBounds().getWidth();
+						// remember new max-width
+						if (calcwidth > max) {
+							max = calcwidth;
+						}
+					}
+				}
+				// set the new max-widht with some extra space
+				column.setPrefWidth(max + 10.0d);
+			}
+		});
+	}
 	// Search all transacts
 	@FXML
 	private void create_psevdo(ActionEvent actionEvent) {
@@ -109,13 +181,16 @@ public class KashController {
 				ObservableList<KashClass> empData = ViewerDAO.searchKash();
 				populateKash(empData);
 				ViewerDAO.delete_kash_psevdo();
+				autoResizeColumns(employeeTable);
+				TableFilter<KashClass> filter = new TableFilter<>(employeeTable);
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
-				alert.setHeaderText("Error");
+				alert.setHeaderText("Warning");
 				alert.setContentText("Нет данных!");
 				alert.show();
 			}
 			rs.close();
+			conn.close();
 		} catch (SQLException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -126,9 +201,6 @@ public class KashController {
 			alert.showAndWait();
 		}
 	}
-
-	@FXML
-	private AnchorPane ap;
 
 	private void populateKash(ObservableList<KashClass> trData) {
 		employeeTable.setItems(trData);

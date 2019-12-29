@@ -134,8 +134,11 @@ public class ViewerDAO {
 	// SELECT Kash
 	// *******************************
 	public static ObservableList<KashClass> searchKash() {
-		String selectStmt = "SELECT cnameoper, ckbk, cpsevdo\r\n" + "FROM ov_plat\r\n"
-				+ "WHERE idov_plat IN (SELECT idov_plat_ FROM z_sb_psevdo_aggregate)\r\n";
+		String selectStmt = "select cnameoper, ckbk, cpsevdo, a.C_CASHNAME \n" + 
+				"  from ov_plat dp, OV_VCPLAT a\n" + 
+				" where dp.IDOV_PLAT = a.IDOV_PLAT\n" + 
+				"   and idov_plat in (SELECT idov_plat_ FROM z_sb_psevdo_aggregate)\n" + 
+				"";
 		// Get ResultSet from dbExecuteQuery method
 		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
 
@@ -272,6 +275,7 @@ public class ViewerDAO {
 				tr.setckbk(rs.getString("ckbk"));
 				tr.setcnameoper(rs.getString("cnameoper"));
 				tr.setcpsevdo(rs.getString("cpsevdo"));
+				tr.setC_CASHNAME(rs.getString("C_CASHNAME"));
 				empList.add(tr);
 			}
 		} catch (SQLException e) {
