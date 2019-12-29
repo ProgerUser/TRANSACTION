@@ -86,7 +86,8 @@ public class EnterController {
 	Statement sqlStatement = null;
 
 	void ent() {
-		try {
+		/*try {*/
+			/*
 			String mDateStr;
 			Date startDate = null;
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -111,7 +112,7 @@ public class EnterController {
 				alert.showAndWait();
 			}
 			Date date2 = sdf.parse("2019-11-25");
-
+*/
 			/*if (startDate.after(date2)) {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
 				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -141,6 +142,8 @@ public class EnterController {
 						alert_1.showAndWait();
 					} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("U146")
 							| Connect.userID_.equals("AMRA_IMPORT")) {
+						Stage stage_ = (Stage) enter_id.getScene().getWindow();
+						stage_.setMaximized(true);
 						Main.showFirst();
 					}
 
@@ -186,7 +189,7 @@ public class EnterController {
 					/* Закрыть текущую форму */
 				}
 			/*}*/
-		} catch (ParseException | IOException e) {
+		/*} catch (ParseException |  e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 			stage.getIcons().add(new Image("terminal.png"));
@@ -194,7 +197,7 @@ public class EnterController {
 			alert.setHeaderText(null);
 			alert.setContentText(e.getMessage());
 			alert.showAndWait();
-		}
+		}*/
 	}
 
 	@FXML

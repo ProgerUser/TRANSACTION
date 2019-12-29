@@ -41,13 +41,14 @@ public class Main extends Application {
 		// 3) Display the EmployeeOperations View
 		// showEmployeeView();
 
-		//Enter();
-
+		Enter();
+/*
 		Connect.connectionURL_ = "10.111.64.21:1521/odb";
 		Connect.userID_ = "XXI";
 		Connect.userPassword_ = "ver8i";
-
-		showFirst();
+*/
+		//showFirst();
+		//this.primaryStage.setMaximized(true);
 	}
 
 	// Initializes the root layout.
