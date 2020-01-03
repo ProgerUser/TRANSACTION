@@ -21,6 +21,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -34,6 +36,7 @@ import sample.Main;
 import sample.model.Amra_Trans;
 import sample.model.Connect;
 import sample.model.ServiceClass;
+import sample.model.TerminalClass;
 import sample.model.TerminalForCombo;
 import sample.model.TransactClass;
 import sample.model.ViewerDAO;
@@ -130,6 +133,7 @@ public class ServiceController {
 	@FXML
 	private void initialize() {
 		try {
+			employeeTable.setEditable(true);
 			/*
 			 * The setCellValueFactory(...) that we set on the table columns are used to
 			 * determine which field inside the Employee objects should be used for the
@@ -160,6 +164,115 @@ public class ServiceController {
 			bo1.setCellValueFactory(cellData -> cellData.getValue().bo1Property());
 			bo2.setCellValueFactory(cellData -> cellData.getValue().bo2Property());
 			comission.setCellValueFactory(cellData -> cellData.getValue().comissionProperty());
+			
+			acc_name.setCellFactory(TextFieldTableCell.forTableColumn());
+			acc_rec.setCellFactory(TextFieldTableCell.forTableColumn());
+			account.setCellFactory(TextFieldTableCell.forTableColumn());
+			idterm.setCellFactory(TextFieldTableCell.forTableColumn());
+			inn.setCellFactory(TextFieldTableCell.forTableColumn());
+			kbk.setCellFactory(TextFieldTableCell.forTableColumn());
+			kpp.setCellFactory(TextFieldTableCell.forTableColumn());
+			name.setCellFactory(TextFieldTableCell.forTableColumn());
+			okato.setCellFactory(TextFieldTableCell.forTableColumn());
+			bo1.setCellFactory(TextFieldTableCell.forTableColumn());
+			bo2.setCellFactory(TextFieldTableCell.forTableColumn());
+			comission.setCellFactory(TextFieldTableCell.forTableColumn());
+			
+			
+			acc_name.setOnEditCommit(new EventHandler<CellEditEvent<ServiceClass, String>>() {
+				@Override
+				public void handle(CellEditEvent<ServiceClass, String> t) {
+					((ServiceClass) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+							.setacc_name(t.getNewValue());
+				}
+			});
+			
+			acc_rec.setOnEditCommit(new EventHandler<CellEditEvent<ServiceClass, String>>() {
+				@Override
+				public void handle(CellEditEvent<ServiceClass, String> t) {
+					((ServiceClass) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+							.setacc_rec(t.getNewValue());
+				}
+			});
+			account.setOnEditCommit(new EventHandler<CellEditEvent<ServiceClass, String>>() {
+				@Override
+				public void handle(CellEditEvent<ServiceClass, String> t) {
+					((ServiceClass) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+							.setaccount(t.getNewValue());
+				}
+			});
+			idterm.setOnEditCommit(new EventHandler<CellEditEvent<ServiceClass, String>>() {
+				@Override
+				public void handle(CellEditEvent<ServiceClass, String> t) {
+					((ServiceClass) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+							.setidterm(t.getNewValue());
+				}
+			});
+			acc_name.setOnEditCommit(new EventHandler<CellEditEvent<ServiceClass, String>>() {
+				@Override
+				public void handle(CellEditEvent<ServiceClass, String> t) {
+					((ServiceClass) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+							.setacc_name(t.getNewValue());
+				}
+			});
+			inn.setOnEditCommit(new EventHandler<CellEditEvent<ServiceClass, String>>() {
+				@Override
+				public void handle(CellEditEvent<ServiceClass, String> t) {
+					((ServiceClass) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+							.setinn(t.getNewValue());
+				}
+			});
+			kbk.setOnEditCommit(new EventHandler<CellEditEvent<ServiceClass, String>>() {
+				@Override
+				public void handle(CellEditEvent<ServiceClass, String> t) {
+					((ServiceClass) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+							.setkbk(t.getNewValue());
+				}
+			});
+			kpp.setOnEditCommit(new EventHandler<CellEditEvent<ServiceClass, String>>() {
+				@Override
+				public void handle(CellEditEvent<ServiceClass, String> t) {
+					((ServiceClass) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+							.setkpp(t.getNewValue());
+				}
+			});
+			name.setOnEditCommit(new EventHandler<CellEditEvent<ServiceClass, String>>() {
+				@Override
+				public void handle(CellEditEvent<ServiceClass, String> t) {
+					((ServiceClass) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+							.setname(t.getNewValue());
+				}
+			});
+			okato.setOnEditCommit(new EventHandler<CellEditEvent<ServiceClass, String>>() {
+				@Override
+				public void handle(CellEditEvent<ServiceClass, String> t) {
+					((ServiceClass) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+							.setokato(t.getNewValue());
+				}
+			});
+			bo1.setOnEditCommit(new EventHandler<CellEditEvent<ServiceClass, String>>() {
+				@Override
+				public void handle(CellEditEvent<ServiceClass, String> t) {
+					((ServiceClass) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+							.setbo1(t.getNewValue());
+				}
+			});
+			bo2.setOnEditCommit(new EventHandler<CellEditEvent<ServiceClass, String>>() {
+				@Override
+				public void handle(CellEditEvent<ServiceClass, String> t) {
+					((ServiceClass) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+							.setbo2(t.getNewValue());
+				}
+			});
+			
+			comission.setOnEditCommit(new EventHandler<CellEditEvent<ServiceClass, String>>() {
+				@Override
+				public void handle(CellEditEvent<ServiceClass, String> t) {
+					((ServiceClass) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+							.setcomission(t.getNewValue());
+				}
+			});
+			
 			
 			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
 					+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");

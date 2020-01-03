@@ -20,6 +20,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -117,6 +119,7 @@ public class TerminalController {
 
 	@FXML
 	private void initialize() {
+		employeeTable.setEditable(true);
 		/*
 		 * The setCellValueFactory(...) that we set on the table columns are used to
 		 * determine which field inside the Employee objects should be used for the
@@ -148,6 +151,88 @@ public class TerminalController {
 		CLEAR_SUM.setCellValueFactory(cellData -> cellData.getValue().CLEAR_SUMProperty());
 		INCOME.setCellValueFactory(cellData -> cellData.getValue().INCOMEProperty());
 
+		ACCOUNT.setCellFactory(TextFieldTableCell.forTableColumn());
+		ADDRESS.setCellFactory(TextFieldTableCell.forTableColumn());
+		DEPARTMENT.setCellFactory(TextFieldTableCell.forTableColumn());
+		NAME.setCellFactory(TextFieldTableCell.forTableColumn());
+		GENERAL_ACC.setCellFactory(TextFieldTableCell.forTableColumn());
+		CRASH_ACC.setCellFactory(TextFieldTableCell.forTableColumn());
+		DEAL_ACC.setCellFactory(TextFieldTableCell.forTableColumn());
+		GENERAL_COMIS.setCellFactory(TextFieldTableCell.forTableColumn());
+		CLEAR_SUM.setCellFactory(TextFieldTableCell.forTableColumn());
+		INCOME.setCellFactory(TextFieldTableCell.forTableColumn());
+		
+		ACCOUNT.setOnEditCommit(new EventHandler<CellEditEvent<TerminalClass, String>>() {
+			@Override
+			public void handle(CellEditEvent<TerminalClass, String> t) {
+				((TerminalClass) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.setACCOUNT(t.getNewValue());
+			}
+		});
+		ADDRESS.setOnEditCommit(new EventHandler<CellEditEvent<TerminalClass, String>>() {
+			@Override
+			public void handle(CellEditEvent<TerminalClass, String> t) {
+				((TerminalClass) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.setADDRESS(t.getNewValue());
+			}
+		});
+		DEPARTMENT.setOnEditCommit(new EventHandler<CellEditEvent<TerminalClass, String>>() {
+			@Override
+			public void handle(CellEditEvent<TerminalClass, String> t) {
+				((TerminalClass) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.setDEPARTMENT(t.getNewValue());
+			}
+		});
+		NAME.setOnEditCommit(new EventHandler<CellEditEvent<TerminalClass, String>>() {
+			@Override
+			public void handle(CellEditEvent<TerminalClass, String> t) {
+				((TerminalClass) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.setNAME(t.getNewValue());
+			}
+		});
+		GENERAL_ACC.setOnEditCommit(new EventHandler<CellEditEvent<TerminalClass, String>>() {
+			@Override
+			public void handle(CellEditEvent<TerminalClass, String> t) {
+				((TerminalClass) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.setGENERAL_ACC(t.getNewValue());
+			}
+		});
+		CRASH_ACC.setOnEditCommit(new EventHandler<CellEditEvent<TerminalClass, String>>() {
+			@Override
+			public void handle(CellEditEvent<TerminalClass, String> t) {
+				((TerminalClass) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.setCRASH_ACC(t.getNewValue());
+			}
+		});
+		DEAL_ACC.setOnEditCommit(new EventHandler<CellEditEvent<TerminalClass, String>>() {
+			@Override
+			public void handle(CellEditEvent<TerminalClass, String> t) {
+				((TerminalClass) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.setDEAL_ACC(t.getNewValue());
+			}
+		});
+		GENERAL_COMIS.setOnEditCommit(new EventHandler<CellEditEvent<TerminalClass, String>>() {
+			@Override
+			public void handle(CellEditEvent<TerminalClass, String> t) {
+				((TerminalClass) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.setGENERAL_COMIS(t.getNewValue());
+			}
+		});
+		CLEAR_SUM.setOnEditCommit(new EventHandler<CellEditEvent<TerminalClass, String>>() {
+			@Override
+			public void handle(CellEditEvent<TerminalClass, String> t) {
+				((TerminalClass) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.setCLEAR_SUM(t.getNewValue());
+			}
+		});
+		INCOME.setOnEditCommit(new EventHandler<CellEditEvent<TerminalClass, String>>() {
+			@Override
+			public void handle(CellEditEvent<TerminalClass, String> t) {
+				((TerminalClass) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.setINCOME(t.getNewValue());
+			}
+		});
+		
 	}
 
 	public static void autoResizeColumns(TableView<?> table) {
