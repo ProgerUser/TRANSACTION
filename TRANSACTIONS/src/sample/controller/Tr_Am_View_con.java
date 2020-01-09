@@ -17,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableCell;
@@ -46,6 +47,23 @@ import sample.model.GUIUtils;
 import sample.model.Amra_Trans;
 import sample.model.Connect;
 
+
+import java.util.Random;
+import java.util.function.Function;
+
+import javafx.application.Application;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.Scene;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
+import javafx.scene.control.TableView;
+import javafx.stage.Stage;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -69,6 +87,7 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.controlsfx.control.PropertySheet.Item;
 import org.controlsfx.control.table.TableFilter;
 
 import java.io.File;
@@ -385,11 +404,11 @@ public class Tr_Am_View_con {
 		checknumber.setCellFactory(TextFieldTableCell.forTableColumn());
 		checkparent.setCellFactory(TextFieldTableCell.forTableColumn());
 		orderofprovidence.setCellFactory(TextFieldTableCell.forTableColumn());
-		provider.setCellFactory(TextFieldTableCell.forTableColumn());
+		//provider.setCellFactory(TextFieldTableCell.forTableColumn());
 		owninown.setCellFactory(TextFieldTableCell.forTableColumn());
 		corrected.setCellFactory(TextFieldTableCell.forTableColumn());
 		commissionrate.setCellFactory(TextFieldTableCell.forTableColumn());
-		status.setCellFactory(TextFieldTableCell.forTableColumn());
+		//status.setCellFactory(TextFieldTableCell.forTableColumn());
 		stringfromfile.setCellFactory(TextFieldTableCell.forTableColumn());
 		rewardamount.setCellFactory(TextFieldTableCell.forTableColumn());
 		ownerincomeamount.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -567,13 +586,7 @@ public class Tr_Am_View_con {
 						.set_commissionrate(t.getNewValue());
 			}
 		});
-		status.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
-			@Override
-			public void handle(CellEditEvent<Amra_Trans, String> t) {
-				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-						.set_status(t.getNewValue());
-			}
-		});
+
 		stringfromfile.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
 			@Override
 			public void handle(CellEditEvent<Amra_Trans, String> t) {
@@ -831,6 +844,16 @@ public class Tr_Am_View_con {
 						.set_sess_id(t.getNewValue());
 			}
 		});
+		
+		status.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+			@Override
+			public void handle(CellEditEvent<Amra_Trans, String> t) {
+				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_status(t.getNewValue());
+			}
+		});
+		
+		
 	}
 
 	void on_filter() {
@@ -1505,27 +1528,10 @@ public class Tr_Am_View_con {
 		autoResizeColumns(trans_table);
 		TableFilter<Amra_Trans> filter = new TableFilter<>(trans_table);
 		
-		status.setCellFactory(col -> new TableCell<Amra_Trans, String>() {
+		
+		provider.setCellFactory(col -> new TextFieldTableCell<Amra_Trans, String>() {
 			@Override
-			protected void updateItem(String item, boolean empty) {
-				super.updateItem(item, empty);
-				if (empty || item == null) {
-					setText(null);
-					setGraphic(null);
-				} else {
-					setText(item.toString());
-					if (item.equals("00")) {
-						setStyle("");
-					} else {
-						setStyle("-fx-background-color: #F9E02C;"
-								+ "-fx-border-color: black;");  
-					}
-				}
-			}
-		});
-		provider.setCellFactory(col -> new TableCell<Amra_Trans, String>() {
-			@Override
-			protected void updateItem(String item, boolean empty) {
+			public void updateItem(String item, boolean empty) {
 				super.updateItem(item, empty);
 				if (empty || item == null) {
 					setText(null);
@@ -1533,22 +1539,72 @@ public class Tr_Am_View_con {
 				} else {
 					setText(item.toString());
 					if (item.equals("СберБанк")) {
-						
 						setStyle("-fx-background-color: rgb(162, 189, 48);"
-								+ "-fx-border-color: black;");  
+								+ "-fx-border-color:black;"
+								+ " -fx-border-width :  1 1 1 1 ");  
 					} else {
 						setStyle("");
 					}
 				}
 			}
 		});
+
+		status.setCellFactory(list -> {
+			TextFieldTableCell<Amra_Trans, String> cell = new TextFieldTableCell<Amra_Trans, String>() {
+				@Override
+				public void updateItem(String item, boolean empty) {
+					super.updateItem(item, empty);
+					if (empty || item == null) {
+						setText(null);
+						setGraphic(null);
+					} else {
+						setText(item.toString());
+						if (item.equals("00")) {
+							setStyle("");
+						} else {
+							setStyle("-fx-background-color: #F9E02C;" +
+						"-fx-border-color:black;"
+									+ " -fx-border-width : 1 1 1 1;");
+						}
+					}
+				}
+			};
+			cell.setOnMouseClicked(value -> {
+				if (value.getClickCount() == 2) {
+				}
+			});
+			return cell;
+		});
+		
+
 	}
 
+    @FXML
+    void EditStatus(TableColumn.CellEditEvent<Amra_Trans, String> t) {
+    	
+    }
+    
 	public static void autoResizeColumns(TableView<?> table) {
 		// Set the right policy
 		table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
 		table.getColumns().stream().forEach((column) -> {
 			// System.out.println(column.getText());
+			
+			
+			/*Стили*/
+			/*
+			if (column.getText().equals("Статус=STATUS")) {
+				for (int i = 0; i < table.getItems().size(); i++) {
+					// cell must not be empty
+					if (column.getCellData(i) != null) {
+						if(!column.getCellData(i).toString().equals("00")) {
+							column.getCellObservableValue(i).setStyle("-fx-background-color: rgb(162, 189, 48);");
+						}
+					}
+				}
+			}*/
+			/*Стили*/
+			
 			if (column.getText().equals("sess_id")) {
 
 			} else {

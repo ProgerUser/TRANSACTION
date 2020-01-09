@@ -175,12 +175,20 @@ public class ShowHistoryController {
 		});
 
 		/*
-		 * fn_sess_table.setRowFactory(tv -> new TableRow<FN_SESS_AMRA>() {
-		 * 
-		 * @Override public void updateItem(FN_SESS_AMRA item, boolean empty) {
-		 * super.updateItem(item, empty) ; if (item == null) { setStyle(""); } else if
-		 * (item.getstatus_().equals("Рассчитан")) { setStyle(""); } else {
-		 * status.setStyle("-fx-background-color: #F9E02C;"); } } });
+		fn_sess_table.setRowFactory(tv -> new TableRow<FN_SESS_AMRA>() {
+
+			@Override
+			public void updateItem(FN_SESS_AMRA item, boolean empty) {
+				super.updateItem(item, empty);
+				if (item == null) {
+					setStyle("");
+				} else if (item.getstatus_().equals("Рассчитан")) {
+					setStyle("");
+				} else {
+					status.setStyle("-fx-background-color: #F9E02C;");
+				}
+			}
+		});
 		 */
 
 

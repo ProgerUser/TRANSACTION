@@ -85,7 +85,7 @@ public class Unpiv_Controller {
 		COL.setCellValueFactory(cellData -> cellData.getValue().COLProperty());
 		COLVALUE.setCellValueFactory(cellData -> cellData.getValue().COLVALUEProperty());
 
-		COL.setCellFactory(TextFieldTableCell.forTableColumn());
+		//COL.setCellFactory(TextFieldTableCell.forTableColumn());
 		COLVALUE.setCellFactory(TextFieldTableCell.forTableColumn());
 
 		COL.setOnEditCommit(new EventHandler<CellEditEvent<Unpiv, String>>() {
@@ -106,6 +106,87 @@ public class Unpiv_Controller {
 		populate_attr(empData);
 		autoResizeColumns(trans_table);
 		TableFilter<Unpiv> filter = new TableFilter<>(trans_table);
+		
+		COL.setCellFactory(col -> new TextFieldTableCell<Unpiv, String>() {
+			@Override
+			public void updateItem(String item, boolean empty) {
+				super.updateItem(item, empty);
+				if (empty || item == null) {
+					setText(null);
+					setGraphic(null);
+				} else {
+					setText(item.toString());  
+					if (item.equals("ДатаОперации=DATEOFOPERATION")) {
+						setStyle("-fx-background-color: #8B9FFA;"+
+					                "-fx-border-color:black;"
+								+ " -fx-border-width :  1 1 1 1 ");
+					} else if (item.equals("Дилер=DEALER")) {
+						setStyle("-fx-background-color: rgb(162, 189, 48);"+ 
+					             "-fx-border-color:black;"+ 
+								 "-fx-border-width :  1 1 1 1 ");
+					}
+					else if (item.equals("НомерЧека=CHECKNUMBER")) {
+						setStyle("-fx-background-color: #E6F06E;"+ 
+					             "-fx-border-color:black;"+ 
+								 "-fx-border-width :  1 1 1 1 ");
+					}
+					else if (item.equals("Провайдер=PROVIDER")) {
+						setStyle("-fx-background-color: #D0D1BF;"+ 
+					             "-fx-border-color:black;"+ 
+								 "-fx-border-width :  1 1 1 1 ");
+					}
+					else if (item.equals("Статус=STATUS")) {
+						setStyle("-fx-background-color: #E6B2F6 ;"+ 
+					             "-fx-border-color:black;"+ 
+								 "-fx-border-width :  1 1 1 1 ");
+					}
+					else if (item.equals("СуммаКомиссии=COMMISSIONAMOUNT")) {
+						setStyle("-fx-background-color: #83C0F2;"+ 
+					             "-fx-border-color:black;"+ 
+								 "-fx-border-width :  1 1 1 1 ");
+					}
+					else if (item.equals("СуммаНК=NKAMOUNT")) {
+						setStyle("-fx-background-color: #5EC395;"+ 
+					             "-fx-border-color:black;"+ 
+								 "-fx-border-width :  1 1 1 1 ");
+					}
+					else if (item.equals("СуммаНаличных=CASHAMOUNT")) {
+						setStyle("-fx-background-color: #CAA2E5;"+ 
+					             "-fx-border-color:black;"+ 
+								 "-fx-border-width :  1 1 1 1 ");
+					}
+					else if (item.equals("СуммаНаЧек=AMOUNTTOCHECK")) {
+						setStyle("-fx-background-color: #EECCAF;"+ 
+					             "-fx-border-color:black;"+ 
+								 "-fx-border-width :  1 1 1 1 ");
+					}
+					else if (item.equals("СуммаПлатежа=AMOUNTOFPAYMENT")) {
+						setStyle("-fx-background-color: #C3F19A;"+ 
+					             "-fx-border-color:black;"+ 
+								 "-fx-border-width :  1 1 1 1 ");
+					}
+					else if (item.equals("СуммаСЧеков=AMOUNTWITHCHECKS")) {
+						setStyle("-fx-background-color: #B2EFD1;"+ 
+					             "-fx-border-color:black;"+ 
+								 "-fx-border-width :  1 1 1 1 ");
+					}
+					else if (item.equals("Услуга=SERVICE")) {
+						setStyle("-fx-background-color: #ACCCE8;"+ 
+					             "-fx-border-color:black;"+ 
+								 "-fx-border-width :  1 1 1 1 ");
+					}
+					else if (item.equals("statusabs")) {
+						setStyle("-fx-background-color: #CCC7DD;"+ 
+					             "-fx-border-color:black;"+ 
+								 "-fx-border-width :  1 1 1 1 ");
+					}
+					else
+					{
+						setStyle("");
+					}
+				}
+			}
+		});
 	}
 
 	@FXML
