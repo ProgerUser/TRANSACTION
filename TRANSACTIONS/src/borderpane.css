@@ -70,6 +70,10 @@
     -fx-background-position:center;
 }
 
+.my_cell.table-cell {
+	-fx-background-color: #F9E02C;
+	}
+
 #view {          
     -fx-background-image: url("view.png");
     -fx-background-size: 35 35;

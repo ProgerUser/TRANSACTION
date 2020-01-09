@@ -29,11 +29,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
@@ -109,6 +111,7 @@ public class ShowHistoryController {
 			t.setDaemon(true);
 			return t;
 		});
+
 		SESS_ID.setCellValueFactory(cellData -> cellData.getValue().sess_idProperty());
 		FILE_NAME.setCellValueFactory(cellData -> cellData.getValue().file_nameProperty());
 		DATE_TIME.setCellValueFactory(cellData -> cellData.getValue().date_timeProperty());
@@ -116,14 +119,14 @@ public class ShowHistoryController {
 		status.setCellValueFactory(cellData -> cellData.getValue().statusProperty());
 		user_.setCellValueFactory(cellData -> cellData.getValue().userProperty());
 		DATE_.setCellValueFactory(cellData -> cellData.getValue().date_Property());
-		
+
 		DATE_TIME.setCellFactory(TextFieldTableCell.forTableColumn());
 		FILE_NAME.setCellFactory(TextFieldTableCell.forTableColumn());
 		SESS_ID.setCellFactory(TextFieldTableCell.forTableColumn());
 		path_.setCellFactory(TextFieldTableCell.forTableColumn());
 		user_.setCellFactory(TextFieldTableCell.forTableColumn());
 		DATE_.setCellFactory(TextFieldTableCell.forTableColumn());
-		
+
 		DATE_.setOnEditCommit(new EventHandler<CellEditEvent<FN_SESS_AMRA, String>>() {
 			@Override
 			public void handle(CellEditEvent<FN_SESS_AMRA, String> t) {
@@ -138,7 +141,7 @@ public class ShowHistoryController {
 						.setuser(t.getNewValue());
 			}
 		});
-		
+
 		path_.setOnEditCommit(new EventHandler<CellEditEvent<FN_SESS_AMRA, String>>() {
 			@Override
 			public void handle(CellEditEvent<FN_SESS_AMRA, String> t) {
@@ -146,7 +149,7 @@ public class ShowHistoryController {
 						.setpath_(t.getNewValue());
 			}
 		});
-		
+
 		DATE_TIME.setOnEditCommit(new EventHandler<CellEditEvent<FN_SESS_AMRA, String>>() {
 			@Override
 			public void handle(CellEditEvent<FN_SESS_AMRA, String> t) {
@@ -170,6 +173,49 @@ public class ShowHistoryController {
 						.setsess_id(t.getNewValue());
 			}
 		});
+
+		/*
+		 * fn_sess_table.setRowFactory(tv -> new TableRow<FN_SESS_AMRA>() {
+		 * 
+		 * @Override public void updateItem(FN_SESS_AMRA item, boolean empty) {
+		 * super.updateItem(item, empty) ; if (item == null) { setStyle(""); } else if
+		 * (item.getstatus_().equals("Рассчитан")) { setStyle(""); } else {
+		 * status.setStyle("-fx-background-color: #F9E02C;"); } } });
+		 */
+
+		status.setCellFactory(col -> new TableCell<FN_SESS_AMRA, String>() {
+			@Override
+			protected void updateItem(String item, boolean empty) {
+				super.updateItem(item, empty);
+				if (empty || item == null) {
+					setText(null);
+					setGraphic(null);
+				} else {
+					setText(item.toString());
+					if (item.equals("Рассчитан")) {
+						setStyle("");
+					} else {
+						setStyle("-fx-background-color: #F9E02C;");
+					}
+				}
+			}
+		});
+		/*
+		 * status.setCellFactory(column -> { return new TableCell<FN_SESS_AMRA,
+		 * String>() {
+		 * 
+		 * @Override protected void updateItem(String item, boolean empty) {
+		 * super.updateItem(item, empty);
+		 * 
+		 * setText(empty ? "" : getItem().toString()); setGraphic(null);
+		 * 
+		 * TableRow<FN_SESS_AMRA> currentRow = getTableRow();
+		 * 
+		 * if (!isEmpty()) { if(item.equals("Рассчитан")) {
+		 * 
+		 * currentRow.get setStyle(""); } else {
+		 * currentRow.setStyle("-fx-background-color: #F9E02C;"); } } } }; });
+		 */
 	}
 
 	// Найти загрузки
@@ -267,6 +313,7 @@ public class ShowHistoryController {
 		// Populate Employees on TableView
 		populate_fn_sess(empData);
 		autoResizeColumns(fn_sess_table);
+
 		// GUIUtils.autoFitTable(fn_sess_table);
 	}
 
