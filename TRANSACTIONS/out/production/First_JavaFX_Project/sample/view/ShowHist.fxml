@@ -44,11 +44,23 @@
 						<Label layoutX="501.0" layoutY="14.0" text="Дата конца:" />
 						<TextField fx:id="sess_id_t" layoutX="197.0" layoutY="33.0" prefHeight="25.0" prefWidth="172.0" />
 						<Label layoutX="197.0" layoutY="14.0" prefHeight="17.0" prefWidth="46.0" text="SESS_ID:" />
-						<Button layoutX="634.0" layoutY="34.0" mnemonicParsing="false" onAction="#fn_sess_search" prefHeight="17.0" prefWidth="56.0" text="Поиск" />
-						<Button layoutX="877.0" layoutY="34.0" mnemonicParsing="false" onAction="#view_clob" prefHeight="25.0" prefWidth="131.0" text="Просмотр загрузки" />
+						<Button fx:id="search" layoutX="638.0" layoutY="28.0" mnemonicParsing="false" onAction="#fn_sess_search" prefHeight="35.0" prefWidth="35.0" >
+																	<tooltip>
+						<Tooltip text="Поиск" />
+					</tooltip>
+						</Button>
+						<Button fx:id="view" layoutX="693.0" layoutY="28.0" mnemonicParsing="false" onAction="#view_clob" prefHeight="35.0" prefWidth="35.0" >
+																							<tooltip>
+						<Tooltip text="Показать транзакции" />
+					</tooltip>
+						</Button>
 						<DatePicker fx:id="datestart" layoutX="376.0" layoutY="33.0" prefHeight="25.0" prefWidth="117.0" />
 						<DatePicker fx:id="dateend" layoutX="501.0" layoutY="34.0" prefHeight="25.0" prefWidth="117.0" />
-						<Button layoutX="772.0" layoutY="33.0" mnemonicParsing="false" onAction="#trn_doc" text="Проводки" />
+						<Button fx:id="post" layoutX="744.0" layoutY="28.0" mnemonicParsing="false" onAction="#trn_doc" prefHeight="35.0" prefWidth="35.0">
+											<tooltip>
+						<Tooltip text="Документы группированные" />
+					</tooltip>
+						</Button>
 					</children>
 				</AnchorPane>
 			</center>

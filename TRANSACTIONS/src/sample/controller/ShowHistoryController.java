@@ -115,14 +115,22 @@ public class ShowHistoryController {
 		path_.setCellValueFactory(cellData -> cellData.getValue().path_Property());
 		status.setCellValueFactory(cellData -> cellData.getValue().statusProperty());
 		user_.setCellValueFactory(cellData -> cellData.getValue().userProperty());
-		//DATE_.setCellValueFactory(cellData -> cellData.getValue().date_Property());
+		DATE_.setCellValueFactory(cellData -> cellData.getValue().date_Property());
 		
 		DATE_TIME.setCellFactory(TextFieldTableCell.forTableColumn());
 		FILE_NAME.setCellFactory(TextFieldTableCell.forTableColumn());
 		SESS_ID.setCellFactory(TextFieldTableCell.forTableColumn());
 		path_.setCellFactory(TextFieldTableCell.forTableColumn());
 		user_.setCellFactory(TextFieldTableCell.forTableColumn());
+		DATE_.setCellFactory(TextFieldTableCell.forTableColumn());
 		
+		DATE_.setOnEditCommit(new EventHandler<CellEditEvent<FN_SESS_AMRA, String>>() {
+			@Override
+			public void handle(CellEditEvent<FN_SESS_AMRA, String> t) {
+				((FN_SESS_AMRA) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.setdate_(t.getNewValue());
+			}
+		});
 		user_.setOnEditCommit(new EventHandler<CellEditEvent<FN_SESS_AMRA, String>>() {
 			@Override
 			public void handle(CellEditEvent<FN_SESS_AMRA, String> t) {

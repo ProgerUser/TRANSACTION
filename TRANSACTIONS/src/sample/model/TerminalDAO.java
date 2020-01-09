@@ -141,20 +141,39 @@ public class TerminalDAO {
 		String ldt2_ = "\n";
 		String bt = "\n";
 		if (dt1 != null & dt2 != null) {
-			bt = " and trunc(date_time) between to_date('" + ldt1 + "','dd.mm.yyyy') and to_date('" + ldt2
+			bt = " and trunc(DateOfOperation) between to_date('" + ldt1 + "','dd.mm.yyyy') and to_date('" + ldt2
 					+ "','dd.mm.yyyy') \n";
 		} else if (dt1 != null & dt2 == null) {
-			ldt1_ = " and trunc(date_time) >= to_date('" + ldt1 + "','dd.mm.yyyy')\n";
+			ldt1_ = " and trunc(DateOfOperation) >= to_date('" + ldt1 + "','dd.mm.yyyy')\n";
 		} else if (dt1 == null & dt2 != null) {
-			ldt2_ = " and trunc(date_time) <= to_date('" + ldt2 + "','dd.mm.yyyy')\n";
+			ldt2_ = " and trunc(DateOfOperation) <= to_date('" + ldt2 + "','dd.mm.yyyy')\n";
 		}
 
-		String selectStmt = "select sess_id,\n" + "       file_name,\n" + "       date_time,\n" + "       fileclob,\n"
-				+ "       case\n" + "         when status = 0 then\n" + "          'Загружен'\n"
-				+ "         when status = 1 then\n" + "          'Разобран'\n" + "         when status = 2 then\n"
-				+ "          'Рассчитан'\n" + "       end status,\n" + "       path,\n"
-				+ "       user_ from Z_SB_FN_SESS_AMRA \n" + "where 1=1" + ldt1_ + ldt2_ + p_n + bt + clob
-				+ "order by date_time desc";
+		String selectStmt = "select * from ( select sess_id,\n" + 
+				"       file_name,\n" + 
+				"       date_time,\n" + 
+				"       fileclob,\n" + 
+				"       case\n" + 
+				"         when status = 0 then\n" + 
+				"          'Загружен'\n" + 
+				"         when status = 1 then\n" + 
+				"          'Разобран'\n" + 
+				"         when status = 2 then\n" + 
+				"          'Рассчитан'\n" + 
+				"       end status,\n" +
+				"  case\n" + 
+				"         when length(z_sb_fn_sess_getdate_clob(SESS_ID)) > 10 then\n" + 
+				"          to_date(substr(z_sb_fn_sess_getdate_clob(SESS_ID),\n" + 
+				"                 1,\n" + 
+				"                 instr(z_sb_fn_sess_getdate_clob(SESS_ID), '-') - 1))\n" + 
+				"                 else\n" + 
+				"                  to_date(z_sb_fn_sess_getdate_clob(SESS_ID)) \n" + 
+				"       end DateOfOperation,"+
+				"       path,\n" + 
+				"       user_\n" + 
+				"  from Z_SB_FN_SESS_AMRA)\n" + 
+				" where 1 = 1 "+ ldt1_ + ldt2_ + p_n + bt + clob+"\n" + 
+				" order by DateOfOperation desc";
 
 		// Execute SELECT statement
 
@@ -564,8 +583,10 @@ public class TerminalDAO {
 			while (rs.next()) {
 				FN_SESS_AMRA fn = new FN_SESS_AMRA();
 				String date_time = new SimpleDateFormat("dd.MM.yy HH:mm:ss").format(rs.getTimestamp("date_time"));
+				String DateOfOperation = new SimpleDateFormat("dd.MM.yy").format(rs.getDate("DateOfOperation"));
 				fn.setsess_id(rs.getString("sess_id"));
 				fn.setfile_name(rs.getString("file_name"));
+				fn.setdate_(DateOfOperation);  
 				fn.setdate_time(date_time);
 				fn.setpath_(rs.getString("path"));
 				fn.setuser(rs.getString("user_"));
