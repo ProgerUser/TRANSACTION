@@ -43,7 +43,7 @@ public class Main extends Application {
 
 		//Enter();
 
-		Connect.connectionURL_ = "10.111.64.128:1521/odb";
+		Connect.connectionURL_ = "10.111.64.21:1521/odb";
 		Connect.userID_ = "XXI";
 		Connect.userPassword_ = "ver8i";
 

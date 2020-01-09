@@ -1491,7 +1491,10 @@ public class Tr_Am_View_con {
 
 	@FXML
 	private void filter(ActionEvent actionEvent) {
-
+		/*
+		trans_table.getStyleClass().clear();
+		trans_table.setStyle(null);
+		*/
 		ObservableList<Amra_Trans> empData = null;
 		if (inkass.isSelected()) {
 			empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(),FIO.getText(), false);
@@ -1501,6 +1504,44 @@ public class Tr_Am_View_con {
 		populate_fn_sess(empData);
 		autoResizeColumns(trans_table);
 		TableFilter<Amra_Trans> filter = new TableFilter<>(trans_table);
+		
+		status.setCellFactory(col -> new TableCell<Amra_Trans, String>() {
+			@Override
+			protected void updateItem(String item, boolean empty) {
+				super.updateItem(item, empty);
+				if (empty || item == null) {
+					setText(null);
+					setGraphic(null);
+				} else {
+					setText(item.toString());
+					if (item.equals("00")) {
+						setStyle("");
+					} else {
+						setStyle("-fx-background-color: #F9E02C;"
+								+ "-fx-border-color: black;");  
+					}
+				}
+			}
+		});
+		provider.setCellFactory(col -> new TableCell<Amra_Trans, String>() {
+			@Override
+			protected void updateItem(String item, boolean empty) {
+				super.updateItem(item, empty);
+				if (empty || item == null) {
+					setText(null);
+					setGraphic(null);
+				} else {
+					setText(item.toString());
+					if (item.equals("—берЅанк")) {
+						
+						setStyle("-fx-background-color: rgb(162, 189, 48);"
+								+ "-fx-border-color: black;");  
+					} else {
+						setStyle("");
+					}
+				}
+			}
+		});
 	}
 
 	public static void autoResizeColumns(TableView<?> table) {

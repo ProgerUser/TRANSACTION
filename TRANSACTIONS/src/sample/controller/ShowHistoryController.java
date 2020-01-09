@@ -183,23 +183,7 @@ public class ShowHistoryController {
 		 * status.setStyle("-fx-background-color: #F9E02C;"); } } });
 		 */
 
-		status.setCellFactory(col -> new TableCell<FN_SESS_AMRA, String>() {
-			@Override
-			protected void updateItem(String item, boolean empty) {
-				super.updateItem(item, empty);
-				if (empty || item == null) {
-					setText(null);
-					setGraphic(null);
-				} else {
-					setText(item.toString());
-					if (item.equals("Рассчитан")) {
-						setStyle("");
-					} else {
-						setStyle("-fx-background-color: #F9E02C;");
-					}
-				}
-			}
-		});
+
 		/*
 		 * status.setCellFactory(column -> { return new TableCell<FN_SESS_AMRA,
 		 * String>() {
@@ -313,7 +297,23 @@ public class ShowHistoryController {
 		// Populate Employees on TableView
 		populate_fn_sess(empData);
 		autoResizeColumns(fn_sess_table);
-
+		status.setCellFactory(col -> new TableCell<FN_SESS_AMRA, String>() {
+			@Override
+			protected void updateItem(String item, boolean empty) {
+				super.updateItem(item, empty);
+				if (empty || item == null) {
+					setText(null);
+					setGraphic(null);
+				} else {
+					setText(item.toString());
+					if (item.equals("Рассчитан")) {
+						setStyle("");
+					} else {
+						setStyle("-fx-background-color: #F9E02C;");
+					}
+				}
+			}
+		});
 		// GUIUtils.autoFitTable(fn_sess_table);
 	}
 
