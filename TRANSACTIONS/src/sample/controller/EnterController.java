@@ -33,6 +33,9 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -144,6 +147,9 @@ public class EnterController {
 							| Connect.userID_.equals("AMRA_IMPORT")) {
 						Stage stage_ = (Stage) enter_id.getScene().getWindow();
 						stage_.setMaximized(true);
+						
+						stage_.setTitle("<Транзакции>____<Пользователь:"+Connect.userID_+">____<База:"+Connect.connectionURL_+">");
+						
 						Main.showFirst();
 					}
 

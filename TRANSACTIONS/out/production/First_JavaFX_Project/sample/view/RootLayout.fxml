@@ -45,6 +45,8 @@
 						<MenuItem mnemonicParsing="false" onAction="#DBCONNECT" text="DBCONNECT" />
 					</items>
 				</Menu>
+			<Menu fx:id="statusbar" mnemonicParsing="false" text="">
+				</Menu>
 			</menus>
 		</MenuBar>
 	</top>

@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -19,7 +20,7 @@ import java.io.IOException;
 public class Main extends Application {
 
 	// This is our PrimaryStage (It contains everything)
-	private Stage primaryStage;
+	public  Stage primaryStage;
 
 	// This is the BorderPane of RootLayout
 	public static BorderPane rootLayout;

@@ -18,6 +18,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -45,6 +46,9 @@ public class RootLayoutController {
 
 	@FXML
 	private MenuItem chekreport;
+	
+	@FXML
+	private    Menu statusbar;
 
 	@FXML
 	void handleExit(ActionEvent event) {
@@ -339,8 +343,11 @@ public class RootLayoutController {
 		alert.show();
 	}
 
+	public void inis() {
+		statusbar.setText(Connect.userID_+"/"+Connect.connectionURL_);
+	}
 	@FXML
-	void initialize() {
+	 void initialize() {
 		assert chekreport != null : "fx:id=\"chekreport\" was not injected: check your FXML file 'RootLayout.fxml'.";
 	}
 }
