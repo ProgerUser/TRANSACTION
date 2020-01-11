@@ -25,7 +25,6 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.swing.JRViewer;
 import sample.model.Connect;
-import sample.model.Item;
 import sample.model.Item2;
 
 public class PrintReport2 extends JFrame {
@@ -54,12 +53,14 @@ public class PrintReport2 extends JFrame {
 					+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
 
 			Statement sqlStatement = conn.createStatement();
-			String readRecordSQL = "select CTRNACCD debet,\r\n" + 
-					"       CTRNACCC credit,\r\n" + 
-					"       MTRNRSUM summ,\r\n" + 
-					"       CTRNPURP ground,\r\n" + 
-					"       DTRNTRAN date_reg_,"+
-					"       t.DTRNCREATE date_,\r\n" + 
+			String readRecordSQL = 
+					"select "+
+							"nvl(CTRNACCD,g.account_payer) debet,\r\n" + 
+							"       nvl(CTRNACCC,g.account_receiver) credit,\r\n" + 
+							"       nvl(MTRNRSUM,g.sum) summ,\r\n" + 
+							"       nvl(CTRNPURP,g.ground) ground,\r\n" + 
+							"       nvl(DTRNTRAN,g.date_value) date_reg_,\r\n" + 
+							"       nvl(t.DTRNCREATE,g.date_document) date_,"+
 					"       case\r\n" + 
 					"         when ITRNNUM is null then\r\n" + 
 					"          'Отсутствует в главной книге'\r\n" + 
