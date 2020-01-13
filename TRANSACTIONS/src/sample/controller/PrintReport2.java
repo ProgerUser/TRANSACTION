@@ -1,5 +1,7 @@
 package sample.controller;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -110,11 +112,24 @@ public class PrintReport2 extends JFrame {
 
 			JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
 
+			// java - get screen size using the Toolkit class
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			
+			// the screen height
+			//int width = (int) screenSize.getHeight();
+
+			// the screen width
+			//int height = (int) screenSize.getWidth();
+			
+			//System.out.println("width = "+width);
+			//System.out.println("height = "+height);
+			
 			JRViewer viewer = new JRViewer(print);
 			viewer.setOpaque(true);
 			viewer.setVisible(true);
+			viewer.setSize(1000,800);//;(width, height);;
 			this.add(viewer);
-			this.setSize(1000, 900);
+			this.setSize(1000,800);
 			this.setVisible(true);
 		} catch (JRException | SQLException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
