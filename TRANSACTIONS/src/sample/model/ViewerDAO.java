@@ -134,10 +134,11 @@ public class ViewerDAO {
 	// SELECT Kash
 	// *******************************
 	public static ObservableList<KashClass> searchKash() {
-		String selectStmt = "select dp.cnameoper, dp.ckbk, dp.cpsevdo, a.C_CASHNAME \n" + 
+		String selectStmt = 
+				"select dp.cnameoper, dp.ckbk, dp.cpsevdo, a.C_CASHNAME \n" + 
 				"  from ov_plat dp, OV_VCPLAT a\n" + 
 				" where dp.IDOV_PLAT = a.IDOV_PLAT\n" + 
-				"   and idov_plat in (SELECT idov_plat_ FROM z_sb_psevdo_aggregate)\n";
+				"   and dp.idov_plat in (SELECT idov_plat_ FROM z_sb_psevdo_aggregate)\n";
 		// Get ResultSet from dbExecuteQuery method
 		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
 

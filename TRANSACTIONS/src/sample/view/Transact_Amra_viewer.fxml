@@ -126,6 +126,7 @@
 				<Tooltip text="Показать проводки" />
 			</tooltip>
 			</Button>
+            <Button fx:id="print_check" layoutX="901.0" layoutY="31.0" mnemonicParsing="false" onAction="#print_" prefHeight="35.0" prefWidth="35.0" />
 			</children>
 		</AnchorPane>
 	</top>

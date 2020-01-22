@@ -38,6 +38,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import net.sf.jasperreports.engine.JRException;
 import sample.model.Transact;
 import sample.model.TransactClass;
 import sample.Main;
@@ -46,7 +47,6 @@ import sample.model.FN_SESS_AMRA;
 import sample.model.GUIUtils;
 import sample.model.Amra_Trans;
 import sample.model.Connect;
-
 
 import java.util.Random;
 import java.util.function.Function;
@@ -300,7 +300,7 @@ public class Tr_Am_View_con {
 
 	@FXML
 	private TextField id_sess;
-	
+
 	@FXML
 	private TextField FIO;
 
@@ -404,11 +404,11 @@ public class Tr_Am_View_con {
 		checknumber.setCellFactory(TextFieldTableCell.forTableColumn());
 		checkparent.setCellFactory(TextFieldTableCell.forTableColumn());
 		orderofprovidence.setCellFactory(TextFieldTableCell.forTableColumn());
-		//provider.setCellFactory(TextFieldTableCell.forTableColumn());
+		// provider.setCellFactory(TextFieldTableCell.forTableColumn());
 		owninown.setCellFactory(TextFieldTableCell.forTableColumn());
 		corrected.setCellFactory(TextFieldTableCell.forTableColumn());
 		commissionrate.setCellFactory(TextFieldTableCell.forTableColumn());
-		//status.setCellFactory(TextFieldTableCell.forTableColumn());
+		// status.setCellFactory(TextFieldTableCell.forTableColumn());
 		stringfromfile.setCellFactory(TextFieldTableCell.forTableColumn());
 		rewardamount.setCellFactory(TextFieldTableCell.forTableColumn());
 		ownerincomeamount.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -844,7 +844,7 @@ public class Tr_Am_View_con {
 						.set_sess_id(t.getNewValue());
 			}
 		});
-		
+
 		status.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
 			@Override
 			public void handle(CellEditEvent<Amra_Trans, String> t) {
@@ -852,44 +852,33 @@ public class Tr_Am_View_con {
 						.set_status(t.getNewValue());
 			}
 		});
-		
-		
+
 	}
 
 	void on_filter() {
 		autoResizeColumns(trans_table);
 		TableFilter<Amra_Trans> filter = new TableFilter<>(trans_table);
 	}
-/*
-	@FXML
-	private void filter(ActionEvent event) {
-		Task<List<Amra_Trans>> task_ = new Task<List<Amra_Trans>>() {
-			@Override
-			public ObservableList<Amra_Trans> call() {
-				return null;
-			}
-		};
-		task_.setOnFailed(e -> print_mess(task_.getException().toString()));
-		task_.setOnSucceeded(e -> pb.setVisible(true));
-		exec.execute(task_);
 
-		Task<List<Amra_Trans>> task = new Task<List<Amra_Trans>>() {
-			@Override
-			public ObservableList<Amra_Trans> call() {
-				if (inkass.isSelected()) {
-					return TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(), false);
-				} else {
-					return TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(), true);
-				}
-			}
-		};
-		task.setOnFailed(e -> print_mess(task.getException().toString()));
-		task.setOnSucceeded(e -> trans_table.setItems((ObservableList<Amra_Trans>) task.getValue()));
-		exec.execute(task);
-		// on_filter();
-		pb.setVisible(false);
-	}
-*/
+	/*
+	 * @FXML private void filter(ActionEvent event) { Task<List<Amra_Trans>> task_ =
+	 * new Task<List<Amra_Trans>>() {
+	 * 
+	 * @Override public ObservableList<Amra_Trans> call() { return null; } };
+	 * task_.setOnFailed(e -> print_mess(task_.getException().toString()));
+	 * task_.setOnSucceeded(e -> pb.setVisible(true)); exec.execute(task_);
+	 * 
+	 * Task<List<Amra_Trans>> task = new Task<List<Amra_Trans>>() {
+	 * 
+	 * @Override public ObservableList<Amra_Trans> call() { if (inkass.isSelected())
+	 * { return TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(),
+	 * dt2.getValue(), false); } else { return
+	 * TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(),
+	 * true); } } }; task.setOnFailed(e ->
+	 * print_mess(task.getException().toString())); task.setOnSucceeded(e ->
+	 * trans_table.setItems((ObservableList<Amra_Trans>) task.getValue()));
+	 * exec.execute(task); // on_filter(); pb.setVisible(false); }
+	 */
 	void print_mess(String text) {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -1457,14 +1446,30 @@ public class Tr_Am_View_con {
 
 		} else {
 			Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
-			new PrintReport2().showReport(fn.get_checknumber(),fn.get_sess_id());
+			new PrintReport2().showReport(fn.get_checknumber(), fn.get_sess_id());
 		}
 	}
-	
+
+	@FXML
+	private void print_(ActionEvent actionEvent) {
+		if (trans_table.getSelectionModel().getSelectedItem() == null) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText("Выберите сначала данные из таблицы!");
+			alert.showAndWait();
+		} else {
+				Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
+				new PrintCheck().showReport(fn.get_checknumber(), fn.get_sess_id());
+		}
+	}
+
 	@FXML
 	private void term_view_(ActionEvent actionEvent) {
-		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(),"",
-				false);
+		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(),
+				"", false);
 		populate_fn_sess(empData);
 
 		autoResizeColumns(trans_table);
@@ -1515,20 +1520,18 @@ public class Tr_Am_View_con {
 	@FXML
 	private void filter(ActionEvent actionEvent) {
 		/*
-		trans_table.getStyleClass().clear();
-		trans_table.setStyle(null);
-		*/
+		 * trans_table.getStyleClass().clear(); trans_table.setStyle(null);
+		 */
 		ObservableList<Amra_Trans> empData = null;
 		if (inkass.isSelected()) {
-			empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(),FIO.getText(), false);
+			empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(), FIO.getText(), false);
 		} else {
-			empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(),FIO.getText(), true);
+			empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(), FIO.getText(), true);
 		}
 		populate_fn_sess(empData);
 		autoResizeColumns(trans_table);
 		TableFilter<Amra_Trans> filter = new TableFilter<>(trans_table);
-		
-		
+
 		provider.setCellFactory(col -> new TextFieldTableCell<Amra_Trans, String>() {
 			@Override
 			public void updateItem(String item, boolean empty) {
@@ -1539,9 +1542,8 @@ public class Tr_Am_View_con {
 				} else {
 					setText(item.toString());
 					if (item.equals("СберБанк")) {
-						setStyle("-fx-background-color: rgb(162, 189, 48);"
-								+ "-fx-border-color:black;"
-								+ " -fx-border-width :  1 1 1 1 ");  
+						setStyle("-fx-background-color: rgb(162, 189, 48);" + "-fx-border-color:black;"
+								+ " -fx-border-width :  1 1 1 1 ");
 					} else {
 						setStyle("");
 					}
@@ -1562,8 +1564,7 @@ public class Tr_Am_View_con {
 						if (item.equals("00")) {
 							setStyle("");
 						} else {
-							setStyle("-fx-background-color: #F9E02C;" +
-						"-fx-border-color:black;"
+							setStyle("-fx-background-color: #F9E02C;" + "-fx-border-color:black;"
 									+ " -fx-border-width : 1 1 1 1;");
 						}
 					}
@@ -1575,36 +1576,31 @@ public class Tr_Am_View_con {
 			});
 			return cell;
 		});
-		
 
 	}
 
-    @FXML
-    void EditStatus(TableColumn.CellEditEvent<Amra_Trans, String> t) {
-    	
-    }
-    
+	@FXML
+	void EditStatus(TableColumn.CellEditEvent<Amra_Trans, String> t) {
+
+	}
+
 	public static void autoResizeColumns(TableView<?> table) {
 		// Set the right policy
 		table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
 		table.getColumns().stream().forEach((column) -> {
 			// System.out.println(column.getText());
-			
-			
-			/*Стили*/
+
+			/* Стили */
 			/*
-			if (column.getText().equals("Статус=STATUS")) {
-				for (int i = 0; i < table.getItems().size(); i++) {
-					// cell must not be empty
-					if (column.getCellData(i) != null) {
-						if(!column.getCellData(i).toString().equals("00")) {
-							column.getCellObservableValue(i).setStyle("-fx-background-color: rgb(162, 189, 48);");
-						}
-					}
-				}
-			}*/
-			/*Стили*/
-			
+			 * if (column.getText().equals("Статус=STATUS")) { for (int i = 0; i <
+			 * table.getItems().size(); i++) { // cell must not be empty if
+			 * (column.getCellData(i) != null) {
+			 * if(!column.getCellData(i).toString().equals("00")) {
+			 * column.getCellObservableValue(i).
+			 * setStyle("-fx-background-color: rgb(162, 189, 48);"); } } } }
+			 */
+			/* Стили */
+
 			if (column.getText().equals("sess_id")) {
 
 			} else {
