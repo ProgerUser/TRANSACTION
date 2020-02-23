@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 import javafx.scene.control.Alert;
@@ -36,6 +36,7 @@ public class PrintCheck extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	@SuppressWarnings("unchecked")
 	public void showReport(String paymnt_number,String sess_id) {
 		
 		try {
@@ -136,6 +137,7 @@ public class PrintCheck extends JFrame {
 	        this.add(viewer);
 	        this.setSize(700, 500);
 	        this.setVisible(true);
+	        //this.setIconImages((List<? extends java.awt.Image>) new Image("terminal.png"));
 			
 		} catch (JRException | SQLException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
