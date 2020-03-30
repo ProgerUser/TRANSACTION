@@ -17,12 +17,13 @@
 						<MenuItem mnemonicParsing="false" onAction="#handleExit" text="Close" />
 					</items>
 				</Menu>
-				<Menu mnemonicParsing="false" text="Терминалы Квант-Капитал">
+				<!--<Menu mnemonicParsing="false" text="Терминалы Квант-Капитал">
 					<items>
 						<MenuItem mnemonicParsing="false" onAction="#loadtransact" text="Загрузка транзакции" />
 						<MenuItem mnemonicParsing="false" onAction="#chektransact" text="Печать чеков" />
 					</items>
 				</Menu>
+				-->
 				<Menu mnemonicParsing="false" text="Кассовый офис">
 					<items>
 						<MenuItem mnemonicParsing="false" onAction="#Kash" text="Сформировать псевдоним" />
@@ -37,6 +38,7 @@
 						<MenuItem mnemonicParsing="false" onAction="#Termdial_view" text="Сдачи" />
 					    <MenuItem mnemonicParsing="false" onAction="#termview" text="Терминалы" />
 						<MenuItem mnemonicParsing="false" onAction="#service" text="Сервисы" />
+						<MenuItem mnemonicParsing="false" onAction="#ap_print" text="Печать" />
 					</items>
 				</Menu>
 				<Menu mnemonicParsing="false" text="Помощь">

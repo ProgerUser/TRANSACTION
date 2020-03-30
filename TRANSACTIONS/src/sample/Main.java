@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -13,6 +14,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sample.model.Connect;
 
+import java.io.File;
 import java.io.IOException;
 
 //Main class which extends from Application Class
@@ -46,9 +48,16 @@ public class Main extends Application {
 /*
 		Connect.connectionURL_ = "10.111.64.21:1521/odb";
 		Connect.userID_ = "XXI";
-		Connect.userPassword_ = "ver8i";
+		Connect.userPassword_ = "man9o";
+		showFirst();
 */
-//		showFirst();
+		primaryStage.setOnCloseRequest(e->{
+			File file = new File(System.getProperty("user.home")+"/XXI.AP_TEST_MAIN.properties");
+			file.delete();
+			System.out.print("------------------------------------------------------");
+			Platform.exit();
+			System.exit(0);
+			});
 		//this.primaryStage.setMaximized(true);
 	}
 

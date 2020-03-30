@@ -5,7 +5,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import sample.Main;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.sql.Connection;
@@ -13,6 +20,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -46,12 +54,15 @@ public class RootLayoutController {
 
 	@FXML
 	private MenuItem chekreport;
-	
+
 	@FXML
-	private    Menu statusbar;
+	private Menu statusbar;
 
 	@FXML
 	void handleExit(ActionEvent event) {
+		File file = new File(System.getProperty("user.home")+"/XXI.AP_TEST_MAIN.properties");
+		file.delete();
+		System.out.print("------------------------------------------------------");
 		Platform.exit();
 		System.exit(0);
 	}
@@ -306,6 +317,45 @@ public class RootLayoutController {
 	}
 
 	@FXML
+	void ap_print(ActionEvent event) throws Exception {
+		/*При каждом вызове происходит создание файла с паролем,логином и базой, при закрытии удаляется
+		 *Хоть так :)
+		 **/
+		
+		try {
+			Properties properties = new Properties();
+			properties.setProperty("login", Connect.userID_);
+			properties.setProperty("password", Connect.userPassword_);
+			properties.setProperty("db", Connect.connectionURL_.substring(Connect.connectionURL_.indexOf("/")+1,Connect.connectionURL_.length()));
+			properties.setProperty("pseudoConnecton","false");
+
+			File file = new File(System.getProperty("user.home")+"/XXI.AP_TEST_MAIN.properties");
+			file.getParentFile().mkdirs(); 
+			file.createNewFile();
+			FileOutputStream fileOut = new FileOutputStream(file);
+			properties.store(fileOut, "Параметры подключения для Печати");
+			fileOut.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		/*Вызов jar файла из cmd и другого процесса, вынужденная мера, больше никак не получается вызвать FXBicomp*/
+		ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c",
+				"java -jar "+System.getenv("TRANSACT_PATH")+"/AP_MAIN.jar 666 1");
+		builder.redirectErrorStream(true);
+		Process p = builder.start();
+		BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        String line;
+        while (true) {
+            line = r.readLine();
+            if (line == null) { break; }
+            System.out.println(line);
+        }
+	}
+
+	@FXML
 	void service(ActionEvent event) {
 		try {
 			if (Connect.userPassword_.equals("")) {
@@ -344,10 +394,11 @@ public class RootLayoutController {
 	}
 
 	public void inis() {
-		statusbar.setText(Connect.userID_+"/"+Connect.connectionURL_);
+		statusbar.setText(Connect.userID_ + "/" + Connect.connectionURL_);
 	}
+
 	@FXML
-	 void initialize() {
+	void initialize() {
 		assert chekreport != null : "fx:id=\"chekreport\" was not injected: check your FXML file 'RootLayout.fxml'.";
 	}
 }

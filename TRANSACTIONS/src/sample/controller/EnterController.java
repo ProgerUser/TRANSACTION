@@ -147,7 +147,7 @@ public class EnterController {
 				Stage stage_ = (Stage) enter_id.getScene().getWindow();
 				stage_.setMaximized(true);
 
-				stage_.setTitle("<Транзакции>____<Пользователь:" + Connect.userID_ + ">____<База:"
+				stage_.setTitle("<USER:" + Connect.userID_ + ">|<DB:"
 						+ Connect.connectionURL_ + ">");
 
 				Main.showFirst();

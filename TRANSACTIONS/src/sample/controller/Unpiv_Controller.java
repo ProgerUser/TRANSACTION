@@ -37,10 +37,8 @@ import sample.model.FN_SESS_AMRA;
 import sample.model.Amra_Trans;
 import sample.model.Attributes;
 import sample.model.Connect;
-
 import java.io.IOException;
 import java.io.PrintWriter;
-//import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -105,6 +103,7 @@ public class Unpiv_Controller {
 		ObservableList<Unpiv> empData = TerminalDAO.Unpiv_View();
 		populate_attr(empData);
 		autoResizeColumns(trans_table);
+		@SuppressWarnings("deprecation")
 		TableFilter<Unpiv> filter = new TableFilter<>(trans_table);
 		
 		COL.setCellFactory(col -> new TextFieldTableCell<Unpiv, String>() {
