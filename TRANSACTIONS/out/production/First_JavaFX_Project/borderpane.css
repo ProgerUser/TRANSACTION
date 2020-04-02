@@ -25,7 +25,7 @@
 }
 
 #browse {          
-    -fx-background-image: url("png/add_file.png");
+    -fx-background-image: url("add_file.png");
     -fx-background-size: 35.0 35.0;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
@@ -33,38 +33,38 @@
 
 
 #import {          
-    -fx-background-image: url("png/process.png");
+    -fx-background-image: url("process.png");
     -fx-background-size: 35.0 35.0;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }
 
 #calc {          
-    -fx-background-image: url("png/post.png");
+    -fx-background-image: url("post.png");
     -fx-background-size: 35.0 35.0;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }
 #del {          
-    -fx-background-image: url("png/delete_log.png");
+    -fx-background-image: url("delete_log.png");
     -fx-background-size: 35.0 35.0;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }
 #search {          
-    -fx-background-image: url("png/search.png");
+    -fx-background-image: url("search.png");
     -fx-background-size: 35.0 35.0;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }
 #xlsx {          
-    -fx-background-image: url("png/xlsx.png");
+    -fx-background-image: url("xlsx.png");
     -fx-background-size: 35.0 35.0;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }
 #attributes {          
-    -fx-background-image: url("png/attributes.png");
+    -fx-background-image: url("attributes.png");
     -fx-background-size: 35.0 35.0;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
@@ -75,25 +75,25 @@
 	}
 
 #view {          
-    -fx-background-image: url("png/view.png");
+    -fx-background-image: url("view.png");
     -fx-background-size: 35.0 35.0;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }
 #post {          
-    -fx-background-image: url("png/post.png");
+    -fx-background-image: url("post.png");
     -fx-background-size: 35.0 35.0;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }
 #pseudo{          
-    -fx-background-image: url("png/generate.png");
+    -fx-background-image: url("generate.png");
     -fx-background-size: 35.0 35.0;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }
 #print_check{          
-    -fx-background-image: url("png/print.png");
+    -fx-background-image: url("print.png");
     -fx-background-size: 35.0 35.0;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
