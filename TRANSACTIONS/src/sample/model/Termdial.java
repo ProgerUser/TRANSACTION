@@ -1,8 +1,7 @@
 package sample.model;
 
-import javafx.beans.property.*;
-import java.sql.Date;
-import java.sql.Timestamp;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 public class Termdial {
 

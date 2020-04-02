@@ -182,6 +182,7 @@ public class KashController {
 				populateKash(empData);
 				ViewerDAO.delete_kash_psevdo();
 				autoResizeColumns(employeeTable);
+				@SuppressWarnings("deprecation")
 				TableFilter<KashClass> filter = new TableFilter<>(employeeTable);
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);

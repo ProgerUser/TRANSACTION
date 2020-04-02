@@ -113,6 +113,7 @@ public class PrintReport2 extends JFrame {
 			JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
 
 			// java - get screen size using the Toolkit class
+			@SuppressWarnings("unused")
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			
 			// the screen height

@@ -337,6 +337,7 @@ public class ServiceController {
 		ObservableList<ServiceClass> empData = ViewerDAO.searchService(terms.getValue().toString());
 		populateService(empData);
 		autoResizeColumns(employeeTable);
+		@SuppressWarnings("deprecation")
 		TableFilter<ServiceClass> filter = new TableFilter<>(employeeTable);
 	}
 

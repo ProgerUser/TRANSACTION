@@ -1,8 +1,7 @@
 package sample.model;
 
-import java.sql.Date;
-
-import javafx.beans.property.*;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 public class FN_SESS_AMRA {
 	private StringProperty sess_id;

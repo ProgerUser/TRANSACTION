@@ -1,15 +1,11 @@
 package sample.model;
 
-import com.sun.javafx.scene.control.skin.TableViewSkin;
-
-import javafx.collections.ListChangeListener;
-import javafx.scene.control.Skin;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-
-import java.io.Console;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import com.sun.javafx.scene.control.skin.TableViewSkin;
+import javafx.collections.ListChangeListener;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
 public class GUIUtils {
 	private static Method columnToFitMethod;

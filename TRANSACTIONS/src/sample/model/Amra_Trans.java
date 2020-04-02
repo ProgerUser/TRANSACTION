@@ -1,9 +1,8 @@
 package sample.model;
 
 
-import java.util.Date;
-
-import javafx.beans.property.*;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 public class Amra_Trans {
 

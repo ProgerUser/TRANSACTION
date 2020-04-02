@@ -2,6 +2,7 @@ package sample.model;
 
 import java.text.SimpleDateFormat;
 
+@SuppressWarnings("serial")
 public class CustomDate extends java.sql.Date {
 
 	public CustomDate(long date) {

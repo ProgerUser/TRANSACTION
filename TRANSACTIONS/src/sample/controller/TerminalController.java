@@ -269,6 +269,7 @@ public class TerminalController {
 		ObservableList<TerminalClass> empData = ViewerDAO.searchTerminal();
 		populateTerminal(empData);
 		autoResizeColumns(employeeTable);
+		@SuppressWarnings("deprecation")
 		TableFilter<TerminalClass> filter = new TableFilter<>(employeeTable);
 	}
 

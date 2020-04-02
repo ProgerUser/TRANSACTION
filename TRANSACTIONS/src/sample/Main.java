@@ -1,21 +1,16 @@
 package sample;
 
+import java.io.File;
+import java.io.IOException;
+
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import sample.model.Connect;
-
-import java.io.File;
-import java.io.IOException;
 
 //Main class which extends from Application Class
 

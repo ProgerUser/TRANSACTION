@@ -1,24 +1,18 @@
 package sample.controller;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.swing.ImageIcon;
+
 import javax.swing.JFrame;
 
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -27,7 +21,6 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.swing.JRViewer;
 import sample.model.Connect;
-import sample.model.Item3;
 
 public class PrintCheck extends JFrame {
 
@@ -36,7 +29,6 @@ public class PrintCheck extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@SuppressWarnings("unchecked")
 	public void showReport(String paymnt_number,String sess_id) {
 		
 		try {

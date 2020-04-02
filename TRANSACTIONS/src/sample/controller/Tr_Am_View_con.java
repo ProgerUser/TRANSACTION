@@ -857,6 +857,7 @@ public class Tr_Am_View_con {
 
 	void on_filter() {
 		autoResizeColumns(trans_table);
+		@SuppressWarnings("deprecation")
 		TableFilter<Amra_Trans> filter = new TableFilter<>(trans_table);
 	}
 
@@ -1530,6 +1531,7 @@ public class Tr_Am_View_con {
 		}
 		populate_fn_sess(empData);
 		autoResizeColumns(trans_table);
+		@SuppressWarnings("deprecation")
 		TableFilter<Amra_Trans> filter = new TableFilter<>(trans_table);
 
 		provider.setCellFactory(col -> new TextFieldTableCell<Amra_Trans, String>() {

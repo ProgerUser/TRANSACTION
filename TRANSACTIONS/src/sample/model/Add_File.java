@@ -2,7 +2,7 @@ package sample.model;
 
 import javafx.beans.property.*;
 
-public class Add_File {
+public class Add_File  {
 
 	private StringProperty FileName;
 	private StringProperty Status;

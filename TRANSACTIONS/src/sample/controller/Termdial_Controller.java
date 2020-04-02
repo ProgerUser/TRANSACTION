@@ -254,6 +254,7 @@ public class Termdial_Controller {
 		}
 		populate_termdial(empData);
 		autoResizeColumns(termdeal_table);
+		@SuppressWarnings("deprecation")
 		TableFilter<Termdial> filter = new TableFilter<>(termdeal_table);
 	}
 
