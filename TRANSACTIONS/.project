@@ -30,5 +30,6 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.xtext.ui.shared.xtextNature</nature>
 		<nature>net.sf.jasperreports.nature</nature>
+		<nature>com.jaspersoft.studio.babel.editor.rbeNature</nature>
 	</natures>
 </projectDescription>

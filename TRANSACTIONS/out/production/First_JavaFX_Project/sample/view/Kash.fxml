@@ -13,7 +13,7 @@
 	<children>
 		<Button fx:id="pseudo" layoutX="17.0" layoutY="24.0"
 			mnemonicParsing="false" onAction="#create_psevdo" prefHeight="35.0"
-			prefWidth="35.0" stylesheets="borderpane.css">
+			prefWidth="35.0" stylesheets="@../../borderpane.css">
 			<tooltip>
 				<Tooltip text="Создать псевдонимы" />
 			</tooltip>

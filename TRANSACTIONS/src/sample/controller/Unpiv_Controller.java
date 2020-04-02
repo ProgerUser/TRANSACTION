@@ -250,7 +250,6 @@ public class Unpiv_Controller {
 	}
 
 	// Заполнить таблицу
-	@FXML
 	private void populate_attr(ObservableList<Unpiv> trData) {
 		// Set items to the employeeTable
 		trans_table.setItems(trData);

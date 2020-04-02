@@ -1625,9 +1625,9 @@ public class Tr_Am_View_con {
 			}
 		});
 	}
-
+    
 	// Заполнить таблицу
-	@FXML
+
 	private void populate_fn_sess(ObservableList<Amra_Trans> trData) {
 		// Set items to the employeeTable
 		trans_table.setItems(trData);

@@ -174,7 +174,7 @@ public class EmployeeController {
 	}
 
 	// Populate Employee
-	@FXML
+
 	private void populateEmployee(Transact emp) {
 		// Declare and ObservableList for table view
 		ObservableList<Transact> empData = FXCollections.observableArrayList();
@@ -185,14 +185,14 @@ public class EmployeeController {
 	}
 
 	// Set Employee information to Text Area
-	@FXML
+
 	private void setEmpInfoToTextArea(Transact emp) {
 		resultArea.setText("Счет: " + emp.getACCOUNT() + "\n" + "ФИО: " + emp.getFIO() + "\n" + "Назначение: "
 				+ emp.getPAYMENTDATA() + "\n");
 	}
 
 	// Populate Employee for TableView and Display Employee on TextArea
-	@FXML
+	
 	private void populateAndShowEmployee(Transact emp) {
 		if (emp != null) {
 			populateEmployee(emp);
@@ -203,7 +203,7 @@ public class EmployeeController {
 	}
 
 	// Populate Employees for TableView
-	@FXML
+
 	private void populateEmployees(ObservableList<Transact> trData) {
 		// Set items to the employeeTable
 		employeeTable.setItems(trData);

@@ -240,7 +240,6 @@ public class Amra_Transact {
 		}
 	}
 
-	@FXML
 	private void populate_fn_sess(ObservableList<Add_File> trData) {
 		// Set items to the employeeTable
 		load_file.setItems(trData);

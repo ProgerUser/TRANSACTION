@@ -191,7 +191,6 @@ public class Attr_Controller {
 	}
 
 	// Заполнить таблицу
-	@FXML
 	private void populate_attr(ObservableList<Attributes> trData) {
 		// Set items to the employeeTable
 		trans_table.setItems(trData);

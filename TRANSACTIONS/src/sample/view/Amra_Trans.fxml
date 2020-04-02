@@ -9,7 +9,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane fx:id="ap" prefHeight="649.0" prefWidth="1017.0" stylesheets="borderpane.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.Amra_Transact">
+<BorderPane fx:id="ap" prefHeight="649.0" prefWidth="1017.0" stylesheets="@../../borderpane.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.Amra_Transact">
 	<center>
 
 	</center>
@@ -112,9 +112,9 @@
 		</GridPane>
 	</center>
 	<top>
-		<AnchorPane fx:id="ap" prefHeight="86.0" prefWidth="1017.0" stylesheets="borderpane.css" BorderPane.alignment="CENTER">
+		<AnchorPane fx:id="ap" prefHeight="86.0" prefWidth="1017.0" stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER">
 			<children>
-				<Button fx:id="browse" disable="false" layoutX="14.0" layoutY="24.0" mnemonicParsing="false" onAction="#Choose" prefHeight="35" prefWidth="35" stylesheets="borderpane.css">
+				<Button fx:id="browse" disable="false" layoutX="14.0" layoutY="24.0" mnemonicParsing="false" onAction="#Choose" prefHeight="35" prefWidth="35" stylesheets="@../../borderpane.css">
 					<tooltip>
 						<Tooltip text="Добавить файл" />
 					</tooltip>

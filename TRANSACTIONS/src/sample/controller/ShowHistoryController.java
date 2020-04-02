@@ -326,7 +326,7 @@ public class ShowHistoryController {
 	}
 
 	// Заполнить таблицу
-	@FXML
+	
 	private void populate_fn_sess(ObservableList<FN_SESS_AMRA> trData) {
 		// Set items to the employeeTable
 		fn_sess_table.setItems(trData);

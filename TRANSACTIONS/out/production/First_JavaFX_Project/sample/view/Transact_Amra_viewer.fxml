@@ -9,7 +9,7 @@
 	<center>
 		<GridPane prefHeight="555.0" prefWidth="598.0">
 			<children>
-				<TableView fx:id="trans_table" layoutX="14.0" prefWidth="994.0" stylesheets="transact.css" tableMenuButtonVisible="true" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS">
+				<TableView fx:id="trans_table" layoutX="14.0" prefWidth="994.0" stylesheets="@../../transact.css" tableMenuButtonVisible="true" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS">
 					<columns>
 						<TableColumn fx:id="rownum" prefWidth="137.0" text="Номер строки" />
 						<TableColumn fx:id="recdate" prefWidth="137.0" text="Дата Загрузки" />
@@ -82,7 +82,7 @@
 		</GridPane>
 	</center>
 	<top>
-		<AnchorPane prefHeight="112.0" prefWidth="1017.0" stylesheets="borderpane.css" BorderPane.alignment="CENTER">
+		<AnchorPane prefHeight="112.0" prefWidth="1017.0" stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER">
 			<children>
 				<Button fx:id="attributes" layoutX="735.0" layoutY="31.0" mnemonicParsing="false" onAction="#view_attr" prefHeight="35.0" prefWidth="35.0">
 				<tooltip>

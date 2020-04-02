@@ -259,7 +259,7 @@ public class Termdial_Controller {
 	}
 
 	// Заполнить таблицу
-	@FXML
+
 	private void populate_termdial(ObservableList<Termdial> trData) {
 		// Set items to the employeeTable
 		termdeal_table.setItems(trData);

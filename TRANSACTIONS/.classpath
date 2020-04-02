@@ -2,6 +2,9 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="css"/>
+	<classpathentry kind="src" path="png"/>
+	<classpathentry kind="src" path="JasperReportFile"/>
 	<classpathentry kind="lib" path="lib/ojdbc6-11.2.0.3.jar"/>
 	<classpathentry kind="lib" path="out/artifacts/JavaFXApp/JavaFXApp.jar"/>
 	<classpathentry kind="lib" path="D:/Users/saidp/git/TRANSACTION/TRANSACTIONS/commons-logging-1.2.jar"/>
