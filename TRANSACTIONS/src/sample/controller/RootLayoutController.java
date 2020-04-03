@@ -1,6 +1,7 @@
 package sample.controller;
 
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -22,6 +23,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -40,6 +44,8 @@ import sample.model.ViewerDAO;
 @SuppressWarnings("unused")
 public class RootLayoutController {
 
+	
+	private Executor exec;
 	/*
 	 * //Reference to the main application private Main main;
 	 * 
@@ -342,26 +348,50 @@ public class RootLayoutController {
 			e.printStackTrace();
 		}
 		*/
-		
 		/*Вызов jar файла из cmd и другого процесса, вынужденная мера, больше никак не получается вызвать FXBicomp*/
-		ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c",
-				"java -jar " + System.getenv("TRANSACT_PATH") + "/AP.jar 666 1 1 no " + Connect.userID_ + " "
-						+ Connect.userPassword_ + " " + Connect.connectionURL_
-								.substring(Connect.connectionURL_.indexOf("/") + 1, Connect.connectionURL_.length())
-						+ " J:\\dev6i\\NET80\\ADMIN");
-		builder.redirectErrorStream(true);
-		Process p = builder.start();
-		BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
-		String line;
-		while (true) {
-			line = r.readLine();
-			if (line == null) {
-				break;
+		Task<Object> task = new Task<Object>() {
+			@Override
+			public  Object call() throws Exception {
+				try {
+					ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c",
+							"java -jar " + System.getenv("TRANSACT_PATH") + "/AP.jar 666 1 1 no " + Connect.userID_ + " "
+									+ Connect.userPassword_ + " " + Connect.connectionURL_
+											.substring(Connect.connectionURL_.indexOf("/") + 1, Connect.connectionURL_.length())
+									+ " J:\\dev6i\\NET80\\ADMIN");
+					builder.redirectErrorStream(true);
+					Process p;
+					p = builder.start();
+					BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+					String line;
+					while (true) {
+						line = r.readLine();
+						if (line == null) {
+							break;
+						}
+						System.out.println(line);
+					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					Alert(e.getMessage());
+				}
+				return null;
 			}
-			System.out.println(line);
-		}
+		};
+		task.setOnFailed(e -> Alert(task.getException().getMessage()));
+		//task.setOnSucceeded(e -> );
+
+		exec.execute(task);
 	}
 
+	private void Alert(String mess) {
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+		stage.getIcons().add(new Image("terminal.png"));
+		alert.setTitle("Внимание");
+		alert.setHeaderText(null);
+		alert.setContentText("Выберите сначала данные из таблицы!");
+		alert.showAndWait();
+	}
 	@FXML
 	void service(ActionEvent event) {
 		try {
@@ -406,6 +436,11 @@ public class RootLayoutController {
 
 	@FXML
 	void initialize() {
+		exec = Executors.newCachedThreadPool((runnable) -> {
+			Thread t = new Thread(runnable);
+			t.setDaemon(true);
+			return t;
+		});
 		assert chekreport != null : "fx:id=\"chekreport\" was not injected: check your FXML file 'RootLayout.fxml'.";
 	}
 }

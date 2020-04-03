@@ -5,6 +5,7 @@ import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -16,7 +17,7 @@ import sample.model.Connect;
 public class Main extends Application {
 
 	// This is our PrimaryStage (It contains everything)
-	public  Stage primaryStage;
+	public Stage primaryStage;
 
 	// This is the BorderPane of RootLayout
 	public static BorderPane rootLayout;
@@ -37,24 +38,27 @@ public class Main extends Application {
 
 		// 3) Display the EmployeeOperations View
 		// showEmployeeView();
-		
+
+		if (Connect.userID_ != "") {
+			primaryStage.setMaximized(true);
+			primaryStage.setTitle(Connect.userID_ + "@"+Connect.connectionURL_);
+			Main.showFirst();
+		}
+		else{
 		Enter();
-/*
-		Connect.connectionURL_ = "10.111.64.21:1521/odb";
-		Connect.userID_ = "XXI";
-		Connect.userPassword_ = "xxi";
-		showFirst();
-*/
+		}
 		/*
-		primaryStage.setOnCloseRequest(e->{
-			File file = new File(System.getProperty("user.home")+"/XXI.AP_TEST_MAIN.properties");
-			file.delete();
-			System.out.print("------------------------------------------------------");
-			Platform.exit();
-			System.exit(0);
-			});
-			*/
-		//this.primaryStage.setMaximized(true);
+		 * Connect.connectionURL_ = "10.111.64.21:1521/odb"; Connect.userID_ = "XXI";
+		 * Connect.userPassword_ = "xxi"; showFirst();
+		 */
+		/*
+		 * primaryStage.setOnCloseRequest(e->{ File file = new
+		 * File(System.getProperty("user.home")+"/XXI.AP_TEST_MAIN.properties");
+		 * file.delete();
+		 * System.out.print("------------------------------------------------------");
+		 * Platform.exit(); System.exit(0); });
+		 */
+		// this.primaryStage.setMaximized(true);
 	}
 
 	// Initializes the root layout.
@@ -258,6 +262,12 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
+		if (args.length != 0) {
+			Connect.userID_ =args[0];
+			Connect.userPassword_ = args[1];
+			Connect.connectionURL_ = args[2];
+		}
+		
 		launch(args);
 	}
 }
