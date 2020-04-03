@@ -90,9 +90,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.controlsfx.control.PropertySheet.Item;
 import org.controlsfx.control.table.TableFilter;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -1479,19 +1481,88 @@ public class Tr_Am_View_con {
 		}
 	}
 
+	private void Alerts(String mess) {
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+		stage.getIcons().add(new Image("terminal.png"));
+		alert.setTitle("Внимание");
+		alert.setHeaderText(null);
+		alert.setContentText("Выберите сначала данные из таблицы!");
+		alert.showAndWait();
+	}
+
 	@FXML
 	private void print_(ActionEvent actionEvent) {
 		if (trans_table.getSelectionModel().getSelectedItem() == null) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText("Выберите сначала данные из таблицы!");
-			alert.showAndWait();
+			Alerts("Выберите сначала данные из таблицы!");
 		} else {
+
 			Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
-			new PrintCheck().showReport(fn.get_checknumber(), fn.get_sess_id());
+			/*
+			 * new PrintCheck().showReport(fn.get_checknumber(), fn.get_sess_id());
+			 */
+			pb.setVisible(true);
+			Task<Object> task = new Task<Object>() {
+				@Override
+				public  Object call() throws Exception {
+					try {
+						ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", "java -jar "
+								+ System.getenv("TRANSACT_PATH") + "/AP.jar 666 2 " + fn.get_checknumber() + " no "
+								+ Connect.userID_ + " " + Connect.userPassword_ + " " + Connect.connectionURL_
+										.substring(Connect.connectionURL_.indexOf("/") + 1, Connect.connectionURL_.length())
+								+ " J:\\dev6i\\NET80\\ADMIN");
+						builder.redirectErrorStream(true);
+						Process p;
+						p = builder.start();
+						BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+						String line;
+						while (true) {
+							line = r.readLine();
+							if (line == null) {
+								break;
+							}
+							System.out.println(line);
+						}
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						Alerts(e.getMessage());
+					}
+					return null;
+				}
+			};
+			task.setOnFailed(e -> Alert(task.getException().getMessage()));
+			task.setOnSucceeded(e ->pb.setVisible(false) );
+
+			exec.execute(task);
+			
+			/*
+			Runnable task = () -> {
+				try {
+					ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", "java -jar "
+							+ System.getenv("TRANSACT_PATH") + "/AP.jar 666 2 " + fn.get_checknumber() + " no "
+							+ Connect.userID_ + " " + Connect.userPassword_ + " " + Connect.connectionURL_
+									.substring(Connect.connectionURL_.indexOf("/") + 1, Connect.connectionURL_.length())
+							+ " J:\\dev6i\\NET80\\ADMIN");
+					builder.redirectErrorStream(true);
+					Process p;
+					p = builder.start();
+					BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+					String line;
+					while (true) {
+						line = r.readLine();
+						if (line == null) {
+							break;
+						}
+						System.out.println(line);
+					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					Alerts(e.getMessage());
+				}
+			};
+			Thread thread = new Thread(task);
+			thread.start();
+			*/
 		}
 	}
 
@@ -1545,31 +1616,12 @@ public class Tr_Am_View_con {
 	}
 
 	// Найти загрузки
-
 	private void exec_filter(ObservableList<Amra_Trans> trData) {
-		trans_table.setItems(trData);
-		autoResizeColumns(trans_table);
-		provider.setCellFactory(col -> new TextFieldTableCell<Amra_Trans, String>() {
-			@Override
-			public void updateItem(String item, boolean empty) {
-				super.updateItem(item, empty);
-				if (empty || item == null) {
-					setText(null);
-					setGraphic(null);
-				} else {
-					setText(item.toString());
-					if (item.equals("СберБанк")) {
-						setStyle("-fx-background-color: rgb(162, 189, 48);" + "-fx-border-color:black;"
-								+ " -fx-border-width :  1 1 1 1 ");
-					} else {
-						setStyle("");
-					}
-				}
-			}
-		});
 
-		status.setCellFactory(list -> {
-			TextFieldTableCell<Amra_Trans, String> cell = new TextFieldTableCell<Amra_Trans, String>() {
+		Runnable task = () -> {
+			trans_table.setItems(trData);
+			autoResizeColumns(trans_table);
+			provider.setCellFactory(col -> new TextFieldTableCell<Amra_Trans, String>() {
 				@Override
 				public void updateItem(String item, boolean empty) {
 					super.updateItem(item, empty);
@@ -1578,29 +1630,64 @@ public class Tr_Am_View_con {
 						setGraphic(null);
 					} else {
 						setText(item.toString());
-						if (item.equals("00")) {
-							setStyle("");
+						if (item.equals("СберБанк")) {
+							setStyle("-fx-background-color: rgb(162, 189, 48);" + "-fx-border-color:black;"
+									+ " -fx-border-width :  1 1 1 1 ");
 						} else {
-							setStyle("-fx-background-color: #F9E02C;" + "-fx-border-color:black;"
-									+ " -fx-border-width : 1 1 1 1;");
+							setStyle("");
 						}
 					}
 				}
-			};
-			cell.setOnMouseClicked(value -> {
-				if (value.getClickCount() == 2) {
-				}
 			});
-			return cell;
-		});
+
+			status.setCellFactory(list -> {
+				TextFieldTableCell<Amra_Trans, String> cell = new TextFieldTableCell<Amra_Trans, String>() {
+					@Override
+					public void updateItem(String item, boolean empty) {
+						super.updateItem(item, empty);
+						if (empty || item == null) {
+							setText(null);
+							setGraphic(null);
+						} else {
+							setText(item.toString());
+							if (item.equals("00")) {
+								setStyle("");
+							} else {
+								setStyle("-fx-background-color: #F9E02C;" + "-fx-border-color:black;"
+										+ " -fx-border-width : 1 1 1 1;");
+							}
+						}
+					}
+				};
+				cell.setOnMouseClicked(value -> {
+					if (value.getClickCount() == 2) {
+					}
+				});
+				return cell;
+			});
+		};
+		Thread thread = new Thread(task);
+		thread.start();
+		Runnable task_ = () -> {
+			@SuppressWarnings("deprecation")
+			TableFilter<Amra_Trans> filter = new TableFilter<>(trans_table);
+		};
+		Thread thread_ = new Thread(task_);
+		thread_.start();
+
 		pb.setVisible(false);
-		@SuppressWarnings("deprecation")
-		TableFilter<Amra_Trans> filter = new TableFilter<>(trans_table);
 	}
 
 	@FXML
 	private void filter(ActionEvent actionEvent) {
-		pb.setVisible(true);
+
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				pb.setVisible(true);
+			}
+		});
+
 		Task<List<Amra_Trans>> task = new Task<List<Amra_Trans>>() {
 			@Override
 			public ObservableList<Amra_Trans> call() throws Exception {
@@ -1634,9 +1721,9 @@ public class Tr_Am_View_con {
 
 	public static void autoResizeColumns(TableView<?> table) {
 		Platform.runLater(new Runnable() {
-		    @Override
-		    public void run() {
-		    	// Set the right policy
+			@Override
+			public void run() {
+				// Set the right policy
 				table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
 				table.getColumns().stream().forEach((column) -> {
 					if (column.getText().equals("sess_id")) {
@@ -1662,9 +1749,9 @@ public class Tr_Am_View_con {
 						column.setPrefWidth(max + 10.0d);
 					}
 				});
-		    }
+			}
 		});
-		
+
 	}
 
 	// Заполнить таблицу

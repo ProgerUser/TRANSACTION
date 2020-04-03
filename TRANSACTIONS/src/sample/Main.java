@@ -1,10 +1,8 @@
 package sample;
 
-import java.io.File;
 import java.io.IOException;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -40,21 +38,13 @@ public class Main extends Application {
 		// 3) Display the EmployeeOperations View
 		// showEmployeeView();
 		
-		/*------------*/
-		//ApMainTest t = new ApMainTest();
-		//t.showMainWindow();
-		//LoginManager lg = new LoginManager();
-		//LoginManager.login(primaryStage);
-		/*------------*/
-		
-		
-		//Enter();
-
+		Enter();
+/*
 		Connect.connectionURL_ = "10.111.64.21:1521/odb";
 		Connect.userID_ = "XXI";
-		Connect.userPassword_ = "man9o";
+		Connect.userPassword_ = "xxi";
 		showFirst();
-
+*/
 		/*
 		primaryStage.setOnCloseRequest(e->{
 			File file = new File(System.getProperty("user.home")+"/XXI.AP_TEST_MAIN.properties");

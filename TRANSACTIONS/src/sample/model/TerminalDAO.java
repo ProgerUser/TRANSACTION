@@ -926,7 +926,6 @@ public class TerminalDAO {
 				fn.set_dataprovider(rs.getString("dataprovider"));
 				fn.set_statusabs(rs.getString("statusabs"));
 				fn.set_sess_id(rs.getString("sess_id"));
-
 				fn_list.add(fn);
 			}
 			return fn_list;
