@@ -20,74 +20,7 @@
 		<AnchorPane prefHeight="17.0" prefWidth="1008.0" BorderPane.alignment="CENTER" />
 	</bottom>
 	<center>
-		<!-- <TitledPane animated="false" prefHeight="456.0" prefWidth="983.0" 
-			text="Загруженные строки" BorderPane.alignment="CENTER"> <content> <BorderPane 
-			minHeight="0.0" minWidth="0.0" prefHeight="293.0" prefWidth="977.0"> <center> 
-			<GridPane prefHeight="555.0" prefWidth="977.0"> <children> <TableView fx:id="trans_table" 
-			layoutX="14.0" prefWidth="994.0" stylesheets="transact.css" tableMenuButtonVisible="true" 
-			GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" 
-			GridPane.rowIndex="0" GridPane.vgrow="ALWAYS"> <columns> <TableColumn fx:id="rownum" 
-			prefWidth="137.0" text="Номер строки" /> <TableColumn fx:id="recdate" prefWidth="137.0" 
-			text="Дата Загрузки" /> <TableColumn fx:id="paydate" prefWidth="137.0" text="Дата 
-			Платежа" /> <TableColumn fx:id="currency" prefWidth="137.0" text="Валюта=CURRENCY" 
-			/> <TableColumn fx:id="paymenttype" prefWidth="137.0" text="ВидПлатежа=PAYMENTTYPE" 
-			/> <TableColumn fx:id="vk" prefWidth="137.0" text="ВК=VK" /> <TableColumn 
-			fx:id="dateofoperation" prefWidth="137.0" text="ДатаОперации=DATEOFOPERATION" 
-			/> <TableColumn fx:id="dataps" prefWidth="137.0" text="ДатаПС=DATAPS" /> 
-			<TableColumn fx:id="dateclearing" prefWidth="137.0" text="ДатаКлиринга=DATECLEARING" 
-			/> <TableColumn fx:id="dealer" prefWidth="137.0" text="Дилер=DEALER" /> <TableColumn 
-			fx:id="accountpayer" prefWidth="137.0" text="ЛСПлательщика=ACCOUNTPAYER" 
-			/> <TableColumn fx:id="cardnumber" prefWidth="137.0" text="НомерКарты=CARDNUMBER" 
-			/> <TableColumn fx:id="operationnumber" prefWidth="137.0" text="НомерОперации=OPERATIONNUMBER" 
-			/> <TableColumn fx:id="operationnumberdelivery" prefWidth="137.0" text="НомерОперацииСдача=OPERATIONNUMBERDELIVERY" 
-			/> <TableColumn fx:id="checknumber" prefWidth="137.0" text="НомерЧека=CHECKNUMBER" 
-			/> <TableColumn fx:id="checkparent" prefWidth="137.0" text="ЧекРодитель=CHECKPARENT" 
-			/> <TableColumn fx:id="orderofprovidence" prefWidth="137.0" text="ПорядокПровдения=ORDEROFPROVIDENCE" 
-			/> <TableColumn fx:id="provider" prefWidth="137.0" text="Провайдер=PROVIDER" 
-			/> <TableColumn fx:id="owninown" prefWidth="137.0" text="СвойВСвоем=OWNINOWN" 
-			/> <TableColumn fx:id="corrected" prefWidth="137.0" text="Скорректирована=CORRECTED" 
-			/> <TableColumn fx:id="commissionrate" prefWidth="137.0" text="СтавкаКомиссии=COMMISSIONRATE" 
-			/> <TableColumn fx:id="status" prefWidth="137.0" text="Статус=STATUS" /> 
-			<TableColumn fx:id="stringfromfile" prefWidth="137.0" text="СтрокаИзФайла=STRINGFROMFILE" 
-			/> <TableColumn fx:id="rewardamount" prefWidth="137.0" text="СуммаВознаграждения=REWARDAMOUNT" 
-			/> <TableColumn fx:id="ownerincomeamount" prefWidth="137.0" text="СуммаДоходВладельца=OWNERINCOMEAMOUNT" 
-			/> <TableColumn fx:id="commissionamount" prefWidth="137.0" text="СуммаКомиссии=COMMISSIONAMOUNT" 
-			/> <TableColumn fx:id="nkamount" prefWidth="137.0" text="СуммаНК=NKAMOUNT" 
-			/> <TableColumn fx:id="maxcommissionamount" prefWidth="137.0" text="СуммаКомиссииМакс=MAXCOMMISSIONAMOUNT" 
-			/> <TableColumn fx:id="mincommissionamount" prefWidth="137.0" text="СуммаКомиссииМин=MINCOMMISSIONAMOUNT" 
-			/> <TableColumn fx:id="cashamount" prefWidth="137.0" text="СуммаНаличных=CASHAMOUNT" 
-			/> <TableColumn fx:id="sumnalprimal" prefWidth="137.0" text="СуммаНалИзначальная=SUMNALPRIMAL" 
-			/> <TableColumn fx:id="amounttocheck" prefWidth="137.0" text="СуммаНаЧек=AMOUNTTOCHECK" 
-			/> <TableColumn fx:id="amountofpayment" prefWidth="137.0" text="СуммаПлатежа=AMOUNTOFPAYMENT" 
-			/> <TableColumn fx:id="sumofsplitting" prefWidth="137.0" text="СуммаНаРасщепление=SUMOFSPLITTING" 
-			/> <TableColumn fx:id="amountintermediary" prefWidth="137.0" text="СуммаПосредника=AMOUNTINTERMEDIARY" 
-			/> <TableColumn fx:id="amountofscs" prefWidth="137.0" text="СуммаСКС=AMOUNTOFSCS" 
-			/> <TableColumn fx:id="amountwithchecks" prefWidth="137.0" text="СуммаСЧеков=AMOUNTWITHCHECKS" 
-			/> <TableColumn fx:id="counter" prefWidth="137.0" text="Счетчик=COUNTER" 
-			/> <TableColumn fx:id="terminal" prefWidth="137.0" text="Терминал=TERMINAL" 
-			/> <TableColumn fx:id="terminalnetwork" prefWidth="137.0" text="ТерминальнаяСеть=TERMINALNETWORK" 
-			/> <TableColumn fx:id="transactiontype" prefWidth="137.0" text="ТипТранзакции=TRANSACTIONTYPE" 
-			/> <TableColumn fx:id="service" prefWidth="137.0" text="Услуга=SERVICE" /> 
-			<TableColumn fx:id="filetransactions" prefWidth="137.0" text="ФайлТранзакции=FILETRANSACTIONS" 
-			/> <TableColumn fx:id="fio" prefWidth="137.0" text="ФИО=FIO" /> <TableColumn 
-			fx:id="checksincoming" prefWidth="200" text="ЧекиВходящие=CHECKSINCOMING" 
-			/> <TableColumn fx:id="barcode" prefWidth="137.0" text="ШтрихКод=BARCODE" 
-			/> <TableColumn fx:id="isaresident" prefWidth="137.0" text="ЯвляетсяРезидентом=ISARESIDENT" 
-			/> <TableColumn fx:id="valuenotfound" prefWidth="137.0" text="ЗначениеНеНайдено=VALUENOTFOUND" 
-			/> <TableColumn fx:id="providertariff" prefWidth="137.0" text="ТарифПровайдера=PROVIDERTARIFF" 
-			/> <TableColumn fx:id="counterchecks" prefWidth="137.0" text="СчетчикСчеков=COUNTERCHECKS" 
-			/> <TableColumn fx:id="countercheck" prefWidth="137.0" text="СчетчикНаЧек=COUNTERCHECK" 
-			/> <TableColumn fx:id="id_" prefWidth="137.0" text="Id=ID_" /> <TableColumn 
-			fx:id="detailing" prefWidth="137.0" text="Деталировка=DETAILING" /> <TableColumn 
-			fx:id="walletpayer" prefWidth="137.0" text="КошелекПлательщик=WALLETPAYER" 
-			/> <TableColumn fx:id="walletreceiver" prefWidth="137.0" text="КошелекПолучатель=WALLETRECEIVER" 
-			/> <TableColumn fx:id="purposeofpayment" prefWidth="137.0" text="НазначениеПлатежа=PURPOSEOFPAYMENT" 
-			/> <TableColumn fx:id="dataprovider" prefWidth="137.0" text="ДатаПровайдера=DATAPROVIDER" 
-			/> <TableColumn fx:id="statusabs" prefWidth="137.0" text="statusabs" /> <TableColumn 
-			fx:id="sess_id" prefWidth="137.0" text="sess_id" /> </columns> </TableView> 
-			</children> <columnConstraints> <ColumnConstraints /> </columnConstraints> 
-			<rowConstraints> <RowConstraints /> </rowConstraints> </GridPane> </center> 
-			</BorderPane> </content> </TitledPane> -->
+		
 	</center>
 	<center>
 		<GridPane prefHeight="555.0" prefWidth="598.0" BorderPane.alignment="CENTER">
@@ -120,20 +53,20 @@
 					</tooltip>
 				</Button>
 				
-				<Button id="import" fx:id="import_" disable="false" layoutX="71.0" layoutY="24.0"  onAction="#Load_Transact" mnemonicParsing="false" prefHeight="35" prefWidth="35">
+				<Button id="import" fx:id="import_" disable="false" layoutX="71.0" layoutY="24.0" mnemonicParsing="false" onAction="#Load_Transact" prefHeight="35" prefWidth="35">
 					<tooltip>
 						<Tooltip text="Разобрать файл" />
 					</tooltip>
 				</Button>
-				<Button id="calc" fx:id="calc" layoutX="127.0" layoutY="24.0" mnemonicParsing="false" onAction="#Calc_Transact" prefHeight="35" prefWidth="35">
+				<Button id="calc" fx:id="calc" layoutX="133.0" layoutY="24.0" mnemonicParsing="false" onAction="#Calc_Transact" prefHeight="35" prefWidth="35">
 					<tooltip>
 						<Tooltip text="Сформировать проводки" />
 					</tooltip>
 				</Button>
-				<Text layoutX="258.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Дата загрузки" />
-				<DatePicker fx:id="date_load" layoutX="248.0" layoutY="34.0" onAction="#view_fn" prefHeight="24.0" prefWidth="144.0" />
-				<Text layoutX="20.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Загруженные файлы" />
-				<Button id="del" fx:id="delete_log" layoutX="182.0" layoutY="24.0" mnemonicParsing="false" onAction="#del_log" prefHeight="35" prefWidth="35">
+				<Text layoutX="250.0" layoutY="22.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Дата загрузки" />
+				<DatePicker fx:id="date_load" layoutX="250.0" layoutY="24.0" onAction="#view_fn" prefHeight="35.0" prefWidth="100.0" />
+				<Text layoutX="19.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Загруженные файлы" />
+				<Button id="del" fx:id="delete_log" layoutX="192.0" layoutY="24.0" mnemonicParsing="false" onAction="#del_log" prefHeight="35" prefWidth="35">
 					<tooltip>
 						<Tooltip text="Удалить лог" />
 					</tooltip>

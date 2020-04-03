@@ -126,18 +126,22 @@
 				<Tooltip text="Показать проводки" />
 			</tooltip>
 			</Button>
-            <Button fx:id="print_check" layoutX="901.0" layoutY="31.0" mnemonicParsing="false" onAction="#print_" prefHeight="35.0" prefWidth="35.0" />
+            <Button fx:id="print_check" layoutX="901.0" layoutY="31.0" mnemonicParsing="false" onAction="#print_" prefHeight="35.0" prefWidth="35.0">
+            <tooltip>
+				<Tooltip text="Печать чека JasperReport" />
+			</tooltip>
+			</Button>
             <ProgressIndicator fx:id="pb" layoutX="951.0" layoutY="22.0" visible="false" />
 			</children>
 		</AnchorPane>
 	</top>
 	<left>
-		<AnchorPane fx:id="anch_b1" prefHeight="455.0" prefWidth="17.0" BorderPane.alignment="CENTER" />
+		<AnchorPane fx:id="anch_b7" prefHeight="455.0" prefWidth="17.0" BorderPane.alignment="CENTER" />
 	</left>
 	<right>
-		<AnchorPane fx:id="anch_b2" prefHeight="455.0" prefWidth="17.0" BorderPane.alignment="CENTER" />
+		<AnchorPane fx:id="anch_b8" prefHeight="455.0" prefWidth="17.0" BorderPane.alignment="CENTER" />
 	</right>
 	<bottom>
-		<AnchorPane fx:id="anch_b3" prefHeight="17.0" prefWidth="1008.0" BorderPane.alignment="CENTER" />
+		<AnchorPane fx:id="anch_b9" prefHeight="17.0" prefWidth="1008.0" BorderPane.alignment="CENTER" />
 	</bottom>
 </BorderPane>

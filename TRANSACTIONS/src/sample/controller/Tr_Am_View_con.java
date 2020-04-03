@@ -1594,6 +1594,8 @@ public class Tr_Am_View_con {
 			return cell;
 		});
 		pb.setVisible(false);
+		@SuppressWarnings("deprecation")
+		TableFilter<Amra_Trans> filter = new TableFilter<>(trans_table);
 	}
 
 	@FXML
@@ -1627,11 +1629,6 @@ public class Tr_Am_View_con {
 				alert.showAndWait();
 			}
 		});
-
-	}
-
-	@FXML
-	void EditStatus(TableColumn.CellEditEvent<Amra_Trans, String> t) {
 
 	}
 

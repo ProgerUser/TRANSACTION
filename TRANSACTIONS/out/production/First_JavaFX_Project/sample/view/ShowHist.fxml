@@ -38,25 +38,25 @@
 			<center>
 				<AnchorPane fx:id="anch_b" prefHeight="71.0" prefWidth="808.0" stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER">
 					<children>
-						<Label layoutX="14.0" layoutY="6.0" text="Номер ТР:" />
+						<Label layoutY="6.0" text="Номер ТР:" />
 						<TextField fx:id="trnumber" layoutY="28.0" prefHeight="35.0" prefWidth="172.0" promptText="\%{123...}%" />
-						<Label layoutX="376.0" layoutY="6.0" text="Дата начала:" />
-						<Label layoutX="501.0" layoutY="6.0" text="Дата конца:" />
-						<TextField fx:id="sess_id_t" layoutX="197.0" layoutY="28.0" prefHeight="35.0" prefWidth="172.0" />
-						<Label layoutX="197.0" layoutY="6.0" prefHeight="17.0" prefWidth="46.0" text="SESS_ID:" />
-						<Button fx:id="search" layoutX="638.0" layoutY="28.0" mnemonicParsing="false" onAction="#fn_sess_search" prefHeight="35.0" prefWidth="35.0">
+						<Label layoutX="369.0" layoutY="6.0" text="Дата начала:" />
+						<Label layoutX="484.0" layoutY="6.0" text="Дата конца:" />
+						<TextField fx:id="sess_id_t" layoutX="185.0" layoutY="28.0" prefHeight="35.0" prefWidth="172.0" />
+						<Label layoutX="185.0" layoutY="6.0" prefHeight="17.0" prefWidth="46.0" text="SESS_ID:" />
+						<Button fx:id="search" layoutX="613.0" layoutY="28.0" mnemonicParsing="false" onAction="#fn_sess_search" prefHeight="35.0" prefWidth="35.0">
 																	<tooltip>
 						<Tooltip text="Поиск" />
 					</tooltip>
 						</Button>
-						<Button fx:id="view" layoutX="693.0" layoutY="28.0" mnemonicParsing="false" onAction="#view_clob" prefHeight="35.0" prefWidth="35.0">
+						<Button fx:id="view" layoutX="666.0" layoutY="28.0" mnemonicParsing="false" onAction="#view_clob" prefHeight="35.0" prefWidth="35.0">
 																							<tooltip>
 						<Tooltip text="Показать транзакции" />
 					</tooltip>
 						</Button>
-						<DatePicker fx:id="datestart" layoutX="376.0" layoutY="28.0" prefHeight="35.0" prefWidth="117.0" />
-						<DatePicker fx:id="dateend" layoutX="501.0" layoutY="28.0" prefHeight="35.0" prefWidth="117.0" />
-						<Button fx:id="post" layoutX="744.0" layoutY="28.0" mnemonicParsing="false" onAction="#trn_doc" prefHeight="35.0" prefWidth="35.0">
+						<DatePicker fx:id="datestart" layoutX="369.0" layoutY="28.0" prefHeight="35.0" prefWidth="100.0" />
+						<DatePicker fx:id="dateend" layoutX="484.0" layoutY="28.0" prefHeight="35.0" prefWidth="100.0" />
+						<Button fx:id="post" layoutX="716.0" layoutY="28.0" mnemonicParsing="false" onAction="#trn_doc" prefHeight="35.0" prefWidth="35.0">
 											<tooltip>
 						<Tooltip text="Документы группированные" />
 					</tooltip>

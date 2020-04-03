@@ -14,6 +14,8 @@ import java.util.HashMap;
 
 import javax.swing.JFrame;
 
+import org.controlsfx.control.table.TableFilter;
+
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -385,5 +387,7 @@ public class ShowHistoryController {
 			}
 		});
 		pb.setVisible(false);
+		@SuppressWarnings("deprecation")
+		TableFilter<FN_SESS_AMRA> filter = new TableFilter<>(fn_sess_table);
 	}
 }
