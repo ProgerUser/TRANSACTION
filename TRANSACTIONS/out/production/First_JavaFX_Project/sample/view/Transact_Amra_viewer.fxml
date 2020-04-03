@@ -82,7 +82,7 @@
 		</GridPane>
 	</center>
 	<top>
-		<AnchorPane prefHeight="112.0" prefWidth="1017.0" stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER">
+		<AnchorPane fx:id="anch_b4" prefHeight="98.0" prefWidth="1017.0" stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER">
 			<children>
 				<Button fx:id="attributes" layoutX="735.0" layoutY="31.0" mnemonicParsing="false" onAction="#view_attr" prefHeight="35.0" prefWidth="35.0">
 				<tooltip>
@@ -127,16 +127,17 @@
 			</tooltip>
 			</Button>
             <Button fx:id="print_check" layoutX="901.0" layoutY="31.0" mnemonicParsing="false" onAction="#print_" prefHeight="35.0" prefWidth="35.0" />
+            <ProgressIndicator fx:id="pb" layoutX="951.0" layoutY="22.0" visible="false" />
 			</children>
 		</AnchorPane>
 	</top>
 	<left>
-		<AnchorPane prefHeight="455.0" prefWidth="17.0" BorderPane.alignment="CENTER" />
+		<AnchorPane fx:id="anch_b1" prefHeight="455.0" prefWidth="17.0" BorderPane.alignment="CENTER" />
 	</left>
 	<right>
-		<AnchorPane prefHeight="455.0" prefWidth="17.0" BorderPane.alignment="CENTER" />
+		<AnchorPane fx:id="anch_b2" prefHeight="455.0" prefWidth="17.0" BorderPane.alignment="CENTER" />
 	</right>
 	<bottom>
-		<AnchorPane prefHeight="17.0" prefWidth="1008.0" BorderPane.alignment="CENTER" />
+		<AnchorPane fx:id="anch_b3" prefHeight="17.0" prefWidth="1008.0" BorderPane.alignment="CENTER" />
 	</bottom>
 </BorderPane>

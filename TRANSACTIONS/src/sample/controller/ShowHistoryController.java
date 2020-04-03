@@ -14,6 +14,7 @@ import java.util.HashMap;
 
 import javax.swing.JFrame;
 
+import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,6 +30,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -95,7 +97,9 @@ public class ShowHistoryController {
 	private TableColumn<FN_SESS_AMRA, String> path_;
 	@FXML
 	private TableColumn<FN_SESS_AMRA, String> DATE_TIME;
-
+	@FXML
+	private ProgressIndicator pb;
+	
 	// For MultiThreading
 	private Executor exec;
 
@@ -104,14 +108,12 @@ public class ShowHistoryController {
 
 	@FXML
 	private void initialize() {
-
-		fn_sess_table.setEditable(true);
 		exec = Executors.newCachedThreadPool((runnable) -> {
 			Thread t = new Thread(runnable);
 			t.setDaemon(true);
 			return t;
 		});
-
+		fn_sess_table.setEditable(true);
 		SESS_ID.setCellValueFactory(cellData -> cellData.getValue().sess_idProperty());
 		FILE_NAME.setCellValueFactory(cellData -> cellData.getValue().file_nameProperty());
 		DATE_TIME.setCellValueFactory(cellData -> cellData.getValue().date_timeProperty());
@@ -175,22 +177,13 @@ public class ShowHistoryController {
 		});
 
 		/*
-		fn_sess_table.setRowFactory(tv -> new TableRow<FN_SESS_AMRA>() {
-
-			@Override
-			public void updateItem(FN_SESS_AMRA item, boolean empty) {
-				super.updateItem(item, empty);
-				if (item == null) {
-					setStyle("");
-				} else if (item.getstatus_().equals("Рассчитан")) {
-					setStyle("");
-				} else {
-					status.setStyle("-fx-background-color: #F9E02C;");
-				}
-			}
-		});
+		 * fn_sess_table.setRowFactory(tv -> new TableRow<FN_SESS_AMRA>() {
+		 * 
+		 * @Override public void updateItem(FN_SESS_AMRA item, boolean empty) {
+		 * super.updateItem(item, empty); if (item == null) { setStyle(""); } else if
+		 * (item.getstatus_().equals("Рассчитан")) { setStyle(""); } else {
+		 * status.setStyle("-fx-background-color: #F9E02C;"); } } });
 		 */
-
 
 		/*
 		 * status.setCellFactory(column -> { return new TableCell<FN_SESS_AMRA,
@@ -208,6 +201,27 @@ public class ShowHistoryController {
 		 * currentRow.get setStyle(""); } else {
 		 * currentRow.setStyle("-fx-background-color: #F9E02C;"); } } } }; });
 		 */
+	}
+
+	// Populate Employees for TableView with MultiThreading (This is for example
+	// usage)
+	@FXML
+	private void fn_sess_search(ActionEvent event) throws SQLException, ClassNotFoundException {
+		pb.setVisible(true);
+		Task<List<FN_SESS_AMRA>> task = new Task<List<FN_SESS_AMRA>>() {
+			@Override
+			public ObservableList<FN_SESS_AMRA> call() throws Exception {
+				return TerminalDAO.srch_fn_sess(sess_id_t.getText(), trnumber.getText(), datestart.getValue(),
+						dateend.getValue());
+			}
+		};
+
+		task.setOnFailed(e -> Alert(task.getException().getMessage()));
+		task.setOnSucceeded(e -> test((ObservableList<FN_SESS_AMRA>) task.getValue()));
+
+		exec.execute(task);
+		/*-----------------------------------------*/
+
 	}
 
 	// Найти загрузки
@@ -249,6 +263,22 @@ public class ShowHistoryController {
 			alert.setContentText(e.getMessage());
 			alert.showAndWait();
 		}
+	}
+
+	public void Alert(String mes) {
+		Platform.runLater(new Runnable() {
+		    @Override
+		    public void run() {
+		    	Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText(mes);
+				alert.showAndWait();
+		    }
+		});
+		
 	}
 
 	public static void autoResizeColumns(TableView<?> table) {
@@ -298,7 +328,7 @@ public class ShowHistoryController {
 
 	// Найти загрузки
 	@FXML
-	private void fn_sess_search(ActionEvent actionEvent) {
+	private void fn_sess_search_(ActionEvent actionEvent) {
 		// Get all Employees information
 		ObservableList<FN_SESS_AMRA> empData = TerminalDAO.srch_fn_sess(sess_id_t.getText(), trnumber.getText(),
 				datestart.getValue(), dateend.getValue());
@@ -326,9 +356,34 @@ public class ShowHistoryController {
 	}
 
 	// Заполнить таблицу
-	
+
 	private void populate_fn_sess(ObservableList<FN_SESS_AMRA> trData) {
 		// Set items to the employeeTable
 		fn_sess_table.setItems(trData);
+	}
+
+	private void test(ObservableList<FN_SESS_AMRA> trData) {
+		// Set items to the employeeTable
+		fn_sess_table.setItems(trData);
+
+		autoResizeColumns(fn_sess_table);
+		status.setCellFactory(col -> new TableCell<FN_SESS_AMRA, String>() {
+			@Override
+			protected void updateItem(String item, boolean empty) {
+				super.updateItem(item, empty);
+				if (empty || item == null) {
+					setText(null);
+					setGraphic(null);
+				} else {
+					setText(item.toString());
+					if (item.equals("Рассчитан")) {
+						setStyle("");
+					} else {
+						setStyle("-fx-background-color: #F9E02C;");
+					}
+				}
+			}
+		});
+		pb.setVisible(false);
 	}
 }
