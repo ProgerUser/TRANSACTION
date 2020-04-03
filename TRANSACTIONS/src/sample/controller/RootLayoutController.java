@@ -328,6 +328,7 @@ public class RootLayoutController {
 			properties.setProperty("password", Connect.userPassword_);
 			properties.setProperty("db", Connect.connectionURL_.substring(Connect.connectionURL_.indexOf("/")+1,Connect.connectionURL_.length()));
 			properties.setProperty("pseudoConnecton","false");
+			properties.setProperty("tns_admin","J:\\dev6i\\NET80\\ADMIN");
 
 			File file = new File(System.getProperty("user.home")+"/XXI.AP_TEST_MAIN.properties");
 			file.getParentFile().mkdirs(); 

@@ -25,48 +25,48 @@
 						<TableColumn fx:id="cashamount" prefWidth="137.0" text="СуммаНаличных=CASHAMOUNT" />
 						<TableColumn fx:id="amountwithchecks" prefWidth="137.0" text="СуммаСЧеков=AMOUNTWITHCHECKS" />
 						<TableColumn fx:id="currency" prefWidth="137.0" text="Валюта=CURRENCY" />
-						<TableColumn fx:id="paymenttype" prefWidth="137.0" text="ВидПлатежа=PAYMENTTYPE" />
+						<!--<TableColumn fx:id="paymenttype" prefWidth="137.0" text="ВидПлатежа=PAYMENTTYPE" />-->
 						<TableColumn fx:id="vk" prefWidth="137.0" text="ВК=VK" />
 						<TableColumn fx:id="dateofoperation" prefWidth="137.0" text="ДатаОперации=DATEOFOPERATION" />
 						<TableColumn fx:id="dataps" prefWidth="137.0" text="ДатаПС=DATAPS" />
 						<TableColumn fx:id="dateclearing" prefWidth="137.0" text="ДатаКлиринга=DATECLEARING" />
 						<TableColumn fx:id="dealer" prefWidth="137.0" text="Дилер=DEALER" />
 						<TableColumn fx:id="accountpayer" prefWidth="137.0" text="ЛСПлательщика=ACCOUNTPAYER" />
-						<TableColumn fx:id="cardnumber" prefWidth="137.0" text="НомерКарты=CARDNUMBER" />
+						<!--<TableColumn fx:id="cardnumber" prefWidth="137.0" text="НомерКарты=CARDNUMBER" />-->
 						<TableColumn fx:id="operationnumber" prefWidth="137.0" text="НомерОперации=OPERATIONNUMBER" />
-						<TableColumn fx:id="operationnumberdelivery" prefWidth="137.0" text="НомерОперацииСдача=OPERATIONNUMBERDELIVERY" />
-						<TableColumn fx:id="orderofprovidence" prefWidth="137.0" text="ПорядокПровдения=ORDEROFPROVIDENCE" />
+						<!--<TableColumn fx:id="operationnumberdelivery" prefWidth="137.0" text="НомерОперацииСдача=OPERATIONNUMBERDELIVERY" />-->
+						<!--<TableColumn fx:id="orderofprovidence" prefWidth="137.0" text="ПорядокПровдения=ORDEROFPROVIDENCE" />-->
 						<TableColumn fx:id="owninown" prefWidth="137.0" text="СвойВСвоем=OWNINOWN" />
-						<TableColumn fx:id="corrected" prefWidth="137.0" text="Скорректирована=CORRECTED" />
-						<TableColumn fx:id="commissionrate" prefWidth="137.0" text="СтавкаКомиссии=COMMISSIONRATE" />
-						<TableColumn fx:id="stringfromfile" prefWidth="137.0" text="СтрокаИзФайла=STRINGFROMFILE" />
-						<TableColumn fx:id="rewardamount" prefWidth="137.0" text="СуммаВознаграждения=REWARDAMOUNT" />
-						<TableColumn fx:id="ownerincomeamount" prefWidth="137.0" text="СуммаДоходВладельца=OWNERINCOMEAMOUNT" />
-						<TableColumn fx:id="maxcommissionamount" prefWidth="137.0" text="СуммаКомиссииМакс=MAXCOMMISSIONAMOUNT" />
-						<TableColumn fx:id="mincommissionamount" prefWidth="137.0" text="СуммаКомиссииМин=MINCOMMISSIONAMOUNT" />
+						<!--<TableColumn fx:id="corrected" prefWidth="137.0" text="Скорректирована=CORRECTED" />-->
+						<!--<TableColumn fx:id="commissionrate" prefWidth="137.0" text="СтавкаКомиссии=COMMISSIONRATE" />-->
+						<!--<TableColumn fx:id="stringfromfile" prefWidth="137.0" text="СтрокаИзФайла=STRINGFROMFILE" />-->
+						<!--<TableColumn fx:id="rewardamount" prefWidth="137.0" text="СуммаВознаграждения=REWARDAMOUNT" />-->
+						<!--<TableColumn fx:id="ownerincomeamount" prefWidth="137.0" text="СуммаДоходВладельца=OWNERINCOMEAMOUNT" />-->
+						<!--<TableColumn fx:id="maxcommissionamount" prefWidth="137.0" text="СуммаКомиссииМакс=MAXCOMMISSIONAMOUNT" />-->
+						<!--<TableColumn fx:id="mincommissionamount" prefWidth="137.0" text="СуммаКомиссииМин=MINCOMMISSIONAMOUNT" />-->
 						<TableColumn fx:id="sumnalprimal" prefWidth="137.0" text="СуммаНалИзначальная=SUMNALPRIMAL" />
 						<TableColumn fx:id="amounttocheck" prefWidth="137.0" text="СуммаНаЧек=AMOUNTTOCHECK" />
-						<TableColumn fx:id="sumofsplitting" prefWidth="137.0" text="СуммаНаРасщепление=SUMOFSPLITTING" />
-						<TableColumn fx:id="amountintermediary" prefWidth="137.0" text="СуммаПосредника=AMOUNTINTERMEDIARY" />
-						<TableColumn fx:id="amountofscs" prefWidth="137.0" text="СуммаСКС=AMOUNTOFSCS" />
-						<TableColumn fx:id="counter" prefWidth="137.0" text="Счетчик=COUNTER" />
+						<!--<TableColumn fx:id="sumofsplitting" prefWidth="137.0" text="СуммаНаРасщепление=SUMOFSPLITTING" />-->
+						<!--<TableColumn fx:id="amountintermediary" prefWidth="137.0" text="СуммаПосредника=AMOUNTINTERMEDIARY" />-->
+						<!--<TableColumn fx:id="amountofscs" prefWidth="137.0" text="СуммаСКС=AMOUNTOFSCS" />-->
+						<!--<TableColumn fx:id="counter" prefWidth="137.0" text="Счетчик=COUNTER" />-->
 						<TableColumn fx:id="terminal" prefWidth="137.0" text="Терминал=TERMINAL" />
 						<TableColumn fx:id="terminalnetwork" prefWidth="137.0" text="ТерминальнаяСеть=TERMINALNETWORK" />
 						<TableColumn fx:id="transactiontype" prefWidth="137.0" text="ТипТранзакции=TRANSACTIONTYPE" />
 						<TableColumn fx:id="filetransactions" prefWidth="137.0" text="ФайлТранзакции=FILETRANSACTIONS" />
-						<TableColumn fx:id="fio" prefWidth="137.0" text="ФИО=FIO" />
+						<!--<TableColumn fx:id="fio" prefWidth="137.0" text="ФИО=FIO" />-->
 						<TableColumn fx:id="checksincoming" prefWidth="200" text="ЧекиВходящие=CHECKSINCOMING" />
-						<TableColumn fx:id="barcode" prefWidth="137.0" text="ШтрихКод=BARCODE" />
-						<TableColumn fx:id="isaresident" prefWidth="137.0" text="ЯвляетсяРезидентом=ISARESIDENT" />
-						<TableColumn fx:id="valuenotfound" prefWidth="137.0" text="ЗначениеНеНайдено=VALUENOTFOUND" />
-						<TableColumn fx:id="providertariff" prefWidth="137.0" text="ТарифПровайдера=PROVIDERTARIFF" />
-						<TableColumn fx:id="counterchecks" prefWidth="137.0" text="СчетчикСчеков=COUNTERCHECKS" />
-						<TableColumn fx:id="countercheck" prefWidth="137.0" text="СчетчикНаЧек=COUNTERCHECK" />
-						<TableColumn fx:id="id_" prefWidth="137.0" text="Id=ID_" />
-						<TableColumn fx:id="detailing" prefWidth="137.0" text="Деталировка=DETAILING" />
-						<TableColumn fx:id="walletpayer" prefWidth="137.0" text="КошелекПлательщик=WALLETPAYER" />
-						<TableColumn fx:id="walletreceiver" prefWidth="137.0" text="КошелекПолучатель=WALLETRECEIVER" />
-						<TableColumn fx:id="purposeofpayment" prefWidth="137.0" text="НазначениеПлатежа=PURPOSEOFPAYMENT" />
+						<!--<TableColumn fx:id="barcode" prefWidth="137.0" text="ШтрихКод=BARCODE" />-->
+						<!--<TableColumn fx:id="isaresident" prefWidth="137.0" text="ЯвляетсяРезидентом=ISARESIDENT" />-->
+						<!--<TableColumn fx:id="valuenotfound" prefWidth="137.0" text="ЗначениеНеНайдено=VALUENOTFOUND" />-->
+						<!--<TableColumn fx:id="providertariff" prefWidth="137.0" text="ТарифПровайдера=PROVIDERTARIFF" />-->
+						<!--<TableColumn fx:id="counterchecks" prefWidth="137.0" text="СчетчикСчеков=COUNTERCHECKS" />-->
+						<!--<TableColumn fx:id="countercheck" prefWidth="137.0" text="СчетчикНаЧек=COUNTERCHECK" />-->
+						<!--<TableColumn fx:id="id_" prefWidth="137.0" text="Id=ID_" />-->
+						<!--<TableColumn fx:id="detailing" prefWidth="137.0" text="Деталировка=DETAILING" />-->
+						<!--<TableColumn fx:id="walletpayer" prefWidth="137.0" text="КошелекПлательщик=WALLETPAYER" />-->
+						<!--<TableColumn fx:id="walletreceiver" prefWidth="137.0" text="КошелекПолучатель=WALLETRECEIVER" />-->
+						<!--<TableColumn fx:id="purposeofpayment" prefWidth="137.0" text="НазначениеПлатежа=PURPOSEOFPAYMENT" />-->
 						<TableColumn fx:id="dataprovider" prefWidth="137.0" text="ДатаПровайдера=DATAPROVIDER" />
 						<TableColumn fx:id="statusabs" prefWidth="137.0" text="statusabs" />
 						<TableColumn fx:id="sess_id" prefWidth="137.0" text="sess_id" />

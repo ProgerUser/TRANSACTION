@@ -11,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import sample.model.Connect;
 
 //Main class which extends from Application Class
 
@@ -38,14 +39,22 @@ public class Main extends Application {
 
 		// 3) Display the EmployeeOperations View
 		// showEmployeeView();
+		
+		/*------------*/
+		//ApMainTest t = new ApMainTest();
+		//t.showMainWindow();
+		//LoginManager lg = new LoginManager();
+		//LoginManager.login(primaryStage);
+		/*------------*/
+		
+		
+		//Enter();
 
-		Enter();
-/*
 		Connect.connectionURL_ = "10.111.64.21:1521/odb";
 		Connect.userID_ = "XXI";
 		Connect.userPassword_ = "man9o";
 		showFirst();
-*/
+
 		primaryStage.setOnCloseRequest(e->{
 			File file = new File(System.getProperty("user.home")+"/XXI.AP_TEST_MAIN.properties");
 			file.delete();
