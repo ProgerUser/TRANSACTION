@@ -321,39 +321,45 @@ public class RootLayoutController {
 		/*При каждом вызове происходит создание файла с паролем,логином и базой, при закрытии удаляется
 		 *Хоть так :)
 		 **/
-		
+		/*
 		try {
 			Properties properties = new Properties();
 			properties.setProperty("login", Connect.userID_);
 			properties.setProperty("password", Connect.userPassword_);
 			properties.setProperty("db", Connect.connectionURL_.substring(Connect.connectionURL_.indexOf("/")+1,Connect.connectionURL_.length()));
 			properties.setProperty("pseudoConnecton","false");
-			properties.setProperty("tns_admin","J:\\dev6i\\NET80\\ADMIN");
+			properties.setProperty("tns_admin","J:/dev6i/NET80/ADMIN");
 
 			File file = new File(System.getProperty("user.home")+"/XXI.AP_TEST_MAIN.properties");
 			file.getParentFile().mkdirs(); 
 			file.createNewFile();
 			FileOutputStream fileOut = new FileOutputStream(file);
-			properties.store(fileOut, "Параметры подключения для Печати");
+			properties.store(fileOut, "Parametry dlia pechati");
 			fileOut.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		*/
 		
 		/*Вызов jar файла из cmd и другого процесса, вынужденная мера, больше никак не получается вызвать FXBicomp*/
 		ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c",
-				"java -jar "+System.getenv("TRANSACT_PATH")+"/AP_MAIN.jar 666 1");
+				"java -jar " + System.getenv("TRANSACT_PATH") + "/AP.jar 666 1 1 no " + Connect.userID_ + " "
+						+ Connect.userPassword_ + " " + Connect.connectionURL_
+								.substring(Connect.connectionURL_.indexOf("/") + 1, Connect.connectionURL_.length())
+						+ " J:\\dev6i\\NET80\\ADMIN");
 		builder.redirectErrorStream(true);
 		Process p = builder.start();
 		BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        String line;
-        while (true) {
-            line = r.readLine();
-            if (line == null) { break; }
-            System.out.println(line);
-        }
+		String line;
+		while (true) {
+			line = r.readLine();
+			if (line == null) {
+				break;
+			}
+			System.out.println(line);
+		}
 	}
 
 	@FXML

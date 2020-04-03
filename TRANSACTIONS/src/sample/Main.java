@@ -55,6 +55,7 @@ public class Main extends Application {
 		Connect.userPassword_ = "man9o";
 		showFirst();
 
+		/*
 		primaryStage.setOnCloseRequest(e->{
 			File file = new File(System.getProperty("user.home")+"/XXI.AP_TEST_MAIN.properties");
 			file.delete();
@@ -62,6 +63,7 @@ public class Main extends Application {
 			Platform.exit();
 			System.exit(0);
 			});
+			*/
 		//this.primaryStage.setMaximized(true);
 	}
 
