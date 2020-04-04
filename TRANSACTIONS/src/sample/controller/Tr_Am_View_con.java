@@ -1506,11 +1506,12 @@ public class Tr_Am_View_con {
 				@Override
 				public  Object call() throws Exception {
 					try {
-						ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", "java -jar "
+						ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", "start javaw -splash:"+System.getenv("TRANSACT_PATH")+"SPLASH/splash.gif -jar "
 								+ System.getenv("TRANSACT_PATH") + "/AP.jar 666 2 " + fn.get_checknumber() + " no "
 								+ Connect.userID_ + " " + Connect.userPassword_ + " " + Connect.connectionURL_
 										.substring(Connect.connectionURL_.indexOf("/") + 1, Connect.connectionURL_.length())
 								+ " J:\\dev6i\\NET80\\ADMIN");
+						
 						builder.redirectErrorStream(true);
 						Process p;
 						p = builder.start();
@@ -1534,7 +1535,12 @@ public class Tr_Am_View_con {
 			task.setOnSucceeded(e ->pb.setVisible(false) );
 
 			exec.execute(task);
-			
+
+			System.out.println("start javaw -splash:"+System.getenv("TRANSACT_PATH")+"SPLASH/splash.gif -jar "
+					+ System.getenv("TRANSACT_PATH") + "/AP.jar 666 2 " + fn.get_checknumber() + " no "
+					+ Connect.userID_ + " " + Connect.userPassword_ + " " + Connect.connectionURL_
+							.substring(Connect.connectionURL_.indexOf("/") + 1, Connect.connectionURL_.length())
+					+ " J:\\dev6i\\NET80\\ADMIN");
 			/*
 			Runnable task = () -> {
 				try {

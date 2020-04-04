@@ -123,7 +123,7 @@ public class EnterController {
 			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("U146")
 					| Connect.userID_.equals("AMRA_IMPORT")) {
 				Stage stage_ = (Stage) enter_id.getScene().getWindow();
-				stage_.setMaximized(true);
+				//stage_.setMaximized(true);
 
 				stage_.setTitle(Connect.userID_ + "@"+Connect.connectionURL_);
 

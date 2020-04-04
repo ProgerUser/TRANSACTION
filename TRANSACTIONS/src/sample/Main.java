@@ -5,7 +5,6 @@ import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -39,8 +38,8 @@ public class Main extends Application {
 		// 3) Display the EmployeeOperations View
 		// showEmployeeView();
 
-		if (Connect.userID_ != "") {
-			primaryStage.setMaximized(true);
+		if (Connect.userID_ != null) {
+			//primaryStage.setMaximized(true);
 			primaryStage.setTitle(Connect.userID_ + "@"+Connect.connectionURL_);
 			Main.showFirst();
 		}

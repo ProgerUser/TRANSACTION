@@ -44,7 +44,6 @@ import sample.model.ViewerDAO;
 @SuppressWarnings("unused")
 public class RootLayoutController {
 
-	
 	private Executor exec;
 	/*
 	 * //Reference to the main application private Main main;
@@ -66,7 +65,7 @@ public class RootLayoutController {
 
 	@FXML
 	void handleExit(ActionEvent event) {
-		File file = new File(System.getProperty("user.home")+"/XXI.AP_TEST_MAIN.properties");
+		File file = new File(System.getProperty("user.home") + "/XXI.AP_TEST_MAIN.properties");
 		file.delete();
 		System.out.print("------------------------------------------------------");
 		Platform.exit();
@@ -324,40 +323,40 @@ public class RootLayoutController {
 
 	@FXML
 	void ap_print(ActionEvent event) throws Exception {
-		/*При каждом вызове происходит создание файла с паролем,логином и базой, при закрытии удаляется
-		 *Хоть так :)
+		/*
+		 * При каждом вызове происходит создание файла с паролем,логином и базой, при
+		 * закрытии удаляется Хоть так :)
 		 **/
 		/*
-		try {
-			Properties properties = new Properties();
-			properties.setProperty("login", Connect.userID_);
-			properties.setProperty("password", Connect.userPassword_);
-			properties.setProperty("db", Connect.connectionURL_.substring(Connect.connectionURL_.indexOf("/")+1,Connect.connectionURL_.length()));
-			properties.setProperty("pseudoConnecton","false");
-			properties.setProperty("tns_admin","J:/dev6i/NET80/ADMIN");
-
-			File file = new File(System.getProperty("user.home")+"/XXI.AP_TEST_MAIN.properties");
-			file.getParentFile().mkdirs(); 
-			file.createNewFile();
-			FileOutputStream fileOut = new FileOutputStream(file);
-			properties.store(fileOut, "Parametry dlia pechati");
-			fileOut.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		*/
-		/*Вызов jar файла из cmd и другого процесса, вынужденная мера, больше никак не получается вызвать FXBicomp*/
+		 * try { Properties properties = new Properties();
+		 * properties.setProperty("login", Connect.userID_);
+		 * properties.setProperty("password", Connect.userPassword_);
+		 * properties.setProperty("db",
+		 * Connect.connectionURL_.substring(Connect.connectionURL_.indexOf("/")+1,
+		 * Connect.connectionURL_.length()));
+		 * properties.setProperty("pseudoConnecton","false");
+		 * properties.setProperty("tns_admin","J:/dev6i/NET80/ADMIN");
+		 * 
+		 * File file = new
+		 * File(System.getProperty("user.home")+"/XXI.AP_TEST_MAIN.properties");
+		 * file.getParentFile().mkdirs(); file.createNewFile(); FileOutputStream fileOut
+		 * = new FileOutputStream(file); properties.store(fileOut,
+		 * "Parametry dlia pechati"); fileOut.close(); } catch (FileNotFoundException e)
+		 * { e.printStackTrace(); } catch (IOException e) { e.printStackTrace(); }
+		 */
+		/*
+		 * Вызов jar файла из cmd и другого процесса, вынужденная мера, больше никак не
+		 * получается вызвать FXBicomp
+		 */
 		Task<Object> task = new Task<Object>() {
 			@Override
-			public  Object call() throws Exception {
+			public Object call() throws Exception {
 				try {
-					ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c",
-							"java -jar " + System.getenv("TRANSACT_PATH") + "/AP.jar 666 1 1 no " + Connect.userID_ + " "
-									+ Connect.userPassword_ + " " + Connect.connectionURL_
-											.substring(Connect.connectionURL_.indexOf("/") + 1, Connect.connectionURL_.length())
-									+ " J:\\dev6i\\NET80\\ADMIN");
+					ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", "start javaw -splash:"+System.getenv("TRANSACT_PATH")+"SPLASH/splash.gif -jar "
+							+ System.getenv("TRANSACT_PATH") + "/AP.jar 666 1 1 no "
+							+ Connect.userID_ + " " + Connect.userPassword_ + " " + Connect.connectionURL_
+									.substring(Connect.connectionURL_.indexOf("/") + 1, Connect.connectionURL_.length())
+							+ " J:\\dev6i\\NET80\\ADMIN");
 					builder.redirectErrorStream(true);
 					Process p;
 					p = builder.start();
@@ -378,7 +377,7 @@ public class RootLayoutController {
 			}
 		};
 		task.setOnFailed(e -> Alert(task.getException().getMessage()));
-		//task.setOnSucceeded(e -> );
+		// task.setOnSucceeded(e -> );
 
 		exec.execute(task);
 	}
@@ -392,6 +391,7 @@ public class RootLayoutController {
 		alert.setContentText("Выберите сначала данные из таблицы!");
 		alert.showAndWait();
 	}
+
 	@FXML
 	void service(ActionEvent event) {
 		try {
