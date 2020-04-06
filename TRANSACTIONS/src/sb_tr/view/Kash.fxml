@@ -9,7 +9,7 @@
 	maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
 	prefHeight="649.0" prefWidth="1017.0" stylesheets="@../../transact.css"
 	xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="sample.controller.KashController">
+	fx:controller="sb_tr.controller.KashController">
 	<children>
 		<Button fx:id="pseudo" layoutX="17.0" layoutY="24.0"
 			mnemonicParsing="false" onAction="#create_psevdo" prefHeight="35.0"

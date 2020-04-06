@@ -11,7 +11,7 @@
 <BorderPane fx:id="ap" prefHeight="670.0" prefWidth="1030.0"
 	stylesheets="@../../borderpane.css" xmlns="http://javafx.com/javafx/8"
 	xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="sample.controller.EnterController">
+	fx:controller="sb_tr.controller.EnterController">
 	<!-- TODO Add Nodes -->
 	<center>
 		<GridPane>

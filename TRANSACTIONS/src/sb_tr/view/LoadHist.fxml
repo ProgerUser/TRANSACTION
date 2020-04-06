@@ -9,7 +9,7 @@
 	minHeight="-Infinity" minWidth="-Infinity" prefHeight="649.0"
 	prefWidth="1017.0" xmlns:fx="http://javafx.com/fxml/1"
 	xmlns="http://javafx.com/javafx/2.2"
-	fx:controller="sample.controller.ShowHistoryController">
+	fx:controller="sb_tr.controller.ShowHistoryController">
 	<children>
 		<TextField fx:id="fio" layoutX="240.0" layoutY="45.0"
 			prefHeight="32.0" prefWidth="198.0" promptText="\%формат%" />
