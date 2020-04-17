@@ -13,7 +13,7 @@ public class Main extends Application {
 	public static String id_card;
 	public static String db_;
 	public static String user_;
-	public static String pass = "ver8i";
+	public static String pass = "man9o";
 
 	@Override
 	public void start(Stage primaryStage) {
