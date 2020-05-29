@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane fx:id="ap" prefHeight="649.0" prefWidth="1017.0"
+	stylesheets="@../../borderpane.css" xmlns="http://javafx.com/javafx/8"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="sb_tr.controller.Amra_Transact">
+	<center>
+
+	</center>
+	<left>
+		<AnchorPane prefHeight="455.0" prefWidth="17.0"
+			BorderPane.alignment="CENTER" />
+	</left>
+	<bottom>
+		<AnchorPane prefHeight="17.0" prefWidth="1008.0"
+			BorderPane.alignment="CENTER" />
+	</bottom>
+	<center>
+
+	</center>
+	<center>
+		<GridPane prefHeight="555.0" prefWidth="598.0"
+			BorderPane.alignment="CENTER">
+			<children>
+				<TableView fx:id="load_file" prefHeight="466.0"
+					prefWidth="983.0" stylesheets="transact.css"
+					tableMenuButtonVisible="true" BorderPane.alignment="CENTER"
+					GridPane.columnIndex="0" GridPane.columnSpan="1"
+					GridPane.hgrow="ALWAYS" GridPane.rowIndex="0"
+					GridPane.vgrow="ALWAYS">
+					<columns>
+						<TableColumn fx:id="FileName" prefWidth="149.0"
+							text="Имя файла" />
+						<TableColumn fx:id="StatusFile" prefWidth="132.0"
+							text="Статус файла" />
+						<TableColumn fx:id="DateFile" prefWidth="128.0"
+							text="Дата" />
+						<TableColumn fx:id="UserFile" prefWidth="120.0"
+							text="Пользователь" />
+						<TableColumn fx:id="IdFile" text="ИД файл" />
+						<TableColumn fx:id="PathFile" prefWidth="98.0"
+							text="Путь загрузки" />
+					</columns>
+				</TableView>
+			</children>
+			<columnConstraints>
+				<ColumnConstraints />
+			</columnConstraints>
+			<rowConstraints>
+				<RowConstraints />
+			</rowConstraints>
+		</GridPane>
+	</center>
+	<top>
+		<AnchorPane fx:id="ap" prefHeight="86.0" prefWidth="1017.0"
+			stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER">
+			<children>
+				<Button fx:id="browse" disable="false" layoutX="14.0"
+					layoutY="24.0" mnemonicParsing="false" onAction="#Choose"
+					prefHeight="35" prefWidth="35" stylesheets="@../../borderpane.css">
+					<tooltip>
+						<Tooltip text="Добавить файл" />
+					</tooltip>
+				</Button>
+
+				<Button id="import" fx:id="import_" disable="false"
+					layoutX="71.0" layoutY="24.0" mnemonicParsing="false"
+					onAction="#Load_Transact" prefHeight="35" prefWidth="35">
+					<tooltip>
+						<Tooltip text="Разобрать файл" />
+					</tooltip>
+				</Button>
+				<Button id="calc" fx:id="calc" layoutX="133.0" layoutY="24.0"
+					mnemonicParsing="false" onAction="#Calc_Transact" prefHeight="35"
+					prefWidth="35">
+					<tooltip>
+						<Tooltip text="Сформировать проводки" />
+					</tooltip>
+				</Button>
+				<Text layoutX="250.0" layoutY="22.0" strokeType="OUTSIDE"
+					strokeWidth="0.0" text="Дата загрузки" />
+				<DatePicker fx:id="date_load" layoutX="250.0"
+					layoutY="24.0" onAction="#view_fn" prefHeight="35.0"
+					prefWidth="100.0" />
+				<Text layoutX="19.0" layoutY="79.0" strokeType="OUTSIDE"
+					strokeWidth="0.0" text="Загруженные файлы" />
+				<Button id="del" fx:id="delete_log" layoutX="192.0"
+					layoutY="24.0" mnemonicParsing="false" onAction="#del_log"
+					prefHeight="35" prefWidth="35">
+					<tooltip>
+						<Tooltip text="Удалить лог" />
+					</tooltip>
+				</Button>
+				<ProgressIndicator fx:id="progress"
+					layoutX="919.0" layoutY="17.0" prefHeight="52.0" prefWidth="84.0"
+					visible="false" />
+			</children>
+		</AnchorPane>
+	</top>
+	<right>
+		<AnchorPane prefHeight="546.0" prefWidth="17.0"
+			BorderPane.alignment="CENTER" />
+	</right>
+</BorderPane>

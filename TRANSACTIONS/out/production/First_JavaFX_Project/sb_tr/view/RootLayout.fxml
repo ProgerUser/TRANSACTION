@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity"
+	minHeight="-Infinity" minWidth="-Infinity" prefHeight="721.0"
+	prefWidth="1030.0" xmlns="http://javafx.com/javafx/8"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="sb_tr.controller.RootLayoutController">
+	<top>
+		<MenuBar prefHeight="29.0" prefWidth="688.0"
+			BorderPane.alignment="CENTER">
+			<menus>
+				<Menu mnemonicParsing="false" text="Файл">
+					<items>
+						<MenuItem mnemonicParsing="false" onAction="#handleExit"
+							text="Close" />
+					</items>
+				</Menu>
+				<!--<Menu mnemonicParsing="false" text="Терминалы Квант-Капитал"> <items> 
+					<MenuItem mnemonicParsing="false" onAction="#loadtransact" text="Загрузка 
+					транзакции" /> <MenuItem mnemonicParsing="false" onAction="#chektransact" 
+					text="Печать чеков" /> </items> </Menu> -->
+				<Menu mnemonicParsing="false" text="Кассовый офис">
+					<items>
+						<MenuItem mnemonicParsing="false" onAction="#Kash"
+							text="Сформировать псевдоним" />
+						<!--<MenuItem mnemonicParsing="false" onAction="#Kash" text="Загрузить 
+							EXCEL с шаблоном" /> -->
+					</items>
+				</Menu>
+				<Menu mnemonicParsing="false" text="Терминалы Амра">
+					<items>
+						<MenuItem mnemonicParsing="false" onAction="#amra_trans"
+							text="Загрузка Транзакции" />
+						<MenuItem mnemonicParsing="false" onAction="#loadhistory"
+							text="История загрузок" />
+						<MenuItem mnemonicParsing="false" onAction="#term_view"
+							text="Загруженные транзакции" />
+						<MenuItem mnemonicParsing="false"
+							onAction="#Termdial_view" text="Сдачи" />
+						<MenuItem mnemonicParsing="false" onAction="#termview"
+							text="Терминалы" />
+						<MenuItem mnemonicParsing="false" onAction="#service"
+							text="Сервисы" />
+						<MenuItem mnemonicParsing="false" onAction="#ap_print"
+							text="Печать" />
+					</items>
+				</Menu>
+				<Menu mnemonicParsing="false" text="Помощь">
+					<items>
+						<MenuItem mnemonicParsing="false" onAction="#handleHelp"
+							text="About" />
+						<MenuItem mnemonicParsing="false" onAction="#DBCONNECT"
+							text="DBCONNECT" />
+					</items>
+				</Menu>
+				<Menu fx:id="statusbar" mnemonicParsing="false" text="">
+				</Menu>
+			</menus>
+		</MenuBar>
+	</top>
+</BorderPane>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="css"/>
 	<classpathentry kind="src" path="png"/>
@@ -95,10 +94,11 @@
 	<classpathentry kind="lib" path="D:/Users/saidp/git/TRANSACTION/TRANSACTIONS/lib/JasperLib/jasperreports-6.10.0.jar"/>
 	<classpathentry kind="lib" path="D:/Users/saidp/git/TRANSACTION/TRANSACTIONS/lib/commons-net-3.6.jar"/>
 	<classpathentry kind="lib" path="D:/Users/saidp/Desktop/JAR/controlsfx-8.40.12.jar"/>
-	<classpathentry exported="true" kind="con" path="net.sf.jasperreports.JR_CONTAINER"/>
-	<classpathentry exported="true" kind="con" path="com.jaspersoft.server.JRS_CONTAINER"/>
+	<classpathentry kind="con" path="net.sf.jasperreports.JR_CONTAINER"/>
+	<classpathentry kind="con" path="com.jaspersoft.server.JRS_CONTAINER"/>
 	<classpathentry kind="lib" path="D:/Users/saidp/Downloads/joda-time-2.10.5.jar"/>
-	<classpathentry kind="lib" path="D:/Users/saidp/Desktop/jacob-1.14.3.jar"/>
+	<classpathentry kind="lib" path="D:/Users/saidp/Desktop/JAR/jacob-1.14.3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_231"/>
 	<classpathentry kind="output" path="out/production/First_JavaFX_Project"/>
 </classpath>
