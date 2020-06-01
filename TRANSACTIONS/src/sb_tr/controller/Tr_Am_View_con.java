@@ -27,6 +27,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TableView.ResizeFeatures;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
@@ -52,6 +53,7 @@ import java.util.Random;
 import java.util.function.Function;
 
 import javafx.application.Application;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -103,6 +105,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -125,7 +128,10 @@ public class Tr_Am_View_con {
 
 	@FXML
 	private CheckBox inkass;
-
+	
+	@FXML
+    private TableColumn<Amra_Trans, String> chk_row;
+	
 	@FXML
 	private TableColumn<Amra_Trans, String> fio;
 
@@ -216,6 +222,9 @@ public class Tr_Am_View_con {
 	@FXML
 	private TableColumn<Amra_Trans, String> paydate;
 
+	  @FXML
+	    private TextField summa_plat;
+	  
 	@FXML
 	private TableColumn<Amra_Trans, String> ownerincomeamount;
 
@@ -329,7 +338,7 @@ public class Tr_Am_View_con {
 			t.setDaemon(true);
 			return t;
 		});
-
+		chk_row.setCellValueFactory(cellData -> cellData.getValue().chk_rowProperty());
 		rownum.setCellValueFactory(cellData -> cellData.getValue().rownumProperty());
 		recdate.setCellValueFactory(cellData -> cellData.getValue().recdateProperty());
 		paydate.setCellValueFactory(cellData -> cellData.getValue().paydateProperty());
@@ -1766,6 +1775,62 @@ public class Tr_Am_View_con {
 		trans_table.setItems(trData);
 	}
 
+	public int cnt = 0;
+	public double all_sum = 0;
+	@FXML
+	void chk_all(ActionEvent event) {
+
+		chk_row.setCellFactory(list -> {
+			TextFieldTableCell<Amra_Trans, String> cell = new TextFieldTableCell<Amra_Trans, String>() {
+				@Override
+				public void updateItem(String item, boolean empty) {
+					super.updateItem("\u2713", empty);
+				}
+			};
+			/* cnt = cnt+1; */
+			//System.out.println(cnt++);
+			return cell;
+		});
+		
+		// cnt = 0;
+		
+		trans_table.getColumns().stream().forEach((column) -> {
+			if (column.getText().equals("СуммаПлатежа=AMOUNTOFPAYMENT")) {
+				for (int i = 0; i < trans_table.getItems().size(); i++) {
+					if (column.getCellData(i) != null) {
+						//System.out.println(Double.parseDouble(column.getCellData(i).toString()));
+						all_sum = all_sum + Double.parseDouble(column.getCellData(i).toString());
+					}
+				}
+			}
+		});
+		String pattern = "###,###.###";
+		DecimalFormat decimalFormat = new DecimalFormat(pattern);
+
+		String format = decimalFormat.format(all_sum);
+		System.out.println(format);
+		summa_plat.setText(String.valueOf(format));
+		all_sum = 0;
+	}
+
+	@FXML
+	void chk_one(ActionEvent event) {
+		trans_table.getSelectionModel().getSelectedItem().set_chk_row("\u2713");
+	}
+    @FXML
+    void unchk_all(ActionEvent event) {
+		chk_row.setCellFactory(list -> {
+			TextFieldTableCell<Amra_Trans, String> cell = new TextFieldTableCell<Amra_Trans, String>() {
+				@Override
+				public void updateItem(String item, boolean empty) {
+					super.updateItem("", empty);
+				}
+			};
+			return cell;
+		});
+		summa_plat.setText("");
+    }
+    
 	@FXML
 	private void view_unpivot(ActionEvent actionEvent) {
 		try {

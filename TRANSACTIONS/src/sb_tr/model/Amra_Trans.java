@@ -7,6 +7,7 @@ import javafx.beans.property.StringProperty;
 public class Amra_Trans {
 
     //private SimpleObjectProperty<Date> paydate;
+	private StringProperty chk_row;
 	private StringProperty rownum;
 	private StringProperty recdate;
 	private StringProperty paydate;
@@ -70,7 +71,7 @@ public class Amra_Trans {
 	// Constructor
 	public Amra_Trans() {
 		
-		
+		this.chk_row = new SimpleStringProperty();
 		this.rownum = new SimpleStringProperty();
 		this.recdate = new SimpleStringProperty();
 		//this.paydate = new SimpleObjectProperty<>();
@@ -134,6 +135,9 @@ public class Amra_Trans {
 
 	}
 
+	public String get_chk_row() {
+		return chk_row.get();
+	}
 	public String get_recdate() {
 		return recdate.get();
 	}
@@ -373,6 +377,10 @@ public class Amra_Trans {
 		return sess_id.get();
 	}
 
+	public void set_chk_row(String chk_row) {
+		this.chk_row.set(chk_row);
+	}
+	
 	public void set_recdate(String recdate) {
 		this.recdate.set(recdate);
 	}
@@ -623,8 +631,11 @@ public class Amra_Trans {
 //    public SimpleObjectProperty<Date> paydateProperty(){
 //        return paydate;
 //    }
+	
 
-
+	public StringProperty chk_rowProperty() {
+		return chk_row;
+	}
 	public StringProperty currencyProperty() {
 		return currency;
 	}
@@ -851,6 +862,11 @@ public class Amra_Trans {
 
 	public StringProperty rownumProperty() {
 		return rownum;
+	}
+
+	public Object setChecked(Boolean isSelected) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
