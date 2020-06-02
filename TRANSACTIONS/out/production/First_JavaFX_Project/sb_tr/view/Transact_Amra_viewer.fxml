@@ -11,7 +11,7 @@
 			<children>
 				<TableView fx:id="trans_table" layoutX="14.0" prefWidth="994.0" styleClass="mylistview" stylesheets="@../../transact.css" tableMenuButtonVisible="true" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS">
 					<columns>
-					    <TableColumn fx:id="chk_row" prefWidth="137.0" text="Выбор" />
+						<TableColumn fx:id="chk_row" prefWidth="137.0" text="Выбор" />
 						<TableColumn fx:id="rownum" prefWidth="137.0" text="Номер строки" />
 						<TableColumn fx:id="recdate" prefWidth="137.0" text="Дата Загрузки" />
 						<TableColumn fx:id="paydate" prefWidth="137.0" text="Дата Платежа" />
@@ -108,7 +108,7 @@
 		</GridPane>
 	</center>
 	<top>
-		<AnchorPane fx:id="anch_b4" prefHeight="98.0" prefWidth="1017.0" stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER">
+		<AnchorPane fx:id="anch_b4" prefHeight="119.0" prefWidth="1017.0" stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER">
 			<children>
 				<Button fx:id="attributes" layoutX="735.0" layoutY="31.0" mnemonicParsing="false" onAction="#view_attr" prefHeight="35.0" prefWidth="35.0">
 					<tooltip>
@@ -129,7 +129,7 @@
 						<Tooltip text="Поиск" />
 					</tooltip>
 				</Button>
-				<TextField fx:id="id_sess" layoutX="253.0" layoutY="31.0" prefHeight="35.0" prefWidth="99.0">
+				<TextField fx:id="id_sess" layoutX="253.0" layoutY="31.0" prefHeight="35.0" prefWidth="100.0">
 					<font>
 						<Font size="14.0" />
 					</font>
@@ -140,7 +140,7 @@
 						<Tooltip text="Показать транзакцию" />
 					</tooltip>
 				</Button>
-				<CheckBox fx:id="inkass" layoutX="363.0" layoutY="75.0" mnemonicParsing="false" text="Инкассация" />
+				<CheckBox fx:id="inkass" layoutX="370.0" layoutY="92.0" mnemonicParsing="false" text="Инкассация" />
 				<ProgressIndicator fx:id="pb" layoutX="147.0" layoutY="68.0" prefHeight="32.0" prefWidth="53.0" visible="false" />
 				<TextField fx:id="FIO" layoutX="364.0" layoutY="31.0" prefHeight="35.0" prefWidth="243.0" promptText="\%...%">
 					<font>
@@ -159,19 +159,28 @@
 					</tooltip>
 				</Button>
 				<ProgressIndicator fx:id="pb" layoutX="951.0" layoutY="22.0" visible="false" />
-            <Button layoutX="18.0" layoutY="71.0" mnemonicParsing="false" onAction="#chk_all" prefHeight="25.0" prefWidth="44.0" text="VVV" />
-            <Button layoutX="68.0" layoutY="71.0" mnemonicParsing="false" onAction="#unchk_all" prefHeight="25.0" prefWidth="44.0" text="OOO" />
-            <TextField fx:id="summa_plat" layoutX="135.0" layoutY="71.0" prefHeight="25.0" prefWidth="120.0" />
+				<Button layoutX="18.0" layoutY="88.0" mnemonicParsing="false" onAction="#chk_all" prefHeight="25.0" prefWidth="44.0" text="VVV">
+					<tooltip>
+						<Tooltip text="Отметить все" />
+					</tooltip>
+				</Button>
+				<Button layoutX="74.0" layoutY="88.0" mnemonicParsing="false" onAction="#unchk_all" prefHeight="25.0" prefWidth="44.0" text="OOO">
+					<tooltip>
+						<Tooltip text="Убрать пометки" />
+					</tooltip>
+				</Button>
+				<TextField fx:id="summa_plat" layoutX="135.0" layoutY="88.0" prefHeight="25.0" prefWidth="100.0" />
+            <TextField fx:id="cnt_all_" layoutX="253.0" layoutY="88.0" prefHeight="25.0" prefWidth="100.0" />
 			</children>
 		</AnchorPane>
 	</top>
 	<left>
-		<AnchorPane fx:id="anch_b7" prefHeight="455.0" prefWidth="17.0" BorderPane.alignment="CENTER" />
+		<AnchorPane fx:id="anch_b7" prefHeight="455.0" prefWidth="17.0" stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER" />
 	</left>
 	<right>
-		<AnchorPane fx:id="anch_b8" prefHeight="455.0" prefWidth="17.0" BorderPane.alignment="CENTER" />
+		<AnchorPane fx:id="anch_b8" prefHeight="455.0" prefWidth="17.0" stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER" />
 	</right>
 	<bottom>
-		<AnchorPane fx:id="anch_b9" prefHeight="17.0" prefWidth="1008.0" BorderPane.alignment="CENTER" />
+		<AnchorPane fx:id="anch_b9" prefHeight="17.0" prefWidth="1008.0" stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER" />
 	</bottom>
 </BorderPane>

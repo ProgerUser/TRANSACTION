@@ -222,8 +222,11 @@ public class Tr_Am_View_con {
 	@FXML
 	private TableColumn<Amra_Trans, String> paydate;
 
-	  @FXML
-	    private TextField summa_plat;
+	@FXML
+	private TextField summa_plat;
+	
+	@FXML
+	private TextField cnt_all_;
 	  
 	@FXML
 	private TableColumn<Amra_Trans, String> ownerincomeamount;
@@ -1681,15 +1684,21 @@ public class Tr_Am_View_con {
 				return cell;
 			});
 		};
+		
 		Thread thread = new Thread(task);
 		thread.start();
+		/*
 		Runnable task_ = () -> {
-			@SuppressWarnings("deprecation")
-			TableFilter<Amra_Trans> filter = new TableFilter<>(trans_table);
+			TableFilter.forTableView(trans_table).apply();
 		};
 		Thread thread_ = new Thread(task_);
 		thread_.start();
-
+		*/
+		Platform.runLater(new Runnable() {
+            @Override public void run() {
+            	TableFilter.forTableView(trans_table).apply();
+            }
+        });
 		pb.setVisible(false);
 	}
 
@@ -1776,10 +1785,11 @@ public class Tr_Am_View_con {
 	}
 
 	public int cnt = 0;
+	
 	public double all_sum = 0;
+	
 	@FXML
 	void chk_all(ActionEvent event) {
-
 		chk_row.setCellFactory(list -> {
 			TextFieldTableCell<Amra_Trans, String> cell = new TextFieldTableCell<Amra_Trans, String>() {
 				@Override
@@ -1787,19 +1797,16 @@ public class Tr_Am_View_con {
 					super.updateItem("\u2713", empty);
 				}
 			};
-			/* cnt = cnt+1; */
-			//System.out.println(cnt++);
 			return cell;
 		});
-		
-		// cnt = 0;
-		
+
 		trans_table.getColumns().stream().forEach((column) -> {
 			if (column.getText().equals("СуммаПлатежа=AMOUNTOFPAYMENT")) {
 				for (int i = 0; i < trans_table.getItems().size(); i++) {
 					if (column.getCellData(i) != null) {
-						//System.out.println(Double.parseDouble(column.getCellData(i).toString()));
+						/* System.out.println(Double.parseDouble(column.getCellData(i).toString())); */
 						all_sum = all_sum + Double.parseDouble(column.getCellData(i).toString());
+						cnt = cnt + 1;
 					}
 				}
 			}
@@ -1808,9 +1815,11 @@ public class Tr_Am_View_con {
 		DecimalFormat decimalFormat = new DecimalFormat(pattern);
 
 		String format = decimalFormat.format(all_sum);
-		System.out.println(format);
+		/* System.out.println(format); */
+		cnt_all_.setText(String.valueOf(cnt));
 		summa_plat.setText(String.valueOf(format));
 		all_sum = 0;
+		cnt = 0;
 	}
 
 	@FXML
@@ -1829,6 +1838,7 @@ public class Tr_Am_View_con {
 			return cell;
 		});
 		summa_plat.setText("");
+		cnt_all_.setText("");
     }
     
 	@FXML
