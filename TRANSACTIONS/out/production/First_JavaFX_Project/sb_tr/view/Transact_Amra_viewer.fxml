@@ -108,7 +108,7 @@
 		</GridPane>
 	</center>
 	<top>
-		<AnchorPane fx:id="anch_b4" prefHeight="119.0" prefWidth="1017.0" stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER">
+		<AnchorPane fx:id="anch_b4" prefHeight="128.0" prefWidth="1017.0" stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER">
 			<children>
 				<Button fx:id="attributes" layoutX="735.0" layoutY="31.0" mnemonicParsing="false" onAction="#view_attr" prefHeight="35.0" prefWidth="35.0">
 					<tooltip>
@@ -140,7 +140,7 @@
 						<Tooltip text="Показать транзакцию" />
 					</tooltip>
 				</Button>
-				<CheckBox fx:id="inkass" layoutX="370.0" layoutY="92.0" mnemonicParsing="false" text="Инкассация" />
+				<CheckBox fx:id="inkass" layoutX="627.0" layoutY="102.0" mnemonicParsing="false" text="Инкассация" />
 				<ProgressIndicator fx:id="pb" layoutX="147.0" layoutY="68.0" prefHeight="32.0" prefWidth="53.0" visible="false" />
 				<TextField fx:id="FIO" layoutX="364.0" layoutY="31.0" prefHeight="35.0" prefWidth="243.0" promptText="\%...%">
 					<font>
@@ -159,18 +159,22 @@
 					</tooltip>
 				</Button>
 				<ProgressIndicator fx:id="pb" layoutX="951.0" layoutY="22.0" visible="false" />
-				<Button layoutX="18.0" layoutY="88.0" mnemonicParsing="false" onAction="#chk_all" prefHeight="25.0" prefWidth="44.0" text="VVV">
+				<Button layoutX="16.0" layoutY="98.0" mnemonicParsing="false" onAction="#chk_all" prefHeight="25.0" prefWidth="44.0" text="VVV">
 					<tooltip>
 						<Tooltip text="Отметить все" />
 					</tooltip>
 				</Button>
-				<Button layoutX="74.0" layoutY="88.0" mnemonicParsing="false" onAction="#unchk_all" prefHeight="25.0" prefWidth="44.0" text="OOO">
+				<Button layoutX="72.0" layoutY="98.0" mnemonicParsing="false" onAction="#unchk_all" prefHeight="25.0" prefWidth="44.0" text="OOO">
 					<tooltip>
 						<Tooltip text="Убрать пометки" />
 					</tooltip>
 				</Button>
-				<TextField fx:id="summa_plat" layoutX="135.0" layoutY="88.0" prefHeight="25.0" prefWidth="100.0" />
-            <TextField fx:id="cnt_all_" layoutX="253.0" layoutY="88.0" prefHeight="25.0" prefWidth="100.0" />
+				<TextField fx:id="summa_plat" layoutX="133.0" layoutY="98.0" prefHeight="25.0" prefWidth="100.0" />
+            <TextField fx:id="cnt_all_" layoutX="251.0" layoutY="98.0" prefHeight="25.0" prefWidth="100.0" />
+            <ComboBox fx:id="terminal_name" editable="true" layoutX="362.0" layoutY="98.0" prefHeight="25.0" prefWidth="100.0" />
+            <Label layoutX="133.0" layoutY="77.0" text="Сумма платежа" />
+            <Label layoutX="253.0" layoutY="77.0" text="Количество" />
+            <Label layoutX="364.0" layoutY="77.0" text="Терминал" />
 			</children>
 		</AnchorPane>
 	</top>

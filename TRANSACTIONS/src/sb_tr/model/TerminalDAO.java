@@ -253,7 +253,8 @@ public class TerminalDAO {
 			LocalDate dt1,
 			LocalDate dt2,
 			String FIO,
-			boolean chk) {
+			boolean chk,
+			String terminal) {
 
 		String ldt1 = null;
 		String ldt2 = null;
@@ -302,7 +303,7 @@ public class TerminalDAO {
 		} else {
 
 		}
-		String selectStmt = " select rownum,t.* from (select rownum,t.* from " + table + " t where 1=1" + sess + ldt1_
+		String selectStmt = " select rownum,t.* from (select rownum,t.* from " + table + " t where 1=1 and (TERMINAL = '"+terminal+"' or '"+terminal+"' = 'Все' ) " + sess + ldt1_
 				+ ldt2_ + bt + FIO_+" order by PAYDATE desc) t";
 
 		// Execute SELECT statement

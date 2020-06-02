@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListCell;
@@ -46,6 +47,7 @@ import sb_tr.model.Connect;
 import sb_tr.model.FN_SESS_AMRA;
 import sb_tr.model.GUIUtils;
 import sb_tr.model.TerminalDAO;
+import sb_tr.model.TerminalForCombo;
 import sb_tr.model.Transact;
 import sb_tr.model.TransactClass;
 
@@ -332,6 +334,9 @@ public class Tr_Am_View_con {
 
 	@FXML
 	private ProgressIndicator pb;
+	
+	@FXML
+	private ComboBox<String> terminal_name;
 
 	@FXML
 	private void initialize() {
@@ -894,7 +899,44 @@ public class Tr_Am_View_con {
 						.set_status(t.getNewValue());
 			}
 		});
+		
+		
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
+					+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
+			Statement sqlStatement = conn.createStatement();
+			String readRecordSQL = "select NAME\r\n" + 
+					"  from (select NAME\r\n" + 
+					"          from Z_SB_TERMINAL_AMRA_DBT t\r\n" + 
+					"        union all\r\n" + 
+					"        select 'Все' NAME\r\n" + 
+					"          from dual)\r\n" + 
+					" order by decode(NAME, 'Все', 0, substr(NAME, length(NAME), 1)) asc\r\n" + 
+					"";
+			ResultSet rs = sqlStatement.executeQuery(readRecordSQL);
+			ObservableList<String> combolist = FXCollections.observableArrayList();
+			while (rs.next()) {
+				TerminalForCombo tr = new TerminalForCombo();
+				tr.setTERMS(rs.getString("NAME"));
+				combolist.add(rs.getString("NAME"));
+			}
+			terminal_name.setItems(combolist);
+			terminal_name.getSelectionModel().select(0);
 
+			rs.close();
+			conn.close();
+			sqlStatement.close();
+			
+		} catch (SQLException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Ошибка");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+		}
+		
 	}
 
 	void on_filter() {
@@ -1587,7 +1629,7 @@ public class Tr_Am_View_con {
 	@FXML
 	private void term_view_(ActionEvent actionEvent) {
 		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(),
-				"", false);
+				"", false,terminal_name.getValue().toString());
 		populate_fn_sess(empData);
 
 		autoResizeColumns(trans_table);
@@ -1687,18 +1729,21 @@ public class Tr_Am_View_con {
 		
 		Thread thread = new Thread(task);
 		thread.start();
-		/*
+		
+		
 		Runnable task_ = () -> {
 			TableFilter.forTableView(trans_table).apply();
 		};
 		Thread thread_ = new Thread(task_);
 		thread_.start();
-		*/
+
+		/*
 		Platform.runLater(new Runnable() {
             @Override public void run() {
             	TableFilter.forTableView(trans_table).apply();
             }
         });
+        */
 		pb.setVisible(false);
 	}
 
@@ -1716,9 +1761,10 @@ public class Tr_Am_View_con {
 			@Override
 			public ObservableList<Amra_Trans> call() throws Exception {
 				return TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(), FIO.getText(),
-						(inkass.isSelected()) ? false : true);
+						(inkass.isSelected()) ? false : true,terminal_name.getValue().toString());
 			}
 		};
+		
 		task.setOnFailed(e -> Alert(task.getException().getMessage()));
 		task.setOnSucceeded(e -> exec_filter((ObservableList<Amra_Trans>) task.getValue()));
 
