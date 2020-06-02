@@ -1677,8 +1677,9 @@ public class Tr_Am_View_con {
 
 	// Найти загрузки
 	private void exec_filter(ObservableList<Amra_Trans> trData) {
-
+		
 		Runnable task = () -> {
+			trans_table.setItems(null);
 			trans_table.setItems(trData);
 			autoResizeColumns(trans_table);
 			provider.setCellFactory(col -> new TextFieldTableCell<Amra_Trans, String>() {
@@ -1725,6 +1726,16 @@ public class Tr_Am_View_con {
 				});
 				return cell;
 			});
+			Runnable task_ = () -> {
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						TableFilter.forTableView(trans_table).apply();
+					}
+				});
+			};
+			Thread thread_ = new Thread(task_);
+			thread_.start();
 		};
 		
 		Thread thread = new Thread(task);
@@ -1737,6 +1748,7 @@ public class Tr_Am_View_con {
 		Thread thread_ = new Thread(task_);
 		thread_.start();
         */
+		/*
 		Task<TableFilter<Amra_Trans>> task__ = new Task<TableFilter<Amra_Trans>>() {
 			@Override
 			public TableFilter<Amra_Trans> call() throws Exception {
@@ -1745,9 +1757,10 @@ public class Tr_Am_View_con {
 		};
 		
 		task__.setOnFailed(e -> Alert(task__.getException().getMessage()));
-		task__.setOnSucceeded(e -> System.out.println(task__.getValue().getFilteredList().toString()));
+		task__.setOnSucceeded(e -> System.out.println(task__.getValue()));
 
 		exec.execute(task__);
+		*/
 		/*
 		Platform.runLater(new Runnable() {
             @Override public void run() {
