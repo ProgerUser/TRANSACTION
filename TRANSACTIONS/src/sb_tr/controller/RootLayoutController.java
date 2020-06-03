@@ -1,6 +1,8 @@
 package sb_tr.controller;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -39,6 +41,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import sb_tr.Main;
 import sb_tr.model.Connect;
+import sb_tr.model.TerminalForCombo;
 import sb_tr.model.ViewerDAO;
 
 @SuppressWarnings("unused")
@@ -65,11 +68,11 @@ public class RootLayoutController {
 
 	@FXML
 	void handleExit(ActionEvent event) {
-		File file = new File(System.getProperty("user.home") + "/XXI.AP_TEST_MAIN.properties");
-		file.delete();
-		System.out.print("------------------------------------------------------");
-		Platform.exit();
-		System.exit(0);
+		//File file = new File(System.getProperty("user.home") + "/XXI.AP_TEST_MAIN.properties");
+		//file.delete();
+		//System.out.print("------------------------------------------------------");
+		//Platform.exit();
+		//System.exit(0);
 	}
 
 	@FXML
@@ -77,7 +80,7 @@ public class RootLayoutController {
 		try {
 			if (Connect.userPassword_.equals("")) {
 
-			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("AMRA_IMPORT")) {
+			} else if (chk_rigth("Viewer.fxml",Connect.userID_) == 1) {
 				Main.showEmployeeView();
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -91,7 +94,6 @@ public class RootLayoutController {
 
 		} catch (NullPointerException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			// alert.setTitle("Error");
 			alert.setHeaderText("Error");
 			alert.setContentText("Введите учетные данные");
 			alert.show();
@@ -104,26 +106,17 @@ public class RootLayoutController {
 
 			if (Connect.userPassword_.equals("")) {
 
-			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("AMRA_IMPORT")) {
+			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
 				alert.setTitle("Program Information");
 				alert.setHeaderText("Информация о DB");
 				alert.setContentText(
 						"Схема: " + Connect.connectionURL_ + "\r\n" + "Пользователь: " + Connect.userID_ + "\r\n");
 				alert.show();
-			} else {
-				Alert alert = new Alert(Alert.AlertType.INFORMATION);
-				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-				stage.getIcons().add(new Image("terminal.png"));
-				alert.setTitle("Внимание");
-				alert.setHeaderText(null);
-				alert.setContentText("Нет прав!");
-				alert.showAndWait();
 			}
 
 		} catch (NullPointerException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			// alert.setTitle("Error");
 			alert.setHeaderText("Error");
 			alert.setContentText("Введите учетные данные");
 			alert.show();
@@ -136,8 +129,7 @@ public class RootLayoutController {
 
 			if (Connect.userPassword_.equals("")) {
 
-			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("U146")
-					| Connect.userID_.equals("AMRA_IMPORT")) {
+			} else if (chk_rigth("Transact_Amra_viewer.fxml",Connect.userID_) == 1) {
 				Main.showAmTr();
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -151,7 +143,6 @@ public class RootLayoutController {
 
 		} catch (NullPointerException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			// alert.setTitle("Error");
 			alert.setHeaderText("Error");
 			alert.setContentText("Введите учетные данные");
 			alert.show();
@@ -164,7 +155,7 @@ public class RootLayoutController {
 
 			if (Connect.userPassword_.equals("")) {
 
-			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("AMRA_IMPORT")) {
+			} else if (chk_rigth("TransactLoad.fxml",Connect.userID_) == 1) {
 				Main.Transact();
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -178,7 +169,6 @@ public class RootLayoutController {
 
 		} catch (NullPointerException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			// alert.setTitle("Error");
 			alert.setHeaderText("Error");
 			alert.setContentText("Введите учетные данные");
 			alert.show();
@@ -191,8 +181,7 @@ public class RootLayoutController {
 
 			if (Connect.userPassword_.equals("")) {
 
-			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("AMRA_IMPORT")
-					|| Connect.userID_.equals("U146")) {
+			} else if (chk_rigth("ShowHist.fxml",Connect.userID_) == 1) {
 				Main.Show_Hist();
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -206,7 +195,6 @@ public class RootLayoutController {
 
 		} catch (NullPointerException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			// alert.setTitle("Error");
 			alert.setHeaderText("Error");
 			alert.setContentText("Введите учетные данные");
 			alert.show();
@@ -219,7 +207,7 @@ public class RootLayoutController {
 
 			if (Connect.userPassword_.equals("")) {
 
-			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("AMRA_IMPORT")) {
+			} else if (chk_rigth("Termdial.fxml",Connect.userID_) == 1) {
 				Main.Termdial_view_();
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -233,7 +221,6 @@ public class RootLayoutController {
 
 		} catch (NullPointerException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			// alert.setTitle("Error");
 			alert.setHeaderText("Error");
 			alert.setContentText("Введите учетные данные");
 			alert.show();
@@ -246,7 +233,7 @@ public class RootLayoutController {
 
 			if (Connect.userPassword_.equals("")) {
 
-			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("AMRA_IMPORT")) {
+			} else if (chk_rigth("Amra_Trans.fxml",Connect.userID_) == 1) {
 				Main.Transact_Amra();
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -260,7 +247,6 @@ public class RootLayoutController {
 
 		} catch (NullPointerException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			// alert.setTitle("Error");
 			alert.setHeaderText("Error");
 			alert.setContentText("Введите учетные данные");
 			alert.show();
@@ -273,8 +259,7 @@ public class RootLayoutController {
 
 			if (Connect.userPassword_.equals("")) {
 
-			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("AMRA_IMPORT")
-					| Connect.userID_.equals("U146")) {
+			} else if (chk_rigth("Terminal.fxml",Connect.userID_) == 1) {
 				Main.Terminal();
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -288,7 +273,6 @@ public class RootLayoutController {
 
 		} catch (NullPointerException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			// alert.setTitle("Error");
 			alert.setHeaderText("Error");
 			alert.setContentText("Введите учетные данные");
 			alert.show();
@@ -300,7 +284,7 @@ public class RootLayoutController {
 		try {
 			if (Connect.userPassword_.equals("")) {
 
-			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("AMRA_IMPORT")) {
+			} else if (chk_rigth("Kash.fxml",Connect.userID_) == 1) {
 				Main.showKash();
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -314,7 +298,6 @@ public class RootLayoutController {
 
 		} catch (NullPointerException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			// alert.setTitle("Error");
 			alert.setHeaderText("Error");
 			alert.setContentText("Введите учетные данные");
 			alert.show();
@@ -397,8 +380,7 @@ public class RootLayoutController {
 		try {
 			if (Connect.userPassword_.equals("")) {
 
-			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("AMRA_IMPORT")
-					| Connect.userID_.equals("U146")) {
+			} else if (chk_rigth("Service.fxml",Connect.userID_) == 1) {
 				Main.Service();
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -412,7 +394,6 @@ public class RootLayoutController {
 
 		} catch (NullPointerException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			// alert.setTitle("Error");
 			alert.setHeaderText("Ошибка!");
 			alert.setContentText("Введите учетные данные");
 			alert.show();
@@ -434,6 +415,43 @@ public class RootLayoutController {
 		statusbar.setText(Connect.userID_ + "/" + Connect.connectionURL_);
 	}
 
+	public int chk_rigth(String FORM_NAME,String CUSRLOGNAME) {
+		int ret = 0;
+		Connection conn;
+		try {
+			conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_ + "@"
+					+ Connect.connectionURL_ + "");
+
+			Statement sqlStatement = conn.createStatement();
+			String readRecordSQL = "select count(*)\n" + 
+					"  from z_sb_access_amra a,\n" + 
+					"       z_sb_access_gr_amra b,\n" + 
+					"       z_sb_access_gr_type_amra c,\n" + 
+					"       (select t.cusrlogname, t.iusrid from usr t) d\n" + 
+					" where a.id_form = b.form_id\n" + 
+					"   and b.gr_id = c.id_type\n" + 
+					"   and b.usr_id = d.iusrid\n" + 
+					"   and upper(FORM_NAME) = upper('"+FORM_NAME+"')\n" + 
+					"   and upper(CUSRLOGNAME) = upper('"+CUSRLOGNAME+"')\n" + 
+					"   and T_NAME = 'Y'";
+			System.out.println(readRecordSQL);
+			ResultSet rs = sqlStatement.executeQuery(readRecordSQL);
+			ObservableList<String> combolist = FXCollections.observableArrayList();
+			if (rs.next()) {
+				ret = 1;
+			}
+		} catch (SQLException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+		}
+		return ret;
+	}
+    
 	@FXML
 	void initialize() {
 		exec = Executors.newCachedThreadPool((runnable) -> {

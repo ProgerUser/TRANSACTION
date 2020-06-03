@@ -1726,6 +1726,7 @@ public class Tr_Am_View_con {
 				});
 				return cell;
 			});
+			try {
 			Runnable task_ = () -> {
 				Platform.runLater(new Runnable() {
 					@Override
@@ -1736,38 +1737,15 @@ public class Tr_Am_View_con {
 			};
 			Thread thread_ = new Thread(task_);
 			thread_.start();
+			}
+			catch (Exception e) {
+				Alert(e.getMessage());
+			}
 		};
 		
 		Thread thread = new Thread(task);
 		thread.start();
 		
-		/*
-		Runnable task_ = () -> {
-			TableFilter.forTableView(trans_table).apply();
-		};
-		Thread thread_ = new Thread(task_);
-		thread_.start();
-        */
-		/*
-		Task<TableFilter<Amra_Trans>> task__ = new Task<TableFilter<Amra_Trans>>() {
-			@Override
-			public TableFilter<Amra_Trans> call() throws Exception {
-				return TableFilter.forTableView(trans_table).apply();
-			}
-		};
-		
-		task__.setOnFailed(e -> Alert(task__.getException().getMessage()));
-		task__.setOnSucceeded(e -> System.out.println(task__.getValue()));
-
-		exec.execute(task__);
-		*/
-		/*
-		Platform.runLater(new Runnable() {
-            @Override public void run() {
-            	TableFilter.forTableView(trans_table).apply();
-            }
-        });
-        */
 		pb.setVisible(false);
 	}
 

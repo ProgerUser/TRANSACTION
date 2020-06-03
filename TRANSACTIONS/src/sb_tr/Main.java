@@ -63,197 +63,155 @@ public class Main extends Application {
 	// Initializes the root layout.
 	public void initRootLayout() {
 		try {
-			// First, load root layout from RootLayout.fxml
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/RootLayout.fxml"));
 			rootLayout = (BorderPane) loader.load();
-
-			// Second, show the scene containing the root layout.
 			Scene scene = new Scene(rootLayout); // We are sending rootLayout to the Scene.
 			primaryStage.setScene(scene); // Set the scene in primary stage.
-
-			/*
-			 * //Give the controller access to the main. RootLayoutController controller =
-			 * loader.getController(); controller.setMain(this);
-			 */
-
-			// Third, show the primary stage
 			primaryStage.show(); // Display the primary stage
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	// Shows the employee operations view inside the root layout.
+	/*Не используется*/
 	public static void showEmployeeView() {
 		try {
-			// First, load EmployeeView from EmployeeView.fxml
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Viewer.fxml"));
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
-
-			// Set Employee Operations view into the center of root layout.
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
+	/*Формирование псевдонимов*/
 	public static void showKash() {
 		try {
-			// First, load EmployeeView from EmployeeView.fxml Kash AnchorPane
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Kash.fxml"));
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
-
-			// Set Employee Operations view into the center of root layout.
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
+	/*Сдачи Амра*/
 	public static void Termdial_view_() {
 		try {
-			// First, load EmployeeView from EmployeeView.fxml
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Termdial.fxml"));
 			BorderPane employeeOperationsView = (BorderPane) loader.load();
-
-			// Set Employee Operations view into the center of root layout.
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
+	/*Тразнакции просмотр Амра*/
 	public static void showAmTr() {
 		try {
-			// First, load EmployeeView from EmployeeView.fxml
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Transact_Amra_viewer.fxml"));
 			BorderPane employeeOperationsView = (BorderPane) loader.load();
-
-			// Set Employee Operations view into the center of root layout.
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
+	/*История загрузок Квант*/
 	public static void Load_Hist() {
 		try {
-			// First, load EmployeeView from EmployeeView.fxml
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/LoadHist.fxml"));
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
-
-			// Set Employee Operations view into the center of root layout.
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	// Shows the employee operations view inside the root layout.
+	/*Первая форма*/
 	public static void showFirst() {
 		try {
-			// First, load EmployeeView from EmployeeView.fxml
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/First.fxml"));
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
-
-			// Set Employee Operations view into the center of root layout.
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	// Shows the employee operations view inside the root layout.
+	/*Вход*/
 	public void Enter() {
 		try {
-			// First, load EmployeeView from EmployeeView.fxml
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Enter.fxml"));
 			BorderPane employeeOperationsView = (BorderPane) loader.load();
-			// TabPane tp = (TabPane) loader.load();
-
-			// Set Employee Operations view into the center of root layout.
 			rootLayout.setCenter(employeeOperationsView);
-
-			// Set Employee Operations view into the center of root layout.
-			// rootLayout.setCenter(tp);
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
+	/*Терминалы*/
 	public static void Terminal() {
 		try {
-			// First, load EmployeeView from EmployeeView.fxml
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Terminal.fxml"));
 			BorderPane employeeOperationsView = (BorderPane) loader.load();
-
-			// Set Employee Operations view into the center of root layout.
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
+	/*История загрузок*/
 	public static void Show_Hist() {
 		try {
-			// First, load EmployeeView from EmployeeView.fxml
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/ShowHist.fxml"));
 			BorderPane employeeOperationsView = (BorderPane) loader.load();
-
-			// Set Employee Operations view into the center of root layout.
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
+	/*Услуги*/
 	public static void Service() {
 		try {
-			// First, load EmployeeView from EmployeeView.fxml
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Service.fxml"));
 			BorderPane employeeOperationsView = (BorderPane) loader.load();
-
-			// Set Employee Operations view into the center of root layout.
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
+	/*Загрузка транз. Квант-Капитал*/
 	public static void Transact() {
 		try {
-			// First, load EmployeeView from EmployeeView.fxml
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/TransactLoad.fxml"));
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
-
-			// Set Employee Operations view into the center of root layout.
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-
+    
+	/*Загрузка транзакции*/
 	public static void Transact_Amra() {
 		try {
-			// First, load EmployeeView from EmployeeView.fxml
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Amra_Trans.fxml"));
 			BorderPane employeeOperationsView = (BorderPane) loader.load();
-
-			// Set Employee Operations view into the center of root layout.
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -266,7 +224,6 @@ public class Main extends Application {
 			Connect.userPassword_ = args[1];
 			Connect.connectionURL_ = args[2];
 		}
-		
 		launch(args);
 	}
 }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="649.0" prefWidth="1017.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sb_tr.controller.ViewerController">
+	<children>
+		<TableView fx:id="forms" layoutX="20.0" layoutY="60.0" prefHeight="571.0" prefWidth="341.0">
+			<columns>
+				<TableColumn fx:id="ID_FORM" prefWidth="75.0" text="ИД" />
+				<TableColumn fx:id="FORM_NAME" prefWidth="234.0" text="Название" />
+				<TableColumn fx:id="FORMN_DESC" prefWidth="114.0" text="Описание" />
+			</columns>
+		</TableView>
+		<TableView layoutX="379.0" layoutY="60.0" prefHeight="571.0" prefWidth="288.0">
+			<columns>
+				<TableColumn fx:id="USR_ID" prefWidth="102.0" text="Пользователь" />
+				<TableColumn fx:id="USER_IN" prefWidth="183.0" text="ФИО" />
+				<TableColumn fx:id="USER_IN1" prefWidth="183.0" text="Тип права" />
+			</columns>
+		</TableView>
+		<TableView fx:id="USER_OUT" layoutX="715.0" layoutY="60.0" prefHeight="571.0" prefWidth="288.0">
+			<columns>
+				<TableColumn prefWidth="75.0" text="Пользователь" />
+				<TableColumn prefWidth="75.0" text="ФИО" />
+			</columns>
+		</TableView>
+		<Button layoutX="675.0" layoutY="113.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="31.0" text="&lt;" />
+		<Button layoutX="675.0" layoutY="152.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="31.0" text="&gt;" />
+		<ComboBox layoutX="715.0" layoutY="32.0" prefHeight="25.0" prefWidth="76.0" />
+		<Text layoutX="715.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Тип разрешения при добавлении пользователя" />
+		<ComboBox layoutX="379.0" layoutY="32.0" prefHeight="25.0" prefWidth="76.0" />
+		<Text layoutX="379.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Изменить разрешение" />
+	</children>
+</AnchorPane>

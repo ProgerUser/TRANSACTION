@@ -120,14 +120,20 @@ public class EnterController {
 				alert_1.setHeaderText(null);
 				alert_1.setContentText("Ошибка ввода логина или пароля");
 				alert_1.showAndWait();
-			} else if (Connect.userID_.equals("XXI") | Connect.userID_.equals("U146")
-					| Connect.userID_.equals("AMRA_IMPORT")) {
+			} else if (chk_rigth("enter.fxml",Connect.userID_) == 1) {
 				Stage stage_ = (Stage) enter_id.getScene().getWindow();
 				//stage_.setMaximized(true);
-
 				stage_.setTitle(Connect.userID_ + "@"+Connect.connectionURL_);
-
 				Main.showFirst();
+			}
+			else {
+				Alert alert_1 = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage_1 = (Stage) alert_1.getDialogPane().getScene().getWindow();
+				stage_1.getIcons().add(new Image("icon.png"));
+				alert_1.setTitle("Внимание");
+				alert_1.setHeaderText(null);
+				alert_1.setContentText("Нет прав!");
+				alert_1.showAndWait();
 			}
 
 		} catch (SQLException sql) {
@@ -260,5 +266,41 @@ public class EnterController {
 			ex.printStackTrace();
 		}
 		// conurl.getSelectionModel().select(0);
+	}
+	public int chk_rigth(String FORM_NAME,String CUSRLOGNAME) {
+		int ret = 0;
+		Connection conn;
+		try {
+			conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_ + "@"
+					+ Connect.connectionURL_ + "");
+
+			Statement sqlStatement = conn.createStatement();
+			String readRecordSQL = "select count(*)\n" + 
+					"  from z_sb_access_amra a,\n" + 
+					"       z_sb_access_gr_amra b,\n" + 
+					"       z_sb_access_gr_type_amra c,\n" + 
+					"       (select t.cusrlogname, t.iusrid from usr t) d\n" + 
+					" where a.id_form = b.form_id\n" + 
+					"   and b.gr_id = c.id_type\n" + 
+					"   and b.usr_id = d.iusrid\n" + 
+					"   and upper(FORM_NAME) = upper('"+FORM_NAME+"')\n" + 
+					"   and upper(CUSRLOGNAME) = upper('"+CUSRLOGNAME+"')\n" + 
+					"   and T_NAME = 'Y'";
+			System.out.println(readRecordSQL);
+			ResultSet rs = sqlStatement.executeQuery(readRecordSQL);
+			ObservableList<String> combolist = FXCollections.observableArrayList();
+			if (rs.next()) {
+				ret = 1;
+			}
+		} catch (SQLException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+		}
+		return ret;
 	}
 }
