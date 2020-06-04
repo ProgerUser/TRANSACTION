@@ -345,6 +345,91 @@ public class TerminalDAO {
 	}
 
 	// *******************************
+	// SELECT Forms
+	// *******************************
+	public static ObservableList<Forms> User_Forms() {
+		String selectStmt = "select id_form, form_name, formn_desc from Z_SB_ACCESS_AMRA order by id_form\n";
+
+		// Execute SELECT statement
+
+		// Get ResultSet from dbExecuteQuery method
+		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
+
+		// Send ResultSet to the getEmployeeList method and get employee object
+		ObservableList<Forms> Forms_lst = get_forms(rsEmps);
+
+		// Return employee object
+		return Forms_lst;
+	}
+	
+	// *******************************
+	// SELECT User_in
+	// *******************************
+	public static ObservableList<User_in> User_in(Integer form_name) {
+		String selectStmt = 
+				"select CUSRLOGNAME, CUSRNAME, T_NAME\n" + 
+				"  from z_sb_access_amra a,\n" + 
+				"       z_sb_access_gr_amra b,\n" + 
+				"       z_sb_access_gr_type_amra c,\n" + 
+				"       (select t.cusrlogname, t.iusrid, t.CUSRNAME from usr t) d\n" + 
+				" where a.id_form = b.form_id\n" + 
+				"   and b.gr_id = c.id_type\n" + 
+				"   and b.usr_id = d.iusrid\n" + 
+				"   and ID_FORM = "+form_name+"\n";
+
+		// Execute SELECT statement
+
+		// Get ResultSet from dbExecuteQuery method
+		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
+
+		// Send ResultSet to the getEmployeeList method and get employee object
+		ObservableList<User_in> Forms_lst = get_usr_in(rsEmps);
+
+		// Return employee object
+		return Forms_lst;
+	}
+	
+	// *******************************
+		// SELECT User_out
+		// *******************************
+		public static ObservableList<User_out> User_out(Integer form_id) {
+			String selectStmt = 
+					"select CUSRLOGNAME, CUSRNAME\n" + 
+					"  from usr\n" + 
+					" where usr.dusrfire is null\n" + 
+					"   and CUSRLOGNAME not in\n" + 
+					"       (select CUSRLOGNAME\n" + 
+					"          from z_sb_access_amra a,\n" + 
+					"               z_sb_access_gr_amra b,\n" + 
+					"               z_sb_access_gr_type_amra c,\n" + 
+					"               (select t.cusrlogname, t.iusrid, t.CUSRNAME from usr t) d\n" + 
+					"         where a.id_form = b.form_id\n" + 
+					"           and b.gr_id = c.id_type\n" + 
+					"           and b.usr_id = d.iusrid\n" + 
+					"           and ID_FORM = "+form_id+")\n" + 
+					" order by CUSRLOGNAME";
+
+			// Execute SELECT statement
+
+			// Get ResultSet from dbExecuteQuery method
+			ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
+
+			// Send ResultSet to the getEmployeeList method and get employee object
+			ObservableList<User_out> Forms_lst = get_usr_out(rsEmps);
+
+			// Return employee object
+			return Forms_lst;
+		}
+	
+    //*************************************
+    //UPDATE usr right
+    //*************************************
+    public static void update_usr_right(String usr_name, String form_name) {   
+      String updateStmt ="";
+      DBUtil.dbExecuteUpdate(updateStmt);
+    }
+    
+	// *******************************
 	// SELECT Unpiv
 	// *******************************
 	public static ObservableList<Unpiv> Unpiv_View() {
@@ -835,6 +920,76 @@ public class TerminalDAO {
 		return null;
 	}
 
+	// Select * from fn_sess Z_SB_ACCESS_AMRA
+		private static ObservableList<Forms> get_forms(ResultSet rs) {
+			try {
+				ObservableList<Forms> forms_list = FXCollections.observableArrayList();
+				while (rs.next()) {
+					Forms frms = new Forms();
+					frms.set_ID_FORM(rs.getInt("ID_FORM"));
+					frms.set_FORM_NAME(rs.getString("FORM_NAME"));
+					frms.set_FORMN_DESC(rs.getString("FORMN_DESC"));
+					forms_list.add(frms);
+				}
+				return forms_list;
+			} catch (SQLException e) {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText(e.getMessage());
+				alert.showAndWait();
+			}
+			return null;
+		}
+		
+	// Select * from usr
+	private static ObservableList<User_in> get_usr_in(ResultSet rs) {
+		try {
+			ObservableList<User_in> user_in_list = FXCollections.observableArrayList();
+			while (rs.next()) {
+				User_in user_in = new User_in();
+				user_in.set_FIO_I(rs.getString("CUSRNAME"));
+				user_in.set_USR_ID_I(rs.getString("CUSRLOGNAME"));
+				user_in.set_TYPE_ACCESS_I(rs.getString("T_NAME"));
+				user_in_list.add(user_in);
+			}
+			return user_in_list;
+		} catch (SQLException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+		}
+		return null;
+	}
+
+	// Select * from usr
+	private static ObservableList<User_out> get_usr_out(ResultSet rs) {
+		try {
+			ObservableList<User_out> user_o_list = FXCollections.observableArrayList();
+			while (rs.next()) {
+				User_out user_o = new User_out();
+				user_o.set_FIO_O(rs.getString("CUSRNAME"));
+				user_o.set_USR_ID_O(rs.getString("CUSRLOGNAME"));
+				user_o_list.add(user_o);
+			}
+			return user_o_list;
+		} catch (SQLException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+		}
+		return null;
+	}
 	// Select * from fn_sess operation
 	private static ObservableList<Unpiv> get_unpiv(ResultSet rs) {
 		try {

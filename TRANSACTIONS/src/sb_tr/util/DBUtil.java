@@ -144,6 +144,7 @@ public class DBUtil {
 	public static void dbExecuteUpdate(String sqlStmt) {
 		// Declare statement as null
 		Statement stmt = null;
+		System.out.println("Update: " + sqlStmt + "\n");
 		try {
 			// Connect to DB (Establish Oracle Connection)
 			dbConnect();
@@ -151,6 +152,7 @@ public class DBUtil {
 			stmt = conn.createStatement();
 			// Run executeUpdate operation with given sql statement
 			stmt.executeUpdate(sqlStmt);
+			
 		} catch (SQLException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();

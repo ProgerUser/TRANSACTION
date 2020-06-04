@@ -432,7 +432,7 @@ public class RootLayoutController {
 		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 		stage.getIcons().add(new Image("terminal.png"));
 		alert.setTitle("Информация");
-		alert.setHeaderText("Работа с терминалами 1.3.0");
+		alert.setHeaderText("Работа с терминалами 1.4.0");
 		alert.setContentText("Загрузка транзакции, администрирование терминалов\n PACHULIYA_S_V 2018");
 		alert.show();
 	}
