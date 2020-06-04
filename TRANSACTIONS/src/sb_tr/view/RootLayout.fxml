@@ -41,7 +41,7 @@
 				</Menu>
             <Menu mnemonicParsing="false" text="Администратор">
                <items>
-                  <MenuItem mnemonicParsing="false" onAction="#DBCONNECT" text="Права доступа" />
+                  <MenuItem mnemonicParsing="false" onAction="#Access" text="Права доступа" />
                </items>
             </Menu>
 				<Menu mnemonicParsing="false" text="Помощь">

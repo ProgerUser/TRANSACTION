@@ -376,6 +376,32 @@ public class RootLayoutController {
 	}
 
 	@FXML
+	void Access(ActionEvent event) {
+		try {
+			if (Connect.userPassword_.equals("")) {
+				
+			} else if (chk_rigth("Admin.fxml",Connect.userID_) == 1) {
+				System.out.println(chk_rigth("Admin.fxml",Connect.userID_));
+				Main.Admin();
+			} else {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText("Нет прав!");
+				alert.showAndWait();
+			}
+
+		} catch (NullPointerException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			alert.setHeaderText("Ошибка!");
+			alert.setContentText("Введите учетные данные");
+			alert.show();
+		}
+	}
+	
+	@FXML
 	void service(ActionEvent event) {
 		try {
 			if (Connect.userPassword_.equals("")) {
@@ -421,9 +447,9 @@ public class RootLayoutController {
 		try {
 			conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_ + "@"
 					+ Connect.connectionURL_ + "");
-
 			Statement sqlStatement = conn.createStatement();
-			String readRecordSQL = "select count(*)\n" + 
+			String readRecordSQL = 
+					" select count(*) cnt\n" + 
 					"  from z_sb_access_amra a,\n" + 
 					"       z_sb_access_gr_amra b,\n" + 
 					"       z_sb_access_gr_type_amra c,\n" + 
@@ -433,13 +459,15 @@ public class RootLayoutController {
 					"   and b.usr_id = d.iusrid\n" + 
 					"   and upper(FORM_NAME) = upper('"+FORM_NAME+"')\n" + 
 					"   and upper(CUSRLOGNAME) = upper('"+CUSRLOGNAME+"')\n" + 
-					"   and T_NAME = 'Y'";
+					"   and T_NAME = 'Y'\n";
 			System.out.println(readRecordSQL);
 			ResultSet rs = sqlStatement.executeQuery(readRecordSQL);
 			ObservableList<String> combolist = FXCollections.observableArrayList();
 			if (rs.next()) {
-				ret = 1;
+				ret = rs.getInt("CNT");
 			}
+			conn.close();
+			sqlStatement.close();
 		} catch (SQLException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -452,6 +480,7 @@ public class RootLayoutController {
 		return ret;
 	}
     
+	
 	@FXML
 	void initialize() {
 		exec = Executors.newCachedThreadPool((runnable) -> {

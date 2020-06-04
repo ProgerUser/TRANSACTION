@@ -194,6 +194,18 @@ public class Main extends Application {
 		}
 	}
 
+	/*Доступ*/
+	public static void Admin() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Main.class.getResource("view/Admin.fxml"));
+			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
+			rootLayout.setCenter(employeeOperationsView);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/*Загрузка транз. Квант-Капитал*/
 	public static void Transact() {
 		try {

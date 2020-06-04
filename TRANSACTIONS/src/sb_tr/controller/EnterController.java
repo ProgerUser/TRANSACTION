@@ -273,9 +273,9 @@ public class EnterController {
 		try {
 			conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_ + "@"
 					+ Connect.connectionURL_ + "");
-
 			Statement sqlStatement = conn.createStatement();
-			String readRecordSQL = "select count(*)\n" + 
+			String readRecordSQL = 
+					" select count(*) cnt\n" + 
 					"  from z_sb_access_amra a,\n" + 
 					"       z_sb_access_gr_amra b,\n" + 
 					"       z_sb_access_gr_type_amra c,\n" + 
@@ -285,13 +285,15 @@ public class EnterController {
 					"   and b.usr_id = d.iusrid\n" + 
 					"   and upper(FORM_NAME) = upper('"+FORM_NAME+"')\n" + 
 					"   and upper(CUSRLOGNAME) = upper('"+CUSRLOGNAME+"')\n" + 
-					"   and T_NAME = 'Y'";
+					"   and T_NAME = 'Y'\n";
 			System.out.println(readRecordSQL);
 			ResultSet rs = sqlStatement.executeQuery(readRecordSQL);
 			ObservableList<String> combolist = FXCollections.observableArrayList();
 			if (rs.next()) {
-				ret = 1;
+				ret = rs.getInt("CNT");
 			}
+			conn.close();
+			sqlStatement.close();
 		} catch (SQLException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
