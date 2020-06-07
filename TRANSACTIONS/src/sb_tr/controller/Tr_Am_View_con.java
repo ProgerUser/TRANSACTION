@@ -228,6 +228,9 @@ public class Tr_Am_View_con {
 	private TextField summa_plat;
 	
 	@FXML
+	private TextField summa_nal;
+	
+	@FXML
 	private TextField cnt_all_;
 	  
 	@FXML
@@ -1836,6 +1839,7 @@ public class Tr_Am_View_con {
 	
 	public double all_sum = 0;
 	
+	public double all_sum_nal = 0;
 	@FXML
 	void chk_all(ActionEvent event) {
 		chk_row.setCellFactory(list -> {
@@ -1858,14 +1862,25 @@ public class Tr_Am_View_con {
 					}
 				}
 			}
+			else if (column.getText().equals("СуммаНаличных=CASHAMOUNT")) {
+				for (int i = 0; i < trans_table.getItems().size(); i++) {
+					if (column.getCellData(i) != null) {
+						all_sum_nal = all_sum_nal + Double.parseDouble(column.getCellData(i).toString());
+					}
+				}
+			}
 		});
+		
 		String pattern = "###,###.###";
 		DecimalFormat decimalFormat = new DecimalFormat(pattern);
 
 		String format = decimalFormat.format(all_sum);
+		String format_nal = decimalFormat.format(all_sum_nal);
 		/* System.out.println(format); */
 		cnt_all_.setText(String.valueOf(cnt));
 		summa_plat.setText(String.valueOf(format));
+		summa_nal.setText(format_nal);
+		all_sum_nal = 0;
 		all_sum = 0;
 		cnt = 0;
 	}
@@ -1886,6 +1901,7 @@ public class Tr_Am_View_con {
 			return cell;
 		});
 		summa_plat.setText("");
+		summa_nal.setText("");
 		cnt_all_.setText("");
     }
     

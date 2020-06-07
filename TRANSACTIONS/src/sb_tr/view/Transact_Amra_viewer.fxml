@@ -170,11 +170,13 @@
 					</tooltip>
 				</Button>
 				<TextField fx:id="summa_plat" layoutX="133.0" layoutY="98.0" prefHeight="25.0" prefWidth="100.0" />
-            <TextField fx:id="cnt_all_" layoutX="251.0" layoutY="98.0" prefHeight="25.0" prefWidth="100.0" />
-            <ComboBox fx:id="terminal_name" editable="true" layoutX="362.0" layoutY="98.0" prefHeight="25.0" prefWidth="100.0" />
+            <TextField fx:id="cnt_all_" layoutX="364.0" layoutY="98.0" prefHeight="25.0" prefWidth="100.0" />
+            <ComboBox fx:id="terminal_name" editable="true" layoutX="475.0" layoutY="98.0" prefHeight="25.0" prefWidth="100.0" />
             <Label layoutX="133.0" layoutY="77.0" text="Сумма платежа" />
-            <Label layoutX="253.0" layoutY="77.0" text="Количество" />
-            <Label layoutX="364.0" layoutY="77.0" text="Терминал" />
+            <Label layoutX="366.0" layoutY="77.0" text="Количество" />
+            <Label layoutX="477.0" layoutY="77.0" text="Терминал" />
+            <TextField fx:id="summa_nal" layoutX="253.0" layoutY="98.0" prefHeight="25.0" prefWidth="100.0" />
+            <Label layoutX="253.0" layoutY="77.0" text="Сумма наличных" />
 			</children>
 		</AnchorPane>
 	</top>
