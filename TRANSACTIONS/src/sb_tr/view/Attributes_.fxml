@@ -20,7 +20,6 @@
 			<columns>
 				<TableColumn fx:id="Service" prefWidth="167.0"
 					text="Услуга" />
-				z
 				<TableColumn fx:id="CheckNumber" prefWidth="144.0"
 					text="НомерЧека" />
 				<TableColumn fx:id="AttributeName" prefWidth="167.0"
