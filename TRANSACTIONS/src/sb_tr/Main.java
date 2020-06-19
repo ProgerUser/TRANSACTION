@@ -122,6 +122,18 @@ public class Main extends Application {
 		}
 	}
 
+	/*Банк-Клиент*/
+	public static void Ibankk() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Main.class.getResource("view/Ibank.fxml"));
+			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
+			rootLayout.setCenter(employeeOperationsView);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/*История загрузок Квант*/
 	public static void Load_Hist() {
 		try {

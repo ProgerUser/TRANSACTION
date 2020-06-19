@@ -7,21 +7,21 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="649.0" prefWidth="1017.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sb_tr.controller.AccessController">
 	<children>
-		<TableView fx:id="FORMS" editable="true" layoutX="20.0" layoutY="60.0" prefHeight="571.0" prefWidth="341.0">
+		<TableView fx:id="FORMS" stylesheets="@../../transact.css" editable="true" layoutX="20.0" layoutY="60.0" prefHeight="571.0" prefWidth="341.0">
 			<columns>
 				<TableColumn fx:id="ID_FORM" prefWidth="75.0" text="ИД" />
 				<TableColumn fx:id="FORM_NAME" prefWidth="234.0" text="Название" />
 				<TableColumn fx:id="FORMN_DESC" prefWidth="114.0" text="Описание" />
 			</columns>
 		</TableView>
-		<TableView fx:id="USERS_IN" editable="true" layoutX="379.0" layoutY="60.0" prefHeight="571.0" prefWidth="288.0">
+		<TableView fx:id="USERS_IN" stylesheets="@../../transact.css" editable="true" layoutX="379.0" layoutY="60.0" prefHeight="571.0" prefWidth="288.0">
 			<columns>
 				<TableColumn fx:id="USR_ID_I" prefWidth="102.0" text="Пользователь" />
 				<TableColumn fx:id="FIO_I" prefWidth="183.0" text="ФИО" />
 				<TableColumn fx:id="TYPE_ACCESS_I" prefWidth="183.0" text="Тип права" />
 			</columns>
 		</TableView>
-		<TableView fx:id="USER_OUT" layoutX="715.0" layoutY="60.0" prefHeight="571.0" prefWidth="288.0">
+		<TableView fx:id="USER_OUT" stylesheets="@../../transact.css" layoutX="715.0" layoutY="60.0" prefHeight="571.0" prefWidth="288.0">
 			<columns>
 				<TableColumn fx:id="USR_ID_O" prefWidth="75.0" text="Пользователь" />
 				<TableColumn fx:id="FIO_O" prefWidth="75.0" text="ФИО" />

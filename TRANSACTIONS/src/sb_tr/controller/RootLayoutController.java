@@ -122,7 +122,33 @@ public class RootLayoutController {
 			alert.show();
 		}
 	}
+	
+	@FXML
+	void Ibank(ActionEvent event) {
+		try {
+			Main.Ibankk();
+			/*
+			if (Connect.userPassword_.equals("")) {
 
+			} else if (chk_rigth("Ibank.fxml",Connect.userID_) == 1) {
+				Main.Ibankk();
+			} else {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText("Нет прав!");
+				alert.showAndWait();
+			}
+			*/
+		} catch (NullPointerException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			alert.setHeaderText("Error");
+			alert.setContentText("Введите учетные данные");
+			alert.show();
+		}
+	}
 	@FXML
 	void term_view(ActionEvent event) {
 		try {

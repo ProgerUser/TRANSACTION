@@ -361,6 +361,26 @@ public class TerminalDAO {
 		// Return employee object
 		return Forms_lst;
 	}
+
+	// *******************************
+	// SELECT ibank2.CLIENTS
+	// *******************************
+	public static ObservableList<Ibank2> CLIENTS(String db,String login,String pass) {
+		String selectStmt = 
+				"select CLIENT_ID, NAME_CLN\n" + 
+				"  from ibank2.CLIENTS t";
+
+		// Execute SELECT statement
+
+		// Get ResultSet from dbExecuteQuery method
+		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
+
+		// Send ResultSet to the getEmployeeList method and get employee object
+		ObservableList<Ibank2> Cli_lst = get_cli(rsEmps);
+
+		// Return Cli_lst object
+		return Cli_lst;
+	}
 	
 	// *******************************
 	// SELECT User_in
@@ -967,6 +987,30 @@ public class TerminalDAO {
 		}
 		return null;
 	}
+	
+	
+	// Select * from Clients
+		private static ObservableList<Ibank2> get_cli(ResultSet rs) {
+			try {
+				ObservableList<Ibank2> user_in_list = FXCollections.observableArrayList();
+				while (rs.next()) {
+					Ibank2 user_in = new Ibank2();
+					user_in.set_CLIENT_ID(rs.getInt("CLIENT_ID"));
+					user_in.set_NAME_CLN(rs.getString("NAME_CLN"));
+					user_in_list.add(user_in);
+				}
+				return user_in_list;
+			} catch (SQLException e) {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText(e.getMessage());
+				alert.showAndWait();
+			}
+			return null;
+		}
 
 	// Select * from usr
 	private static ObservableList<User_out> get_usr_out(ResultSet rs) {
