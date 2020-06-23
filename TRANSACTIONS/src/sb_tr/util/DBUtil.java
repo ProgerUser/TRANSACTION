@@ -10,7 +10,7 @@ import sb_tr.model.Connect;
 import java.sql.*;
 
 /**
- * Created by ONUR BASKIRT on 22.02.2016.
+ * Created by Pachuliy Said on 22.02.2016.
  */
 public class DBUtil {
 	// Declare JDBC Driver
