@@ -81,6 +81,7 @@ import sb_tr.model.Amra_Trans;
 import sb_tr.model.Connect;
 import sb_tr.model.FN_SESS_AMRA;
 import sb_tr.model.TerminalDAO;
+import sb_tr.util.DBUtil;
 import javafx.stage.Stage;
 
 @SuppressWarnings("unused")
@@ -177,9 +178,10 @@ public class Amra_Transact {
 			if (file != null) {
 				// textbox.setText(file.getParent() + "::_" + file.getName());
 
-				Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
+				/*Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
 						+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
-
+						*/
+				Connection conn = DBUtil.conn;
 				CallableStatement callStmt = null;
 				String reviewContent = null;
 				callStmt = conn.prepareCall(sql_snsess);
@@ -386,9 +388,11 @@ public class Amra_Transact {
 		try {
 			if (load_file.getSelectionModel().getSelectedItem() != null) {
 				Add_File af = load_file.getSelectionModel().getSelectedItem();
+				/*
 				Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
 						+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
-
+						*/
+				Connection conn = DBUtil.conn;
 				String sql_txt = "delete from z_sb_log_amra where sess_id = ?";
 				CallableStatement cs = conn.prepareCall(sql_txt);
 				cs.setString(1, af.get_FileId());
@@ -402,7 +406,7 @@ public class Amra_Transact {
 				alert.setContentText("Лог файл с ID = " + af.get_FileId() + " удален!");
 				alert.showAndWait();
 				cs.close();
-				conn.close();
+				//conn.close();
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
 				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -476,10 +480,11 @@ public class Amra_Transact {
 					DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH-mm-ss");
 
 					String strDate = dateFormat.format(date);
-
+					Connection conn = DBUtil.conn;
+					/*
 					Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
 							+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
-
+*/
 					CallableStatement callStmt = null;
 					String reviewContent = null;
 
@@ -549,7 +554,7 @@ public class Amra_Transact {
 						 */
 					}
 					callStmt.close();
-					conn.close();
+					//conn.close();
 
 					ObservableList<Add_File> empData = TerminalDAO.add_file(/* af.get_FileId() */"",
 							date_load.getValue());
@@ -567,7 +572,6 @@ public class Amra_Transact {
 
 				}
 			} else {
-
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
 				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 				stage.getIcons().add(new Image("terminal.png"));
@@ -622,9 +626,11 @@ public class Amra_Transact {
 			Date date = new Date();
 			DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH-mm-ss");
 			String strDate = dateFormat.format(date);
+			Connection conn = DBUtil.conn;
+			/*
 			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
 					+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
-
+*/
 			Statement sqlStatement = conn.createStatement();
 			String readRecordSQL = "SELECT * FROM z_sb_transact_amra_dbt WHERE sess_id = " + sessid + "";
 			ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
@@ -682,10 +688,13 @@ public class Amra_Transact {
 
 					CallableStatement callStmt = null;
 					Clob reviewContent = null;
+					Connection conn = DBUtil.conn;
+					/*
 					Connection conn;
-
+ 
 					conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
 							+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
+				    */
 					callStmt = conn.prepareCall(sql_calc);
 
 					callStmt.registerOutParameter(1, Types.CLOB);
@@ -731,7 +740,7 @@ public class Amra_Transact {
 					 * alert.showAndWait();
 					 */
 					callStmt.close();
-					conn.close();
+					//conn.close();
 					ObservableList<Add_File> empData = TerminalDAO.add_file(/* af.get_FileId() */"",
 							date_load.getValue());
 					// Populate Employees on TableView

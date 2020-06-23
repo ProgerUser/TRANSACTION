@@ -1,8 +1,10 @@
 package sb_tr;
 
+import java.io.File;
 import java.io.IOException;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -10,6 +12,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import sb_tr.model.Connect;
+import sb_tr.util.DBUtil;
 
 //Main class which extends from Application Class
 
@@ -39,24 +42,29 @@ public class Main extends Application {
 		// showEmployeeView();
 
 		if (Connect.userID_ != null) {
-			//primaryStage.setMaximized(true);
-			primaryStage.setTitle(Connect.userID_ + "@"+Connect.connectionURL_);
+			// primaryStage.setMaximized(true);
+			primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
 			Main.showFirst();
-		}
-		else{
-		Enter();
+		} else {
+			Enter();
 		}
 		/*
 		 * Connect.connectionURL_ = "10.111.64.21:1521/odb"; Connect.userID_ = "XXI";
 		 * Connect.userPassword_ = "xxi"; showFirst();
 		 */
-		/*
-		 * primaryStage.setOnCloseRequest(e->{ File file = new
-		 * File(System.getProperty("user.home")+"/XXI.AP_TEST_MAIN.properties");
-		 * file.delete();
-		 * System.out.print("------------------------------------------------------");
-		 * Platform.exit(); System.exit(0); });
-		 */
+
+		primaryStage.setOnCloseRequest(e -> {
+			DBUtil.dbDisconnect();
+			/*
+			File file = new File(System.getProperty("user.home") + "/XXI.AP_TEST_MAIN.properties");
+			file.delete();
+			System.out.print("------------------------------------------------------");
+			*/
+			Platform.exit();
+			System.exit(0);
+			
+		});
+
 		// this.primaryStage.setMaximized(true);
 	}
 
@@ -74,7 +82,7 @@ public class Main extends Application {
 		}
 	}
 
-	/*Не используется*/
+	/* Не используется */
 	public static void showEmployeeView() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
@@ -86,7 +94,7 @@ public class Main extends Application {
 		}
 	}
 
-	/*Формирование псевдонимов*/
+	/* Формирование псевдонимов */
 	public static void showKash() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
@@ -98,7 +106,7 @@ public class Main extends Application {
 		}
 	}
 
-	/*Сдачи Амра*/
+	/* Сдачи Амра */
 	public static void Termdial_view_() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
@@ -110,7 +118,7 @@ public class Main extends Application {
 		}
 	}
 
-	/*Тразнакции просмотр Амра*/
+	/* Тразнакции просмотр Амра */
 	public static void showAmTr() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
@@ -122,7 +130,7 @@ public class Main extends Application {
 		}
 	}
 
-	/*Банк-Клиент*/
+	/* Банк-Клиент */
 	public static void Ibankk() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
@@ -133,8 +141,8 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
-	
-	/*История загрузок Квант*/
+
+	/* История загрузок Квант */
 	public static void Load_Hist() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
@@ -146,7 +154,7 @@ public class Main extends Application {
 		}
 	}
 
-	/*Первая форма*/
+	/* Первая форма */
 	public static void showFirst() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
@@ -158,7 +166,7 @@ public class Main extends Application {
 		}
 	}
 
-	/*Вход*/
+	/* Вход */
 	public void Enter() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
@@ -170,7 +178,7 @@ public class Main extends Application {
 		}
 	}
 
-	/*Терминалы*/
+	/* Терминалы */
 	public static void Terminal() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
@@ -182,7 +190,7 @@ public class Main extends Application {
 		}
 	}
 
-	/*История загрузок*/
+	/* История загрузок */
 	public static void Show_Hist() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
@@ -194,7 +202,7 @@ public class Main extends Application {
 		}
 	}
 
-	/*Услуги*/
+	/* Услуги */
 	public static void Service() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
@@ -206,7 +214,7 @@ public class Main extends Application {
 		}
 	}
 
-	/*Доступ*/
+	/* Доступ */
 	public static void Admin() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
@@ -217,8 +225,8 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
-	
-	/*Загрузка транз. Квант-Капитал*/
+
+	/* Загрузка транз. Квант-Капитал */
 	public static void Transact() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
@@ -229,8 +237,8 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
-    
-	/*Загрузка транзакции*/
+
+	/* Загрузка транзакции */
 	public static void Transact_Amra() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
@@ -244,7 +252,7 @@ public class Main extends Application {
 
 	public static void main(String[] args) {
 		if (args.length != 0) {
-			Connect.userID_ =args[0];
+			Connect.userID_ = args[0];
 			Connect.userPassword_ = args[1];
 			Connect.connectionURL_ = args[2];
 		}

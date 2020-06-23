@@ -40,6 +40,7 @@ import sb_tr.model.TerminalClass;
 import sb_tr.model.TerminalForCombo;
 import sb_tr.model.TransactClass;
 import sb_tr.model.ViewerDAO;
+import sb_tr.util.DBUtil;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -274,10 +275,11 @@ public class ServiceController {
 				}
 			});
 			
-			
+			/*
 			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
 					+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
-
+			*/
+			Connection conn = DBUtil.conn;
 			Statement sqlStatement = conn.createStatement();
 			String readRecordSQL = "select NAME from Z_SB_TERMINAL_AMRA_DBT t";
 			ResultSet rs = sqlStatement.executeQuery(readRecordSQL);
@@ -858,10 +860,11 @@ public class ServiceController {
 							alert.setHeaderText(null);
 							alert.setContentText("Добавлен сервис: " + acc_name_T.getText() + " !\n");
 							alert.showAndWait();
-
+/*
 							Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
 									+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
-
+									*/
+							Connection conn = DBUtil.conn;
 							Statement sqlStatement = conn.createStatement();
 							String readRecordSQL = "select NAME from Z_SB_TERMINAL_DBT t";
 							ResultSet rs = sqlStatement.executeQuery(readRecordSQL);

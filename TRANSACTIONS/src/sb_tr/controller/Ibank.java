@@ -108,8 +108,11 @@ public class Ibank {
 				try {
 					String acc_ = "";
 					int id = CLI.getSelectionModel().getSelectedItem().get_CLIENT_ID();
+					Connection conn = DBUtil.conn;
+					/*
 					Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
 							+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
+							*/
 					Statement sqlStatement = conn.createStatement();
 					String readRecordSQL = "select filtering\n" + 
 							"  from (select '[224100017]' filtering\n" + 

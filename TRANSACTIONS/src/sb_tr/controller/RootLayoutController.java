@@ -43,6 +43,7 @@ import sb_tr.Main;
 import sb_tr.model.Connect;
 import sb_tr.model.TerminalForCombo;
 import sb_tr.model.ViewerDAO;
+import sb_tr.util.DBUtil;
 
 @SuppressWarnings("unused")
 public class RootLayoutController {
@@ -469,10 +470,13 @@ public class RootLayoutController {
 
 	public int chk_rigth(String FORM_NAME,String CUSRLOGNAME) {
 		int ret = 0;
-		Connection conn;
+		//Connection conn;
+		Connection conn = DBUtil.conn;
 		try {
+			/*
 			conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_ + "@"
 					+ Connect.connectionURL_ + "");
+					*/
 			Statement sqlStatement = conn.createStatement();
 			String readRecordSQL = 
 					" select count(*) cnt\n" + 
@@ -492,7 +496,7 @@ public class RootLayoutController {
 			if (rs.next()) {
 				ret = rs.getInt("CNT");
 			}
-			conn.close();
+			//conn.close();
 			sqlStatement.close();
 		} catch (SQLException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);

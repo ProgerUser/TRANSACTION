@@ -17,7 +17,7 @@ public class DBUtil {
 	private static final String JDBC_DRIVER = "oracle.jdbc.OracleDriver";
 
 	// Connection
-	private static Connection conn = null;
+	public static Connection conn = null;
 
 	// Connection String
 	// String connStr = "jdbc:oracle:thin:Username/Password@IP:Port/SID";
@@ -79,7 +79,9 @@ public class DBUtil {
 		CachedRowSetImpl crs = null;
 		try {
 			// Connect to DB (Establish Oracle Connection)
-			dbConnect();
+			if (conn == null && !conn.isClosed()) {
+				dbConnect();
+			}
 			System.out.println("Выборка данных: " + queryStmt + "\n");
 
 			// Create statement
@@ -134,7 +136,7 @@ public class DBUtil {
 				}
 			}
 			// Close connection
-			dbDisconnect();
+			//dbDisconnect();
 		}
 		// Return CachedRowSet
 		return crs;
@@ -147,7 +149,9 @@ public class DBUtil {
 		System.out.println("Update: " + sqlStmt + "\n");
 		try {
 			// Connect to DB (Establish Oracle Connection)
-			dbConnect();
+			if (conn == null && !conn.isClosed()) {
+				dbConnect();
+			}
 			// Create Statement
 			stmt = conn.createStatement();
 			// Run executeUpdate operation with given sql statement
@@ -177,7 +181,7 @@ public class DBUtil {
 				}
 			}
 			// Close connection
-			dbDisconnect();
+			//dbDisconnect();
 		}
 	}
 }

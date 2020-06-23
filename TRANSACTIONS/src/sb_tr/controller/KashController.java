@@ -35,6 +35,7 @@ import sb_tr.model.Connect;
 import sb_tr.model.KashClass;
 import sb_tr.model.TerminalClass;
 import sb_tr.model.ViewerDAO;
+import sb_tr.util.DBUtil;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -172,8 +173,11 @@ public class KashController {
 	@FXML
 	private void create_psevdo(ActionEvent actionEvent) {
 		try {
+			/*
 			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
 					+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
+			*/
+			Connection conn = DBUtil.conn;
 			Statement chekStatement = conn.createStatement();
 			String chek = "select IDOV_PLAT from ov_plat where CPSEVDO is null";
 			ResultSet rs = chekStatement.executeQuery(chek);
@@ -192,7 +196,7 @@ public class KashController {
 				alert.show();
 			}
 			rs.close();
-			conn.close();
+			//conn.close();
 		} catch (SQLException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();

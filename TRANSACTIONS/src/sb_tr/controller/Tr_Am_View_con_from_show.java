@@ -42,6 +42,7 @@ import sb_tr.model.GUIUtils;
 import sb_tr.model.TerminalDAO;
 import sb_tr.model.Transact;
 import sb_tr.model.TransactClass;
+import sb_tr.util.DBUtil;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -1070,10 +1071,11 @@ public class Tr_Am_View_con_from_show {
 				attributes__c.setCellStyle(cellStyle_border_for_cell);
 				statusabs_c.setCellStyle(cellStyle_border_for_cell);
 				sess_id_c.setCellStyle(cellStyle_border_for_cell);
-
+				Connection conn = DBUtil.conn;
+				/*
 				Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
 						+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
-
+*/
 				// id_sess.getText(), dt1.getValue(),
 				// dt2.getValue()
 
@@ -1385,7 +1387,7 @@ public class Tr_Am_View_con_from_show {
 					sheet.autoSizeColumn(j);
 				}
 				myResultSet.close();
-				conn.close();
+				//conn.close();
 				book.write(new FileOutputStream(file.getPath()));
 				book.close();
 			}

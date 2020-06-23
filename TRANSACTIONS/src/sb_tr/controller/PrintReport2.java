@@ -28,6 +28,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.swing.JRViewer;
 import sb_tr.model.Connect;
 import sb_tr.model.Item2;
+import sb_tr.util.DBUtil;
 
 public class PrintReport2 extends JFrame {
 
@@ -50,10 +51,11 @@ public class PrintReport2 extends JFrame {
 
 			/* Create Items */
 			Item2 list = null;
-
+/*
 			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
 					+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
-
+					*/
+			Connection conn = DBUtil.conn;
 			Statement sqlStatement = conn.createStatement();
 			String readRecordSQL = 
 					"select "+
@@ -101,7 +103,7 @@ public class PrintReport2 extends JFrame {
 				listItems.add(list);
 			}
 			myResultSet.close();
-			conn.close();
+			//conn.close();
 
 			/* Convert List to JRBeanCollectionDataSource */
 			JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(listItems);

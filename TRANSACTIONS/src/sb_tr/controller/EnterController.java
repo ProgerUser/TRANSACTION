@@ -30,6 +30,7 @@ import javafx.stage.Stage;
 import sb_tr.Main;
 import sb_tr.model.Connect;
 import sb_tr.model.InputFilter;
+import sb_tr.util.DBUtil;
 
 public class EnterController {
 
@@ -105,9 +106,12 @@ public class EnterController {
 
 		/* Выполнить проверку соединения с базой */
 		try {
-
+			/*
 			conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_ + "@"
 					+ Connect.connectionURL_ + "");
+					*/
+			DBUtil.dbConnect();
+			Connection conn = DBUtil.conn;
 			sqlStatement = conn.createStatement();
 			String readRecordSQL = "SELECT user FROM dual";
 			ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
@@ -160,17 +164,8 @@ public class EnterController {
 
 			}
 			if (conn != null) {
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					Alert alert = new Alert(Alert.AlertType.INFORMATION);
-					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-					stage.getIcons().add(new Image("terminal.png"));
-					alert.setTitle("Внимание");
-					alert.setHeaderText(null);
-					alert.setContentText(e.getMessage());
-					alert.showAndWait();
-				}
+				//conn.close();
+				DBUtil.dbDisconnect();
 			}
 			/* Закрыть текущую форму */
 			// Stage stage_ = (Stage) enter_id.getScene().getWindow();
@@ -269,10 +264,13 @@ public class EnterController {
 	}
 	public int chk_rigth(String FORM_NAME,String CUSRLOGNAME) {
 		int ret = 0;
-		Connection conn;
+		//Connection conn;
+		Connection conn = DBUtil.conn;
 		try {
+			/*
 			conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_ + "@"
 					+ Connect.connectionURL_ + "");
+					*/
 			Statement sqlStatement = conn.createStatement();
 			String readRecordSQL = 
 					" select count(*) cnt\n" + 
@@ -292,7 +290,7 @@ public class EnterController {
 			if (rs.next()) {
 				ret = rs.getInt("CNT");
 			}
-			conn.close();
+			//conn.close();
 			sqlStatement.close();
 		} catch (SQLException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);

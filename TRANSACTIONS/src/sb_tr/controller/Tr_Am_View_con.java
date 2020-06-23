@@ -50,6 +50,7 @@ import sb_tr.model.TerminalDAO;
 import sb_tr.model.TerminalForCombo;
 import sb_tr.model.Transact;
 import sb_tr.model.TransactClass;
+import sb_tr.util.DBUtil;
 
 import java.util.Random;
 import java.util.function.Function;
@@ -905,8 +906,11 @@ public class Tr_Am_View_con {
 		
 		
 		try {
+			/*
 			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
 					+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
+*/
+			Connection conn = DBUtil.conn;
 			Statement sqlStatement = conn.createStatement();
 			String readRecordSQL = "select NAME\r\n" + 
 					"  from (select NAME\r\n" + 
@@ -927,7 +931,7 @@ public class Tr_Am_View_con {
 			terminal_name.getSelectionModel().select(0);
 
 			rs.close();
-			conn.close();
+			//conn.close();
 			sqlStatement.close();
 			
 		} catch (SQLException e) {
@@ -1198,10 +1202,11 @@ public class Tr_Am_View_con {
 				attributes__c.setCellStyle(cellStyle_border_for_cell);
 				statusabs_c.setCellStyle(cellStyle_border_for_cell);
 				sess_id_c.setCellStyle(cellStyle_border_for_cell);
-
+/*
 				Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
 						+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
-
+						*/
+				Connection conn = DBUtil.conn;
 				// id_sess.getText(), dt1.getValue(),
 				// dt2.getValue()
 
@@ -1506,7 +1511,7 @@ public class Tr_Am_View_con {
 					sheet.autoSizeColumn(j);
 				}
 				myResultSet.close();
-				conn.close();
+				//conn.close();
 				book.write(new FileOutputStream(file.getPath()));
 				book.close();
 			}

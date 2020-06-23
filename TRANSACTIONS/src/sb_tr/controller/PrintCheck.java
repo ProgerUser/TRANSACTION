@@ -21,6 +21,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.swing.JRViewer;
 import sb_tr.model.Connect;
+import sb_tr.util.DBUtil;
 
 public class PrintCheck extends JFrame {
 
@@ -38,10 +39,11 @@ public class PrintCheck extends JFrame {
 	        JasperReport jasperReport = JasperCompileManager.compileReport(reportSrcFile);
 	        // Fields for report
 	        HashMap<String, Object> parameters = new HashMap<String, Object>();
-
+/*
 			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
 					+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
-
+*/
+			Connection conn = DBUtil.conn;
 			Statement sqlStatement = conn.createStatement();
 			String readRecordSQL ="select t.terminal,\r\n" + 
 					"               (select ADDRESS\r\n" + 
@@ -117,7 +119,7 @@ public class PrintCheck extends JFrame {
 		        parameters.put("period", myResultSet.getString("PERIOD"));
 			}
 			myResultSet.close();
-			conn.close();
+			//conn.close();
 	        ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 	        list.add(parameters);
 	 
