@@ -44,6 +44,7 @@ public class Main extends Application {
 		if (Connect.userID_ != null) {
 			// primaryStage.setMaximized(true);
 			primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
+			DBUtil.dbConnect();/*Подключиться к БД*/
 			Main.showFirst();
 		} else {
 			Enter();
