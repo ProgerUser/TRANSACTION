@@ -193,7 +193,16 @@ public class Ibank {
 			ObservableList<Ibank2> empData = CLIENTS();
 			populate_cli(empData);
 			autoResizeColumns(CLI);
-			TableFilter.forTableView(CLI).apply();
+			/* TableFilter.forTableView(CLI).apply(); */
+			TableFilter<Ibank2> tableFilter = new TableFilter<>(CLI);
+			ObservableList<Ibank2> items = tableFilter.getBackingList();
+			tableFilter.setSearchStrategy((input, target) -> {
+				try {
+					return target.toLowerCase().contains(input.toLowerCase());
+				} catch (Exception e) {
+					return false;
+				}
+			});
 		}
 
 	}
