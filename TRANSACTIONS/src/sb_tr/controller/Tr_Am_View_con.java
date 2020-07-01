@@ -46,6 +46,7 @@ import sb_tr.model.Amra_Trans;
 import sb_tr.model.Connect;
 import sb_tr.model.FN_SESS_AMRA;
 import sb_tr.model.GUIUtils;
+import sb_tr.model.Ibank2;
 import sb_tr.model.TerminalDAO;
 import sb_tr.model.TerminalForCombo;
 import sb_tr.model.Transact;
@@ -131,10 +132,10 @@ public class Tr_Am_View_con {
 
 	@FXML
 	private CheckBox inkass;
-	
+
 	@FXML
-    private TableColumn<Amra_Trans, String> chk_row;
-	
+	private TableColumn<Amra_Trans, String> chk_row;
+
 	@FXML
 	private TableColumn<Amra_Trans, String> fio;
 
@@ -227,13 +228,13 @@ public class Tr_Am_View_con {
 
 	@FXML
 	private TextField summa_plat;
-	
+
 	@FXML
 	private TextField summa_nal;
-	
+
 	@FXML
 	private TextField cnt_all_;
-	  
+
 	@FXML
 	private TableColumn<Amra_Trans, String> ownerincomeamount;
 
@@ -338,10 +339,16 @@ public class Tr_Am_View_con {
 
 	@FXML
 	private ProgressIndicator pb;
-	
+
 	@FXML
 	private ComboBox<String> terminal_name;
 
+	
+    @FXML
+    void show_(ActionEvent l) {
+		
+    }
+    
 	@FXML
 	private void initialize() {
 		trans_table.setEditable(true);
@@ -350,6 +357,8 @@ public class Tr_Am_View_con {
 			t.setDaemon(true);
 			return t;
 		});
+	
+		
 		chk_row.setCellValueFactory(cellData -> cellData.getValue().chk_rowProperty());
 		rownum.setCellValueFactory(cellData -> cellData.getValue().rownumProperty());
 		recdate.setCellValueFactory(cellData -> cellData.getValue().recdateProperty());
@@ -903,23 +912,19 @@ public class Tr_Am_View_con {
 						.set_status(t.getNewValue());
 			}
 		});
-		
-		
+
 		try {
 			/*
-			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
-					+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
-*/
+			 * Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" +
+			 * Connect.userID_ + "/" + Connect.userPassword_ + "@" + Connect.connectionURL_
+			 * + "");
+			 */
 			Connection conn = DBUtil.conn;
 			Statement sqlStatement = conn.createStatement();
-			String readRecordSQL = "select NAME\r\n" + 
-					"  from (select NAME\r\n" + 
-					"          from Z_SB_TERMINAL_AMRA_DBT t\r\n" + 
-					"        union all\r\n" + 
-					"        select 'Все' NAME\r\n" + 
-					"          from dual)\r\n" + 
-					" order by decode(NAME, 'Все', 0, substr(NAME, length(NAME), 1)) asc\r\n" + 
-					"";
+			String readRecordSQL = "select NAME\r\n" + "  from (select NAME\r\n"
+					+ "          from Z_SB_TERMINAL_AMRA_DBT t\r\n" + "        union all\r\n"
+					+ "        select 'Все' NAME\r\n" + "          from dual)\r\n"
+					+ " order by decode(NAME, 'Все', 0, substr(NAME, length(NAME), 1)) asc\r\n" + "";
 			ResultSet rs = sqlStatement.executeQuery(readRecordSQL);
 			ObservableList<String> combolist = FXCollections.observableArrayList();
 			while (rs.next()) {
@@ -931,9 +936,9 @@ public class Tr_Am_View_con {
 			terminal_name.getSelectionModel().select(0);
 
 			rs.close();
-			//conn.close();
+			// conn.close();
 			sqlStatement.close();
-			
+
 		} catch (SQLException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -943,7 +948,7 @@ public class Tr_Am_View_con {
 			alert.setContentText(e.getMessage());
 			alert.showAndWait();
 		}
-		
+
 	}
 
 	void on_filter() {
@@ -1202,10 +1207,11 @@ public class Tr_Am_View_con {
 				attributes__c.setCellStyle(cellStyle_border_for_cell);
 				statusabs_c.setCellStyle(cellStyle_border_for_cell);
 				sess_id_c.setCellStyle(cellStyle_border_for_cell);
-/*
-				Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
-						+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
-						*/
+				/*
+				 * Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" +
+				 * Connect.userID_ + "/" + Connect.userPassword_ + "@" + Connect.connectionURL_
+				 * + "");
+				 */
 				Connection conn = DBUtil.conn;
 				// id_sess.getText(), dt1.getValue(),
 				// dt2.getValue()
@@ -1511,7 +1517,7 @@ public class Tr_Am_View_con {
 					sheet.autoSizeColumn(j);
 				}
 				myResultSet.close();
-				//conn.close();
+				// conn.close();
 				book.write(new FileOutputStream(file.getPath()));
 				book.close();
 			}
@@ -1566,14 +1572,16 @@ public class Tr_Am_View_con {
 			pb.setVisible(true);
 			Task<Object> task = new Task<Object>() {
 				@Override
-				public  Object call() throws Exception {
+				public Object call() throws Exception {
 					try {
-						ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", "start javaw -splash:"+System.getenv("TRANSACT_PATH")+"SPLASH/splash.gif -jar "
-								+ System.getenv("TRANSACT_PATH") + "/AP.jar 666 2 " + fn.get_checknumber() + " no "
-								+ Connect.userID_ + " " + Connect.userPassword_ + " " + Connect.connectionURL_
-										.substring(Connect.connectionURL_.indexOf("/") + 1, Connect.connectionURL_.length())
-								+ " J:\\dev6i\\NET80\\ADMIN");
-						
+						ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c",
+								"start javaw -splash:" + System.getenv("TRANSACT_PATH") + "SPLASH/splash.gif -jar "
+										+ System.getenv("TRANSACT_PATH") + "/AP.jar 666 2 " + fn.get_checknumber()
+										+ " no " + Connect.userID_ + " " + Connect.userPassword_ + " "
+										+ Connect.connectionURL_.substring(Connect.connectionURL_.indexOf("/") + 1,
+												Connect.connectionURL_.length())
+										+ " J:\\dev6i\\NET80\\ADMIN");
+
 						builder.redirectErrorStream(true);
 						Process p;
 						p = builder.start();
@@ -1594,50 +1602,37 @@ public class Tr_Am_View_con {
 				}
 			};
 			task.setOnFailed(e -> Alert(task.getException().getMessage()));
-			task.setOnSucceeded(e ->pb.setVisible(false) );
+			task.setOnSucceeded(e -> pb.setVisible(false));
 
 			exec.execute(task);
 
-			System.out.println("start javaw -splash:"+System.getenv("TRANSACT_PATH")+"SPLASH/splash.gif -jar "
+			System.out.println("start javaw -splash:" + System.getenv("TRANSACT_PATH") + "SPLASH/splash.gif -jar "
 					+ System.getenv("TRANSACT_PATH") + "/AP.jar 666 2 " + fn.get_checknumber() + " no "
 					+ Connect.userID_ + " " + Connect.userPassword_ + " " + Connect.connectionURL_
 							.substring(Connect.connectionURL_.indexOf("/") + 1, Connect.connectionURL_.length())
 					+ " J:\\dev6i\\NET80\\ADMIN");
 			/*
-			Runnable task = () -> {
-				try {
-					ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", "java -jar "
-							+ System.getenv("TRANSACT_PATH") + "/AP.jar 666 2 " + fn.get_checknumber() + " no "
-							+ Connect.userID_ + " " + Connect.userPassword_ + " " + Connect.connectionURL_
-									.substring(Connect.connectionURL_.indexOf("/") + 1, Connect.connectionURL_.length())
-							+ " J:\\dev6i\\NET80\\ADMIN");
-					builder.redirectErrorStream(true);
-					Process p;
-					p = builder.start();
-					BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
-					String line;
-					while (true) {
-						line = r.readLine();
-						if (line == null) {
-							break;
-						}
-						System.out.println(line);
-					}
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					Alerts(e.getMessage());
-				}
-			};
-			Thread thread = new Thread(task);
-			thread.start();
-			*/
+			 * Runnable task = () -> { try { ProcessBuilder builder = new
+			 * ProcessBuilder("cmd.exe", "/c", "java -jar " + System.getenv("TRANSACT_PATH")
+			 * + "/AP.jar 666 2 " + fn.get_checknumber() + " no " + Connect.userID_ + " " +
+			 * Connect.userPassword_ + " " + Connect.connectionURL_
+			 * .substring(Connect.connectionURL_.indexOf("/") + 1,
+			 * Connect.connectionURL_.length()) + " J:\\dev6i\\NET80\\ADMIN");
+			 * builder.redirectErrorStream(true); Process p; p = builder.start();
+			 * BufferedReader r = new BufferedReader(new
+			 * InputStreamReader(p.getInputStream())); String line; while (true) { line =
+			 * r.readLine(); if (line == null) { break; } System.out.println(line); } }
+			 * catch (IOException e) { // TODO Auto-generated catch block
+			 * Alerts(e.getMessage()); } }; Thread thread = new Thread(task);
+			 * thread.start();
+			 */
 		}
 	}
 
 	@FXML
 	private void term_view_(ActionEvent actionEvent) {
 		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(),
-				"", false,terminal_name.getValue().toString());
+				"", false, terminal_name.getValue().toString());
 		populate_fn_sess(empData);
 
 		autoResizeColumns(trans_table);
@@ -1685,11 +1680,12 @@ public class Tr_Am_View_con {
 
 	// Найти загрузки
 	private void exec_filter(ObservableList<Amra_Trans> trData) {
-		
+
 		Runnable task = () -> {
 			trans_table.setItems(null);
 			trans_table.setItems(trData);
 			autoResizeColumns(trans_table);
+			
 			provider.setCellFactory(col -> new TextFieldTableCell<Amra_Trans, String>() {
 				@Override
 				public void updateItem(String item, boolean empty) {
@@ -1735,35 +1731,52 @@ public class Tr_Am_View_con {
 				return cell;
 			});
 			try {
-			Runnable task_ = () -> {
-				Platform.runLater(new Runnable() {
-					@Override
-					public void run() {
-						TableFilter.forTableView(trans_table).apply();
-					}
-				});
-			};
-			Thread thread_ = new Thread(task_);
-			thread_.start();
-			}
-			catch (Exception e) {
+				Runnable task_ = () -> {
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							/* TableFilter.forTableView().apply(); */
+							TableFilter<Amra_Trans> tableFilter = new TableFilter<>(trans_table);
+							tableFilter.setSearchStrategy((input, target) -> {
+								try {
+									return target.toLowerCase().contains(input.toLowerCase());
+								} catch (Exception e) {
+									return false;
+								}
+							});
+						}
+					});
+				};
+				Thread thread_ = new Thread(task_);
+				thread_.start();
+			} catch (Exception e) {
 				Alert(e.getMessage());
 			}
 		};
-		
+
 		Thread thread = new Thread(task);
 		thread.start();
-		
+
 		pb.setVisible(false);
 	}
 
 	@FXML
 	private void filter(ActionEvent actionEvent) {
-
+		/*
+		trans_table.setOnKeyReleased((KeyEvent t)-> {
+		    KeyCode key=t.getCode();
+		    ActionEvent l;
+		    if (key == KeyCode.F4){
+		    	view_unpivot2(actionEvent);
+		    }
+		});
+		*/
+		
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
 				pb.setVisible(true);
+				
 			}
 		});
 
@@ -1771,10 +1784,10 @@ public class Tr_Am_View_con {
 			@Override
 			public ObservableList<Amra_Trans> call() throws Exception {
 				return TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(), FIO.getText(),
-						(inkass.isSelected()) ? false : true,terminal_name.getValue().toString());
+						(inkass.isSelected()) ? false : true, terminal_name.getValue().toString());
 			}
 		};
-		
+
 		task.setOnFailed(e -> Alert(task.getException().getMessage()));
 		task.setOnSucceeded(e -> exec_filter((ObservableList<Amra_Trans>) task.getValue()));
 
@@ -1841,10 +1854,11 @@ public class Tr_Am_View_con {
 	}
 
 	public int cnt = 0;
-	
+
 	public double all_sum = 0;
-	
+
 	public double all_sum_nal = 0;
+
 	@FXML
 	void chk_all(ActionEvent event) {
 		chk_row.setCellFactory(list -> {
@@ -1866,8 +1880,7 @@ public class Tr_Am_View_con {
 						cnt = cnt + 1;
 					}
 				}
-			}
-			else if (column.getText().equals("СуммаНаличных=CASHAMOUNT")) {
+			} else if (column.getText().equals("СуммаНаличных=CASHAMOUNT")) {
 				for (int i = 0; i < trans_table.getItems().size(); i++) {
 					if (column.getCellData(i) != null) {
 						all_sum_nal = all_sum_nal + Double.parseDouble(column.getCellData(i).toString());
@@ -1875,7 +1888,7 @@ public class Tr_Am_View_con {
 				}
 			}
 		});
-		
+
 		String pattern = "###,###.###";
 		DecimalFormat decimalFormat = new DecimalFormat(pattern);
 
@@ -1894,8 +1907,9 @@ public class Tr_Am_View_con {
 	void chk_one(ActionEvent event) {
 		trans_table.getSelectionModel().getSelectedItem().set_chk_row("\u2713");
 	}
-    @FXML
-    void unchk_all(ActionEvent event) {
+
+	@FXML
+	void unchk_all(ActionEvent event) {
 		chk_row.setCellFactory(list -> {
 			TextFieldTableCell<Amra_Trans, String> cell = new TextFieldTableCell<Amra_Trans, String>() {
 				@Override
@@ -1908,8 +1922,8 @@ public class Tr_Am_View_con {
 		summa_plat.setText("");
 		summa_nal.setText("");
 		cnt_all_.setText("");
-    }
-    
+	}
+
 	@FXML
 	private void view_unpivot(ActionEvent actionEvent) {
 		try {
@@ -1949,4 +1963,41 @@ public class Tr_Am_View_con {
 		}
 	}
 
+	private void view_unpivot2(ActionEvent actionEvent) {
+		try {
+			if (trans_table.getSelectionModel().getSelectedItem() == null) {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText("Выберите сначала данные из таблицы!");
+				alert.showAndWait();
+			} else {
+				Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
+
+				Connect.PNMB_ = fn.get_checknumber();
+
+				Stage stage = new Stage();
+				Parent root;
+
+				root = FXMLLoader.load(Main.class.getResource("view/Transact_Unpiv.fxml"));
+
+				stage.setScene(new Scene(root));
+				stage.getIcons().add(new Image("icon.png"));
+				stage.setTitle("Подробно " + fn.get_checknumber());
+				// stage.initModality(Modality.WINDOW_MODAL);
+				stage.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
+				stage.show();
+			}
+		} catch (IOException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+		}
+	}
 }

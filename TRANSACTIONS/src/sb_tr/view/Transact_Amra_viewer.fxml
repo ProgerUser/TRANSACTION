@@ -9,7 +9,7 @@
 	<center>
 		<GridPane prefHeight="555.0" prefWidth="598.0">
 			<children>
-				<TableView fx:id="trans_table" layoutX="14.0" prefWidth="994.0" styleClass="mylistview" stylesheets="@../../transact.css" tableMenuButtonVisible="true" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS">
+				<TableView fx:id="trans_table" layoutX="14.0" onKeyPressed="#show_" prefWidth="994.0" styleClass="mylistview" stylesheets="@../../transact.css" tableMenuButtonVisible="true" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS">
 					<columns>
 						<TableColumn fx:id="chk_row" prefWidth="137.0" text="Выбор" />
 						<TableColumn fx:id="rownum" prefWidth="137.0" text="Номер строки" />
