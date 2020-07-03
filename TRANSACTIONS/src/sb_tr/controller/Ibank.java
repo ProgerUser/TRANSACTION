@@ -146,7 +146,12 @@ public class Ibank {
 							+ "             1\n" + "            else\n" + "             2\n" + "          end";
 					ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
 					while (myResultSet.next()) {
-						acc_ = acc_ + "\r\n" + myResultSet.getString("FILTERING");
+						if (acc_.equals("")) {
+							acc_ = myResultSet.getString("FILTERING");
+						}else
+						{
+							acc_ = acc_ + "\r\n" + myResultSet.getString("FILTERING");
+						}
 					}
 					acc.setText(acc_);
 				} catch (Exception e) {

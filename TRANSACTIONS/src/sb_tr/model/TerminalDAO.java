@@ -254,17 +254,22 @@ public class TerminalDAO {
 			LocalDate dt2,
 			String FIO,
 			boolean chk,
+			boolean chk_pay,
 			String terminal) {
 
 		String ldt1 = null;
 		String ldt2 = null;
 
 		String table = null;
+		
 		if (chk == true) {
-			table = "Z_SB_TRANSACT_AMRA_DBT";
-		} else {
 			table = "z_sb_transact_amra_inkas";
+		} else if (chk_pay == true) {
+			table = "z_sb_transact_amra_ret";
+		} else if ((chk == false & chk_pay == false)) {
+			table = "Z_SB_TRANSACT_AMRA_DBT";
 		}
+		
 		if (dt1 != null)
 			ldt1 = dt1.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 		if (dt2 != null)

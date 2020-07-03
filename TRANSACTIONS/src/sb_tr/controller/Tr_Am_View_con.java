@@ -132,6 +132,9 @@ public class Tr_Am_View_con {
 
 	@FXML
 	private CheckBox inkass;
+	
+	@FXML
+	private CheckBox ret_pay;
 
 	@FXML
 	private TableColumn<Amra_Trans, String> chk_row;
@@ -1632,13 +1635,29 @@ public class Tr_Am_View_con {
 	@FXML
 	private void term_view_(ActionEvent actionEvent) {
 		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(),
-				"", false, terminal_name.getValue().toString());
+				"", false,false, terminal_name.getValue().toString());
 		populate_fn_sess(empData);
 
 		autoResizeColumns(trans_table);
 		// GUIUtils.autoFitTable(trans_table);
 	}
+	
+	
 
+	@FXML
+	private void check_table(ActionEvent actionEvent) {
+		if (ret_pay.isSelected()) {
+			ret_pay.setSelected(false);
+		}
+	}
+	
+	@FXML
+	private void check_table_ret(ActionEvent actionEvent) {
+		if (inkass.isSelected()) {
+			inkass.setSelected(false);
+		}
+	}
+	
 	@FXML
 	private void view_attr(ActionEvent actionEvent) {
 		try {
@@ -1784,7 +1803,8 @@ public class Tr_Am_View_con {
 			@Override
 			public ObservableList<Amra_Trans> call() throws Exception {
 				return TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(), FIO.getText(),
-						(inkass.isSelected()) ? false : true, terminal_name.getValue().toString());
+						(inkass.isSelected()) ? true : false, (ret_pay.isSelected()) ? true : false,
+						terminal_name.getValue().toString());
 			}
 		};
 

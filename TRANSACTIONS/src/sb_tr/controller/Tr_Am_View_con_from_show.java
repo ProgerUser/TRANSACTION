@@ -820,8 +820,8 @@ public class Tr_Am_View_con_from_show {
 			}
 		});
 
-		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(Connect.SESS_ID_, dt1.getValue(),
-				dt2.getValue(),"",false,"Все");
+		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(Connect.SESS_ID_, dt1.getValue(), dt2.getValue(),
+				"", false, false, "Все");
 		populate_fn_sess(empData);
 
 		autoResizeColumns(trans_table);
@@ -1405,7 +1405,7 @@ public class Tr_Am_View_con_from_show {
 	@FXML
 	private void term_view_(ActionEvent actionEvent) {
 		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(),
-				dt2.getValue(),"",false,"Все");
+				dt2.getValue(),"",false,false,"Все");
 		populate_fn_sess(empData);
 
 		autoResizeColumns(trans_table);
@@ -1456,7 +1456,7 @@ public class Tr_Am_View_con_from_show {
 	private void filter(ActionEvent actionEvent) {
 		trans_table.setEditable(true);
 		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(),
-				dt2.getValue(),"",false,"Все");
+				dt2.getValue(),"",false,false,"Все");
 		populate_fn_sess(empData);
 		// autoResizeColumns(trans_table);
 	}
