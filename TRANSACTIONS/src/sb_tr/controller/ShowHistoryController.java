@@ -85,6 +85,9 @@ public class ShowHistoryController {
 	@FXML
 	private DatePicker datestart;
 
+    @FXML
+    private Button search;
+    
 	@FXML
 	private TableColumn<FN_SESS_AMRA, String> DATE_;
 	@FXML
@@ -209,6 +212,7 @@ public class ShowHistoryController {
 	// usage)
 	@FXML
 	private void fn_sess_search(ActionEvent event) throws SQLException, ClassNotFoundException {
+		search.setDisable(true);
 		pb.setVisible(true);
 		Task<List<FN_SESS_AMRA>> task = new Task<List<FN_SESS_AMRA>>() {
 			@Override
@@ -331,6 +335,7 @@ public class ShowHistoryController {
 	// Найти загрузки
 	@FXML
 	private void fn_sess_search_(ActionEvent actionEvent) {
+		search.setDisable(true);
 		// Get all Employees information
 		ObservableList<FN_SESS_AMRA> empData = TerminalDAO.srch_fn_sess(sess_id_t.getText(), trnumber.getText(),
 				datestart.getValue(), dateend.getValue());
@@ -354,6 +359,7 @@ public class ShowHistoryController {
 				}
 			}
 		});
+		search.setDisable(false);
 		// GUIUtils.autoFitTable(fn_sess_table);
 	}
 
@@ -386,8 +392,9 @@ public class ShowHistoryController {
 				}
 			}
 		});
-		pb.setVisible(false);
 		@SuppressWarnings("deprecation")
 		TableFilter<FN_SESS_AMRA> filter = new TableFilter<>(fn_sess_table);
+		pb.setVisible(false);
+		search.setDisable(false);
 	}
 }

@@ -136,6 +136,9 @@ public class Tr_Am_View_con {
 	@FXML
 	private CheckBox ret_pay;
 
+    @FXML
+    private Button search;
+    
 	@FXML
 	private TableColumn<Amra_Trans, String> chk_row;
 
@@ -1777,6 +1780,7 @@ public class Tr_Am_View_con {
 		thread.start();
 
 		pb.setVisible(false);
+		search.setDisable(false);
 	}
 
 	@FXML
@@ -1795,7 +1799,7 @@ public class Tr_Am_View_con {
 			@Override
 			public void run() {
 				pb.setVisible(true);
-				
+				search.setDisable(true);
 			}
 		});
 
