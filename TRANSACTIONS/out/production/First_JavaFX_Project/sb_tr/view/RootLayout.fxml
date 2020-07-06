@@ -23,10 +23,10 @@
 							text="Close" />
 					</items>
 				</Menu>
-				<!--<Menu mnemonicParsing="false" text="Терминалы Квант-Капитал"> <items> 
-					<MenuItem mnemonicParsing="false" onAction="#loadtransact" text="Загрузка 
-					транзакции" /> <MenuItem mnemonicParsing="false" onAction="#chektransact" 
-					text="Печать чеков" /> </items> </Menu> -->
+				<Menu mnemonicParsing="false" text="Терминалы Квант-Капитал"> <items> 
+					<!--<MenuItem mnemonicParsing="false" onAction="#loadtransact" text="Загрузка транзакции" />-->
+				    <MenuItem mnemonicParsing="false" onAction="#chektransact" 
+					text="Печать чеков" /> </items> </Menu> 
 				<Menu mnemonicParsing="false" text="Кассовый офис">
 					<items>
 						<MenuItem mnemonicParsing="false" onAction="#Kash"

@@ -181,6 +181,10 @@ public class Amra_Transact {
 				/*Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
 						+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
 						*/
+				
+				DBUtil.dbDisconnect();
+				DBUtil.dbConnect();
+				
 				Connection conn = DBUtil.conn;
 				CallableStatement callStmt = null;
 				String reviewContent = null;
@@ -392,6 +396,10 @@ public class Amra_Transact {
 				Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
 						+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
 						*/
+				
+				DBUtil.dbDisconnect();
+				DBUtil.dbConnect();
+				
 				Connection conn = DBUtil.conn;
 				String sql_txt = "delete from z_sb_log_amra where sess_id = ?";
 				CallableStatement cs = conn.prepareCall(sql_txt);
@@ -480,6 +488,10 @@ public class Amra_Transact {
 					DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH-mm-ss");
 
 					String strDate = dateFormat.format(date);
+					
+					DBUtil.dbDisconnect();
+					DBUtil.dbConnect();
+					
 					Connection conn = DBUtil.conn;
 					/*
 					Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
@@ -688,6 +700,10 @@ public class Amra_Transact {
 
 					CallableStatement callStmt = null;
 					Clob reviewContent = null;
+					
+					DBUtil.dbDisconnect();
+					DBUtil.dbConnect();
+					
 					Connection conn = DBUtil.conn;
 					/*
 					Connection conn;
