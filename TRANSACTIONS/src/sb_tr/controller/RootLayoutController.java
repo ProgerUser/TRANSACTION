@@ -69,11 +69,12 @@ public class RootLayoutController {
 
 	@FXML
 	void handleExit(ActionEvent event) {
-		//File file = new File(System.getProperty("user.home") + "/XXI.AP_TEST_MAIN.properties");
-		//file.delete();
-		//System.out.print("------------------------------------------------------");
-		//Platform.exit();
-		//System.exit(0);
+		// File file = new File(System.getProperty("user.home") +
+		// "/XXI.AP_TEST_MAIN.properties");
+		// file.delete();
+		// System.out.print("------------------------------------------------------");
+		// Platform.exit();
+		// System.exit(0);
 	}
 
 	@FXML
@@ -81,7 +82,7 @@ public class RootLayoutController {
 		try {
 			if (Connect.userPassword_.equals("")) {
 
-			} else if (chk_rigth("Viewer.fxml",Connect.userID_) == 1) {
+			} else if (chk_rigth("Viewer.fxml", Connect.userID_) == 1) {
 				Main.showEmployeeView();
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -123,26 +124,21 @@ public class RootLayoutController {
 			alert.show();
 		}
 	}
-	
+
 	@FXML
 	void Ibank(ActionEvent event) {
 		try {
 			Main.Ibankk();
 			/*
-			if (Connect.userPassword_.equals("")) {
-
-			} else if (chk_rigth("Ibank.fxml",Connect.userID_) == 1) {
-				Main.Ibankk();
-			} else {
-				Alert alert = new Alert(Alert.AlertType.INFORMATION);
-				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-				stage.getIcons().add(new Image("terminal.png"));
-				alert.setTitle("Внимание");
-				alert.setHeaderText(null);
-				alert.setContentText("Нет прав!");
-				alert.showAndWait();
-			}
-			*/
+			 * if (Connect.userPassword_.equals("")) {
+			 * 
+			 * } else if (chk_rigth("Ibank.fxml",Connect.userID_) == 1) { Main.Ibankk(); }
+			 * else { Alert alert = new Alert(Alert.AlertType.INFORMATION); Stage stage =
+			 * (Stage) alert.getDialogPane().getScene().getWindow();
+			 * stage.getIcons().add(new Image("terminal.png")); alert.setTitle("Внимание");
+			 * alert.setHeaderText(null); alert.setContentText("Нет прав!");
+			 * alert.showAndWait(); }
+			 */
 		} catch (NullPointerException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			alert.setHeaderText("Error");
@@ -150,13 +146,14 @@ public class RootLayoutController {
 			alert.show();
 		}
 	}
+
 	@FXML
 	void term_view(ActionEvent event) {
 		try {
 
 			if (Connect.userPassword_.equals("")) {
 
-			} else if (chk_rigth("Transact_Amra_viewer.fxml",Connect.userID_) == 1) {
+			} else if (chk_rigth("Transact_Amra_viewer.fxml", Connect.userID_) == 1) {
 				Main.showAmTr();
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -182,7 +179,7 @@ public class RootLayoutController {
 
 			if (Connect.userPassword_.equals("")) {
 
-			} else if (chk_rigth("TransactLoad.fxml",Connect.userID_) == 1) {
+			} else if (chk_rigth("TransactLoad.fxml", Connect.userID_) == 1) {
 				Main.Transact();
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -208,7 +205,7 @@ public class RootLayoutController {
 
 			if (Connect.userPassword_.equals("")) {
 
-			} else if (chk_rigth("ShowHist.fxml",Connect.userID_) == 1) {
+			} else if (chk_rigth("ShowHist.fxml", Connect.userID_) == 1) {
 				Main.Show_Hist();
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -234,7 +231,7 @@ public class RootLayoutController {
 
 			if (Connect.userPassword_.equals("")) {
 
-			} else if (chk_rigth("Termdial.fxml",Connect.userID_) == 1) {
+			} else if (chk_rigth("Termdial.fxml", Connect.userID_) == 1) {
 				Main.Termdial_view_();
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -260,7 +257,7 @@ public class RootLayoutController {
 
 			if (Connect.userPassword_.equals("")) {
 
-			} else if (chk_rigth("Amra_Trans.fxml",Connect.userID_) == 1) {
+			} else if (chk_rigth("Amra_Trans.fxml", Connect.userID_) == 1) {
 				Main.Transact_Amra();
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -286,7 +283,7 @@ public class RootLayoutController {
 
 			if (Connect.userPassword_.equals("")) {
 
-			} else if (chk_rigth("Terminal.fxml",Connect.userID_) == 1) {
+			} else if (chk_rigth("Terminal.fxml", Connect.userID_) == 1) {
 				Main.Terminal();
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -311,7 +308,7 @@ public class RootLayoutController {
 		try {
 			if (Connect.userPassword_.equals("")) {
 
-			} else if (chk_rigth("Kash.fxml",Connect.userID_) == 1) {
+			} else if (chk_rigth("Kash.fxml", Connect.userID_) == 1) {
 				Main.showKash();
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -362,11 +359,55 @@ public class RootLayoutController {
 			@Override
 			public Object call() throws Exception {
 				try {
-					ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", "start javaw -splash:"+System.getenv("TRANSACT_PATH")+"SPLASH/splash.gif -jar "
-							+ System.getenv("TRANSACT_PATH") + "/AP.jar 666 1 1 no "
-							+ Connect.userID_ + " " + Connect.userPassword_ + " " + Connect.connectionURL_
+					ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", "start javaw -splash:"
+							+ System.getenv("TRANSACT_PATH") + "SPLASH/splash.gif -jar "
+							+ System.getenv("TRANSACT_PATH") + "/AP.jar 666 1 1 no " + Connect.userID_ + " "
+							+ Connect.userPassword_ + " " + Connect.connectionURL_
 									.substring(Connect.connectionURL_.indexOf("/") + 1, Connect.connectionURL_.length())
 							+ " J:\\dev6i\\NET80\\ADMIN");
+					builder.redirectErrorStream(true);
+					Process p;
+					p = builder.start();
+					BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+					String line;
+					while (true) {
+						line = r.readLine();
+						if (line == null) {
+							break;
+						}
+						System.out.println(line);
+					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					Alert(e.getMessage());
+				}
+				return null;
+			}
+		};
+		task.setOnFailed(e -> Alert(task.getException().getMessage()));
+		// task.setOnSucceeded(e -> );
+
+		exec.execute(task);
+	}
+
+	@FXML
+	void ap_printfmx(ActionEvent event) throws Exception {
+
+		System.out.println("ifrun60.exe I:\\KERNEL\\ap_main.fmx " + Connect.userID_ + "/" + Connect.userPassword_ + "@"
+				+ Connect.connectionURL_
+						.substring(Connect.connectionURL_.indexOf("/") + 1, Connect.connectionURL_.length())
+						.toUpperCase()
+				+ " \"report_type_id = 666\"");
+		
+		Task<Object> task = new Task<Object>() {
+			@Override
+			public Object call() throws Exception {
+				try {
+					ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c",
+							"ifrun60.exe I:\\KERNEL\\ap_main.fmx " + Connect.userID_ + "/" + Connect.userPassword_ + "@"
+									+ Connect.connectionURL_.substring(Connect.connectionURL_.indexOf("/") + 1,
+											Connect.connectionURL_.length()).toUpperCase()
+									+ " \"report_type_id = 666\"");
 					builder.redirectErrorStream(true);
 					Process p;
 					p = builder.start();
@@ -406,9 +447,9 @@ public class RootLayoutController {
 	void Access(ActionEvent event) {
 		try {
 			if (Connect.userPassword_.equals("")) {
-				
-			} else if (chk_rigth("Admin.fxml",Connect.userID_) == 1) {
-				System.out.println(chk_rigth("Admin.fxml",Connect.userID_));
+
+			} else if (chk_rigth("Admin.fxml", Connect.userID_) == 1) {
+				System.out.println(chk_rigth("Admin.fxml", Connect.userID_));
 				Main.Admin();
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -427,13 +468,13 @@ public class RootLayoutController {
 			alert.show();
 		}
 	}
-	
+
 	@FXML
 	void service(ActionEvent event) {
 		try {
 			if (Connect.userPassword_.equals("")) {
 
-			} else if (chk_rigth("Service.fxml",Connect.userID_) == 1) {
+			} else if (chk_rigth("Service.fxml", Connect.userID_) == 1) {
 				Main.Service();
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -468,35 +509,29 @@ public class RootLayoutController {
 		statusbar.setText(Connect.userID_ + "/" + Connect.connectionURL_);
 	}
 
-	public int chk_rigth(String FORM_NAME,String CUSRLOGNAME) {
+	public int chk_rigth(String FORM_NAME, String CUSRLOGNAME) {
 		int ret = 0;
-		//Connection conn;
+		// Connection conn;
 		Connection conn = DBUtil.conn;
 		try {
 			/*
-			conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_ + "@"
-					+ Connect.connectionURL_ + "");
-					*/
+			 * conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ +
+			 * "/" + Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
+			 */
 			Statement sqlStatement = conn.createStatement();
-			String readRecordSQL = 
-					" select count(*) cnt\n" + 
-					"  from z_sb_access_amra a,\n" + 
-					"       z_sb_access_gr_amra b,\n" + 
-					"       z_sb_access_gr_type_amra c,\n" + 
-					"       (select t.cusrlogname, t.iusrid from usr t) d\n" + 
-					" where a.id_form = b.form_id\n" + 
-					"   and b.gr_id = c.id_type\n" + 
-					"   and b.usr_id = d.iusrid\n" + 
-					"   and upper(FORM_NAME) = upper('"+FORM_NAME+"')\n" + 
-					"   and upper(CUSRLOGNAME) = upper('"+CUSRLOGNAME+"')\n" + 
-					"   and T_NAME = 'Y'\n";
+			String readRecordSQL = " select count(*) cnt\n" + "  from z_sb_access_amra a,\n"
+					+ "       z_sb_access_gr_amra b,\n" + "       z_sb_access_gr_type_amra c,\n"
+					+ "       (select t.cusrlogname, t.iusrid from usr t) d\n" + " where a.id_form = b.form_id\n"
+					+ "   and b.gr_id = c.id_type\n" + "   and b.usr_id = d.iusrid\n"
+					+ "   and upper(FORM_NAME) = upper('" + FORM_NAME + "')\n" + "   and upper(CUSRLOGNAME) = upper('"
+					+ CUSRLOGNAME + "')\n" + "   and T_NAME = 'Y'\n";
 			System.out.println(readRecordSQL);
 			ResultSet rs = sqlStatement.executeQuery(readRecordSQL);
 			ObservableList<String> combolist = FXCollections.observableArrayList();
 			if (rs.next()) {
 				ret = rs.getInt("CNT");
 			}
-			//conn.close();
+			// conn.close();
 			sqlStatement.close();
 		} catch (SQLException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -509,8 +544,7 @@ public class RootLayoutController {
 		}
 		return ret;
 	}
-    
-	
+
 	@FXML
 	void initialize() {
 		exec = Executors.newCachedThreadPool((runnable) -> {
