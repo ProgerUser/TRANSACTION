@@ -227,6 +227,18 @@ public class Main extends Application {
 		}
 	}
 
+	/* Пенсия */
+	public static void sep() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Main.class.getResource("view/Pens_divide.fxml"));
+			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
+			rootLayout.setCenter(employeeOperationsView);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/* Загрузка транз. Квант-Капитал */
 	public static void Transact() {
 		try {

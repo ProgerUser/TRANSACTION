@@ -67,6 +67,13 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }
+
+#separate {          
+    -fx-background-image: url("separate.png");
+    -fx-background-size: 35.0 35.0;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position:center;
+}
 #xlsx {          
     -fx-background-image: url("xlsx.png");
     -fx-background-size: 35.0 35.0;

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane minWidth="600" prefHeight="500" prefWidth="208.0"
+	xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+	
+	fx:controller="sb_tr.controller.penscontroller">
+	<children>
+		<Button fx:id="separate" disable="false" layoutX="14.0"
+					layoutY="24.0" mnemonicParsing="false" onAction="#separate"
+					prefHeight="35" prefWidth="35" stylesheets="@../../borderpane.css">
+			<tooltip>
+				<Tooltip text="Разделить файл" />
+			</tooltip>
+		</Button>
+	</children>
+</AnchorPane>

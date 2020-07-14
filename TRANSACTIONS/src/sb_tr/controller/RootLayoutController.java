@@ -546,6 +546,32 @@ public class RootLayoutController {
 	}
 
 	@FXML
+	void divide(ActionEvent event) {
+		try {
+			if (Connect.userPassword_.equals("")) {
+
+			} else if (chk_rigth("Pens_divide.fxml", Connect.userID_) == 1) {
+				System.out.println(chk_rigth("Pens_divide.fxml", Connect.userID_));
+				Main.sep();
+			} else {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText("Нет прав!");
+				alert.showAndWait();
+			}
+
+		} catch (NullPointerException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			alert.setHeaderText("Ошибка!");
+			alert.setContentText("Введите учетные данные");
+			alert.show();
+		}
+	}
+	
+	@FXML
 	void initialize() {
 		exec = Executors.newCachedThreadPool((runnable) -> {
 			Thread t = new Thread(runnable);
