@@ -67,6 +67,7 @@
 							text="Клиенты" />
 					</items>
 				</Menu>
+				<!-- 
 				<Menu mnemonicParsing="false" text="Помощь">
 					<items>
 						<MenuItem mnemonicParsing="false" onAction="#handleHelp"
@@ -75,6 +76,7 @@
 							text="DBCONNECT" />
 					</items>
 				</Menu>
+				 -->
 				<Menu mnemonicParsing="false" text="Пенсия">
 					<items>
 						<MenuItem mnemonicParsing="false" onAction="#divide"

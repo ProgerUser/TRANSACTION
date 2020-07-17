@@ -64,7 +64,6 @@ public class penscontroller {
 		try {
 			BufferedReader br = new BufferedReader(
 					new InputStreamReader(new FileInputStream(fileName), "CP1251"/* getFileCharset(fileName) */));
-
 			System.out.println("File_encode=" + getFileCharset(fileName));
 			String nextLine = "";
 			StringBuffer sb = new StringBuffer();

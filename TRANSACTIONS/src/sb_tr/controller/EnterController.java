@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -73,6 +72,7 @@ public class EnterController {
 	Statement sqlStatement = null;
 
 	void ent() {
+
 		/* try { */
 		/*
 		 * String mDateStr; Date startDate = null; SimpleDateFormat sdf = new
@@ -107,9 +107,9 @@ public class EnterController {
 		/* Выполнить проверку соединения с базой */
 		try {
 			/*
-			conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_ + "@"
-					+ Connect.connectionURL_ + "");
-					*/
+			 * conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ +
+			 * "/" + Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
+			 */
 			DBUtil.dbConnect();
 			Connection conn = DBUtil.conn;
 			sqlStatement = conn.createStatement();
@@ -124,13 +124,12 @@ public class EnterController {
 				alert_1.setHeaderText(null);
 				alert_1.setContentText("Ошибка ввода логина или пароля");
 				alert_1.showAndWait();
-			} else if (chk_rigth("enter.fxml",Connect.userID_) == 1) {
+			} else if (chk_rigth("enter.fxml", Connect.userID_) == 1) {
 				Stage stage_ = (Stage) enter_id.getScene().getWindow();
-				//stage_.setMaximized(true);
-				stage_.setTitle(Connect.userID_ + "@"+Connect.connectionURL_);
+				// stage_.setMaximized(true);
+				stage_.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
 				Main.showFirst();
-			}
-			else {
+			} else {
 				Alert alert_1 = new Alert(Alert.AlertType.INFORMATION);
 				Stage stage_1 = (Stage) alert_1.getDialogPane().getScene().getWindow();
 				stage_1.getIcons().add(new Image("icon.png"));
@@ -164,7 +163,7 @@ public class EnterController {
 
 			}
 			if (conn != null) {
-				//conn.close();
+				// conn.close();
 				DBUtil.dbDisconnect();
 			}
 			/* Закрыть текущую форму */
@@ -190,21 +189,47 @@ public class EnterController {
 		// con.setconnectionURL(conurl.getText());
 		// con.setuserID(login.getText());
 		// con.setuserPassword(pass.getText());
-		Connect.connectionURL_ = conurl.getValue().toString();
-		Connect.userID_ = login.getValue().toString();
-		Connect.userPassword_ = pass.getText();
-		/* Присвоить переменным значения для соединения с базой */
-		ent();
+
+		try
+		{
+			Connect.connectionURL_ = conurl.getValue().toString();
+			Connect.userID_ = login.getValue().toString();
+			Connect.userPassword_ = pass.getText();
+			ent();
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+		}
+		
 	}
 
 	@FXML
 	void enter_(KeyEvent ke) {
 		if (ke.getCode().equals(KeyCode.ENTER)) {
-			Connect.connectionURL_ = conurl.getValue().toString();
-			Connect.userID_ = login.getValue().toString();
-			Connect.userPassword_ = pass.getText();
-			/* Присвоить переменным значения для соединения с базой */
-			ent();
+			try
+			{
+				Connect.connectionURL_ = conurl.getValue().toString();
+				Connect.userID_ = login.getValue().toString();
+				Connect.userPassword_ = pass.getText();
+				ent();
+			}
+			catch (Exception e) {
+				// TODO: handle exception
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText(e.getMessage());
+				alert.showAndWait();
+			}
 		}
 	}
 
@@ -223,8 +248,8 @@ public class EnterController {
 			prop.load(input);
 
 			ObservableList<String> items = FXCollections.observableArrayList();
-			
-			//ObservableList<String> items_2 = FXCollections.observableArrayList();
+
+			// ObservableList<String> items_2 = FXCollections.observableArrayList();
 
 			@SuppressWarnings("unchecked")
 			Enumeration<String> enums = (Enumeration<String>) prop.propertyNames();
@@ -236,7 +261,7 @@ public class EnterController {
 					items.add(value);
 				} else if (key.contains("url")) {
 					conurl.getItems().addAll(value);
-					//items_2.add(value);
+					// items_2.add(value);
 				}
 			}
 
@@ -244,53 +269,47 @@ public class EnterController {
 //			conurl.getItems().addAll(prop.getProperty("url1"), prop.getProperty("url2"));
 
 			FilteredList<String> filteredItems = new FilteredList<String>(items);
-			//FilteredList<String> filteredItems_2 = new FilteredList<String>(items_2);
+			// FilteredList<String> filteredItems_2 = new FilteredList<String>(items_2);
 			// Then you need to provide the InputFilter with the FilteredList in the
 			// constructor call.
 			login.getEditor().textProperty().addListener(new InputFilter(login, filteredItems, false));
 
 			login.setItems(filteredItems);
-			
-			
-			//conurl.getEditor().textProperty().addListener(new InputFilter(conurl, filteredItems_2, false));
 
-			//conurl.setItems(filteredItems_2);
-			
+			// conurl.getEditor().textProperty().addListener(new InputFilter(conurl,
+			// filteredItems_2, false));
+
+			// conurl.setItems(filteredItems_2);
 
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
 		// conurl.getSelectionModel().select(0);
 	}
-	public int chk_rigth(String FORM_NAME,String CUSRLOGNAME) {
+
+	public int chk_rigth(String FORM_NAME, String CUSRLOGNAME) {
 		int ret = 0;
-		//Connection conn;
+		// Connection conn;
 		Connection conn = DBUtil.conn;
 		try {
 			/*
-			conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_ + "@"
-					+ Connect.connectionURL_ + "");
-					*/
+			 * conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ +
+			 * "/" + Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
+			 */
 			Statement sqlStatement = conn.createStatement();
-			String readRecordSQL = 
-					" select count(*) cnt\n" + 
-					"  from z_sb_access_amra a,\n" + 
-					"       z_sb_access_gr_amra b,\n" + 
-					"       z_sb_access_gr_type_amra c,\n" + 
-					"       (select t.cusrlogname, t.iusrid from usr t) d\n" + 
-					" where a.id_form = b.form_id\n" + 
-					"   and b.gr_id = c.id_type\n" + 
-					"   and b.usr_id = d.iusrid\n" + 
-					"   and upper(FORM_NAME) = upper('"+FORM_NAME+"')\n" + 
-					"   and upper(CUSRLOGNAME) = upper('"+CUSRLOGNAME+"')\n" + 
-					"   and T_NAME = 'Y'\n";
+			String readRecordSQL = " select count(*) cnt\n" + "  from z_sb_access_amra a,\n"
+					+ "       z_sb_access_gr_amra b,\n" + "       z_sb_access_gr_type_amra c,\n"
+					+ "       (select t.cusrlogname, t.iusrid from usr t) d\n" + " where a.id_form = b.form_id\n"
+					+ "   and b.gr_id = c.id_type\n" + "   and b.usr_id = d.iusrid\n"
+					+ "   and upper(FORM_NAME) = upper('" + FORM_NAME + "')\n" + "   and upper(CUSRLOGNAME) = upper('"
+					+ CUSRLOGNAME + "')\n" + "   and T_NAME = 'Y'\n";
 			System.out.println(readRecordSQL);
 			ResultSet rs = sqlStatement.executeQuery(readRecordSQL);
 			ObservableList<String> combolist = FXCollections.observableArrayList();
 			if (rs.next()) {
 				ret = rs.getInt("CNT");
 			}
-			//conn.close();
+			// conn.close();
 			sqlStatement.close();
 		} catch (SQLException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
