@@ -28,15 +28,18 @@ import sb_tr.util.DBUtil;
  * Пачулия Саид 13.07.2020.
  */
 public class penscontroller {
+    
+	/*Пакет для разбора*/
+	private final String sepfile = "{ ? = call z_sb_pens_sepfile.z_sb_pens_sepfile(?)}";
 
-	static String sepfile = "{ ? = call z_sb_pens_sepfile.z_sb_pens_sepfile(?)}";
-
+	/*Инициализация*/
 	@FXML
 	private void initialize() {
 
 	}
-
-	public static String getFileCharset(String file) {
+    
+	/*Получить кодировку файла*/
+	public String getFileCharset(String file) {
 		try {
 			byte[] buf = new byte[4096];
 			BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
@@ -51,22 +54,16 @@ public class penscontroller {
 			bufferedInputStream.close();
 			return encoding;
 		} catch (IOException e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
-			alert.showAndWait();
+			showalert(e.getMessage());
 		}
 		return null;
 	}
-
-	@SuppressWarnings("resource")
-	private static String readFile(String fileName) {
+    
+	/*Чтение файла*/
+	private String readFile(String fileName) {
 		try {
 			BufferedReader br = new BufferedReader(
-					new InputStreamReader(new FileInputStream(fileName), "CP1251"/*getFileCharset(fileName)*/));
+					new InputStreamReader(new FileInputStream(fileName), "CP1251"/* getFileCharset(fileName) */));
 
 			System.out.println("File_encode=" + getFileCharset(fileName));
 			String nextLine = "";
@@ -76,19 +73,15 @@ public class penscontroller {
 				sb.append(System.lineSeparator());
 			}
 			String clobData = sb.toString();
+			br.close();
 			return clobData;
 		} catch (IOException e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
-			alert.showAndWait();
+			showalert(e.getMessage());
 		}
-		return null;
+		return "Error";
 	}
 
+	/*Старт*/
 	@FXML
 	private void separate(ActionEvent event) {
 		try {
@@ -131,27 +124,17 @@ public class penscontroller {
 						System.out.println(i);
 						retclob(i, Integer.valueOf(part1), conn, file);
 					}
-					Alert alert = new Alert(Alert.AlertType.INFORMATION);
-					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-					stage.getIcons().add(new Image("terminal.png"));
-					alert.setTitle("Внимание");
-					alert.setHeaderText(null);
-					alert.setContentText("Файлы сформированы в папку=" + file.getParent());
-					alert.showAndWait();
+					/* Вывод сообщения */
+					showalert("Файлы сформированы в папку=" + file.getParent());
 				}
 			}
 
 		} catch (SQLException e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
-			alert.showAndWait();
+			showalert(e.getMessage());
 		}
 	}
-
+    
+	/*Вывод ошибок*/
 	public void write_error(Connection conn, File file, int sess_id) {
 		try {
 			Statement sqlStatement = conn.createStatement();
@@ -168,16 +151,11 @@ public class penscontroller {
 			sqlStatement.close();
 
 		} catch (Exception e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
-			alert.showAndWait();
+			showalert(e.getMessage());
 		}
 	}
-
+    
+	/*Возврат самого файла*/
 	public void retclob(int id, int sess_id, Connection conn, File file) {
 		try {
 			Statement sqlStatement = conn.createStatement();
@@ -203,13 +181,18 @@ public class penscontroller {
 			sqlStatement.close();
 
 		} catch (Exception e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
-			alert.showAndWait();
+			showalert(e.getMessage());
 		}
+	}
+
+	/*Вывод сообщения*/
+	public void showalert(String mes) {
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+		stage.getIcons().add(new Image("terminal.png"));
+		alert.setTitle("Внимание");
+		alert.setHeaderText(null);
+		alert.setContentText(mes);
+		alert.showAndWait();
 	}
 }
