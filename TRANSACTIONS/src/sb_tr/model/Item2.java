@@ -19,6 +19,8 @@ public class Item2 {
 	private StringProperty debet;
 	private StringProperty ground;
 	private StringProperty stat;
+	private StringProperty trsum;
+	private StringProperty tr;
 	private DoubleProperty summ;
 
 	private SimpleObjectProperty<Date> date_;
@@ -32,9 +34,35 @@ public class Item2 {
 		this.ground = new SimpleStringProperty();
 		this.date_reg_ = new SimpleStringProperty();
 		this.stat = new SimpleStringProperty();
+		this.trsum = new SimpleStringProperty();
+		this.tr = new SimpleStringProperty();
 		this.summ = new SimpleDoubleProperty();
 		this.date_ = new SimpleObjectProperty<>();
 		this.date_reg = new SimpleObjectProperty<>();
+	}
+	//tr
+		public String gettr() {
+			return tr.get();
+		}
+
+		public void settr(String tr) {
+			this.tr.set(tr);
+		}
+
+		public StringProperty trProperty() {
+			return tr;
+		}
+	//tr_summ
+	public String gettrsum() {
+		return trsum.get();
+	}
+
+	public void settrsum(String trsum) {
+		this.trsum.set(trsum);
+	}
+
+	public StringProperty trsumProperty() {
+		return trsum;
 	}
 	//date_reg_
 	public String getdate_reg_() {

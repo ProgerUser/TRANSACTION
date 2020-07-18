@@ -3,7 +3,6 @@ package sb_tr.controller;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -26,7 +25,6 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.swing.JRViewer;
-import sb_tr.model.Connect;
 import sb_tr.model.Item2;
 import sb_tr.util.DBUtil;
 
@@ -37,9 +35,9 @@ public class PrintReport2 extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public void showReport(String paymnt_number,String sess_id) {
+	public void showReport(String paymnt_number,String sess_id, String znak) {
 		try {
-			String reportSrcFile = System.getenv("TRANSACT_PATH") + "\\" + "report\\postdoc.jrxml";
+			String reportSrcFile = "./JasperReportFile/postdoc.jrxml";//System.getenv("TRANSACT_PATH") + "\\" + "report\\postdoc.jrxml";
 
 			// First, compile jrxml file.
 			JasperReport jasperReport;
@@ -57,26 +55,50 @@ public class PrintReport2 extends JFrame {
 					*/
 			Connection conn = DBUtil.conn;
 			Statement sqlStatement = conn.createStatement();
-			String readRecordSQL = 
-					"select "+
-							"nvl(CTRNACCD,g.account_payer) debet,\r\n" + 
-							"       nvl(CTRNACCC,g.account_receiver) credit,\r\n" + 
-							"       nvl(MTRNRSUM,g.sum) summ,\r\n" + 
-							"       nvl(CTRNPURP,g.ground) ground,\r\n" + 
-							"       nvl(DTRNTRAN,g.date_value) date_reg_,\r\n" + 
-							"       nvl(t.DTRNCREATE,g.date_document) date_,"+
+			/*
+			"   and (select count(*)\r\n" + 
+			"          from table(lob2table.separatedcolumns(g.paymentnumbers,chr(13) || chr(10), '',''))) "+znak+" 1"+
+			*/
+			String readRecordSQL = "select nvl(CTRNACCD, g.account_payer) debet,\r\n" + 
+					"       nvl(CTRNACCC, g.account_receiver) credit,\r\n" + 
+					"       nvl(MTRNRSUM, g.sum) summ,\r\n" + 
+					"       nvl(CTRNPURP, g.ground) ground,\r\n" + 
+					"       nvl(DTRNTRAN, g.date_value) date_reg_,\r\n" + 
+					"       nvl(t.DTRNCREATE, g.date_document) date_,\r\n" + 
 					"       case\r\n" + 
 					"         when ITRNNUM is null then\r\n" + 
 					"          'Отсутствует в главной книге'\r\n" + 
 					"         else\r\n" + 
 					"          'Документ найден'\r\n" + 
-					"       end stat\r\n" + 
+					"       end stat,\r\n" + 
+					"       case\r\n" + 
+					"         when (select count(*)\r\n" + 
+					"                 from table(lob2table.separatedcolumns(paymentnumbers,\r\n" + 
+					"                                                       chr(13) || chr(10),\r\n" + 
+					"                                                       ';',\r\n" + 
+					"                                                       ''))) = 1 then\r\n" + 
+					"          (select listagg_clob(COLUMN1 || ';' || hh.amountofpayment) str\r\n" + 
+					"             from table(lob2table.separatedcolumns(paymentnumbers,\r\n" + 
+					"                                                   chr(13) || chr(10),\r\n" + 
+					"                                                   ';',\r\n" + 
+					"                                                   '')),\r\n" + 
+					"                  z_sb_transact_amra_dbt hh\r\n" + 
+					"            where hh.checknumber = COLUMN1)\r\n" + 
+					"         else\r\n"+
+					"        paymentnumbers"+
+					"       end trsum,\r\n" +
+					"       '"+paymnt_number+"'        tr\r\n"+
 					"  from trn t, z_sb_postdoc_amra_dbt g\r\n" + 
 					" where t.ITRNNUM(+) = g.KINDPAYMENT\r\n" + 
-					"   and PAYMENTNUMBERS like '%"+paymnt_number+"%'\r\n" + 
+					"   and exists\r\n" + 
+					" (select null\r\n" + 
+					"          from table(lob2table.separatedcolumns(paymentnumbers,\r\n" + 
+					"                                                chr(13) || chr(10),\r\n" + 
+					"                                                ';',\r\n" + 
+					"                                                ''))\r\n" + 
+					"         where COLUMN1 = '"+paymnt_number+"')\r\n" + 
 					"   and sess_id = "+sess_id+"\r\n" + 
-					" order by CTRNACCD, MTRNRSUM desc\r\n" + 
-					"";
+					" order by CTRNACCD, MTRNRSUM desc\r\n";
 			ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
 			System.out.println(readRecordSQL);
 			while (myResultSet.next()) {
@@ -87,6 +109,8 @@ public class PrintReport2 extends JFrame {
 				list.setstat(myResultSet.getString("stat"));
 				list.setdate_(myResultSet.getDate("date_"));
 				list.setground(myResultSet.getString("ground"));
+				list.settrsum(myResultSet.getString("trsum"));
+				//list.settr(myResultSet.getString("tr"));
 				//list.setdate_reg(myResultSet.getTimestamp("date_reg"));
 				String date_reg_ = null;
 				if(myResultSet.getString("date_reg_") != null) {

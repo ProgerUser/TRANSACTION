@@ -18,6 +18,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressIndicator;
@@ -35,6 +36,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -47,10 +49,12 @@ import sb_tr.model.Connect;
 import sb_tr.model.FN_SESS_AMRA;
 import sb_tr.model.GUIUtils;
 import sb_tr.model.Ibank2;
+import sb_tr.model.TerminalClass;
 import sb_tr.model.TerminalDAO;
 import sb_tr.model.TerminalForCombo;
 import sb_tr.model.Transact;
 import sb_tr.model.TransactClass;
+import sb_tr.model.ViewerDAO;
 import sb_tr.util.DBUtil;
 
 import java.util.Random;
@@ -354,6 +358,14 @@ public class Tr_Am_View_con {
     void show_(ActionEvent l) {
 		
     }
+    
+    @FXML
+	private BorderPane pane_;
+    
+    
+    @FXML
+	private AnchorPane anch_b4;
+    
     
 	@FXML
 	private void initialize() {
@@ -1550,8 +1562,61 @@ public class Tr_Am_View_con {
 			alert.showAndWait();
 
 		} else {
+			
 			Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
-			new PrintReport2().showReport(fn.get_checknumber(), fn.get_sess_id());
+			new PrintReport2().showReport(fn.get_checknumber(), fn.get_sess_id(),"=");
+			/*
+			Stage stage = (Stage) trans_table.getScene().getWindow();
+			Label alert = new Label("Печать одиночных сумм?");
+			alert.setLayoutX(75.0);
+			alert.setLayoutY(11.0);
+			alert.setPrefHeight(17.0);
+
+			Button no = new Button();
+			no.setText("Нет");
+			no.setLayoutX(111.0);
+			no.setLayoutY(56.0);
+			no.setPrefWidth(72.0);
+			no.setPrefHeight(21.0);
+
+			Button yes = new Button();
+			yes.setText("Да");
+			yes.setLayoutX(14.0);
+			yes.setLayoutY(56.0);
+			yes.setPrefWidth(72.0);
+			yes.setPrefHeight(21.0);
+
+			AnchorPane yn = new AnchorPane();
+			yn.getChildren().add(alert);
+			yn.getChildren().add(no);
+			yn.getChildren().add(yes);
+			Scene ynScene = new Scene(yn, 250, 100);
+			Stage newWindow_yn = new Stage();
+			
+			no.setOnAction(new EventHandler<ActionEvent>() {
+				public void handle(ActionEvent event) {
+					Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
+					new PrintReport2().showReport(fn.get_checknumber(), fn.get_sess_id(),">");
+					newWindow_yn.close();
+				}
+			});
+			yes.setOnAction(new EventHandler<ActionEvent>() {
+				public void handle(ActionEvent event) {
+					Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
+					new PrintReport2().showReport(fn.get_checknumber(), fn.get_sess_id(),"=");
+					newWindow_yn.close();
+				}
+			});
+			
+			newWindow_yn.setTitle("Внимание");
+			newWindow_yn.setScene(ynScene);
+			// Specifies the modality for new window.
+			newWindow_yn.initModality(Modality.WINDOW_MODAL);
+			// Specifies the owner Window (parent) for new window
+			newWindow_yn.initOwner(stage);
+			newWindow_yn.getIcons().add(new Image("icon.png"));
+			newWindow_yn.show();
+			*/
 		}
 	}
 

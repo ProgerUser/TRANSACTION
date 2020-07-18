@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.10.0.final using JasperReports Library version 6.10.0-unknown  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="template_Table" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1a0aa80b-dc07-4dca-bdbc-aa78eeb0d12b">
+<!-- Created with Jaspersoft Studio version 6.12.0.final using JasperReports Library version 6.12.1-ac0eebdb29e4c0985457bab279a6db744d661530  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="template_Table" pageWidth="1100" pageHeight="595" orientation="Landscape" columnWidth="1060" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1a0aa80b-dc07-4dca-bdbc-aa78eeb0d12b">
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
@@ -10,6 +10,12 @@
 	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<style name="style1">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{trsum}.contains($F{tr})]]></conditionExpression>
+			<style mode="Opaque" forecolor="#16B433" backcolor="#F0F8FF"/>
+		</conditionalStyle>
+	</style>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
@@ -75,6 +81,8 @@
 		<field name="summ" class="java.lang.Double"/>
 		<field name="date_" class="java.sql.Date"/>
 		<field name="date_reg_" class="java.lang.String"/>
+		<field name="trsum" class="java.lang.String"/>
+		<field name="tr" class="java.lang.String"/>
 	</subDataset>
 	<parameter name="ItemDataSource" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
 	<queryString>
@@ -84,9 +92,9 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="256" splitType="Stretch">
+		<band height="272" splitType="Stretch">
 			<componentElement>
-				<reportElement x="-10" y="0" width="840" height="240" uuid="7786bb05-503a-4b6a-991a-a7bcf3abad07">
+				<reportElement stretchType="ContainerHeight" x="-10" y="0" width="1120" height="240" uuid="7786bb05-503a-4b6a-991a-a7bcf3abad07">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 1_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 1_CH"/>
@@ -198,6 +206,21 @@
 							<textField>
 								<reportElement x="0" y="0" width="90" height="30" uuid="01299229-4bdc-4328-ab6f-bd54064c6f45"/>
 								<textFieldExpression><![CDATA[$F{stat}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="140" uuid="881b6818-e03d-4c58-8ded-d4d55fbbb652">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column8"/>
+						<jr:tableHeader style="Table 1_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="140" height="30" uuid="ad71a22b-0e98-426d-b47a-590b3038386c"/>
+								<text><![CDATA[Номер чека;Сумма]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="Table 1_TD" height="30">
+							<textField textAdjust="StretchHeight">
+								<reportElement x="0" y="0" width="140" height="30" uuid="94674197-c367-4c01-94be-b1169930a6d4"/>
+								<textFieldExpression><![CDATA[$F{trsum}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

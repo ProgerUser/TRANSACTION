@@ -276,6 +276,7 @@ public class TerminalController {
 
 	@FXML
 	private BorderPane bp;
+	
 	@FXML
 	private AnchorPane ap;
 
