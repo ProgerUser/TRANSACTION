@@ -465,7 +465,7 @@ public class TerminalDAO {
 		
 		
 		try {
-		SqlMap s = new SqlMap().load("src/SQL.xml");
+		SqlMap s = new SqlMap().load(System.getenv("TRANSACT_PATH") + "\\report\\SQL.xml");
 		
 		String selectStmt = s.getSql("getUnpivot").replace(":p1", "'"+Connect.PNMB_+"'");
 

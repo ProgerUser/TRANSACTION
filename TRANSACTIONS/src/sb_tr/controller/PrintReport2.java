@@ -74,7 +74,7 @@ public class PrintReport2 extends JFrame {
 
 			Connection conn = DBUtil.conn;
 
-			SqlMap s = new SqlMap().load("src/SQL.xml");
+			SqlMap s = new SqlMap().load(System.getenv("TRANSACT_PATH") + "\\report\\SQL.xml");
 			String readRecordSQL = s.getSql("getPOSTTRN");
 			PreparedStatement prepStmt = conn.prepareStatement(readRecordSQL);
 			prepStmt.setString(1, paymnt_number);

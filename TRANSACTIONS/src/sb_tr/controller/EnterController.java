@@ -289,7 +289,7 @@ public class EnterController {
 		int ret = 0;
 		Connection conn = DBUtil.conn;
 		try {
-			SqlMap sql = new SqlMap().load("src/SQL.xml");
+			SqlMap sql = new SqlMap().load(System.getenv("TRANSACT_PATH") + "\\report\\SQL.xml");
 			String selectStmt = sql.getSql("acces_enter");
 			PreparedStatement prepStmt = conn.prepareStatement(selectStmt);
 			prepStmt.setString(1, FORM_NAME);
