@@ -1,0 +1,44 @@
+<tests>
+    <test-data> 
+         <inser_clob>
+  select nvl(CTRNACCD, g.account_payer) debet,
+       nvl(CTRNACCC, g.account_receiver) credit,
+       nvl(MTRNRSUM, g.sum) summ,
+       nvl(CTRNPURP, g.ground) ground,
+       nvl(DTRNTRAN, g.date_value) date_reg_,
+       nvl(t.DTRNCREATE, g.date_document) date_,
+       case
+         when ITRNNUM is null then
+          'Отсутствует в главной книге'
+         else
+          'Документ найден'
+       end stat,
+       case
+         when (select count(*)
+                 from table(lob2table.separatedcolumns(paymentnumbers,
+                                                       chr(13) || chr(10),
+                                                       ';',
+                                                       ''))) = 1 then
+          (select listagg_clob(COLUMN1 || ';' || hh.amountofpayment) str
+             from table(lob2table.separatedcolumns(paymentnumbers,
+                                                   chr(13) || chr(10),
+                                                   ';',
+                                                   '')),
+                  z_sb_transact_amra_dbt hh
+            where hh.checknumber = COLUMN1)
+         else
+        paymentnumbers       end trsum
+  from trn t, z_sb_postdoc_amra_dbt g
+ where t.ITRNNUM(+) = g.KINDPAYMENT
+   and exists
+ (select null
+          from table(lob2table.separatedcolumns(paymentnumbers,
+                                                chr(13) || chr(10),
+                                                ';',
+                                                ''))
+         where COLUMN1 = ?)
+   and sess_id = ?
+ order by CTRNACCD, MTRNRSUM desc
+</inser_clob> 
+</test-data>
+</tests>

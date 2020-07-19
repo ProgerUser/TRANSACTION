@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sqlMap>
+	<sqls>
+		<entry>
+			<key>getPOSTTRN</key>
+			<value><![CDATA[
+select nvl(CTRNACCD, g.account_payer) debet,
+       nvl(CTRNACCC, g.account_receiver) credit,
+       nvl(MTRNRSUM, g.sum) summ,
+       nvl(CTRNPURP, g.ground) ground,
+       nvl(DTRNTRAN, g.date_value) date_reg_,
+       nvl(t.DTRNCREATE, g.date_document) date_,
+       case
+         when ITRNNUM is null then
+          'Отсутствует в главной книге'
+         else
+          'Документ найден'
+       end stat,
+       case
+         when (select count(*)
+                 from table(lob2table.separatedcolumns(paymentnumbers,
+                                                       chr(13) || chr(10),
+                                                       ';',
+                                                       ''))) = 1 then
+          (select listagg_clob(COLUMN1 || ';' || hh.amountofpayment) str
+             from table(lob2table.separatedcolumns(paymentnumbers,
+                                                   chr(13) || chr(10),
+                                                   ';',
+                                                   '')),
+                  z_sb_transact_amra_dbt hh
+            where hh.checknumber = COLUMN1)
+         else
+        paymentnumbers       end trsum
+  from trn t, z_sb_postdoc_amra_dbt g
+ where t.ITRNNUM(+) = g.KINDPAYMENT
+   and exists
+ (select null
+          from table(lob2table.separatedcolumns(paymentnumbers,
+                                                chr(13) || chr(10),
+                                                ';',
+                                                ''))
+         where COLUMN1 = ?)
+   and sess_id = ?
+ order by CTRNACCD, MTRNRSUM desc
+            ]]></value>
+		</entry>
+		<entry>
+			<key>acces_enter</key>
+			<value><![CDATA[
+			select count(*) cnt
+  from z_sb_access_amra a,
+       z_sb_access_gr_amra b,
+       z_sb_access_gr_type_amra c,
+       (select t.cusrlogname, t.iusrid from usr t) d
+ where a.id_form = b.form_id
+   and b.gr_id = c.id_type
+   and b.usr_id = d.iusrid
+   and upper(FORM_NAME) = upper(?)
+   and upper(CUSRLOGNAME) = upper(?)
+   and T_NAME = 'Y'
+			]]></value>
+		</entry>
+		<entry>
+			<key>getUnpivot</key>
+			<value><![CDATA[
+with dat as
+ (select nvl(to_char(recdate, 'DD-MM-RRRR HH24:MI:SS'), '-') recdate,
+         nvl(to_char(paydate, 'DD-MM-RRRR HH24:MI:SS'), '-') paydate,
+         nvl(currency, '-') currency,
+         nvl(paymenttype, '-') paymenttype,
+         nvl(vk, '-') vk,
+         nvl(to_char(dateofoperation, 'DD-MM-RRRR HH24:MI:SS'), '-') dateofoperation,
+         nvl(dataps, '-') dataps,
+         nvl(dateclearing, '-') dateclearing,
+         nvl(dealer, '-') dealer,
+         nvl(accountpayer, '-') accountpayer,
+         nvl(cardnumber, '-') cardnumber,
+         nvl(operationnumber, '-') operationnumber,
+         nvl(operationnumberdelivery, '-') operationnumberdelivery,
+         nvl(checknumber, '-') checknumber,
+         nvl(checkparent, '-') checkparent,
+         nvl(orderofprovidence, '-') orderofprovidence,
+         nvl(provider, '-') provider,
+         nvl(owninown, '-') owninown,
+         nvl(corrected, '-') corrected,
+         nvl(commissionrate, '-') commissionrate,
+         nvl(status, '-') status,
+         nvl(stringfromfile, '-') stringfromfile,
+         nvl(rewardamount, '-') rewardamount,
+         nvl(ownerincomeamount, '-') ownerincomeamount,
+         nvl(to_char(commissionamount), '-') commissionamount,
+         nvl(nkamount, '-') nkamount,
+         nvl(maxcommissionamount, '-') maxcommissionamount,
+         nvl(mincommissionamount, '-') mincommissionamount,
+         nvl(to_char(cashamount), '-') cashamount,
+         nvl(sumnalprimal, '-') sumnalprimal,
+         nvl(to_char(amounttocheck), '-') amounttocheck,
+         nvl(to_char(amountofpayment), '-') amountofpayment,
+         nvl(sumofsplitting, '-') sumofsplitting,
+         nvl(amountintermediary, '-') amountintermediary,
+         nvl(amountofscs, '-') amountofscs,
+         nvl(to_char(amountwithchecks), '-') amountwithchecks,
+         nvl(counter, '-') counter,
+         nvl(terminal, '-') terminal,
+         nvl(terminalnetwork, '-') terminalnetwork,
+         nvl(transactiontype, '-') transactiontype,
+         nvl(service, '-') service,
+         nvl(filetransactions, '-') filetransactions,
+         nvl(fio, '-') fio,
+         nvl(checksincoming, '-') checksincoming,
+         nvl(barcode, '-') barcode,
+         nvl(isaresident, '-') isaresident,
+         nvl(valuenotfound, '-') valuenotfound,
+         nvl(providertariff, '-') providertariff,
+         nvl(counterchecks, '-') counterchecks,
+         nvl(countercheck, '-') countercheck,
+         nvl(id_, '-') id_,
+         nvl(detailing, '-') detailing,
+         nvl(walletpayer, '-') walletpayer,
+         nvl(walletreceiver, '-') walletreceiver,
+         nvl(purposeofpayment, '-') purposeofpayment,
+         nvl(dataprovider, '-') dataprovider,
+         nvl(to_char(statusabs), '-') statusabs,
+         nvl(to_char(sess_id), '-') sess_id
+  
+    from z_sb_transact_amra_dbt t
+   where t.checknumber = :p1),
+unpiv as
+ (select *
+    from dat unpivot(colvalue for col in(recdate,
+                                         paydate,
+                                         currency,
+                                         paymenttype,
+                                         vk,
+                                         dateofoperation,
+                                         dataps,
+                                         dateclearing,
+                                         dealer,
+                                         accountpayer,
+                                         cardnumber,
+                                         operationnumber,
+                                         operationnumberdelivery,
+                                         checknumber,
+                                         checkparent,
+                                         orderofprovidence,
+                                         provider,
+                                         owninown,
+                                         corrected,
+                                         commissionrate,
+                                         status,
+                                         stringfromfile,
+                                         rewardamount,
+                                         ownerincomeamount,
+                                         commissionamount,
+                                         nkamount,
+                                         maxcommissionamount,
+                                         mincommissionamount,
+                                         cashamount,
+                                         sumnalprimal,
+                                         amounttocheck,
+                                         amountofpayment,
+                                         sumofsplitting,
+                                         amountintermediary,
+                                         amountofscs,
+                                         amountwithchecks,
+                                         counter,
+                                         terminal,
+                                         terminalnetwork,
+                                         transactiontype,
+                                         service,
+                                         filetransactions,
+                                         fio,
+                                         checksincoming,
+                                         barcode,
+                                         isaresident,
+                                         valuenotfound,
+                                         providertariff,
+                                         counterchecks,
+                                         countercheck,
+                                         id_,
+                                         detailing,
+                                         walletpayer,
+                                         walletreceiver,
+                                         purposeofpayment,
+                                         dataprovider,
+                                         statusabs,
+                                         sess_id)))
+
+select case
+         when COL = 'RECDATE' then
+          'Дата Загрузки'
+         when COL = 'PAYDATE' then
+          'Дата Платежа'
+         when COL = 'CURRENCY' then
+          'Валюта=CURRENCY'
+         when COL = 'PAYMENTTYPE' then
+          'ВидПлатежа=PAYMENTTYPE'
+         when COL = 'VK' then
+          'ВК=VK'
+         when COL = 'DATEOFOPERATION' then
+          'ДатаОперации=DATEOFOPERATION'
+         when COL = 'DATAPS' then
+          'ДатаПС=DATAPS'
+         when COL = 'DATECLEARING' then
+          'ДатаКлиринга=DATECLEARING'
+         when COL = 'DEALER' then
+          'Дилер=DEALER'
+         when COL = 'ACCOUNTPAYER' then
+          'ЛСПлательщика=ACCOUNTPAYER'
+         when COL = 'CARDNUMBER' then
+          'НомерКарты=CARDNUMBER'
+         when COL = 'OPERATIONNUMBER' then
+          'НомерОперации=OPERATIONNUMBER'
+         when COL = 'OPERATIONNUMBERDELIVERY' then
+          'НомерОперацииСдача=OPERATIONNUMBERDELIVERY'
+         when COL = 'CHECKNUMBER' then
+          'НомерЧека=CHECKNUMBER'
+         when COL = 'CHECKPARENT' then
+          'ЧекРодитель=CHECKPARENT'
+         when COL = 'ORDEROFPROVIDENCE' then
+          'ПорядокПровдения=ORDEROFPROVIDENCE'
+         when COL = 'PROVIDER' then
+          'Провайдер=PROVIDER'
+         when COL = 'OWNINOWN' then
+          'СвойВСвоем=OWNINOWN'
+         when COL = 'CORRECTED' then
+          'Скорректирована=CORRECTED'
+         when COL = 'COMMISSIONRATE' then
+          'СтавкаКомиссии=COMMISSIONRATE'
+         when COL = 'STATUS' then
+          'Статус=STATUS'
+         when COL = 'STRINGFROMFILE' then
+          'СтрокаИзФайла=STRINGFROMFILE'
+         when COL = 'REWARDAMOUNT' then
+          'СуммаВознаграждения=REWARDAMOUNT'
+         when COL = 'OWNERINCOMEAMOUNT' then
+          'СуммаДоходВладельца=OWNERINCOMEAMOUNT'
+         when COL = 'COMMISSIONAMOUNT' then
+          'СуммаКомиссии=COMMISSIONAMOUNT'
+         when COL = 'NKAMOUNT' then
+          'СуммаНК=NKAMOUNT'
+         when COL = 'MAXCOMMISSIONAMOUNT' then
+          'СуммаКомиссииМакс=MAXCOMMISSIONAMOUNT'
+         when COL = 'MINCOMMISSIONAMOUNT' then
+          'СуммаКомиссииМин=MINCOMMISSIONAMOUNT'
+         when COL = 'CASHAMOUNT' then
+          'СуммаНаличных=CASHAMOUNT'
+         when COL = 'SUMNALPRIMAL' then
+          'СуммаНалИзначальная=SUMNALPRIMAL'
+         when COL = 'AMOUNTTOCHECK' then
+          'СуммаНаЧек=AMOUNTTOCHECK'
+         when COL = 'AMOUNTOFPAYMENT' then
+          'СуммаПлатежа=AMOUNTOFPAYMENT'
+         when COL = 'SUMOFSPLITTING' then
+          'СуммаНаРасщепление=SUMOFSPLITTING'
+         when COL = 'AMOUNTINTERMEDIARY' then
+          'СуммаПосредника=AMOUNTINTERMEDIARY'
+         when COL = 'AMOUNTOFSCS' then
+          'СуммаСКС=AMOUNTOFSCS'
+         when COL = 'AMOUNTWITHCHECKS' then
+          'СуммаСЧеков=AMOUNTWITHCHECKS'
+         when COL = 'COUNTER' then
+          'Счетчик=COUNTER'
+         when COL = 'TERMINAL' then
+          'Терминал=TERMINAL'
+         when COL = 'TERMINALNETWORK' then
+          'ТерминальнаяСеть=TERMINALNETWORK'
+         when COL = 'TRANSACTIONTYPE' then
+          'ТипТранзакции=TRANSACTIONTYPE'
+         when COL = 'SERVICE' then
+          'Услуга=SERVICE'
+         when COL = 'FILETRANSACTIONS' then
+          'ФайлТранзакции=FILETRANSACTIONS'
+         when COL = 'FIO' then
+          'ФИО=FIO'
+         when COL = 'CHECKSINCOMING' then
+          'ЧекиВходящие=CHECKSINCOMING'
+         when COL = 'BARCODE' then
+          'ШтрихКод=BARCODE'
+         when COL = 'ISARESIDENT' then
+          'ЯвляетсяРезидентом=ISARESIDENT'
+         when COL = 'VALUENOTFOUND' then
+          'ЗначениеНеНайдено=VALUENOTFOUND'
+         when COL = 'PROVIDERTARIFF' then
+          'ТарифПровайдера=PROVIDERTARIFF'
+         when COL = 'COUNTERCHECKS' then
+          'СчетчикСчеков=COUNTERCHECKS'
+         when COL = 'COUNTERCHECK' then
+          'СчетчикНаЧек=COUNTERCHECK'
+         when COL = 'ID_' then
+          'Id=ID_'
+         when COL = 'DETAILING' then
+          'Деталировка=DETAILING'
+         when COL = 'WALLETPAYER' then
+          'КошелекПлательщик=WALLETPAYER'
+         when COL = 'WALLETRECEIVER' then
+          'КошелекПолучатель=WALLETRECEIVER'
+         when COL = 'PURPOSEOFPAYMENT' then
+          'НазначениеПлатежа=PURPOSEOFPAYMENT'
+         when COL = 'DATAPROVIDER' then
+          'ДатаПровайдера=DATAPROVIDER'
+         when COL = 'STATUSABS' then
+          'statusabs'
+         when COL = 'SESS_ID' then
+          'sess_id'
+       end col,
+       COLVALUE
+  from unpiv
+  ]]></value>
+		</entry>
+	</sqls>
+</sqlMap>

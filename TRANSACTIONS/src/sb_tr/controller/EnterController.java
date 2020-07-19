@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -29,6 +30,7 @@ import javafx.stage.Stage;
 import sb_tr.Main;
 import sb_tr.model.Connect;
 import sb_tr.model.InputFilter;
+import sb_tr.model.SqlMap;
 import sb_tr.util.DBUtil;
 
 public class EnterController {
@@ -190,14 +192,12 @@ public class EnterController {
 		// con.setuserID(login.getText());
 		// con.setuserPassword(pass.getText());
 
-		try
-		{
+		try {
 			Connect.connectionURL_ = conurl.getValue().toString();
 			Connect.userID_ = login.getValue().toString();
 			Connect.userPassword_ = pass.getText();
 			ent();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			// TODO: handle exception
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -207,20 +207,18 @@ public class EnterController {
 			alert.setContentText(e.getMessage());
 			alert.showAndWait();
 		}
-		
+
 	}
 
 	@FXML
 	void enter_(KeyEvent ke) {
 		if (ke.getCode().equals(KeyCode.ENTER)) {
-			try
-			{
+			try {
 				Connect.connectionURL_ = conurl.getValue().toString();
 				Connect.userID_ = login.getValue().toString();
 				Connect.userPassword_ = pass.getText();
 				ent();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				// TODO: handle exception
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
 				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -289,37 +287,36 @@ public class EnterController {
 
 	public int chk_rigth(String FORM_NAME, String CUSRLOGNAME) {
 		int ret = 0;
-		// Connection conn;
 		Connection conn = DBUtil.conn;
 		try {
-			/*
-			 * conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ +
-			 * "/" + Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
-			 */
-			Statement sqlStatement = conn.createStatement();
-			String readRecordSQL = " select count(*) cnt\n" + "  from z_sb_access_amra a,\n"
-					+ "       z_sb_access_gr_amra b,\n" + "       z_sb_access_gr_type_amra c,\n"
-					+ "       (select t.cusrlogname, t.iusrid from usr t) d\n" + " where a.id_form = b.form_id\n"
-					+ "   and b.gr_id = c.id_type\n" + "   and b.usr_id = d.iusrid\n"
-					+ "   and upper(FORM_NAME) = upper('" + FORM_NAME + "')\n" + "   and upper(CUSRLOGNAME) = upper('"
-					+ CUSRLOGNAME + "')\n" + "   and T_NAME = 'Y'\n";
-			System.out.println(readRecordSQL);
-			ResultSet rs = sqlStatement.executeQuery(readRecordSQL);
+			SqlMap sql = new SqlMap().load("src/SQL.xml");
+			String selectStmt = sql.getSql("acces_enter");
+			PreparedStatement prepStmt = conn.prepareStatement(selectStmt);
+			prepStmt.setString(1, FORM_NAME);
+			prepStmt.setString(2, CUSRLOGNAME);
+
+			System.out.println(selectStmt);
+
+			ResultSet rs = prepStmt.executeQuery();
 			ObservableList<String> combolist = FXCollections.observableArrayList();
 			if (rs.next()) {
 				ret = rs.getInt("CNT");
 			}
 			// conn.close();
-			sqlStatement.close();
-		} catch (SQLException e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
-			alert.showAndWait();
+		} catch (Exception e) {
+			alert(e.getMessage());
 		}
 		return ret;
 	}
+
+	public static void alert(String mes) {
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+		stage.getIcons().add(new Image("terminal.png"));
+		alert.setTitle("Внимание");
+		alert.setHeaderText(null);
+		alert.setContentText(mes);
+		alert.showAndWait();
+	}
+
 }

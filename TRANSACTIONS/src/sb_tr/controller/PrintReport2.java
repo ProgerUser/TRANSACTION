@@ -2,7 +2,10 @@ package sb_tr.controller;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -13,12 +16,21 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JFrame;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.CharacterData;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import net.sf.jasperreports.engine.JREmptyDataSource;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -26,6 +38,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.swing.JRViewer;
 import sb_tr.model.Item2;
+import sb_tr.model.SqlMap;
 import sb_tr.util.DBUtil;
 
 public class PrintReport2 extends JFrame {
@@ -35,9 +48,18 @@ public class PrintReport2 extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public void showReport(String paymnt_number,String sess_id, String znak) {
+	public String getCharacterDataFromElement(Element e) {
+		Node child = e.getFirstChild();
+		if (child instanceof CharacterData) {
+			CharacterData cd = (CharacterData) child;
+			return cd.getData();
+		}
+		return "";
+	}
+
+	public void showReport(String paymnt_number, String sess_id, String znak) {
 		try {
-			String reportSrcFile = "./JasperReportFile/postdoc.jrxml";//System.getenv("TRANSACT_PATH") + "\\" + "report\\postdoc.jrxml";
+			String reportSrcFile = System.getenv("TRANSACT_PATH") + "\\" + "report\\postdoc.jrxml";
 
 			// First, compile jrxml file.
 			JasperReport jasperReport;
@@ -49,57 +71,16 @@ public class PrintReport2 extends JFrame {
 
 			/* Create Items */
 			Item2 list = null;
-/*
-			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
-					+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
-					*/
+
 			Connection conn = DBUtil.conn;
-			Statement sqlStatement = conn.createStatement();
-			/*
-			"   and (select count(*)\r\n" + 
-			"          from table(lob2table.separatedcolumns(g.paymentnumbers,chr(13) || chr(10), '',''))) "+znak+" 1"+
-			*/
-			String readRecordSQL = "select nvl(CTRNACCD, g.account_payer) debet,\r\n" + 
-					"       nvl(CTRNACCC, g.account_receiver) credit,\r\n" + 
-					"       nvl(MTRNRSUM, g.sum) summ,\r\n" + 
-					"       nvl(CTRNPURP, g.ground) ground,\r\n" + 
-					"       nvl(DTRNTRAN, g.date_value) date_reg_,\r\n" + 
-					"       nvl(t.DTRNCREATE, g.date_document) date_,\r\n" + 
-					"       case\r\n" + 
-					"         when ITRNNUM is null then\r\n" + 
-					"          'Отсутствует в главной книге'\r\n" + 
-					"         else\r\n" + 
-					"          'Документ найден'\r\n" + 
-					"       end stat,\r\n" + 
-					"       case\r\n" + 
-					"         when (select count(*)\r\n" + 
-					"                 from table(lob2table.separatedcolumns(paymentnumbers,\r\n" + 
-					"                                                       chr(13) || chr(10),\r\n" + 
-					"                                                       ';',\r\n" + 
-					"                                                       ''))) = 1 then\r\n" + 
-					"          (select listagg_clob(COLUMN1 || ';' || hh.amountofpayment) str\r\n" + 
-					"             from table(lob2table.separatedcolumns(paymentnumbers,\r\n" + 
-					"                                                   chr(13) || chr(10),\r\n" + 
-					"                                                   ';',\r\n" + 
-					"                                                   '')),\r\n" + 
-					"                  z_sb_transact_amra_dbt hh\r\n" + 
-					"            where hh.checknumber = COLUMN1)\r\n" + 
-					"         else\r\n"+
-					"        paymentnumbers"+
-					"       end trsum,\r\n" +
-					"       '"+paymnt_number+"'        tr\r\n"+
-					"  from trn t, z_sb_postdoc_amra_dbt g\r\n" + 
-					" where t.ITRNNUM(+) = g.KINDPAYMENT\r\n" + 
-					"   and exists\r\n" + 
-					" (select null\r\n" + 
-					"          from table(lob2table.separatedcolumns(paymentnumbers,\r\n" + 
-					"                                                chr(13) || chr(10),\r\n" + 
-					"                                                ';',\r\n" + 
-					"                                                ''))\r\n" + 
-					"         where COLUMN1 = '"+paymnt_number+"')\r\n" + 
-					"   and sess_id = "+sess_id+"\r\n" + 
-					" order by CTRNACCD, MTRNRSUM desc\r\n";
-			ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
+
+			SqlMap s = new SqlMap().load("src/SQL.xml");
+			String readRecordSQL = s.getSql("getPOSTTRN");
+			PreparedStatement prepStmt = conn.prepareStatement(readRecordSQL);
+			prepStmt.setString(1, paymnt_number);
+			prepStmt.setInt(2, Integer.valueOf(sess_id));
+			ResultSet myResultSet = prepStmt.executeQuery();
+
 			System.out.println(readRecordSQL);
 			while (myResultSet.next()) {
 				list = new Item2();
@@ -110,24 +91,22 @@ public class PrintReport2 extends JFrame {
 				list.setdate_(myResultSet.getDate("date_"));
 				list.setground(myResultSet.getString("ground"));
 				list.settrsum(myResultSet.getString("trsum"));
-				//list.settr(myResultSet.getString("tr"));
-				//list.setdate_reg(myResultSet.getTimestamp("date_reg"));
+				// list.settr(myResultSet.getString("tr"));
+				// list.setdate_reg(myResultSet.getTimestamp("date_reg"));
 				String date_reg_ = null;
-				if(myResultSet.getString("date_reg_") != null) {
+				if (myResultSet.getString("date_reg_") != null) {
 					date_reg_ = new SimpleDateFormat("dd.MM.yy HH:mm:ss").format(myResultSet.getTimestamp("date_reg_"));
-				}else
-				{
-					date_reg_ = "Не проведена!"/*myResultSet.getString("date_reg_")*/;
+				} else {
+					date_reg_ = "Не проведена!"/* myResultSet.getString("date_reg_") */;
 				}
-				
-				list.setdate_reg_(date_reg_);
-				
 
-				//System.out.println(myResultSet.getDate("CTRNACCD"));
+				list.setdate_reg_(date_reg_);
+
+				// System.out.println(myResultSet.getDate("CTRNACCD"));
 				listItems.add(list);
 			}
 			myResultSet.close();
-			//conn.close();
+			// conn.close();
 
 			/* Convert List to JRBeanCollectionDataSource */
 			JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(listItems);
@@ -141,24 +120,24 @@ public class PrintReport2 extends JFrame {
 			// java - get screen size using the Toolkit class
 			@SuppressWarnings("unused")
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			
+
 			// the screen height
-			//int width = (int) screenSize.getHeight();
+			// int width = (int) screenSize.getHeight();
 
 			// the screen width
-			//int height = (int) screenSize.getWidth();
-			
-			//System.out.println("width = "+width);
-			//System.out.println("height = "+height);
-			
+			// int height = (int) screenSize.getWidth();
+
+			// System.out.println("width = "+width);
+			// System.out.println("height = "+height);
+
 			JRViewer viewer = new JRViewer(print);
 			viewer.setOpaque(true);
 			viewer.setVisible(true);
-			viewer.setSize(1000,800);//;(width, height);;
+			viewer.setSize(1000, 800);// ;(width, height);;
 			this.add(viewer);
-			this.setSize(1000,800);
+			this.setSize(1000, 800);
 			this.setVisible(true);
-		} catch (JRException | SQLException e) {
+		} catch (Exception e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 			stage.getIcons().add(new Image("terminal.png"));

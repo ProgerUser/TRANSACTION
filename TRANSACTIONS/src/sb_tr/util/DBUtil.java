@@ -136,7 +136,7 @@ public class DBUtil {
 				}
 			}
 			// Close connection
-			//dbDisconnect();
+			// dbDisconnect();
 		}
 		// Return CachedRowSet
 		return crs;
@@ -156,7 +156,7 @@ public class DBUtil {
 			stmt = conn.createStatement();
 			// Run executeUpdate operation with given sql statement
 			stmt.executeUpdate(sqlStmt);
-			
+
 		} catch (SQLException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -181,7 +181,7 @@ public class DBUtil {
 				}
 			}
 			// Close connection
-			//dbDisconnect();
+			// dbDisconnect();
 		}
 	}
 }
