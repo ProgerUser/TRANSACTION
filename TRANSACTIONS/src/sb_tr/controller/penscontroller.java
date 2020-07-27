@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.sql.CallableStatement;
 import java.sql.Clob;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -22,23 +23,24 @@ import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import sb_tr.model.SqlMap;
 import sb_tr.util.DBUtil;
 
 /**
  * Пачулия Саид 13.07.2020.
  */
 public class penscontroller {
-    
-	/*Пакет для разбора*/
-	private final String sepfile = "{ ? = call z_sb_pens_sepfile.z_sb_pens_sepfile(?)}";
 
-	/*Инициализация*/
+	/* Пакет для разбора */
+	private final String sepfile = "{ ? = call z_sb_pens_sepfile.z_sb_pens_sepfile(?,?)}";
+
+	/* Инициализация */
 	@FXML
 	private void initialize() {
 
 	}
-    
-	/*Получить кодировку файла*/
+
+	/* Получить кодировку файла */
 	public String getFileCharset(String file) {
 		try {
 			byte[] buf = new byte[4096];
@@ -58,8 +60,8 @@ public class penscontroller {
 		}
 		return null;
 	}
-    
-	/*Чтение файла*/
+
+	/* Чтение файла */
 	private String readFile(String fileName) {
 		try {
 			BufferedReader br = new BufferedReader(
@@ -80,7 +82,7 @@ public class penscontroller {
 		return "Error";
 	}
 
-	/*Старт*/
+	/* Старт */
 	@FXML
 	private void separate(ActionEvent event) {
 		try {
@@ -105,6 +107,7 @@ public class penscontroller {
 				clob.setString(1, reviewStr);
 				callStmt.registerOutParameter(1, Types.VARCHAR);
 				callStmt.setClob(2, clob);
+				callStmt.setString(3, file.getName());
 				callStmt.execute();
 				reviewContent = callStmt.getString(1);
 
@@ -121,19 +124,68 @@ public class penscontroller {
 					System.out.println("OK--");
 					for (int i = 1; i <= 4; i++) {
 						System.out.println(i);
-						retclob(i, Integer.valueOf(part1), conn, file);
+						String str = "";
+						
+						if (i == 1) {
+							Clob clobb = conn.createClob();
+							str = retclob(i, Integer.valueOf(part1), conn, file);
+							clobb.setString(1, str);
+							String upd = "update z_sb_pens_4file\r\n"
+									+ "set ONE_PART = ?\r\n"+
+									"where ID = ?\r\n";
+							System.out.println(upd);
+							PreparedStatement prepStmt = conn.prepareStatement(upd);
+							prepStmt.setClob(1, clobb);
+							prepStmt.setInt(2, Integer.valueOf(part1));
+							prepStmt.executeUpdate();
+						} else if (i == 2) {
+							Clob clobb = conn.createClob();
+							str = retclob(i, Integer.valueOf(part1), conn, file);
+							clobb.setString(1, str);
+							String upd = "update z_sb_pens_4file\r\n"
+									+ "set TWO_PART = ?\r\n"+
+									"where ID = ?\r\n";
+							System.out.println(upd);
+							PreparedStatement prepStmt = conn.prepareStatement(upd);
+							prepStmt.setClob(1, clobb);
+							prepStmt.setInt(2, Integer.valueOf(part1));
+							prepStmt.executeUpdate();
+						} else if (i == 3) {
+							Clob clobb = conn.createClob();
+							str = retclob(i, Integer.valueOf(part1), conn, file);
+							clobb.setString(1, str);
+							String upd = "update z_sb_pens_4file\r\n"
+									+ "set THREE_PART = ?\r\n"+
+									"where ID = ?\r\n";
+							System.out.println(upd);
+							PreparedStatement prepStmt = conn.prepareStatement(upd);
+							prepStmt.setClob(1, clobb);
+							prepStmt.setInt(2, Integer.valueOf(part1));
+							prepStmt.executeUpdate();
+						} else if (i == 4) {
+							Clob clobb = conn.createClob();
+							str = retclob(i, Integer.valueOf(part1), conn, file);
+							clobb.setString(1, str);
+							String upd = "update z_sb_pens_4file\r\n"
+									+ "set FOUR_PART = ?\r\n"+
+									"where ID = ?\r\n";
+							System.out.println(upd);
+							PreparedStatement prepStmt = conn.prepareStatement(upd);
+							prepStmt.setClob(1, clobb);
+							prepStmt.setInt(2, Integer.valueOf(part1));
+							prepStmt.executeUpdate();
+						}
 					}
 					/* Вывод сообщения */
 					showalert("Файлы сформированы в папку=" + file.getParent());
 				}
 			}
-
 		} catch (SQLException e) {
 			showalert(e.getMessage());
 		}
 	}
-    
-	/*Вывод ошибок*/
+
+	/* Вывод ошибок */
 	public void write_error(Connection conn, File file, int sess_id) {
 		try {
 			Statement sqlStatement = conn.createStatement();
@@ -149,16 +201,51 @@ public class penscontroller {
 			rs.close();
 			sqlStatement.close();
 
+			ProcessBuilder pb = new ProcessBuilder("Notepad.exe",
+					file.getParent() + "\\" + file.getName() + "_Error.txt");
+			pb.start();
+
 		} catch (Exception e) {
 			showalert(e.getMessage());
 		}
 	}
-    
-	/*Возврат самого файла*/
-	public void retclob(int id, int sess_id, Connection conn, File file) {
+
+	/* Возврат самого файла */
+	public String retclob(int id, int sess_id, Connection conn, File file) {
+		String str = "";
+		try {
+			SqlMap s = new SqlMap().load(System.getenv("TRANSACT_PATH") + "\\report\\SQL.xml");
+			String readRecordSQL = s.getSql("getPens");
+			PreparedStatement prepStmt = conn.prepareStatement(readRecordSQL);
+			prepStmt.setInt(1, id);
+			ResultSet rs = prepStmt.executeQuery();
+
+			String createfolder = file.getParent() + "\\" + file.getName() + "_0" + id + ".txt";
+			System.out.println(readRecordSQL);
+			
+			PrintWriter writer = new PrintWriter(createfolder);
+			
+			
+			while (rs.next()) {
+				str = str + rs.getString("STR") + "\r\n";
+			}
+			writer.write(str);
+			writer.flush();
+			writer.close();
+			rs.close();
+			prepStmt.close();
+
+		} catch (Exception e) {
+			showalert(e.getMessage());
+		}
+		return str;
+	}
+
+	/* Возврат самого файла */
+	public void retclob_(int id, int sess_id, Connection conn, File file) {
 		try {
 			Statement sqlStatement = conn.createStatement();
-			String readRecordSQL = "select * from Z_SB_PENS_4FILE t where t.id = " + sess_id;
+			String readRecordSQL = "select * from Z_SB_PENS_WDP t where t.PART = " + sess_id;
 
 			String createfolder = file.getParent() + "\\" + file.getName() + "_0" + id + ".txt";
 			System.out.println(createfolder);
@@ -184,7 +271,7 @@ public class penscontroller {
 		}
 	}
 
-	/*Вывод сообщения*/
+	/* Вывод сообщения */
 	public void showalert(String mes) {
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
 		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
