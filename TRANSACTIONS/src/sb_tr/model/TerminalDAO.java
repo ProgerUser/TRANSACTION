@@ -363,6 +363,23 @@ public class TerminalDAO {
 	}
 
 	// *******************************
+	// SELECT Z_SB_PENS_4FILE
+	// *******************************
+	public static ObservableList<pensmodel> Z_SB_PENS_4FILE() {
+		String selectStmt = "select * from Z_SB_PENS_4FILE t order by DATE_LOAD desc";
+
+		// Execute SELECT statement
+
+		// Get ResultSet from dbExecuteQuery method
+		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
+
+		// Send ResultSet to the getEmployeeList method and get employee object
+		ObservableList<pensmodel> Forms_lst = PENS_4FILE(rsEmps);
+
+		// Return employee object
+		return Forms_lst;
+	}
+	// *******************************
 	// SELECT ibank2.CLIENTS
 	// *******************************
 	public static ObservableList<Ibank2> CLIENTS(String db,String login,String pass) {
@@ -703,7 +720,28 @@ public class TerminalDAO {
 			}
 			return null;
 		}
-		
+
+		// Select * from fn_sess Z_SB_PENS_4FILE
+		private static ObservableList<pensmodel> PENS_4FILE(ResultSet rs) {
+			try {
+				ObservableList<pensmodel> forms_list = FXCollections.observableArrayList();
+				while (rs.next()) {
+					pensmodel frms = new pensmodel();
+					frms.setid(rs.getInt("ID"));
+					frms.setdateload(rs.getDate("DATE_LOAD"));
+					frms.setfilename(rs.getString("FILENAME"));
+					frms.setone_part("<CLOB>");
+					frms.setTWO_PART("<CLOB>");
+					frms.setTHREE_PART("<CLOB>");
+					frms.setFOUR_PART("<CLOB>");
+					forms_list.add(frms);
+				}
+				return forms_list;
+			} catch (SQLException e) {
+				alert(e.getMessage());
+			}
+			return null;
+		}
 	// Select * from usr
 	private static ObservableList<User_in> get_usr_in(ResultSet rs) {
 		try {
