@@ -74,6 +74,13 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }
+#save_sep {          
+    -fx-background-image: url("save_sep.png");
+    -fx-background-size: 35.0 35.0;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position:center;
+}
+
 #xlsx {          
     -fx-background-image: url("xlsx.png");
     -fx-background-size: 35.0 35.0;

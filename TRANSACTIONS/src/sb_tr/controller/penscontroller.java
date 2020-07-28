@@ -14,13 +14,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.sql.Types;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.controlsfx.control.table.TableFilter;
 import org.mozilla.universalchardet.UniversalDetector;
-
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -33,14 +31,10 @@ import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-import javafx.util.converter.DateStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import sb_tr.model.SqlMap;
 import sb_tr.model.TerminalDAO;
@@ -57,9 +51,11 @@ public class penscontroller {
 
 	@FXML
 	private Button separate;
+	@FXML
+	private Button save_sep;
 
 	@FXML
-	private TableColumn<pensmodel, Date> DateLoad;
+	private TableColumn<pensmodel, Timestamp> DateLoad;
 
 	@FXML
 	private TableColumn<pensmodel, String> Filename;
@@ -69,10 +65,13 @@ public class penscontroller {
 
 	@FXML
 	private TableColumn<pensmodel, String> ONE_PART;
+
 	@FXML
 	private TableColumn<pensmodel, String> TWO_PART;
+
 	@FXML
 	private TableColumn<pensmodel, String> THREE_PART;
+
 	@FXML
 	private TableColumn<pensmodel, String> FOUR_PART;
 
@@ -88,34 +87,38 @@ public class penscontroller {
 		ID.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
 		Filename.setCellValueFactory(cellData -> cellData.getValue().filenameProperty());
 		DateLoad.setCellValueFactory(cellData -> cellData.getValue().dateloadProperty());
-		ONE_PART.setCellValueFactory(cellData -> cellData.getValue().one_partProperty());
-		TWO_PART.setCellValueFactory(cellData -> cellData.getValue().TWO_PARTProperty());
-		THREE_PART.setCellValueFactory(cellData -> cellData.getValue().THREE_PARTProperty());
-		FOUR_PART.setCellValueFactory(cellData -> cellData.getValue().FOUR_PARTProperty());
-
+		/*
+		 * ONE_PART.setCellValueFactory(cellData ->
+		 * cellData.getValue().one_partProperty());
+		 * TWO_PART.setCellValueFactory(cellData ->
+		 * cellData.getValue().TWO_PARTProperty());
+		 * THREE_PART.setCellValueFactory(cellData ->
+		 * cellData.getValue().THREE_PARTProperty());
+		 * FOUR_PART.setCellValueFactory(cellData ->
+		 * cellData.getValue().FOUR_PARTProperty());
+		 */
 		Filename.setCellFactory(TextFieldTableCell.forTableColumn());
 		ID.setCellFactory(TextFieldTableCell.<pensmodel, Integer>forTableColumn(new IntegerStringConverter()));
-		DateLoad.setCellFactory(TextFieldTableCell.<pensmodel, Date>forTableColumn(new DateStringConverter()));
+		// DateLoad.setCellFactory(TextFieldTableCell.<pensmodel,Timestamp>forTableColumn(new
+		// DateStringConverter()));
 
-		/*
-		 * DateLoad.setCellFactory(column -> { TableCell<pensmodel, Date> cell = new
-		 * TableCell<pensmodel, Date>() { private SimpleDateFormat format = new
-		 * SimpleDateFormat("dd.MM.yyyy");
-		 * 
-		 * @Override protected void updateItem(Date item, boolean empty) {
-		 * super.updateItem(item, empty); if (empty) { setText(null); } else {
-		 * setText(format.format(item)); } } }; return cell; });
-		 */
+		DateLoad.setCellFactory(column -> {
+			TableCell<pensmodel, Timestamp> cell = new TableCell<pensmodel, Timestamp>() {
+				private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 
-		ONE_PART.setCellFactory(TextFieldTableCell.forTableColumn());
-		
-		ONE_PART.setOnEditCommit(new EventHandler<CellEditEvent<pensmodel, String>>() {
-			@Override
-			public void handle(CellEditEvent<pensmodel, String> t) {
-				((pensmodel) t.getTableView().getItems().get(t.getTablePosition().getRow())).setone_part(t.getNewValue());
-			}
+				@Override
+				protected void updateItem(Timestamp item, boolean empty) {
+					super.updateItem(item, empty);
+					if (empty) {
+						setText(null);
+					} else {
+						setText(format.format(item));
+					}
+				}
+			};
+			return cell;
 		});
-		
+
 		ID.setOnEditCommit(new EventHandler<CellEditEvent<pensmodel, Integer>>() {
 			@Override
 			public void handle(CellEditEvent<pensmodel, Integer> t) {
@@ -131,9 +134,9 @@ public class penscontroller {
 			}
 		});
 
-		DateLoad.setOnEditCommit(new EventHandler<CellEditEvent<pensmodel, Date>>() {
+		DateLoad.setOnEditCommit(new EventHandler<CellEditEvent<pensmodel, Timestamp>>() {
 			@Override
-			public void handle(CellEditEvent<pensmodel, Date> t) {
+			public void handle(CellEditEvent<pensmodel, Timestamp> t) {
 				((pensmodel) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.setdateload(t.getNewValue());
 			}
@@ -147,6 +150,45 @@ public class penscontroller {
 
 	private void populate(ObservableList<pensmodel> pensmodel) {
 		sep_pens.setItems(pensmodel);
+	}
+
+	private void Alerts(String mess) {
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+		stage.getIcons().add(new Image("terminal.png"));
+		alert.setTitle("Внимание");
+		alert.setHeaderText(null);
+		alert.setContentText("Выберите сначала данные из таблицы!");
+		alert.showAndWait();
+	}
+
+	@FXML
+	void save_seps(ActionEvent event) {
+		if (sep_pens.getSelectionModel().getSelectedItem() == null) {
+			Alerts("Выберите сначала данные из таблицы!");
+		} else {
+			pensmodel pens = sep_pens.getSelectionModel().getSelectedItem();
+			System.out.println(pens.getid());
+			FileChooser fileChooser = new FileChooser();
+
+			System.setProperty("javax.xml.transform.TransformerFactory",
+					"com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl");
+
+			// Set extension filter for text files
+			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT File", "*.txt");
+			fileChooser.getExtensionFilters().add(extFilter);
+
+			// Show save file dialog
+			File file = fileChooser.showSaveDialog(null);
+
+			if (file != null) {
+				for (int i = 1; i <= 4; i++) {
+					retclob_(i, pens.getid(), DBUtil.conn, file);
+				}
+				showalert("Файлы сформированы в папку=" + file.getParent());
+			}
+
+		}
 	}
 
 	public static void autoResizeColumns(TableView<?> table) {
@@ -262,7 +304,6 @@ public class penscontroller {
 					for (int i = 1; i <= 4; i++) {
 						System.out.println(i);
 						String str = "";
-
 						if (i == 1) {
 							Clob clobb = conn.createClob();
 							str = retclob(i, Integer.valueOf(part1), conn, file);
@@ -307,6 +348,10 @@ public class penscontroller {
 					}
 					/* Вывод сообщения */
 					showalert("Файлы сформированы в папку=" + file.getParent());
+					ObservableList<pensmodel> empData = TerminalDAO.Z_SB_PENS_4FILE();
+					populate(empData);
+					autoResizeColumns(sep_pens);
+					TableFilter.forTableView(sep_pens).apply();
 				}
 			}
 		} catch (SQLException e) {
@@ -373,7 +418,7 @@ public class penscontroller {
 	public void retclob_(int id, int sess_id, Connection conn, File file) {
 		try {
 			Statement sqlStatement = conn.createStatement();
-			String readRecordSQL = "select * from Z_SB_PENS_WDP t where t.PART = " + sess_id;
+			String readRecordSQL = "select * from Z_SB_PENS_4FILE t where t.ID = " + sess_id;
 
 			String createfolder = file.getParent() + "\\" + file.getName() + "_0" + id + ".txt";
 			System.out.println(createfolder);

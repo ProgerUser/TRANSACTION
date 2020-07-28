@@ -1,5 +1,6 @@
 package sb_tr.model;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import javafx.beans.property.IntegerProperty;
@@ -12,7 +13,7 @@ public class pensmodel {
 
 	private IntegerProperty id;
 	private StringProperty filename;
-	private SimpleObjectProperty<Date> dateload;
+	private SimpleObjectProperty<Timestamp> dateload;
 	private StringProperty one_part;
 	private StringProperty THREE_PART;
 	private StringProperty TWO_PART;
@@ -112,11 +113,11 @@ public class pensmodel {
 		return dateload.get();
 	}
 
-	public void setdateload(Date dateload) {
+	public void setdateload(Timestamp dateload) {
 		this.dateload.set(dateload);
 	}
 
-	public SimpleObjectProperty<Date> dateloadProperty() {
+	public SimpleObjectProperty<Timestamp> dateloadProperty() {
 		return dateload;
 	}
 }

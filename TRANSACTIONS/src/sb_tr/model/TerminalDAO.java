@@ -728,12 +728,13 @@ public class TerminalDAO {
 				while (rs.next()) {
 					pensmodel frms = new pensmodel();
 					frms.setid(rs.getInt("ID"));
-					frms.setdateload(rs.getDate("DATE_LOAD"));
+					frms.setdateload(rs.getTimestamp("DATE_LOAD"));
 					frms.setfilename(rs.getString("FILENAME"));
-					frms.setone_part("<CLOB>");
+					/*frms.setone_part("<CLOB>");
 					frms.setTWO_PART("<CLOB>");
 					frms.setTHREE_PART("<CLOB>");
 					frms.setFOUR_PART("<CLOB>");
+					*/
 					forms_list.add(frms);
 				}
 				return forms_list;
