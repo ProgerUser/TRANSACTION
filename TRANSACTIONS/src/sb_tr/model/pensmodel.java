@@ -1,7 +1,6 @@
 package sb_tr.model;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;

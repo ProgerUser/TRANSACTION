@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -819,12 +820,15 @@ public class TerminalDAO {
 			while (rs.next()) {
 				Amra_Trans fn = new Amra_Trans();
 
-				String recdate = new SimpleDateFormat("dd.MM.yy HH:mm:ss").format(rs.getTimestamp("recdate"));
-				String paydate = new SimpleDateFormat("dd.MM.yy HH:mm:ss").format(rs.getTimestamp("paydate"));
+				
+				String recdate = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getTimestamp("recdate"));
+				String paydate = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getTimestamp("paydate"));
+				
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
-				fn.set_rownum(rs.getString("rownum"));
-				fn.set_recdate(recdate);
-				fn.set_paydate(paydate);
+				fn.set_rownum(rs.getInt("rownum"));
+				fn.set_recdate(LocalDateTime.parse(recdate, formatter));
+				fn.set_paydate(LocalDateTime.parse(paydate, formatter));
 				fn.set_currency(rs.getString("currency"));
 				fn.set_paymenttype(rs.getString("paymenttype"));
 				fn.set_vk(rs.getString("vk"));
@@ -847,18 +851,18 @@ public class TerminalDAO {
 				fn.set_stringfromfile(rs.getString("stringfromfile"));
 				fn.set_rewardamount(rs.getString("rewardamount"));
 				fn.set_ownerincomeamount(rs.getString("ownerincomeamount"));
-				fn.set_commissionamount(rs.getString("commissionamount"));
-				fn.set_nkamount(rs.getString("nkamount"));
+				fn.set_commissionamount(rs.getDouble("commissionamount"));
+				fn.set_nkamount(Double.valueOf(rs.getString("nkamount").replace(",", ".").replace(" ", "")));
 				fn.set_maxcommissionamount(rs.getString("maxcommissionamount"));
 				fn.set_mincommissionamount(rs.getString("mincommissionamount"));
-				fn.set_cashamount(rs.getString("cashamount"));
-				fn.set_sumnalprimal(rs.getString("sumnalprimal"));
-				fn.set_amounttocheck(rs.getString("amounttocheck"));
-				fn.set_amountofpayment(rs.getString("amountofpayment"));
+				fn.set_cashamount(rs.getDouble("cashamount"));
+				fn.set_sumnalprimal(Double.valueOf(rs.getString("sumnalprimal").replace(",", ".").replace(" ", "")));
+				fn.set_amounttocheck(rs.getDouble("amounttocheck"));
+				fn.set_amountofpayment(rs.getDouble("amountofpayment"));
 				fn.set_sumofsplitting(rs.getString("sumofsplitting"));
 				fn.set_amountintermediary(rs.getString("amountintermediary"));
 				fn.set_amountofscs(rs.getString("amountofscs"));
-				fn.set_amountwithchecks(rs.getString("amountwithchecks"));
+				fn.set_amountwithchecks(rs.getDouble("amountwithchecks"));
 				fn.set_counter(rs.getString("counter"));
 				fn.set_terminal(rs.getString("terminal"));
 				fn.set_terminalnetwork(rs.getString("terminalnetwork"));
@@ -880,7 +884,7 @@ public class TerminalDAO {
 				fn.set_purposeofpayment(rs.getString("purposeofpayment"));
 				fn.set_dataprovider(rs.getString("dataprovider"));
 				fn.set_statusabs(rs.getString("statusabs"));
-				fn.set_sess_id(rs.getString("sess_id"));
+				fn.set_sess_id(rs.getInt("sess_id"));
 				fn_list.add(fn);
 			}
 			return fn_list;

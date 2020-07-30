@@ -34,6 +34,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.converter.DoubleStringConverter;
+import javafx.util.converter.IntegerStringConverter;
+import javafx.util.converter.LocalDateTimeStringConverter;
 import sb_tr.Main;
 import sb_tr.model.Amra_Trans;
 import sb_tr.model.Connect;
@@ -51,6 +54,7 @@ import java.util.TimeZone;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -82,6 +86,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -112,7 +117,7 @@ public class Tr_Am_View_con_from_show {
 	private TableColumn<Amra_Trans, String> detailing;
 
 	@FXML
-	private TableColumn<Amra_Trans, String> sess_id;
+	private TableColumn<Amra_Trans, Integer> sess_id;
 
 	@FXML
 	private TableColumn<Amra_Trans, String> valuenotfound;
@@ -145,13 +150,13 @@ public class Tr_Am_View_con_from_show {
 	private TableColumn<Amra_Trans, String> amountintermediary;
 
 	@FXML
-	private TableColumn<Amra_Trans, String> commissionamount;
+	private TableColumn<Amra_Trans, Double> commissionamount;
 
 	@FXML
 	private TableColumn<Amra_Trans, String> vk;
 
 	@FXML
-	private TableColumn<Amra_Trans, String> sumnalprimal;
+	private TableColumn<Amra_Trans, Double> sumnalprimal;
 
 	@FXML
 	private TableColumn<Amra_Trans, String> dateofoperation;
@@ -166,7 +171,7 @@ public class Tr_Am_View_con_from_show {
 	private TableColumn<Amra_Trans, String> accountpayer;
 
 	@FXML
-	private TableColumn<Amra_Trans, String> recdate;
+	private TableColumn<Amra_Trans, LocalDateTime> recdate;
 
 	@FXML
 	private TableColumn<Amra_Trans, String> checknumber;
@@ -178,16 +183,16 @@ public class Tr_Am_View_con_from_show {
 	private TableColumn<Amra_Trans, String> mincommissionamount;
 
 	@FXML
-	private TableColumn<Amra_Trans, String> rownum;
+	private TableColumn<Amra_Trans, Integer> rownum;
 
 	@FXML
-	private TableColumn<Amra_Trans, String> amounttocheck;
+	private TableColumn<Amra_Trans, Double> amounttocheck;
 
 	@FXML
 	private TableColumn<Amra_Trans, String> dateclearing;
 
 	@FXML
-	private TableColumn<Amra_Trans, String> paydate;
+	private TableColumn<Amra_Trans, LocalDateTime> paydate;
 
 	@FXML
 	private TableColumn<Amra_Trans, String> ownerincomeamount;
@@ -214,7 +219,7 @@ public class Tr_Am_View_con_from_show {
 	private TableColumn<Amra_Trans, String> currency;
 
 	@FXML
-	private TableColumn<Amra_Trans, String> amountwithchecks;
+	private TableColumn<Amra_Trans, Double> amountwithchecks;
 
 	@FXML
 	private TableColumn<Amra_Trans, String> statusabs;
@@ -229,10 +234,10 @@ public class Tr_Am_View_con_from_show {
 	private TableColumn<Amra_Trans, String> providertariff;
 
 	@FXML
-	private TableColumn<Amra_Trans, String> nkamount;
+	private TableColumn<Amra_Trans, Double> nkamount;
 
 	@FXML
-	private TableColumn<Amra_Trans, String> amountofpayment;
+	private TableColumn<Amra_Trans, Double> amountofpayment;
 
 	@FXML
 	private TableColumn<Amra_Trans, String> counter;
@@ -256,7 +261,7 @@ public class Tr_Am_View_con_from_show {
 	private TableColumn<Amra_Trans, String> commissionrate;
 
 	@FXML
-	private TableColumn<Amra_Trans, String> cashamount;
+	private TableColumn<Amra_Trans, Double> cashamount;
 
 	@FXML
 	private TableColumn<Amra_Trans, String> service;
@@ -297,7 +302,7 @@ public class Tr_Am_View_con_from_show {
 			t.setDaemon(true);
 			return t;
 		});
-		rownum.setCellValueFactory(cellData -> cellData.getValue().rownumProperty());
+		rownum.setCellValueFactory(cellData -> cellData.getValue().rownumProperty().asObject());
 		recdate.setCellValueFactory(cellData -> cellData.getValue().recdateProperty());
 		paydate.setCellValueFactory(cellData -> cellData.getValue().paydateProperty());
 		currency.setCellValueFactory(cellData -> cellData.getValue().currencyProperty());
@@ -322,18 +327,18 @@ public class Tr_Am_View_con_from_show {
 		stringfromfile.setCellValueFactory(cellData -> cellData.getValue().stringfromfileProperty());
 		rewardamount.setCellValueFactory(cellData -> cellData.getValue().rewardamountProperty());
 		ownerincomeamount.setCellValueFactory(cellData -> cellData.getValue().ownerincomeamountProperty());
-		commissionamount.setCellValueFactory(cellData -> cellData.getValue().commissionamountProperty());
-		nkamount.setCellValueFactory(cellData -> cellData.getValue().nkamountProperty());
+		commissionamount.setCellValueFactory(cellData -> cellData.getValue().commissionamountProperty().asObject());
+		nkamount.setCellValueFactory(cellData -> cellData.getValue().nkamountProperty().asObject());
 		maxcommissionamount.setCellValueFactory(cellData -> cellData.getValue().maxcommissionamountProperty());
 		mincommissionamount.setCellValueFactory(cellData -> cellData.getValue().mincommissionamountProperty());
-		cashamount.setCellValueFactory(cellData -> cellData.getValue().cashamountProperty());
-		sumnalprimal.setCellValueFactory(cellData -> cellData.getValue().sumnalprimalProperty());
-		amounttocheck.setCellValueFactory(cellData -> cellData.getValue().amounttocheckProperty());
-		amountofpayment.setCellValueFactory(cellData -> cellData.getValue().amountofpaymentProperty());
+		cashamount.setCellValueFactory(cellData -> cellData.getValue().cashamountProperty().asObject());
+		sumnalprimal.setCellValueFactory(cellData -> cellData.getValue().sumnalprimalProperty().asObject());
+		amounttocheck.setCellValueFactory(cellData -> cellData.getValue().amounttocheckProperty().asObject());
+		amountofpayment.setCellValueFactory(cellData -> cellData.getValue().amountofpaymentProperty().asObject());
 		sumofsplitting.setCellValueFactory(cellData -> cellData.getValue().sumofsplittingProperty());
 		amountintermediary.setCellValueFactory(cellData -> cellData.getValue().amountintermediaryProperty());
 		amountofscs.setCellValueFactory(cellData -> cellData.getValue().amountofscsProperty());
-		amountwithchecks.setCellValueFactory(cellData -> cellData.getValue().amountwithchecksProperty());
+		amountwithchecks.setCellValueFactory(cellData -> cellData.getValue().amountwithchecksProperty().asObject());
 		counter.setCellValueFactory(cellData -> cellData.getValue().counterProperty());
 		terminal.setCellValueFactory(cellData -> cellData.getValue().terminalProperty());
 		terminalnetwork.setCellValueFactory(cellData -> cellData.getValue().terminalnetworkProperty());
@@ -355,10 +360,10 @@ public class Tr_Am_View_con_from_show {
 		purposeofpayment.setCellValueFactory(cellData -> cellData.getValue().purposeofpaymentProperty());
 		dataprovider.setCellValueFactory(cellData -> cellData.getValue().dataproviderProperty());
 		statusabs.setCellValueFactory(cellData -> cellData.getValue().statusabsProperty());
-		sess_id.setCellValueFactory(cellData -> cellData.getValue().sess_idProperty());
+		sess_id.setCellValueFactory(cellData -> cellData.getValue().sess_idProperty().asObject());
 
-		recdate.setCellFactory(TextFieldTableCell.forTableColumn());
-		paydate.setCellFactory(TextFieldTableCell.forTableColumn());
+		recdate.setCellFactory(TextFieldTableCell.<Amra_Trans, LocalDateTime>forTableColumn(new LocalDateTimeStringConverter()));
+		paydate.setCellFactory(TextFieldTableCell.<Amra_Trans, LocalDateTime>forTableColumn(new LocalDateTimeStringConverter()));
 		currency.setCellFactory(TextFieldTableCell.forTableColumn());
 		paymenttype.setCellFactory(TextFieldTableCell.forTableColumn());
 		vk.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -381,18 +386,18 @@ public class Tr_Am_View_con_from_show {
 		stringfromfile.setCellFactory(TextFieldTableCell.forTableColumn());
 		rewardamount.setCellFactory(TextFieldTableCell.forTableColumn());
 		ownerincomeamount.setCellFactory(TextFieldTableCell.forTableColumn());
-		commissionamount.setCellFactory(TextFieldTableCell.forTableColumn());
-		nkamount.setCellFactory(TextFieldTableCell.forTableColumn());
+		commissionamount.setCellFactory(TextFieldTableCell.<Amra_Trans, Double>forTableColumn(new DoubleStringConverter()));
+		nkamount.setCellFactory(TextFieldTableCell.<Amra_Trans, Double>forTableColumn(new DoubleStringConverter()));
 		maxcommissionamount.setCellFactory(TextFieldTableCell.forTableColumn());
 		mincommissionamount.setCellFactory(TextFieldTableCell.forTableColumn());
-		cashamount.setCellFactory(TextFieldTableCell.forTableColumn());
-		sumnalprimal.setCellFactory(TextFieldTableCell.forTableColumn());
-		amounttocheck.setCellFactory(TextFieldTableCell.forTableColumn());
-		amountofpayment.setCellFactory(TextFieldTableCell.forTableColumn());
+		cashamount.setCellFactory(TextFieldTableCell.<Amra_Trans, Double>forTableColumn(new DoubleStringConverter()));
+		sumnalprimal.setCellFactory(TextFieldTableCell.<Amra_Trans, Double>forTableColumn(new DoubleStringConverter()));
+		amounttocheck.setCellFactory(TextFieldTableCell.<Amra_Trans, Double>forTableColumn(new DoubleStringConverter()));
+		amountofpayment.setCellFactory(TextFieldTableCell.<Amra_Trans, Double>forTableColumn(new DoubleStringConverter()));
 		sumofsplitting.setCellFactory(TextFieldTableCell.forTableColumn());
 		amountintermediary.setCellFactory(TextFieldTableCell.forTableColumn());
 		amountofscs.setCellFactory(TextFieldTableCell.forTableColumn());
-		amountwithchecks.setCellFactory(TextFieldTableCell.forTableColumn());
+		amountwithchecks.setCellFactory(TextFieldTableCell.<Amra_Trans, Double>forTableColumn(new DoubleStringConverter()));
 		counter.setCellFactory(TextFieldTableCell.forTableColumn());
 		terminal.setCellFactory(TextFieldTableCell.forTableColumn());
 		terminalnetwork.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -414,18 +419,18 @@ public class Tr_Am_View_con_from_show {
 		purposeofpayment.setCellFactory(TextFieldTableCell.forTableColumn());
 		dataprovider.setCellFactory(TextFieldTableCell.forTableColumn());
 		statusabs.setCellFactory(TextFieldTableCell.forTableColumn());
-		sess_id.setCellFactory(TextFieldTableCell.forTableColumn());
+		sess_id.setCellFactory(TextFieldTableCell.<Amra_Trans, Integer>forTableColumn(new IntegerStringConverter()));
 
-		recdate.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+		recdate.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, LocalDateTime>>() {
 			@Override
-			public void handle(CellEditEvent<Amra_Trans, String> t) {
+			public void handle(CellEditEvent<Amra_Trans, LocalDateTime> t) {
 				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.set_recdate(t.getNewValue());
 			}
 		});
-		paydate.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+		paydate.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, LocalDateTime>>() {
 			@Override
-			public void handle(CellEditEvent<Amra_Trans, String> t) {
+			public void handle(CellEditEvent<Amra_Trans, LocalDateTime> t) {
 				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.set_paydate(t.getNewValue());
 			}
@@ -583,16 +588,16 @@ public class Tr_Am_View_con_from_show {
 						.set_ownerincomeamount(t.getNewValue());
 			}
 		});
-		commissionamount.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+		commissionamount.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, Double>>() {
 			@Override
-			public void handle(CellEditEvent<Amra_Trans, String> t) {
+			public void handle(CellEditEvent<Amra_Trans, Double> t) {
 				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.set_commissionamount(t.getNewValue());
 			}
 		});
-		nkamount.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+		nkamount.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, Double>>() {
 			@Override
-			public void handle(CellEditEvent<Amra_Trans, String> t) {
+			public void handle(CellEditEvent<Amra_Trans, Double> t) {
 				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.set_nkamount(t.getNewValue());
 			}
@@ -611,30 +616,30 @@ public class Tr_Am_View_con_from_show {
 						.set_mincommissionamount(t.getNewValue());
 			}
 		});
-		cashamount.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+		cashamount.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, Double>>() {
 			@Override
-			public void handle(CellEditEvent<Amra_Trans, String> t) {
+			public void handle(CellEditEvent<Amra_Trans, Double> t) {
 				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.set_cashamount(t.getNewValue());
 			}
 		});
-		sumnalprimal.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+		sumnalprimal.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, Double>>() {
 			@Override
-			public void handle(CellEditEvent<Amra_Trans, String> t) {
+			public void handle(CellEditEvent<Amra_Trans, Double> t) {
 				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.set_sumnalprimal(t.getNewValue());
 			}
 		});
-		amounttocheck.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+		amounttocheck.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, Double>>() {
 			@Override
-			public void handle(CellEditEvent<Amra_Trans, String> t) {
+			public void handle(CellEditEvent<Amra_Trans, Double> t) {
 				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.set_amounttocheck(t.getNewValue());
 			}
 		});
-		amountofpayment.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+		amountofpayment.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, Double>>() {
 			@Override
-			public void handle(CellEditEvent<Amra_Trans, String> t) {
+			public void handle(CellEditEvent<Amra_Trans, Double> t) {
 				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.set_amountofpayment(t.getNewValue());
 			}
@@ -660,9 +665,9 @@ public class Tr_Am_View_con_from_show {
 						.set_amountofscs(t.getNewValue());
 			}
 		});
-		amountwithchecks.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+		amountwithchecks.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, Double>>() {
 			@Override
-			public void handle(CellEditEvent<Amra_Trans, String> t) {
+			public void handle(CellEditEvent<Amra_Trans, Double> t) {
 				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.set_amountwithchecks(t.getNewValue());
 			}
@@ -812,9 +817,9 @@ public class Tr_Am_View_con_from_show {
 						.set_statusabs(t.getNewValue());
 			}
 		});
-		sess_id.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+		sess_id.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, Integer>>() {
 			@Override
-			public void handle(CellEditEvent<Amra_Trans, String> t) {
+			public void handle(CellEditEvent<Amra_Trans, Integer> t) {
 				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.set_sess_id(t.getNewValue());
 			}
@@ -857,7 +862,59 @@ public class Tr_Am_View_con_from_show {
 	}
 
 	@FXML
-	private void excel_export(ActionEvent actionEvent) {
+	public void excel_export(ActionEvent event) throws IOException {
+		try {
+			FileChooser fileChooser = new FileChooser();
+			System.setProperty("javax.xml.transform.TransformerFactory",
+					"com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl");
+			// Set extension filter for text files
+			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel File", "*.xls");
+			fileChooser.getExtensionFilters().add(extFilter);
+			// Show save file dialog
+			File file = fileChooser.showSaveDialog(null);
+			if (file != null) {
+				Workbook workbook = new HSSFWorkbook();
+				Sheet spreadsheet = workbook.createSheet("Таблица");
+
+				Row row = spreadsheet.createRow(0);
+
+				for (int j = 0; j < trans_table.getColumns().size(); j++) {
+					row.createCell(j).setCellValue(trans_table.getColumns().get(j).getText());
+				}
+
+				for (int i = 0; i < trans_table.getItems().size(); i++) {
+					row = spreadsheet.createRow(i + 1);
+					for (int j = 0; j < trans_table.getColumns().size(); j++) {
+						if (trans_table.getColumns().get(j).getText() == ""){
+							
+						}
+						if (trans_table.getColumns().get(j).getCellData(i) != null) {
+							row.createCell(j).setCellValue(trans_table.getColumns().get(j).getCellData(i).toString());
+						} else {
+							row.createCell(j).setCellValue("");
+						}
+					}
+				}
+				workbook.write(new FileOutputStream(file.getPath()));
+				workbook.close();
+				Alerts("Файл сформирован в папку "+file.getPath());
+			}
+		} catch (Exception e) {
+			Alerts(e.getMessage());
+		}
+
+	}
+	private void Alerts(String mess) {
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+		stage.getIcons().add(new Image("terminal.png"));
+		alert.setTitle("Внимание");
+		alert.setHeaderText(null);
+		alert.setContentText(mess);
+		alert.showAndWait();
+	}
+	@FXML
+	private void excel_export_(ActionEvent actionEvent) {
 		try {
 			FileChooser fileChooser = new FileChooser();
 

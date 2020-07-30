@@ -24,7 +24,7 @@
 					text="Значение" />
 			</columns>
 		</TableView>
-		<Button disable="true" layoutX="14.0" layoutY="12.0"
+		<Button disable="false" layoutX="14.0" layoutY="12.0"
 			mnemonicParsing="false" onAction="#view_attr"
 			text="Выгрузить в EXCEL" />
 	</children>

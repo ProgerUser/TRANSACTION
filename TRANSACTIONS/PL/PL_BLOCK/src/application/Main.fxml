@@ -7,7 +7,7 @@
 
 <AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="198.0" prefWidth="652.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SaveController">
    <children>
-      <Text layoutX="22.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Основание блокировки:" />
+      <Text fx:id="action" layoutX="22.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" />
       <TextField fx:id="gr" layoutX="22.0" layoutY="83.0" prefHeight="35.0" prefWidth="609.0" />
       <Button layoutX="22.0" layoutY="131.0" mnemonicParsing="false" onAction="#save" text="Сохранить" />
       <Text layoutX="22.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID карты:" />

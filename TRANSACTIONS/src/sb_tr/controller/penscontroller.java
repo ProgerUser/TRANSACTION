@@ -17,8 +17,10 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.text.SimpleDateFormat;
+
 import org.controlsfx.control.table.TableFilter;
 import org.mozilla.universalchardet.UniversalDetector;
+
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -83,7 +85,7 @@ public class penscontroller {
 	private void initialize() {
 
 		sep_pens.setEditable(true);
-
+		
 		ID.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
 		Filename.setCellValueFactory(cellData -> cellData.getValue().filenameProperty());
 		DateLoad.setCellValueFactory(cellData -> cellData.getValue().dateloadProperty());
@@ -99,8 +101,7 @@ public class penscontroller {
 		 */
 		Filename.setCellFactory(TextFieldTableCell.forTableColumn());
 		ID.setCellFactory(TextFieldTableCell.<pensmodel, Integer>forTableColumn(new IntegerStringConverter()));
-		// DateLoad.setCellFactory(TextFieldTableCell.<pensmodel,Timestamp>forTableColumn(new
-		// DateStringConverter()));
+		/*DateLoad.setCellFactory(TextFieldTableCell.<pensmodel,Timestamp>forTableColumn(StringConverter<T> converter));*/
 
 		DateLoad.setCellFactory(column -> {
 			TableCell<pensmodel, Timestamp> cell = new TableCell<pensmodel, Timestamp>() {

@@ -1,6 +1,16 @@
 package sb_tr.model;
 
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
+import org.joda.time.DateTime;
+
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -8,9 +18,9 @@ public class Amra_Trans {
 
     //private SimpleObjectProperty<Date> paydate;
 	private StringProperty chk_row;
-	private StringProperty rownum;
-	private StringProperty recdate;
-	private StringProperty paydate;
+	private IntegerProperty rownum;
+	private SimpleObjectProperty<LocalDateTime> recdate;
+	private SimpleObjectProperty<LocalDateTime> paydate;
 	private StringProperty currency;
 	private StringProperty paymenttype;
 	private StringProperty vk;
@@ -33,18 +43,18 @@ public class Amra_Trans {
 	private StringProperty stringfromfile;
 	private StringProperty rewardamount;
 	private StringProperty ownerincomeamount;
-	private StringProperty commissionamount;
-	private StringProperty nkamount;
+	private DoubleProperty commissionamount;
+	private DoubleProperty nkamount;
 	private StringProperty maxcommissionamount;
 	private StringProperty mincommissionamount;
-	private StringProperty cashamount;
-	private StringProperty sumnalprimal;
-	private StringProperty amounttocheck;
-	private StringProperty amountofpayment;
+	private DoubleProperty cashamount;
+	private DoubleProperty sumnalprimal;
+	private DoubleProperty amounttocheck;
+	private DoubleProperty amountofpayment;
 	private StringProperty sumofsplitting;
 	private StringProperty amountintermediary;
 	private StringProperty amountofscs;
-	private StringProperty amountwithchecks;
+	private DoubleProperty amountwithchecks;
 	private StringProperty counter;
 	private StringProperty terminal;
 	private StringProperty terminalnetwork;
@@ -66,16 +76,16 @@ public class Amra_Trans {
 	private StringProperty purposeofpayment;
 	private StringProperty dataprovider;
 	private StringProperty statusabs;
-	private StringProperty sess_id;
+	private IntegerProperty sess_id;
 
 	// Constructor
 	public Amra_Trans() {
 		
 		this.chk_row = new SimpleStringProperty();
-		this.rownum = new SimpleStringProperty();
-		this.recdate = new SimpleStringProperty();
+		this.rownum = new SimpleIntegerProperty();
+		this.recdate = new SimpleObjectProperty<>();
 		//this.paydate = new SimpleObjectProperty<>();
-		this.paydate = new SimpleStringProperty();
+		this.paydate = new SimpleObjectProperty<>();
 		this.currency = new SimpleStringProperty();
 		this.paymenttype = new SimpleStringProperty();
 		this.vk = new SimpleStringProperty();
@@ -98,18 +108,18 @@ public class Amra_Trans {
 		this.stringfromfile = new SimpleStringProperty();
 		this.rewardamount = new SimpleStringProperty();
 		this.ownerincomeamount = new SimpleStringProperty();
-		this.commissionamount = new SimpleStringProperty();
-		this.nkamount = new SimpleStringProperty();
+		this.commissionamount = new SimpleDoubleProperty();
+		this.nkamount = new SimpleDoubleProperty();
 		this.maxcommissionamount = new SimpleStringProperty();
 		this.mincommissionamount = new SimpleStringProperty();
-		this.cashamount = new SimpleStringProperty();
-		this.sumnalprimal = new SimpleStringProperty();
-		this.amounttocheck = new SimpleStringProperty();
-		this.amountofpayment = new SimpleStringProperty();
+		this.cashamount = new SimpleDoubleProperty();
+		this.sumnalprimal = new SimpleDoubleProperty();
+		this.amounttocheck = new SimpleDoubleProperty();
+		this.amountofpayment = new SimpleDoubleProperty();
 		this.sumofsplitting = new SimpleStringProperty();
 		this.amountintermediary = new SimpleStringProperty();
 		this.amountofscs = new SimpleStringProperty();
-		this.amountwithchecks = new SimpleStringProperty();
+		this.amountwithchecks = new SimpleDoubleProperty();
 		this.counter = new SimpleStringProperty();
 		this.terminal = new SimpleStringProperty();
 		this.terminalnetwork = new SimpleStringProperty();
@@ -131,14 +141,14 @@ public class Amra_Trans {
 		this.purposeofpayment = new SimpleStringProperty();
 		this.dataprovider = new SimpleStringProperty();
 		this.statusabs = new SimpleStringProperty();
-		this.sess_id = new SimpleStringProperty();
+		this.sess_id = new SimpleIntegerProperty();
 
 	}
 
 	public String get_chk_row() {
 		return chk_row.get();
 	}
-	public String get_recdate() {
+	public Object get_recdate() {
 		return recdate.get();
 	}
 
@@ -241,11 +251,11 @@ public class Amra_Trans {
 		return ownerincomeamount.get();
 	}
 
-	public String get_commissionamount() {
+	public Double get_commissionamount() {
 		return commissionamount.get();
 	}
 
-	public String get_nkamount() {
+	public Double get_nkamount() {
 		return nkamount.get();
 	}
 
@@ -257,19 +267,19 @@ public class Amra_Trans {
 		return mincommissionamount.get();
 	}
 
-	public String get_cashamount() {
+	public Double get_cashamount() {
 		return cashamount.get();
 	}
 
-	public String get_sumnalprimal() {
+	public Double get_sumnalprimal() {
 		return sumnalprimal.get();
 	}
 
-	public String get_amounttocheck() {
+	public Double get_amounttocheck() {
 		return amounttocheck.get();
 	}
 
-	public String get_amountofpayment() {
+	public Double get_amountofpayment() {
 		return amountofpayment.get();
 	}
 
@@ -285,7 +295,7 @@ public class Amra_Trans {
 		return amountofscs.get();
 	}
 
-	public String get_amountwithchecks() {
+	public Double get_amountwithchecks() {
 		return amountwithchecks.get();
 	}
 
@@ -373,7 +383,7 @@ public class Amra_Trans {
 		return statusabs.get();
 	}
 
-	public String get_sess_id() {
+	public Integer get_sess_id() {
 		return sess_id.get();
 	}
 
@@ -381,11 +391,11 @@ public class Amra_Trans {
 		this.chk_row.set(chk_row);
 	}
 	
-	public void set_recdate(String recdate) {
+	public void set_recdate(LocalDateTime recdate) {
 		this.recdate.set(recdate);
 	}
 
-	public void set_paydate(String paydate) {
+	public void set_paydate(LocalDateTime paydate) {
 		this.paydate.set(paydate);
 	}
 	
@@ -445,7 +455,7 @@ public class Amra_Trans {
 		this.checkparent.set(checkparent);
 	}
 
-	public void set_rownum(String rownum) {
+	public void set_rownum(Integer rownum) {
 		this.rownum.set(rownum);
 	}
 
@@ -485,11 +495,11 @@ public class Amra_Trans {
 		this.ownerincomeamount.set(ownerincomeamount);
 	}
 
-	public void set_commissionamount(String commissionamount) {
+	public void set_commissionamount(Double commissionamount) {
 		this.commissionamount.set(commissionamount);
 	}
 
-	public void set_nkamount(String nkamount) {
+	public void set_nkamount(Double nkamount) {
 		this.nkamount.set(nkamount);
 	}
 
@@ -501,19 +511,19 @@ public class Amra_Trans {
 		this.mincommissionamount.set(mincommissionamount);
 	}
 
-	public void set_cashamount(String cashamount) {
+	public void set_cashamount(Double cashamount) {
 		this.cashamount.set(cashamount);
 	}
 
-	public void set_sumnalprimal(String sumnalprimal) {
+	public void set_sumnalprimal(Double sumnalprimal) {
 		this.sumnalprimal.set(sumnalprimal);
 	}
 
-	public void set_amounttocheck(String amounttocheck) {
+	public void set_amounttocheck(Double amounttocheck) {
 		this.amounttocheck.set(amounttocheck);
 	}
 
-	public void set_amountofpayment(String amountofpayment) {
+	public void set_amountofpayment(Double amountofpayment) {
 		this.amountofpayment.set(amountofpayment);
 	}
 
@@ -529,7 +539,7 @@ public class Amra_Trans {
 		this.amountofscs.set(amountofscs);
 	}
 
-	public void set_amountwithchecks(String amountwithchecks) {
+	public void set_amountwithchecks(Double amountwithchecks) {
 		this.amountwithchecks.set(amountwithchecks);
 	}
 
@@ -617,15 +627,15 @@ public class Amra_Trans {
 		this.statusabs.set(statusabs);
 	}
 
-	public void set_sess_id(String sess_id) {
+	public void set_sess_id(Integer sess_id) {
 		this.sess_id.set(sess_id);
 	}
 
-	public StringProperty recdateProperty() {
+	public SimpleObjectProperty<LocalDateTime> recdateProperty() {
 		return recdate;
 	}
 
-	public StringProperty paydateProperty() {
+	public SimpleObjectProperty<LocalDateTime> paydateProperty() {
 		return paydate;
 	}
 //    public SimpleObjectProperty<Date> paydateProperty(){
@@ -724,11 +734,11 @@ public class Amra_Trans {
 		return ownerincomeamount;
 	}
 
-	public StringProperty commissionamountProperty() {
+	public DoubleProperty commissionamountProperty() {
 		return commissionamount;
 	}
 
-	public StringProperty nkamountProperty() {
+	public DoubleProperty nkamountProperty() {
 		return nkamount;
 	}
 
@@ -740,19 +750,19 @@ public class Amra_Trans {
 		return mincommissionamount;
 	}
 
-	public StringProperty cashamountProperty() {
+	public DoubleProperty cashamountProperty() {
 		return cashamount;
 	}
 
-	public StringProperty sumnalprimalProperty() {
+	public DoubleProperty sumnalprimalProperty() {
 		return sumnalprimal;
 	}
 
-	public StringProperty amounttocheckProperty() {
+	public DoubleProperty amounttocheckProperty() {
 		return amounttocheck;
 	}
 
-	public StringProperty amountofpaymentProperty() {
+	public DoubleProperty amountofpaymentProperty() {
 		return amountofpayment;
 	}
 
@@ -768,7 +778,7 @@ public class Amra_Trans {
 		return amountofscs;
 	}
 
-	public StringProperty amountwithchecksProperty() {
+	public DoubleProperty amountwithchecksProperty() {
 		return amountwithchecks;
 	}
 
@@ -856,11 +866,11 @@ public class Amra_Trans {
 		return statusabs;
 	}
 
-	public StringProperty sess_idProperty() {
+	public IntegerProperty sess_idProperty() {
 		return sess_id;
 	}
 
-	public StringProperty rownumProperty() {
+	public IntegerProperty rownumProperty() {
 		return rownum;
 	}
 

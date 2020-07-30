@@ -42,6 +42,10 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.converter.DateTimeStringConverter;
+import javafx.util.converter.DoubleStringConverter;
+import javafx.util.converter.IntegerStringConverter;
+import javafx.util.converter.LocalDateTimeStringConverter;
 import net.sf.jasperreports.engine.JRException;
 import sb_tr.Main;
 import sb_tr.model.Amra_Trans;
@@ -55,6 +59,7 @@ import sb_tr.model.TerminalForCombo;
 import sb_tr.model.Transact;
 import sb_tr.model.TransactClass;
 import sb_tr.model.ViewerDAO;
+import sb_tr.model.pensmodel;
 import sb_tr.util.DBUtil;
 
 import java.util.Random;
@@ -81,6 +86,7 @@ import java.util.TimeZone;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -117,11 +123,15 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import com.gembox.spreadsheet.ExcelFile;
+import com.gembox.spreadsheet.ExcelWorksheet;
+import com.gembox.spreadsheet.SpreadsheetInfo;
 import com.sun.prism.impl.Disposer.Record;
 
 /**
@@ -131,18 +141,22 @@ import com.sun.prism.impl.Disposer.Record;
 @SuppressWarnings("unused")
 public class Tr_Am_View_con {
 
+	static {
+		SpreadsheetInfo.setLicense("FREE-LIMITED-KEY");
+	}
+
 	@FXML
 	private TableColumn<Amra_Trans, String> filetransactions;
 
 	@FXML
 	private CheckBox inkass;
-	
+
 	@FXML
 	private CheckBox ret_pay;
 
-    @FXML
-    private Button search;
-    
+	@FXML
+	private Button search;
+
 	@FXML
 	private TableColumn<Amra_Trans, String> chk_row;
 
@@ -159,7 +173,7 @@ public class Tr_Am_View_con {
 	private TableColumn<Amra_Trans, String> detailing;
 
 	@FXML
-	private TableColumn<Amra_Trans, String> sess_id;
+	private TableColumn<Amra_Trans, Integer> sess_id;
 
 	@FXML
 	private TableColumn<Amra_Trans, String> valuenotfound;
@@ -192,13 +206,13 @@ public class Tr_Am_View_con {
 	private TableColumn<Amra_Trans, String> amountintermediary;
 
 	@FXML
-	private TableColumn<Amra_Trans, String> commissionamount;
+	private TableColumn<Amra_Trans, Double> commissionamount;
 
 	@FXML
 	private TableColumn<Amra_Trans, String> vk;
 
 	@FXML
-	private TableColumn<Amra_Trans, String> sumnalprimal;
+	private TableColumn<Amra_Trans, Double> sumnalprimal;
 
 	@FXML
 	private TableColumn<Amra_Trans, String> dateofoperation;
@@ -213,7 +227,7 @@ public class Tr_Am_View_con {
 	private TableColumn<Amra_Trans, String> accountpayer;
 
 	@FXML
-	private TableColumn<Amra_Trans, String> recdate;
+	private TableColumn<Amra_Trans, LocalDateTime> recdate;
 
 	@FXML
 	private TableColumn<Amra_Trans, String> checknumber;
@@ -225,16 +239,16 @@ public class Tr_Am_View_con {
 	private TableColumn<Amra_Trans, String> mincommissionamount;
 
 	@FXML
-	private TableColumn<Amra_Trans, String> rownum;
+	private TableColumn<Amra_Trans, Integer> rownum;
 
 	@FXML
-	private TableColumn<Amra_Trans, String> amounttocheck;
+	private TableColumn<Amra_Trans, Double> amounttocheck;
 
 	@FXML
 	private TableColumn<Amra_Trans, String> dateclearing;
 
 	@FXML
-	private TableColumn<Amra_Trans, String> paydate;
+	private TableColumn<Amra_Trans, LocalDateTime> paydate;
 
 	@FXML
 	private TextField summa_plat;
@@ -270,7 +284,7 @@ public class Tr_Am_View_con {
 	private TableColumn<Amra_Trans, String> currency;
 
 	@FXML
-	private TableColumn<Amra_Trans, String> amountwithchecks;
+	private TableColumn<Amra_Trans, Double> amountwithchecks;
 
 	@FXML
 	private TableColumn<Amra_Trans, String> statusabs;
@@ -285,10 +299,10 @@ public class Tr_Am_View_con {
 	private TableColumn<Amra_Trans, String> providertariff;
 
 	@FXML
-	private TableColumn<Amra_Trans, String> nkamount;
+	private TableColumn<Amra_Trans, Double> nkamount;
 
 	@FXML
-	private TableColumn<Amra_Trans, String> amountofpayment;
+	private TableColumn<Amra_Trans, Double> amountofpayment;
 
 	@FXML
 	private TableColumn<Amra_Trans, String> counter;
@@ -312,7 +326,7 @@ public class Tr_Am_View_con {
 	private TableColumn<Amra_Trans, String> commissionrate;
 
 	@FXML
-	private TableColumn<Amra_Trans, String> cashamount;
+	private TableColumn<Amra_Trans, Double> cashamount;
 
 	@FXML
 	private TableColumn<Amra_Trans, String> service;
@@ -353,20 +367,17 @@ public class Tr_Am_View_con {
 	@FXML
 	private ComboBox<String> terminal_name;
 
-	
-    @FXML
-    void show_(ActionEvent l) {
-		
-    }
-    
-    @FXML
+	@FXML
+	void show_(ActionEvent l) {
+
+	}
+
+	@FXML
 	private BorderPane pane_;
-    
-    
-    @FXML
+
+	@FXML
 	private AnchorPane anch_b4;
-    
-    
+
 	@FXML
 	private void initialize() {
 		trans_table.setEditable(true);
@@ -375,10 +386,9 @@ public class Tr_Am_View_con {
 			t.setDaemon(true);
 			return t;
 		});
-	
-		
+
 		chk_row.setCellValueFactory(cellData -> cellData.getValue().chk_rowProperty());
-		rownum.setCellValueFactory(cellData -> cellData.getValue().rownumProperty());
+		rownum.setCellValueFactory(cellData -> cellData.getValue().rownumProperty().asObject());
 		recdate.setCellValueFactory(cellData -> cellData.getValue().recdateProperty());
 		paydate.setCellValueFactory(cellData -> cellData.getValue().paydateProperty());
 		currency.setCellValueFactory(cellData -> cellData.getValue().currencyProperty());
@@ -412,23 +422,23 @@ public class Tr_Am_View_con {
 		// cellData.getValue().rewardamountProperty());
 		// ownerincomeamount.setCellValueFactory(cellData ->
 		// cellData.getValue().ownerincomeamountProperty());
-		commissionamount.setCellValueFactory(cellData -> cellData.getValue().commissionamountProperty());
-		nkamount.setCellValueFactory(cellData -> cellData.getValue().nkamountProperty());
+		commissionamount.setCellValueFactory(cellData -> cellData.getValue().commissionamountProperty().asObject());
+		nkamount.setCellValueFactory(cellData -> cellData.getValue().nkamountProperty().asObject());
 		// maxcommissionamount.setCellValueFactory(cellData ->
 		// cellData.getValue().maxcommissionamountProperty());
 		// mincommissionamount.setCellValueFactory(cellData ->
 		// cellData.getValue().mincommissionamountProperty());
-		cashamount.setCellValueFactory(cellData -> cellData.getValue().cashamountProperty());
-		sumnalprimal.setCellValueFactory(cellData -> cellData.getValue().sumnalprimalProperty());
-		amounttocheck.setCellValueFactory(cellData -> cellData.getValue().amounttocheckProperty());
-		amountofpayment.setCellValueFactory(cellData -> cellData.getValue().amountofpaymentProperty());
+		cashamount.setCellValueFactory(cellData -> cellData.getValue().cashamountProperty().asObject());
+		sumnalprimal.setCellValueFactory(cellData -> cellData.getValue().sumnalprimalProperty().asObject());
+		amounttocheck.setCellValueFactory(cellData -> cellData.getValue().amounttocheckProperty().asObject());
+		amountofpayment.setCellValueFactory(cellData -> cellData.getValue().amountofpaymentProperty().asObject());
 		// sumofsplitting.setCellValueFactory(cellData ->
 		// cellData.getValue().sumofsplittingProperty());
 		// amountintermediary.setCellValueFactory(cellData ->
 		// cellData.getValue().amountintermediaryProperty());
 		// amountofscs.setCellValueFactory(cellData ->
 		// cellData.getValue().amountofscsProperty());
-		amountwithchecks.setCellValueFactory(cellData -> cellData.getValue().amountwithchecksProperty());
+		amountwithchecks.setCellValueFactory(cellData -> cellData.getValue().amountwithchecksProperty().asObject());
 		// counter.setCellValueFactory(cellData ->
 		// cellData.getValue().counterProperty());
 		terminal.setCellValueFactory(cellData -> cellData.getValue().terminalProperty());
@@ -462,10 +472,46 @@ public class Tr_Am_View_con {
 		 */
 		dataprovider.setCellValueFactory(cellData -> cellData.getValue().dataproviderProperty());
 		statusabs.setCellValueFactory(cellData -> cellData.getValue().statusabsProperty());
-		sess_id.setCellValueFactory(cellData -> cellData.getValue().sess_idProperty());
+		sess_id.setCellValueFactory(cellData -> cellData.getValue().sess_idProperty().asObject());
 
-		recdate.setCellFactory(TextFieldTableCell.forTableColumn());
-		paydate.setCellFactory(TextFieldTableCell.forTableColumn());
+		
+		recdate.setCellFactory(column -> {
+			TableCell<Amra_Trans, LocalDateTime> cell = new TableCell<Amra_Trans, LocalDateTime>() {
+				private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+
+				@Override
+				protected void updateItem(LocalDateTime item, boolean empty) {
+					super.updateItem(item, empty);
+					if (empty) {
+						setText(null);
+					} else {
+						setText(format.format(item));
+					}
+				}
+			};
+			return cell;
+		});
+		
+		
+		paydate.setCellFactory(column -> {
+			TableCell<Amra_Trans, LocalDateTime> cell = new TableCell<Amra_Trans, LocalDateTime>() {
+				private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+
+				@Override
+				protected void updateItem(LocalDateTime item, boolean empty) {
+					super.updateItem(item, empty);
+					if (empty) {
+						setText(null);
+					} else {
+						setText(format.format(item));
+					}
+				}
+			};
+			return cell;
+		});
+		
+		recdate.setCellFactory(TextFieldTableCell.<Amra_Trans, LocalDateTime>forTableColumn(new LocalDateTimeStringConverter()));
+		paydate.setCellFactory(TextFieldTableCell.<Amra_Trans, LocalDateTime>forTableColumn(new LocalDateTimeStringConverter()));
 		currency.setCellFactory(TextFieldTableCell.forTableColumn());
 		// paymenttype.setCellFactory(TextFieldTableCell.forTableColumn());
 		vk.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -488,18 +534,18 @@ public class Tr_Am_View_con {
 		// stringfromfile.setCellFactory(TextFieldTableCell.forTableColumn());
 		// rewardamount.setCellFactory(TextFieldTableCell.forTableColumn());
 		// ownerincomeamount.setCellFactory(TextFieldTableCell.forTableColumn());
-		commissionamount.setCellFactory(TextFieldTableCell.forTableColumn());
-		nkamount.setCellFactory(TextFieldTableCell.forTableColumn());
+		commissionamount.setCellFactory(TextFieldTableCell.<Amra_Trans, Double>forTableColumn(new DoubleStringConverter()));
+		nkamount.setCellFactory(TextFieldTableCell.<Amra_Trans, Double>forTableColumn(new DoubleStringConverter()));
 		// maxcommissionamount.setCellFactory(TextFieldTableCell.forTableColumn());
 		// mincommissionamount.setCellFactory(TextFieldTableCell.forTableColumn());
-		cashamount.setCellFactory(TextFieldTableCell.forTableColumn());
-		sumnalprimal.setCellFactory(TextFieldTableCell.forTableColumn());
-		amounttocheck.setCellFactory(TextFieldTableCell.forTableColumn());
-		amountofpayment.setCellFactory(TextFieldTableCell.forTableColumn());
+		cashamount.setCellFactory(TextFieldTableCell.<Amra_Trans, Double>forTableColumn(new DoubleStringConverter()));
+		sumnalprimal.setCellFactory(TextFieldTableCell.<Amra_Trans, Double>forTableColumn(new DoubleStringConverter()));
+		amounttocheck.setCellFactory(TextFieldTableCell.<Amra_Trans, Double>forTableColumn(new DoubleStringConverter()));
+		amountofpayment.setCellFactory(TextFieldTableCell.<Amra_Trans, Double>forTableColumn(new DoubleStringConverter()));
 		// sumofsplitting.setCellFactory(TextFieldTableCell.forTableColumn());
 		// amountintermediary.setCellFactory(TextFieldTableCell.forTableColumn());
 		// amountofscs.setCellFactory(TextFieldTableCell.forTableColumn());
-		amountwithchecks.setCellFactory(TextFieldTableCell.forTableColumn());
+		amountwithchecks.setCellFactory(TextFieldTableCell.<Amra_Trans, Double>forTableColumn(new DoubleStringConverter()));
 		// counter.setCellFactory(TextFieldTableCell.forTableColumn());
 		terminal.setCellFactory(TextFieldTableCell.forTableColumn());
 		terminalnetwork.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -523,18 +569,18 @@ public class Tr_Am_View_con {
 		 */
 		dataprovider.setCellFactory(TextFieldTableCell.forTableColumn());
 		statusabs.setCellFactory(TextFieldTableCell.forTableColumn());
-		sess_id.setCellFactory(TextFieldTableCell.forTableColumn());
+		sess_id.setCellFactory(TextFieldTableCell.<Amra_Trans, Integer>forTableColumn(new IntegerStringConverter()));
 
-		recdate.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+		recdate.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, LocalDateTime>>() {
 			@Override
-			public void handle(CellEditEvent<Amra_Trans, String> t) {
+			public void handle(CellEditEvent<Amra_Trans, LocalDateTime> t) {
 				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.set_recdate(t.getNewValue());
 			}
 		});
-		paydate.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+		paydate.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, LocalDateTime>>() {
 			@Override
-			public void handle(CellEditEvent<Amra_Trans, String> t) {
+			public void handle(CellEditEvent<Amra_Trans, LocalDateTime> t) {
 				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.set_paydate(t.getNewValue());
 			}
@@ -694,16 +740,16 @@ public class Tr_Am_View_con {
 		 * ((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 		 * .set_ownerincomeamount(t.getNewValue()); } });
 		 */
-		commissionamount.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+		commissionamount.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, Double>>() {
 			@Override
-			public void handle(CellEditEvent<Amra_Trans, String> t) {
+			public void handle(CellEditEvent<Amra_Trans, Double> t) {
 				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.set_commissionamount(t.getNewValue());
 			}
 		});
-		nkamount.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+		nkamount.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, Double>>() {
 			@Override
-			public void handle(CellEditEvent<Amra_Trans, String> t) {
+			public void handle(CellEditEvent<Amra_Trans, Double> t) {
 				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.set_nkamount(t.getNewValue());
 			}
@@ -724,30 +770,30 @@ public class Tr_Am_View_con {
 		 * ((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 		 * .set_mincommissionamount(t.getNewValue()); } });
 		 */
-		cashamount.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+		cashamount.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, Double>>() {
 			@Override
-			public void handle(CellEditEvent<Amra_Trans, String> t) {
+			public void handle(CellEditEvent<Amra_Trans, Double> t) {
 				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.set_cashamount(t.getNewValue());
 			}
 		});
-		sumnalprimal.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+		sumnalprimal.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, Double>>() {
 			@Override
-			public void handle(CellEditEvent<Amra_Trans, String> t) {
+			public void handle(CellEditEvent<Amra_Trans, Double> t) {
 				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.set_sumnalprimal(t.getNewValue());
 			}
 		});
-		amounttocheck.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+		amounttocheck.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, Double>>() {
 			@Override
-			public void handle(CellEditEvent<Amra_Trans, String> t) {
+			public void handle(CellEditEvent<Amra_Trans, Double> t) {
 				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.set_amounttocheck(t.getNewValue());
 			}
 		});
-		amountofpayment.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+		amountofpayment.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, Double>>() {
 			@Override
-			public void handle(CellEditEvent<Amra_Trans, String> t) {
+			public void handle(CellEditEvent<Amra_Trans, Double> t) {
 				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.set_amountofpayment(t.getNewValue());
 			}
@@ -776,9 +822,9 @@ public class Tr_Am_View_con {
 		 * ((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 		 * .set_amountofscs(t.getNewValue()); } });
 		 */
-		amountwithchecks.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+		amountwithchecks.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, Double>>() {
 			@Override
-			public void handle(CellEditEvent<Amra_Trans, String> t) {
+			public void handle(CellEditEvent<Amra_Trans, Double> t) {
 				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.set_amountwithchecks(t.getNewValue());
 			}
@@ -915,9 +961,9 @@ public class Tr_Am_View_con {
 						.set_statusabs(t.getNewValue());
 			}
 		});
-		sess_id.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
+		sess_id.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, Integer>>() {
 			@Override
-			public void handle(CellEditEvent<Amra_Trans, String> t) {
+			public void handle(CellEditEvent<Amra_Trans, Integer> t) {
 				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.set_sess_id(t.getNewValue());
 			}
@@ -1010,7 +1056,7 @@ public class Tr_Am_View_con {
 	}
 
 	@FXML
-	private void excel_export(ActionEvent actionEvent) {
+	private void excel_export_(ActionEvent actionEvent) {
 		try {
 			FileChooser fileChooser = new FileChooser();
 
@@ -1551,6 +1597,51 @@ public class Tr_Am_View_con {
 	}
 
 	@FXML
+	public void excel_export(ActionEvent event) throws IOException {
+		try {
+			FileChooser fileChooser = new FileChooser();
+			System.setProperty("javax.xml.transform.TransformerFactory",
+					"com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl");
+			// Set extension filter for text files
+			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel File", "*.xls");
+			fileChooser.getExtensionFilters().add(extFilter);
+			fileChooser.setInitialFileName("Транзакции "+dt1.getValue()+"-"+dt2.getValue());
+			// Show save file dialog
+			File file = fileChooser.showSaveDialog(null);
+			if (file != null) {
+				Workbook workbook = new HSSFWorkbook();
+				Sheet spreadsheet = workbook.createSheet("Таблица");
+
+				Row row = spreadsheet.createRow(0);
+
+				for (int j = 0; j < trans_table.getColumns().size(); j++) {
+					row.createCell(j).setCellValue(trans_table.getColumns().get(j).getText());
+				}
+
+				for (int i = 0; i < trans_table.getItems().size(); i++) {
+					row = spreadsheet.createRow(i + 1);
+					for (int j = 0; j < trans_table.getColumns().size(); j++) {
+						if (trans_table.getColumns().get(j).getText() == ""){
+							
+						}
+						if (trans_table.getColumns().get(j).getCellData(i) != null) {
+							row.createCell(j).setCellValue(trans_table.getColumns().get(j).getCellData(i).toString());
+						} else {
+							row.createCell(j).setCellValue("");
+						}
+					}
+				}
+				workbook.write(new FileOutputStream(file.getPath()));
+				workbook.close();
+				Alerts("Файл сформирован в папку "+file.getPath());
+			}
+		} catch (Exception e) {
+			Alerts(e.getMessage());
+		}
+
+	}
+
+	@FXML
 	private void view_post(ActionEvent actionEvent) {
 		if (trans_table.getSelectionModel().getSelectedItem() == null) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -1562,61 +1653,40 @@ public class Tr_Am_View_con {
 			alert.showAndWait();
 
 		} else {
-			
+
 			Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
-			new PrintReport2().showReport(fn.get_checknumber(), fn.get_sess_id(),"=");
+			new PrintReport2().showReport(fn.get_checknumber(), String.valueOf(fn.get_sess_id()), "=");
 			/*
-			Stage stage = (Stage) trans_table.getScene().getWindow();
-			Label alert = new Label("Печать одиночных сумм?");
-			alert.setLayoutX(75.0);
-			alert.setLayoutY(11.0);
-			alert.setPrefHeight(17.0);
-
-			Button no = new Button();
-			no.setText("Нет");
-			no.setLayoutX(111.0);
-			no.setLayoutY(56.0);
-			no.setPrefWidth(72.0);
-			no.setPrefHeight(21.0);
-
-			Button yes = new Button();
-			yes.setText("Да");
-			yes.setLayoutX(14.0);
-			yes.setLayoutY(56.0);
-			yes.setPrefWidth(72.0);
-			yes.setPrefHeight(21.0);
-
-			AnchorPane yn = new AnchorPane();
-			yn.getChildren().add(alert);
-			yn.getChildren().add(no);
-			yn.getChildren().add(yes);
-			Scene ynScene = new Scene(yn, 250, 100);
-			Stage newWindow_yn = new Stage();
-			
-			no.setOnAction(new EventHandler<ActionEvent>() {
-				public void handle(ActionEvent event) {
-					Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
-					new PrintReport2().showReport(fn.get_checknumber(), fn.get_sess_id(),">");
-					newWindow_yn.close();
-				}
-			});
-			yes.setOnAction(new EventHandler<ActionEvent>() {
-				public void handle(ActionEvent event) {
-					Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
-					new PrintReport2().showReport(fn.get_checknumber(), fn.get_sess_id(),"=");
-					newWindow_yn.close();
-				}
-			});
-			
-			newWindow_yn.setTitle("Внимание");
-			newWindow_yn.setScene(ynScene);
-			// Specifies the modality for new window.
-			newWindow_yn.initModality(Modality.WINDOW_MODAL);
-			// Specifies the owner Window (parent) for new window
-			newWindow_yn.initOwner(stage);
-			newWindow_yn.getIcons().add(new Image("icon.png"));
-			newWindow_yn.show();
-			*/
+			 * Stage stage = (Stage) trans_table.getScene().getWindow(); Label alert = new
+			 * Label("Печать одиночных сумм?"); alert.setLayoutX(75.0);
+			 * alert.setLayoutY(11.0); alert.setPrefHeight(17.0);
+			 * 
+			 * Button no = new Button(); no.setText("Нет"); no.setLayoutX(111.0);
+			 * no.setLayoutY(56.0); no.setPrefWidth(72.0); no.setPrefHeight(21.0);
+			 * 
+			 * Button yes = new Button(); yes.setText("Да"); yes.setLayoutX(14.0);
+			 * yes.setLayoutY(56.0); yes.setPrefWidth(72.0); yes.setPrefHeight(21.0);
+			 * 
+			 * AnchorPane yn = new AnchorPane(); yn.getChildren().add(alert);
+			 * yn.getChildren().add(no); yn.getChildren().add(yes); Scene ynScene = new
+			 * Scene(yn, 250, 100); Stage newWindow_yn = new Stage();
+			 * 
+			 * no.setOnAction(new EventHandler<ActionEvent>() { public void
+			 * handle(ActionEvent event) { Amra_Trans fn =
+			 * trans_table.getSelectionModel().getSelectedItem(); new
+			 * PrintReport2().showReport(fn.get_checknumber(), fn.get_sess_id(),">");
+			 * newWindow_yn.close(); } }); yes.setOnAction(new EventHandler<ActionEvent>() {
+			 * public void handle(ActionEvent event) { Amra_Trans fn =
+			 * trans_table.getSelectionModel().getSelectedItem(); new
+			 * PrintReport2().showReport(fn.get_checknumber(), fn.get_sess_id(),"=");
+			 * newWindow_yn.close(); } });
+			 * 
+			 * newWindow_yn.setTitle("Внимание"); newWindow_yn.setScene(ynScene); //
+			 * Specifies the modality for new window.
+			 * newWindow_yn.initModality(Modality.WINDOW_MODAL); // Specifies the owner
+			 * Window (parent) for new window newWindow_yn.initOwner(stage);
+			 * newWindow_yn.getIcons().add(new Image("icon.png")); newWindow_yn.show();
+			 */
 		}
 	}
 
@@ -1626,7 +1696,7 @@ public class Tr_Am_View_con {
 		stage.getIcons().add(new Image("terminal.png"));
 		alert.setTitle("Внимание");
 		alert.setHeaderText(null);
-		alert.setContentText("Выберите сначала данные из таблицы!");
+		alert.setContentText(mess);
 		alert.showAndWait();
 	}
 
@@ -1703,14 +1773,12 @@ public class Tr_Am_View_con {
 	@FXML
 	private void term_view_(ActionEvent actionEvent) {
 		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(),
-				"", false,false, terminal_name.getValue().toString());
+				"", false, false, terminal_name.getValue().toString());
 		populate_fn_sess(empData);
 
 		autoResizeColumns(trans_table);
 		// GUIUtils.autoFitTable(trans_table);
 	}
-	
-	
 
 	@FXML
 	private void check_table(ActionEvent actionEvent) {
@@ -1718,14 +1786,14 @@ public class Tr_Am_View_con {
 			ret_pay.setSelected(false);
 		}
 	}
-	
+
 	@FXML
 	private void check_table_ret(ActionEvent actionEvent) {
 		if (inkass.isSelected()) {
 			inkass.setSelected(false);
 		}
 	}
-	
+
 	@FXML
 	private void view_attr(ActionEvent actionEvent) {
 		try {
@@ -1772,7 +1840,7 @@ public class Tr_Am_View_con {
 			trans_table.setItems(null);
 			trans_table.setItems(trData);
 			autoResizeColumns(trans_table);
-			
+
 			provider.setCellFactory(col -> new TextFieldTableCell<Amra_Trans, String>() {
 				@Override
 				public void updateItem(String item, boolean empty) {
@@ -1851,15 +1919,10 @@ public class Tr_Am_View_con {
 	@FXML
 	private void filter(ActionEvent actionEvent) {
 		/*
-		trans_table.setOnKeyReleased((KeyEvent t)-> {
-		    KeyCode key=t.getCode();
-		    ActionEvent l;
-		    if (key == KeyCode.F4){
-		    	view_unpivot2(actionEvent);
-		    }
-		});
-		*/
-		
+		 * trans_table.setOnKeyReleased((KeyEvent t)-> { KeyCode key=t.getCode();
+		 * ActionEvent l; if (key == KeyCode.F4){ view_unpivot2(actionEvent); } });
+		 */
+
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {

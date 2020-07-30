@@ -25,6 +25,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -38,6 +39,8 @@ import sb_tr.model.Transact;
 import sb_tr.model.TransactClass;
 import sb_tr.model.Unpiv;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -50,6 +53,10 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.controlsfx.control.table.TableFilter;
 
 import java.util.Date;
@@ -188,9 +195,65 @@ public class Unpiv_Controller {
 			}
 		});
 	}
-
+	
 	@FXML
-	private void view_attr(ActionEvent actionEvent) {
+	public void view_attr(ActionEvent event) throws IOException {
+		try {
+			FileChooser fileChooser = new FileChooser();
+			System.setProperty("javax.xml.transform.TransformerFactory",
+					"com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl");
+			// Set extension filter for text files
+			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel File", "*.xls");
+			fileChooser.getExtensionFilters().add(extFilter);
+			fileChooser.setInitialFileName("Транзакция "+Connect.PNMB_);
+			// Show save file dialog
+			File file = fileChooser.showSaveDialog(null);
+			
+			if (file != null) {
+				Workbook workbook = new HSSFWorkbook();
+				Sheet spreadsheet = workbook.createSheet("Таблица");
+
+				Row row = spreadsheet.createRow(0);
+
+				for (int j = 0; j < trans_table.getColumns().size(); j++) {
+					row.createCell(j).setCellValue(trans_table.getColumns().get(j).getText());
+				}
+
+				for (int i = 0; i < trans_table.getItems().size(); i++) {
+					row = spreadsheet.createRow(i + 1);
+					for (int j = 0; j < trans_table.getColumns().size(); j++) {
+						if (trans_table.getColumns().get(j).getText() == ""){
+							
+						}
+						if (trans_table.getColumns().get(j).getCellData(i) != null) {
+							row.createCell(j).setCellValue(trans_table.getColumns().get(j).getCellData(i).toString());
+						} else {
+							row.createCell(j).setCellValue("");
+						}
+					}
+				}
+				workbook.write(new FileOutputStream(file.getPath()));
+				workbook.close();
+				Alerts("Файл сформирован в папку "+file.getPath());
+			}
+		} catch (Exception e) {
+			Alerts(e.getMessage());
+		}
+
+	}
+
+
+	private void Alerts(String mess) {
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+		stage.getIcons().add(new Image("terminal.png"));
+		alert.setTitle("Внимание");
+		alert.setHeaderText(null);
+		alert.setContentText(mess);
+		alert.showAndWait();
+	}
+	@FXML
+	private void view_attr_(ActionEvent actionEvent) {
 		if (trans_table.getSelectionModel().getSelectedItem() == null) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
