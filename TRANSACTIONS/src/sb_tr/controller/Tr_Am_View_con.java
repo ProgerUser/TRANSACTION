@@ -395,9 +395,9 @@ public class Tr_Am_View_con {
 		// paymenttype.setCellValueFactory(cellData ->
 		// cellData.getValue().paymenttypeProperty());
 		vk.setCellValueFactory(cellData -> cellData.getValue().vkProperty());
-		dateofoperation.setCellValueFactory(cellData -> cellData.getValue().dateofoperationProperty());
-		dataps.setCellValueFactory(cellData -> cellData.getValue().datapsProperty());
-		dateclearing.setCellValueFactory(cellData -> cellData.getValue().dateclearingProperty());
+		//dateofoperation.setCellValueFactory(cellData -> cellData.getValue().dateofoperationProperty());
+		//dataps.setCellValueFactory(cellData -> cellData.getValue().datapsProperty());
+		//dateclearing.setCellValueFactory(cellData -> cellData.getValue().dateclearingProperty());
 		dealer.setCellValueFactory(cellData -> cellData.getValue().dealerProperty());
 		accountpayer.setCellValueFactory(cellData -> cellData.getValue().accountpayerProperty());
 		// cardnumber.setCellValueFactory(cellData ->
@@ -445,9 +445,9 @@ public class Tr_Am_View_con {
 		terminalnetwork.setCellValueFactory(cellData -> cellData.getValue().terminalnetworkProperty());
 		transactiontype.setCellValueFactory(cellData -> cellData.getValue().transactiontypeProperty());
 		service.setCellValueFactory(cellData -> cellData.getValue().serviceProperty());
-		filetransactions.setCellValueFactory(cellData -> cellData.getValue().filetransactionsProperty());
+		//filetransactions.setCellValueFactory(cellData -> cellData.getValue().filetransactionsProperty());
 		// fio.setCellValueFactory(cellData -> cellData.getValue().fioProperty());
-		checksincoming.setCellValueFactory(cellData -> cellData.getValue().checksincomingProperty());
+		//checksincoming.setCellValueFactory(cellData -> cellData.getValue().checksincomingProperty());
 		/*
 		 * barcode.setCellValueFactory(cellData ->
 		 * cellData.getValue().barcodeProperty());
@@ -470,7 +470,7 @@ public class Tr_Am_View_con {
 		 * purposeofpayment.setCellValueFactory(cellData ->
 		 * cellData.getValue().purposeofpaymentProperty());
 		 */
-		dataprovider.setCellValueFactory(cellData -> cellData.getValue().dataproviderProperty());
+		//dataprovider.setCellValueFactory(cellData -> cellData.getValue().dataproviderProperty());
 		statusabs.setCellValueFactory(cellData -> cellData.getValue().statusabsProperty());
 		sess_id.setCellValueFactory(cellData -> cellData.getValue().sess_idProperty().asObject());
 
@@ -515,9 +515,9 @@ public class Tr_Am_View_con {
 		currency.setCellFactory(TextFieldTableCell.forTableColumn());
 		// paymenttype.setCellFactory(TextFieldTableCell.forTableColumn());
 		vk.setCellFactory(TextFieldTableCell.forTableColumn());
-		dateofoperation.setCellFactory(TextFieldTableCell.forTableColumn());
-		dataps.setCellFactory(TextFieldTableCell.forTableColumn());
-		dateclearing.setCellFactory(TextFieldTableCell.forTableColumn());
+		//dateofoperation.setCellFactory(TextFieldTableCell.forTableColumn());
+		//dataps.setCellFactory(TextFieldTableCell.forTableColumn());
+		//dateclearing.setCellFactory(TextFieldTableCell.forTableColumn());
 		dealer.setCellFactory(TextFieldTableCell.forTableColumn());
 		accountpayer.setCellFactory(TextFieldTableCell.forTableColumn());
 		// cardnumber.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -551,9 +551,9 @@ public class Tr_Am_View_con {
 		terminalnetwork.setCellFactory(TextFieldTableCell.forTableColumn());
 		transactiontype.setCellFactory(TextFieldTableCell.forTableColumn());
 		service.setCellFactory(TextFieldTableCell.forTableColumn());
-		filetransactions.setCellFactory(TextFieldTableCell.forTableColumn());
+		//filetransactions.setCellFactory(TextFieldTableCell.forTableColumn());
 		// fio.setCellFactory(TextFieldTableCell.forTableColumn());
-		checksincoming.setCellFactory(TextFieldTableCell.forTableColumn());
+		//checksincoming.setCellFactory(TextFieldTableCell.forTableColumn());
 		/*
 		 * barcode.setCellFactory(TextFieldTableCell.forTableColumn());
 		 * isaresident.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -567,7 +567,7 @@ public class Tr_Am_View_con {
 		 * walletreceiver.setCellFactory(TextFieldTableCell.forTableColumn());
 		 * purposeofpayment.setCellFactory(TextFieldTableCell.forTableColumn());
 		 */
-		dataprovider.setCellFactory(TextFieldTableCell.forTableColumn());
+		//dataprovider.setCellFactory(TextFieldTableCell.forTableColumn());
 		statusabs.setCellFactory(TextFieldTableCell.forTableColumn());
 		sess_id.setCellFactory(TextFieldTableCell.<Amra_Trans, Integer>forTableColumn(new IntegerStringConverter()));
 
@@ -606,6 +606,7 @@ public class Tr_Am_View_con {
 				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow())).set_vk(t.getNewValue());
 			}
 		});
+		/*
 		dateofoperation.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
 			@Override
 			public void handle(CellEditEvent<Amra_Trans, String> t) {
@@ -627,6 +628,7 @@ public class Tr_Am_View_con {
 						.set_dateclearing(t.getNewValue());
 			}
 		});
+		*/
 		dealer.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
 			@Override
 			public void handle(CellEditEvent<Amra_Trans, String> t) {
@@ -865,6 +867,7 @@ public class Tr_Am_View_con {
 						.set_service(t.getNewValue());
 			}
 		});
+		/*
 		filetransactions.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
 			@Override
 			public void handle(CellEditEvent<Amra_Trans, String> t) {
@@ -872,6 +875,7 @@ public class Tr_Am_View_con {
 						.set_filetransactions(t.getNewValue());
 			}
 		});
+		*/
 		/*
 		 * fio.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
 		 * 
@@ -880,6 +884,7 @@ public class Tr_Am_View_con {
 		 * t.getTableView().getItems().get(t.getTablePosition().getRow())).set_fio(t.
 		 * getNewValue()); } });
 		 */
+		/*
 		checksincoming.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
 			@Override
 			public void handle(CellEditEvent<Amra_Trans, String> t) {
@@ -887,6 +892,7 @@ public class Tr_Am_View_con {
 						.set_checksincoming(t.getNewValue());
 			}
 		});
+		*/
 		/*
 		 * barcode.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>()
 		 * {
@@ -947,6 +953,7 @@ public class Tr_Am_View_con {
 		 * ((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 		 * .set_purposeofpayment(t.getNewValue()); } });
 		 */
+		/*
 		dataprovider.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
 			@Override
 			public void handle(CellEditEvent<Amra_Trans, String> t) {
@@ -954,6 +961,7 @@ public class Tr_Am_View_con {
 						.set_dataprovider(t.getNewValue());
 			}
 		});
+		*/
 		statusabs.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans, String>>() {
 			@Override
 			public void handle(CellEditEvent<Amra_Trans, String> t) {
@@ -1900,6 +1908,26 @@ public class Tr_Am_View_con {
 				}
 			});
 
+			terminal.setCellFactory(col -> new TextFieldTableCell<Amra_Trans, String>() {
+				@Override
+				public void updateItem(String item, boolean empty) {
+					super.updateItem(item, empty);
+					if (empty || item == null) {
+						setText(null);
+						setGraphic(null);
+					} else {
+						setText(item.toString());
+						if (item.contains("SB")) {
+							setStyle("-fx-background-color: rgb(210, 236, 126);" + "-fx-border-color:black;"
+									+ " -fx-border-width :  1 1 1 1 ");
+						} else {
+							setStyle("-fx-background-color: rgb(169, 53, 107);" + "-fx-border-color:black;"
+									+ " -fx-border-width :  1 1 1 1 ");
+						}
+					}
+				}
+			});
+			
 			status.setCellFactory(list -> {
 				TextFieldTableCell<Amra_Trans, String> cell = new TextFieldTableCell<Amra_Trans, String>() {
 					@Override
@@ -2013,7 +2041,7 @@ public class Tr_Am_View_con {
 				table.getColumns().stream().forEach((column) -> {
 					if (column.getText().equals("sess_id")) {
 
-					} else if (column.getText().equals("„еки¬ход€щие=CHECKSINCOMING")) {
+					} else if (column.getText().equals("„еки¬ход€щие")) {
 						System.out.println(column.getText());
 					} else {
 						// Minimal width = columnheader
@@ -2064,7 +2092,7 @@ public class Tr_Am_View_con {
 		});
 
 		trans_table.getColumns().stream().forEach((column) -> {
-			if (column.getText().equals("—уммаѕлатежа=AMOUNTOFPAYMENT")) {
+			if (column.getText().equals("—уммаѕлатежа")) {
 				for (int i = 0; i < trans_table.getItems().size(); i++) {
 					if (column.getCellData(i) != null) {
 						/* System.out.println(Double.parseDouble(column.getCellData(i).toString())); */
@@ -2072,7 +2100,7 @@ public class Tr_Am_View_con {
 						cnt = cnt + 1;
 					}
 				}
-			} else if (column.getText().equals("—уммаЌаличных=CASHAMOUNT")) {
+			} else if (column.getText().equals("—уммаЌаличных")) {
 				for (int i = 0; i < trans_table.getItems().size(); i++) {
 					if (column.getCellData(i) != null) {
 						all_sum_nal = all_sum_nal + Double.parseDouble(column.getCellData(i).toString());
