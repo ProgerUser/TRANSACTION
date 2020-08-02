@@ -9,7 +9,7 @@
 	minHeight="-Infinity" minWidth="-Infinity" prefHeight="649.0"
 	prefWidth="1017.0" xmlns="http://javafx.com/javafx/8"
 	xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="sb_tr.controller.Attr_Controller">
+	fx:controller="sb_tr.controller.DealCintroller">
 	<children>
 		<VBox layoutX="97.0" layoutY="24.0" spacing="4.0" />
 		<VBox layoutX="1.0" layoutY="45.0" prefWidth="67.0"
@@ -18,14 +18,16 @@
 			prefHeight="561.0" prefWidth="994.0"
 			stylesheets="@../../transact.css" tableMenuButtonVisible="true">
 			<columns>
-				<TableColumn fx:id="Service" prefWidth="167.0"
-					text="Услуга" />
-				<TableColumn fx:id="CheckNumber" prefWidth="144.0"
+				<TableColumn fx:id="ROWNUMBER" prefWidth="167.0"
+					text="Номер строки" />
+				<TableColumn fx:id="CHEKNUMBER" prefWidth="144.0"
 					text="НомерЧека" />
-				<TableColumn fx:id="AttributeName" prefWidth="167.0"
-					text="ИмяАтрибута" />
-				<TableColumn fx:id="AttributeValue" prefWidth="171.0"
-					text="ЗначениеАтрибута" />
+				<TableColumn fx:id="SUMMA" prefWidth="167.0"
+					text="Сумма" />
+				<TableColumn fx:id="TERMINAL" prefWidth="171.0"
+					text="Номер терминала" />
+				<TableColumn fx:id="DATEOPERATION" prefWidth="171.0"
+					text="Дата оплаты" />
 			</columns>
 		</TableView>
 		<Button disable="false" layoutX="14.0" layoutY="14.0"

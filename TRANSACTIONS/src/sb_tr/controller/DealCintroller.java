@@ -29,6 +29,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.converter.DoubleStringConverter;
+import javafx.util.converter.IntegerStringConverter;
+import javafx.util.converter.LocalDateTimeStringConverter;
 import sb_tr.Main;
 import sb_tr.model.Amra_Trans;
 import sb_tr.model.Attributes;
@@ -50,6 +53,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -67,23 +71,25 @@ import java.util.Date;
  */
 
 @SuppressWarnings("unused")
-public class Attr_Controller {
+public class DealCintroller {
 
 	@FXML
-	private TableColumn<Attributes, String> AttributeValue;
+	private TableColumn<Deal, Integer> ROWNUMBER;
 
 	@FXML
-	private TableColumn<Attributes, String> Service;
+	private TableColumn<Deal, String> CHEKNUMBER;
 
 	@FXML
-	private TableView<Attributes> trans_table;
+	private TableView<Deal> trans_table;
 
 	@FXML
-	private TableColumn<Attributes, String> AttributeName;
+	private TableColumn<Deal, Double> SUMMA;
 
 	@FXML
-	private TableColumn<Attributes, String> CheckNumber;
+	private TableColumn<Deal, String> TERMINAL;
 
+	@FXML
+	private TableColumn<Deal, LocalDateTime> DATEOPERATION;
 	// For MultiThreading
 	private Executor exec;
 
@@ -95,51 +101,77 @@ public class Attr_Controller {
 			t.setDaemon(true);
 			return t;
 		});
-		Service.setCellValueFactory(cellData -> cellData.getValue().ServiceProperty());
-		AttributeName.setCellValueFactory(cellData -> cellData.getValue().AttributeNameProperty());
-		CheckNumber.setCellValueFactory(cellData -> cellData.getValue().CheckNumberProperty());
-		AttributeValue.setCellValueFactory(cellData -> cellData.getValue().AttributeValueProperty());
+		ROWNUMBER.setCellValueFactory(cellData -> cellData.getValue().ROWNUMBERProperty().asObject());
+		CHEKNUMBER.setCellValueFactory(cellData -> cellData.getValue().CHEKNUMBERProperty());
+		SUMMA.setCellValueFactory(cellData -> cellData.getValue().SUMMAProperty().asObject());
+		TERMINAL.setCellValueFactory(cellData -> cellData.getValue().TERMINALProperty());
+		DATEOPERATION.setCellValueFactory(cellData -> cellData.getValue().DATEOPERATIONProperty());
 
-		Service.setCellFactory(TextFieldTableCell.forTableColumn());
-		AttributeName.setCellFactory(TextFieldTableCell.forTableColumn());
-		CheckNumber.setCellFactory(TextFieldTableCell.forTableColumn());
-		AttributeValue.setCellFactory(TextFieldTableCell.forTableColumn());
+		ROWNUMBER.setCellFactory(TextFieldTableCell.<Deal, Integer>forTableColumn(new IntegerStringConverter()));
+		CHEKNUMBER.setCellFactory(TextFieldTableCell.forTableColumn());
+		SUMMA.setCellFactory(TextFieldTableCell.<Deal, Double>forTableColumn(new DoubleStringConverter()));
+		TERMINAL.setCellFactory(TextFieldTableCell.forTableColumn());
+		DATEOPERATION.setCellFactory(
+				TextFieldTableCell.<Deal, LocalDateTime>forTableColumn(new LocalDateTimeStringConverter()));
 
-		Service.setOnEditCommit(new EventHandler<CellEditEvent<Attributes, String>>() {
+		ROWNUMBER.setOnEditCommit(new EventHandler<CellEditEvent<Deal, Integer>>() {
 			@Override
-			public void handle(CellEditEvent<Attributes, String> t) {
-				((Attributes) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-						.set_Service(t.getNewValue());
+			public void handle(CellEditEvent<Deal, Integer> t) {
+				((Deal) t.getTableView().getItems().get(t.getTablePosition().getRow())).set_ROWNUMBER(t.getNewValue());
 			}
 		});
-		AttributeName.setOnEditCommit(new EventHandler<CellEditEvent<Attributes, String>>() {
+		CHEKNUMBER.setOnEditCommit(new EventHandler<CellEditEvent<Deal, String>>() {
 			@Override
-			public void handle(CellEditEvent<Attributes, String> t) {
-				((Attributes) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-						.set_AttributeName(t.getNewValue());
+			public void handle(CellEditEvent<Deal, String> t) {
+				((Deal) t.getTableView().getItems().get(t.getTablePosition().getRow())).set_CHEKNUMBER(t.getNewValue());
 			}
 		});
-		CheckNumber.setOnEditCommit(new EventHandler<CellEditEvent<Attributes, String>>() {
+		SUMMA.setOnEditCommit(new EventHandler<CellEditEvent<Deal, Double>>() {
 			@Override
-			public void handle(CellEditEvent<Attributes, String> t) {
-				((Attributes) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-						.set_CheckNumber(t.getNewValue());
+			public void handle(CellEditEvent<Deal, Double> t) {
+				((Deal) t.getTableView().getItems().get(t.getTablePosition().getRow())).set_SUMMA(t.getNewValue());
 			}
 		});
-		AttributeValue.setOnEditCommit(new EventHandler<CellEditEvent<Attributes, String>>() {
+		TERMINAL.setOnEditCommit(new EventHandler<CellEditEvent<Deal, String>>() {
 			@Override
-			public void handle(CellEditEvent<Attributes, String> t) {
-				((Attributes) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-						.set_AttributeValue(t.getNewValue());
+			public void handle(CellEditEvent<Deal, String> t) {
+				((Deal) t.getTableView().getItems().get(t.getTablePosition().getRow())).set_TERMINAL(t.getNewValue());
 			}
 		});
 
-		ObservableList<Attributes> empData = TerminalDAO.Attributes_();
+		DATEOPERATION.setOnEditCommit(new EventHandler<CellEditEvent<Deal, LocalDateTime>>() {
+			@Override
+			public void handle(CellEditEvent<Deal, LocalDateTime> t) {
+				((Deal) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_DATEOPERATION(t.getNewValue());
+			}
+		});
+
+		ObservableList<Deal> empData = TerminalDAO.Deals();
 		populate_attr(empData);
 		autoResizeColumns(trans_table);
-		TableFilter<Attributes> filter = new TableFilter<>(trans_table);
+		TableFilter<Deal> filter = new TableFilter<>(trans_table);
+		
+		TERMINAL.setCellFactory(col -> new TextFieldTableCell<Deal, String>() {
+			@Override
+			public void updateItem(String item, boolean empty) {
+				super.updateItem(item, empty);
+				if (empty || item == null) {
+					setText(null);
+					setGraphic(null);
+				} else {
+					setText(item.toString());
+					if (item.contains("SB")) {
+						setStyle("-fx-background-color: rgb(162, 189, 48);" + "-fx-border-color:black;"
+								+ " -fx-border-width :  1 1 1 1 ");
+					} else {
+						setStyle("");
+					}
+				}
+			}
+		});
 	}
-	
+
 	@FXML
 	public void view_attr(ActionEvent event) throws IOException {
 		try {
@@ -149,10 +181,10 @@ public class Attr_Controller {
 			// Set extension filter for text files
 			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel File", "*.xls");
 			fileChooser.getExtensionFilters().add(extFilter);
-			fileChooser.setInitialFileName("Атрибуты "+Connect.PNMB_);
+			fileChooser.setInitialFileName("Атрибуты " + Connect.PNMB_);
 			// Show save file dialog
 			File file = fileChooser.showSaveDialog(null);
-			
+
 			if (file != null) {
 				Workbook workbook = new HSSFWorkbook();
 				Sheet spreadsheet = workbook.createSheet("Таблица");
@@ -166,8 +198,8 @@ public class Attr_Controller {
 				for (int i = 0; i < trans_table.getItems().size(); i++) {
 					row = spreadsheet.createRow(i + 1);
 					for (int j = 0; j < trans_table.getColumns().size(); j++) {
-						if (trans_table.getColumns().get(j).getText() == ""){
-							
+						if (trans_table.getColumns().get(j).getText() == "") {
+
 						}
 						if (trans_table.getColumns().get(j).getCellData(i) != null) {
 							row.createCell(j).setCellValue(trans_table.getColumns().get(j).getCellData(i).toString());
@@ -178,14 +210,14 @@ public class Attr_Controller {
 				}
 				workbook.write(new FileOutputStream(file.getPath()));
 				workbook.close();
-				Alerts("Файл сформирован в папку "+file.getPath());
+				Alerts("Файл сформирован в папку " + file.getPath());
 			}
 		} catch (Exception e) {
 			Alerts(e.getMessage());
 		}
 
 	}
-	
+
 	private void Alerts(String mess) {
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
 		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -259,7 +291,7 @@ public class Attr_Controller {
 	}
 
 	// Заполнить таблицу
-	private void populate_attr(ObservableList<Attributes> trData) {
+	private void populate_attr(ObservableList<Deal> trData) {
 		// Set items to the employeeTable
 		trans_table.setItems(trData);
 	}

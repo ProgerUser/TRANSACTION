@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane fx:id="pane_1" prefHeight="649.0" prefWidth="1017.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sb_tr.controller.Tr_Am_View_con">
+<BorderPane fx:id="pane_1" prefHeight="653.0" prefWidth="1088.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sb_tr.controller.Tr_Am_View_con">
 	<center>
 		<GridPane prefHeight="555.0" prefWidth="598.0">
 			<children>
@@ -108,76 +108,81 @@
 		</GridPane>
 	</center>
 	<top>
-		<AnchorPane fx:id="anch_b4" prefHeight="128.0" prefWidth="1017.0" stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER">
+		<AnchorPane fx:id="anch_b4" prefHeight="128.0" prefWidth="1061.0" stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER">
 			<children>
-				<Button fx:id="attributes" layoutX="735.0" layoutY="31.0" mnemonicParsing="false" onAction="#view_attr" prefHeight="35.0" prefWidth="35.0">
+				<Button fx:id="attributes" layoutX="676.0" layoutY="31.0" mnemonicParsing="false" onAction="#view_attr" prefHeight="30.0" prefWidth="30.0">
 					<tooltip>
 						<Tooltip text="Показать дополнительные атрибуты" />
 					</tooltip>
 				</Button>
-				<Button layoutX="790.0" layoutY="31.0" mnemonicParsing="false" onAction="#excel_export" prefHeight="35.0" prefWidth="35.0" fx:id="xlsx">
+				<Button layoutX="715.0" layoutY="31.0" mnemonicParsing="false" onAction="#excel_export" prefHeight="30.0" prefWidth="30.0" fx:id="xlsx">
 					<tooltip>
 						<Tooltip text="Выгрузка в Excel" />
 					</tooltip>
 				</Button>
-				<DatePicker fx:id="dt1" layoutX="18.0" layoutY="31.0" prefHeight="35.0" prefWidth="100.0" />
-				<DatePicker fx:id="dt2" layoutX="135.0" layoutY="31.0" prefHeight="35.0" prefWidth="100.0" />
+				<DatePicker fx:id="dt1" layoutX="18.0" layoutY="31.0" prefHeight="30.0" prefWidth="100.0" />
+				<DatePicker fx:id="dt2" layoutX="135.0" layoutY="31.0" prefHeight="30.0" prefWidth="100.0" />
 				<Text layoutX="18.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Дата начала" />
 				<Text layoutX="135.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Дата конца" />
-				<Button fx:id="search" layoutX="627.0" layoutY="31.0" mnemonicParsing="false" onAction="#filter" prefHeight="35" prefWidth="35">
+				<Button fx:id="search" layoutX="599.0" layoutY="31.0" mnemonicParsing="false" onAction="#filter" prefHeight="30.0" prefWidth="30.0">
 					<tooltip>
 						<Tooltip text="Поиск" />
 					</tooltip>
 				</Button>
-				<TextField fx:id="id_sess" layoutX="253.0" layoutY="31.0" prefHeight="35.0" prefWidth="100.0">
+				<TextField fx:id="id_sess" layoutX="253.0" layoutY="31.0" prefHeight="25.0" prefWidth="100.0">
 					<font>
 						<Font size="14.0" />
 					</font>
 				</TextField>
 				<Text layoutX="253.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID Сессии" />
-				<Button fx:id="view" layoutX="682.0" layoutY="31.0" mnemonicParsing="false" onAction="#view_unpivot" prefHeight="35.0" prefWidth="35.0">
+				<Button fx:id="view" layoutX="636.0" layoutY="31.0" mnemonicParsing="false" onAction="#view_unpivot" prefHeight="30.0" prefWidth="30.0">
 					<tooltip>
 						<Tooltip text="Показать транзакцию" />
 					</tooltip>
 				</Button>
-				<CheckBox fx:id="inkass" layoutX="627.0" layoutY="102.0" mnemonicParsing="false" onAction="#check_table" text="Инкассация" />
+				<CheckBox fx:id="inkass" layoutX="599.0" layoutY="82.0" mnemonicParsing="false" onAction="#check_table" text="Показать инкас." />
 				<ProgressIndicator fx:id="pb" layoutX="147.0" layoutY="68.0" prefHeight="32.0" prefWidth="53.0" visible="false" />
-				<TextField fx:id="FIO" layoutX="364.0" layoutY="31.0" prefHeight="35.0" prefWidth="243.0" promptText="\%...%">
+				<TextField fx:id="FIO" layoutX="364.0" layoutY="31.0" prefHeight="30.0" prefWidth="211.0" promptText="\%...%">
 					<font>
 						<Font size="14.0" />
 					</font>
 				</TextField>
 				<Text layoutX="364.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ФИО, тел., и т.д." />
-				<Button fx:id="post" layoutX="846.0" layoutY="31.0" mnemonicParsing="false" onAction="#view_post" prefHeight="35.0" prefWidth="35.0">
+				<Button fx:id="post" layoutX="753.0" layoutY="31.0" mnemonicParsing="false" onAction="#view_post" prefHeight="30.0" prefWidth="30.0">
 					<tooltip>
 						<Tooltip text="Показать проводки" />
 					</tooltip>
 				</Button>
-				<Button fx:id="print_check" layoutX="901.0" layoutY="31.0" mnemonicParsing="false" onAction="#print_" prefHeight="35.0" prefWidth="35.0">
+				<Button fx:id="print_check" layoutX="793.0" layoutY="31.0" mnemonicParsing="false" onAction="#print_" prefHeight="30.0" prefWidth="30.0">
 					<tooltip>
 						<Tooltip text="Печать чека JasperReport" />
 					</tooltip>
 				</Button>
 				<ProgressIndicator fx:id="pb" layoutX="951.0" layoutY="22.0" visible="false" />
-				<Button layoutX="16.0" layoutY="98.0" mnemonicParsing="false" onAction="#chk_all" prefHeight="25.0" prefWidth="44.0" text="VVV">
+				<Button layoutX="18.0" layoutY="90.0" mnemonicParsing="false" onAction="#chk_all" prefHeight="30.0" prefWidth="44.0" text="VVV">
 					<tooltip>
 						<Tooltip text="Отметить все" />
 					</tooltip>
 				</Button>
-				<Button layoutX="72.0" layoutY="98.0" mnemonicParsing="false" onAction="#unchk_all" prefHeight="25.0" prefWidth="44.0" text="OOO">
+				<Button layoutX="74.0" layoutY="90.0" mnemonicParsing="false" onAction="#unchk_all" prefHeight="30.0" prefWidth="44.0" text="OOO">
 					<tooltip>
 						<Tooltip text="Убрать пометки" />
 					</tooltip>
 				</Button>
-				<TextField fx:id="summa_plat" layoutX="133.0" layoutY="98.0" prefHeight="25.0" prefWidth="100.0" />
-            <TextField fx:id="cnt_all_" layoutX="364.0" layoutY="98.0" prefHeight="25.0" prefWidth="100.0" />
-            <ComboBox fx:id="terminal_name" editable="true" layoutX="475.0" layoutY="98.0" prefHeight="25.0" prefWidth="100.0" />
-            <Label layoutX="133.0" layoutY="77.0" text="Сумма платежа" />
-            <Label layoutX="366.0" layoutY="77.0" text="Количество" />
-            <Label layoutX="477.0" layoutY="77.0" text="Терминал" />
-            <TextField fx:id="summa_nal" layoutX="253.0" layoutY="98.0" prefHeight="25.0" prefWidth="100.0" />
-            <Label layoutX="253.0" layoutY="77.0" text="Сумма наличных" />
-            <CheckBox fx:id="ret_pay" layoutX="752.0" layoutY="102.0" mnemonicParsing="false" onAction="#check_table_ret" prefHeight="17.0" prefWidth="77.0" text="Возврат" />
+				<TextField fx:id="summa_plat" layoutX="135.0" layoutY="90.0" prefHeight="30.0" prefWidth="100.0" />
+            <TextField fx:id="cnt_all_" layoutX="366.0" layoutY="90.0" prefHeight="30.0" prefWidth="100.0" />
+            <ComboBox fx:id="terminal_name" editable="true" layoutX="477.0" layoutY="90.0" prefHeight="30.0" prefWidth="100.0" />
+            <Label layoutX="135.0" layoutY="69.0" text="Сумма платежа" />
+            <Label layoutX="368.0" layoutY="69.0" text="Количество" />
+            <Label layoutX="479.0" layoutY="69.0" text="Терминал" />
+            <TextField fx:id="summa_nal" layoutX="253.0" layoutY="90.0" prefHeight="30.0" prefWidth="102.0" />
+            <Label layoutX="255.0" layoutY="69.0" text="Сумма наличных" />
+            <CheckBox fx:id="ret_pay" layoutX="599.0" layoutY="102.0" mnemonicParsing="false" onAction="#check_table_ret" prefHeight="17.0" prefWidth="115.0" text="Показать возвр." />
+            <Button fx:id="chk_nmbers" ellipsisString="" layoutX="832.0" layoutY="31.0" minHeight="30.0" mnemonicParsing="false" onAction="#showdeal" prefWidth="30.0">
+            <tooltip>
+						<Tooltip text="Показать сдачи" />
+					</tooltip>
+				</Button>
 			</children>
 		</AnchorPane>
 	</top>

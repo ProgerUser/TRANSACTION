@@ -346,6 +346,36 @@ public class TerminalDAO {
 	}
 
 	// *******************************
+	// SELECT Dealss
+	// *******************************
+	public static ObservableList<Deal> Deals() {
+		String selectStmt = "select ROW_NO rownumber,\n" + 
+				"       COLUMN1 cheknumber,\n" + 
+				"       to_number(replace(replace(COLUMN2, ' ', ''), '.', ',')) summa,\n" + 
+				"       COLUMN3 terminal,\n" + 
+				"       to_date(COLUMN4,'dd.mm.yyyy hh24:mi:ss') dateoperation\n" + 
+				"  from table(lob2table.separatedcolumns((select CHECKSINCOMING_Clob\n" + 
+				"                                          from Z_SB_TRANSACT_AMRA_DBT t\n" + 
+				"                                         where CHECKSINCOMING_CLOB is not null\n" + 
+				"                                           and t.checknumber =\n" + 
+				"                                               '"+Connect.PNMB_+"'), /* the data LOB */\n" + 
+				"                                        '|', /* row separator */\n" + 
+				"                                        '/', /* column separator */\n" + 
+				"                                        '' /* delimiter (optional) */))";
+
+		// Execute SELECT statement
+
+		// Get ResultSet from dbExecuteQuery method
+		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
+
+		// Send ResultSet to the getEmployeeList method and get employee object
+		ObservableList<Deal> empList = get_deals(rsEmps);
+
+		// Return employee object
+		return empList;
+	}
+	
+	// *******************************
 	// SELECT Forms
 	// *******************************
 	public static ObservableList<Forms> User_Forms() {
@@ -703,6 +733,32 @@ public class TerminalDAO {
 		}
 		return null;
 	}
+	
+	
+	// Select * from Dealss operation
+		private static ObservableList<Deal> get_deals(ResultSet rs) {
+			try {
+				ObservableList<Deal> fn_list = FXCollections.observableArrayList();
+				while (rs.next()) {
+					
+					String DATEOPERATION = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getTimestamp("DATEOPERATION"));
+					
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+					
+					Deal fn = new Deal();
+					fn.set_ROWNUMBER(rs.getInt("ROWNUMBER"));
+					fn.set_CHEKNUMBER(rs.getString("CHEKNUMBER"));
+					fn.set_SUMMA(rs.getDouble("SUMMA"));
+					fn.set_TERMINAL(rs.getString("TERMINAL"));
+					fn.set_DATEOPERATION(LocalDateTime.parse(DATEOPERATION, formatter));
+					fn_list.add(fn);
+				}
+				return fn_list;
+			} catch (SQLException e) {
+				alert(e.getMessage());
+			}
+			return null;
+		}
 
 	// Select * from fn_sess Z_SB_ACCESS_AMRA
 		private static ObservableList<Forms> get_forms(ResultSet rs) {
