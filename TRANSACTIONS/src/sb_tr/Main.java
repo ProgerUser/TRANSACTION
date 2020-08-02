@@ -42,33 +42,27 @@ public class Main extends Application {
 		// showEmployeeView();
 
 		/*
-		if (Connect.userID_ != null) {
-			// primaryStage.setMaximized(true);
-			primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
-			DBUtil.dbConnect();
-			Main.showFirst();
-		} else {
-			Enter();
-		}
-		*/
-		
+		 * if (Connect.userID_ != null) { // primaryStage.setMaximized(true);
+		 * primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
+		 * DBUtil.dbConnect(); Main.showFirst(); } else { Enter(); }
+		 */
+
 		Connect.connectionURL_ = "10.111.64.21:1521/odb";
-		  Connect.userID_ = "AMRA_IMPORT";
-		  Connect.userPassword_ = "ver8i"; 
-		  DBUtil.dbConnect();
-		  showFirst();
-		 
+		Connect.userID_ = "AMRA_IMPORT";
+		Connect.userPassword_ = "ver8i";
+		DBUtil.dbConnect();
+		showFirst();
 
 		primaryStage.setOnCloseRequest(e -> {
 			DBUtil.dbDisconnect();
 			/*
-			File file = new File(System.getProperty("user.home") + "/XXI.AP_TEST_MAIN.properties");
-			file.delete();
-			System.out.print("------------------------------------------------------");
-			*/
+			 * File file = new File(System.getProperty("user.home") +
+			 * "/XXI.AP_TEST_MAIN.properties"); file.delete();
+			 * System.out.print("------------------------------------------------------");
+			 */
 			Platform.exit();
 			System.exit(0);
-			
+
 		});
 
 		// this.primaryStage.setMaximized(true);
@@ -243,7 +237,7 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/* Загрузка транз. Квант-Капитал */
 	public static void Transact() {
 		try {

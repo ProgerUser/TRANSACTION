@@ -783,9 +783,11 @@ public class TerminalDAO {
 			try {
 				ObservableList<pensmodel> forms_list = FXCollections.observableArrayList();
 				while (rs.next()) {
+					String DATE_LOAD = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getTimestamp("DATE_LOAD"));
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");	
 					pensmodel frms = new pensmodel();
 					frms.setid(rs.getInt("ID"));
-					frms.setdateload(rs.getTimestamp("DATE_LOAD"));
+					frms.setdateload(LocalDateTime.parse(DATE_LOAD, formatter));
 					frms.setfilename(rs.getString("FILENAME"));
 					/*frms.setone_part("<CLOB>");
 					frms.setTWO_PART("<CLOB>");

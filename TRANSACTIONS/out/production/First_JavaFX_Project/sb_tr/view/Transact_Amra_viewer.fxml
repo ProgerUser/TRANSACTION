@@ -5,16 +5,16 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane fx:id="pane_1" prefHeight="653.0" prefWidth="1088.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sb_tr.controller.Tr_Am_View_con">
+<BorderPane fx:id="pane_1" prefHeight="654.0" prefWidth="1015.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sb_tr.controller.Tr_Am_View_con">
 	<center>
 		<GridPane prefHeight="555.0" prefWidth="598.0">
 			<children>
 				<TableView fx:id="trans_table" layoutX="14.0" onKeyPressed="#show_" prefWidth="994.0" styleClass="mylistview" stylesheets="@../../transact.css" tableMenuButtonVisible="true" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS">
 					<columns>
 						<TableColumn fx:id="chk_row" prefWidth="137.0" text="Выбор" />
-						<TableColumn fx:id="rownum" prefWidth="137.0" text="Номер строки" />
-						<TableColumn fx:id="recdate" prefWidth="137.0" text="Дата Загрузки" />
-						<TableColumn fx:id="paydate" prefWidth="137.0" text="Дата Платежа" />
+						<TableColumn fx:id="rownum" prefWidth="137.0" text="НомерСтроки" />
+						<TableColumn fx:id="recdate" prefWidth="137.0" text="ДатаЗагрузки" />
+						<TableColumn fx:id="paydate" prefWidth="137.0" text="ДатаПлатежа" />
 						<TableColumn fx:id="status" prefWidth="137.0" text="Статус" />
 						<TableColumn fx:id="checknumber" prefWidth="137.0" text="НомерЧека" />
 						<TableColumn fx:id="service" prefWidth="137.0" text="Услуга" />
@@ -25,6 +25,8 @@
 						<TableColumn fx:id="nkamount" prefWidth="137.0" text="СуммаНК" />
 						<TableColumn fx:id="cashamount" prefWidth="137.0" text="СуммаНаличных" />
 						<TableColumn fx:id="amountwithchecks" prefWidth="137.0" text="СуммаСЧеков" />
+						<TableColumn fx:id="sumnalprimal" prefWidth="137.0" text="СуммаНалИзначальная" />
+						<TableColumn fx:id="amounttocheck" prefWidth="137.0" text="СуммаНаЧек" />
 						<TableColumn fx:id="checkparent" prefWidth="137.0" text="ЧекРодитель" />
 						<TableColumn fx:id="currency" prefWidth="137.0" text="Валюта" />
 						<!--<TableColumn fx:id="paymenttype" prefWidth="137.0" text="ВидПлатежа=PAYMENTTYPE" 
@@ -35,7 +37,7 @@
 						<TableColumn fx:id="dataps" prefWidth="137.0" text="ДатаПС" />
 						<TableColumn fx:id="dateclearing" prefWidth="137.0" text="ДатаКлиринга" />
 						 -->
-						<TableColumn fx:id="dealer" prefWidth="137.0" text="Дилер=DEALER" />
+						<TableColumn fx:id="dealer" prefWidth="137.0" text="Дилер" />
 						<TableColumn fx:id="accountpayer" prefWidth="137.0" text="ЛСПлательщика" />
 						<!--<TableColumn fx:id="cardnumber" prefWidth="137.0" text="НомерКарты=CARDNUMBER" 
 							/> -->
@@ -59,8 +61,6 @@
 							/> -->
 						<!--<TableColumn fx:id="mincommissionamount" prefWidth="137.0" text="СуммаКомиссииМин=MINCOMMISSIONAMOUNT" 
 							/> -->
-						<TableColumn fx:id="sumnalprimal" prefWidth="137.0" text="СуммаНалИзначальная" />
-						<TableColumn fx:id="amounttocheck" prefWidth="137.0" text="СуммаНаЧек" />
 						<!--<TableColumn fx:id="sumofsplitting" prefWidth="137.0" text="СуммаНаРасщепление=SUMOFSPLITTING" 
 							/> -->
 						<!--<TableColumn fx:id="amountintermediary" prefWidth="137.0" text="СуммаПосредника=AMOUNTINTERMEDIARY" 
@@ -97,8 +97,8 @@
 						<!--<TableColumn fx:id="purposeofpayment" prefWidth="137.0" text="НазначениеПлатежа=PURPOSEOFPAYMENT" 
 							/> -->
 						<!--<TableColumn fx:id="dataprovider" prefWidth="137.0" text="ДатаПровайдера" />-->
-						<TableColumn fx:id="statusabs" prefWidth="137.0" text="statusabs" />
-						<TableColumn fx:id="sess_id" prefWidth="137.0" text="sess_id" />
+						<TableColumn fx:id="statusabs" prefWidth="137.0" text="СтатусвАБС" />
+						<TableColumn fx:id="sess_id" prefWidth="137.0" text="НомерЗагрузки" />
 					</columns>
 				</TableView>
 			</children>
@@ -144,7 +144,6 @@
 					</tooltip>
 				</Button>
 				<CheckBox fx:id="inkass" layoutX="599.0" layoutY="82.0" mnemonicParsing="false" onAction="#check_table" text="Показать инкас." />
-				<ProgressIndicator fx:id="pb" layoutX="147.0" layoutY="68.0" prefHeight="32.0" prefWidth="53.0" visible="false" />
 				<TextField fx:id="FIO" layoutX="364.0" layoutY="31.0" prefHeight="30.0" prefWidth="211.0" promptText="\%...%">
 					<font>
 						<Font size="14.0" />

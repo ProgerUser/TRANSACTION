@@ -181,7 +181,7 @@ public class DealCintroller {
 			// Set extension filter for text files
 			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel File", "*.xls");
 			fileChooser.getExtensionFilters().add(extFilter);
-			fileChooser.setInitialFileName("Атрибуты " + Connect.PNMB_);
+			fileChooser.setInitialFileName("Сдачи " + Connect.PNMB_);
 			// Show save file dialog
 			File file = fileChooser.showSaveDialog(null);
 

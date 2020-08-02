@@ -17,6 +17,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 
 import org.controlsfx.control.table.TableFilter;
 import org.mozilla.universalchardet.UniversalDetector;
@@ -37,7 +38,9 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import javafx.util.converter.DateTimeStringConverter;
 import javafx.util.converter.IntegerStringConverter;
+import javafx.util.converter.LocalDateTimeStringConverter;
 import sb_tr.model.SqlMap;
 import sb_tr.model.TerminalDAO;
 import sb_tr.model.pensmodel;
@@ -57,7 +60,7 @@ public class penscontroller {
 	private Button save_sep;
 
 	@FXML
-	private TableColumn<pensmodel, Timestamp> DateLoad;
+	private TableColumn<pensmodel, LocalDateTime> DateLoad;
 
 	@FXML
 	private TableColumn<pensmodel, String> Filename;
@@ -85,30 +88,23 @@ public class penscontroller {
 	private void initialize() {
 
 		sep_pens.setEditable(true);
-		
+
 		ID.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
 		Filename.setCellValueFactory(cellData -> cellData.getValue().filenameProperty());
 		DateLoad.setCellValueFactory(cellData -> cellData.getValue().dateloadProperty());
-		/*
-		 * ONE_PART.setCellValueFactory(cellData ->
-		 * cellData.getValue().one_partProperty());
-		 * TWO_PART.setCellValueFactory(cellData ->
-		 * cellData.getValue().TWO_PARTProperty());
-		 * THREE_PART.setCellValueFactory(cellData ->
-		 * cellData.getValue().THREE_PARTProperty());
-		 * FOUR_PART.setCellValueFactory(cellData ->
-		 * cellData.getValue().FOUR_PARTProperty());
-		 */
+
 		Filename.setCellFactory(TextFieldTableCell.forTableColumn());
 		ID.setCellFactory(TextFieldTableCell.<pensmodel, Integer>forTableColumn(new IntegerStringConverter()));
-		/*DateLoad.setCellFactory(TextFieldTableCell.<pensmodel,Timestamp>forTableColumn(StringConverter<T> converter));*/
+		DateLoad.setCellFactory(
+				TextFieldTableCell.<pensmodel, LocalDateTime>forTableColumn(new LocalDateTimeStringConverter()));
 
+		/*
 		DateLoad.setCellFactory(column -> {
-			TableCell<pensmodel, Timestamp> cell = new TableCell<pensmodel, Timestamp>() {
+			TableCell<pensmodel, LocalDateTime> cell = new TableCell<pensmodel, LocalDateTime>() {
 				private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 
 				@Override
-				protected void updateItem(Timestamp item, boolean empty) {
+				protected void updateItem(LocalDateTime item, boolean empty) {
 					super.updateItem(item, empty);
 					if (empty) {
 						setText(null);
@@ -119,6 +115,7 @@ public class penscontroller {
 			};
 			return cell;
 		});
+		*/
 
 		ID.setOnEditCommit(new EventHandler<CellEditEvent<pensmodel, Integer>>() {
 			@Override
@@ -135,9 +132,9 @@ public class penscontroller {
 			}
 		});
 
-		DateLoad.setOnEditCommit(new EventHandler<CellEditEvent<pensmodel, Timestamp>>() {
+		DateLoad.setOnEditCommit(new EventHandler<CellEditEvent<pensmodel, LocalDateTime>>() {
 			@Override
-			public void handle(CellEditEvent<pensmodel, Timestamp> t) {
+			public void handle(CellEditEvent<pensmodel, LocalDateTime> t) {
 				((pensmodel) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.setdateload(t.getNewValue());
 			}
