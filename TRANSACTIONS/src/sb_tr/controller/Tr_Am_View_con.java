@@ -1714,7 +1714,7 @@ public class Tr_Am_View_con {
 			}
 			workbook.write(new FileOutputStream(file.getPath()));
 			workbook.close();
-			//spreadsheet.setAutoFilter(CellRangeAddress.valueOf("B1:AA" + num + ""));
+			// spreadsheet.setAutoFilter(CellRangeAddress.valueOf("B1:AA" + num + ""));
 		}
 		return 0;
 	}
@@ -1764,8 +1764,20 @@ public class Tr_Am_View_con {
 
 		} else {
 
-			Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
-			new PrintReport2().showReport(fn.get_checknumber(), String.valueOf(fn.get_sess_id()), "=");
+			pb.setVisible(true);
+			Task<Object> task = new Task<Object>() {
+				@Override
+				public Object call() throws Exception {
+					Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
+					new PrintReport2().showReport(fn.get_checknumber(), String.valueOf(fn.get_sess_id()), "=");
+					return null;
+				}
+			};
+			task.setOnFailed(e -> Alert(task.getException().getMessage()));
+			task.setOnSucceeded(e -> pb.setVisible(false));
+
+			exec.execute(task);
+
 			/*
 			 * Stage stage = (Stage) trans_table.getScene().getWindow(); Label alert = new
 			 * Label("Печать одиночных сумм?"); alert.setLayoutX(75.0);

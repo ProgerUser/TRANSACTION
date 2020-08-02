@@ -41,18 +41,19 @@ public class Main extends Application {
 		// 3) Display the EmployeeOperations View
 		// showEmployeeView();
 
+		if (Connect.userID_ != null) { // primaryStage.setMaximized(true);
+			primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
+			DBUtil.dbConnect();
+			Main.showFirst();
+		} else {
+			Enter();
+		}
+
 		/*
-		 * if (Connect.userID_ != null) { // primaryStage.setMaximized(true);
-		 * primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
-		 * DBUtil.dbConnect(); Main.showFirst(); } else { Enter(); }
+		 * Connect.connectionURL_ = "10.111.64.21:1521/odb"; Connect.userID_ =
+		 * "AMRA_IMPORT"; Connect.userPassword_ = "ver8i"; DBUtil.dbConnect();
+		 * showFirst();
 		 */
-
-		Connect.connectionURL_ = "10.111.64.21:1521/odb";
-		Connect.userID_ = "AMRA_IMPORT";
-		Connect.userPassword_ = "ver8i";
-		DBUtil.dbConnect();
-		showFirst();
-
 		primaryStage.setOnCloseRequest(e -> {
 			DBUtil.dbDisconnect();
 			/*
