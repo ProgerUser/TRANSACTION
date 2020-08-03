@@ -1730,25 +1730,26 @@ public class Tr_Am_View_con {
 		fileChooser.setInitialFileName("Транзакции " + dt1.getValue() + "-" + dt2.getValue());
 		// Show save file dialog
 		File file = fileChooser.showSaveDialog(null);
+		if (file != null) {
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					pb.setVisible(true);
+					xlsx.setDisable(true);
+				}
+			});
 
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				pb.setVisible(true);
-				xlsx.setDisable(true);
-			}
-		});
+			Task<Integer> task = new Task<Integer>() {
+				@Override
+				public Integer call() throws Exception {
+					return excel_exports(file);
+				}
+			};
 
-		Task<Integer> task = new Task<Integer>() {
-			@Override
-			public Integer call() throws Exception {
-				return excel_exports(file);
-			}
-		};
-
-		task.setOnFailed(e -> Alert(task.getException().getMessage()));
-		task.setOnSucceeded(e -> excel_exportsb(file));
-		exec.execute(task);
+			task.setOnFailed(e -> Alert(task.getException().getMessage()));
+			task.setOnSucceeded(e -> excel_exportsb(file));
+			exec.execute(task);
+		}
 	}
 
 	@FXML
@@ -2209,7 +2210,6 @@ public class Tr_Am_View_con {
 			if (column.getText().equals("СуммаПлатежа")) {
 				for (int i = 0; i < trans_table.getItems().size(); i++) {
 					if (column.getCellData(i) != null) {
-						/* System.out.println(Double.parseDouble(column.getCellData(i).toString())); */
 						all_sum = all_sum + Double.parseDouble(column.getCellData(i).toString());
 						cnt = cnt + 1;
 					}
@@ -2222,13 +2222,10 @@ public class Tr_Am_View_con {
 				}
 			}
 		});
-
 		String pattern = "###,###.###";
 		DecimalFormat decimalFormat = new DecimalFormat(pattern);
-
 		String format = decimalFormat.format(all_sum);
 		String format_nal = decimalFormat.format(all_sum_nal);
-		/* System.out.println(format); */
 		cnt_all_.setText(String.valueOf(cnt));
 		summa_plat.setText(String.valueOf(format));
 		summa_nal.setText(format_nal);
