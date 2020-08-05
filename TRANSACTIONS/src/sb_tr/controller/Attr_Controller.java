@@ -47,6 +47,7 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -83,6 +84,12 @@ public class Attr_Controller {
 
 	@FXML
 	private TableColumn<Attributes, String> CheckNumber;
+
+	@FXML
+	private TextField summ;
+
+	@FXML
+	private TextField counts;
 
 	// For MultiThreading
 	private Executor exec;
@@ -138,8 +145,27 @@ public class Attr_Controller {
 		populate_attr(empData);
 		autoResizeColumns(trans_table);
 		TableFilter<Attributes> filter = new TableFilter<>(trans_table);
+
+		AttributeName.setCellFactory(col -> new TextFieldTableCell<Attributes, String>() {
+			@Override
+			public void updateItem(String item, boolean empty) {
+				super.updateItem(item, empty);
+				if (empty || item == null) {
+					setText(null);
+					setGraphic(null);
+				} else {
+					setText(item.toString());
+					if (item.equals("Сумма")) {
+						setStyle("-fx-background-color: rgb(162, 189, 48);" + "-fx-border-color:black;"
+								+ " -fx-border-width :  1 1 1 1 ");
+					} else {
+						setStyle("");
+					}
+				}
+			}
+		});
 	}
-	
+
 	@FXML
 	public void view_attr(ActionEvent event) throws IOException {
 		try {
@@ -149,10 +175,10 @@ public class Attr_Controller {
 			// Set extension filter for text files
 			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel File", "*.xls");
 			fileChooser.getExtensionFilters().add(extFilter);
-			fileChooser.setInitialFileName("Атрибуты "+Connect.PNMB_);
+			fileChooser.setInitialFileName("Атрибуты " + Connect.PNMB_);
 			// Show save file dialog
 			File file = fileChooser.showSaveDialog(null);
-			
+
 			if (file != null) {
 				Workbook workbook = new HSSFWorkbook();
 				Sheet spreadsheet = workbook.createSheet("Таблица");
@@ -166,8 +192,8 @@ public class Attr_Controller {
 				for (int i = 0; i < trans_table.getItems().size(); i++) {
 					row = spreadsheet.createRow(i + 1);
 					for (int j = 0; j < trans_table.getColumns().size(); j++) {
-						if (trans_table.getColumns().get(j).getText() == ""){
-							
+						if (trans_table.getColumns().get(j).getText() == "") {
+
 						}
 						if (trans_table.getColumns().get(j).getCellData(i) != null) {
 							row.createCell(j).setCellValue(trans_table.getColumns().get(j).getCellData(i).toString());
@@ -178,14 +204,44 @@ public class Attr_Controller {
 				}
 				workbook.write(new FileOutputStream(file.getPath()));
 				workbook.close();
-				Alerts("Файл сформирован в папку "+file.getPath());
+				Alerts("Файл сформирован в папку " + file.getPath());
 			}
 		} catch (Exception e) {
 			Alerts(e.getMessage());
 		}
 
 	}
-	
+
+	double all_sum = 0;
+	int cnt = 0;
+
+	@FXML
+	void chk_sum(ActionEvent event) {
+		trans_table.getColumns().stream().forEach((column) -> {
+			if (column.getText().equals("ЗначениеАтрибута")) {
+				for (int i = 0; i < trans_table.getItems().size(); i++) {
+					// System.out.println(trans_table.getColumns().get(2).getCellData(i).toString());
+					if (column.getCellData(i) != null
+							& trans_table.getColumns().get(2).getCellData(i).toString().equals("Сумма")) {
+						all_sum = all_sum
+								+ Double.valueOf(column.getCellData(i).toString().replace(",", ".").replace(" ", ""));
+						cnt++;
+					}
+				}
+			}
+
+		});
+
+		String pattern = "###,###.###";
+		DecimalFormat decimalFormat = new DecimalFormat(pattern);
+		String format = decimalFormat.format(all_sum);
+		counts.setText(String.valueOf(cnt));
+		summ.setText(String.valueOf(format));
+		
+		all_sum = 0;
+		cnt = 0;
+	}
+
 	private void Alerts(String mess) {
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
 		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();

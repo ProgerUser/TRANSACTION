@@ -36,7 +36,7 @@
 
 #browse {          
     -fx-background-image: url("add_file.png");
-    -fx-background-size: 30.0 30.0;
+    -fx-background-size: 25.0 25.0;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }
@@ -44,52 +44,59 @@
 
 #import {          
     -fx-background-image: url("process.png");
-    -fx-background-size: 30.0 30.0;
+    -fx-background-size: 25.0 25.0;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }
 
 #calc {          
     -fx-background-image: url("post.png");
-    -fx-background-size: 30.0 30.0;
+    -fx-background-size: 25.0 25.0;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }
 #del {          
     -fx-background-image: url("delete_log.png");
-    -fx-background-size: 30.0 30.0;
+    -fx-background-size: 25.0 25.0;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }
 #search {          
     -fx-background-image: url("search.png");
-    -fx-background-size: 30.0 30.0;
+    -fx-background-size: 25.0 25.0;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }
 
 #separate {          
     -fx-background-image: url("separate.png");
-    -fx-background-size: 30.0 30.0;
+    -fx-background-size: 25.0 25.0;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }
 #save_sep {          
     -fx-background-image: url("save_sep.png");
-    -fx-background-size: 30.0 30.0;
+    -fx-background-size: 25.0 25.0;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position:center;
+}
+
+#atrexcel {          
+    -fx-background-image: url("xlsx.png");
+    -fx-background-size: 25.0 25.0;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }
 
 #xlsx {          
     -fx-background-image: url("xlsx.png");
-    -fx-background-size: 30.0 30.0;
+    -fx-background-size: 25.0 25.0;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }
 #attributes {          
     -fx-background-image: url("attributes.png");
-    -fx-background-size: 30.0 30.0;
+    -fx-background-size: 25.0 25.0;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }
@@ -100,32 +107,32 @@
 
 #view {          
     -fx-background-image: url("view.png");
-    -fx-background-size: 30.0 30.0;
+    -fx-background-size: 25.0 25.0;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }
 #post {          
     -fx-background-image: url("post.png");
-    -fx-background-size: 30.0 30.0;
+    -fx-background-size: 25.0 25.0;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }
 
 #chk_nmbers{          
     -fx-background-image: url("deal.png");
-    -fx-background-size: 30.0 30.0;
+    -fx-background-size: 25.0 25.0;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }
 #pseudo{          
     -fx-background-image: url("generate.png");
-    -fx-background-size: 30.0 30.0;
+    -fx-background-size: 25.0 25.0;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }
 #print_check{          
     -fx-background-image: url("print.png");
-    -fx-background-size: 30.0 30.0;
+    -fx-background-size: 25.0 25.0;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
 }

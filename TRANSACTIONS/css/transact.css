@@ -1,6 +1,7 @@
 
 .table-view .column-header, .table-view .filler {
     -fx-border-color: black;
+    -fx-alignment: center-left ;
 }
 
 .table-row-cell{

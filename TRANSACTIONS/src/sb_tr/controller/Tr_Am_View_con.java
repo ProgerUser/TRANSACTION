@@ -1997,54 +1997,37 @@ public class Tr_Am_View_con {
 	}
 
 	// Ќайти загрузки
-	private void exec_filter(ObservableList<Amra_Trans> trData) {
-
+	private void exec_filter(ObservableList<Amra_Trans> trData) /*throws Exception*/ {
 		Runnable task = () -> {
-			trans_table.setItems(null);
 			trans_table.setItems(trData);
 			autoResizeColumns(trans_table);
 
-			provider.setCellFactory(col -> new TextFieldTableCell<Amra_Trans, String>() {
-				@Override
-				public void updateItem(String item, boolean empty) {
-					super.updateItem(item, empty);
-					if (empty || item == null) {
-						setText(null);
-						setGraphic(null);
-					} else {
-						setText(item.toString());
-						if (item.equals("—берЅанк")) {
-							setStyle("-fx-background-color: rgb(162, 189, 48);" + "-fx-border-color:black;"
-									+ " -fx-border-width :  1 1 1 1 ");
-						} else {
-							setStyle("");
-						}
+			Runnable task_ = () -> {
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						TableFilter<Amra_Trans> tableFilter = TableFilter.forTableView(trans_table).apply();
+						tableFilter.setSearchStrategy((input, target) -> {
+							try {
+								return target.toLowerCase().contains(input.toLowerCase());
+							} catch (Exception e) {
+								return false;
+							}
+						});
+						Button bFilter = new Button("Filter Smith");
+						bFilter.setOnAction(new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent e) {
+								System.out.println("Filter Smith");
+								// XXX Does not have any effect!?
+								tableFilter.executeFilter();
+							}
+						});
+						// trans_table.setItems(tableFilter.getFilteredList());
 					}
-				}
-			});
+				});
 
-			terminal.setCellFactory(col -> new TextFieldTableCell<Amra_Trans, String>() {
-				@Override
-				public void updateItem(String item, boolean empty) {
-					super.updateItem(item, empty);
-					if (empty || item == null) {
-						setText(null);
-						setGraphic(null);
-					} else {
-						setText(item.toString());
-						if (item.contains("SB")) {
-							setStyle("-fx-background-color: rgb(210, 236, 126);" + "-fx-border-color:black;"
-									+ " -fx-border-width :  1 1 1 1 ");
-						} else {
-							setStyle("-fx-background-color: rgb(169, 53, 107);" + "-fx-border-color:black;"
-									+ " -fx-border-width :  1 1 1 1 ");
-						}
-					}
-				}
-			});
-
-			status.setCellFactory(list -> {
-				TextFieldTableCell<Amra_Trans, String> cell = new TextFieldTableCell<Amra_Trans, String>() {
+				provider.setCellFactory(col -> new TextFieldTableCell<Amra_Trans, String>() {
 					@Override
 					public void updateItem(String item, boolean empty) {
 						super.updateItem(item, empty);
@@ -2053,43 +2036,81 @@ public class Tr_Am_View_con {
 							setGraphic(null);
 						} else {
 							setText(item.toString());
-							if (item.equals("00")) {
-								setStyle("");
+							if (item.equals("—берЅанк")) {
+								setStyle("-fx-background-color: rgb(162, 189, 48);" + "-fx-border-color:black;"
+										+ " -fx-border-width :  1 1 1 1 ");
 							} else {
-								setStyle("-fx-background-color: #F9E02C;" + "-fx-border-color:black;"
-										+ " -fx-border-width : 1 1 1 1;");
+								setStyle("");
 							}
 						}
 					}
-				};
-				cell.setOnMouseClicked(value -> {
-					if (value.getClickCount() == 2) {
+				});
+				terminal.setCellFactory(col -> new TextFieldTableCell<Amra_Trans, String>() {
+					@Override
+					public void updateItem(String item, boolean empty) {
+						super.updateItem(item, empty);
+						if (empty || item == null) {
+							setText(null);
+							setGraphic(null);
+						} else {
+							setText(item.toString());
+							if (item.contains("SB")) {
+								setStyle("-fx-background-color: rgb(210, 236, 126);" + "-fx-border-color:black;"
+										+ " -fx-border-width :  1 1 1 1 ");
+							} else {
+								setStyle("-fx-background-color: rgb(169, 53, 107);" + "-fx-border-color:black;"
+										+ " -fx-border-width :  1 1 1 1 ");
+							}
+						}
 					}
 				});
-				return cell;
-			});
-			try {
-				Runnable task_ = () -> {
-					Platform.runLater(new Runnable() {
+
+				status.setCellFactory(list -> {
+					TextFieldTableCell<Amra_Trans, String> cell = new TextFieldTableCell<Amra_Trans, String>() {
 						@Override
-						public void run() {
-							/* TableFilter.forTableView().apply(); */
-							TableFilter<Amra_Trans> tableFilter = new TableFilter<>(trans_table);
-							tableFilter.setSearchStrategy((input, target) -> {
-								try {
-									return target.toLowerCase().contains(input.toLowerCase());
-								} catch (Exception e) {
-									return false;
+						public void updateItem(String item, boolean empty) {
+							super.updateItem(item, empty);
+							if (empty || item == null) {
+								setText(null);
+								setGraphic(null);
+							} else {
+								setText(item.toString());
+								if (item.equals("00")) {
+									setStyle("");
+								} else {
+									setStyle("-fx-background-color: #F9E02C;" + "-fx-border-color:black;"
+											+ " -fx-border-width : 1 1 1 1;");
 								}
-							});
+							}
+						}
+					};
+
+					cell.setOnMouseClicked(value -> {
+						if (value.getClickCount() == 2) {
+							// System.out.println("<Double mouse click>");
 						}
 					});
-				};
-				Thread thread_ = new Thread(task_);
-				thread_.start();
-			} catch (Exception e) {
-				Alert(e.getMessage());
-			}
+
+					return cell;
+				});
+
+				/*
+				trans_table.addEventHandler(KeyEvent.KEY_PRESSED, e -> {
+					if (e.getCode() == KeyCode.F7) {
+						if (trans_table.getSelectionModel().getSelectedItem() != null) {
+							System.out.println("<KEY_PRESSED>");
+							status.setStyle("-fx-background-color: rgb(255, 255, 255);");
+							terminal.setStyle("-fx-background-color: rgb(255, 255, 255);");
+							provider.setStyle("-fx-background-color: rgb(255, 255, 255);");
+						}
+					}
+				});
+				*/
+			};
+
+			Thread thread_ = new Thread(task_);
+			thread_.start();
+
 		};
 
 		Thread thread = new Thread(task);
@@ -2124,7 +2145,15 @@ public class Tr_Am_View_con {
 		};
 
 		task.setOnFailed(e -> Alert(task.getException().getMessage()));
-		task.setOnSucceeded(e -> exec_filter((ObservableList<Amra_Trans>) task.getValue()));
+		task.setOnSucceeded(e -> {
+			try {
+				exec_filter((ObservableList<Amra_Trans>) task.getValue());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				Alert(e1.getMessage());
+				;
+			}
+		});
 
 		exec.execute(task);
 		/*-----------------------------------------*/
@@ -2156,7 +2185,13 @@ public class Tr_Am_View_con {
 				table.getColumns().stream().forEach((column) -> {
 					if (column.getText().equals("sess_id")) {
 
-					} else if (column.getText().equals("„еки¬ход€щие")) {
+					} else if (column.getText().equals("—уммаѕлатежа")|
+							column.getText().equals("—умма омиссии")|
+							column.getText().equals("—уммаЌ ")|
+							column.getText().equals("—уммаЌаличных")|
+							column.getText().equals("—умма—„еков")|
+							column.getText().equals("—уммаЌал»значальна€")|
+							column.getText().equals("—уммаЌа„ек")) {
 						System.out.println(column.getText());
 					} else {
 						// Minimal width = columnheader
