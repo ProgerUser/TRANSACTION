@@ -7,14 +7,18 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
@@ -38,6 +42,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
@@ -131,6 +136,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -163,7 +169,7 @@ public class Tr_Am_View_con {
 	private Button search;
 
 	@FXML
-	private TableColumn<Amra_Trans, String> chk_row;
+	private TableColumn<Amra_Trans, Boolean> chk_row;
 
 	@FXML
 	private TableColumn<Amra_Trans, String> fio;
@@ -392,6 +398,50 @@ public class Tr_Am_View_con {
 	@FXML
 	private AnchorPane anch_b4;
 
+	private void validate(CheckBox checkBox, Amra_Trans item, Event event) {
+		// Validate here
+		event.consume();
+		/*
+		 * Alert alert = new Alert(AlertType.CONFIRMATION); alert.setTitle("ƒиалог");
+		 * alert.setHeaderText("”ведомление об отметке");
+		 * alert.setContentText("ќтметить?");
+		 * 
+		 * // Set the checkbox if the user want to continue Optional<ButtonType> result
+		 * = alert.showAndWait(); if (result.get() == ButtonType.OK) {
+		 * checkBox.setSelected(!checkBox.isSelected()); }
+		 */
+		if (!checkBox.isSelected()) {
+			all_sum_nal = all_sum_nal + item.cashamountProperty().getValue();
+			all_sum = all_sum + item.amountofpaymentProperty().getValue();
+			cnt = cnt + 1;
+
+			String pattern = "###,###.###";
+			DecimalFormat decimalFormat = new DecimalFormat(pattern);
+			String format = decimalFormat.format(all_sum);
+			String format_nal = decimalFormat.format(all_sum_nal);
+			cnt_all_.setText(String.valueOf(cnt));
+			summa_plat.setText(String.valueOf(format));
+			summa_nal.setText(format_nal);
+			checkBox.setSelected(true);
+			System.out.println("Check=true");
+		} else {
+			all_sum_nal = all_sum_nal - item.cashamountProperty().getValue();
+			all_sum = all_sum - item.amountofpaymentProperty().getValue();
+			cnt = cnt - 1;
+
+			String pattern = "###,###.###";
+			DecimalFormat decimalFormat = new DecimalFormat(pattern);
+			String format = decimalFormat.format(all_sum);
+			String format_nal = decimalFormat.format(all_sum_nal);
+			cnt_all_.setText(String.valueOf(cnt));
+			summa_plat.setText(String.valueOf(format));
+			summa_nal.setText(format_nal);
+			checkBox.setSelected(false);
+			System.out.println("Check=false");
+		}
+
+	}
+
 	@FXML
 	private void initialize() {
 		trans_table.setEditable(true);
@@ -402,6 +452,7 @@ public class Tr_Am_View_con {
 		});
 
 		chk_row.setCellValueFactory(cellData -> cellData.getValue().chk_rowProperty());
+
 		rownum.setCellValueFactory(cellData -> cellData.getValue().rownumProperty().asObject());
 		recdate.setCellValueFactory(cellData -> cellData.getValue().recdateProperty());
 		paydate.setCellValueFactory(cellData -> cellData.getValue().paydateProperty());
@@ -493,6 +544,57 @@ public class Tr_Am_View_con {
 		statusabs.setCellValueFactory(cellData -> cellData.getValue().statusabsProperty());
 		sess_id.setCellValueFactory(cellData -> cellData.getValue().sess_idProperty().asObject());
 
+		chk_row.setCellFactory(p -> new CheckBoxTableCell<>());
+
+		chk_row.setCellFactory(p -> {
+			CheckBox checkBox = new CheckBox();
+			TableCell<Amra_Trans, Boolean> tableCell = new TableCell<Amra_Trans, Boolean>() {
+				@Override
+				protected void updateItem(Boolean item, boolean empty) {
+					super.updateItem(item, empty);
+					if (empty || item == null)
+						setGraphic(null);
+					else {
+						setGraphic(checkBox);
+						checkBox.setSelected(item);
+					}
+				}
+			};
+
+			/*
+			 * checkBox.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> validate(checkBox,
+			 * (Amra_Trans) tableCell.getTableRow().getItem(), event));
+			 */
+			checkBox.addEventFilter(MouseEvent.MOUSE_PRESSED,
+					event -> validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event));
+
+			checkBox.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+				if (event.getCode() == KeyCode.SPACE)
+					validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
+			});
+
+			tableCell.setAlignment(Pos.CENTER);
+			tableCell.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+
+			return tableCell;
+		});
+
+		recdate.setCellFactory(column -> {
+			TableCell<Amra_Trans, LocalDateTime> cell = new TableCell<Amra_Trans, LocalDateTime>() {
+				private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+
+				@Override
+				protected void updateItem(LocalDateTime item, boolean empty) {
+					super.updateItem(item, empty);
+					if (empty) {
+						setText(null);
+					} else {
+						setText(format.format(item));
+					}
+				}
+			};
+			return cell;
+		});
 		recdate.setCellFactory(column -> {
 			TableCell<Amra_Trans, LocalDateTime> cell = new TableCell<Amra_Trans, LocalDateTime>() {
 				private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
@@ -1997,7 +2099,7 @@ public class Tr_Am_View_con {
 	}
 
 	// Ќайти загрузки
-	private void exec_filter(ObservableList<Amra_Trans> trData) /*throws Exception*/ {
+	private void exec_filter(ObservableList<Amra_Trans> trData) /* throws Exception */ {
 		Runnable task = () -> {
 			trans_table.setItems(trData);
 			autoResizeColumns(trans_table);
@@ -2095,17 +2197,13 @@ public class Tr_Am_View_con {
 				});
 
 				/*
-				trans_table.addEventHandler(KeyEvent.KEY_PRESSED, e -> {
-					if (e.getCode() == KeyCode.F7) {
-						if (trans_table.getSelectionModel().getSelectedItem() != null) {
-							System.out.println("<KEY_PRESSED>");
-							status.setStyle("-fx-background-color: rgb(255, 255, 255);");
-							terminal.setStyle("-fx-background-color: rgb(255, 255, 255);");
-							provider.setStyle("-fx-background-color: rgb(255, 255, 255);");
-						}
-					}
-				});
-				*/
+				 * trans_table.addEventHandler(KeyEvent.KEY_PRESSED, e -> { if (e.getCode() ==
+				 * KeyCode.F7) { if (trans_table.getSelectionModel().getSelectedItem() != null)
+				 * { System.out.println("<KEY_PRESSED>");
+				 * status.setStyle("-fx-background-color: rgb(255, 255, 255);");
+				 * terminal.setStyle("-fx-background-color: rgb(255, 255, 255);");
+				 * provider.setStyle("-fx-background-color: rgb(255, 255, 255);"); } } });
+				 */
 			};
 
 			Thread thread_ = new Thread(task_);
@@ -2185,13 +2283,10 @@ public class Tr_Am_View_con {
 				table.getColumns().stream().forEach((column) -> {
 					if (column.getText().equals("sess_id")) {
 
-					} else if (column.getText().equals("—уммаѕлатежа")|
-							column.getText().equals("—умма омиссии")|
-							column.getText().equals("—уммаЌ ")|
-							column.getText().equals("—уммаЌаличных")|
-							column.getText().equals("—умма—„еков")|
-							column.getText().equals("—уммаЌал»значальна€")|
-							column.getText().equals("—уммаЌа„ек")) {
+					} else if (column.getText().equals("—уммаѕлатежа") | column.getText().equals("—умма омиссии")
+							| column.getText().equals("—уммаЌ ") | column.getText().equals("—уммаЌаличных")
+							| column.getText().equals("—умма—„еков") | column.getText().equals("—уммаЌал»значальна€")
+							| column.getText().equals("—уммаЌа„ек")) {
 						System.out.println(column.getText());
 					} else {
 						// Minimal width = columnheader
@@ -2230,15 +2325,35 @@ public class Tr_Am_View_con {
 	public double all_sum_nal = 0;
 
 	@FXML
-	void chk_all(ActionEvent event) {
+	void chk_all(ActionEvent event_) {
 		chk_row.setCellFactory(list -> {
-			TextFieldTableCell<Amra_Trans, String> cell = new TextFieldTableCell<Amra_Trans, String>() {
+			CheckBox checkBox = new CheckBox();
+			TableCell<Amra_Trans, Boolean> tableCell = new TableCell<Amra_Trans, Boolean>() {
 				@Override
-				public void updateItem(String item, boolean empty) {
-					super.updateItem("\u2713", empty);
+				protected void updateItem(Boolean item, boolean empty) {
+					super.updateItem(item, empty);
+					if (empty || item == null)
+						setGraphic(null);
+					else {
+						setGraphic(checkBox);
+						checkBox.setSelected(true);
+					}
+
 				}
 			};
-			return cell;
+
+			checkBox.addEventFilter(MouseEvent.MOUSE_PRESSED,
+					event -> validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event));
+
+			checkBox.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+				if (event.getCode() == KeyCode.SPACE)
+					validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
+			});
+
+			tableCell.setAlignment(Pos.CENTER);
+			tableCell.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+			
+			return tableCell;
 		});
 
 		trans_table.getColumns().stream().forEach((column) -> {
@@ -2257,6 +2372,37 @@ public class Tr_Am_View_con {
 				}
 			}
 		});
+
+		String pattern = "###,###.###";
+		DecimalFormat decimalFormat = new DecimalFormat(pattern);
+		String format = decimalFormat.format(all_sum);
+		String format_nal = decimalFormat.format(all_sum_nal);
+		cnt_all_.setText(String.valueOf(cnt));
+		summa_plat.setText(String.valueOf(format));
+		summa_nal.setText(format_nal);
+		all_sum_nal = 0;
+		all_sum = 0;
+		cnt = 0;
+	}
+
+	void chk_all() {
+		trans_table.getColumns().stream().forEach((column) -> {
+			if (column.getText().equals("—уммаѕлатежа")) {
+				for (int i = 0; i < trans_table.getItems().size(); i++) {
+					if (column.getCellData(i) != null) {
+						all_sum = all_sum + Double.parseDouble(column.getCellData(i).toString());
+						cnt = cnt + 1;
+					}
+				}
+			} else if (column.getText().equals("—уммаЌаличных")) {
+				for (int i = 0; i < trans_table.getItems().size(); i++) {
+					if (column.getCellData(i) != null) {
+						all_sum_nal = all_sum_nal + Double.parseDouble(column.getCellData(i).toString());
+					}
+				}
+			}
+		});
+
 		String pattern = "###,###.###";
 		DecimalFormat decimalFormat = new DecimalFormat(pattern);
 		String format = decimalFormat.format(all_sum);
@@ -2271,23 +2417,49 @@ public class Tr_Am_View_con {
 
 	@FXML
 	void chk_one(ActionEvent event) {
-		trans_table.getSelectionModel().getSelectedItem().set_chk_row("\u2713");
+		trans_table.getSelectionModel().getSelectedItem().set_chk_row(true);
 	}
 
 	@FXML
-	void unchk_all(ActionEvent event) {
+	void unchk_all(ActionEvent event_) {
+
 		chk_row.setCellFactory(list -> {
-			TextFieldTableCell<Amra_Trans, String> cell = new TextFieldTableCell<Amra_Trans, String>() {
+			CheckBox checkBox = new CheckBox();
+			TableCell<Amra_Trans, Boolean> tableCell = new TableCell<Amra_Trans, Boolean>() {
 				@Override
-				public void updateItem(String item, boolean empty) {
-					super.updateItem("", empty);
+				protected void updateItem(Boolean item, boolean empty) {
+					super.updateItem(item, empty);
+					if (empty || item == null)
+						setGraphic(null);
+					else {
+						setGraphic(checkBox);
+						checkBox.setSelected(false);
+					}
+
 				}
 			};
-			return cell;
+
+			checkBox.addEventFilter(MouseEvent.MOUSE_PRESSED,
+					event -> validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event));
+
+			checkBox.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+				if (event.getCode() == KeyCode.SPACE)
+					validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
+			});
+
+			tableCell.setAlignment(Pos.CENTER);
+			tableCell.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+			
+			return tableCell;
 		});
+
 		summa_plat.setText("");
 		summa_nal.setText("");
 		cnt_all_.setText("");
+		
+		all_sum_nal = 0;
+		all_sum = 0;
+		cnt = 0;
 	}
 
 	@FXML

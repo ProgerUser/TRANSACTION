@@ -45,7 +45,7 @@
 		</GridPane>
 	</center>
 	<top>
-		<AnchorPane fx:id="ap" prefHeight="86.0" prefWidth="1017.0" stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER">
+		<AnchorPane fx:id="ap" prefHeight="69.0" prefWidth="1017.0" stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER">
 			<children>
 				<Button fx:id="browse" disable="false" layoutX="14.0" layoutY="24.0" mnemonicParsing="false" onAction="#Choose" prefHeight="30.0" prefWidth="30.0" stylesheets="@../../borderpane.css">
 					<tooltip>
@@ -63,9 +63,7 @@
 						<Tooltip text="Сформировать проводки" />
 					</tooltip>
 				</Button>
-				<Text layoutX="168.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Дата загрузки" />
-				<DatePicker fx:id="date_load" layoutX="168.0" layoutY="24.0" onAction="#view_fn" prefHeight="30.0" prefWidth="100.0" />
-				<Text layoutX="19.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Загруженные файлы" />
+				<DatePicker fx:id="date_load" layoutX="168.0" layoutY="24.0" onAction="#view_fn" prefHeight="30.0" prefWidth="116.0" promptText="Дата загрузки" />
 				<Button id="del" fx:id="delete_log" layoutX="122.0" layoutY="24.0" mnemonicParsing="false" onAction="#del_log" prefHeight="30.0" prefWidth="30.0">
 					<tooltip>
 						<Tooltip text="Удалить лог" />

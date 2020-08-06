@@ -299,7 +299,7 @@ public class TerminalDAO {
 			if (FIO.equals("")) {
 
 			} else {
-				FIO_ = " and lower(attributes_) like '" + FIO + "'\n";
+				FIO_ = " and lower(attributes_) like '%" + FIO + "%'\n";
 			}
 		} else {
 

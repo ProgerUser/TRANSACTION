@@ -6,8 +6,10 @@ import java.time.LocalDateTime;
 
 import org.joda.time.DateTime;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -16,8 +18,7 @@ import javafx.beans.property.StringProperty;
 
 public class Amra_Trans {
 
-    //private SimpleObjectProperty<Date> paydate;
-	private StringProperty chk_row;
+	private BooleanProperty chk_row;
 	private IntegerProperty rownum;
 	private SimpleObjectProperty<LocalDateTime> recdate;
 	private SimpleObjectProperty<LocalDateTime> paydate;
@@ -81,10 +82,9 @@ public class Amra_Trans {
 	// Constructor
 	public Amra_Trans() {
 		
-		this.chk_row = new SimpleStringProperty();
+		this.chk_row = new SimpleBooleanProperty();
 		this.rownum = new SimpleIntegerProperty();
 		this.recdate = new SimpleObjectProperty<>();
-		//this.paydate = new SimpleObjectProperty<>();
 		this.paydate = new SimpleObjectProperty<>();
 		this.currency = new SimpleStringProperty();
 		this.paymenttype = new SimpleStringProperty();
@@ -145,18 +145,13 @@ public class Amra_Trans {
 
 	}
 
-	public String get_chk_row() {
+	public Boolean get_chk_row() {
 		return chk_row.get();
 	}
 	public Object get_recdate() {
 		return recdate.get();
 	}
 
-//	public String get_paydate() {
-//		return paydate.get();
-//	}
-
-    //hire_date
     public Object get_paydate(){
         return paydate.get();
     }
@@ -387,7 +382,7 @@ public class Amra_Trans {
 		return sess_id.get();
 	}
 
-	public void set_chk_row(String chk_row) {
+	public void set_chk_row(Boolean chk_row) {
 		this.chk_row.set(chk_row);
 	}
 	
@@ -398,10 +393,6 @@ public class Amra_Trans {
 	public void set_paydate(LocalDateTime paydate) {
 		this.paydate.set(paydate);
 	}
-	
-//    public void set_paydate(Date paydate){
-//        this.paydate.set(paydate);
-//    }
 
 	public void set_currency(String currency) {
 		this.currency.set(currency);
@@ -638,12 +629,8 @@ public class Amra_Trans {
 	public SimpleObjectProperty<LocalDateTime> paydateProperty() {
 		return paydate;
 	}
-//    public SimpleObjectProperty<Date> paydateProperty(){
-//        return paydate;
-//    }
 	
-
-	public StringProperty chk_rowProperty() {
+	public BooleanProperty chk_rowProperty() {
 		return chk_row;
 	}
 	public StringProperty currencyProperty() {
