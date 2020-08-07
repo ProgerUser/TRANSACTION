@@ -101,6 +101,13 @@
 						<TableColumn fx:id="statusabs" prefWidth="137.0" text="СтатусвАБС" />
 						<TableColumn fx:id="sess_id" prefWidth="137.0" text="НомерЗагрузки" />
 					</columns>
+               <contextMenu>
+                  <ContextMenu fx:id="menubar">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#show_rel" text="Связанные" />
+                    </items>
+                  </ContextMenu>
+               </contextMenu>
 				</TableView>
 			</children>
 			<columnConstraints>

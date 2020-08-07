@@ -24,6 +24,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
@@ -45,6 +46,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -60,6 +62,7 @@ import javafx.util.converter.LocalDateTimeStringConverter;
 import net.sf.jasperreports.engine.JRException;
 import sb_tr.Main;
 import sb_tr.model.Amra_Trans;
+import sb_tr.model.Attributes;
 import sb_tr.model.Connect;
 import sb_tr.model.FN_SESS_AMRA;
 import sb_tr.model.GUIUtils;
@@ -432,7 +435,7 @@ public class Tr_Am_View_con {
 				summa_plat.setText(String.valueOf(format));
 				summa_nal.setText(format_nal);
 				checkBox.setSelected(true);
-				//System.out.println("Check=" + item.get_chk_row());
+				// System.out.println("Check=" + item.get_chk_row());
 			} else {
 				all_sum_nal = all_sum_nal + item.cashamountProperty().getValue();
 				all_sum = all_sum + item.amountofpaymentProperty().getValue();
@@ -446,7 +449,7 @@ public class Tr_Am_View_con {
 				summa_plat.setText(String.valueOf(format));
 				summa_nal.setText(format_nal);
 				checkBox.setSelected(true);
-				//System.out.println("Check=" + item.get_chk_row());
+				// System.out.println("Check=" + item.get_chk_row());
 			}
 
 		} else {
@@ -466,7 +469,7 @@ public class Tr_Am_View_con {
 				summa_plat.setText(String.valueOf(format));
 				summa_nal.setText(format_nal);
 				checkBox.setSelected(false);
-				//System.out.println("Check=" + item.get_chk_row());
+				// System.out.println("Check=" + item.get_chk_row());
 			} else {
 				all_sum_nal = all_sum_nal - item.cashamountProperty().getValue();
 				all_sum = all_sum - item.amountofpaymentProperty().getValue();
@@ -480,7 +483,7 @@ public class Tr_Am_View_con {
 				summa_plat.setText(String.valueOf(format));
 				summa_nal.setText(format_nal);
 				checkBox.setSelected(false);
-				//System.out.println("Check=" + item.get_chk_row());
+				// System.out.println("Check=" + item.get_chk_row());
 			}
 
 			// item.set_chk_row(false);
@@ -489,7 +492,7 @@ public class Tr_Am_View_con {
 	}
 
 	@FXML
-	private void initialize() {
+	private void initialize() throws Exception {
 		trans_table.setEditable(true);
 		exec = Executors.newCachedThreadPool((runnable) -> {
 			Thread t = new Thread(runnable);
@@ -618,6 +621,7 @@ public class Tr_Am_View_con {
 		 * if(item.equals("a")) currentRow.setStyle("-fx-background-color:lightcoral");
 		 * else currentRow.setStyle("-fx-background-color:lightgreen"); } } }; });
 		 */
+
 		chk_row.setCellFactory(p -> {
 			CheckBox checkBox = new CheckBox();
 			TableCell<Amra_Trans, Boolean> tableCell = new TableCell<Amra_Trans, Boolean>() {
@@ -629,27 +633,18 @@ public class Tr_Am_View_con {
 					} else {
 						setGraphic(checkBox);
 						checkBox.setSelected(item);
-						if (checkBox.isSelected()) {
-							TableRow<Amra_Trans> currentRow = getTableRow();
-							currentRow.setStyle("-fx-background-color:tomato;");
-						} else {
-							TableRow<Amra_Trans> currentRow = getTableRow();
-							currentRow.setStyle("");
-						}
-
 					}
 				}
 			};
 
-			checkBox.addEventFilter(MouseEvent.MOUSE_PRESSED,
-					event -> {
-						try {
-							validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							Alert(e.getMessage());
-						}
-					});
+			checkBox.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+				try {
+					validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					Alert(e.getMessage());
+				}
+			});
 
 			checkBox.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
 				if (event.getCode() == KeyCode.SPACE)
@@ -665,23 +660,6 @@ public class Tr_Am_View_con {
 			tableCell.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
 
 			return tableCell;
-		});
-
-		recdate.setCellFactory(column -> {
-			TableCell<Amra_Trans, LocalDateTime> cell = new TableCell<Amra_Trans, LocalDateTime>() {
-				private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-
-				@Override
-				protected void updateItem(LocalDateTime item, boolean empty) {
-					super.updateItem(item, empty);
-					if (empty) {
-						setText(null);
-					} else {
-						setText(format.format(item));
-					}
-				}
-			};
-			return cell;
 		});
 
 		recdate.setCellFactory(column -> {
@@ -2174,7 +2152,7 @@ public class Tr_Am_View_con {
 
 				stage.setScene(new Scene(root));
 				stage.getIcons().add(new Image("icon.png"));
-				stage.setTitle("Атрибуты транзакции " + fn.get_checknumber());
+				stage.setTitle("Чеки оплаты транзакции " + fn.get_checknumber());
 				// stage.initModality(Modality.WINDOW_MODAL);
 				stage.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
 				stage.show();
@@ -2191,7 +2169,7 @@ public class Tr_Am_View_con {
 	}
 
 	// Найти загрузки
-	private void exec_filter(ObservableList<Amra_Trans> trData) /* throws Exception */ {
+	private void exec_filter(ObservableList<Amra_Trans> trData) throws Exception {
 		Runnable task = () -> {
 			trans_table.setItems(trData);
 			autoResizeColumns(trans_table);
@@ -2208,16 +2186,6 @@ public class Tr_Am_View_con {
 								return false;
 							}
 						});
-						Button bFilter = new Button("Filter Smith");
-						bFilter.setOnAction(new EventHandler<ActionEvent>() {
-							@Override
-							public void handle(ActionEvent e) {
-								System.out.println("Filter Smith");
-								// XXX Does not have any effect!?
-								tableFilter.executeFilter();
-							}
-						});
-						// trans_table.setItems(tableFilter.getFilteredList());
 					}
 				});
 
@@ -2279,12 +2247,10 @@ public class Tr_Am_View_con {
 						}
 					};
 
-					cell.setOnMouseClicked(value -> {
-						if (value.getClickCount() == 2) {
-							// System.out.println("<Double mouse click>");
-						}
-					});
-
+					/*
+					 * cell.setOnMouseClicked(value -> { if (value.getClickCount() == 2) { //
+					 * System.out.println("<Double mouse click>"); } });
+					 */
 					return cell;
 				});
 
@@ -2316,38 +2282,40 @@ public class Tr_Am_View_con {
 		 * trans_table.setOnKeyReleased((KeyEvent t)-> { KeyCode key=t.getCode();
 		 * ActionEvent l; if (key == KeyCode.F4){ view_unpivot2(actionEvent); } });
 		 */
+		try {
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					pb.setVisible(true);
+					search.setDisable(true);
+				}
+			});
 
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				pb.setVisible(true);
-				search.setDisable(true);
-			}
-		});
+			Task<List<Amra_Trans>> task = new Task<List<Amra_Trans>>() {
+				@Override
+				public ObservableList<Amra_Trans> call() throws Exception {
+					return TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(), FIO.getText(),
+							(inkass.isSelected()) ? true : false, (ret_pay.isSelected()) ? true : false,
+							terminal_name.getValue().toString());
+				}
+			};
 
-		Task<List<Amra_Trans>> task = new Task<List<Amra_Trans>>() {
-			@Override
-			public ObservableList<Amra_Trans> call() throws Exception {
-				return TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(), FIO.getText(),
-						(inkass.isSelected()) ? true : false, (ret_pay.isSelected()) ? true : false,
-						terminal_name.getValue().toString());
-			}
-		};
+			task.setOnFailed(e -> Alert(task.getException().getMessage()));
+			task.setOnSucceeded(e -> {
+				try {
+					exec_filter((ObservableList<Amra_Trans>) task.getValue());
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					Alert(e1.getMessage());
+					;
+				}
+			});
 
-		task.setOnFailed(e -> Alert(task.getException().getMessage()));
-		task.setOnSucceeded(e -> {
-			try {
-				exec_filter((ObservableList<Amra_Trans>) task.getValue());
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				Alert(e1.getMessage());
-				;
-			}
-		});
-
-		exec.execute(task);
-		/*-----------------------------------------*/
-
+			exec.execute(task);
+			/*-----------------------------------------*/
+		} catch (Exception e) {
+			Alert(e.getMessage());
+		}
 	}
 
 	public void Alert(String mes) {
@@ -2379,7 +2347,7 @@ public class Tr_Am_View_con {
 							| column.getText().equals("СуммаНК") | column.getText().equals("СуммаНаличных")
 							| column.getText().equals("СуммаСЧеков") | column.getText().equals("СуммаНалИзначальная")
 							| column.getText().equals("СуммаНаЧек")) {
-						//System.out.println(column.getText());
+						// System.out.println(column.getText());
 					} else {
 						// Minimal width = columnheader
 						Text t = new Text(column.getText());
@@ -2434,15 +2402,14 @@ public class Tr_Am_View_con {
 				}
 			};
 
-			checkBox.addEventFilter(MouseEvent.MOUSE_PRESSED,
-					event -> {
-						try {
-							validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							Alert(e.getMessage());
-						}
-					});
+			checkBox.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+				try {
+					validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					Alert(e.getMessage());
+				}
+			});
 
 			checkBox.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
 				if (event.getCode() == KeyCode.SPACE)
@@ -2537,15 +2504,14 @@ public class Tr_Am_View_con {
 				}
 			};
 
-			checkBox.addEventFilter(MouseEvent.MOUSE_PRESSED,
-					event -> {
-						try {
-							validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							Alert(e.getMessage());
-						}
-					});
+			checkBox.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+				try {
+					validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					Alert(e.getMessage());
+				}
+			});
 
 			checkBox.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
 				if (event.getCode() == KeyCode.SPACE)
@@ -2565,13 +2531,36 @@ public class Tr_Am_View_con {
 		all_sum_nal = 0;
 		all_sum = 0;
 		cnt = 0;
-		
+
 		summa_plat.setText(String.valueOf(all_sum));
 		summa_nal.setText(String.valueOf(all_sum_nal));
 		cnt_all_.setText(String.valueOf(cnt));
 		// trans_table.refresh();
 	}
-	
+
+	@FXML
+	void show_rel(ActionEvent event) {
+		Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
+		if (!(fn.get_checkparent() == null)) {
+			ObservableList<Amra_Trans> trData = TerminalDAO.Amra_Trans_rel(fn.get_checknumber(), fn.get_checkparent());
+			trans_table.setItems(trData);
+			autoResizeColumns(trans_table);
+			TableFilter.forTableView(trans_table).apply();
+			trans_table.refresh();
+		} else {
+			Alert("Нет родительской транзакции");
+		}
+
+	}
+
+	@FXML
+	private ContextMenu menubar;
+
+	@FXML
+	void show_deal_c(ActionEvent event) {
+
+	}
+
 	@FXML
 	void view_trn(ActionEvent event) {
 
@@ -2585,20 +2574,17 @@ public class Tr_Am_View_con {
 				@Override
 				public Object call() throws Exception {
 					try {
-						String call = "ifrun60.exe I:/KERNEL/operlist.fmx "+ Connect.userID_+"/"+Connect.userPassword_+"@ODB where=\""+
-								"ITRNNUM in (select t.ITRNNUM " + 
-								"  from trn t, z_sb_postdoc_amra_dbt g " + 
-								" where t.ITRNNUM(+) = g.KINDPAYMENT " + 
-								"   and exists " + 
-								" (select null " + 
-								"          from table(lob2table.separatedcolumns(paymentnumbers, " + 
-								"                                                chr(13) || chr(10), " + 
-								"                                                ';', " + 
-								"                                                '')) " + 
-								"         where COLUMN1 = '"+fn.get_checknumber()+"') " + 
-								"   and sess_id = "+fn.get_sess_id()+")\"";
-						ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c",call);
-						//System.out.println(call);
+						String call = "ifrun60.exe I:/KERNEL/operlist.fmx " + Connect.userID_ + "/"
+								+ Connect.userPassword_ + "@ODB where=\"" + "ITRNNUM in (select t.ITRNNUM "
+								+ "  from trn t, z_sb_postdoc_amra_dbt g " + " where t.ITRNNUM(+) = g.KINDPAYMENT "
+								+ "   and exists " + " (select null "
+								+ "          from table(lob2table.separatedcolumns(paymentnumbers, "
+								+ "                                                chr(13) || chr(10), "
+								+ "                                                ';', "
+								+ "                                                '')) " + "         where COLUMN1 = '"
+								+ fn.get_checknumber() + "') " + "   and sess_id = " + fn.get_sess_id() + ")\"";
+						ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", call);
+						// System.out.println(call);
 						builder.redirectErrorStream(true);
 						Process p;
 						p = builder.start();
@@ -2624,7 +2610,6 @@ public class Tr_Am_View_con {
 			exec.execute(task);
 		}
 	}
-	 
 
 	@FXML
 	private void view_unpivot(ActionEvent actionEvent) {

@@ -242,6 +242,30 @@ public class TerminalDAO {
 	}
 
 	// *******************************
+	// SELECT REL
+	// *******************************
+	public static ObservableList<Amra_Trans> Amra_Trans_rel(String chk,String chkper) {
+
+		
+		String selectStmt = "select rownum,t.*\n" + 
+				"  from Z_SB_TRANSACT_AMRA_DBT t\n" + 
+				" where t.checknumber = '"+chk+"'\n" + 
+				"    or t.checknumber = '"+chkper+"'";
+
+		// Execute SELECT statement
+
+		// Get ResultSet from dbExecuteQuery method
+		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
+
+		// Send ResultSet to the getEmployeeList method and get employee object
+		ObservableList<Amra_Trans> empList = get_amra_trans(rsEmps);
+
+		
+		// Return employee object
+		return empList;
+	}
+	
+	// *******************************
 	// SELECT FN_SESS
 	// *******************************
 	public static ObservableList<Amra_Trans> Amra_Trans_(
