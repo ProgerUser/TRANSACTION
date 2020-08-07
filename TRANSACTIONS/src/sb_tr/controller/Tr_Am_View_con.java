@@ -403,7 +403,7 @@ public class Tr_Am_View_con {
 	@FXML
 	private AnchorPane anch_b4;
 
-	private void validate(CheckBox checkBox, Amra_Trans item, Event event) {
+	private void validate(CheckBox checkBox, Amra_Trans item, Event event) throws Exception {
 		// Validate here
 		event.consume();
 		/*
@@ -416,9 +416,12 @@ public class Tr_Am_View_con {
 		 * checkBox.setSelected(!checkBox.isSelected()); }
 		 */
 		if (!checkBox.isSelected()) {
-			if (!summa_plat.getText().equals("")|!summa_plat.getText().equals("0")) {
-				all_sum_nal = Double.parseDouble(summa_nal.getText().replace(",", ".").replace("†", "")) + item.cashamountProperty().getValue();
-				all_sum = Double.parseDouble(summa_plat.getText().replace(",", ".").replace("†", "")) + item.amountofpaymentProperty().getValue();
+			if (!summa_plat.getText().equals("") | !summa_plat.getText().equals("0")
+					| !summa_plat.getText().trim().isEmpty()) {
+				all_sum_nal = Double.parseDouble(summa_nal.getText().replace(",", ".").replace("†", ""))
+						+ item.cashamountProperty().getValue();
+				all_sum = Double.parseDouble(summa_plat.getText().replace(",", ".").replace("†", ""))
+						+ item.amountofpaymentProperty().getValue();
 				cnt = Integer.parseInt(cnt_all_.getText()) + 1;
 
 				String pattern = "###,###.###";
@@ -430,7 +433,7 @@ public class Tr_Am_View_con {
 				summa_nal.setText(format_nal);
 				checkBox.setSelected(true);
 				System.out.println("Check=" + item.get_chk_row());
-			}else {
+			} else {
 				all_sum_nal = all_sum_nal + item.cashamountProperty().getValue();
 				all_sum = all_sum + item.amountofpaymentProperty().getValue();
 				cnt = cnt + 1;
@@ -447,9 +450,12 @@ public class Tr_Am_View_con {
 			}
 
 		} else {
-			if (!summa_plat.getText().equals("")|!summa_plat.getText().equals("0")) {
-				all_sum_nal = Double.parseDouble(summa_nal.getText().replace(",", ".").replace("†", "")) - item.cashamountProperty().getValue();
-				all_sum = Double.parseDouble(summa_plat.getText().replace(",", ".").replace("†", "")) - item.amountofpaymentProperty().getValue();
+			if (!summa_plat.getText().equals("") | summa_plat.getText().equals("0")
+					| !summa_plat.getText().trim().isEmpty()) {
+				all_sum_nal = Double.parseDouble(summa_nal.getText().replace(",", ".").replace("†", ""))
+						- item.cashamountProperty().getValue();
+				all_sum = Double.parseDouble(summa_plat.getText().replace(",", ".").replace("†", ""))
+						- item.amountofpaymentProperty().getValue();
 				cnt = Integer.parseInt(cnt_all_.getText()) - 1;
 
 				String pattern = "###,###.###";
@@ -461,7 +467,7 @@ public class Tr_Am_View_con {
 				summa_nal.setText(format_nal);
 				checkBox.setSelected(false);
 				System.out.println("Check=" + item.get_chk_row());
-			}else {
+			} else {
 				all_sum_nal = all_sum_nal - item.cashamountProperty().getValue();
 				all_sum = all_sum - item.amountofpaymentProperty().getValue();
 				cnt = cnt - 1;
@@ -477,9 +483,9 @@ public class Tr_Am_View_con {
 				System.out.println("Check=" + item.get_chk_row());
 			}
 
-			//item.set_chk_row(false);
+			// item.set_chk_row(false);
 		}
-		//trans_table.refresh();
+		// trans_table.refresh();
 	}
 
 	@FXML
@@ -587,23 +593,31 @@ public class Tr_Am_View_con {
 		// chk_row.setCellFactory(p -> new CheckBoxTableCell<>());
 
 		/*
-		trans_table.setRowFactory(row -> new TableRow<Amra_Trans>() {
-			@Override
-			public void updateItem(Amra_Trans item, boolean empty) {
-				super.updateItem(item, empty);
-
-				if (item == null || empty) {
-					setStyle("");
-				} else {
-					// Now 'item' has all the info of the Person in this row
-					if (chk_row.getCellData(item)) {
-						setStyle("-fx-background-color: tomato;");
-					} else {
-					}
-				}
-			}
-		});
-		*/
+		 * trans_table.setRowFactory(row -> new TableRow<Amra_Trans>() {
+		 * 
+		 * @Override public void updateItem(Amra_Trans item, boolean empty) {
+		 * super.updateItem(item, empty);
+		 * 
+		 * if (item == null || empty) { setStyle(""); } else { // Now 'item' has all the
+		 * info of the Person in this row if (chk_row.getCellData(item)) {
+		 * setStyle("-fx-background-color: tomato;"); } else { } } } });
+		 */
+		/*
+		 * chk_row.setCellFactory(column -> { return new TableCell<Amra_Trans,
+		 * Boolean>() {
+		 * 
+		 * @Override protected void updateItem(Boolean item, boolean empty) {
+		 * super.updateItem(item, empty);
+		 * 
+		 * setText(empty ? "" : getItem().toString()); setGraphic(null);
+		 * 
+		 * TableRow<Amra_Trans> currentRow = getTableRow();
+		 * 
+		 * if (!isEmpty()) {
+		 * 
+		 * if(item.equals("a")) currentRow.setStyle("-fx-background-color:lightcoral");
+		 * else currentRow.setStyle("-fx-background-color:lightgreen"); } } }; });
+		 */
 		chk_row.setCellFactory(p -> {
 			CheckBox checkBox = new CheckBox();
 			TableCell<Amra_Trans, Boolean> tableCell = new TableCell<Amra_Trans, Boolean>() {
@@ -615,16 +629,36 @@ public class Tr_Am_View_con {
 					} else {
 						setGraphic(checkBox);
 						checkBox.setSelected(item);
+						if (checkBox.isSelected()) {
+							TableRow<Amra_Trans> currentRow = getTableRow();
+							currentRow.setStyle("-fx-background-color:tomato;");
+						} else {
+							TableRow<Amra_Trans> currentRow = getTableRow();
+							currentRow.setStyle("");
+						}
+
 					}
 				}
 			};
 
 			checkBox.addEventFilter(MouseEvent.MOUSE_PRESSED,
-					event -> validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event));
+					event -> {
+						try {
+							validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							Alert(e.getMessage());
+						}
+					});
 
 			checkBox.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
 				if (event.getCode() == KeyCode.SPACE)
-					validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
+					try {
+						validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						Alert(e.getMessage());
+					}
 			});
 
 			tableCell.setAlignment(Pos.CENTER);
@@ -2342,7 +2376,7 @@ public class Tr_Am_View_con {
 							| column.getText().equals("—ÛÏÏ‡Õ ") | column.getText().equals("—ÛÏÏ‡Õ‡ÎË˜Ì˚ı")
 							| column.getText().equals("—ÛÏÏ‡—◊ÂÍÓ‚") | column.getText().equals("—ÛÏÏ‡Õ‡Î»ÁÌ‡˜‡Î¸Ì‡ˇ")
 							| column.getText().equals("—ÛÏÏ‡Õ‡◊ÂÍ")) {
-						System.out.println(column.getText());
+						//System.out.println(column.getText());
 					} else {
 						// Minimal width = columnheader
 						Text t = new Text(column.getText());
@@ -2398,11 +2432,23 @@ public class Tr_Am_View_con {
 			};
 
 			checkBox.addEventFilter(MouseEvent.MOUSE_PRESSED,
-					event -> validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event));
+					event -> {
+						try {
+							validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							Alert(e.getMessage());
+						}
+					});
 
 			checkBox.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
 				if (event.getCode() == KeyCode.SPACE)
-					validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
+					try {
+						validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						Alert(e.getMessage());
+					}
 			});
 
 			tableCell.setAlignment(Pos.CENTER);
@@ -2415,7 +2461,7 @@ public class Tr_Am_View_con {
 		all_sum_nal = 0;
 		all_sum = 0;
 		cnt = 0;
-		
+
 		trans_table.getColumns().stream().forEach((column) -> {
 			if (column.getText().equals("—ÛÏÏ‡œÎ‡ÚÂÊ‡")) {
 				for (int i = 0; i < trans_table.getItems().size(); i++) {
@@ -2444,7 +2490,7 @@ public class Tr_Am_View_con {
 		all_sum = 0;
 		cnt = 0;
 
-		//trans_table.refresh();
+		// trans_table.refresh();
 	}
 
 	@FXML
@@ -2489,11 +2535,23 @@ public class Tr_Am_View_con {
 			};
 
 			checkBox.addEventFilter(MouseEvent.MOUSE_PRESSED,
-					event -> validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event));
+					event -> {
+						try {
+							validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							Alert(e.getMessage());
+						}
+					});
 
 			checkBox.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
 				if (event.getCode() == KeyCode.SPACE)
-					validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
+					try {
+						validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						Alert(e.getMessage());
+					}
 			});
 
 			tableCell.setAlignment(Pos.CENTER);
@@ -2501,15 +2559,14 @@ public class Tr_Am_View_con {
 			tableCell.setItem(false);
 			return tableCell;
 		});
-
-		summa_plat.setText("");
-		summa_nal.setText("");
-		cnt_all_.setText("");
-
 		all_sum_nal = 0;
 		all_sum = 0;
 		cnt = 0;
-		//trans_table.refresh();
+		
+		summa_plat.setText(String.valueOf(all_sum));
+		summa_nal.setText(String.valueOf(all_sum_nal));
+		cnt_all_.setText(String.valueOf(cnt));
+		// trans_table.refresh();
 	}
 
 	@FXML
