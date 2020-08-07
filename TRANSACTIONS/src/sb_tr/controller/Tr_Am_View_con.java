@@ -432,7 +432,7 @@ public class Tr_Am_View_con {
 				summa_plat.setText(String.valueOf(format));
 				summa_nal.setText(format_nal);
 				checkBox.setSelected(true);
-				System.out.println("Check=" + item.get_chk_row());
+				//System.out.println("Check=" + item.get_chk_row());
 			} else {
 				all_sum_nal = all_sum_nal + item.cashamountProperty().getValue();
 				all_sum = all_sum + item.amountofpaymentProperty().getValue();
@@ -446,7 +446,7 @@ public class Tr_Am_View_con {
 				summa_plat.setText(String.valueOf(format));
 				summa_nal.setText(format_nal);
 				checkBox.setSelected(true);
-				System.out.println("Check=" + item.get_chk_row());
+				//System.out.println("Check=" + item.get_chk_row());
 			}
 
 		} else {
@@ -466,7 +466,7 @@ public class Tr_Am_View_con {
 				summa_plat.setText(String.valueOf(format));
 				summa_nal.setText(format_nal);
 				checkBox.setSelected(false);
-				System.out.println("Check=" + item.get_chk_row());
+				//System.out.println("Check=" + item.get_chk_row());
 			} else {
 				all_sum_nal = all_sum_nal - item.cashamountProperty().getValue();
 				all_sum = all_sum - item.amountofpaymentProperty().getValue();
@@ -480,7 +480,7 @@ public class Tr_Am_View_con {
 				summa_plat.setText(String.valueOf(format));
 				summa_nal.setText(format_nal);
 				checkBox.setSelected(false);
-				System.out.println("Check=" + item.get_chk_row());
+				//System.out.println("Check=" + item.get_chk_row());
 			}
 
 			// item.set_chk_row(false);
@@ -1190,6 +1190,9 @@ public class Tr_Am_View_con {
 						.set_status(t.getNewValue());
 			}
 		});
+		cnt_all_.setText(String.valueOf(0));
+		summa_plat.setText(String.valueOf(0));
+		summa_nal.setText(String.valueOf(0));
 
 		try {
 			/*
@@ -2568,6 +2571,60 @@ public class Tr_Am_View_con {
 		cnt_all_.setText(String.valueOf(cnt));
 		// trans_table.refresh();
 	}
+	
+	@FXML
+	void view_trn(ActionEvent event) {
+
+		if (trans_table.getSelectionModel().getSelectedItem() == null) {
+			Alerts("Выберите сначала данные из таблицы!");
+		} else {
+
+			Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
+			pb.setVisible(true);
+			Task<Object> task = new Task<Object>() {
+				@Override
+				public Object call() throws Exception {
+					try {
+						String call = "ifrun60.exe I:/KERNEL/operlist.fmx "+ Connect.userID_+"/"+Connect.userPassword_+"@ODB where=\""+
+								"ITRNNUM in (select t.ITRNNUM " + 
+								"  from trn t, z_sb_postdoc_amra_dbt g " + 
+								" where t.ITRNNUM(+) = g.KINDPAYMENT " + 
+								"   and exists " + 
+								" (select null " + 
+								"          from table(lob2table.separatedcolumns(paymentnumbers, " + 
+								"                                                chr(13) || chr(10), " + 
+								"                                                ';', " + 
+								"                                                '')) " + 
+								"         where COLUMN1 = '"+fn.get_checknumber()+"') " + 
+								"   and sess_id = "+fn.get_sess_id()+")\"";
+						ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c",call);
+						//System.out.println(call);
+						builder.redirectErrorStream(true);
+						Process p;
+						p = builder.start();
+						BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+						String line;
+						while (true) {
+							line = r.readLine();
+							if (line == null) {
+								break;
+							}
+							System.out.println(line);
+						}
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						Alerts(e.getMessage());
+					}
+					return null;
+				}
+			};
+			task.setOnFailed(e -> Alert(task.getException().getMessage()));
+			task.setOnSucceeded(e -> pb.setVisible(false));
+
+			exec.execute(task);
+		}
+	}
+	 
 
 	@FXML
 	private void view_unpivot(ActionEvent actionEvent) {

@@ -68,6 +68,13 @@
     -fx-background-position:center;
 }
 
+#trn_ {          
+    -fx-background-image: url("trn_.png");
+    -fx-background-size: 25.0 25.0;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position:center;
+}
+
 #separate {          
     -fx-background-image: url("separate.png");
     -fx-background-size: 25.0 25.0;

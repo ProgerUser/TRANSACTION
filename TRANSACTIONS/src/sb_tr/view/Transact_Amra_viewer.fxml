@@ -259,6 +259,14 @@
 						<Font size="14.0" />
 					</font>
 				</Button>
+            <Button fx:id="trn_" layoutX="831.0" layoutY="16.0" minHeight="30.0" mnemonicParsing="false" onAction="#view_trn" prefWidth="30.0">
+            				<tooltip>
+						<Tooltip text="Реестр документов" />
+					</tooltip>
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
 			</children>
 		</AnchorPane>
 	</top>
