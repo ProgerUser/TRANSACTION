@@ -622,46 +622,6 @@ public class Tr_Am_View_con {
 		 * else currentRow.setStyle("-fx-background-color:lightgreen"); } } }; });
 		 */
 
-		chk_row.setCellFactory(p -> {
-			CheckBox checkBox = new CheckBox();
-			TableCell<Amra_Trans, Boolean> tableCell = new TableCell<Amra_Trans, Boolean>() {
-				@Override
-				protected void updateItem(Boolean item, boolean empty) {
-					super.updateItem(item, empty);
-					if (empty || item == null) {
-						setGraphic(null);
-					} else {
-						setGraphic(checkBox);
-						checkBox.setSelected(item);
-					}
-				}
-			};
-
-			checkBox.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-				try {
-					validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					Alert(e.getMessage());
-				}
-			});
-
-			checkBox.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-				if (event.getCode() == KeyCode.SPACE)
-					try {
-						validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						Alert(e.getMessage());
-					}
-			});
-
-			tableCell.setAlignment(Pos.CENTER);
-			tableCell.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-
-			return tableCell;
-		});
-
 		recdate.setCellFactory(column -> {
 			TableCell<Amra_Trans, LocalDateTime> cell = new TableCell<Amra_Trans, LocalDateTime>() {
 				private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
@@ -798,6 +758,46 @@ public class Tr_Am_View_con {
 				((Amra_Trans) t.getTableView().getItems().get(t.getTablePosition().getRow())).set_vk(t.getNewValue());
 			}
 		});
+		chk_row.setCellFactory(p -> {
+			CheckBox checkBox = new CheckBox();
+			TableCell<Amra_Trans, Boolean> tableCell = new TableCell<Amra_Trans, Boolean>() {
+				@Override
+				protected void updateItem(Boolean item, boolean empty) {
+					super.updateItem(item, empty);
+					if (empty || item == null) {
+						setGraphic(null);
+					} else {
+						setGraphic(checkBox);
+						checkBox.setSelected(item);
+					}
+				}
+			};
+
+			checkBox.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+				try {
+					validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					Alert(e.getMessage());
+				}
+			});
+
+			checkBox.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+				if (event.getCode() == KeyCode.SPACE)
+					try {
+						validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						Alert(e.getMessage());
+					}
+			});
+
+			tableCell.setAlignment(Pos.CENTER);
+			tableCell.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+
+			return tableCell;
+		});
+
 		/*
 		 * dateofoperation.setOnEditCommit(new EventHandler<CellEditEvent<Amra_Trans,
 		 * String>>() {
@@ -2557,8 +2557,20 @@ public class Tr_Am_View_con {
 	private ContextMenu menubar;
 
 	@FXML
-	void show_deal_c(ActionEvent event) {
+	void jasperkinder(ActionEvent event) {
+		pb.setVisible(true);
+		Task<Object> task = new Task<Object>() {
+			@Override
+			public Object call() throws Exception {
+				Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
+				new PrintCheck().showReport(String.valueOf(fn.get_checknumber()), String.valueOf(fn.get_sess_id()));
+				return null;
+			}
+		};
+		task.setOnFailed(e -> Alert(task.getException().getMessage()));
+		task.setOnSucceeded(e -> pb.setVisible(false));
 
+		exec.execute(task);
 	}
 
 	@FXML

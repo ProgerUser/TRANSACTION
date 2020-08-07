@@ -1,8 +1,9 @@
 package sb_tr;
 
-import java.io.File;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.xml.DOMConfigurator;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -14,10 +15,13 @@ import javafx.stage.Stage;
 import sb_tr.model.Connect;
 import sb_tr.util.DBUtil;
 
-//Main class which extends from Application Class
+
 
 public class Main extends Application {
 
+	// Define a static logger variable so that it references the
+	// Logger instance named "MyApp".
+	public static Logger logger = Logger.getLogger(Main.class);
 	// This is our PrimaryStage (It contains everything)
 	public Stage primaryStage;
 
@@ -27,6 +31,12 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 
+		/* log4j */
+		String log4jConfigFile = System.getenv("TRANSACT_PATH")+"log4j.xml";
+		System.out.print(log4jConfigFile+"\r\n");
+		DOMConfigurator.configure(log4jConfigFile);
+		logger.info("Transact Start: " + Thread.currentThread().getName());
+        
 		// 1) Declare a primary stage (Everything will be on this stage)
 		this.primaryStage = primaryStage;
 
@@ -41,7 +51,7 @@ public class Main extends Application {
 		// 3) Display the EmployeeOperations View
 		// showEmployeeView();
 
-		
+		/*
 		if (Connect.userID_ != null) { // primaryStage.setMaximized(true);
 			primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
 			DBUtil.dbConnect();
@@ -49,13 +59,13 @@ public class Main extends Application {
 		} else {
 			Enter();
 		}
-		
-		
-		/*
-		  Connect.connectionURL_ = "10.111.64.21:1521/odb"; Connect.userID_ =
-		  "AMRA_IMPORT"; Connect.userPassword_ = "xxx"; DBUtil.dbConnect();
-		  showFirst();
 		*/
+		
+		
+		  Connect.connectionURL_ = "10.111.64.21:1521/odb"; Connect.userID_ =
+		  "AMRA_IMPORT"; Connect.userPassword_ = "ver8i"; DBUtil.dbConnect();
+		  showFirst();
+		
 		
 		primaryStage.setOnCloseRequest(e -> {
 			DBUtil.dbDisconnect();

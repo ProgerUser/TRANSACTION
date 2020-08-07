@@ -19,6 +19,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.swing.JRViewer;
+import sb_tr.Main;
 import sb_tr.util.DBUtil;
 
 public class PrintCheck extends JFrame {
@@ -139,6 +140,7 @@ public class PrintCheck extends JFrame {
 			alert.setHeaderText(null);
 			alert.setContentText(e.getMessage());
 			alert.showAndWait();
+			Main.logger.error(e.getMessage() + Thread.currentThread().getName());
 		}
 	}
 }

@@ -105,6 +105,7 @@
                   <ContextMenu fx:id="menubar">
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#show_rel" text="Связанные" />
+                        <MenuItem mnemonicParsing="false" onAction="#jasperkinder" text="Печать Детсад Jasper" />
                     </items>
                   </ContextMenu>
                </contextMenu>

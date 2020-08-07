@@ -4,7 +4,7 @@
 	<classpathentry kind="src" path="css"/>
 	<classpathentry kind="src" path="png"/>
 	<classpathentry kind="src" path="JasperReportFile"/>
-	<classpathentry kind="src" path="rep"/>
+	<classpathentry kind="src" path="resources"/>
 	<classpathentry kind="lib" path="lib/ojdbc6-11.2.0.3.jar"/>
 	<classpathentry kind="lib" path="out/artifacts/JavaFXApp/JavaFXApp.jar"/>
 	<classpathentry kind="lib" path="D:/Users/saidp/git/TRANSACTION/TRANSACTIONS/commons-logging-1.2.jar"/>
@@ -102,5 +102,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_231"/>
 	<classpathentry kind="lib" path="D:/Users/saidp/git/TRANSACTION/TRANSACTIONS/lib/gembox-spreadsheet_.jar"/>
 	<classpathentry kind="lib" path="D:/Users/saidp/Desktop/JAR - копия/controlsfx-8.40.12.jar"/>
+	<classpathentry kind="lib" path="D:/Users/saidp/git/TRANSACTION/TRANSACTIONS/lib/log4j-1.2.17.jar"/>
 	<classpathentry kind="output" path="out/production/First_JavaFX_Project"/>
 </classpath>
