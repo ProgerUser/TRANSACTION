@@ -3,6 +3,7 @@ package sb_tr.controller;
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.concurrent.Service;
@@ -96,6 +97,7 @@ import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -104,12 +106,14 @@ import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -147,10 +151,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
-import com.gembox.spreadsheet.ExcelFile;
-import com.gembox.spreadsheet.ExcelWorksheet;
-import com.gembox.spreadsheet.SpreadsheetInfo;
 import com.sun.prism.impl.Disposer.Record;
 
 /**
@@ -159,10 +159,6 @@ import com.sun.prism.impl.Disposer.Record;
 
 @SuppressWarnings("unused")
 public class Tr_Am_View_con {
-
-	static {
-		SpreadsheetInfo.setLicense("FREE-LIMITED-KEY");
-	}
 
 	@FXML
 	private TableColumn<Amra_Trans, String> filetransactions;
@@ -435,7 +431,9 @@ public class Tr_Am_View_con {
 				summa_plat.setText(String.valueOf(format));
 				summa_nal.setText(format_nal);
 				checkBox.setSelected(true);
+
 				// System.out.println("Check=" + item.get_chk_row());
+
 			} else {
 				all_sum_nal = all_sum_nal + item.cashamountProperty().getValue();
 				all_sum = all_sum + item.amountofpaymentProperty().getValue();
@@ -451,6 +449,7 @@ public class Tr_Am_View_con {
 				checkBox.setSelected(true);
 				// System.out.println("Check=" + item.get_chk_row());
 			}
+			// item.set_chk_row(true);
 
 		} else {
 			if (!summa_plat.getText().equals("") | summa_plat.getText().equals("0")
@@ -1791,6 +1790,12 @@ public class Tr_Am_View_con {
 		}
 	}
 
+	public void excel_exportsbe(File file, String mess) {
+		Alerts(mess);
+		pb.setVisible(false);
+		xlsx.setDisable(false);
+	}
+
 	public void excel_exportsb(File file) {
 		Alerts("‘айл сформирован в папку " + file.getPath());
 		pb.setVisible(false);
@@ -1799,12 +1804,11 @@ public class Tr_Am_View_con {
 
 	public int excel_exports(File file) throws FileNotFoundException, IOException, ParseException {
 		if (file != null) {
-			HSSFWorkbook workbook = new HSSFWorkbook();
-			HSSFSheet spreadsheet = workbook.createSheet("“аблица");
-
+			XSSFWorkbook workbook = new XSSFWorkbook();
+			XSSFSheet spreadsheet = workbook.createSheet("“аблица");
 			Row row = spreadsheet.createRow(0);
 
-			CellStyle cellStyle_border_d = workbook.createCellStyle();
+			XSSFCellStyle cellStyle_border_d = workbook.createCellStyle();
 			cellStyle_border_d.setBorderTop(BorderStyle.THIN);
 			cellStyle_border_d.setBorderBottom(BorderStyle.THIN);
 			cellStyle_border_d.setBorderLeft(BorderStyle.THIN);
@@ -1812,13 +1816,29 @@ public class Tr_Am_View_con {
 			CreationHelper createHelper = workbook.getCreationHelper();
 			cellStyle_border_d.setDataFormat(createHelper.createDataFormat().getFormat("dd.mm.yyyy HH:mm:ss"));
 
-			CellStyle cellStyle_border = workbook.createCellStyle();
+			XSSFCellStyle style = spreadsheet.getWorkbook().createCellStyle();
+			style.setBorderTop(BorderStyle.THIN);
+			style.setBorderLeft(BorderStyle.THIN);
+			style.setBorderRight(BorderStyle.THIN);
+			style.setBorderBottom(BorderStyle.THIN);
+			style.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
+			style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+			XSSFCellStyle style_sb = spreadsheet.getWorkbook().createCellStyle();
+			style_sb.setBorderTop(BorderStyle.THIN);
+			style_sb.setBorderLeft(BorderStyle.THIN);
+			style_sb.setBorderRight(BorderStyle.THIN);
+			style_sb.setBorderBottom(BorderStyle.THIN);
+			style_sb.setFillForegroundColor(IndexedColors.GREEN.getIndex());
+			style_sb.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+			XSSFCellStyle cellStyle_border = workbook.createCellStyle();
 			cellStyle_border.setBorderTop(BorderStyle.THIN);
 			cellStyle_border.setBorderBottom(BorderStyle.THIN);
 			cellStyle_border.setBorderLeft(BorderStyle.THIN);
 			cellStyle_border.setBorderRight(BorderStyle.THIN);
 
-			HSSFFont defaultFont = workbook.createFont();
+			XSSFFont defaultFont = workbook.createFont();
 			defaultFont.setFontHeightInPoints((short) 12);
 			defaultFont.setFontName("Arial");
 			defaultFont.setColor(IndexedColors.BLACK.getIndex());
@@ -1833,16 +1853,11 @@ public class Tr_Am_View_con {
 			cellStyle_border_for_cell.setFont(defaultFont);
 
 			for (int j = 0; j < trans_table.getColumns().size(); j++) {
-				if (j > 0) {
-					row.createCell(j).setCellValue(trans_table.getColumns().get(j).getText());
-					row.getCell(j).setCellStyle(cellStyle_border_for_cell);
-				}
-
+				row.createCell(j).setCellValue(trans_table.getColumns().get(j).getText());
+				row.getCell(j).setCellStyle(cellStyle_border_for_cell);
 			}
 
-			int num = 0;
 			for (int i = 0; i < trans_table.getItems().size(); i++) {
-				num++;
 				row = spreadsheet.createRow(i + 1);
 				for (int j = 0; j < trans_table.getColumns().size(); j++) {
 					if (trans_table.getColumns().get(j).getCellData(i) != null) {
@@ -1856,7 +1871,7 @@ public class Tr_Am_View_con {
 
 							row.createCell(j).setCellValue(parsedDate);
 							row.getCell(j).setCellStyle(cellStyle_border_d);
-						} else if (j == 3) {
+						} else if (j == 24) {
 							LocalDateTime now = (LocalDateTime) trans_table.getColumns().get(j).getCellData(i);
 							DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.mm.yyyy HH:mm:ss");
 							String formatDateTime = now.format(formatter);
@@ -1866,27 +1881,46 @@ public class Tr_Am_View_con {
 
 							row.createCell(j).setCellValue(parsedDate);
 							row.getCell(j).setCellStyle(cellStyle_border_d);
-
-						} else if (j >= 9 & j <= 15) {
+						} else if (j >= 8 & j <= 14) {
 							row.createCell(j).setCellValue(
 									Double.valueOf(trans_table.getColumns().get(j).getCellData(i).toString()));
 							row.getCell(j).setCellStyle(cellStyle_border);
+						} else if (j == 1) {
+							row.createCell(j).setCellValue(trans_table.getColumns().get(j).getCellData(i).toString());
+							if (trans_table.getColumns().get(j).getCellData(i).toString().length() == 20) {
+								row.getCell(j).setCellStyle(style);
+							} else {
+								row.getCell(j).setCellStyle(cellStyle_border);
+							}
+						} else if (j == 3) {
+							row.createCell(j).setCellValue(trans_table.getColumns().get(j).getCellData(i).toString());
+							if (trans_table.getColumns().get(j).getCellData(i).toString().equals("00")) {
+								row.getCell(j).setCellStyle(style);
+							} else {
+								row.getCell(j).setCellStyle(cellStyle_border);
+							}
+						} else if (j == 6) {
+							row.createCell(j).setCellValue(trans_table.getColumns().get(j).getCellData(i).toString());
+							if (trans_table.getColumns().get(j).getCellData(i).toString().equals("—берЅанк")) {
+								row.getCell(j).setCellStyle(style_sb);
+							} else {
+								row.getCell(j).setCellStyle(cellStyle_border);
+							}
+
 						} else {
 							row.createCell(j).setCellValue(trans_table.getColumns().get(j).getCellData(i).toString());
 							row.getCell(j).setCellStyle(cellStyle_border);
 						}
 					} else {
-						if (j != 0) {
-							row.createCell(j).setCellValue("");
-						}
-
+						row.createCell(j).setCellValue("");
+						row.getCell(j).setCellStyle(cellStyle_border);
 					}
 					spreadsheet.autoSizeColumn(i);
 				}
 			}
+			spreadsheet.setAutoFilter(CellRangeAddress.valueOf("A1:AA" + trans_table.getItems().size()));
 			workbook.write(new FileOutputStream(file.getPath()));
 			workbook.close();
-			// spreadsheet.setAutoFilter(CellRangeAddress.valueOf("B1:AA" + num + ""));
 		}
 		return 0;
 	}
@@ -1897,7 +1931,7 @@ public class Tr_Am_View_con {
 		System.setProperty("javax.xml.transform.TransformerFactory",
 				"com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl");
 		// Set extension filter for text files
-		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel File", "*.xls");
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel File", "*.xlsx");
 		fileChooser.getExtensionFilters().add(extFilter);
 		fileChooser.setInitialFileName("“ранзакции " + dt1.getValue() + "-" + dt2.getValue());
 		// Show save file dialog
@@ -1918,7 +1952,7 @@ public class Tr_Am_View_con {
 				}
 			};
 
-			task.setOnFailed(e -> Alert(task.getException().getMessage()));
+			task.setOnFailed(e -> excel_exportsbe(file, task.getException().getMessage()));
 			task.setOnSucceeded(e -> excel_exportsb(file));
 			exec.execute(task);
 		}
@@ -2196,6 +2230,7 @@ public class Tr_Am_View_con {
 						if (empty || item == null) {
 							setText(null);
 							setGraphic(null);
+							setStyle("");
 						} else {
 							setText(item.toString());
 							if (item.equals("—берЅанк")) {
@@ -2214,14 +2249,59 @@ public class Tr_Am_View_con {
 						if (empty || item == null) {
 							setText(null);
 							setGraphic(null);
+							setStyle("");
 						} else {
 							setText(item.toString());
 							if (item.contains("SB")) {
+								setStyle("");
+								/*
+								 * setStyle("-fx-background-color: rgb(210, 236, 126);" +
+								 * "-fx-border-color:black;" + " -fx-border-width :  1 1 1 1 ");
+								 */
+							} else {
+								setStyle("-fx-background-color: rgb(169, 53, 107);" + "-fx-border-color:black;"
+										+ " -fx-border-width :  1 1 1 1 ");
+							}
+						}
+					}
+				});
+
+				dealer.setCellFactory(col -> new TextFieldTableCell<Amra_Trans, String>() {
+					@Override
+					public void updateItem(String item, boolean empty) {
+						super.updateItem(item, empty);
+						if (empty || item == null) {
+							setText(null);
+							setGraphic(null);
+							setStyle("");
+						} else {
+							setText(item.toString());
+							if (item.contains("—берЅанк")) {
 								setStyle("-fx-background-color: rgb(210, 236, 126);" + "-fx-border-color:black;"
 										+ " -fx-border-width :  1 1 1 1 ");
 							} else {
 								setStyle("-fx-background-color: rgb(169, 53, 107);" + "-fx-border-color:black;"
 										+ " -fx-border-width :  1 1 1 1 ");
+							}
+						}
+					}
+				});
+
+				checkparent.setCellFactory(col -> new TextFieldTableCell<Amra_Trans, String>() {
+					@Override
+					public void updateItem(String item, boolean empty) {
+						super.updateItem(item, empty);
+						if (empty || item == null) {
+							setText(null);
+							setGraphic(null);
+							setStyle("");
+						} else {
+							setText(item.toString());
+							if (item.toString().length() == 20) {
+								setStyle("-fx-background-color: #F9E02C;" + "-fx-border-color:black;"
+										+ " -fx-border-width :  1 1 1 1 ");
+							} else {
+								setStyle("");
 							}
 						}
 					}
@@ -2235,6 +2315,7 @@ public class Tr_Am_View_con {
 							if (empty || item == null) {
 								setText(null);
 								setGraphic(null);
+								setStyle("");
 							} else {
 								setText(item.toString());
 								if (item.equals("00")) {
@@ -2343,15 +2424,19 @@ public class Tr_Am_View_con {
 				table.getColumns().stream().forEach((column) -> {
 					if (column.getText().equals("sess_id")) {
 
-					} else if (column.getText().equals("—уммаѕлатежа") | column.getText().equals("—умма омиссии")
-							| column.getText().equals("—уммаЌ ") | column.getText().equals("—уммаЌаличных")
-							| column.getText().equals("—умма—„еков") | column.getText().equals("—уммаЌал»значальна€")
-							| column.getText().equals("—уммаЌа„ек")) {
-						// System.out.println(column.getText());
-					} else {
+					} /*
+						 * else if (column.getText().equals("—уммаѕлатежа") |
+						 * column.getText().equals("—умма омиссии") | column.getText().equals("—уммаЌ ")
+						 * | column.getText().equals("—уммаЌаличных") |
+						 * column.getText().equals("—умма—„еков") |
+						 * column.getText().equals("—уммаЌал»значальна€") |
+						 * column.getText().equals("—уммаЌа„ек")) { //
+						 * System.out.println(column.getText()); }
+						 */else {
 						// Minimal width = columnheader
 						Text t = new Text(column.getText());
 						double max = t.getLayoutBounds().getWidth();
+
 						for (int i = 0; i < table.getItems().size(); i++) {
 							// cell must not be empty
 							if (column.getCellData(i) != null) {
@@ -2364,7 +2449,7 @@ public class Tr_Am_View_con {
 							}
 						}
 						// set the new max-widht with some extra space
-						column.setPrefWidth(max + 10.0d);
+						column.setPrefWidth(max + 20.0d);
 					}
 				});
 			}
@@ -2386,6 +2471,7 @@ public class Tr_Am_View_con {
 
 	@FXML
 	void chk_all(ActionEvent event_) {
+
 		chk_row.setCellFactory(list -> {
 			CheckBox checkBox = new CheckBox();
 			TableCell<Amra_Trans, Boolean> tableCell = new TableCell<Amra_Trans, Boolean>() {
@@ -2398,7 +2484,6 @@ public class Tr_Am_View_con {
 						setGraphic(checkBox);
 						checkBox.setSelected(true);
 					}
-
 				}
 			};
 
@@ -2459,8 +2544,6 @@ public class Tr_Am_View_con {
 		all_sum_nal = 0;
 		all_sum = 0;
 		cnt = 0;
-
-		// trans_table.refresh();
 	}
 
 	@FXML
@@ -2500,7 +2583,6 @@ public class Tr_Am_View_con {
 						setGraphic(checkBox);
 						checkBox.setSelected(false);
 					}
-
 				}
 			};
 
@@ -2535,7 +2617,6 @@ public class Tr_Am_View_con {
 		summa_plat.setText(String.valueOf(all_sum));
 		summa_nal.setText(String.valueOf(all_sum_nal));
 		cnt_all_.setText(String.valueOf(cnt));
-		// trans_table.refresh();
 	}
 
 	@FXML
@@ -2555,6 +2636,119 @@ public class Tr_Am_View_con {
 
 	@FXML
 	private ContextMenu menubar;
+
+	@FXML
+	void show_all_col(ActionEvent event) {
+		try {
+			if (trans_table.getSelectionModel().getSelectedItem() == null) {
+				Alert("¬ыберите сначала данные из таблицы!");
+			} else {
+				Stage stage_ = (Stage) anch_b4.getScene().getWindow();
+				Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
+				Connect.PNMB_ = fn.get_checknumber();
+				Stage stage = new Stage();
+				Parent root;
+				root = FXMLLoader.load(Main.class.getResource("view/Transact_Unpiv.fxml"));
+				stage.setScene(new Scene(root));
+				stage.getIcons().add(new Image("icon.png"));
+				stage.setTitle("ѕодробно " + fn.get_checknumber());
+				stage.initOwner(stage_);
+				stage.show();
+			}
+		} catch (IOException e) {
+			Alert(e.getMessage());
+		}
+	}
+
+	@FXML
+	void show_all_deal(ActionEvent event) {
+		try {
+			if (trans_table.getSelectionModel().getSelectedItem() == null) {
+				Alert("¬ыберите сначала данные из таблицы!");
+			} else {
+				Stage stage_ = (Stage) anch_b4.getScene().getWindow();
+				Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
+				Connect.PNMB_ = fn.get_checknumber();
+				Stage stage = new Stage();
+				Parent root;
+				root = FXMLLoader.load(Main.class.getResource("view/Deals.fxml"));
+				stage.setScene(new Scene(root));
+				stage.getIcons().add(new Image("icon.png"));
+				stage.setTitle("ѕодробно " + fn.get_checknumber());
+				stage.initOwner(stage_);
+				stage.show();
+			}
+		} catch (IOException e) {
+			Alert(e.getMessage());
+		}
+	}
+
+	@FXML
+	void show_all_atr(ActionEvent event) {
+		try {
+			if (trans_table.getSelectionModel().getSelectedItem() == null) {
+				Alert("¬ыберите сначала данные из таблицы!");
+			} else {
+				Stage stage_ = (Stage) anch_b4.getScene().getWindow();
+				Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
+				Connect.PNMB_ = fn.get_checknumber();
+				Stage stage = new Stage();
+				Parent root;
+				root = FXMLLoader.load(Main.class.getResource("view/Attributes_.fxml"));
+				stage.setScene(new Scene(root));
+				stage.getIcons().add(new Image("icon.png"));
+				stage.setTitle("ѕодробно " + fn.get_checknumber());
+				stage.initOwner(stage_);
+				stage.show();
+			}
+		} catch (IOException e) {
+			Alert(e.getMessage());
+		}
+	}
+
+	@FXML
+	void show_all_trn(ActionEvent event) {
+		Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
+		pb.setVisible(true);
+		Task<Object> task = new Task<Object>() {
+			@Override
+			public Object call() throws Exception {
+				try {
+					String call = "ifrun60.exe I:/KERNEL/operlist.fmx " + Connect.userID_ + "/" + Connect.userPassword_
+							+ "@ODB where=\"" + "ITRNNUM in (select t.ITRNNUM "
+							+ "  from trn t, z_sb_postdoc_amra_dbt g " + " where t.ITRNNUM(+) = g.KINDPAYMENT "
+							+ "   and exists " + " (select null "
+							+ "          from table(lob2table.separatedcolumns(paymentnumbers, "
+							+ "                                                chr(13) || chr(10), "
+							+ "                                                ';', "
+							+ "                                                '')) " + "         where COLUMN1 = '"
+							+ fn.get_checknumber() + "') " + "   and sess_id = " + fn.get_sess_id() + ")\"";
+					ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", call);
+					// System.out.println(call);
+					builder.redirectErrorStream(true);
+					Process p;
+					p = builder.start();
+					BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+					String line;
+					while (true) {
+						line = r.readLine();
+						if (line == null) {
+							break;
+						}
+						System.out.println(line);
+					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					Alerts(e.getMessage());
+				}
+				return null;
+			}
+		};
+		task.setOnFailed(e -> Alert(task.getException().getMessage()));
+		task.setOnSucceeded(e -> pb.setVisible(false));
+
+		exec.execute(task);
+	}
 
 	@FXML
 	void jasperkinder(ActionEvent event) {

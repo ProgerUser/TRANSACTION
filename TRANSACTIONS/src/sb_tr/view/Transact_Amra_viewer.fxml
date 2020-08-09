@@ -12,8 +12,7 @@
 				<TableView fx:id="trans_table" layoutX="14.0" onKeyPressed="#show_" prefWidth="994.0" styleClass="mylistview" stylesheets="@../../transact.css" tableMenuButtonVisible="true" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS">
 					<columns>
 						<TableColumn fx:id="chk_row" prefWidth="137.0" text="Выбор" />
-						<TableColumn fx:id="rownum" prefWidth="137.0" text="НомерСтроки" />
-						<TableColumn fx:id="recdate" prefWidth="137.0" text="ДатаЗагрузки" />
+						<TableColumn fx:id="checkparent" prefWidth="137.0" text="ЧекРодитель" />
 						<TableColumn fx:id="paydate" prefWidth="137.0" text="ДатаПлатежа" />
 						<TableColumn fx:id="status" prefWidth="137.0" text="Статус" />
 						<TableColumn fx:id="checknumber" prefWidth="137.0" text="НомерЧека" />
@@ -27,7 +26,6 @@
 						<TableColumn fx:id="amountwithchecks" prefWidth="140.0" text="СуммаСЧеков" />
 						<TableColumn fx:id="sumnalprimal" prefWidth="150.0" text="СуммаНалИзначальная" />
 						<TableColumn fx:id="amounttocheck" prefWidth="140.0" text="СуммаНаЧек" />
-						<TableColumn fx:id="checkparent" prefWidth="137.0" text="ЧекРодитель" />
 						<TableColumn fx:id="currency" prefWidth="137.0" text="Валюта" />
 						<!--<TableColumn fx:id="paymenttype" prefWidth="137.0" text="ВидПлатежа=PAYMENTTYPE" 
 							/> -->
@@ -70,6 +68,8 @@
 
 						<TableColumn fx:id="terminalnetwork" prefWidth="137.0" text="ТерминальнаяСеть" />
 						<TableColumn fx:id="transactiontype" prefWidth="137.0" text="ТипТранзакции" />
+						<TableColumn fx:id="rownum" prefWidth="137.0" text="НомерСтроки" />
+						<TableColumn fx:id="recdate" prefWidth="137.0" text="ДатаЗагрузки" />
 						<!--<TableColumn fx:id="filetransactions" prefWidth="137.0" text="ФайлТранзакции" 
 							/> -->
 						<!--<TableColumn fx:id="fio" prefWidth="137.0" text="ФИО=FIO" /> -->
@@ -105,7 +105,11 @@
                   <ContextMenu fx:id="menubar">
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#show_rel" text="Связанные" />
-                        <MenuItem mnemonicParsing="false" onAction="#jasperkinder" text="Печать Детсад Jasper" />
+                      <MenuItem mnemonicParsing="false" onAction="#show_all_col" text="Показать все строки" />
+                      <MenuItem mnemonicParsing="false" onAction="#show_all_atr" text="Показать атрибуы" />
+                      <MenuItem mnemonicParsing="false" onAction="#show_all_deal" text="Показать сдачи" />
+                      <MenuItem mnemonicParsing="false" onAction="#show_all_trn" text="Показать окументы в главной книге" />
+                      <MenuItem mnemonicParsing="false" onAction="#jasperkinder" text="Печать чек дет. сад" />
                     </items>
                   </ContextMenu>
                </contextMenu>
