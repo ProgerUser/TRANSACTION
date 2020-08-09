@@ -196,11 +196,21 @@ public class TerminalDAO {
 		if (dt != null) {
 			ldt = " and trunc(date_time) = to_date('" + ldt_ + "','dd.mm.yyyy')\n";
 		}
-		String selectStmt = "select sess_id,\n" + "       file_name,\n" + "       date_time,\n" + "       fileclob,\n"
-				+ "       case\n" + "         when status = 0 then\n" + "          'Загружен'\n"
-				+ "         when status = 1 then\n" + "          'Разобран'\n" + "         when status = 2 then\n"
-				+ "          'Рассчитан'\n" + "       end status,\n" + "       path,\n"
-				+ "       user_ from Z_SB_FN_SESS_AMRA \n" + "where 1=1" + p_n + ldt + "order by date_time desc";
+		String selectStmt = "select sess_id,\n" + 
+		                    "       file_name,\n" + 
+				            "       date_time,\n" + 
+		                    "       fileclob,\n"
+				+ "       case\n" + 
+		                    "         when status = 0 then\n" + 
+				"          'Загружен'\n"
+				+ "         when status = 1 then\n" + 
+				"          'Разобран'\n" +
+				"         when status = 2 then\n"
+				+ "          'Рассчитан'\n" +
+				"       end status,\n" +
+				"       path,\n"
+				+ "       user_ from Z_SB_FN_SESS_AMRA \n" +
+				"where 1=1" + p_n + ldt + "order by date_time desc";
 
 		// Get ResultSet from dbExecuteQuery method
 		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
@@ -263,6 +273,31 @@ public class TerminalDAO {
 		
 		// Return employee object
 		return empList;
+	}
+	
+	// *******************************
+	// SELECT REL
+	// *******************************
+	public static ObservableList<Amra_Trans> Amra_Trans_before(String sid) {
+		try {
+		SqlMap s = new SqlMap().load(System.getenv("TRANSACT_PATH") + "\\report\\SQL.xml");
+		
+		String selectStmt = s.getSql("getBeforeInsert").replace(":p1", ""+sid+"");
+
+		// Execute SELECT statement
+
+		// Get ResultSet from dbExecuteQuery method
+		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
+
+		// Send ResultSet to the getEmployeeList method and get employee object
+		ObservableList<Amra_Trans> empList = get_amra_trans(rsEmps);
+		return empList;
+		// Return employee object
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			alert(e.getMessage());
+		}
+		return null;
 	}
 	
 	// *******************************
@@ -348,7 +383,22 @@ public class TerminalDAO {
 	// SELECT Attributes
 	// *******************************
 	public static ObservableList<Attributes> Attributes_() {
-		String selectStmt = "SELECT Service, CheckNumber, AttributeName, AttributeValue\n"
+		
+		String selectStmt = "";
+		if (Connect.SESSID != null) {
+			SqlMap s;
+			try {
+				s = new SqlMap().load(System.getenv("TRANSACT_PATH") + "\\report\\SQL.xml");
+				selectStmt = s.getSql("getAttr_B").replace(":p1", "" + Connect.SESSID + "").replace(":p2",
+						"" + Connect.PNMB_ + "");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				alert(e.getMessage());
+			}
+		}
+		else
+		{
+		 selectStmt = "SELECT Service, CheckNumber, AttributeName, AttributeValue\n"
 				+ "  FROM (select ATTRIBUTES_\n" + "          from Z_SB_TRANSACT_AMRA_DBT\n"
 				+ "         where CHECKNUMBER = '" + Connect.PNMB_ + "'),\n"
 				+ "       XMLTABLE('/Атрибуты/Атр' PASSING xmltype(ATTRIBUTES_) COLUMNS\n"
@@ -356,7 +406,7 @@ public class TerminalDAO {
 				+ "                CheckNumber VARCHAR2(500) PATH '@НомерЧека',\n"
 				+ "                AttributeName VARCHAR2(500) PATH '@ИмяАтрибута',\n"
 				+ "                AttributeValue VARCHAR2(500) PATH '@ЗначениеАтрибута')";
-
+		}
 		// Execute SELECT statement
 
 		// Get ResultSet from dbExecuteQuery method

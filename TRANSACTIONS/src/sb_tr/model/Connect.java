@@ -6,9 +6,8 @@ import javafx.beans.property.StringProperty;
 public class Connect {
     
 	public static String SESS_ID_;
-	
+	public static String SESSID= null;
 	public static String PNMB_;
-	
 	public static String connectionURL_= null;
 	public static String userID_ = null;
 	public static String userPassword_= null;

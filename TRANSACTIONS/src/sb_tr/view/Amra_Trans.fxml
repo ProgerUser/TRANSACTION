@@ -9,7 +9,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane fx:id="ap" prefHeight="649.0" prefWidth="1017.0" stylesheets="@../../borderpane.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sb_tr.controller.Amra_Transact">
+<BorderPane fx:id="ap1" prefHeight="649.0" prefWidth="1017.0" stylesheets="@../../borderpane.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sb_tr.controller.Amra_Transact">
 	<center>
 
 	</center>
@@ -34,6 +34,13 @@
 						<TableColumn fx:id="IdFile" text="ИД файл" />
 						<TableColumn fx:id="PathFile" prefWidth="98.0" text="Путь загрузки" />
 					</columns>
+					<contextMenu>
+                  <ContextMenu fx:id="menubar">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#show_tr" text="Показать транзакции" />
+                    </items>
+                  </ContextMenu>
+               </contextMenu>
 				</TableView>
 			</children>
 			<columnConstraints>

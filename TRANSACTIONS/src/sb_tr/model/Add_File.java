@@ -2,7 +2,7 @@ package sb_tr.model;
 
 import javafx.beans.property.*;
 
-public class Add_File  {
+public class Add_File {
 
 	private StringProperty FileName;
 	private StringProperty Status;
@@ -10,6 +10,7 @@ public class Add_File  {
 	private StringProperty User;
 	private StringProperty FileId;
 	private StringProperty Path;
+	private StringProperty SessId;
 
 	// Constructor
 	public Add_File() {
@@ -19,6 +20,12 @@ public class Add_File  {
 		this.User = new SimpleStringProperty();
 		this.FileId = new SimpleStringProperty();
 		this.Path = new SimpleStringProperty();
+		this.SessId = new SimpleStringProperty();
+	}
+
+	// ------------------------------
+	public StringProperty SessIdProperty() {
+		return SessId;
 	}
 
 	// ------------------------------
@@ -47,6 +54,11 @@ public class Add_File  {
 	}
 
 	// ------------------------------
+	public void set_SessId(String SessId) {
+		this.SessId.set(SessId);
+	}
+
+	// ------------------------------
 	public void set_FileName(String FileName) {
 		this.FileName.set(FileName);
 	}
@@ -72,6 +84,11 @@ public class Add_File  {
 	}
 
 	// ------------------------------
+
+	public String get_SessId() {
+		return SessId.get();
+	}
+
 	public String get_FileName() {
 		return FileName.get();
 	}

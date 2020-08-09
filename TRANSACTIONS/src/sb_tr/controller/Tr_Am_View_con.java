@@ -1206,6 +1206,14 @@ public class Tr_Am_View_con {
 			alert.setContentText(e.getMessage());
 			alert.showAndWait();
 		}
+		
+		
+		if (Connect.SESSID != null) {
+			ObservableList<Amra_Trans> trData = TerminalDAO.Amra_Trans_before(Connect.SESSID);
+			trans_table.setItems(trData);
+			autoResizeColumns(trans_table);
+			TableFilter.forTableView(trans_table).apply();
+		} 
 
 	}
 
@@ -2359,6 +2367,7 @@ public class Tr_Am_View_con {
 
 	@FXML
 	private void filter(ActionEvent actionEvent) {
+		Connect.SESSID = null;
 		/*
 		 * trans_table.setOnKeyReleased((KeyEvent t)-> { KeyCode key=t.getCode();
 		 * ActionEvent l; if (key == KeyCode.F4){ view_unpivot2(actionEvent); } });
@@ -2399,7 +2408,7 @@ public class Tr_Am_View_con {
 		}
 	}
 
-	public void Alert(String mes) {
+	public static void Alert(String mes) {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
@@ -2631,7 +2640,6 @@ public class Tr_Am_View_con {
 		} else {
 			Alert("Нет родительской транзакции");
 		}
-
 	}
 
 	@FXML

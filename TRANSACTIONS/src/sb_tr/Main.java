@@ -61,9 +61,10 @@ public class Main extends Application {
 		}
 		
 		
+		
 		/*
-		  Connect.connectionURL_ = "10.111.64.21:1521/odb"; Connect.userID_ =
-		  "AMRA_IMPORT"; Connect.userPassword_ = "xxx"; DBUtil.dbConnect();
+		  Connect.connectionURL_ = "10.111.64.24:1521/odb"; Connect.userID_ =
+		  "AMRA_IMPORT"; Connect.userPassword_ = "ver8i"; DBUtil.dbConnect();
 		  showFirst();
 		*/
 		

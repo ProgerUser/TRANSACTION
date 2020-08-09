@@ -58,6 +58,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -73,9 +74,11 @@ import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import sb_tr.Main;
 import sb_tr.model.Add_File;
 import sb_tr.model.Amra_Trans;
 import sb_tr.model.Connect;
@@ -133,8 +136,11 @@ public class Amra_Transact {
 	private Button browse;
 
 	@FXML
-	private AnchorPane anchorpane;
-
+	private BorderPane ap1;
+	
+	@FXML
+	private AnchorPane ap;
+	
 	@FXML
 	private Button import_;
 
@@ -178,13 +184,15 @@ public class Amra_Transact {
 			if (file != null) {
 				// textbox.setText(file.getParent() + "::_" + file.getName());
 
-				/*Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
-						+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
-						*/
-				
+				/*
+				 * Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" +
+				 * Connect.userID_ + "/" + Connect.userPassword_ + "@" + Connect.connectionURL_
+				 * + "");
+				 */
+
 				DBUtil.dbDisconnect();
 				DBUtil.dbConnect();
-				
+
 				Connection conn = DBUtil.conn;
 				CallableStatement callStmt = null;
 				String reviewContent = null;
@@ -350,7 +358,7 @@ public class Amra_Transact {
 		// Populate Employees on TableView
 		populate_fn_sess(empData);
 		autoResizeColumns(load_file);
-		
+
 		StatusFile.setCellFactory(col -> new TextFieldTableCell<Add_File, String>() {
 			@Override
 			public void updateItem(String item, boolean empty) {
@@ -361,18 +369,14 @@ public class Amra_Transact {
 				} else {
 					setText(item.toString());
 					if (item.equals("Рассчитан")) {
-						setStyle("-fx-background-color: #7ede80;"
-								+ "-fx-border-color:black;"
-								+ " -fx-border-width :  1 1 1 1 "); 
-					} else if (item.equals("Разобран"))  {
-						setStyle("-fx-background-color: #ebaf2f;"
-								+ "-fx-border-color:black;"
-								+ " -fx-border-width :  1 1 1 1 ");  
-					}
-					else {
-						setStyle("-fx-background-color: #e65591;"
-								+ "-fx-border-color:black;"
-								+ " -fx-border-width :  1 1 1 1 "); 
+						setStyle("-fx-background-color: #7ede80;" + "-fx-border-color:black;"
+								+ " -fx-border-width :  1 1 1 1 ");
+					} else if (item.equals("Разобран")) {
+						setStyle("-fx-background-color: #ebaf2f;" + "-fx-border-color:black;"
+								+ " -fx-border-width :  1 1 1 1 ");
+					} else {
+						setStyle("-fx-background-color: #e65591;" + "-fx-border-color:black;"
+								+ " -fx-border-width :  1 1 1 1 ");
 					}
 				}
 			}
@@ -388,18 +392,43 @@ public class Amra_Transact {
 	}
 
 	@FXML
+	void show_tr(ActionEvent event) throws IOException {
+		try {
+			if (load_file.getSelectionModel().getSelectedItem() == null) {
+				Tr_Am_View_con.Alert("Выберите сначала данные из таблицы!");
+			} else {
+				Stage stage_ = (Stage) load_file.getScene().getWindow();
+				Add_File fn = load_file.getSelectionModel().getSelectedItem();
+				Connect.SESSID = fn.get_FileId();
+				Stage stage = new Stage();
+				Parent root;
+				root = FXMLLoader.load(Main.class.getResource("view/Transact_Amra_viewer.fxml"));
+				stage.setScene(new Scene(root));
+				stage.getIcons().add(new Image("icon.png"));
+				stage.setTitle("Подробно " + fn.get_FileId());
+				stage.initOwner(stage_);
+				stage.show();
+			}
+		} catch (IOException e) {
+			Tr_Am_View_con.Alert(e.getMessage());
+			Connect.SESSID = null;
+		}
+	}
+
+	@FXML
 	void del_log(ActionEvent event) {
 		try {
 			if (load_file.getSelectionModel().getSelectedItem() != null) {
 				Add_File af = load_file.getSelectionModel().getSelectedItem();
 				/*
-				Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
-						+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
-						*/
-				
+				 * Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" +
+				 * Connect.userID_ + "/" + Connect.userPassword_ + "@" + Connect.connectionURL_
+				 * + "");
+				 */
+
 				DBUtil.dbDisconnect();
 				DBUtil.dbConnect();
-				
+
 				Connection conn = DBUtil.conn;
 				String sql_txt = "delete from z_sb_log_amra where sess_id = ?";
 				CallableStatement cs = conn.prepareCall(sql_txt);
@@ -414,7 +443,7 @@ public class Amra_Transact {
 				alert.setContentText("Лог файл с ID = " + af.get_FileId() + " удален!");
 				alert.showAndWait();
 				cs.close();
-				//conn.close();
+				// conn.close();
 			} else {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
 				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -476,6 +505,7 @@ public class Amra_Transact {
 			}
 		});
 	}
+
 	@FXML
 	void Load_Transact(ActionEvent event) {
 		try {
@@ -488,15 +518,16 @@ public class Amra_Transact {
 					DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH-mm-ss");
 
 					String strDate = dateFormat.format(date);
-					
+
 					DBUtil.dbDisconnect();
 					DBUtil.dbConnect();
-					
+
 					Connection conn = DBUtil.conn;
 					/*
-					Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
-							+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
-*/
+					 * Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" +
+					 * Connect.userID_ + "/" + Connect.userPassword_ + "@" + Connect.connectionURL_
+					 * + "");
+					 */
 					CallableStatement callStmt = null;
 					String reviewContent = null;
 
@@ -566,7 +597,7 @@ public class Amra_Transact {
 						 */
 					}
 					callStmt.close();
-					//conn.close();
+					// conn.close();
 
 					ObservableList<Add_File> empData = TerminalDAO.add_file(/* af.get_FileId() */"",
 							date_load.getValue());
@@ -640,9 +671,10 @@ public class Amra_Transact {
 			String strDate = dateFormat.format(date);
 			Connection conn = DBUtil.conn;
 			/*
-			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
-					+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
-*/
+			 * Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" +
+			 * Connect.userID_ + "/" + Connect.userPassword_ + "@" + Connect.connectionURL_
+			 * + "");
+			 */
 			Statement sqlStatement = conn.createStatement();
 			String readRecordSQL = "SELECT * FROM z_sb_transact_amra_dbt WHERE sess_id = " + sessid + "";
 			ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
@@ -700,17 +732,17 @@ public class Amra_Transact {
 
 					CallableStatement callStmt = null;
 					Clob reviewContent = null;
-					
+
 					DBUtil.dbDisconnect();
 					DBUtil.dbConnect();
-					
+
 					Connection conn = DBUtil.conn;
 					/*
-					Connection conn;
- 
-					conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
-							+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
-				    */
+					 * Connection conn;
+					 * 
+					 * conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ +
+					 * "/" + Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
+					 */
 					callStmt = conn.prepareCall(sql_calc);
 
 					callStmt.registerOutParameter(1, Types.CLOB);
@@ -756,7 +788,7 @@ public class Amra_Transact {
 					 * alert.showAndWait();
 					 */
 					callStmt.close();
-					//conn.close();
+					// conn.close();
 					ObservableList<Add_File> empData = TerminalDAO.add_file(/* af.get_FileId() */"",
 							date_load.getValue());
 					// Populate Employees on TableView
