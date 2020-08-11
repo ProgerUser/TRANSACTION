@@ -292,8 +292,18 @@ public class penscontrollerRA {
 				String createfolder = null;
 
 				while (rs.next()) {
+					File file = new File(selectedFiles.get(0).getParent() + "/" + rs.getInt("CASSA"));
+					if (!file.exists()) {
+						if (file.mkdir()) {
+							System.out.println("Directory is created!");
+						} else {
+							System.out.println("Failed to create directory!");
+						}
+					}
+
 					Blob blob = rs.getBlob("XLSX");
-					createfolder = selectedFiles.get(0).getParent() + "/"+rs.getString("NAME_") + ".xlsx";
+					createfolder = selectedFiles.get(0).getParent() + "/" + rs.getInt("CASSA") + "/"
+							+ rs.getString("NAME_") + ".xlsx";
 					OutputStream out = new FileOutputStream(createfolder);
 					byte[] buff = blob.getBytes(1, (int) blob.length());
 					out.write(buff);

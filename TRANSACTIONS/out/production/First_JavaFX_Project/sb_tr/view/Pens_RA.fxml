@@ -5,34 +5,25 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane minWidth="600" prefHeight="500" prefWidth="208.0"
-	xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="sb_tr.controller.penscontrollerRA">
+<AnchorPane minWidth="600" prefHeight="500" prefWidth="208.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sb_tr.controller.penscontrollerRA">
 	<children>
-		<Button fx:id="separate" disable="false" layoutX="14.0"
-			layoutY="24.0" mnemonicParsing="false" onAction="#separate"
-			prefHeight="35" prefWidth="35" stylesheets="@../../borderpane.css">
+		<Button fx:id="separate" disable="false" layoutX="14.0" layoutY="24.0" mnemonicParsing="false" onAction="#separate" prefHeight="35" prefWidth="35" stylesheets="@../../borderpane.css">
 			<tooltip>
 				<Tooltip text="Разделить файл" />
 			</tooltip>
 		</Button>
-		<TableView fx:id="sep_pens" editable="true" layoutX="14.0"
-			layoutY="73.0" prefHeight="413.0" prefWidth="573.0">
+		<TableView fx:id="sep_pens" editable="true" layoutX="14.0" layoutY="73.0" prefHeight="413.0" prefWidth="573.0">
 			<columns>
 				<TableColumn fx:id="ID" prefWidth="75.0" text="ИД" />
-				<TableColumn fx:id="DateLoad" prefWidth="109.0"
-					text="Дата загрузки" />
-				<TableColumn fx:id="Filename" prefWidth="144.0"
-					text="Название файла" />
+				<TableColumn fx:id="DateLoad" prefWidth="109.0" text="Дата загрузки" />
+				<TableColumn fx:id="Filename" prefWidth="144.0" text="Название файла" />
 				<!-- <TableColumn fx:id="ONE_PART" prefWidth="144.0" text="Часть I" /> 
 					<TableColumn fx:id="TWO_PART" prefWidth="144.0" text="Часть II" /> <TableColumn 
 					fx:id="THREE_PART" prefWidth="144.0" text="Часть III" /> <TableColumn fx:id="FOUR_PART" 
 					prefWidth="144.0" text="Часть IV" /> -->
 			</columns>
 		</TableView>
-		<Button fx:id="save_sep" disable="false" layoutX="109.0"
-			layoutY="24.0" mnemonicParsing="false" onAction="#save_seps"
-			prefHeight="35" prefWidth="35" stylesheets="@../../borderpane.css">
+		<Button fx:id="save_sep" disable="true" layoutX="109.0" layoutY="24.0" mnemonicParsing="false" onAction="#save_seps" prefHeight="35" prefWidth="35" stylesheets="@../../borderpane.css">
 			<tooltip>
 				<Tooltip text="Сохранить файлы" />
 			</tooltip>

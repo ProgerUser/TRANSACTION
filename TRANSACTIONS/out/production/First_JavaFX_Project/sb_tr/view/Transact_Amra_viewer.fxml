@@ -106,7 +106,7 @@
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#show_rel" text="Связанные" />
                       <MenuItem mnemonicParsing="false" onAction="#show_all_col" text="Показать все строки" />
-                      <MenuItem mnemonicParsing="false" onAction="#show_all_atr" text="Показать атрибуы" />
+                      <MenuItem mnemonicParsing="false" onAction="#show_all_atr" text="Показать атрибуты" />
                       <MenuItem mnemonicParsing="false" onAction="#show_all_deal" text="Показать сдачи" />
                       <MenuItem mnemonicParsing="false" onAction="#show_all_trn" text="Показать документы в главной книге" />
                       <MenuItem mnemonicParsing="false" onAction="#jasperkinder" text="Печать чек дет. сад" />
