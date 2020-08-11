@@ -63,8 +63,8 @@ public class Main extends Application {
 		
 		
 		/*
-		  Connect.connectionURL_ = "10.111.64.24:1521/odb"; Connect.userID_ =
-		  "AMRA_IMPORT"; Connect.userPassword_ = "ver8i"; DBUtil.dbConnect();
+		  Connect.connectionURL_ = "10.111.64.21:1521/odb"; Connect.userID_ =
+		  "AMRA_IMPORT"; Connect.userPassword_ = "xxx"; DBUtil.dbConnect();
 		  showFirst();
 		*/
 		
@@ -246,6 +246,18 @@ public class Main extends Application {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Pens_divide.fxml"));
+			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
+			rootLayout.setCenter(employeeOperationsView);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/* Пенсия */
+	public static void sepRA() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Main.class.getResource("view/Pens_RA.fxml"));
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {

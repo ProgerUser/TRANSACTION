@@ -153,10 +153,14 @@ public class Attr_Controller {
 				if (empty || item == null) {
 					setText(null);
 					setGraphic(null);
+					setStyle("");
 				} else {
 					setText(item.toString());
 					if (item.equals("Сумма")) {
 						setStyle("-fx-background-color: rgb(162, 189, 48);" + "-fx-border-color:black;"
+								+ " -fx-border-width :  1 1 1 1 ");
+					} else if (item.equals("Основание")) {
+						setStyle("-fx-background-color:#96C2D2;" + "-fx-border-color:black;"
 								+ " -fx-border-width :  1 1 1 1 ");
 					} else {
 						setStyle("");
@@ -237,7 +241,7 @@ public class Attr_Controller {
 		String format = decimalFormat.format(all_sum);
 		counts.setText(String.valueOf(cnt));
 		summ.setText(String.valueOf(format));
-		
+
 		all_sum = 0;
 		cnt = 0;
 	}

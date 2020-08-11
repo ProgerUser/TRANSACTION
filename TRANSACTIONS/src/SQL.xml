@@ -22,15 +22,19 @@ select nvl(CTRNACCD, g.account_payer) debet,
                                                        chr(13) || chr(10),
                                                        ';',
                                                        ''))) = 1 then
-          (select listagg_clob(COLUMN1 || ';' || hh.amountofpayment) str
-             from table(lob2table.separatedcolumns(paymentnumbers,
-                                                   chr(13) || chr(10),
-                                                   ';',
-                                                   '')),
-                  z_sb_transact_amra_dbt hh
-            where hh.checknumber = COLUMN1)
+          paymentnumbers
+       /*
+           (select listagg_clob(COLUMN1 || ';' || hh.amountofpayment) str
+              from table(lob2table.separatedcolumns(paymentnumbers,
+                                                    chr(13) || chr(10),
+                                                    ';',
+                                                    '')),
+                   z_sb_transact_amra_dbt hh
+             where hh.checknumber = COLUMN1)
+       */
          else
-        paymentnumbers       end trsum
+          paymentnumbers
+       end trsum
   from trn t, z_sb_postdoc_amra_dbt g
  where t.ITRNNUM(+) = g.KINDPAYMENT
    and exists
@@ -43,6 +47,103 @@ select nvl(CTRNACCD, g.account_payer) debet,
    and sess_id = ?
  order by CTRNACCD, MTRNRSUM desc
             ]]></value>
+		</entry>
+		<entry>
+			<key>PensRa</key>
+			<value><![CDATA[
+declare
+  cursor seldate is
+    select t.* from Z_PENS_XLSX t where inout = 0;
+  cursor cass_part is
+    with dat as
+     (select h.* from Z_SB_PENSRA_ROWS h ORDER BY dbms_random.value),
+    parts as
+     (select case
+               when (rownum <= ((select count(*) from Z_SB_PENSRA_ROWS) / 3)) then
+                1
+               when (rownum > ((select count(*) from Z_SB_PENSRA_ROWS) / 3) and
+                    rownum <=
+                    ((select count(*) from Z_SB_PENSRA_ROWS) / 3 * 2)) then
+                2
+               when (rownum >
+                    ((select count(*) from Z_SB_PENSRA_ROWS) / 3 * 2)) then
+                3
+             end part,
+             g.*
+        from dat g)
+    select CASSA, part
+      from parts
+     group by cassa, part
+     order by CASSA, PART asc;
+  query varchar2(1000);
+begin
+  for r in seldate loop
+    insert into Z_SB_PENSRA_ROWS
+      select COL02 lastname,
+             COL03 firstname,
+             COL04 middlename,
+             COL05,
+             COL06 accounts,
+             to_number(replace(COL07, '.', ',')) summ,
+             COL08 categorys,
+             substr(COL08,
+                    instr(COL08, 'Касса') + 6,
+                    instr(COL08, 'категория') - 8) cassa,
+             replace(replace(regexp_substr(COL08, '[(][0-9]{1,2}.{0,3}[)]'),
+                             '('),
+                     ')') cat
+        from table(xlsx_parser.parse(p_xlsx_name      => r.NAME_,
+                                     p_xlsx_content   => r.XLSX,
+                                     p_worksheet_name => 'sheet1'))
+       where COL06 is not null;
+  end loop;
+  commit;
+  for r in cass_part loop
+    query := q'[
+    with dat as
+     (select h.* from Z_SB_PENSRA_ROWS h ORDER BY dbms_random.value),
+    parts as
+     (select case
+               when (rownum <= ((select count(*) from Z_SB_PENSRA_ROWS) / 3)) then
+                1
+               when (rownum > ((select count(*) from Z_SB_PENSRA_ROWS) / 3) and
+                    rownum <=
+                    ((select count(*) from Z_SB_PENSRA_ROWS) / 3 * 2)) then
+                2
+               when (rownum >
+                    ((select count(*) from Z_SB_PENSRA_ROWS) / 3 * 2)) then
+                3
+             end part,
+             g.*
+        from dat g)
+    select LASTNAME,
+           FIRSTNAME,
+           MIDDLENAME,
+           COL05,
+           ACCOUNTS,
+           SUMM,
+           CATEGORYS
+ from parts
+    where CASSA = ]' || r.cassa || q'[
+    and part = ]' || r.part || q'[]';
+  
+    as_xlsx.clear_workbook;
+    as_xlsx.query2sheet(query);
+  
+    insert into Z_PENS_XLSX
+      (NAME_, XLSX, ID_, INOUT, CASSA, PART)
+    values
+      (sysdate || ' Касса ' || r.cassa || ' Часть ' || r.part,
+       as_xlsx.finish,
+       0,
+       1,
+       r.cassa,
+       r.part);
+  end loop;
+  commit;
+end;
+]]>
+	   </value>
 		</entry>
 		<entry>
 			<key>acces_enter</key>
@@ -58,6 +159,171 @@ select nvl(CTRNACCD, g.account_payer) debet,
    and upper(FORM_NAME) = upper(?)
    and upper(CUSRLOGNAME) = upper(?)
    and T_NAME = 'Y'
+			]]></value>
+		</entry>
+		<entry>
+			<key>getAttr_B</key>
+			<value><![CDATA[
+select atr.*
+  from (SELECT g.ATTRIBUTES_ ATTRIBUTES_, g.checknumber
+          FROM Z_SB_FN_SESS_AMRA t,
+               XMLTABLE('/Транзакции/Трн' PASSING xmltype(FILECLOB) COLUMNS
+                        CheckNumber VARCHAR2(4000) PATH '@НомерЧека',
+                        Attributes_ xmltype PATH 'Атрибуты') g
+         where t.SESS_ID = :p1) g,
+       XMLTABLE('/Атрибуты/Атр' PASSING g.ATTRIBUTES_ COLUMNS Service
+                VARCHAR2(500) PATH '@Услуга',
+                CheckNumber VARCHAR2(500) PATH '@НомерЧека',
+                AttributeName VARCHAR2(500) PATH '@ИмяАтрибута',
+                AttributeValue VARCHAR2(500) PATH '@ЗначениеАтрибута') atr
+ where g.checknumber = ':p2'
+
+
+			]]></value>
+		</entry>
+		<entry>
+			<key>getPens</key>
+			<value><![CDATA[
+	select RN||'|'||
+       LAST_NAME||'|'||
+       FIRST_NAME||'|'||
+       MIDDLE_NAME||'|'||
+       COLUMN5||'|'||
+       ACC||'|'||
+       SUMM||'|'||
+       to_char(ABS_BDATE,'dd.mm.rrrr')||'|'||
+       COLUMN9||'|'||
+       COLUMN10||'|'||
+       ACC_VTB||'|'||
+       COLUMN12||'|'||
+       SNILS  str
+  from Z_SB_PENS_WDP t
+ where part = ?
+order by ABS_BDATE asc, rn
+			]]></value>
+		</entry>
+		<entry>
+			<key>getBeforeInsert</key>
+			<value><![CDATA[
+SELECT rownum,
+       to_date(DATEOFOPERATION, 'DD-MM-RRRR HH24:MI:SS') recdate,
+       sysdate paydate,
+       currency,
+       paymenttype,
+       vk,
+       dateofoperation,
+       dataps,
+       dateclearing,
+       dealer,
+       accountpayer,
+       cardnumber,
+       operationnumber,
+       operationnumberdelivery,
+       checknumber,
+       checkparent,
+       orderofprovidence,
+       provider,
+       owninown,
+       corrected,
+       commissionrate,
+       g.status,
+       stringfromfile,
+       rewardamount,
+       ownerincomeamount,
+       to_number(replace(replace(commissionamount, ' ', ''), '.', ',')) commissionamount,
+       nkamount,
+       maxcommissionamount,
+       mincommissionamount,
+       to_number(replace(replace(cashamount, ' ', ''), '.', ',')) cashamount,
+       sumnalprimal,
+       to_number(replace(replace(amounttocheck, ' ', ''), '.', ',')) amounttocheck,
+       to_number(replace(replace(amountofpayment, ' ', ''), '.', ',')) amountofpayment,
+       sumofsplitting,
+       amountintermediary,
+       amountofscs,
+       to_number(replace(replace(amountwithchecks, ' ', ''), '.', ',')) amountwithchecks,
+       counter,
+       terminal,
+       terminalnetwork,
+       transactiontype,
+       service,
+       filetransactions,
+       fio,
+       checksincoming,
+       barcode,
+       isaresident,
+       valuenotfound,
+       providertariff,
+       counterchecks,
+       countercheck,
+       id_,
+       detailing,
+       walletpayer,
+       walletreceiver,
+       purposeofpayment,
+       dataprovider,
+       0 statusabs,
+       sess_id
+  FROM Z_SB_FN_SESS_AMRA t,
+       XMLTABLE('/Транзакции/Трн' PASSING xmltype(FILECLOB) COLUMNS
+                Currency VARCHAR2(4000) PATH '@Валюта',
+                PaymentType VARCHAR2(4000) PATH '@ВидПлатежа',
+                VK VARCHAR2(4000) PATH '@ВК',
+                DateOfOperation VARCHAR2(4000) PATH '@ДатаОперации',
+                DataPs VARCHAR2(4000) PATH '@ДатаПС',
+                DateClearing VARCHAR2(4000) PATH '@ДатаКлиринга',
+                Dealer VARCHAR2(4000) PATH '@Дилер',
+                AccountPayer VARCHAR2(4000) PATH '@ЛСПлательщика',
+                CardNumber VARCHAR2(4000) PATH '@НомерКарты',
+                OperationNumber VARCHAR2(4000) PATH '@НомерОперации',
+                OperationNumberDelivery VARCHAR2(4000) PATH
+                '@НомерОперацииСдача',
+                CheckNumber VARCHAR2(4000) PATH '@НомерЧека',
+                CheckParent VARCHAR2(4000) PATH '@ЧекРодитель',
+                OrderOfProvidence VARCHAR2(4000) PATH '@ПорядокПровдения',
+                Provider VARCHAR2(4000) PATH '@Провайдер',
+                OwnInOwn VARCHAR2(4000) PATH '@СвойВСвоем',
+                Corrected VARCHAR2(4000) PATH '@Скорректирована',
+                CommissionRate VARCHAR2(4000) PATH '@СтавкаКомиссии',
+                Status VARCHAR2(4000) PATH '@Статус',
+                StringFromFile VARCHAR2(4000) PATH '@СтрокаИзФайла',
+                RewardAmount VARCHAR2(4000) PATH '@СуммаВознаграждения',
+                OwnerIncomeAmount VARCHAR2(4000) PATH '@СуммаДоходВладельца',
+                CommissionAmount VARCHAR2(4000) PATH '@СуммаКомиссии',
+                NKAmount VARCHAR2(4000) PATH '@СуммаНК',
+                MaxCommissionAmount VARCHAR2(4000) PATH '@СуммаКомиссииМакс',
+                MinCommissionAmount VARCHAR2(4000) PATH '@СуммаКомиссииМин',
+                CashAmount VARCHAR2(4000) PATH '@СуммаНаличных',
+                SumNalPrimal VARCHAR2(4000) PATH '@СуммаНалИзначальная',
+                AmountToCheck VARCHAR2(4000) PATH '@СуммаНаЧек',
+                AmountOfPayment VARCHAR2(4000) PATH '@СуммаПлатежа',
+                SumOfSplitting VARCHAR2(4000) PATH '@СуммаНаРасщепление',
+                AmountIntermediary VARCHAR2(4000) PATH '@СуммаПосредника',
+                AmountOfSCS VARCHAR2(4000) PATH '@СуммаСКС',
+                AmountWithChecks VARCHAR2(4000) PATH '@СуммаСЧеков',
+                Counter VARCHAR2(4000) PATH '@Счетчик',
+                Terminal VARCHAR2(4000) PATH '@Терминал',
+                TerminalNetwork VARCHAR2(4000) PATH '@ТерминальнаяСеть',
+                TransactionType VARCHAR2(4000) PATH '@ТипТранзакции',
+                Service VARCHAR2(4000) PATH '@Услуга',
+                FileTransactions VARCHAR2(4000) PATH '@ФайлТранзакции',
+                FIO VARCHAR2(4000) PATH '@ФИО',
+                ChecksIncoming VARCHAR2(4000) PATH '@ЧекиВходящие',
+                Barcode VARCHAR2(4000) PATH '@ШтрихКод',
+                IsAResident VARCHAR2(4000) PATH '@ЯвляетсяРезидентом',
+                ValueNotFound VARCHAR2(4000) PATH '@ЗначениеНеНайдено',
+                ProviderTariff VARCHAR2(4000) PATH '@ТарифПровайдера',
+                CounterChecks VARCHAR2(4000) PATH '@СчетчикСчеков',
+                CounterCheck VARCHAR2(4000) PATH '@СчетчикНаЧек',
+                Id_ VARCHAR2(4000) PATH '@Id',
+                Detailing VARCHAR2(4000) PATH '@Деталировка',
+                WalletPayer VARCHAR2(4000) PATH '@КошелекПлательщик',
+                WalletReceiver VARCHAR2(4000) PATH '@КошелекПолучатель',
+                PurposeOfPayment VARCHAR2(4000) PATH '@НазначениеПлатежа',
+                DataProvider VARCHAR2(4000) PATH '@ДатаПровайдера',
+                Attributes_ xmltype PATH 'Атрибуты',
+                ChecksIncoming_ xmltype PATH '@ЧекиВходящие') g
+ where t.SESS_ID = :p1
 			]]></value>
 		</entry>
 		<entry>

@@ -67,19 +67,18 @@
 							text="Клиенты" />
 					</items>
 				</Menu>
-				<!-- 
-				<Menu mnemonicParsing="false" text="Помощь">
-					<items>
-						<MenuItem mnemonicParsing="false" onAction="#handleHelp"
-							text="About" />
-						<MenuItem mnemonicParsing="false" onAction="#DBCONNECT"
-							text="DBCONNECT" />
-					</items>
-				</Menu>
-				 -->
-				<Menu mnemonicParsing="false" text="Пенсия">
+				<!-- <Menu mnemonicParsing="false" text="Помощь"> <items> <MenuItem mnemonicParsing="false" 
+					onAction="#handleHelp" text="About" /> <MenuItem mnemonicParsing="false" 
+					onAction="#DBCONNECT" text="DBCONNECT" /> </items> </Menu> -->
+				<Menu mnemonicParsing="false" text="Пенсия РФ">
 					<items>
 						<MenuItem mnemonicParsing="false" onAction="#divide"
+							text="Разбить файл" />
+					</items>
+				</Menu>
+				<Menu mnemonicParsing="false" text="Пенсия РА">
+					<items>
+						<MenuItem mnemonicParsing="false" onAction="#divide_RA"
 							text="Разбить файл" />
 					</items>
 				</Menu>

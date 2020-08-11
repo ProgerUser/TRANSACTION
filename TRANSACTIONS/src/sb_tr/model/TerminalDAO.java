@@ -256,7 +256,6 @@ public class TerminalDAO {
 	// *******************************
 	public static ObservableList<Amra_Trans> Amra_Trans_rel(String chk,String chkper) {
 
-		
 		String selectStmt = "select rownum,t.*\n" + 
 				"  from Z_SB_TRANSACT_AMRA_DBT t\n" + 
 				" where t.checknumber = '"+chk+"'\n" + 

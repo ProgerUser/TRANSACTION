@@ -121,6 +121,7 @@ public class Unpiv_Controller {
 				if (empty || item == null) {
 					setText(null);
 					setGraphic(null);
+					setStyle("");
 				} else {
 					setText(item.toString());  
 					if (item.equals("ДатаОперации=DATEOFOPERATION")) {

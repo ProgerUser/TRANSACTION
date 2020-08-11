@@ -4,9 +4,13 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.sql.Blob;
 import java.sql.CallableStatement;
 import java.sql.Clob;
 import java.sql.Connection;
@@ -16,6 +20,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import org.controlsfx.control.table.TableFilter;
 import org.mozilla.universalchardet.UniversalDetector;
 import javafx.collections.ObservableList;
@@ -43,7 +49,7 @@ import sb_tr.util.DBUtil;
 /**
  * Пачулия Саид 13.07.2020.
  */
-public class penscontroller {
+public class penscontrollerRA {
 
 	@FXML
 	private TableView<pensmodel> sep_pens;
@@ -93,23 +99,14 @@ public class penscontroller {
 				TextFieldTableCell.<pensmodel, LocalDateTime>forTableColumn(new LocalDateTimeStringConverter()));
 
 		/*
-		DateLoad.setCellFactory(column -> {
-			TableCell<pensmodel, LocalDateTime> cell = new TableCell<pensmodel, LocalDateTime>() {
-				private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-
-				@Override
-				protected void updateItem(LocalDateTime item, boolean empty) {
-					super.updateItem(item, empty);
-					if (empty) {
-						setText(null);
-					} else {
-						setText(format.format(item));
-					}
-				}
-			};
-			return cell;
-		});
-		*/
+		 * DateLoad.setCellFactory(column -> { TableCell<pensmodel, LocalDateTime> cell
+		 * = new TableCell<pensmodel, LocalDateTime>() { private SimpleDateFormat format
+		 * = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+		 * 
+		 * @Override protected void updateItem(LocalDateTime item, boolean empty) {
+		 * super.updateItem(item, empty); if (empty) { setText(null); } else {
+		 * setText(format.format(item)); } } }; return cell; });
+		 */
 
 		ID.setOnEditCommit(new EventHandler<CellEditEvent<pensmodel, Integer>>() {
 			@Override
@@ -133,11 +130,11 @@ public class penscontroller {
 						.setdateload(t.getNewValue());
 			}
 		});
-
-		ObservableList<pensmodel> empData = TerminalDAO.Z_SB_PENS_4FILE();
-		populate(empData);
-		autoResizeColumns(sep_pens);
-		TableFilter.forTableView(sep_pens).apply();
+		/*
+		 * ObservableList<pensmodel> empData = TerminalDAO.Z_SB_PENS_4FILE();
+		 * populate(empData); autoResizeColumns(sep_pens);
+		 * TableFilter.forTableView(sep_pens).apply();
+		 */
 	}
 
 	private void populate(ObservableList<pensmodel> pensmodel) {
@@ -256,6 +253,67 @@ public class penscontroller {
 	/* Старт */
 	@FXML
 	private void separate(ActionEvent event) {
+		try {
+			DBUtil.dbDisconnect();
+			DBUtil.dbConnect();
+
+			Connection conn = DBUtil.conn;
+			PreparedStatement pstmt = conn
+					.prepareStatement("insert into Z_PENS_XLSX (NAME_,XLSX,ID_,INOUT) values (?,?,?,?) ");
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("Выбрать файл");
+			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Excel файл", "*.xlsx"));
+			fileChooser.setInitialDirectory(
+					new File(System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
+			Stage stage_ = (Stage) separate.getScene().getWindow();
+			List<File> selectedFiles = fileChooser.showOpenMultipleDialog(stage_);
+			if (selectedFiles != null) {
+
+				for (int i = 0; i < selectedFiles.size(); i++) {
+					FileInputStream in = new FileInputStream(selectedFiles.get(i));
+					pstmt.setBinaryStream(2, in, (int) selectedFiles.get(i).length());
+					pstmt.setString(1, selectedFiles.get(i).getName());
+					pstmt.setInt(3, i);
+					pstmt.setInt(4, 0);
+					pstmt.executeUpdate();
+				}
+
+				/* Выгрузка */
+
+				SqlMap s = new SqlMap().load(System.getenv("TRANSACT_PATH") + "/report/SQL.xml");
+				String readRecordSQL = s.getSql("PensRa");
+				System.out.println(readRecordSQL);
+				PreparedStatement exec = conn.prepareStatement(readRecordSQL);
+				exec.execute();
+
+				String query = "select * from Z_PENS_XLSX t where inout = 1";
+				PreparedStatement prepStmt = conn.prepareStatement(query);
+				ResultSet rs = prepStmt.executeQuery();
+				String createfolder = null;
+
+				while (rs.next()) {
+					Blob blob = rs.getBlob("XLSX");
+					createfolder = selectedFiles.get(0).getParent() + "/"+rs.getString("NAME_") + ".xlsx";
+					OutputStream out = new FileOutputStream(createfolder);
+					byte[] buff = blob.getBytes(1, (int) blob.length());
+					out.write(buff);
+					out.close();
+				}
+
+				rs.close();
+				prepStmt.close();
+
+				conn.commit();
+				pstmt.close();
+			}
+		} catch (Exception e) {
+			showalert(e.getMessage());
+		}
+	}
+
+	/* Старт */
+	@FXML
+	private void separate_(ActionEvent event) {
 		try {
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Выбрать файл");
@@ -378,6 +436,36 @@ public class penscontroller {
 
 	/* Возврат самого файла */
 	public String retclob(int id, int sess_id, Connection conn, File file) {
+		String str = "";
+		try {
+			SqlMap s = new SqlMap().load(System.getenv("TRANSACT_PATH") + "\\report\\SQL.xml");
+			String readRecordSQL = s.getSql("getPens");
+			PreparedStatement prepStmt = conn.prepareStatement(readRecordSQL);
+			prepStmt.setInt(1, id);
+			ResultSet rs = prepStmt.executeQuery();
+
+			String createfolder = file.getParent() + "\\" + file.getName() + "_0" + id + ".txt";
+			System.out.println(readRecordSQL);
+
+			PrintWriter writer = new PrintWriter(createfolder);
+
+			while (rs.next()) {
+				str = str + rs.getString("STR") + "\r\n";
+			}
+			writer.write(str);
+			writer.flush();
+			writer.close();
+			rs.close();
+			prepStmt.close();
+
+		} catch (Exception e) {
+			showalert(e.getMessage());
+		}
+		return str;
+	}
+
+	/* Возврат самого файла */
+	public String retclob_xlsx(int id, int sess_id, Connection conn, File file) {
 		String str = "";
 		try {
 			SqlMap s = new SqlMap().load(System.getenv("TRANSACT_PATH") + "\\report\\SQL.xml");
