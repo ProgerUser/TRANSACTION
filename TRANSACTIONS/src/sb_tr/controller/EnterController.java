@@ -128,8 +128,9 @@ public class EnterController {
 				alert_1.showAndWait();
 			} else if (chk_rigth("enter.fxml", Connect.userID_) == 1) {
 				Stage stage_ = (Stage) enter_id.getScene().getWindow();
-				// stage_.setMaximized(true);
+				//stage_.setMaximized(true);
 				stage_.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
+				Main.initRootLayout();
 				Main.showFirst();
 			} else {
 				Alert alert_1 = new Alert(Alert.AlertType.INFORMATION);
@@ -298,7 +299,6 @@ public class EnterController {
 			System.out.println(selectStmt);
 
 			ResultSet rs = prepStmt.executeQuery();
-			ObservableList<String> combolist = FXCollections.observableArrayList();
 			if (rs.next()) {
 				ret = rs.getInt("CNT");
 			}

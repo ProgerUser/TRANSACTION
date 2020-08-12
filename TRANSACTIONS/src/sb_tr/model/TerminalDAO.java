@@ -465,6 +465,24 @@ public class TerminalDAO {
 		// Return employee object
 		return Forms_lst;
 	}
+	
+	// *******************************
+	// SELECT Menu
+	// *******************************
+	public static ObservableList<Forms> User_Menu() {
+		String selectStmt = "select id_menu, menu_name, menu_desc from z_sb_menu_amra order by id_menu\n";
+
+		// Execute SELECT statement
+
+		// Get ResultSet from dbExecuteQuery method
+		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
+
+		// Send ResultSet to the getEmployeeList method and get employee object
+		ObservableList<Forms> Forms_lst = get_menu(rsEmps);
+
+		// Return employee object
+		return Forms_lst;
+	}
 
 	// *******************************
 	// SELECT Z_SB_PENS_4FILE
@@ -531,6 +549,33 @@ public class TerminalDAO {
 	}
 	
 	// *******************************
+	// SELECT User_in_Menu
+	// *******************************
+	public static ObservableList<User_in> User_in_menu(Integer form_name) {
+		String selectStmt = 
+				"select CUSRLOGNAME, CUSRNAME, T_NAME\n" + 
+				"  from z_sb_menu_amra a,\n" + 
+				"       z_sb_access_gr_menu_amra b,\n" + 
+				"       z_sb_access_gr_type_amra c,\n" + 
+				"       (select t.cusrlogname, t.iusrid, t.CUSRNAME from usr t) d\n" + 
+				" where a.id_menu = b.menu_id\n" + 
+				"   and b.gr_id = c.id_type\n" + 
+				"   and b.usr_id = d.iusrid\n" + 
+				"   and ID_MENU = "+form_name+"\n";
+
+		// Execute SELECT statement
+
+		// Get ResultSet from dbExecuteQuery method
+		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
+
+		// Send ResultSet to the getEmployeeList method and get employee object
+		ObservableList<User_in> Forms_lst = get_usr_in(rsEmps);
+
+		// Return employee object
+		return Forms_lst;
+	}
+	
+	// *******************************
 		// SELECT User_out
 		// *******************************
 		public static ObservableList<User_out> User_out(Integer form_id) {
@@ -561,7 +606,37 @@ public class TerminalDAO {
 			// Return employee object
 			return Forms_lst;
 		}
-	
+		// *******************************
+				// SELECT User_out
+				// *******************************
+				public static ObservableList<User_out> User_out_menu(Integer form_id) {
+					String selectStmt = 
+							"select CUSRLOGNAME, CUSRNAME\n" + 
+							"  from usr\n" + 
+							" where usr.dusrfire is null\n" + 
+							"   and CUSRLOGNAME not in\n" + 
+							"       (select CUSRLOGNAME\n" + 
+							"          from z_sb_menu_amra a,\n" + 
+							"               z_sb_access_gr_menu_amra b,\n" + 
+							"               z_sb_access_gr_type_amra c,\n" + 
+							"               (select t.cusrlogname, t.iusrid, t.CUSRNAME from usr t) d\n" + 
+							"         where a.id_menu = b.menu_id\n" + 
+							"           and b.gr_id = c.id_type\n" + 
+							"           and b.usr_id = d.iusrid\n" + 
+							"           and ID_menu = "+form_id+")\n" + 
+							" order by CUSRLOGNAME";
+
+					// Execute SELECT statement
+
+					// Get ResultSet from dbExecuteQuery method
+					ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
+
+					// Send ResultSet to the getEmployeeList method and get employee object
+					ObservableList<User_out> Forms_lst = get_usr_out(rsEmps);
+
+					// Return employee object
+					return Forms_lst;
+				}
     //*************************************
     //UPDATE usr right
     //*************************************
@@ -834,22 +909,39 @@ public class TerminalDAO {
 		}
 
 	// Select * from fn_sess Z_SB_ACCESS_AMRA
-		private static ObservableList<Forms> get_forms(ResultSet rs) {
-			try {
-				ObservableList<Forms> forms_list = FXCollections.observableArrayList();
-				while (rs.next()) {
-					Forms frms = new Forms();
-					frms.set_ID_FORM(rs.getInt("ID_FORM"));
-					frms.set_FORM_NAME(rs.getString("FORM_NAME"));
-					frms.set_FORMN_DESC(rs.getString("FORMN_DESC"));
-					forms_list.add(frms);
-				}
-				return forms_list;
-			} catch (SQLException e) {
-				alert(e.getMessage());
+	private static ObservableList<Forms> get_forms(ResultSet rs) {
+		try {
+			ObservableList<Forms> forms_list = FXCollections.observableArrayList();
+			while (rs.next()) {
+				Forms frms = new Forms();
+				frms.set_ID_FORM(rs.getInt("ID_FORM"));
+				frms.set_FORM_NAME(rs.getString("FORM_NAME"));
+				frms.set_FORMN_DESC(rs.getString("FORMN_DESC"));
+				forms_list.add(frms);
 			}
-			return null;
+			return forms_list;
+		} catch (SQLException e) {
+			alert(e.getMessage());
 		}
+		return null;
+	}
+	// Select * from fn_sess z_sb_menu_amra
+	private static ObservableList<Forms> get_menu(ResultSet rs) {
+		try {
+			ObservableList<Forms> forms_list = FXCollections.observableArrayList();
+			while (rs.next()) {
+				Forms frms = new Forms();
+				frms.set_ID_FORM(rs.getInt("ID_MENU"));
+				frms.set_FORM_NAME(rs.getString("menu_name"));
+				frms.set_FORMN_DESC(rs.getString("menu_desc"));
+				forms_list.add(frms);
+			}
+			return forms_list;
+		} catch (SQLException e) {
+			alert(e.getMessage());
+		}
+		return null;
+	}
 
 		// Select * from fn_sess Z_SB_PENS_4FILE
 		private static ObservableList<pensmodel> PENS_4FILE(ResultSet rs) {
@@ -893,7 +985,24 @@ public class TerminalDAO {
 		return null;
 	}
 	
-	
+	// Select * from usr menu
+		private static ObservableList<User_in> get_usr_in_menu(ResultSet rs) {
+			try {
+				ObservableList<User_in> user_in_list = FXCollections.observableArrayList();
+				while (rs.next()) {
+					User_in user_in = new User_in();
+					user_in.set_FIO_I(rs.getString("CUSRNAME"));
+					user_in.set_USR_ID_I(rs.getString("CUSRLOGNAME"));
+					user_in.set_TYPE_ACCESS_I(rs.getString("T_NAME"));
+					user_in_list.add(user_in);
+				}
+				return user_in_list;
+			} catch (SQLException e) {
+				alert(e.getMessage());
+			}
+			return null;
+		}
+		
 	// Select * from Clients
 		private static ObservableList<Ibank2> get_cli(ResultSet rs) {
 			try {

@@ -23,7 +23,7 @@ public class Main extends Application {
 	// Logger instance named "MyApp".
 	public static Logger logger = Logger.getLogger(Main.class);
 	// This is our PrimaryStage (It contains everything)
-	public Stage primaryStage;
+	public static  Stage primaryStage;
 
 	// This is the BorderPane of RootLayout
 	public static BorderPane rootLayout;
@@ -46,27 +46,27 @@ public class Main extends Application {
 		this.primaryStage.setTitle("Транзакции");
 
 		// 2) Initialize RootLayout
-		initRootLayout();
-
 		// 3) Display the EmployeeOperations View
 		// showEmployeeView();
 
-		/*
+		//initRootLayout();
 		if (Connect.userID_ != null) { // primaryStage.setMaximized(true);
 			primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
 			DBUtil.dbConnect();
-			Main.showFirst();
+			showFirst();
 		} else {
 			Enter();
 		}
-		*/
 		
 		
 		
-		  Connect.connectionURL_ = "10.111.64.21:1521/odb"; Connect.userID_ =
-		  "AMRA_IMPORT"; Connect.userPassword_ = "ver8i"; DBUtil.dbConnect();
+		/*
+		  Connect.connectionURL_ = "10.111.64.21:1521/odb"; 
+		  Connect.userID_ ="SAIDP"; 
+		  Connect.userPassword_ = "xxx";
+		  DBUtil.dbConnect();
 		  showFirst();
-		
+		*/
 		
 		primaryStage.setOnCloseRequest(e -> {
 			DBUtil.dbDisconnect();
@@ -84,7 +84,7 @@ public class Main extends Application {
 	}
 
 	// Initializes the root layout.
-	public void initRootLayout() {
+	public static  void initRootLayout() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/RootLayout.fxml"));
@@ -180,14 +180,33 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
+	/* Первая форма */
+	public static void RT() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Main.class.getResource("view/RootLayout.fxml"));
+			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
+			rootLayout.setCenter(employeeOperationsView);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	/* Вход */
 	public void Enter() {
 		try {
+			/*
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Enter.fxml"));
 			BorderPane employeeOperationsView = (BorderPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
+			*/
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Main.class.getResource("view/Enter.fxml"));
+			rootLayout = (BorderPane) loader.load();
+			Scene scene = new Scene(rootLayout); // We are sending rootLayout to the Scene.
+			primaryStage.setScene(scene); // Set the scene in primary stage.
+			primaryStage.show(); // Display the primary stage
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -234,6 +253,18 @@ public class Main extends Application {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Admin.fxml"));
+			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
+			rootLayout.setCenter(employeeOperationsView);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/* Доступ Меню*/
+	public static void Admin_Menu() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Main.class.getResource("view/Admin_Menu.fxml"));
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {

@@ -4,8 +4,10 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 
 import java.io.BufferedReader;
@@ -19,9 +21,12 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.concurrent.Executor;
@@ -32,6 +37,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -41,6 +47,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import sb_tr.Main;
 import sb_tr.model.Connect;
+import sb_tr.model.SqlMap;
 import sb_tr.model.TerminalForCombo;
 import sb_tr.model.ViewerDAO;
 import sb_tr.util.DBUtil;
@@ -59,6 +66,9 @@ public class RootLayoutController {
 	private ResourceBundle resources;
 
 	@FXML
+	private MenuItem adminmenuitems;
+
+	@FXML
 	private URL location;
 
 	@FXML
@@ -68,13 +78,79 @@ public class RootLayoutController {
 	private Menu statusbar;
 
 	@FXML
+	private MenuItem adminright;
+
+	@FXML
+	private MenuItem executeamratrans;
+
+	@FXML
+	private MenuItem createpsevdo;
+
+	@FXML
+	private MenuItem seporatepensrf;
+
+	@FXML
+	private MenuItem services;
+
+	@FXML
+	private MenuItem seporatepensra;
+
+	@FXML
+	private MenuItem terminals;
+
+	@FXML
+	private MenuBar menubar;
+
+	@FXML
+	private MenuItem transactlist;
+
+	@FXML
+	private MenuItem print;
+
+	@FXML
+	private Menu administrator;
+
+	@FXML
+	private Menu pensiara;
+
+	@FXML
+	private Menu file;
+
+	@FXML
+	private Menu pensiarf;
+
+	@FXML
+	private MenuItem deals;
+
+	@FXML
+	private MenuItem bankklients;
+
+	@FXML
+	private Menu kash;
+
+	@FXML
+	private MenuItem exitapp;
+
+	@FXML
+	private MenuItem historyload;
+
+	@FXML
+	private Menu amraterminal;
+
+	@FXML
+	private MenuItem printapmain;
+
+	@FXML
+	private Menu bankklient;
+
+	@FXML
 	void handleExit(ActionEvent event) {
 		// File file = new File(System.getProperty("user.home") +
 		// "/XXI.AP_TEST_MAIN.properties");
 		// file.delete();
 		// System.out.print("------------------------------------------------------");
-		// Platform.exit();
-		// System.exit(0);
+		Platform.exit();
+		System.exit(0);
 	}
 
 	@FXML
@@ -142,6 +218,32 @@ public class RootLayoutController {
 		} catch (NullPointerException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			alert.setHeaderText("Error");
+			alert.setContentText("Введите учетные данные");
+			alert.show();
+		}
+	}
+
+	@FXML
+	void access_menuitems(ActionEvent event) {
+		try {
+			if (Connect.userPassword_.equals("")) {
+
+			} else if (chk_rigth("Admin.fxml", Connect.userID_) == 1) {
+				System.out.println(chk_rigth("Admin_Menu.fxml", Connect.userID_));
+				Main.Admin_Menu();
+			} else {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText("Нет прав!");
+				alert.showAndWait();
+			}
+
+		} catch (NullPointerException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			alert.setHeaderText("Ошибка!");
 			alert.setContentText("Введите учетные данные");
 			alert.show();
 		}
@@ -398,7 +500,7 @@ public class RootLayoutController {
 						.substring(Connect.connectionURL_.indexOf("/") + 1, Connect.connectionURL_.length())
 						.toUpperCase()
 				+ " \"report_type_id = 666\"");
-		
+
 		Task<Object> task = new Task<Object>() {
 			@Override
 			public Object call() throws Exception {
@@ -440,6 +542,16 @@ public class RootLayoutController {
 		alert.setTitle("Внимание");
 		alert.setHeaderText(null);
 		alert.setContentText("Выберите сначала данные из таблицы!");
+		alert.showAndWait();
+	}
+
+	private void Alerts(String mess) {
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+		stage.getIcons().add(new Image("terminal.png"));
+		alert.setTitle("Внимание");
+		alert.setHeaderText(null);
+		alert.setContentText(mess);
 		alert.showAndWait();
 	}
 
@@ -518,22 +630,22 @@ public class RootLayoutController {
 			 * conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ +
 			 * "/" + Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
 			 */
-			Statement sqlStatement = conn.createStatement();
-			String readRecordSQL = " select count(*) cnt\n" + "  from z_sb_access_amra a,\n"
-					+ "       z_sb_access_gr_amra b,\n" + "       z_sb_access_gr_type_amra c,\n"
-					+ "       (select t.cusrlogname, t.iusrid from usr t) d\n" + " where a.id_form = b.form_id\n"
-					+ "   and b.gr_id = c.id_type\n" + "   and b.usr_id = d.iusrid\n"
-					+ "   and upper(FORM_NAME) = upper('" + FORM_NAME + "')\n" + "   and upper(CUSRLOGNAME) = upper('"
-					+ CUSRLOGNAME + "')\n" + "   and T_NAME = 'Y'\n";
+
+			SqlMap s = new SqlMap().load(System.getenv("TRANSACT_PATH") + "\\report\\SQL.xml");
+			String readRecordSQL = s.getSql("acces_enter");
+			PreparedStatement prepStmt = conn.prepareStatement(readRecordSQL);
+			prepStmt.setString(1, FORM_NAME);
+			prepStmt.setString(2, CUSRLOGNAME);
+
 			System.out.println(readRecordSQL);
-			ResultSet rs = sqlStatement.executeQuery(readRecordSQL);
+			ResultSet rs = prepStmt.executeQuery();
 			ObservableList<String> combolist = FXCollections.observableArrayList();
 			if (rs.next()) {
 				ret = rs.getInt("CNT");
 			}
 			// conn.close();
-			sqlStatement.close();
-		} catch (SQLException e) {
+			prepStmt.close();
+		} catch (Exception e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 			stage.getIcons().add(new Image("terminal.png"));
@@ -545,8 +657,41 @@ public class RootLayoutController {
 		return ret;
 	}
 
-	
-	
+	public int chk_menu(String FORM_NAME, String CUSRLOGNAME) {
+		int ret = 0;
+		// Connection conn;
+		Connection conn = DBUtil.conn;
+		try {
+			/*
+			 * conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ +
+			 * "/" + Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
+			 */
+
+			SqlMap s = new SqlMap().load(System.getenv("TRANSACT_PATH") + "\\report\\SQL.xml");
+			String readRecordSQL = s.getSql("acces_menu");
+			PreparedStatement prepStmt = conn.prepareStatement(readRecordSQL);
+			prepStmt.setString(1, FORM_NAME);
+			prepStmt.setString(2, CUSRLOGNAME);
+			System.out.println(readRecordSQL);
+			ResultSet rs = prepStmt.executeQuery();
+			ObservableList<String> combolist = FXCollections.observableArrayList();
+			if (rs.next()) {
+				ret = rs.getInt("CNT");
+			}
+			// conn.close();
+			prepStmt.close();
+		} catch (Exception e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image("terminal.png"));
+			alert.setTitle("Внимание");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+		}
+		return ret;
+	}
+
 	@FXML
 	void divide_RA(ActionEvent event) {
 		try {
@@ -572,7 +717,7 @@ public class RootLayoutController {
 			alert.show();
 		}
 	}
-	
+
 	@FXML
 	void divide(ActionEvent event) {
 		try {
@@ -598,7 +743,7 @@ public class RootLayoutController {
 			alert.show();
 		}
 	}
-	
+
 	@FXML
 	void initialize() {
 		exec = Executors.newCachedThreadPool((runnable) -> {
@@ -606,6 +751,19 @@ public class RootLayoutController {
 			t.setDaemon(true);
 			return t;
 		});
-		assert chekreport != null : "fx:id=\"chekreport\" was not injected: check your FXML file 'RootLayout.fxml'.";
+		menubar.getMenus().forEach(menu -> {
+			if (chk_menu(menu.getId(), Connect.userID_) == 1) {
+				menu.setVisible(true);
+			} else {
+				menu.setVisible(false);
+			}
+			menu.getItems().forEach(menuItem -> {
+				if (chk_menu(menuItem.getId(), Connect.userID_) == 1) {
+					menuItem.setVisible(true);
+				} else {
+					menuItem.setVisible(false);
+				}
+			});
+		});
 	}
 }

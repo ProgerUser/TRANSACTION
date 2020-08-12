@@ -20,7 +20,7 @@ import sb_tr.util.DBUtil;
 /**
  * Пачулия Саид 04.06.2020.
  */
-public class AccessController {
+public class AccessControllerMenu {
 
 	
 	@FXML
@@ -60,10 +60,10 @@ public class AccessController {
 			String user_name = USERS_IN.getSelectionModel().getSelectedItem().get_USR_ID_I();
 			
 			String updateStmt =
-			"update Z_SB_ACCESS_GR_AMRA\n" + 
+			"update z_sb_access_gr_menu_amra\n" + 
 			"   set GR_ID = decode((select j.gr_id\n" + 
-			"                        from Z_SB_ACCESS_GR_AMRA j\n" + 
-			"                       where FORM_ID = "+form_id+"\n" + 
+			"                        from z_sb_access_gr_menu_amra j\n" + 
+			"                       where MENU_ID = "+form_id+"\n" + 
 			"                         and USR_ID =\n" + 
 			"                             (select f.iusrid\n" + 
 			"                                from usr f\n" + 
@@ -71,7 +71,7 @@ public class AccessController {
 			"                      1,\n" + 
 			"                      2,\n" + 
 			"                      1)\n" + 
-			" where FORM_ID = "+form_id+"\n" + 
+			" where MENU_ID = "+form_id+"\n" + 
 			"   and USR_ID = (select f.iusrid\n" + 
 			"                   from usr f\n" + 
 			"                  where lower(f.cusrlogname) = lower('"+user_name+"'))\n";
@@ -83,7 +83,7 @@ public class AccessController {
 	
 	public void upd_usr_in() {
 		Forms forms = FORMS.getSelectionModel().getSelectedItem();
-		ObservableList<User_in> empData_2 = TerminalDAO.User_in(forms.get_ID_FORM());
+		ObservableList<User_in> empData_2 = TerminalDAO.User_in_menu(forms.get_ID_FORM());
 		populate_user_in(empData_2);
 		autoResizeColumns(USERS_IN);
 		TableFilter.forTableView(USERS_IN).apply();
@@ -92,7 +92,7 @@ public class AccessController {
 	public void upd_usr_out() {
 		int form_id = FORMS.getSelectionModel().getSelectedItem().get_ID_FORM();
 		
-		ObservableList<User_out> empData_2 = TerminalDAO.User_out(form_id);
+		ObservableList<User_out> empData_2 = TerminalDAO.User_out_menu(form_id);
 		populate_user_o(empData_2);
 		
 		autoResizeColumns(USER_OUT);
@@ -122,7 +122,7 @@ public class AccessController {
 		USR_ID_O.setCellValueFactory(cellData -> cellData.getValue().USR_ID_O_Property());
 		FIO_O.setCellValueFactory(cellData -> cellData.getValue().FIO_O_Property());
 		
-		ObservableList<Forms> empData = TerminalDAO.User_Forms();
+		ObservableList<Forms> empData = TerminalDAO.User_Menu();
 		populate_forms(empData);
 		autoResizeColumns(FORMS);
 		TableFilter.forTableView(FORMS).apply();
@@ -146,7 +146,7 @@ public class AccessController {
 			int form_id = FORMS.getSelectionModel().getSelectedItem().get_ID_FORM();
 			String user_name = USER_OUT.getSelectionModel().getSelectedItem().get_USR_ID_O();
 			
-			String updateStmt = "insert into z_sb_access_gr_amra (form_id, \n" + 
+			String updateStmt = "insert into Z_SB_ACCESS_GR_MENU_AMRA (menu_id, \n" + 
 					"usr_id, \n" + 
 					"gr_id) \n"
 					+ " values ("+form_id+",(select IUSRID from usr h\n" + 
@@ -167,8 +167,8 @@ public class AccessController {
 			String type = USERS_IN.getSelectionModel().getSelectedItem().get_TYPE_ACCESS_I();
 			
 			String updateStmt = 
-					"delete from z_sb_access_gr_amra j\n" + 
-					" where j.form_id = '"+form_id+"'\n" + 
+					"delete from Z_SB_ACCESS_GR_MENU_AMRA j\n" + 
+					" where j.menu_id = '"+form_id+"'\n" + 
 					"   and j.usr_id =\n" + 
 					"       (select IUSRID from usr h where h.CUSRLOGNAME = '"+user_name+"')\n" 
 					+"   and j.gr_id = decode('"+type+"', 'Y', 1, 'N', 2)\n";

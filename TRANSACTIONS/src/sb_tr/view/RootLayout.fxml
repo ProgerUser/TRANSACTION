@@ -8,81 +8,61 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity"
-	minHeight="-Infinity" minWidth="-Infinity" prefHeight="721.0"
-	prefWidth="1030.0" xmlns="http://javafx.com/javafx/8"
-	xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="sb_tr.controller.RootLayoutController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="721.0" prefWidth="1030.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sb_tr.controller.RootLayoutController">
 	<top>
-		<MenuBar prefHeight="29.0" prefWidth="688.0"
-			BorderPane.alignment="CENTER">
+		<MenuBar fx:id="menubar" prefHeight="29.0" prefWidth="688.0" BorderPane.alignment="CENTER">
 			<menus>
-				<Menu mnemonicParsing="false" text="Файл">
+				<Menu fx:id="file" mnemonicParsing="false" text="Файл">
 					<items>
-						<MenuItem mnemonicParsing="false" onAction="#handleExit"
-							text="Close" />
+						<MenuItem fx:id="exitapp" mnemonicParsing="false" onAction="#handleExit" text="Close" />
 					</items>
 				</Menu>
 				<!--<Menu mnemonicParsing="false" text="Терминалы Квант-Капитал"> <items> 
 					<MenuItem mnemonicParsing="false" onAction="#loadtransact" text="Загрузка 
 					транзакции" /> <MenuItem mnemonicParsing="false" onAction="#chektransact" 
 					text="Печать чеков" /> </items> </Menu> -->
-				<Menu mnemonicParsing="false" text="Кассовый офис">
+				<Menu fx:id="kash" mnemonicParsing="false" text="Кассовый офис">
 					<items>
-						<MenuItem mnemonicParsing="false" onAction="#Kash"
-							text="Сформировать псевдоним" />
+						<MenuItem fx:id="createpsevdo" mnemonicParsing="false" onAction="#Kash" text="Сформировать псевдоним" />
 						<!--<MenuItem mnemonicParsing="false" onAction="#Kash" text="Загрузить 
 							EXCEL с шаблоном" /> -->
 					</items>
 				</Menu>
-				<Menu mnemonicParsing="false" text="Терминалы Амра">
+				<Menu fx:id="amraterminal" mnemonicParsing="false" text="Терминалы Амра">
 					<items>
-						<MenuItem mnemonicParsing="false" onAction="#amra_trans"
-							text="Загрузка Транзакции" />
-						<MenuItem mnemonicParsing="false" onAction="#loadhistory"
-							text="История загрузок" />
-						<MenuItem mnemonicParsing="false" onAction="#term_view"
-							text="Загруженные транзакции" />
-						<MenuItem mnemonicParsing="false"
-							onAction="#Termdial_view" text="Сдачи" />
-						<MenuItem mnemonicParsing="false" onAction="#termview"
-							text="Терминалы" />
-						<MenuItem mnemonicParsing="false" onAction="#service"
-							text="Сервисы" />
-						<MenuItem mnemonicParsing="false" onAction="#ap_print"
-							text="Печать" />
-						<MenuItem mnemonicParsing="false" onAction="#ap_printfmx"
-							text="Печать AP_MAIN" />
+						<MenuItem fx:id="executeamratrans" mnemonicParsing="false" onAction="#amra_trans" text="Загрузка Транзакции" />
+						<MenuItem fx:id="historyload" mnemonicParsing="false" onAction="#loadhistory" text="История загрузок" />
+						<MenuItem fx:id="transactlist" mnemonicParsing="false" onAction="#term_view" text="Загруженные транзакции" />
+						<MenuItem fx:id="deals" mnemonicParsing="false" onAction="#Termdial_view" text="Сдачи" />
+						<MenuItem fx:id="terminals" mnemonicParsing="false" onAction="#termview" text="Терминалы" />
+						<MenuItem fx:id="services" mnemonicParsing="false" onAction="#service" text="Сервисы" />
+						<MenuItem fx:id="print" mnemonicParsing="false" onAction="#ap_print" text="Печать" />
+						<MenuItem fx:id="printapmain" mnemonicParsing="false" onAction="#ap_printfmx" text="Печать AP_MAIN" />
 					</items>
 				</Menu>
-				<Menu mnemonicParsing="false" text="Администратор">
+				<Menu fx:id="administrator" mnemonicParsing="false" text="Администратор">
 					<items>
-						<MenuItem mnemonicParsing="false" onAction="#Access"
-							text="Права доступа" />
+						<MenuItem fx:id="adminright" mnemonicParsing="false" onAction="#Access" text="Права доступа" />
+                  <MenuItem fx:id="adminmenuitems" mnemonicParsing="false" onAction="#access_menuitems" text="Доступность пунктов меню" />
 					</items>
 				</Menu>
-				<Menu mnemonicParsing="false" text="Банк-Клиент">
+				<Menu fx:id="bankklient" mnemonicParsing="false" text="Банк-Клиент">
 					<items>
-						<MenuItem mnemonicParsing="false" onAction="#Ibank"
-							text="Клиенты" />
+						<MenuItem fx:id="bankklients" mnemonicParsing="false" onAction="#Ibank" text="Клиенты" />
 					</items>
 				</Menu>
 				<!-- <Menu mnemonicParsing="false" text="Помощь"> <items> <MenuItem mnemonicParsing="false" 
 					onAction="#handleHelp" text="About" /> <MenuItem mnemonicParsing="false" 
 					onAction="#DBCONNECT" text="DBCONNECT" /> </items> </Menu> -->
-				<Menu mnemonicParsing="false" text="Пенсия РФ">
+				<Menu fx:id="pensiarf" mnemonicParsing="false" text="Пенсия РФ">
 					<items>
-						<MenuItem mnemonicParsing="false" onAction="#divide"
-							text="Разбить файл" />
+						<MenuItem fx:id="seporatepensrf" mnemonicParsing="false" onAction="#divide" text="Разбить файл" />
 					</items>
 				</Menu>
-				<Menu mnemonicParsing="false" text="Пенсия РА">
+				<Menu fx:id="pensiara" mnemonicParsing="false" text="Пенсия РА">
 					<items>
-						<MenuItem mnemonicParsing="false" onAction="#divide_RA"
-							text="Разбить файл" />
+						<MenuItem fx:id="seporatepensra" mnemonicParsing="false" onAction="#divide_RA" text="Разбить файл" />
 					</items>
-				</Menu>
-				<Menu fx:id="statusbar" mnemonicParsing="false" text="">
 				</Menu>
 			</menus>
 		</MenuBar>
