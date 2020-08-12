@@ -2,7 +2,7 @@
 <sqlMap>
 	<sqls>
 		<entry>
-			<key>getPOSTTRN</key>
+		<key>getPOSTTRN</key>
 			<value><![CDATA[
 select nvl(CTRNACCD, g.account_payer) debet,
        nvl(CTRNACCC, g.account_receiver) credit,
@@ -116,7 +116,8 @@ begin
              end part,
              g.*
         from dat g)
-    select LASTNAME,
+    select rownum,
+	       LASTNAME,
            FIRSTNAME,
            MIDDLENAME,
            COL05,
@@ -128,12 +129,12 @@ begin
     and part = ]' || r.part || q'[]';
   
     as_xlsx.clear_workbook;
-    as_xlsx.query2sheet(query);
+    as_xlsx.query2sheet(p_sql => query,p_column_headers => false);
   
     insert into Z_PENS_XLSX
       (NAME_, XLSX, ID_, INOUT, CASSA, PART)
     values
-      (sysdate || ' Касса ' || r.cassa || ' Часть ' || r.part,
+      (to_char(sysdate,'dd.mm.yyyy HH24-MI-SS') || ' Касса ' || r.cassa || ' Часть ' || r.part,
        as_xlsx.finish,
        0,
        1,
@@ -148,7 +149,7 @@ end;
 		<entry>
 			<key>acces_enter</key>
 			<value><![CDATA[
-			select count(*) cnt
+select count(*) cnt
   from z_sb_access_amra a,
        z_sb_access_gr_amra b,
        z_sb_access_gr_type_amra c,
@@ -157,6 +158,22 @@ end;
    and b.gr_id = c.id_type
    and b.usr_id = d.iusrid
    and upper(FORM_NAME) = upper(?)
+   and upper(CUSRLOGNAME) = upper(?)
+   and T_NAME = 'Y'
+			]]></value>
+		</entry>
+		<entry>
+			<key>acces_menu</key>
+			<value><![CDATA[
+select count(*) cnt
+  from z_sb_menu_amra a,
+       z_sb_access_gr_menu_amra b,
+       z_sb_access_gr_type_amra c,
+       (select t.cusrlogname, t.iusrid from usr t) d
+ where a.id_menu = b.menu_id
+   and b.gr_id = c.id_type
+   and b.usr_id = d.iusrid
+   and upper(MENU_NAME) = upper(?)
    and upper(CUSRLOGNAME) = upper(?)
    and T_NAME = 'Y'
 			]]></value>
