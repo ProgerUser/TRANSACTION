@@ -469,8 +469,8 @@ public class TerminalDAO {
 	// *******************************
 	// SELECT Menu
 	// *******************************
-	public static ObservableList<Forms> User_Menu() {
-		String selectStmt = "select id_menu, menu_name, menu_desc from z_sb_menu_amra order by id_menu\n";
+	public static ObservableList<MenuItems> User_Menu() {
+		String selectStmt = "select * from z_sb_menu_amra ORDER BY MENU_I, MENU_POS\n";
 
 		// Execute SELECT statement
 
@@ -478,7 +478,7 @@ public class TerminalDAO {
 		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
 
 		// Send ResultSet to the getEmployeeList method and get employee object
-		ObservableList<Forms> Forms_lst = get_menu(rsEmps);
+		ObservableList<MenuItems> Forms_lst = get_menu(rsEmps);
 
 		// Return employee object
 		return Forms_lst;
@@ -926,14 +926,16 @@ public class TerminalDAO {
 		return null;
 	}
 	// Select * from fn_sess z_sb_menu_amra
-	private static ObservableList<Forms> get_menu(ResultSet rs) {
+	private static ObservableList<MenuItems> get_menu(ResultSet rs) {
 		try {
-			ObservableList<Forms> forms_list = FXCollections.observableArrayList();
+			ObservableList<MenuItems> forms_list = FXCollections.observableArrayList();
 			while (rs.next()) {
-				Forms frms = new Forms();
-				frms.set_ID_FORM(rs.getInt("ID_MENU"));
-				frms.set_FORM_NAME(rs.getString("menu_name"));
-				frms.set_FORMN_DESC(rs.getString("menu_desc"));
+				MenuItems frms = new MenuItems();
+				frms.setID_MENU(rs.getInt("ID_MENU"));
+				frms.setMENU_NAME(rs.getString("menu_name"));
+				frms.setMENU_DESC(rs.getString("menu_desc"));
+				frms.setMENU_POS(rs.getInt("MENU_POS"));
+				frms.setMENU_I(rs.getInt("MENU_I"));
 				forms_list.add(frms);
 			}
 			return forms_list;
