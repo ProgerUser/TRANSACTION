@@ -15,15 +15,13 @@ import javafx.stage.Stage;
 import sb_tr.model.Connect;
 import sb_tr.util.DBUtil;
 
-
-
 public class Main extends Application {
 
 	// Define a static logger variable so that it references the
 	// Logger instance named "MyApp".
 	public static Logger logger = Logger.getLogger(Main.class);
 	// This is our PrimaryStage (It contains everything)
-	public static  Stage primaryStage;
+	public static Stage primaryStage;
 
 	// This is the BorderPane of RootLayout
 	public static BorderPane rootLayout;
@@ -32,11 +30,11 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 
 		/* log4j */
-		String log4jConfigFile = System.getenv("TRANSACT_PATH")+"log4j.xml";
-		System.out.print(log4jConfigFile+"\r\n");
+		String log4jConfigFile = System.getenv("TRANSACT_PATH") + "log4j.xml";
+		System.out.print(log4jConfigFile + "\r\n");
 		DOMConfigurator.configure(log4jConfigFile);
-		logger.info("Transact Start: " + Thread.currentThread().getName());
-        
+		//logger.info("Transact Start: " + Thread.currentThread().getName());
+
 		// 1) Declare a primary stage (Everything will be on this stage)
 		this.primaryStage = primaryStage;
 
@@ -49,25 +47,21 @@ public class Main extends Application {
 		// 3) Display the EmployeeOperations View
 		// showEmployeeView();
 
-		//initRootLayout();
+		// initRootLayout();
 		if (Connect.userID_ != null) { // primaryStage.setMaximized(true);
 			primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
 			DBUtil.dbConnect();
+			initRootLayout();
 			showFirst();
 		} else {
 			Enter();
 		}
-		
-		
-		
+
 		/*
-		  Connect.connectionURL_ = "10.111.64.21:1521/odb"; 
-		  Connect.userID_ ="SAIDP"; 
-		  Connect.userPassword_ = "xxx";
-		  DBUtil.dbConnect();
-		  showFirst();
-		*/
-		
+		 * Connect.connectionURL_ = "10.111.64.21:1521/odb"; Connect.userID_ ="SAIDP";
+		 * Connect.userPassword_ = "xxx"; DBUtil.dbConnect(); showFirst();
+		 */
+
 		primaryStage.setOnCloseRequest(e -> {
 			DBUtil.dbDisconnect();
 			/*
@@ -84,7 +78,7 @@ public class Main extends Application {
 	}
 
 	// Initializes the root layout.
-	public static  void initRootLayout() {
+	public static void initRootLayout() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/RootLayout.fxml"));
@@ -180,6 +174,7 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
+
 	/* Первая форма */
 	public static void RT() {
 		try {
@@ -196,11 +191,11 @@ public class Main extends Application {
 	public void Enter() {
 		try {
 			/*
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("view/Enter.fxml"));
-			BorderPane employeeOperationsView = (BorderPane) loader.load();
-			rootLayout.setCenter(employeeOperationsView);
-			*/
+			 * FXMLLoader loader = new FXMLLoader();
+			 * loader.setLocation(Main.class.getResource("view/Enter.fxml")); BorderPane
+			 * employeeOperationsView = (BorderPane) loader.load();
+			 * rootLayout.setCenter(employeeOperationsView);
+			 */
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Enter.fxml"));
 			rootLayout = (BorderPane) loader.load();
@@ -259,8 +254,8 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
-	
-	/* Доступ Меню*/
+
+	/* Доступ Меню */
 	public static void Admin_Menu() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
@@ -283,7 +278,7 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/* Пенсия */
 	public static void sepRA() {
 		try {

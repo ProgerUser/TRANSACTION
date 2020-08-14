@@ -128,7 +128,7 @@ public class EnterController {
 				alert_1.showAndWait();
 			} else if (chk_rigth("enter.fxml", Connect.userID_) == 1) {
 				Stage stage_ = (Stage) enter_id.getScene().getWindow();
-				//stage_.setMaximized(true);
+				// stage_.setMaximized(true);
 				stage_.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
 				Main.initRootLayout();
 				Main.showFirst();
@@ -248,7 +248,7 @@ public class EnterController {
 
 			ObservableList<String> items = FXCollections.observableArrayList();
 
-			// ObservableList<String> items_2 = FXCollections.observableArrayList();
+			ObservableList<String> items_2 = FXCollections.observableArrayList();
 
 			@SuppressWarnings("unchecked")
 			Enumeration<String> enums = (Enumeration<String>) prop.propertyNames();
@@ -260,7 +260,7 @@ public class EnterController {
 					items.add(value);
 				} else if (key.contains("url")) {
 					conurl.getItems().addAll(value);
-					// items_2.add(value);
+					items_2.add(value);
 				}
 			}
 
@@ -268,17 +268,16 @@ public class EnterController {
 //			conurl.getItems().addAll(prop.getProperty("url1"), prop.getProperty("url2"));
 
 			FilteredList<String> filteredItems = new FilteredList<String>(items);
-			// FilteredList<String> filteredItems_2 = new FilteredList<String>(items_2);
+			FilteredList<String> filteredItems_2 = new FilteredList<String>(items_2);
 			// Then you need to provide the InputFilter with the FilteredList in the
 			// constructor call.
 			login.getEditor().textProperty().addListener(new InputFilter(login, filteredItems, false));
 
 			login.setItems(filteredItems);
 
-			// conurl.getEditor().textProperty().addListener(new InputFilter(conurl,
-			// filteredItems_2, false));
+			conurl.getEditor().textProperty().addListener(new InputFilter(conurl, filteredItems_2, false));
 
-			// conurl.setItems(filteredItems_2);
+			conurl.setItems(filteredItems_2);
 
 		} catch (IOException ex) {
 			ex.printStackTrace();
