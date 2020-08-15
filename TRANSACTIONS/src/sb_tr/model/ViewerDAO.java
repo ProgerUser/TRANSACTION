@@ -504,14 +504,26 @@ public class ViewerDAO {
 		String param = acc_name_C + acc_rec_C + account_C  + idterm_C
 				+ inn_C + kbk_C  + kpp_C + name_C + okato_C + bo1_C + bo2_C +comission_C;
 
-		String updateStmt = "BEGIN\n" + "   UPDATE Z_SB_TERMSERV_AMRA_DBT\n" + "SET " + "acc_name = '" + acc_name_ + "', "
-				+ "acc_rec = '" + acc_rec_ + "', " + "account = '" + account_ + "', " 
-				+ "idterm = '" + idterm_ + "', " + "inn = '" + inn_ + "', " + "kbk = '" + kbk_
-				+ "', " + "kpp = '" + kpp_ + "', " + "name = '" + name_
-				+ "', " + "okato = '" + okato_ + "', " + "bo1 = '" + bo1_ + "', " + "bo2 = '" 
-				+ bo2_  + "',"+ "comission = " + comission_ + " WHERE ACCOUNT = '" + BeforeAcc + "' and idterm = '" + Beforeidterm
-				+ "' and name = '" + Beforename + "';\n" + "   COMMIT;\n" + "END;";
-		System.out.println(updateStmt);
+		String updateStmt = 
+		"BEGIN\n" 
+		+ "   UPDATE Z_SB_TERMSERV_AMRA_DBT\n" 
+						+ "SET " 
+		+ "acc_name = '" + acc_name_ + "', "
+				+ "acc_rec = '"+ acc_rec_ + "', " 
+				+ "account = '"+ account_ + "', " 
+				+ "idterm = '"+ idterm_ + "', " 
+				+ "inn = '" + inn_ + "', " 
+				+ "kbk = '" + kbk_+ "', " 
+				+ "kpp = '" + kpp_ + "', " 
+				+ "name = '" + name_+ "', " 
+				+ "okato = '" + okato_ + "', " 
+				+ "bo1 = '" + bo1_ + "', " 
+				+ "bo2 = '" + bo2_  + "',"
+				+ "comission = " + comission_ 
+				+ " WHERE ACCOUNT = '" + BeforeAcc + "' and idterm = '" + Beforeidterm
+				+ "' and name = '" + Beforename + "';\n" 
+				+ "   COMMIT;\n" 
+	   + "END;";
 		DBUtil.dbExecuteUpdate(updateStmt);
 	}
 

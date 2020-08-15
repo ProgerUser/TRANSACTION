@@ -7,11 +7,13 @@ import org.apache.log4j.xml.DOMConfigurator;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import sb_tr.model.Amra_Trans;
 import sb_tr.model.Connect;
 import sb_tr.util.DBUtil;
 
@@ -48,6 +50,7 @@ public class Main extends Application {
 		// showEmployeeView();
 
 		// initRootLayout();
+		
 		if (Connect.userID_ != null) { // primaryStage.setMaximized(true);
 			primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
 			DBUtil.dbConnect();
@@ -58,8 +61,11 @@ public class Main extends Application {
 		}
 
 		/*
-		 * Connect.connectionURL_ = "10.111.64.21:1521/odb"; Connect.userID_ ="SAIDP";
-		 * Connect.userPassword_ = "xxx"; DBUtil.dbConnect(); showFirst();
+		  Connect.connectionURL_ = "10.111.64.21:1521/odb"; Connect.userID_ ="SAIDP";
+		  Connect.userPassword_ = ""; 
+		  DBUtil.dbConnect(); 
+		  initRootLayout();
+		  showFirst();
 		 */
 
 		primaryStage.setOnCloseRequest(e -> {
@@ -130,10 +136,21 @@ public class Main extends Application {
 	/* Тразнакции просмотр Амра */
 	public static void showAmTr() {
 		try {
+			/*
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Transact_Amra_viewer.fxml"));
 			BorderPane employeeOperationsView = (BorderPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
+			*/
+			
+			Stage stage = new Stage();
+			Parent root;
+			root = FXMLLoader.load(Main.class.getResource("view/Transact_Amra_viewer.fxml"));
+			stage.setScene(new Scene(root));
+			stage.getIcons().add(new Image("icon.png"));
+			stage.setTitle("Загруженные транзакции");
+			stage.initOwner(primaryStage);
+			stage.show();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -210,10 +227,23 @@ public class Main extends Application {
 	/* Терминалы */
 	public static void Terminal() {
 		try {
+			/*
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Terminal.fxml"));
 			BorderPane employeeOperationsView = (BorderPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
+			*/
+			
+			
+			Stage stage = new Stage();
+			Parent root;
+			root = FXMLLoader.load(Main.class.getResource("view/Terminal.fxml"));
+			stage.setScene(new Scene(root));
+			stage.getIcons().add(new Image("icon.png"));
+			stage.setTitle("Терминалы");
+			stage.initOwner(primaryStage);
+			stage.show();
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -222,10 +252,21 @@ public class Main extends Application {
 	/* История загрузок */
 	public static void Show_Hist() {
 		try {
+			/*
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/ShowHist.fxml"));
 			BorderPane employeeOperationsView = (BorderPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
+			*/
+			
+			Stage stage = new Stage();
+			Parent root;
+			root = FXMLLoader.load(Main.class.getResource("view/ShowHist.fxml"));
+			stage.setScene(new Scene(root));
+			stage.getIcons().add(new Image("icon.png"));
+			stage.setTitle("История загрузок");
+			stage.initOwner(primaryStage);
+			stage.show();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -234,10 +275,20 @@ public class Main extends Application {
 	/* Услуги */
 	public static void Service() {
 		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("view/Service.fxml"));
-			BorderPane employeeOperationsView = (BorderPane) loader.load();
-			rootLayout.setCenter(employeeOperationsView);
+			//FXMLLoader loader = new FXMLLoader();
+			//loader.setLocation(Main.class.getResource("view/Service.fxml"));
+			//BorderPane employeeOperationsView = (BorderPane) loader.load();
+			//rootLayout.setCenter(employeeOperationsView);
+
+			Stage stage = new Stage();
+			Parent root;
+			root = FXMLLoader.load(Main.class.getResource("view/Service.fxml"));
+			stage.setScene(new Scene(root));
+			stage.getIcons().add(new Image("icon.png"));
+			stage.setTitle("Сервисы");
+			stage.initOwner(primaryStage);
+			stage.show();
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

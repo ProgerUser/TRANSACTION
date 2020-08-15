@@ -1902,7 +1902,7 @@ public class Tr_Am_View_con {
 							}
 						} else if (j == 3) {
 							row.createCell(j).setCellValue(trans_table.getColumns().get(j).getCellData(i).toString());
-							if (trans_table.getColumns().get(j).getCellData(i).toString().equals("00")) {
+							if (!trans_table.getColumns().get(j).getCellData(i).toString().equals("00")) {
 								row.getCell(j).setCellStyle(style);
 							} else {
 								row.getCell(j).setCellStyle(cellStyle_border);
