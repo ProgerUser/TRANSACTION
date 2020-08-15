@@ -573,9 +573,9 @@ public class Amra_Transact {
 						String path_file = createfolder + "\\" + strDate + "_ERROR.txt";
 						PrintWriter writer = new PrintWriter(path_file);
 						while (myResultSet.next()) {
-							writer.write(rowid + " | " + myResultSet.getString("recdate") + " | "
-									+ myResultSet.getString("paydate") + " | " + myResultSet.getString("desc_") + " | "
-									+ myResultSet.getString("sess_id") + "\r\n");
+							writer.write(rowid + " | " + myResultSet.getTimestamp("recdate") + " | "
+									+ myResultSet.getString("desc_") + " | " + myResultSet.getString("sess_id")
+									+ "\r\n");
 							rowid++;
 						}
 						writer.close();
