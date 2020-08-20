@@ -75,6 +75,7 @@ public class Debt_InfoController {
 
 	@FXML
 	void save(ActionEvent eventt) {
+		
 		Label alert = new Label("Вы уверены?");
 		alert.setLayoutX(75.0);
 		alert.setLayoutY(11.0);
@@ -103,6 +104,7 @@ public class Debt_InfoController {
 				newWindow_yn.close();
 			}
 		});
+		
 		yes.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent events) {
 				try {
@@ -242,6 +244,7 @@ public class Debt_InfoController {
 					} else {
 						Alert("Поля не из справочников!");
 					}
+					newWindow_yn.close();
 				} catch (Exception e) {
 					Alert(e.getMessage());
 				}
