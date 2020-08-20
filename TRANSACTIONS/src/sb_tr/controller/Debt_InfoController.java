@@ -1,9 +1,11 @@
 package sb_tr.controller;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -155,6 +157,7 @@ public class Debt_InfoController {
 						}
 						rs.close();
 					}
+					/*
 					{
 						Connection conn = DBUtil.conn;
 						String readRecordSQL = "SELECT count(*) FROM DNV_NALPERIOD where  CCODE||'.'||to_char(trunc(sysdate),'yyyy') = ?";
@@ -170,7 +173,7 @@ public class Debt_InfoController {
 							}
 						}
 						rs.close();
-					}
+					}*/
 					{
 						Connection conn = DBUtil.conn;
 						String readRecordSQL = "SELECT count(*) FROM DNV_NALTYPE where CCODE = ?";
@@ -189,62 +192,35 @@ public class Debt_InfoController {
 					}
 
 					/******************************/
-					if (ff101 & ff106 & ff107 & ff110 & ff104) {
-						Connection conn = DBUtil.conn;
-						String ifex = "select count(*) cnt from TRN_DEPT_INFO  where INUM = ? and IANUM = ? \n";
-						PreparedStatement prstm = conn.prepareStatement(ifex);
-						prstm.setInt(1, Integer.valueOf(Connect.trnnum));
-						prstm.setInt(2, Integer.valueOf(Connect.trnanum));
-						ResultSet rs1 = prstm.executeQuery();
-						if (rs1.next()) {
-							if (rs1.getInt("cnt") == 0) {
-								String insert = "insert into TRN_DEPT_INFO (" + "inum, \n" + "ianum, \n"
-										+ "ccreatstatus, \n" + "cbudcode, \n" + "cokatocode, \n" + "cnalpurp, \n"
-										+ "cnalperiod, \n" + "cnaldocnum, \n" + "cnaldocdate, \n" + "cnaltype, \n"
-										+ "cdocindex \n" + "values (?,?,?,?,?,?,?,?,?,?,?)\n";
-								PreparedStatement insprp = conn.prepareStatement(insert);
-								insprp.setInt(1, Integer.valueOf(Connect.trnnum));
-								insprp.setInt(2, Integer.valueOf(Connect.trnanum));
-								insprp.setString(3, f101.getText());
-								insprp.setString(4, f104.getText());
-								insprp.setString(5, f105.getText());
-								insprp.setString(6, f106.getText());
-								insprp.setString(7, f107.getText());
-								insprp.setString(8, f108.getText());
-								insprp.setString(9, f109.getText());
-								insprp.setString(10, f110.getText());
-								insprp.setString(11, f22.getText());
-								insprp.executeUpdate();
-								Alert("Успешно создана запись!");
-							} else {
-								String update = "update TRN_DEPT_INFO\n" + "set ccreatstatus = ?," + " cbudcode = ?,\n"
-										+ " cokatocode = ?,\n" + " cnalpurp = ?,\n" + " cnalperiod = ?,\n"
-										+ " cnaldocnum = ?,\n" + " cnaldocdate = ?,\n" + " cnaltype = ?,\n"
-										+ " cdocindex = ?,\n" + "where inum = ? and ianum = ?\n";
-								PreparedStatement updprp = conn.prepareStatement(update);
-
-								updprp.setString(1, f101.getText());
-								updprp.setString(2, f104.getText());
-								updprp.setString(3, f105.getText());
-								updprp.setString(4, f106.getText());
-								updprp.setString(5, f107.getText());
-								updprp.setString(6, f108.getText());
-								updprp.setString(7, f109.getText());
-								updprp.setString(8, f110.getText());
-								updprp.setString(9, f22.getText());
-
-								updprp.setInt(10, Integer.valueOf(Connect.trnnum));
-								updprp.setInt(11, Integer.valueOf(Connect.trnanum));
-
-								updprp.executeUpdate();
-								Alert("Обновлено успешно!");
+					{
+						if (ff101 & ff106 & ff110 & ff104) {
+							Connection conn = DBUtil.conn;
+							CallableStatement callStmt = null;
+							callStmt = conn.prepareCall("{ ? = call z_sb_deptinfo(?,?,?,?,?,?,?,?,?,?,?)}");
+							callStmt.registerOutParameter(1, Types.VARCHAR);
+							callStmt.setString(2, f101.getText());
+							callStmt.setString(3, f104.getText());
+							callStmt.setString(4, f105.getText());
+							callStmt.setString(5, f106.getText());
+							callStmt.setString(6, f107.getText());
+							callStmt.setString(7, f108.getText());
+							callStmt.setString(8, f109.getText());
+							callStmt.setString(9, f110.getText());
+							callStmt.setString(10, f22.getText());
+							callStmt.setInt(11, Integer.valueOf(Connect.trnnum));
+							callStmt.setInt(12, Integer.valueOf(Connect.trnanum));
+							callStmt.execute();
+							
+							if(!callStmt.getString(1).equals("ok")) {
+								Alert(callStmt.getString(1));
 							}
+							Alert("Обновлено успешно!");
+							((Node) (eventt.getSource())).getScene().getWindow().hide();
+						} else {
+							Alert("Поля не из справочников!");
 						}
-						((Node) (eventt.getSource())).getScene().getWindow().hide();
-					} else {
-						Alert("Поля не из справочников!");
+						newWindow_yn.close();
 					}
-					newWindow_yn.close();
 				} catch (Exception e) {
 					Alert(e.getMessage());
 				}
@@ -703,3 +679,108 @@ public class Debt_InfoController {
 	}
 
 }
+
+/*
+ * Connection conn = DBUtil.conn;
+						String ifex = "select count(*)  from TRN_DEPT_INFO  where INUM = ? and IANUM = ? \n";
+						PreparedStatement prstm = conn.prepareStatement(ifex);
+						prstm.setInt(1, Integer.valueOf(Connect.trnnum));
+						prstm.setInt(2, Integer.valueOf(Connect.trnanum));
+						ResultSet rs1 = prstm.executeQuery();
+						if (rs1.next()) {
+							if (rs1.getInt(1) == 0) {
+								String fff101 = (f101.getText().equals("") | f101.getText().isEmpty()) ? "null": f101.getText();
+								String fff104 = (f104.getText().equals("") | f104.getText().isEmpty()) ? "null": f104.getText();
+								String fff105 = (f105.getText().equals("") | f105.getText().isEmpty()) ? "null": f105.getText();
+								String fff106 = (f106.getText().equals("") | f106.getText().isEmpty()) ? "null": f106.getText();
+								String fff107 = (f107.getText().equals("") | f107.getText().isEmpty()) ? "null": f107.getText();
+								String fff108 = (f108.getText().equals("") | f108.getText().isEmpty()) ? "null": f108.getText();
+								String fff109 = (f109.getText().equals("") | f109.getText().isEmpty()) ? "null": f109.getText();
+								String fff110 = (f110.getText().equals("") | f110.getText().isEmpty()) ? "null": f110.getText();
+								String fff22 = (f22.getText().equals("") | f22.getText().isEmpty()) ? "null": f22.getText();
+								String insert = "insert into TRN_DEPT_INFO (" +
+							                                  "inum, "+ 
+							                                  "ianum, "+ 
+							                                  "ccreatstatus, " + 
+							                                  "cbudcode, " + 
+							                                  "cokatocode, " + 
+							                                  "cnalpurp, "+ 
+							                                  "cnalperiod, " + 
+							                                  "cnaldocnum, " + 
+							                                  "cnaldocdate, " + 
+							                                  "cnaltype, "+ 
+							                                  "cdocindex " + 
+							                                  "values ("
+							                                  + ""+Connect.trnnum+","
+							                                  + ""+Connect.trnanum+","
+							                                  + "'"+ fff101+"',"
+							                                  + "'"+ fff104+"',"
+							                                  + "'"+ fff105+"',"
+							                                  + "'"+ fff106+"',"
+							                                  + "'"+ fff107+"',"
+							                                  + "'"+ fff108+"',"
+							                                  + "'"+ fff109+"',"
+							                                  + "'"+ fff110+"',"
+							                                  + "'"+ fff22+"')";
+									PreparedStatement insprp = conn.prepareStatement(insert);
+									
+									insprp.setInt(1, Integer.valueOf(Connect.trnnum));
+									insprp.setInt(2, Integer.valueOf(Connect.trnanum));
+									insprp.setString(3, (f101.getText().equals("") | f101.getText().isEmpty()) ? "null": f101.getText());
+									insprp.setString(4, (f104.getText().equals("") | f104.getText().isEmpty()) ? null
+											: f104.getText());
+									insprp.setString(5, (f105.getText().equals("") | f105.getText().isEmpty()) ? null
+											: f105.getText());
+									insprp.setString(6, (f106.getText().equals("") | f106.getText().isEmpty()) ? null
+											: f106.getText());
+									insprp.setString(7, (f107.getText().equals("") | f107.getText().isEmpty()) ? null
+											: f107.getText());
+									insprp.setString(8, (f108.getText().equals("") | f108.getText().isEmpty()) ? null
+											: f108.getText());
+									insprp.setString(9, (f109.getText().equals("") | f109.getText().isEmpty()) ? null
+											: f109.getText());
+									insprp.setString(10, (f110.getText().equals("") | f110.getText().isEmpty()) ? null
+											: f110.getText());
+									insprp.setString(11, (f22.getText().equals("") | f22.getText().isEmpty()) ? null
+											: f22.getText());
+											
+									insprp.executeUpdate();
+								Alert("Успешно создана запись!");
+							} else {
+								String fff101 = (f101.getText().equals("") | f101.getText().isEmpty()) ? "null": f101.getText();
+								String fff104 = (f104.getText().equals("") | f104.getText().isEmpty()) ? "null": f104.getText();
+								String fff105 = (f105.getText().equals("") | f105.getText().isEmpty()) ? "null": f105.getText();
+								String fff106 = (f106.getText().equals("") | f106.getText().isEmpty()) ? "null": f106.getText();
+								String fff107 = (f107.getText().equals("") | f107.getText().isEmpty()) ? "null": f107.getText();
+								String fff108 = (f108.getText().equals("") | f108.getText().isEmpty()) ? "null": f108.getText();
+								String fff109 = (f109.getText().equals("") | f109.getText().isEmpty()) ? "null": f109.getText();
+								String fff110 = (f110.getText().equals("") | f110.getText().isEmpty()) ? "null": f110.getText();
+								String fff22 = (f22.getText().equals("") | f22.getText().isEmpty()) ? "null": f22.getText();
+								String update = "update TRN_DEPT_INFO " + 
+							                     "set ccreatstatus = '"+fff101+"'," + 
+										            " cbudcode = '"+fff104+"',\n" + 
+							                        " cokatocode ='"+fff105+"',\n" + 
+										            " cnalpurp = "+fff106+"',\n" + 
+							                        " cnalperiod = '"+fff107+"',\n"+ 
+										            " cnaldocnum = '"+fff108+"',\n" + 
+							                        " cnaldocdate = '"+fff109+"',\n" + 
+										            " cnaltype = '"+fff110+"',\n"+ 
+							                        " cdocindex = '"+fff22+"' \n" + 
+										         "where inum = "+Connect.trnnum+" and ianum = "+Connect.trnnum+"\n";
+								PreparedStatement updprp = conn.prepareStatement(update);
+								
+								updprp.setString(1, f101.getText());
+								updprp.setString(2, f104.getText());
+								updprp.setString(3, f105.getText());
+								updprp.setString(4, f106.getText());
+								updprp.setString(5, f107.getText());
+								updprp.setString(6, f108.getText());
+								updprp.setString(7, f109.getText());
+								updprp.setString(8, f110.getText());
+								updprp.setString(9, f22.getText());
+							
+								updprp.setInt(10, Integer.valueOf(Connect.trnnum));
+								updprp.setInt(11, Integer.valueOf(Connect.trnanum));
+								
+								updprp.executeUpdate();
+								*/
