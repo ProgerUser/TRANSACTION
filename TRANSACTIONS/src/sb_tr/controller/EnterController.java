@@ -259,7 +259,7 @@ public class EnterController {
 					// login.getItems().addAll(value);
 					items.add(value);
 				} else if (key.contains("url")) {
-					conurl.getItems().addAll(value);
+					// conurl.getItems().addAll(value);
 					items_2.add(value);
 				}
 			}
@@ -279,10 +279,10 @@ public class EnterController {
 
 			conurl.setItems(filteredItems_2);
 
-		} catch (IOException ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			alert(e.getMessage());
 		}
-		// conurl.getSelectionModel().select(0);
+		conurl.getSelectionModel().select(0);
 	}
 
 	public int chk_rigth(String FORM_NAME, String CUSRLOGNAME) {

@@ -483,6 +483,24 @@ public class TerminalDAO {
 		// Return employee object
 		return Forms_lst;
 	}
+	
+	// *******************************
+		// SELECT Menu
+		// *******************************
+		public static ObservableList<BUDCODE> bud(String query) {
+			String selectStmt = query;
+
+			// Execute SELECT statement
+
+			// Get ResultSet from dbExecuteQuery method
+			ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
+
+			// Send ResultSet to the getEmployeeList method and get employee object
+			ObservableList<BUDCODE> Forms_lst = getbud(rsEmps);
+
+			// Return employee object
+			return Forms_lst;
+		}
 
 	// *******************************
 	// SELECT Z_SB_PENS_4FILE
@@ -944,6 +962,23 @@ public class TerminalDAO {
 		}
 		return null;
 	}
+	
+	// Select * from fn_sess z_sb_menu_amra
+		private static ObservableList<BUDCODE> getbud(ResultSet rs) {
+			try {
+				ObservableList<BUDCODE> forms_list = FXCollections.observableArrayList();
+				while (rs.next()) {
+					BUDCODE frms = new BUDCODE();
+					frms.setcode(rs.getString("CCODE"));
+					frms.setcodename(rs.getString("CDESCRIPTION"));
+					forms_list.add(frms);
+				}
+				return forms_list;
+			} catch (SQLException e) {
+				alert(e.getMessage());
+			}
+			return null;
+		}
 
 		// Select * from fn_sess Z_SB_PENS_4FILE
 		private static ObservableList<pensmodel> PENS_4FILE(ResultSet rs) {

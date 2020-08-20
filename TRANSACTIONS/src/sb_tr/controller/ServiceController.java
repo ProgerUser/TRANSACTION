@@ -145,7 +145,7 @@ public class ServiceController {
 	private void initialize() {
 		try {
 			deleteservice.setDisable(true);
-			if (Connect.userID_ == "SAIDP") {
+			if (Connect.userID_.equals("SAIDP")) {
 				updateservice.setDisable(false);
 				addservice.setDisable(false);
 			}else

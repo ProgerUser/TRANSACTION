@@ -64,6 +64,11 @@
 						<MenuItem fx:id="seporatepensra" mnemonicParsing="false" onAction="#divide_RA" text="Разбить файл" />
 					</items>
 				</Menu>
+								<Menu fx:id="budcode" mnemonicParsing="false" text="Бюджетная информация">
+					<items>
+						<MenuItem fx:id="savebudcode" mnemonicParsing="false" onAction="#save_budcode" text="Сохранить данные" />
+					</items>
+				</Menu>
 			</menus>
 		</MenuBar>
 	</top>

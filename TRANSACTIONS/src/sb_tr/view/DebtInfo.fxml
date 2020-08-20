@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="643.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sb_tr.controller.Debt_InfoController">
+   <children>
+      <Text layoutX="68.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Статус сост. (101)" wrappingWidth="94.591796875" x="1.0" />
+      <Text layoutX="43.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Показатель КБК (104)" wrappingWidth="120.0" x="2.0" />
+      <Text layoutX="20.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Код ОКАТО/ОКТМО (105)" wrappingWidth="143.591796875" x="2.0" />
+      <TextField fx:id="f105" layoutX="172.0" layoutY="64.0" prefHeight="25.0" prefWidth="120.0" />
+      <Text layoutX="44.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Показатель осн. (106)" wrappingWidth="120.0" />
+      <TextField fx:id="f108" layoutX="172.0" layoutY="145.0" prefHeight="25.0" prefWidth="120.0" />
+      <Text layoutX="20.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Налоговый период  (107)" wrappingWidth="144.0" x="3.0" />
+      <Text layoutX="48.0" layoutY="162.0" strokeType="OUTSIDE" strokeWidth="0.0" text="№ налог.дог.  (108)" wrappingWidth="108.0" x="9.0" />
+      <TextField fx:id="f109" layoutX="172.0" layoutY="172.0" prefHeight="25.0" prefWidth="120.0" />
+      <Text layoutX="35.0" layoutY="189.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Дата налог.док.  (109)" wrappingWidth="120.0" x="9.0" />
+      <Text layoutX="22.0" layoutY="216.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Тип налог.платежа  (110)" wrappingWidth="144.0" x="5.0" />
+      <TextField fx:id="f22" layoutX="172.0" layoutY="230.0" prefHeight="25.0" prefWidth="221.0" />
+      <Text layoutX="116.0" layoutY="247.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Код (22)" wrappingWidth="47.0" x="2.0" />
+      <Button layoutX="20.0" layoutY="272.0" mnemonicParsing="false" onAction="#save" text="Сохранить" />
+      <TextField fx:id="f101" layoutX="172.0" layoutY="10.0" prefHeight="25.0" prefWidth="47.0" />
+      <Button layoutX="218.0" layoutY="10.0" mnemonicParsing="false" onAction="#b101" prefHeight="25.0" prefWidth="27.0" text="▼" />
+      <TextField fx:id="f104" layoutX="172.0" layoutY="37.0" prefHeight="25.0" prefWidth="221.0" />
+      <Button layoutX="393.0" layoutY="37.0" mnemonicParsing="false" onAction="#b104" prefHeight="25.0" prefWidth="27.0" text="▼" />
+      <Button layoutX="217.0" layoutY="91.0" mnemonicParsing="false" onAction="#b106" prefHeight="25.0" prefWidth="27.0" text="▼" />
+      <TextField fx:id="f106" layoutX="171.0" layoutY="91.0" prefHeight="25.0" prefWidth="47.0" />
+      <TextField fx:id="f107" layoutX="172.0" layoutY="118.0" prefHeight="25.0" prefWidth="120.0" />
+      <Button layoutX="292.0" layoutY="118.0" mnemonicParsing="false" onAction="#b107" prefHeight="25.0" prefWidth="27.0" text="▼" />
+      <TextField fx:id="f110" layoutX="172.0" layoutY="199.0" prefHeight="25.0" prefWidth="47.0" />
+      <Button layoutX="218.0" layoutY="199.0" mnemonicParsing="false" onAction="#b110" prefHeight="25.0" prefWidth="27.0" text="▼" />
+   </children>
+</AnchorPane>

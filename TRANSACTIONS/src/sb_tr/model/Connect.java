@@ -5,6 +5,8 @@ import javafx.beans.property.StringProperty;
 
 public class Connect {
     
+	public static String trnanum;
+	public static String trnnum;
 	public static String SESS_ID_;
 	public static String SESSID= null;
 	public static String PNMB_;

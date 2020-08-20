@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +14,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import sb_tr.model.Amra_Trans;
 import sb_tr.model.Connect;
 import sb_tr.util.DBUtil;
 
@@ -51,18 +51,23 @@ public class Main extends Application {
 
 		// initRootLayout();
 		
-		if (Connect.userID_ != null) { // primaryStage.setMaximized(true);
+		if (Connect.userID_ != null & Connect.trnnum == null) { // primaryStage.setMaximized(true);
 			primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
 			DBUtil.dbConnect();
 			initRootLayout();
 			showFirst();
+		} else if (Connect.userID_ != null & Connect.trnnum != null) {
+			primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
+			DBUtil.dbConnect();
+			initRootLayout();
+			Debtinfo();
 		} else {
 			Enter();
 		}
 
 		/*
 		  Connect.connectionURL_ = "10.111.64.21:1521/odb"; Connect.userID_ ="SAIDP";
-		  Connect.userPassword_ = ""; 
+		  Connect.userPassword_ = "ipman165"; 
 		  DBUtil.dbConnect(); 
 		  initRootLayout();
 		  showFirst();
@@ -103,6 +108,7 @@ public class Main extends Application {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Viewer.fxml"));
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
+			
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -317,6 +323,21 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	/* Доступ Вединоформация */
+	public static void Debtinfo() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Main.class.getResource("view/DebtInfo.fxml"));
+			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
+			Scene scene = new Scene(employeeOperationsView,600,450); // We are sending rootLayout to the Scene.
+			primaryStage.setScene(scene); // Set the scene in primary stage.
+			primaryStage.show(); // Display the primary stage
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	/* Пенсия */
 	public static void sep() {
@@ -367,10 +388,16 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
-		if (args.length != 0) {
+		if (args.length != 0 & args.length <= 4) {
 			Connect.userID_ = args[0];
 			Connect.userPassword_ = args[1];
 			Connect.connectionURL_ = args[2];
+		} else if (args.length != 0 & args.length > 4) {
+			Connect.userID_ = args[0];
+			Connect.userPassword_ = args[1];
+			Connect.connectionURL_ = args[2];
+			Connect.trnnum = args[3];
+			Connect.trnanum = args[4];
 		}
 		launch(args);
 	}

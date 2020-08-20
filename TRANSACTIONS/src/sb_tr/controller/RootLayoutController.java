@@ -142,6 +142,12 @@ public class RootLayoutController {
 
 	@FXML
 	private Menu bankklient;
+	
+	@FXML
+	private Menu budcode;
+	
+	@FXML
+	private MenuItem savebudcode;
 
 	@FXML
 	void handleExit(ActionEvent event) {
@@ -178,6 +184,34 @@ public class RootLayoutController {
 		}
 	}
 
+	
+	@FXML
+	void save_budcode(ActionEvent event) {
+		try {
+			if (Connect.userPassword_.equals("")) {
+
+			} else if (chk_rigth("DebtInfo.fxml", Connect.userID_) == 1) {
+				System.out.println(chk_rigth("DebtInfo.fxml", Connect.userID_));
+				Main.Debtinfo();
+			} else {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("terminal.png"));
+				alert.setTitle("Внимание");
+				alert.setHeaderText(null);
+				alert.setContentText("Нет прав!");
+				alert.showAndWait();
+			}
+
+		} catch (NullPointerException e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			alert.setHeaderText("Ошибка!");
+			alert.setContentText("Введите учетные данные");
+			alert.show();
+		}
+	}
+	
+	
 	@FXML
 	void DBCONNECT(ActionEvent event) {
 		try {
