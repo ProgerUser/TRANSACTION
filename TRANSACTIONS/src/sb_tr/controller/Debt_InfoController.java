@@ -254,8 +254,7 @@ public class Debt_InfoController {
 		codename.setCellValueFactory(new PropertyValueFactory<>("codename"));
 		debtinfo.getColumns().add(code);
 		debtinfo.getColumns().add(codename);
-		debtinfo.prefWidth(341);
-		debtinfo.prefHeight(490);
+		
 		/**/
 		code.setCellValueFactory(cellData -> cellData.getValue().codeProperty());
 		codename.setCellValueFactory(cellData -> cellData.getValue().codenameProperty());
@@ -263,6 +262,8 @@ public class Debt_InfoController {
 				.bud("SELECT CCODE,CDESCRIPTION FROM DNV_CREATSTATUS order by cCode");
 		debtinfo.setItems(empData);
 		autoResizeColumns(debtinfo);
+		debtinfo.prefWidth(341);
+		debtinfo.prefHeight(490);
 		TableFilter<BUDCODE> tableFilter = TableFilter.forTableView(debtinfo).apply();
 		tableFilter.setSearchStrategy((input, target) -> {
 			try {
@@ -607,6 +608,12 @@ public class Debt_InfoController {
 			return t;
 		});
 
+		if (Connect.trnnum == null | Connect.trnnum == null) {
+			Alert("Нет данных!");
+			Platform.exit();
+			System.exit(0);
+		}
+		
 		if (chk_menu("savebudcode", Connect.userID_) == 1) {
 			
 		} else {

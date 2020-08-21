@@ -5,18 +5,32 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="531.0" prefWidth="893.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sb_tr.controller.Ibank">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity"
+	minHeight="-Infinity" minWidth="-Infinity" prefHeight="531.0"
+	prefWidth="893.0" xmlns="http://javafx.com/javafx/8"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="sb_tr.controller.Ibank">
 	<children>
-		<TableView fx:id="CLI" stylesheets="@../../transact.css" editable="true" layoutX="22.0" layoutY="70.0" prefHeight="442.0" prefWidth="539.0">
+		<TableView fx:id="CLI" stylesheets="@../../transact.css"
+			editable="true" layoutX="22.0" layoutY="70.0" prefHeight="442.0"
+			prefWidth="539.0">
 			<columns>
-				<TableColumn fx:id="CLIENT_ID" prefWidth="119.0" text="ИД" />
-				<TableColumn fx:id="NAME_CLN" prefWidth="590.0" text="Наименование" />
+				<TableColumn fx:id="CLIENT_ID" prefWidth="119.0"
+					text="ИД" />
+				<TableColumn fx:id="NAME_CLN" prefWidth="590.0"
+					text="Наименование" />
 			</columns>
 		</TableView>
-      <Button layoutX="22.0" layoutY="37.0" mnemonicParsing="false" onAction="#search" text="Поиск" />
-      <TextField fx:id="db" layoutX="107.0" layoutY="37.0" prefHeight="25.0" prefWidth="167.0" text="10.111.64.121:1521/IBANKUL" />
-      <TextField fx:id="login" layoutX="293.0" layoutY="37.0" prefHeight="25.0" prefWidth="106.0" promptText="Логин" />
-      <PasswordField fx:id="password" layoutX="414.0" layoutY="37.0" prefHeight="25.0" prefWidth="106.0" promptText="Пароль" />
-      <TextArea fx:id="acc" layoutX="585.0" layoutY="70.0" prefHeight="442.0" prefWidth="270.0" />
+		<Button layoutX="22.0" layoutY="37.0" mnemonicParsing="false"
+			onAction="#search" text="Поиск" />
+		<TextField fx:id="db" layoutX="107.0" layoutY="37.0"
+			prefHeight="25.0" prefWidth="167.0" text="10.111.64.121:1521/IBANKUL" />
+		<TextField fx:id="login" layoutX="293.0" layoutY="37.0"
+			prefHeight="25.0" prefWidth="106.0" promptText="Логин" />
+		<PasswordField fx:id="password" layoutX="414.0"
+			layoutY="37.0" prefHeight="25.0" prefWidth="106.0"
+			promptText="Пароль" />
+		<TextArea fx:id="acc" layoutX="585.0" layoutY="70.0"
+			prefHeight="442.0" prefWidth="270.0" />
 	</children>
 </AnchorPane>

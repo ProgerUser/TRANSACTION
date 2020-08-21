@@ -51,17 +51,23 @@ public class Main extends Application {
 
 		// initRootLayout();
 		
-		if (Connect.userID_ != null & Connect.trnnum == null) { // primaryStage.setMaximized(true);
+		if (Connect.userID_ != null & Connect.trnnum == null & Connect.trnanum == null
+				& Connect.userPassword_ != null) { // primaryStage.setMaximized(true);
 			primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
 			DBUtil.dbConnect();
 			initRootLayout();
 			showFirst();
-		} else if (Connect.userID_ != null & Connect.trnnum != null) {
+		} else if (Connect.userID_ != null & Connect.trnnum != null & Connect.trnanum != null
+				& Connect.userPassword_ != null) {
 			primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
 			DBUtil.dbConnect();
 			initRootLayout();
 			Debtinfo();
-		} else {
+		} else if (Connect.trnnum == null & Connect.trnanum == null & Connect.userID_ != null
+				& Connect.userPassword_ != null) {
+			Platform.exit();
+			System.exit(0);
+		} else if (Connect.userID_ == null & Connect.userPassword_ == null) {
 			Enter();
 		}
 
