@@ -11,6 +11,7 @@ import java.util.concurrent.Executors;
 
 import org.controlsfx.control.table.TableFilter;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -40,7 +41,7 @@ public class CopyDoverController {
 
 	@FXML
 	private TableColumn<DJTRUST, String> clifioo;
-	
+
 	@FXML
 	private TableColumn<DJTRUST, String> dognum;
 
@@ -57,7 +58,7 @@ public class CopyDoverController {
 			SqlMap s = new SqlMap().load(System.getenv("TRANSACT_PATH") + "\\report\\SQL.xml");
 			String readRecordSQL = s.getSql("DJ");
 			PreparedStatement prepStmt = conn.prepareStatement(readRecordSQL);
-			prepStmt.setString(1, "%"+searchf.getText()+"%");
+			prepStmt.setString(1, "%" + searchf.getText() + "%");
 			ResultSet rs = prepStmt.executeQuery();
 			ObservableList<DJTRUST> empData = getbud(rs);
 			dover.setItems(empData);
@@ -70,7 +71,7 @@ public class CopyDoverController {
 					return false;
 				}
 			});
-		} catch ( Exception e) {
+		} catch (Exception e) {
 			Alert(e.getMessage());
 		}
 	}
@@ -92,6 +93,7 @@ public class CopyDoverController {
 		}
 		return null;
 	}
+
 	@FXML
 	void copy(ActionEvent event) {
 		if (dover.getSelectionModel().getSelectedItem() == null) {
@@ -106,11 +108,15 @@ public class CopyDoverController {
 				callStmt.setInt(2, Integer.valueOf(dj.getiddover()));
 				callStmt.setInt(3, Integer.valueOf(Connect.djdog_id));
 				callStmt.execute();
-				if(!callStmt.getString(1).equals("ok")) {
+				if (!callStmt.getString(1).equals("ok")) {
 					Alert(callStmt.getString(1));
+				} else {
+					Alert("Обновлено успешно!");
+					//((Node) (event.getSource())).getScene().getWindow().hide();
+					Platform.exit();
+					System.exit(0);
 				}
-				Alert("Обновлено успешно!");
-				((Node) (event.getSource())).getScene().getWindow().hide();
+
 			} catch (Exception e) {
 				Alert(e.getMessage());
 			}
@@ -171,6 +177,6 @@ public class CopyDoverController {
 		clifioo.setCellValueFactory(cellData -> cellData.getValue().fioProperty());
 		dognum.setCellValueFactory(cellData -> cellData.getValue().accProperty());
 		ID.setCellValueFactory(cellData -> cellData.getValue().iddoverProperty());
-		
+
 	}
 }
