@@ -50,9 +50,9 @@ public class Main extends Application {
 		// showEmployeeView();
 
 		// initRootLayout();
-		
-		if (Connect.userID_ != null & Connect.trnnum == null & Connect.trnanum == null
-				& Connect.userPassword_ != null) { // primaryStage.setMaximized(true);
+
+		if (Connect.userID_ != null & Connect.trnnum == null & Connect.trnanum == null & Connect.userPassword_ != null
+				& Connect.djdog_id == null) { // primaryStage.setMaximized(true);
 			primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
 			DBUtil.dbConnect();
 			initRootLayout();
@@ -63,6 +63,10 @@ public class Main extends Application {
 			DBUtil.dbConnect();
 			initRootLayout();
 			Debtinfo();
+		} else if (Connect.userID_ != null & Connect.userPassword_ != null & Connect.djdog_id != null) {
+			primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
+			DBUtil.dbConnect();
+			CopyDover();
 		} else if (Connect.trnnum == null & Connect.trnanum == null & Connect.userID_ != null
 				& Connect.userPassword_ != null) {
 			Platform.exit();
@@ -73,11 +77,12 @@ public class Main extends Application {
 
 		/*
 		  Connect.connectionURL_ = "10.111.64.21:1521/odb"; Connect.userID_ ="SAIDP";
-		  Connect.userPassword_ = "ipman165"; 
+		  Connect.userPassword_ = ""; 
 		  DBUtil.dbConnect(); 
-		  initRootLayout();
-		  showFirst();
+		  //initRootLayout();
+		  CopyDover();
 		 */
+ 
 
 		primaryStage.setOnCloseRequest(e -> {
 			DBUtil.dbDisconnect();
@@ -344,6 +349,20 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
+	
+	/* Копировать доверенность */
+	public static void CopyDover() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Main.class.getResource("view/CopyDover.fxml"));
+			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
+			Scene scene = new Scene(employeeOperationsView,600,450); // We are sending rootLayout to the Scene.
+			primaryStage.setScene(scene); // Set the scene in primary stage.
+			primaryStage.show(); // Display the primary stage
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	/* Пенсия */
 	public static void sep() {
@@ -394,16 +413,22 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
-		if (args.length != 0 & args.length <= 4) {
+		if (args.length != 0 & args.length == 3) {
 			Connect.userID_ = args[0];
 			Connect.userPassword_ = args[1];
 			Connect.connectionURL_ = args[2];
-		} else if (args.length != 0 & args.length > 4) {
+		} else if (args.length != 0 & args.length == 5) {
 			Connect.userID_ = args[0];
 			Connect.userPassword_ = args[1];
 			Connect.connectionURL_ = args[2];
 			Connect.trnnum = args[3];
 			Connect.trnanum = args[4];
+		}
+		else if (args.length != 0 & args.length == 4) {
+			Connect.userID_ = args[0];
+			Connect.userPassword_ = args[1];
+			Connect.connectionURL_ = args[2];
+			Connect.djdog_id = args[3];
 		}
 		launch(args);
 	}
