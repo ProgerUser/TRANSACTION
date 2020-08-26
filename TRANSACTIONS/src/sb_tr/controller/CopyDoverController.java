@@ -4,20 +4,15 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Types;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
 import org.controlsfx.control.table.TableFilter;
-
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-//import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
