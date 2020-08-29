@@ -16,16 +16,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import sb_tr.model.Connect;
 import sb_tr.util.DBUtil;
+import sbalert.Msg;
 
 public class Main extends Application {
 
-	// Define a static logger variable so that it references the
-	// Logger instance named "MyApp".
 	public static Logger logger = Logger.getLogger(Main.class);
-	// This is our PrimaryStage (It contains everything)
 	public static Stage primaryStage;
-
-	// This is the BorderPane of RootLayout
 	public static BorderPane rootLayout;
 
 	@Override
@@ -35,21 +31,10 @@ public class Main extends Application {
 		String log4jConfigFile = System.getenv("TRANSACT_PATH") + "log4j.xml";
 		System.out.print(log4jConfigFile + "\r\n");
 		DOMConfigurator.configure(log4jConfigFile);
-		//logger.info("Transact Start: " + Thread.currentThread().getName());
-
-		// 1) Declare a primary stage (Everything will be on this stage)
+		/*logger.info("Transact Start: " + Thread.currentThread().getName());*/
 		this.primaryStage = primaryStage;
-
 		primaryStage.getIcons().add(new Image("icon.png"));
-		// Optional: Set a title for primary stage
-
 		this.primaryStage.setTitle("Транзакции");
-
-		// 2) Initialize RootLayout
-		// 3) Display the EmployeeOperations View
-		// showEmployeeView();
-
-		// initRootLayout();
 
 		if (Connect.userID_ != null & Connect.trnnum == null & Connect.trnanum == null & Connect.userPassword_ != null
 				& Connect.djdog_id == null) { // primaryStage.setMaximized(true);
@@ -86,17 +71,12 @@ public class Main extends Application {
 
 		primaryStage.setOnCloseRequest(e -> {
 			DBUtil.dbDisconnect();
-			/*
-			 * File file = new File(System.getProperty("user.home") +
-			 * "/XXI.AP_TEST_MAIN.properties"); file.delete();
-			 * System.out.print("------------------------------------------------------");
-			 */
 			Platform.exit();
 			System.exit(0);
 
 		});
 
-		// this.primaryStage.setMaximized(true);
+		/*this.primaryStage.setMaximized(true);*/
 	}
 
 	// Initializes the root layout.
@@ -109,7 +89,7 @@ public class Main extends Application {
 			primaryStage.setScene(scene); // Set the scene in primary stage.
 			primaryStage.show(); // Display the primary stage
 		} catch (IOException e) {
-			e.printStackTrace();
+			Msg.Messge(e.getMessage());
 		}
 	}
 
@@ -122,7 +102,7 @@ public class Main extends Application {
 			
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Msg.Messge(e.getMessage());
 		}
 	}
 
@@ -134,10 +114,22 @@ public class Main extends Application {
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Msg.Messge(e.getMessage());
 		}
 	}
 
+	/*Contact */
+	public static void Contact() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Main.class.getResource("view/Contact.fxml"));
+			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
+			rootLayout.setCenter(employeeOperationsView);
+		} catch (IOException e) {
+			Msg.Messge(e.getMessage());
+		}
+	}
+	
 	/* Сдачи Амра */
 	public static void Termdial_view_() {
 		try {
@@ -146,7 +138,7 @@ public class Main extends Application {
 			BorderPane employeeOperationsView = (BorderPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Msg.Messge(e.getMessage());
 		}
 	}
 
@@ -169,7 +161,7 @@ public class Main extends Application {
 			stage.initOwner(primaryStage);
 			stage.show();
 		} catch (IOException e) {
-			e.printStackTrace();
+			Msg.Messge(e.getMessage());
 		}
 	}
 
@@ -181,7 +173,7 @@ public class Main extends Application {
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Msg.Messge(e.getMessage());
 		}
 	}
 
@@ -193,7 +185,7 @@ public class Main extends Application {
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Msg.Messge(e.getMessage());
 		}
 	}
 
@@ -205,7 +197,7 @@ public class Main extends Application {
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Msg.Messge(e.getMessage());
 		}
 	}
 
@@ -217,7 +209,7 @@ public class Main extends Application {
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Msg.Messge(e.getMessage());
 		}
 	}
 
@@ -237,7 +229,7 @@ public class Main extends Application {
 			primaryStage.setScene(scene); // Set the scene in primary stage.
 			primaryStage.show(); // Display the primary stage
 		} catch (IOException e) {
-			e.printStackTrace();
+			Msg.Messge(e.getMessage());
 		}
 	}
 
@@ -262,7 +254,7 @@ public class Main extends Application {
 			stage.show();
 			
 		} catch (IOException e) {
-			e.printStackTrace();
+			Msg.Messge(e.getMessage());
 		}
 	}
 
@@ -285,7 +277,7 @@ public class Main extends Application {
 			stage.initOwner(primaryStage);
 			stage.show();
 		} catch (IOException e) {
-			e.printStackTrace();
+			Msg.Messge(e.getMessage());
 		}
 	}
 
@@ -307,7 +299,7 @@ public class Main extends Application {
 			stage.show();
 			
 		} catch (IOException e) {
-			e.printStackTrace();
+			Msg.Messge(e.getMessage());
 		}
 	}
 
@@ -319,7 +311,7 @@ public class Main extends Application {
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Msg.Messge(e.getMessage());
 		}
 	}
 
@@ -331,7 +323,7 @@ public class Main extends Application {
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Msg.Messge(e.getMessage());
 		}
 	}
 	
@@ -346,7 +338,7 @@ public class Main extends Application {
 			primaryStage.setScene(scene); // Set the scene in primary stage.
 			primaryStage.show(); // Display the primary stage
 		} catch (IOException e) {
-			e.printStackTrace();
+			Msg.Messge(e.getMessage());
 		}
 	}
 	
@@ -360,7 +352,7 @@ public class Main extends Application {
 			primaryStage.setScene(scene); // Set the scene in primary stage.
 			primaryStage.show(); // Display the primary stage
 		} catch (IOException e) {
-			e.printStackTrace();
+			Msg.Messge(e.getMessage());
 		}
 	}
 
@@ -372,7 +364,7 @@ public class Main extends Application {
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Msg.Messge(e.getMessage());
 		}
 	}
 
@@ -384,7 +376,7 @@ public class Main extends Application {
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Msg.Messge(e.getMessage());
 		}
 	}
 
@@ -396,7 +388,7 @@ public class Main extends Application {
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Msg.Messge(e.getMessage());
 		}
 	}
 
@@ -408,28 +400,31 @@ public class Main extends Application {
 			BorderPane employeeOperationsView = (BorderPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Msg.Messge(e.getMessage());
 		}
 	}
 
 	public static void main(String[] args) {
-		if (args.length != 0 & args.length == 3) {
-			Connect.userID_ = args[0];
-			Connect.userPassword_ = args[1];
-			Connect.connectionURL_ = args[2];
-		} else if (args.length != 0 & args.length == 5) {
-			Connect.userID_ = args[0];
-			Connect.userPassword_ = args[1];
-			Connect.connectionURL_ = args[2];
-			Connect.trnnum = args[3];
-			Connect.trnanum = args[4];
+		try {
+			if (args.length != 0 & args.length == 3) {
+				Connect.userID_ = args[0];
+				Connect.userPassword_ = args[1];
+				Connect.connectionURL_ = args[2];
+			} else if (args.length != 0 & args.length == 5) {
+				Connect.userID_ = args[0];
+				Connect.userPassword_ = args[1];
+				Connect.connectionURL_ = args[2];
+				Connect.trnnum = args[3];
+				Connect.trnanum = args[4];
+			} else if (args.length != 0 & args.length == 4) {
+				Connect.userID_ = args[0];
+				Connect.userPassword_ = args[1];
+				Connect.connectionURL_ = args[2];
+				Connect.djdog_id = args[3];
+			}
+			launch(args);
+		} catch (Exception e) {
+			Msg.Messge(e.getMessage());
 		}
-		else if (args.length != 0 & args.length == 4) {
-			Connect.userID_ = args[0];
-			Connect.userPassword_ = args[1];
-			Connect.connectionURL_ = args[2];
-			Connect.djdog_id = args[3];
-		}
-		launch(args);
 	}
 }

@@ -24,8 +24,7 @@
 				<Menu fx:id="kash" mnemonicParsing="false" text="Кассовый офис">
 					<items>
 						<MenuItem fx:id="createpsevdo" mnemonicParsing="false" onAction="#Kash" text="Сформировать псевдоним" />
-						<!--<MenuItem mnemonicParsing="false" onAction="#Kash" text="Загрузить 
-							EXCEL с шаблоном" /> -->
+						<MenuItem fx:id="contactload" mnemonicParsing="false" onAction="#ContactLoad" text="Комиссии Контакт" />
 					</items>
 				</Menu>
 				<Menu fx:id="amraterminal" mnemonicParsing="false" text="Терминалы Амра">
