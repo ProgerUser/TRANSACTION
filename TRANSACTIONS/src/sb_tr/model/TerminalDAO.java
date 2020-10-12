@@ -506,7 +506,7 @@ public class TerminalDAO {
 	// SELECT Z_SB_PENS_4FILE
 	// *******************************
 	public static ObservableList<pensmodel> Z_SB_PENS_4FILE() {
-		String selectStmt = "select * from Z_SB_PENS_4FILE t order by DATE_LOAD desc";
+		String selectStmt = "select DATE_LOAD,ID,FILENAME from Z_SB_PENS_4FILE t order by DATE_LOAD desc";
 
 		// Execute SELECT statement
 

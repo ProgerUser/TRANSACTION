@@ -14,10 +14,10 @@
 
 	</center>
 	<left>
-		<AnchorPane prefHeight="455.0" prefWidth="17.0" BorderPane.alignment="CENTER" />
+		<AnchorPane fx:id="anch_b5" prefHeight="455.0" prefWidth="17.0" BorderPane.alignment="CENTER" stylesheets="@../../borderpane.css"/>
 	</left>
 	<bottom>
-		<AnchorPane prefHeight="17.0" prefWidth="1008.0" BorderPane.alignment="CENTER" />
+		<AnchorPane fx:id="anch_b3" prefHeight="17.0" prefWidth="1008.0" BorderPane.alignment="CENTER" stylesheets="@../../borderpane.css"/>
 	</bottom>
 	<center>
 
@@ -81,6 +81,6 @@
 		</AnchorPane>
 	</top>
 	<right>
-		<AnchorPane prefHeight="546.0" prefWidth="17.0" BorderPane.alignment="CENTER" />
+		<AnchorPane fx:id="anch_b7" prefHeight="546.0" prefWidth="17.0" BorderPane.alignment="CENTER" stylesheets="@../../borderpane.css" />
 	</right>
 </BorderPane>

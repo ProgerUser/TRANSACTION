@@ -29,6 +29,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
@@ -79,13 +80,63 @@ public class penscontroller {
 	@FXML
 	private TableColumn<pensmodel, String> FOUR_PART;
 
+	@FXML
+	private CheckBox pensrachk;
+
 	/* Пакет для разбора */
 	private final String sepfile = "{ ? = call z_sb_pens_sepfile.z_sb_pens_sepfile(?,?)}";
+	Connection conn = DBUtil.conn;
+	@FXML
+	void pensrachk(ActionEvent event) {
+		try {
+			if (pensrachk.isSelected()) {
+				System.out.println("true");
+				CallableStatement callStmt = conn.prepareCall("{ ? = call z_sb_pens_sepfile.ALLOWLOADABKHPENS(?)");
+				callStmt.registerOutParameter(1, Types.VARCHAR);
+				callStmt.setInt(2, 1);
+				callStmt.execute();
+				String ret = callStmt.getString(1);
+				if (!ret.equals("OK")) {
+					Alerts(ret);
+				}
+				pensrachk.setSelected(true);
+			} else {
+				System.out.println("false");
+				CallableStatement callStmt = conn.prepareCall("{ ? = call z_sb_pens_sepfile.ALLOWLOADABKHPENS(?)");
+				callStmt.registerOutParameter(1, Types.VARCHAR);
+				callStmt.setInt(2, 0);
+				callStmt.execute();
+				String ret = callStmt.getString(1);
+				if (!ret.equals("OK")) {
+					Alerts(ret);
+				}
+				pensrachk.setSelected(false);
+			}
+			conn.commit();
+		} catch (Exception e) {
+			Alerts(e.getMessage());
+		}
+	}
 
 	/* Инициализация */
 	@FXML
 	private void initialize() {
-
+		try {
+			String sql = "select t.BOOLEAN from Z_SB_PENSRACHK t";
+			Connection conn = DBUtil.conn;
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			if (rs.next()) {
+				{
+					if (rs.getString("BOOLEAN").equals("Y"))
+						pensrachk.setSelected(true);
+					else
+						pensrachk.setSelected(false);
+				}
+			}
+		} catch (Exception e) {
+			Alerts(e.getMessage());
+		}
 		sep_pens.setEditable(true);
 
 		ID.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
@@ -98,23 +149,14 @@ public class penscontroller {
 				TextFieldTableCell.<pensmodel, LocalDateTime>forTableColumn(new LocalDateTimeStringConverter()));
 
 		/*
-		DateLoad.setCellFactory(column -> {
-			TableCell<pensmodel, LocalDateTime> cell = new TableCell<pensmodel, LocalDateTime>() {
-				private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-
-				@Override
-				protected void updateItem(LocalDateTime item, boolean empty) {
-					super.updateItem(item, empty);
-					if (empty) {
-						setText(null);
-					} else {
-						setText(format.format(item));
-					}
-				}
-			};
-			return cell;
-		});
-		*/
+		 * DateLoad.setCellFactory(column -> { TableCell<pensmodel, LocalDateTime> cell
+		 * = new TableCell<pensmodel, LocalDateTime>() { private SimpleDateFormat format
+		 * = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+		 * 
+		 * @Override protected void updateItem(LocalDateTime item, boolean empty) {
+		 * super.updateItem(item, empty); if (empty) { setText(null); } else {
+		 * setText(format.format(item)); } } }; return cell; });
+		 */
 
 		ID.setOnEditCommit(new EventHandler<CellEditEvent<pensmodel, Integer>>() {
 			@Override
@@ -155,7 +197,7 @@ public class penscontroller {
 		stage.getIcons().add(new Image("terminal.png"));
 		alert.setTitle("Внимание");
 		alert.setHeaderText(null);
-		alert.setContentText("Выберите сначала данные из таблицы!");
+		alert.setContentText(mess);
 		alert.showAndWait();
 	}
 
@@ -298,7 +340,7 @@ public class penscontroller {
 					write_error(conn, file, Integer.valueOf(part1));
 				} else if (part2.equals("ok")) {
 					System.out.println("OK--");
-					for (int i = 1; i <= 4; i++) {
+					for (int i = 1; i <= 6; i++) {
 						System.out.println(i);
 						String str = "";
 						if (i == 1) {
@@ -336,6 +378,26 @@ public class penscontroller {
 							str = retclob(i, Integer.valueOf(part1), conn, file);
 							clobb.setString(1, str);
 							String upd = "update z_sb_pens_4file\r\n" + "set FOUR_PART = ?\r\n" + "where ID = ?\r\n";
+							System.out.println(upd);
+							PreparedStatement prepStmt = conn.prepareStatement(upd);
+							prepStmt.setClob(1, clobb);
+							prepStmt.setInt(2, Integer.valueOf(part1));
+							prepStmt.executeUpdate();
+						} else if (i == 5) {
+							Clob clobb = conn.createClob();
+							str = retclob(i, Integer.valueOf(part1), conn, file);
+							clobb.setString(1, str);
+							String upd = "update z_sb_pens_4file\r\n" + "set FIVE_PART = ?\r\n" + "where ID = ?\r\n";
+							System.out.println(upd);
+							PreparedStatement prepStmt = conn.prepareStatement(upd);
+							prepStmt.setClob(1, clobb);
+							prepStmt.setInt(2, Integer.valueOf(part1));
+							prepStmt.executeUpdate();
+						} else if (i == 6) {
+							Clob clobb = conn.createClob();
+							str = retclob(i, Integer.valueOf(part1), conn, file);
+							clobb.setString(1, str);
+							String upd = "update z_sb_pens_4file\r\n" + "set SIX_PART = ?\r\n" + "where ID = ?\r\n";
 							System.out.println(upd);
 							PreparedStatement prepStmt = conn.prepareStatement(upd);
 							prepStmt.setClob(1, clobb);
@@ -430,6 +492,10 @@ public class penscontroller {
 					writer.write(rs.getString("THREE_PART"));
 				} else if (id == 4) {
 					writer.write(rs.getString("FOUR_PART"));
+				} else if (id == 5) {
+					writer.write(rs.getString("FIVE_PART"));
+				} else if (id == 6) {
+					writer.write(rs.getString("SIX_PART"));
 				}
 			}
 			writer.close();
@@ -440,8 +506,7 @@ public class penscontroller {
 			showalert(e.getMessage());
 		}
 	}
-	
-	
+
 	/* Возврат самого файла */
 	public void retxlsx(int id, int sess_id, Connection conn, File file) {
 		try {
@@ -456,34 +521,25 @@ public class penscontroller {
 				part = "FOUR_PART";
 			}
 			Statement sqlStatement = conn.createStatement();
-			String readRecordSQL = 
-					"select to_number(COLUMN1) row_num,\n" + 
-					"       COLUMN2 last_name,\n" + 
-					"       COLUMN3 first_name,\n" + 
-					"       COLUMN4 middle_name,\n" + 
-					"       COLUMN5,\n" + 
-					"       COLUMN6 acc,\n" + 
-					"       to_number(replace(COLUMN7, '.', ',')) summ,\n" + 
-					"       to_date(COLUMN8,'dd.mm.yyyy') bdate,\n" + 
-					"       COLUMN9,\n" + 
-					"       COLUMN10,\n" + 
-					"       COLUMN11 acc_vtb,\n" + 
-					"       COLUMN12,\n" + 
-					"       COLUMN13 snils\n" + 
-					"  from (select "+part+" from Z_SB_PENS_4FILE t where id = "+sess_id+") g,\n" + 
-					"       table(lob2table.separatedcolumns(g.one_part,\n" + 
-					"                                        chr(13) || chr(10), \n" + 
-					"                                        '|', \n" + 
-					"                                        '')) h\n";
+			String readRecordSQL = "select to_number(COLUMN1) row_num,\n" + "       COLUMN2 last_name,\n"
+					+ "       COLUMN3 first_name,\n" + "       COLUMN4 middle_name,\n" + "       COLUMN5,\n"
+					+ "       COLUMN6 acc,\n" + "       to_number(replace(COLUMN7, '.', ',')) summ,\n"
+					+ "       to_date(COLUMN8,'dd.mm.yyyy') bdate,\n" + "       COLUMN9,\n" + "       COLUMN10,\n"
+					+ "       COLUMN11 acc_vtb,\n" + "       COLUMN12,\n" + "       COLUMN13 snils\n"
+					+ "  from (select " + part + " from Z_SB_PENS_4FILE t where id = " + sess_id + ") g,\n"
+					+ "       table(lob2table.separatedcolumns(g.one_part,\n"
+					+ "                                        chr(13) || chr(10), \n"
+					+ "                                        '|', \n"
+					+ "                                        '')) h\n";
 			String createfolder = file.getParent() + "\\" + file.getName() + "_0" + id + ".xlsx";
 			ResultSet rs = sqlStatement.executeQuery(readRecordSQL);
-			
+
 			XSSFWorkbook workbook = new XSSFWorkbook();
 			XSSFSheet spreadsheet = workbook.createSheet("Таблица");
 			Row row = spreadsheet.createRow(0);
-			
-			int i=0;
-			
+
+			int i = 0;
+
 			while (rs.next()) {
 				row = spreadsheet.createRow(i + 1);
 				row.createCell(0).setCellValue(rs.getInt("ROW_NUM"));
@@ -514,14 +570,13 @@ public class penscontroller {
 			}
 			rs.close();
 			sqlStatement.close();
-			
+
 			workbook.write(new FileOutputStream(file.getPath()));
 			workbook.close();
 
 		} catch (Exception e) {
 			showalert(e.getMessage());
 		}
-		
 	}
 
 	/* Вывод сообщения */

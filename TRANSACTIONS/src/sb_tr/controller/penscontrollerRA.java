@@ -277,9 +277,7 @@ public class penscontrollerRA {
 					pstmt.setInt(4, 0);
 					pstmt.executeUpdate();
 				}
-
-				/* Выгрузка */
-
+				/*Выгрузка*/
 				SqlMap s = new SqlMap().load(System.getenv("TRANSACT_PATH") + "/report/SQL.xml");
 				String readRecordSQL = s.getSql("PensRa");
 				System.out.println(readRecordSQL);

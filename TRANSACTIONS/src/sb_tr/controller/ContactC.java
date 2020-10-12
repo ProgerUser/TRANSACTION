@@ -127,7 +127,7 @@ public class ContactC {
 				ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
 				DateFormat dateFormat_ = new SimpleDateFormat("dd.MM.yyyy HH");
 				String strDate_ = dateFormat_.format(date);
-				String createfolder = System.getProperty("user.dir") + "\\" + strDate_;
+				String createfolder = System.getenv("TRANSACT_PATH")+ strDate_;
 				File file = new File(createfolder);
 				if (!file.exists()) {
 					if (file.mkdir()) {
