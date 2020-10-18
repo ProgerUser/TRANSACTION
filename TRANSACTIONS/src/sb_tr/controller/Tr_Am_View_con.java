@@ -1211,14 +1211,14 @@ public class Tr_Am_View_con {
 		if (Connect.SESSID != null) {
 			ObservableList<Amra_Trans> trData = TerminalDAO.Amra_Trans_before(Connect.SESSID);
 			trans_table.setItems(trData);
-			autoResizeColumns(trans_table);
+			//autoResizeColumns(trans_table);
 			TableFilter.forTableView(trans_table).apply();
 		} 
 
 	}
 
 	void on_filter() {
-		autoResizeColumns(trans_table);
+		//autoResizeColumns(trans_table);
 		@SuppressWarnings("deprecation")
 		TableFilter<Amra_Trans> filter = new TableFilter<>(trans_table);
 	}
@@ -2113,7 +2113,7 @@ public class Tr_Am_View_con {
 				"", false, false, terminal_name.getValue().toString());
 		populate_fn_sess(empData);
 
-		autoResizeColumns(trans_table);
+		//autoResizeColumns(trans_table);
 		// GUIUtils.autoFitTable(trans_table);
 	}
 
@@ -2214,7 +2214,7 @@ public class Tr_Am_View_con {
 	private void exec_filter(ObservableList<Amra_Trans> trData) throws Exception {
 		Runnable task = () -> {
 			trans_table.setItems(trData);
-			autoResizeColumns(trans_table);
+			//autoResizeColumns(trans_table);
 
 			Runnable task_ = () -> {
 				Platform.runLater(new Runnable() {
@@ -2634,7 +2634,7 @@ public class Tr_Am_View_con {
 		if (!(fn.get_checkparent() == null)) {
 			ObservableList<Amra_Trans> trData = TerminalDAO.Amra_Trans_rel(fn.get_checknumber(), fn.get_checkparent());
 			trans_table.setItems(trData);
-			autoResizeColumns(trans_table);
+			//autoResizeColumns(trans_table);
 			TableFilter.forTableView(trans_table).apply();
 			trans_table.refresh();
 		} else {

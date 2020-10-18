@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.shape.*?>
 <?import java.lang.*?>
 <?import javafx.collections.*?>
@@ -8,62 +9,47 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.*?>
 
-<BorderPane fx:id="ap" prefHeight="670.0" prefWidth="1030.0"
-	stylesheets="@../../borderpane.css" xmlns="http://javafx.com/javafx/8"
-	xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="sb_tr.controller.EnterController">
-	<!-- TODO Add Nodes -->
-	<center>
-		<GridPane>
-			<children>
-				<AnchorPane BorderPane.alignment="CENTER"
-					GridPane.columnIndex="0" GridPane.columnSpan="1"
-					GridPane.hgrow="ALWAYS" GridPane.rowIndex="0"
-					GridPane.vgrow="ALWAYS">
-					<children>
-						<ComboBox fx:id="login" editable="true" layoutX="432.0"
-							layoutY="261.0" prefHeight="25.000099999997474" prefWidth="194.0">
-							<items>
-							</items>
-						</ComboBox>
-						<PasswordField fx:id="pass" layoutX="432.0"
-							layoutY="295.0" onKeyPressed="#enter_" prefHeight="25.0"
-							prefWidth="194.0" />
-						<ComboBox fx:id="conurl" editable="true" layoutX="432.0"
-							layoutY="327.0" prefHeight="25.000099999997474" prefWidth="194.0">
-						</ComboBox>
-						<Label layoutX="380.0" layoutY="266.0" text="Логин:">
+<BorderPane fx:id="ap" stylesheets="@../../borderpane.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sb_tr.controller.EnterController">
+   <top>
+      <GridPane BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="307.0" minWidth="10.0" prefWidth="60.0" />
+          <ColumnConstraints hgrow="SOMETIMES" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+						<Label text="Логин:">
 							<font>
 								<Font name="Arial Bold" size="14.0" />
 							</font>
 						</Label>
-						<Label layoutX="370.0" layoutY="298.0" text="Пароль:">
-							<font>
-								<Font name="System Bold" size="14.0" />
-							</font>
-						</Label>
-						<Label layoutX="391.0" layoutY="330.0" text="База:">
-							<font>
-								<Font name="System Bold" size="14.0" />
-							</font>
-						</Label>
-						<Button fx:id="enter_id" layoutX="432.0" layoutY="363.0"
-							mnemonicParsing="false" onAction="#enter" text="Вход">
+						<Button fx:id="enter_id" mnemonicParsing="false" onAction="#enter" text="Вход" GridPane.columnIndex="1" GridPane.rowIndex="3">
 							<font>
 								<Font size="14.0" />
 							</font>
 						</Button>
-
-					</children>
-				</AnchorPane>
-			</children>
-			<columnConstraints>
-				<ColumnConstraints />
-			</columnConstraints>
-			<rowConstraints>
-				<RowConstraints />
-			</rowConstraints>
-		</GridPane>
-
-	</center>
+						<Label text="Пароль:" GridPane.rowIndex="1">
+							<font>
+								<Font name="System Bold" size="14.0" />
+							</font>
+						</Label>
+						<Label text="База:" GridPane.rowIndex="2">
+							<font>
+								<Font name="System Bold" size="14.0" />
+							</font>
+						</Label>
+            <ComboBox fx:id="conurl" editable="true" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <PasswordField fx:id="pass" maxWidth="200.0" onKeyPressed="#enter_" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <ComboBox fx:id="login" editable="true" prefWidth="200.0" GridPane.columnIndex="1" />
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </BorderPane.margin>
+      </GridPane>
+   </top>
 </BorderPane>

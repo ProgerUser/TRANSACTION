@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sb_tr.model.Connect;
 import sb_tr.util.DBUtil;
@@ -36,6 +37,7 @@ public class Main extends Application {
 		primaryStage.getIcons().add(new Image("icon.png"));
 		this.primaryStage.setTitle("Транзакции");
 
+		
 		if (Connect.userID_ != null & Connect.trnnum == null & Connect.trnanum == null & Connect.userPassword_ != null
 				& Connect.djdog_id == null) { // primaryStage.setMaximized(true);
 			primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
@@ -59,14 +61,15 @@ public class Main extends Application {
 		} else if (Connect.userID_ == null & Connect.userPassword_ == null) {
 			Enter();
 		}
-
+		
 		/*
 		  Connect.connectionURL_ = "10.111.64.21:1521/odb"; Connect.userID_ ="SAIDP";
-		  Connect.userPassword_ = ""; 
+		  Connect.userPassword_ = "zzz"; 
 		  DBUtil.dbConnect(); 
-		  //initRootLayout();
-		  CopyDover();
-		 */
+		  initRootLayout();
+		  */
+		 //CopyDover();
+		 
  
 
 		primaryStage.setOnCloseRequest(e -> {
@@ -359,10 +362,24 @@ public class Main extends Application {
 	/* Пенсия */
 	public static void sep() {
 		try {
+			/*
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Pens_divide.fxml"));
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
+			*/
+			
+			Stage stage = new Stage();
+			Parent root;
+			root = FXMLLoader.load(Main.class.getResource("view/Pens_divide.fxml"));
+			stage.setScene(new Scene(root));
+			stage.getIcons().add(new Image("icon.png"));
+			stage.setTitle("Пенсия РФ");
+			stage.setResizable(false);
+			stage.initModality(Modality.WINDOW_MODAL);
+			stage.initOwner(primaryStage);
+			stage.show();
+			
 		} catch (IOException e) {
 			Msg.Messge(e.getMessage());
 		}
@@ -395,10 +412,23 @@ public class Main extends Application {
 	/* Загрузка транзакции */
 	public static void Transact_Amra() {
 		try {
+			/*
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Amra_Trans.fxml"));
 			BorderPane employeeOperationsView = (BorderPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
+			
+			*/
+			Stage stage = new Stage();
+			Parent root;
+			root = FXMLLoader.load(Main.class.getResource("view/Amra_Trans.fxml"));
+			stage.setScene(new Scene(root));
+			stage.getIcons().add(new Image("icon.png"));
+			stage.setTitle("Загрузка транзакции");
+			stage.setResizable(false);
+			stage.initModality(Modality.WINDOW_MODAL);
+			stage.initOwner(primaryStage);
+			stage.show();
 		} catch (IOException e) {
 			Msg.Messge(e.getMessage());
 		}

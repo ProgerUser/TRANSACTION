@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.effect.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
@@ -9,78 +10,73 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane fx:id="ap1" prefHeight="649.0" prefWidth="1017.0" stylesheets="@../../borderpane.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sb_tr.controller.Amra_Transact">
-	<center>
-
-	</center>
-	<left>
-		<AnchorPane fx:id="anch_b5" prefHeight="455.0" prefWidth="17.0" BorderPane.alignment="CENTER" stylesheets="@../../borderpane.css"/>
-	</left>
-	<bottom>
-		<AnchorPane fx:id="anch_b3" prefHeight="17.0" prefWidth="1008.0" BorderPane.alignment="CENTER" stylesheets="@../../borderpane.css"/>
-	</bottom>
+<BorderPane fx:id="ap1" stylesheets="@../../borderpane.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sb_tr.controller.Amra_Transact">
 	<center>
 
 	</center>
 	<center>
-		<GridPane prefHeight="555.0" prefWidth="598.0" BorderPane.alignment="CENTER">
-			<children>
-				<TableView fx:id="load_file" prefHeight="466.0" prefWidth="983.0" stylesheets="transact.css" tableMenuButtonVisible="true" BorderPane.alignment="CENTER" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS">
-					<columns>
-						<TableColumn fx:id="FileName" prefWidth="149.0" text="Имя файла" />
-						<TableColumn fx:id="StatusFile" prefWidth="132.0" text="Статус файла" />
-						<TableColumn fx:id="DateFile" prefWidth="128.0" text="Дата" />
-						<TableColumn fx:id="UserFile" prefWidth="120.0" text="Пользователь" />
-						<TableColumn fx:id="IdFile" text="ИД файл" />
-						<TableColumn fx:id="PathFile" prefWidth="98.0" text="Путь загрузки" />
-					</columns>
-					<contextMenu>
-                  <ContextMenu fx:id="menubar">
-                    <items>
-                      <MenuItem mnemonicParsing="false" onAction="#show_tr" text="Показать транзакции" />
-                    </items>
-                  </ContextMenu>
-               </contextMenu>
-				</TableView>
-			</children>
-			<columnConstraints>
-				<ColumnConstraints />
-			</columnConstraints>
-			<rowConstraints>
-				<RowConstraints />
-			</rowConstraints>
-		</GridPane>
-	</center>
-	<top>
-		<AnchorPane fx:id="ap" prefHeight="69.0" prefWidth="1017.0" stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER">
-			<children>
-				<Button fx:id="browse" disable="false" layoutX="14.0" layoutY="24.0" mnemonicParsing="false" onAction="#Choose" prefHeight="30.0" prefWidth="30.0" stylesheets="@../../borderpane.css">
-					<tooltip>
-						<Tooltip text="Добавить файл" />
-					</tooltip>
-				</Button>
 
-				<Button id="import" fx:id="import_" disable="false" layoutX="50.0" layoutY="24.0" mnemonicParsing="false" onAction="#Load_Transact" prefHeight="30.0" prefWidth="30.0">
-					<tooltip>
-						<Tooltip text="Разобрать файл" />
-					</tooltip>
-				</Button>
-				<Button id="calc" fx:id="calc" layoutX="86.0" layoutY="24.0" mnemonicParsing="false" onAction="#Calc_Transact" prefHeight="30.0" prefWidth="30.0">
-					<tooltip>
-						<Tooltip text="Сформировать проводки" />
-					</tooltip>
-				</Button>
-				<DatePicker fx:id="date_load" layoutX="168.0" layoutY="24.0" onAction="#view_fn" prefHeight="30.0" prefWidth="116.0" promptText="Дата загрузки" />
-				<Button id="del" fx:id="delete_log" layoutX="122.0" layoutY="24.0" mnemonicParsing="false" onAction="#del_log" prefHeight="30.0" prefWidth="30.0">
-					<tooltip>
-						<Tooltip text="Удалить лог" />
-					</tooltip>
-				</Button>
-				<ProgressIndicator fx:id="progress" layoutX="919.0" layoutY="17.0" prefHeight="52.0" prefWidth="84.0" visible="false" />
-			</children>
-		</AnchorPane>
-	</top>
-	<right>
-		<AnchorPane fx:id="anch_b7" prefHeight="546.0" prefWidth="17.0" BorderPane.alignment="CENTER" stylesheets="@../../borderpane.css" />
-	</right>
+	</center>
+   <center>
+      <VBox BorderPane.alignment="CENTER">
+         <children>
+            <ToolBar>
+               <items>
+      				<Button fx:id="browse" disable="false" mnemonicParsing="false" onAction="#Choose" prefHeight="30.0" prefWidth="30.0" stylesheets="@../../borderpane.css">
+      					<tooltip>
+      						<Tooltip text="Добавить файл" />
+      					</tooltip>
+      				</Button>
+      
+            				<Button id="import" fx:id="import_" disable="false" mnemonicParsing="false" onAction="#Load_Transact" prefHeight="30.0" prefWidth="30.0">
+      					<tooltip>
+      						<Tooltip text="Разобрать файл" />
+      					</tooltip>
+      				</Button>
+      				<Button id="calc" fx:id="calc" mnemonicParsing="false" onAction="#Calc_Transact" prefHeight="30.0" prefWidth="30.0">
+      					<tooltip>
+      						<Tooltip text="Сформировать проводки" />
+      					</tooltip>
+      				</Button>
+      				<Button id="del" fx:id="delete_log" mnemonicParsing="false" onAction="#del_log" prefHeight="30.0" prefWidth="30.0">
+      					<tooltip>
+      						<Tooltip text="Удалить лог" />
+      					</tooltip>
+      				</Button>
+      				<DatePicker fx:id="date_load" onAction="#view_fn" prefHeight="30.0" prefWidth="120.0" promptText="Дата загрузки" />
+               </items>
+            </ToolBar>
+      		<GridPane>
+      			<children>
+      				<TableView fx:id="load_file" prefHeight="466.0" prefWidth="800.0" tableMenuButtonVisible="true" BorderPane.alignment="CENTER" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS">
+      					<columns>
+      						<TableColumn fx:id="FileName" prefWidth="149.0" text="Имя файла" />
+      						<TableColumn fx:id="StatusFile" prefWidth="132.0" text="Статус файла" />
+      						<TableColumn fx:id="DateFile" prefWidth="128.0" text="Дата" />
+      						<TableColumn fx:id="UserFile" prefWidth="120.0" text="Пользователь" />
+      						<TableColumn fx:id="IdFile" text="ИД файл" />
+      						<TableColumn fx:id="PathFile" prefWidth="98.0" text="Путь загрузки" />
+      					</columns>
+      					<contextMenu>
+                        <ContextMenu fx:id="menubar">
+                          <items>
+                            <MenuItem mnemonicParsing="false" onAction="#show_tr" text="Показать транзакции" />
+                          </items>
+                        </ContextMenu>
+                     </contextMenu>
+      				</TableView>
+      			</children>
+      			<columnConstraints>
+      				<ColumnConstraints />
+      			</columnConstraints>
+      			<rowConstraints>
+      				<RowConstraints />
+      			</rowConstraints>
+      		</GridPane>
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </VBox>
+   </center>
 </BorderPane>

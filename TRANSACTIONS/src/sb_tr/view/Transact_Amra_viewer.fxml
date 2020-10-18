@@ -123,172 +123,171 @@
 			</rowConstraints>
 		</GridPane>
 	</center>
-	<top>
-		<AnchorPane fx:id="anch_b4" prefHeight="92.0" prefWidth="1015.0" stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER">
-			<children>
-				<Button fx:id="attributes" layoutX="636.0" layoutY="16.0" mnemonicParsing="false" onAction="#view_attr" prefHeight="30.0" prefWidth="30.0">
-					<tooltip>
-						<Tooltip text="Показать дополнительные атрибуты" />
-					</tooltip>
-					<font>
-						<Font size="14.0" />
-					</font>
-				</Button>
-				<Button layoutX="675.0" layoutY="16.0" mnemonicParsing="false" onAction="#excel_export" prefHeight="30.0" prefWidth="30.0" fx:id="xlsx">
-					<tooltip>
-						<Tooltip text="Выгрузка в Excel" />
-					</tooltip>
-					<font>
-						<Font size="14.0" />
-					</font>
-				</Button>
-				<DatePicker fx:id="dt1" layoutX="18.0" layoutY="16.0" prefHeight="30.0" prefWidth="100.0" promptText="Дата с:">
-					<tooltip>
-						<Tooltip text="Дата с" />
-					</tooltip>
-				</DatePicker>
-				<DatePicker fx:id="dt2" layoutX="126.0" layoutY="16.0" prefHeight="30.0" prefWidth="100.0" promptText="Дата по:">
-					<tooltip>
-						<Tooltip text="Дата по" />
-					</tooltip>
-				</DatePicker>
-				<Button fx:id="search" layoutX="559.0" layoutY="16.0" mnemonicParsing="false" onAction="#filter" prefHeight="30.0" prefWidth="30.0">
-					<tooltip>
-						<Tooltip text="Поиск" />
-					</tooltip>
-					<font>
-						<Font size="14.0" />
-					</font>
-				</Button>
-				<TextField fx:id="id_sess" layoutX="235.0" layoutY="16.0" prefHeight="25.0" prefWidth="100.0" promptText="ИД загрузки">
-					<tooltip>
-						<Tooltip text="Идентификатор загрузки" />
-					</tooltip>
-					<font>
-						<Font size="14.0" />
-					</font>
-				</TextField>
-				<Button fx:id="view" layoutX="596.0" layoutY="16.0" mnemonicParsing="false" onAction="#view_unpivot" prefHeight="30.0" prefWidth="30.0">
-					<tooltip>
-						<Tooltip text="Показать транзакцию" />
-					</tooltip>
-					<font>
-						<Font size="14.0" />
-					</font>
-				</Button>
-				<CheckBox fx:id="inkass" layoutX="559.0" layoutY="54.0" mnemonicParsing="false" onAction="#check_table" prefHeight="20.0" prefWidth="82.0" text="Инкасс.">
-					<tooltip>
-						<Tooltip text="Показать инкассации" />
-					</tooltip>
-					<font>
-						<Font size="14.0" />
-					</font>
-				</CheckBox>
-				<TextField fx:id="FIO" layoutX="342.0" layoutY="16.0" prefHeight="30.0" prefWidth="211.0" promptText="ФИО, тел., и т.д.">
-					<tooltip>
-						<Tooltip text="ФИО, тел., и т.д." />
-					</tooltip>
-					<font>
-						<Font size="14.0" />
-					</font>
-				</TextField>
-				<Button fx:id="post" layoutX="713.0" layoutY="16.0" mnemonicParsing="false" onAction="#view_post" prefHeight="30.0" prefWidth="30.0">
-					<tooltip>
-						<Tooltip text="Показать проводки" />
-					</tooltip>
-					<font>
-						<Font size="14.0" />
-					</font>
-				</Button>
-				<Button fx:id="print_check" layoutX="753.0" layoutY="16.0" mnemonicParsing="false" onAction="#print_" prefHeight="30.0" prefWidth="30.0">
-					<tooltip>
-						<Tooltip text="Печать чека JasperReport" />
-					</tooltip>
-					<font>
-						<Font size="14.0" />
-					</font>
-				</Button>
-				<ProgressIndicator fx:id="pb" layoutX="951.0" layoutY="22.0" visible="false" />
-				<Button layoutX="18.0" layoutY="49.0" mnemonicParsing="false" onAction="#chk_all" prefHeight="30.0" prefWidth="44.0" text="VVV">
-					<tooltip>
-						<Tooltip text="Отметить все" />
-					</tooltip>
-					<font>
-						<Font name="System Bold" size="12.0" />
-					</font>
-				</Button>
-				<Button layoutX="74.0" layoutY="49.0" mnemonicParsing="false" onAction="#unchk_all" prefHeight="30.0" prefWidth="44.0" text="OOO">
-					<tooltip>
-						<Tooltip text="Убрать пометки" />
-					</tooltip>
-					<font>
-						<Font name="System Bold" size="12.0" />
-					</font>
-				</Button>
-				<TextField fx:id="summa_plat" layoutX="126.0" layoutY="49.0" prefHeight="30.0" prefWidth="100.0" promptText="Σ платежа">
-					<tooltip>
-						<Tooltip text="Сумма платежа" />
-					</tooltip>
-					<font>
-						<Font size="14.0" />
-					</font>
-				</TextField>
-				<TextField fx:id="cnt_all_" layoutX="342.0" layoutY="49.0" prefHeight="30.0" prefWidth="100.0" promptText="Кол-во ">
-					<tooltip>
-						<Tooltip text="Количество" />
-					</tooltip>
-					<font>
-						<Font size="14.0" />
-					</font>
-				</TextField>
-
-				<ComboBox fx:id="terminal_name" editable="true" layoutX="448.0" layoutY="49.0" prefHeight="30.0" prefWidth="105.0" promptText="Терминал">
-					<tooltip>
-						<Tooltip text="Выбор терминала" />
-					</tooltip>
-				</ComboBox>
-				<TextField fx:id="summa_nal" layoutX="235.0" layoutY="49.0" prefHeight="30.0" prefWidth="100.0" promptText="Σ наличных">
-					<tooltip>
-						<Tooltip text="Сумма наличных" />
-					</tooltip>
-					<font>
-						<Font size="14.0" />
-					</font>
-				</TextField>
-				<CheckBox fx:id="ret_pay" layoutX="639.0" layoutY="54.0" mnemonicParsing="false" onAction="#check_table_ret" prefHeight="20.0" prefWidth="95.0" text="Возвраты">
-					<tooltip>
-						<Tooltip text="Показать возвраты" />
-					</tooltip>
-					<font>
-						<Font size="14.0" />
-					</font>
-				</CheckBox>
-				<Button fx:id="chk_nmbers" ellipsisString="" layoutX="792.0" layoutY="16.0" minHeight="30.0" mnemonicParsing="false" onAction="#showdeal" prefWidth="30.0">
-					<tooltip>
-						<Tooltip text="Показать сдачи" />
-					</tooltip>
-					<font>
-						<Font size="14.0" />
-					</font>
-				</Button>
-            <Button fx:id="trn_" layoutX="831.0" layoutY="16.0" minHeight="30.0" mnemonicParsing="false" onAction="#view_trn" prefWidth="30.0">
-            				<tooltip>
-						<Tooltip text="Реестр документов" />
-					</tooltip>
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Button>
-			</children>
-		</AnchorPane>
-	</top>
-	<left>
-		<AnchorPane fx:id="anch_b7" prefHeight="455.0" prefWidth="17.0" stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER" />
-	</left>
-	<right>
-		<AnchorPane fx:id="anch_b8" prefHeight="455.0" prefWidth="17.0" stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER" />
-	</right>
-	<bottom>
-		<AnchorPane fx:id="anch_b9" prefHeight="17.0" prefWidth="1008.0" stylesheets="@../../borderpane.css" BorderPane.alignment="CENTER" />
-	</bottom>
+   <top>
+      <VBox BorderPane.alignment="CENTER">
+         <children>
+            <ToolBar stylesheets="@../../borderpane.css">
+               <items>
+      				<DatePicker fx:id="dt1" prefHeight="30.0" prefWidth="100.0" promptText="Дата с:">
+      					<tooltip>
+      						<Tooltip text="Дата с" />
+      					</tooltip>
+      				</DatePicker>
+      				<DatePicker fx:id="dt2" prefHeight="30.0" prefWidth="100.0" promptText="Дата по:">
+      					<tooltip>
+      						<Tooltip text="Дата по" />
+      					</tooltip>
+      				</DatePicker>
+      				<TextField fx:id="id_sess" prefHeight="25.0" prefWidth="100.0" promptText="ИД загрузки">
+      					<tooltip>
+      						<Tooltip text="Идентификатор загрузки" />
+      					</tooltip>
+      					<font>
+      						<Font size="14.0" />
+      					</font>
+      				</TextField>
+      				<TextField fx:id="FIO" prefHeight="30.0" prefWidth="211.0" promptText="ФИО, тел., и т.д.">
+      					<tooltip>
+      						<Tooltip text="ФИО, тел., и т.д." />
+      					</tooltip>
+      					<font>
+      						<Font size="14.0" />
+      					</font>
+      				</TextField>
+      				<Button fx:id="search" mnemonicParsing="false" onAction="#filter" prefHeight="30.0" prefWidth="30.0">
+      					<tooltip>
+      						<Tooltip text="Поиск" />
+      					</tooltip>
+      					<font>
+      						<Font size="14.0" />
+      					</font>
+      				</Button>
+      				<Button fx:id="view" mnemonicParsing="false" onAction="#view_unpivot" prefHeight="30.0" prefWidth="30.0">
+      					<tooltip>
+      						<Tooltip text="Показать транзакцию" />
+      					</tooltip>
+      					<font>
+      						<Font size="14.0" />
+      					</font>
+      				</Button>
+      				<Button fx:id="attributes" mnemonicParsing="false" onAction="#view_attr" prefHeight="30.0" prefWidth="30.0">
+      					<tooltip>
+      						<Tooltip text="Показать дополнительные атрибуты" />
+      					</tooltip>
+      					<font>
+      						<Font size="14.0" />
+      					</font>
+      				</Button>
+      				<Button mnemonicParsing="false" onAction="#excel_export" prefHeight="30.0" prefWidth="30.0" fx:id="xlsx">
+      					<tooltip>
+      						<Tooltip text="Выгрузка в Excel" />
+      					</tooltip>
+      					<font>
+      						<Font size="14.0" />
+      					</font>
+      				</Button>
+      				<Button fx:id="post" mnemonicParsing="false" onAction="#view_post" prefHeight="30.0" prefWidth="30.0">
+      					<tooltip>
+      						<Tooltip text="Показать проводки" />
+      					</tooltip>
+      					<font>
+      						<Font size="14.0" />
+      					</font>
+      				</Button>
+      				<Button fx:id="print_check" mnemonicParsing="false" onAction="#print_" prefHeight="30.0" prefWidth="30.0">
+      					<tooltip>
+      						<Tooltip text="Печать чека JasperReport" />
+      					</tooltip>
+      					<font>
+      						<Font size="14.0" />
+      					</font>
+      				</Button>
+      				<Button fx:id="chk_nmbers" ellipsisString="" minHeight="30.0" mnemonicParsing="false" onAction="#showdeal" prefWidth="30.0">
+      					<tooltip>
+      						<Tooltip text="Показать сдачи" />
+      					</tooltip>
+      					<font>
+      						<Font size="14.0" />
+      					</font>
+      				</Button>
+                  <Button fx:id="trn_" minHeight="30.0" mnemonicParsing="false" onAction="#view_trn" prefWidth="30.0">
+                  				<tooltip>
+      						<Tooltip text="Реестр документов" />
+      					</tooltip>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+      				<ProgressIndicator fx:id="pb" visible="false" />
+               </items>
+            </ToolBar>
+            <ToolBar>
+               <items>
+      				<Button mnemonicParsing="false" onAction="#chk_all" prefHeight="30.0" prefWidth="44.0" text="VVV">
+      					<tooltip>
+      						<Tooltip text="Отметить все" />
+      					</tooltip>
+      					<font>
+      						<Font name="System Bold" size="12.0" />
+      					</font>
+      				</Button>
+      				<Button mnemonicParsing="false" onAction="#unchk_all" prefHeight="30.0" prefWidth="44.0" text="OOO">
+      					<tooltip>
+      						<Tooltip text="Убрать пометки" />
+      					</tooltip>
+      					<font>
+      						<Font name="System Bold" size="12.0" />
+      					</font>
+      				</Button>
+      				<TextField fx:id="summa_plat" prefHeight="30.0" prefWidth="100.0" promptText="Σ платежа">
+      					<tooltip>
+      						<Tooltip text="Сумма платежа" />
+      					</tooltip>
+      					<font>
+      						<Font size="14.0" />
+      					</font>
+      				</TextField>
+      				<TextField fx:id="summa_nal" prefHeight="30.0" prefWidth="100.0" promptText="Σ наличных">
+      					<tooltip>
+      						<Tooltip text="Сумма наличных" />
+      					</tooltip>
+      					<font>
+      						<Font size="14.0" />
+      					</font>
+      				</TextField>
+      				<TextField fx:id="cnt_all_" prefHeight="30.0" prefWidth="100.0" promptText="Кол-во ">
+      					<tooltip>
+      						<Tooltip text="Количество" />
+      					</tooltip>
+      					<font>
+      						<Font size="14.0" />
+      					</font>
+      				</TextField>
+      
+            				<ComboBox fx:id="terminal_name" editable="true" prefHeight="30.0" prefWidth="105.0" promptText="Терминал">
+      					<tooltip>
+      						<Tooltip text="Выбор терминала" />
+      					</tooltip>
+      				</ComboBox>
+      				<CheckBox fx:id="inkass" mnemonicParsing="false" onAction="#check_table" prefHeight="20.0" prefWidth="82.0" text="Инкасс.">
+      					<tooltip>
+      						<Tooltip text="Показать инкассации" />
+      					</tooltip>
+      					<font>
+      						<Font size="14.0" />
+      					</font>
+      				</CheckBox>
+      				<CheckBox fx:id="ret_pay" mnemonicParsing="false" onAction="#check_table_ret" prefHeight="20.0" prefWidth="95.0" text="Возвраты">
+      					<tooltip>
+      						<Tooltip text="Показать возвраты" />
+      					</tooltip>
+      					<font>
+      						<Font size="14.0" />
+      					</font>
+      				</CheckBox>
+               </items>
+            </ToolBar>
+         </children>
+      </VBox>
+   </top>
 </BorderPane>
