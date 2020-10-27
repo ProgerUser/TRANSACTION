@@ -1,5 +1,6 @@
 package sb_tr;
 
+import java.awt.SplashScreen;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
@@ -64,7 +65,7 @@ public class Main extends Application {
 		
 		/*
 		  Connect.connectionURL_ = "10.111.64.21:1521/odb"; Connect.userID_ ="SAIDP";
-		  Connect.userPassword_ = "zzz"; 
+		  Connect.userPassword_ = ""; 
 		  DBUtil.dbConnect(); 
 		  initRootLayout();
 		  */
@@ -112,10 +113,20 @@ public class Main extends Application {
 	/* Формирование псевдонимов */
 	public static void showKash() {
 		try {
+			/*
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Kash.fxml"));
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
+			*/
+			Stage stage = new Stage();
+			Parent root;
+			root = FXMLLoader.load(Main.class.getResource("view/Kash.fxml"));
+			stage.setScene(new Scene(root));
+			stage.getIcons().add(new Image("icon.png"));
+			stage.setTitle("Псевдонимы");
+			stage.initOwner(primaryStage);
+			stage.show();
 		} catch (IOException e) {
 			Msg.Messge(e.getMessage());
 		}
@@ -171,10 +182,20 @@ public class Main extends Application {
 	/* Банк-Клиент */
 	public static void Ibankk() {
 		try {
+			/*
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Ibank.fxml"));
-			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
+			VBox employeeOperationsView = (VBox) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
+			*/
+			Stage stage = new Stage();
+			Parent root;
+			root = FXMLLoader.load(Main.class.getResource("view/Ibank.fxml"));
+			stage.setScene(new Scene(root));
+			stage.getIcons().add(new Image("icon.png"));
+			stage.setTitle("Клиенты");
+			stage.initOwner(primaryStage);
+			stage.show();
 		} catch (IOException e) {
 			Msg.Messge(e.getMessage());
 		}
@@ -436,6 +457,10 @@ public class Main extends Application {
 
 	public static void main(String[] args) {
 		try {
+			final SplashScreen splash = SplashScreen.getSplashScreen();
+		    if (splash != null) {
+		        splash.close();
+		    }
 			if (args.length != 0 & args.length == 3) {
 				Connect.userID_ = args[0];
 				Connect.userPassword_ = args[1];

@@ -94,12 +94,12 @@ public class Ibank {
 			if (newSelection != null) {
 				try {
 					String acc_ = "";
-					int id = CLI.getSelectionModel().getSelectedItem().get_CLIENT_ID();
+					Ibank2 IbMod = CLI.getSelectionModel().getSelectedItem();
 					Statement sqlStatement = conn.createStatement();
 					String readRecordSQL = "select filtering\n" + "  from (select '[224100017]' filtering\n"
 							+ "          from dual\n" + "        union all\n" + "        select ACCOUNT filtering\n"
 							+ "          from ibank2.ACCOUNTS t\n" + "         where ID in\n"
-							+ "               (select ACCOUNT_ID from ibank2.C2ACCOUNTS t where client_id = " + id
+							+ "               (select ACCOUNT_ID from ibank2.C2ACCOUNTS t where client_id = " + IbMod.get_CLIENT_ID()
 							+ "))\n" + " order by case\n" + "            when substr(filtering, 1, 1) = '[' then\n"
 							+ "             1\n" + "            else\n" + "             2\n" + "          end";
 					ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
@@ -112,6 +112,10 @@ public class Ibank {
 						}
 					}
 					acc.setText(acc_);
+					
+					{
+						
+					}
 				} catch (Exception e) {
 					altert(e.getMessage());
 				}

@@ -246,6 +246,7 @@ public class KashController {
 				//}
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			Alert(e.getMessage());
 		}
 	}
