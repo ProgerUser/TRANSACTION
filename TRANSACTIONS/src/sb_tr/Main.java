@@ -91,6 +91,9 @@ public class Main extends Application {
 			rootLayout = (BorderPane) loader.load();
 			Scene scene = new Scene(rootLayout); // We are sending rootLayout to the Scene.
 			primaryStage.setScene(scene); // Set the scene in primary stage.
+			primaryStage.centerOnScreen();
+			//primaryStage.setMaximized(true);
+			primaryStage.setResizable(true);
 			primaryStage.show(); // Display the primary stage
 		} catch (IOException e) {
 			Msg.Messge(e.getMessage());
@@ -251,6 +254,8 @@ public class Main extends Application {
 			rootLayout = (BorderPane) loader.load();
 			Scene scene = new Scene(rootLayout); // We are sending rootLayout to the Scene.
 			primaryStage.setScene(scene); // Set the scene in primary stage.
+			primaryStage.setResizable(false);
+			primaryStage.centerOnScreen();
 			primaryStage.show(); // Display the primary stage
 		} catch (IOException e) {
 			Msg.Messge(e.getMessage());

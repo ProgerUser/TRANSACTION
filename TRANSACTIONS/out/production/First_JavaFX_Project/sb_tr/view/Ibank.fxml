@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sb_tr.controller.Ibank">
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sb_tr.controller.Ibank">
 	<children>
       <ToolBar>
          <items>
@@ -19,21 +19,29 @@
       		<PasswordField fx:id="password" prefHeight="25.0" prefWidth="106.0" promptText="Пароль" text="qwerty" />
          </items>
       </ToolBar>
-      <SplitPane dividerPositions="0.5">
+      <SplitPane orientation="VERTICAL">
          <items>
             <VBox>
                <children>
-            		<TableView fx:id="CLI" editable="true" stylesheets="@../../transact.css">
-            			<columns>
-            				<TableColumn fx:id="CLIENT_ID" prefWidth="69.0" text="ИД" />
-            				<TableColumn fx:id="NAME_CLN" prefWidth="319.0" text="Наименование" />
-            			</columns>
-            		</TableView>
-               </children>
-            </VBox>
-            <VBox>
-               <children>
-            		<TextArea fx:id="acc" prefHeight="399.0" prefWidth="200.0" />
+                  <SplitPane dividerPositions="0.5">
+                     <items>
+                        <VBox>
+                           <children>
+                        		<TableView fx:id="CLI" editable="true" stylesheets="@../../transact.css">
+                        			<columns>
+                        				<TableColumn fx:id="CLIENT_ID" prefWidth="69.0" text="ИД" />
+                        				<TableColumn fx:id="NAME_CLN" prefWidth="319.0" text="Наименование" />
+                        			</columns>
+                        		</TableView>
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                        		<TextArea fx:id="acc" prefHeight="399.0" prefWidth="200.0" />
+                           </children>
+                        </VBox>
+                     </items>
+                  </SplitPane>
                </children>
             </VBox>
          </items>

@@ -168,11 +168,11 @@ public class KashController {
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Выбрать файл");
 
-			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Excel File", "*.xlsx"));
-
+			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Excel File after 2007", "*.xlsx"),
+					new ExtensionFilter("Excel File defore 2007", "*.xls"));
 			File file = fileChooser.showOpenDialog(null);
 			if (file != null) {
-				/*
+
 				if (file.getName().substring(file.getName().indexOf(".") + 1, file.getName().length()).equals("xls")) {
 
 					Workbook xlsx = xls2xlsx(file.getPath());
@@ -182,19 +182,15 @@ public class KashController {
 					} finally {
 						bos.close();
 					}
-
 					byte[] bytes = bos.toByteArray();
 					InputStream is = new ByteArrayInputStream(bytes);
 					Connection conn = DBUtil.conn;
-
 					CallableStatement callStmt = null;
 					callStmt = conn.prepareCall("{ ? =  call Get_XlsAFile(?)} ");
 					callStmt.registerOutParameter(1, Types.VARCHAR);
 					callStmt.setBlob(2, is, bytes.length);
 					callStmt.execute();
-
 					String ret = callStmt.getString(1);
-
 					if (!ret.equals("ok")) {
 						TextArea alert = new TextArea();
 						alert.setPrefSize(600, 400);
@@ -203,24 +199,21 @@ public class KashController {
 						yn.getChildren().add(alert);
 						Stage newWindow_yn = new Stage();
 						newWindow_yn.setTitle("Внимание");
-						newWindow_yn.setScene(ynScene);
-						// Specifies the modality for new window.
+						newWindow_yn.setScene(ynScene); // Specifies the modality for new window.
 						newWindow_yn.initModality(Modality.WINDOW_MODAL);
-
-						Stage stage = (Stage) employeeTable.getScene().getWindow();
-						// Specifies the owner Window (parent) for new window
-						newWindow_yn.initOwner(stage);
+						Stage stage = (Stage) employeeTable.getScene().getWindow(); // Specifies the
+						// owner Window (parent) for new window newWindow_yn.initOwner(stage);
 						newWindow_yn.getIcons().add(new Image("icon.png"));
 						newWindow_yn.show();
 						alert.setText(ret);
+					} else {
+						Alert("Файл загружен успешно!");
+						psevdo();
 					}
-
 				} else {
-				*/
 					FileInputStream in = new FileInputStream(file);
 					Connection conn = DBUtil.conn;
-					CallableStatement callStmt = null;
-					callStmt = conn.prepareCall("{ ? =  call Get_XlsAFile(?)} ");
+					CallableStatement callStmt = conn.prepareCall("{ ? =  call Get_XlsAFile(?)} ");
 					callStmt.registerOutParameter(1, Types.VARCHAR);
 					callStmt.setBlob(2, in, file.length());
 					callStmt.execute();
@@ -242,8 +235,11 @@ public class KashController {
 						newWindow_yn.getIcons().add(new Image("icon.png"));
 						newWindow_yn.show();
 						alert.setText(ret);
+					} else {
+						Alert("Файл загружен успешно!");
+						psevdo();
 					}
-				//}
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -365,6 +361,32 @@ public class KashController {
 			}
 			rs.close();
 			// conn.close();
+		} catch (SQLException e) {
+			Alert(e.getMessage());
+		}
+	}
+
+	void psevdo() {
+		try {
+			Connection conn = DBUtil.conn;
+			Statement chekStatement = conn.createStatement();
+			String chek = "select IDOV_PLAT from ov_plat where CPSEVDO is null";
+			ResultSet rs = chekStatement.executeQuery(chek);
+			if (rs.next()) {
+				ViewerDAO.kash_psevdo();
+				ObservableList<KashClass> empData = ViewerDAO.searchKash();
+				populateKash(empData);
+				ViewerDAO.delete_kash_psevdo();
+				autoResizeColumns(employeeTable);
+				@SuppressWarnings("deprecation")
+				TableFilter<KashClass> filter = new TableFilter<>(employeeTable);
+			} else {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				alert.setHeaderText("Warning");
+				alert.setContentText("Нет данных!");
+				alert.show();
+			}
+			rs.close();
 		} catch (SQLException e) {
 			Alert(e.getMessage());
 		}

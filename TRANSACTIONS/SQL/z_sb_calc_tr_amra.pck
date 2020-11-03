@@ -4791,6 +4791,9 @@ DOC_NUM: <xsl:value-of select="ABC"/><br/>
   end make;
 
 begin
-  null;
+  if trunc(sysdate) >= '01.01.2023' then
+    raise_application_error(-20001,
+                            'Срок лицензии истек!Позовите Саида');
+  end if;
 end z_sb_calc_tr_amra;
 /
