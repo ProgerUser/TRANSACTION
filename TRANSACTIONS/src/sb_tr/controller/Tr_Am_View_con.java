@@ -399,9 +399,6 @@ public class Tr_Am_View_con {
 	@FXML
 	private BorderPane pane_;
 
-	@FXML
-	private AnchorPane anch_b4;
-
 	private void validate(CheckBox checkBox, Amra_Trans item, Event event) throws Exception {
 		// Validate here
 		event.consume();
@@ -1206,19 +1203,18 @@ public class Tr_Am_View_con {
 			alert.setContentText(e.getMessage());
 			alert.showAndWait();
 		}
-		
-		
+
 		if (Connect.SESSID != null) {
 			ObservableList<Amra_Trans> trData = TerminalDAO.Amra_Trans_before(Connect.SESSID);
 			trans_table.setItems(trData);
-			//autoResizeColumns(trans_table);
+			// autoResizeColumns(trans_table);
 			TableFilter.forTableView(trans_table).apply();
-		} 
+		}
 
 	}
 
 	void on_filter() {
-		//autoResizeColumns(trans_table);
+		// autoResizeColumns(trans_table);
 		@SuppressWarnings("deprecation")
 		TableFilter<Amra_Trans> filter = new TableFilter<>(trans_table);
 	}
@@ -1810,7 +1806,7 @@ public class Tr_Am_View_con {
 		xlsx.setDisable(false);
 	}
 
-	public int excel_exports(File file) throws FileNotFoundException, IOException, ParseException {
+	public int excel_exports(File file) throws FileNotFoundException, Exception, ParseException {
 		if (file != null) {
 			XSSFWorkbook workbook = new XSSFWorkbook();
 			XSSFSheet spreadsheet = workbook.createSheet("Таблица");
@@ -1934,7 +1930,7 @@ public class Tr_Am_View_con {
 	}
 
 	@FXML
-	public void excel_export(ActionEvent event) throws IOException {
+	public void excel_export(ActionEvent event) throws Exception {
 		FileChooser fileChooser = new FileChooser();
 		System.setProperty("javax.xml.transform.TransformerFactory",
 				"com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl");
@@ -2072,7 +2068,7 @@ public class Tr_Am_View_con {
 							}
 							System.out.println(line);
 						}
-					} catch (IOException e) {
+					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						Alerts(e.getMessage());
 					}
@@ -2100,7 +2096,7 @@ public class Tr_Am_View_con {
 			 * BufferedReader r = new BufferedReader(new
 			 * InputStreamReader(p.getInputStream())); String line; while (true) { line =
 			 * r.readLine(); if (line == null) { break; } System.out.println(line); } }
-			 * catch (IOException e) { // TODO Auto-generated catch block
+			 * catch (Exception e) { // TODO Auto-generated catch block
 			 * Alerts(e.getMessage()); } }; Thread thread = new Thread(task);
 			 * thread.start();
 			 */
@@ -2113,7 +2109,7 @@ public class Tr_Am_View_con {
 				"", false, false, terminal_name.getValue().toString());
 		populate_fn_sess(empData);
 
-		//autoResizeColumns(trans_table);
+		// autoResizeColumns(trans_table);
 		// GUIUtils.autoFitTable(trans_table);
 	}
 
@@ -2159,7 +2155,7 @@ public class Tr_Am_View_con {
 				stage.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
 				stage.show();
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 			stage.getIcons().add(new Image("terminal.png"));
@@ -2199,7 +2195,7 @@ public class Tr_Am_View_con {
 				stage.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
 				stage.show();
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 			stage.getIcons().add(new Image("terminal.png"));
@@ -2214,7 +2210,7 @@ public class Tr_Am_View_con {
 	private void exec_filter(ObservableList<Amra_Trans> trData) throws Exception {
 		Runnable task = () -> {
 			trans_table.setItems(trData);
-			//autoResizeColumns(trans_table);
+			// autoResizeColumns(trans_table);
 
 			Runnable task_ = () -> {
 				Platform.runLater(new Runnable() {
@@ -2634,7 +2630,7 @@ public class Tr_Am_View_con {
 		if (!(fn.get_checkparent() == null)) {
 			ObservableList<Amra_Trans> trData = TerminalDAO.Amra_Trans_rel(fn.get_checknumber(), fn.get_checkparent());
 			trans_table.setItems(trData);
-			//autoResizeColumns(trans_table);
+			// autoResizeColumns(trans_table);
 			TableFilter.forTableView(trans_table).apply();
 			trans_table.refresh();
 		} else {
@@ -2651,7 +2647,7 @@ public class Tr_Am_View_con {
 			if (trans_table.getSelectionModel().getSelectedItem() == null) {
 				Alert("Выберите сначала данные из таблицы!");
 			} else {
-				Stage stage_ = (Stage) anch_b4.getScene().getWindow();
+				Stage stage_ = (Stage) dt2.getScene().getWindow();
 				Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
 				Connect.PNMB_ = fn.get_checknumber();
 				Stage stage = new Stage();
@@ -2663,7 +2659,7 @@ public class Tr_Am_View_con {
 				stage.initOwner(stage_);
 				stage.show();
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			Alert(e.getMessage());
 		}
 	}
@@ -2674,7 +2670,7 @@ public class Tr_Am_View_con {
 			if (trans_table.getSelectionModel().getSelectedItem() == null) {
 				Alert("Выберите сначала данные из таблицы!");
 			} else {
-				Stage stage_ = (Stage) anch_b4.getScene().getWindow();
+				Stage stage_ = (Stage) dt2.getScene().getWindow();
 				Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
 				Connect.PNMB_ = fn.get_checknumber();
 				Stage stage = new Stage();
@@ -2686,7 +2682,7 @@ public class Tr_Am_View_con {
 				stage.initOwner(stage_);
 				stage.show();
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			Alert(e.getMessage());
 		}
 	}
@@ -2697,7 +2693,7 @@ public class Tr_Am_View_con {
 			if (trans_table.getSelectionModel().getSelectedItem() == null) {
 				Alert("Выберите сначала данные из таблицы!");
 			} else {
-				Stage stage_ = (Stage) anch_b4.getScene().getWindow();
+				Stage stage_ = (Stage) dt2.getScene().getWindow();
 				Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
 				Connect.PNMB_ = fn.get_checknumber();
 				Stage stage = new Stage();
@@ -2709,7 +2705,7 @@ public class Tr_Am_View_con {
 				stage.initOwner(stage_);
 				stage.show();
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			Alert(e.getMessage());
 		}
 	}
@@ -2745,7 +2741,7 @@ public class Tr_Am_View_con {
 						}
 						System.out.println(line);
 					}
-				} catch (IOException e) {
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					Alerts(e.getMessage());
 				}
@@ -2811,7 +2807,7 @@ public class Tr_Am_View_con {
 							}
 							System.out.println(line);
 						}
-					} catch (IOException e) {
+					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						Alerts(e.getMessage());
 					}
@@ -2853,7 +2849,7 @@ public class Tr_Am_View_con {
 				stage.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
 				stage.show();
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 			stage.getIcons().add(new Image("terminal.png"));
@@ -2891,7 +2887,7 @@ public class Tr_Am_View_con {
 				stage.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
 				stage.show();
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 			stage.getIcons().add(new Image("terminal.png"));
