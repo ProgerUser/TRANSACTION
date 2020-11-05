@@ -35,6 +35,7 @@
 						<MenuItem fx:id="deals" mnemonicParsing="false" onAction="#Termdial_view" text="Сдачи" />
 						<MenuItem fx:id="terminals" mnemonicParsing="false" onAction="#termview" text="Терминалы" />
 						<MenuItem fx:id="services" mnemonicParsing="false" onAction="#service" text="Сервисы" />
+						<MenuItem fx:id="Sverka" mnemonicParsing="false" onAction="#Sverka" text="Сверка" />
 						<MenuItem fx:id="print" mnemonicParsing="false" onAction="#ap_print" text="Печать" />
 						<MenuItem fx:id="printapmain" mnemonicParsing="false" onAction="#ap_printfmx" text="Печать AP_MAIN" />
 					</items>

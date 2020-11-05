@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="458.0" prefWidth="562.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sb_tr.controller.Debt_InfoController2">
+   <children>
+      <TableView fx:id="debtinfo" layoutX="21.0" layoutY="25.0" prefHeight="370.0" prefWidth="505.0">
+        <columns>
+          <TableColumn fx:id="code" prefWidth="75.0" text="Код" />
+          <TableColumn fx:id="codename" prefWidth="75.0" text="Название" />
+        </columns>
+      </TableView>
+      <Button layoutX="21.0" layoutY="412.0" mnemonicParsing="false" onAction="#select" text="Выбрать" />
+   </children>
+</AnchorPane>

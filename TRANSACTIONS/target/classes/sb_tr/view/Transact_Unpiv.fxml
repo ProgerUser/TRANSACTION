@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity"
+	minHeight="-Infinity" minWidth="-Infinity" prefHeight="649.0"
+	prefWidth="1017.0" xmlns="http://javafx.com/javafx/8"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="sb_tr.controller.Unpiv_Controller">
+	<children>
+		<VBox layoutX="97.0" layoutY="24.0" spacing="4.0" />
+		<VBox layoutX="1.0" layoutY="45.0" prefWidth="67.0"
+			spacing="12.0" />
+		<TableView fx:id="trans_table" layoutX="12.0" layoutY="51.0"
+			prefHeight="561.0" prefWidth="994.0"
+			stylesheets="@../../transact.css" tableMenuButtonVisible="true">
+			<columns>
+				<TableColumn fx:id="COL" prefWidth="167.0"
+					text="Столбец" />
+				<TableColumn fx:id="COLVALUE" prefWidth="144.0"
+					text="Значение" />
+			</columns>
+		</TableView>
+		<Button disable="false" layoutX="14.0" layoutY="12.0"
+			mnemonicParsing="false" onAction="#view_attr"
+			text="Выгрузить в EXCEL" />
+	</children>
+</AnchorPane>

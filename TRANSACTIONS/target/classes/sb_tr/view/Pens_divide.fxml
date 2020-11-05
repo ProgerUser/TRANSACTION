@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sb_tr.controller.penscontroller">
+	<children>
+      <VBox>
+         <children>
+            <ToolBar>
+               <items>
+            		<Button fx:id="separate" disable="false" mnemonicParsing="false" onAction="#separate" prefHeight="30.0" prefWidth="30.0" stylesheets="@../../borderpane.css">
+            			<tooltip>
+            				<Tooltip text="Разделить файл" />
+            			</tooltip>
+            		</Button>
+            		<Button fx:id="save_sep" disable="false" mnemonicParsing="false" onAction="#save_seps" prefHeight="30.0" prefWidth="30.0" stylesheets="@../../borderpane.css">
+            			<tooltip>
+            				<Tooltip text="Сохранить файлы" />
+            			</tooltip>
+            		</Button>
+               </items>
+            </ToolBar>
+            <ToolBar prefHeight="40.0" prefWidth="200.0">
+               <items>
+                  <CheckBox fx:id="pensrachk" mnemonicParsing="false" onAction="#pensrachk" text="Разрешить загрузку РА пенсии в пл. модуле" />
+               </items>
+            </ToolBar>
+      		<TableView fx:id="sep_pens" editable="true" prefHeight="300.0" prefWidth="400.0">
+      			<columns>
+      				<TableColumn fx:id="ID" prefWidth="75.0" text="ИД" />
+      				<TableColumn fx:id="DateLoad" prefWidth="109.0" text="Дата загрузки" />
+      				<TableColumn fx:id="Filename" prefWidth="144.0" text="Название файла" />
+      				<!-- <TableColumn fx:id="ONE_PART" prefWidth="144.0" text="Часть I" />
+      				<TableColumn fx:id="TWO_PART" prefWidth="144.0" text="Часть II" />
+      				<TableColumn fx:id="THREE_PART" prefWidth="144.0" text="Часть III" />
+      				<TableColumn fx:id="FOUR_PART" prefWidth="144.0" text="Часть IV" /> -->
+      			</columns>
+      		</TableView>
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </VBox>
+	</children>
+</AnchorPane>

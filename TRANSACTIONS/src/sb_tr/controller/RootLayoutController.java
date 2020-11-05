@@ -117,6 +117,26 @@ public class RootLayoutController {
 	@FXML
 	private MenuItem savebudcode;
 
+	/**
+	 * Для сверки
+	 */
+	@FXML
+	private MenuItem Sverka;
+
+	/**
+	 * Для сверки
+	 * 
+	 * @param event
+	 */
+	@FXML
+	void Sverka(ActionEvent event) {
+		try {
+			Main.Sverka();
+		} catch (Exception e) {
+			Msg.Messge(e.getMessage());
+		}
+	}
+
 	@FXML
 	void handleExit(ActionEvent event) {
 		Platform.exit();
@@ -126,14 +146,7 @@ public class RootLayoutController {
 	@FXML
 	void chektransact(ActionEvent event) {
 		try {
-			if (Connect.userPassword_.equals("")) {
-
-			} else if (chk_rigth("Viewer.fxml", Connect.userID_) == 1) {
-				Main.showEmployeeView();
-			} else {
-				Msg.Messge("Нет прав");
-			}
-
+			Main.showEmployeeView();
 		} catch (Exception e) {
 			Msg.Messge(e.getMessage());
 		}
@@ -142,15 +155,7 @@ public class RootLayoutController {
 	@FXML
 	void save_budcode(ActionEvent event) {
 		try {
-			if (Connect.userPassword_.equals("")) {
-
-			} else if (chk_rigth("DebtInfo.fxml", Connect.userID_) == 1) {
-				System.out.println(chk_rigth("DebtInfo.fxml", Connect.userID_));
-				Main.Debtinfo();
-			} else {
-				Msg.Messge("Нет прав");
-			}
-
+			Main.Debtinfo();
 		} catch (Exception e) {
 			Msg.Messge(e.getMessage());
 		}
@@ -182,12 +187,7 @@ public class RootLayoutController {
 	@FXML
 	void Ibank(ActionEvent event) {
 		try {
-			if (chk_rigth("Ibank.fxml", Connect.userID_) == 1) {
-				Main.Ibankk();
-			} else {
-				Msg.Messge("Нет прав");
-			}
-
+			Main.Ibankk();
 		} catch (Exception e) {
 			Msg.Messge(e.getMessage());
 		}
@@ -196,15 +196,7 @@ public class RootLayoutController {
 	@FXML
 	void access_menuitems(ActionEvent event) {
 		try {
-			if (Connect.userPassword_.equals("")) {
-
-			} else if (chk_rigth("Admin.fxml", Connect.userID_) == 1) {
-				System.out.println(chk_rigth("Admin_Menu.fxml", Connect.userID_));
-				Main.Admin_Menu();
-			} else {
-				Msg.Messge("Нет прав");
-			}
-
+			Main.Admin_Menu();
 		} catch (Exception e) {
 			Msg.Messge(e.getMessage());
 		}
@@ -213,15 +205,7 @@ public class RootLayoutController {
 	@FXML
 	void term_view(ActionEvent event) {
 		try {
-
-			if (Connect.userPassword_.equals("")) {
-
-			} else if (chk_rigth("Transact_Amra_viewer.fxml", Connect.userID_) == 1) {
-				Main.showAmTr();
-			} else {
-				Msg.Messge("Нет прав");
-			}
-
+			Main.showAmTr();
 		} catch (Exception e) {
 			Msg.Messge(e.getMessage());
 		}
@@ -230,15 +214,7 @@ public class RootLayoutController {
 	@FXML
 	void loadtransact(ActionEvent event) {
 		try {
-
-			if (Connect.userPassword_.equals("")) {
-
-			} else if (chk_rigth("TransactLoad.fxml", Connect.userID_) == 1) {
-				Main.Transact();
-			} else {
-				Msg.Messge("Нет прав");
-			}
-
+			Main.Transact();
 		} catch (Exception e) {
 			Msg.Messge(e.getMessage());
 		}
@@ -247,15 +223,7 @@ public class RootLayoutController {
 	@FXML
 	void loadhistory(ActionEvent event) {
 		try {
-
-			if (Connect.userPassword_.equals("")) {
-
-			} else if (chk_rigth("ShowHist.fxml", Connect.userID_) == 1) {
-				Main.Show_Hist();
-			} else {
-				Msg.Messge("Нет прав");
-			}
-
+			Main.Show_Hist();
 		} catch (Exception e) {
 			Msg.Messge(e.getMessage());
 		}
@@ -264,15 +232,7 @@ public class RootLayoutController {
 	@FXML
 	void Termdial_view(ActionEvent event) {
 		try {
-
-			if (Connect.userPassword_.equals("")) {
-
-			} else if (chk_rigth("Termdial.fxml", Connect.userID_) == 1) {
-				Main.Termdial_view_();
-			} else {
-				Msg.Messge("Нет прав");
-			}
-
+			Main.Termdial_view_();
 		} catch (Exception e) {
 			Msg.Messge(e.getMessage());
 		}
@@ -281,15 +241,7 @@ public class RootLayoutController {
 	@FXML
 	void amra_trans(ActionEvent event) {
 		try {
-
-			if (Connect.userPassword_.equals("")) {
-
-			} else if (chk_rigth("Amra_Trans.fxml", Connect.userID_) == 1) {
-				Main.Transact_Amra();
-			} else {
-				Msg.Messge("Нет прав");
-			}
-
+			Main.Transact_Amra();
 		} catch (Exception e) {
 			Msg.Messge(e.getMessage());
 		}
@@ -298,15 +250,7 @@ public class RootLayoutController {
 	@FXML
 	void termview(ActionEvent event) {
 		try {
-
-			if (Connect.userPassword_.equals("")) {
-
-			} else if (chk_rigth("Terminal.fxml", Connect.userID_) == 1) {
-				Main.Terminal();
-			} else {
-				Msg.Messge("Нет прав");
-			}
-
+			Main.Terminal();
 		} catch (Exception e) {
 			Msg.Messge(e.getMessage());
 		}
@@ -315,14 +259,7 @@ public class RootLayoutController {
 	@FXML
 	void Kash(ActionEvent event) {
 		try {
-			if (Connect.userPassword_.equals("")) {
-
-			} else if (chk_rigth("Kash.fxml", Connect.userID_) == 1) {
-				Main.showKash();
-			} else {
-				Msg.Messge("Нет прав");
-			}
-
+			Main.showKash();
 		} catch (Exception e) {
 			Msg.Messge(e.getMessage());
 		}
@@ -331,13 +268,7 @@ public class RootLayoutController {
 	@FXML
 	void ContactLoad(ActionEvent event) {
 		try {
-			if (Connect.userPassword_.equals("")) {
-				
-			} else if (chk_rigth("Contact.fxml", Connect.userID_) == 1) {
-				Main.Contact();
-			} else {
-				Msg.Messge("Нет прав");
-			}
+			Main.Contact();
 		} catch (Exception e) {
 			Msg.Messge(e.getMessage());
 		}
@@ -422,15 +353,7 @@ public class RootLayoutController {
 	@FXML
 	void Access(ActionEvent event) {
 		try {
-			if (Connect.userPassword_.equals("")) {
-
-			} else if (chk_rigth("Admin.fxml", Connect.userID_) == 1) {
-				System.out.println(chk_rigth("Admin.fxml", Connect.userID_));
-				Main.Admin();
-			} else {
-				Msg.Messge("Нет прав");
-			}
-
+			Main.Admin();
 		} catch (Exception e) {
 			Msg.Messge(e.getMessage());
 		}
@@ -439,14 +362,7 @@ public class RootLayoutController {
 	@FXML
 	void service(ActionEvent event) {
 		try {
-			if (Connect.userPassword_.equals("")) {
-
-			} else if (chk_rigth("Service.fxml", Connect.userID_) == 1) {
-				Main.Service();
-			} else {
-				Msg.Messge("Нет прав");
-			}
-
+			Main.Service();
 		} catch (Exception e) {
 			Msg.Messge(e.getMessage());
 		}
@@ -456,8 +372,14 @@ public class RootLayoutController {
 		statusbar.setText(Connect.userID_ + "/" + Connect.connectionURL_);
 	}
 
-	/* Проверка прав на доступ к формам */
-	public int chk_rigth(String FORM_NAME, String CUSRLOGNAME) {
+	/**
+	 * Проверка прав на доступ к формам
+	 * 
+	 * @param FORM_NAME
+	 * @param CUSRLOGNAME
+	 * @return
+	 */
+	public int chk_rigth_(String FORM_NAME, String CUSRLOGNAME) {
 		int ret = 0;
 		Connection conn = DBUtil.conn;
 		try {
@@ -477,7 +399,13 @@ public class RootLayoutController {
 		return ret;
 	}
 
-	/* Проверка прав доступа к меню */
+	/**
+	 * Проверка прав доступа к меню
+	 * 
+	 * @param FORM_NAME
+	 * @param CUSRLOGNAME
+	 * @return
+	 */
 	public int chk_menu(String FORM_NAME, String CUSRLOGNAME) {
 		int ret = 0;
 		Connection conn = DBUtil.conn;
@@ -501,15 +429,7 @@ public class RootLayoutController {
 	@FXML
 	void divide_RA(ActionEvent event) {
 		try {
-			if (Connect.userPassword_.equals("")) {
-
-			} else if (chk_rigth("Pens_RA.fxml", Connect.userID_) == 1) {
-				System.out.println(chk_rigth("Pens_RA.fxml", Connect.userID_));
-				Main.sepRA();
-			} else {
-				Msg.Messge("Нет прав");
-			}
-
+			Main.sepRA();
 		} catch (Exception e) {
 			Msg.Messge(e.getMessage());
 		}
@@ -518,15 +438,7 @@ public class RootLayoutController {
 	@FXML
 	void divide(ActionEvent event) {
 		try {
-			if (Connect.userPassword_.equals("")) {
-
-			} else if (chk_rigth("Pens_divide.fxml", Connect.userID_) == 1) {
-				System.out.println(chk_rigth("Pens_divide.fxml", Connect.userID_));
-				Main.sep();
-			} else {
-				Msg.Messge("Нет прав");
-			}
-
+			Main.sep();
 		} catch (Exception e) {
 			Msg.Messge(e.getMessage());
 		}

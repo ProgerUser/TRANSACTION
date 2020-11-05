@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="643.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sb_tr.controller.CopyDoverController">
+	<children>
+		<TableView fx:id="dover" layoutX="14.0" layoutY="91.0" prefHeight="296.0" prefWidth="428.0">
+			<columns>
+			    <TableColumn fx:id="ID" prefWidth="97.0" text="ID" />
+				<TableColumn fx:id="dogid" prefWidth="97.0" text="Номер дов." />
+				<TableColumn fx:id="clifioo" prefWidth="128.0" text="Клиент ФИО" />
+				<TableColumn fx:id="dognum" prefWidth="128.0" text="Номер договора" />
+			</columns>
+		</TableView>
+		<TextField fx:id="searchf" layoutX="14.0" layoutY="25.0" prefHeight="25.0" prefWidth="428.0" promptText="\%ФИО клиента%" />
+		<Button layoutX="14.0" layoutY="56.0" mnemonicParsing="false" onAction="#find" text="Найти" />
+		<Button layoutX="76.0" layoutY="56.0" mnemonicParsing="false" onAction="#copy" text="Копировать" />
+	</children>
+</AnchorPane>

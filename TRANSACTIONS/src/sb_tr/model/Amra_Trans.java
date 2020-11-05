@@ -3,9 +3,6 @@ package sb_tr.model;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-
-import org.joda.time.DateTime;
-
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;

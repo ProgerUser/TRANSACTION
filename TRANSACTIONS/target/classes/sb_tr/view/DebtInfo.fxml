@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sb_tr.controller.Debt_InfoController">
+   <children>
+      <GridPane>
+        <columnConstraints>
+          <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" />
+          <ColumnConstraints hgrow="SOMETIMES" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints vgrow="SOMETIMES" />
+          <RowConstraints vgrow="SOMETIMES" />
+          <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Статус сост. (101)" wrappingWidth="94.591796875" x="1.0" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Показатель КБК (104)" wrappingWidth="120.0" x="2.0" GridPane.rowIndex="1" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Код ОКАТО/ОКТМО (105)" wrappingWidth="143.591796875" x="2.0" GridPane.rowIndex="2" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Показатель осн. (106)" wrappingWidth="120.0" GridPane.rowIndex="3" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Налоговый период  (107)" wrappingWidth="144.0" x="3.0" GridPane.rowIndex="4" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="№ налог.дог.  (108)" wrappingWidth="108.0" x="9.0" GridPane.rowIndex="5" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Дата налог.док.  (109)" wrappingWidth="120.0" x="9.0" GridPane.rowIndex="6" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Тип налог.платежа  (110)" wrappingWidth="144.0" x="5.0" GridPane.rowIndex="7" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Код (22)" wrappingWidth="47.0" x="2.0" GridPane.rowIndex="8" />
+            <ToolBar GridPane.columnIndex="1">
+               <items>
+                  <TextField fx:id="f101" maxWidth="47.0" prefHeight="25.0" prefWidth="47.0" />
+                  <Button mnemonicParsing="false" onAction="#b101" prefHeight="25.0" prefWidth="27.0" text="▼" />
+               </items>
+            </ToolBar>
+            <ToolBar GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <items>
+                  <TextField fx:id="f104" maxWidth="200.0" prefWidth="200.0" />
+                  <Button mnemonicParsing="false" onAction="#b104" prefHeight="25.0" prefWidth="27.0" text="▼" />
+               </items>
+            </ToolBar>
+            <ToolBar GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <items>
+                  <TextField fx:id="f105" maxWidth="120.0" prefWidth="120.0" />
+               </items>
+            </ToolBar>
+            <ToolBar GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <items>
+                  <TextField fx:id="f106" maxWidth="47.0" prefHeight="25.0" prefWidth="47.0" />
+                  <Button mnemonicParsing="false" onAction="#b106" prefHeight="25.0" prefWidth="27.0" text="▼" />
+               </items>
+            </ToolBar>
+            <ToolBar GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <items>
+                  <TextField fx:id="f107" maxWidth="120.0" prefHeight="25.0" prefWidth="120.0" />
+                  <Button mnemonicParsing="false" onAction="#b107" prefHeight="25.0" prefWidth="27.0" text="▼" />
+               </items>
+            </ToolBar>
+            <ToolBar GridPane.columnIndex="1" GridPane.rowIndex="5">
+               <items>
+                  <TextField fx:id="f108" maxWidth="120.0" prefHeight="25.0" prefWidth="120.0" />
+               </items>
+            </ToolBar>
+            <ToolBar GridPane.columnIndex="1" GridPane.rowIndex="6">
+               <items>
+                  <TextField fx:id="f109" maxWidth="120.0" prefHeight="25.0" prefWidth="120.0" />
+               </items>
+            </ToolBar>
+            <ToolBar GridPane.columnIndex="1" GridPane.rowIndex="7">
+               <items>
+                  <TextField fx:id="f110" maxWidth="47.0" prefHeight="25.0" prefWidth="47.0" />
+                  <Button mnemonicParsing="false" onAction="#b110" prefHeight="25.0" prefWidth="27.0" text="▼" />
+               </items>
+            </ToolBar>
+            <ToolBar GridPane.columnIndex="1" GridPane.rowIndex="8">
+               <items>
+                  <TextField fx:id="f22" maxWidth="200.0" prefHeight="25.0" prefWidth="200.0" />
+               </items>
+            </ToolBar>
+            <Button mnemonicParsing="false" onAction="#save" text="Сохранить" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </GridPane>
+   </children>
+</AnchorPane>
