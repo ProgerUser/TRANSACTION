@@ -35,7 +35,7 @@
 			<resource>
 				<directory>resources</directory>
 				<excludes>
-					<exclude>**/*.xml</exclude>
+					<exclude>**/*.java</exclude>
 				</excludes>
 			</resource>
 		</resources>
@@ -51,6 +51,13 @@
 		</plugins>
 	</build>
 	<dependencies>
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc</artifactId>
+			<version>8</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/ojdbc8.jar</systemPath>
+		</dependency>
 		<dependency>
 			<groupId>com.googlecode.juniversalchardet</groupId>
 			<artifactId>juniversalchardet</artifactId>

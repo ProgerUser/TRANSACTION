@@ -1,15 +1,9 @@
 package sb_tr;
 
 import java.awt.SplashScreen;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -33,36 +27,12 @@ public class Main extends Application {
 	public static Stage primaryStage;
 	public static BorderPane rootLayout;
 
-	public static File getResourceAsFile(String resourcePath) {
-	    try {
-	        InputStream in = ClassLoader.getSystemClassLoader().getResourceAsStream(resourcePath);
-	        if (in == null) {
-	            return null;
-	        }
 
-	        File tempFile = File.createTempFile(String.valueOf(in.hashCode()), ".tmp");
-	        tempFile.deleteOnExit();
-
-	        try (FileOutputStream out = new FileOutputStream(tempFile)) {
-	            //copy stream
-	            byte[] buffer = new byte[1024];
-	            int bytesRead;
-	            while ((bytesRead = in.read(buffer)) != -1) {
-	                out.write(buffer, 0, bytesRead);
-	            }
-	        }
-	        return tempFile;
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	        return null;
-	    }
-	}
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 			/* log4j */
-			getResourceAsFile("log4j.xml");
-			DOMConfigurator.configure(getResourceAsFile("log4j.xml"));
+			DOMConfigurator.configure(getClass().getResource("/log4j.xml"));
 			logger.info("Transact Start: " + Thread.currentThread().getName());
 			Main.primaryStage = primaryStage;
 			primaryStage.getIcons().add(new Image("icon.png"));
