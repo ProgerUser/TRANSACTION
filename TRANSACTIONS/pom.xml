@@ -3,8 +3,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>TRANSACTIONS</groupId>
-	<artifactId>TRANSACTIONS</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>Transact</artifactId>
+	<version>0.0.1</version>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<resources>
@@ -48,6 +48,15 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>com.zenjava</groupId>
+				<artifactId>javafx-maven-plugin</artifactId>
+				<version>8.1.2</version>
+				<configuration>
+					<vendor>SBRA</vendor>
+					<mainClass>sb_tr.Main</mainClass>
+				</configuration>
+			</plugin>	
 		</plugins>
 	</build>
 	<dependencies>
