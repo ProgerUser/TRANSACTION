@@ -1,12 +1,11 @@
 package sb_tr.model;
 
-import javax.xml.bind.JAXB;
-import javax.xml.bind.annotation.XmlRootElement;
-
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.xml.bind.JAXB;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class SqlMap {
@@ -26,11 +25,8 @@ public class SqlMap {
 
 	
 	public SqlMap load(String name) throws Exception {
-		// create file writer object
-        File f = new File(name);
-        // create new file input stream
-        FileInputStream fis = new FileInputStream(f);
-        SqlMap sqlMap = JAXB.unmarshal(fis, SqlMap.class);
+		InputStream is = getClass().getResourceAsStream(name);
+		SqlMap sqlMap = JAXB.unmarshal(is, getClass());
 		return sqlMap;
 	}
 }

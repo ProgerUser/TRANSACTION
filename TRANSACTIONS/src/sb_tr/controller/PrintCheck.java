@@ -1,5 +1,6 @@
 package sb_tr.controller;
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,6 +19,8 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.swing.JRViewer;
 import sb_tr.Main;
 import sb_tr.util.DBUtil;
@@ -25,23 +28,17 @@ import sb_tr.util.DBUtil;
 public class PrintCheck extends JFrame {
 
 	/**
-	 * 
+	 * Печать чека
 	 */
 	private static final long serialVersionUID = 1L;
 
 	public void showReport(String paymnt_number,String sess_id) {
 		
 		try {
-			String reportSrcFile = System.getenv("TRANSACT_PATH") + "\\" + "report\\Blank_A4.jrxml";
-			 
-	        // First, compile jrxml file.
-	        JasperReport jasperReport = JasperCompileManager.compileReport(reportSrcFile);
-	        // Fields for report
+			InputStream input = this.getClass().getResourceAsStream("/Blank_A4.jrxml");
+			JasperDesign design = JRXmlLoader.load(input);
+			JasperReport jasperReport = JasperCompileManager.compileReport(design);
 	        HashMap<String, Object> parameters = new HashMap<String, Object>();
-/*
-			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
-					+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
-*/
 			Connection conn = DBUtil.conn;
 			Statement sqlStatement = conn.createStatement();
 			String readRecordSQL ="select t.terminal,\r\n" + 

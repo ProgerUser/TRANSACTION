@@ -6,17 +6,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Types;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import org.controlsfx.control.table.TableFilter;
-
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-//import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -247,7 +245,7 @@ public class Debt_InfoController {
 		Update.setLayoutY(462.0);
 		AnchorPane secondaryLayout = new AnchorPane();
 
-		TableView<BUDCODE> debtinfo = new TableView();
+		TableView<BUDCODE> debtinfo = new TableView<>();
 		TableColumn<BUDCODE, String> code = new TableColumn<>("Код");
 		code.setCellValueFactory(new PropertyValueFactory<>("code"));
 		TableColumn<BUDCODE, String> codename = new TableColumn<>("Наименование");
@@ -313,7 +311,7 @@ public class Debt_InfoController {
 		Update.setLayoutY(462.0);
 		AnchorPane secondaryLayout = new AnchorPane();
 
-		TableView<BUDCODE> debtinfo = new TableView();
+		TableView<BUDCODE> debtinfo = new TableView<>();
 		TableColumn<BUDCODE, String> code = new TableColumn<>("Код");
 		code.setCellValueFactory(new PropertyValueFactory<>("code"));
 		TableColumn<BUDCODE, String> codename = new TableColumn<>("Наименование");
@@ -376,7 +374,7 @@ public class Debt_InfoController {
 		Update.setLayoutY(462.0);
 		AnchorPane secondaryLayout = new AnchorPane();
 
-		TableView<BUDCODE> debtinfo = new TableView();
+		TableView<BUDCODE> debtinfo = new TableView<>();
 		TableColumn<BUDCODE, String> code = new TableColumn<>("Код");
 		code.setCellValueFactory(new PropertyValueFactory<>("code"));
 		TableColumn<BUDCODE, String> codename = new TableColumn<>("Наименование");
@@ -439,7 +437,7 @@ public class Debt_InfoController {
 		Update.setLayoutY(462.0);
 		AnchorPane secondaryLayout = new AnchorPane();
 
-		TableView<BUDCODE> debtinfo = new TableView();
+		TableView<BUDCODE> debtinfo = new TableView<>();
 		TableColumn<BUDCODE, String> code = new TableColumn<>("Код");
 		code.setCellValueFactory(new PropertyValueFactory<>("code"));
 		TableColumn<BUDCODE, String> codename = new TableColumn<>("Наименование");
@@ -495,6 +493,13 @@ public class Debt_InfoController {
 		newWindow.show();
 	}
 
+	public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
+	    List<T> r = new ArrayList<T>(c.size());
+	    for(Object o: c)
+	      r.add(clazz.cast(o));
+	    return r;
+	}
+	
 	@FXML
 	void b110(ActionEvent event) {
 		Button Update = new Button();
@@ -502,8 +507,8 @@ public class Debt_InfoController {
 		Update.setLayoutX(29.0);
 		Update.setLayoutY(462.0);
 		AnchorPane secondaryLayout = new AnchorPane();
-
-		TableView<BUDCODE> debtinfo = new TableView();
+		
+		TableView<BUDCODE> debtinfo = new TableView<BUDCODE>();
 		TableColumn<BUDCODE, String> code = new TableColumn<>("Код");
 		code.setCellValueFactory(new PropertyValueFactory<>("code"));
 		TableColumn<BUDCODE, String> codename = new TableColumn<>("Наименование");
@@ -558,8 +563,6 @@ public class Debt_InfoController {
 		newWindow.show();
 	}
 
-	// For MultiThreading
-	private Executor exec;
 
 	public static void Alert(String mes) {
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -602,11 +605,7 @@ public class Debt_InfoController {
 	@FXML
 	private void initialize() {
 		// For multithreading: Create executor that uses daemon threads:
-		exec = Executors.newCachedThreadPool((runnable) -> {
-			Thread t = new Thread(runnable);
-			t.setDaemon(true);
-			return t;
-		});
+		
 
 		if (Connect.trnnum == null | Connect.trnnum == null) {
 			Alert("Нет данных!");
@@ -660,14 +659,13 @@ public class Debt_InfoController {
 			 * "/" + Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
 			 */
 
-			SqlMap s = new SqlMap().load(System.getenv("TRANSACT_PATH") + "\\report\\SQL.xml");
+			SqlMap s = new SqlMap().load("/SQL.xml");
 			String readRecordSQL = s.getSql("acces_menu");
 			PreparedStatement prepStmt = conn.prepareStatement(readRecordSQL);
 			prepStmt.setString(1, FORM_NAME);
 			prepStmt.setString(2, CUSRLOGNAME);
 			System.out.println(readRecordSQL);
 			ResultSet rs = prepStmt.executeQuery();
-			ObservableList<String> combolist = FXCollections.observableArrayList();
 			if (rs.next()) {
 				ret = rs.getInt("CNT");
 			}

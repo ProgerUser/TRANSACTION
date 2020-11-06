@@ -38,6 +38,7 @@ import sb_tr.model.Attributes;
 import sb_tr.model.Connect;
 import sb_tr.model.Deal;
 import sb_tr.model.FN_SESS_AMRA;
+import sb_tr.model.Ibank2;
 import sb_tr.model.TerminalDAO;
 import sb_tr.model.Transact;
 import sb_tr.model.TransactClass;
@@ -150,7 +151,15 @@ public class DealCintroller {
 		ObservableList<Deal> empData = TerminalDAO.Deals();
 		populate_attr(empData);
 		autoResizeColumns(trans_table);
-		TableFilter<Deal> filter = new TableFilter<>(trans_table);
+		
+		TableFilter<Deal> tableFilter = TableFilter.forTableView(trans_table).apply();
+		tableFilter.setSearchStrategy((input, target) -> {
+			try {
+				return target.toLowerCase().contains(input.toLowerCase());
+			} catch (Exception e) {
+				return false;
+			}
+		});
 		
 		TERMINAL.setCellFactory(col -> new TextFieldTableCell<Deal, String>() {
 			@Override

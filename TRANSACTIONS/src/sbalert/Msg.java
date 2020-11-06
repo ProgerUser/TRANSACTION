@@ -28,7 +28,7 @@ public class Msg {
 		alert.setText(Mess);
 	}
 	
-	public static void Messge(String mess) {
+	public static void Message(String mess) {
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
 		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 		stage.getIcons().add(new Image("terminal.png"));

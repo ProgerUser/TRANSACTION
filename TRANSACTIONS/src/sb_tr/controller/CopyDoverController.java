@@ -50,7 +50,7 @@ public class CopyDoverController {
 	void find(ActionEvent event) {
 		try {
 			Connection conn = DBUtil.conn;
-			SqlMap s = new SqlMap().load(System.getenv("TRANSACT_PATH") + "\\report\\SQL.xml");
+			SqlMap s = new SqlMap().load("/SQL.xml");
 			String readRecordSQL = s.getSql("DJ");
 			PreparedStatement prepStmt = conn.prepareStatement(readRecordSQL);
 			prepStmt.setString(1, "%" + searchf.getText() + "%");
@@ -120,6 +120,8 @@ public class CopyDoverController {
 	}
 
 	// For MultiThreading
+
+	@SuppressWarnings("unused")
 	private Executor exec;
 
 	public static void Alert(String mes) {

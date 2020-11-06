@@ -55,6 +55,7 @@ import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LocalDateStringConverter;
 import javafx.util.converter.LocalDateTimeStringConverter;
 import sb_tr.model.Connect;
+import sb_tr.model.SqlMap;
 
 /**
  * Сверка по Кор. счету, выгрузка в формате 1с
@@ -734,21 +735,45 @@ public class SverkaC {
 				prepStmt.setInt(1, rec.getID());
 				ResultSet rs = prepStmt.executeQuery();
 				while (rs.next()) {
-					PreparedStatement prepStmt1 = conn.prepareStatement(
-							"select ST_ID, ST_DATE, ST_SUM from table(z_sb_create_tr_amra.STMT_CHECK(?))");
-					prepStmt1.setDate(1, rs.getDate("DT_DATE"));
-					ResultSet rs1 = prepStmt1.executeQuery();
-					while (rs1.next()) {
-						error = error + "Ошибка за " + new SimpleDateFormat("dd.MM.yyyy").format(rs1.getDate("ST_DATE"))
-								+ " на сумму " + decimalFormat_.format(rs1.getDouble("ST_SUM")) + "\r\n";
+					{
+						PreparedStatement prepStmt1 = conn.prepareStatement(
+								"select ST_ID, ST_DATE, ST_SUM from table(z_sb_create_tr_amra.STMT_CHECK(?))");
+						prepStmt1.setDate(1, rs.getDate("DT_DATE"));
+						ResultSet rs1 = prepStmt1.executeQuery();
+						while (rs1.next()) {
+							error = error + "Ошибка за "
+									+ new SimpleDateFormat("dd.MM.yyyy").format(rs1.getDate("ST_DATE")) + " на сумму "
+									+ decimalFormat_.format(rs1.getDouble("ST_SUM")) + "\r\n";
+						}
+						prepStmt1.close();
+						rs1.close();
 					}
-					prepStmt1.close();
-					rs1.close();
+					{
+						SqlMap sql = new SqlMap().load("/Sverka.xml");
+						String readRecordSQL = sql.getSql("GetVector");
+						PreparedStatement prepStmt1 = conn.prepareStatement(readRecordSQL);
+						prepStmt1.setDate(1, rs.getDate("DT_DATE"));
+						prepStmt1.setDate(2, rs.getDate("DT_DATE"));
+						prepStmt1.setDate(3, rs.getDate("DT_DATE"));
+						prepStmt1.setDate(4, rs.getDate("DT_DATE"));
+						prepStmt1.setDate(5, rs.getDate("DT_DATE"));
+						prepStmt1.setDate(6, rs.getDate("DT_DATE"));
+						ResultSet rs1 = prepStmt1.executeQuery();
+						while (rs1.next()) {
+							error = error + "Расшифровка Дата "
+									+ new SimpleDateFormat("dd.MM.yyyy").format(rs1.getDate("DT")) + " сумму "
+									+ decimalFormat_.format(rs1.getDouble("SUMM")) + " Направление "
+									+ rs1.getString("N") + "\r\n";
+						}
+						prepStmt1.close();
+						rs1.close();
+					}
 				}
 				prepStmt.close();
 				rs.close();
 
 				if (!error.equals("")) {
+
 					ShowError(rec.getID(), error);
 				}
 			} else {

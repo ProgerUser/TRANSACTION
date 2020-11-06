@@ -2,6 +2,7 @@ package sb_tr.controller;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,6 +27,8 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.swing.JRViewer;
 import sb_tr.model.Item2;
 import sb_tr.model.SqlMap;
@@ -49,12 +52,9 @@ public class PrintReport2 extends JFrame {
 
 	public void showReport(String paymnt_number, String sess_id, String znak) {
 		try {
-			String reportSrcFile = System.getenv("TRANSACT_PATH") + "\\" + "report\\postdoc.jrxml";
-
-			// First, compile jrxml file.
-			JasperReport jasperReport;
-			jasperReport = JasperCompileManager.compileReport(reportSrcFile);
-			/* User home directory location */
+			InputStream input = this.getClass().getResourceAsStream("/postdoc.jrxml");
+			JasperDesign design = JRXmlLoader.load(input);
+			JasperReport jasperReport = JasperCompileManager.compileReport(design);
 
 			/* List to hold Items */
 			List<Item2> listItems = new ArrayList<Item2>();
@@ -64,7 +64,7 @@ public class PrintReport2 extends JFrame {
 
 			Connection conn = DBUtil.conn;
 
-			SqlMap s = new SqlMap().load(System.getenv("TRANSACT_PATH") + "\\report\\SQL.xml");
+			SqlMap s = new SqlMap().load("/SQL.xml");
 			String readRecordSQL = s.getSql("getPOSTTRN");
 			PreparedStatement prepStmt = conn.prepareStatement(readRecordSQL);
 			prepStmt.setString(1, paymnt_number);

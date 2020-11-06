@@ -41,7 +41,6 @@ import sb_tr.Main;
 import sb_tr.model.Amra_Trans;
 import sb_tr.model.Connect;
 import sb_tr.model.FN_SESS_AMRA;
-import sb_tr.model.GUIUtils;
 import sb_tr.model.TerminalDAO;
 import sb_tr.model.Transact;
 import sb_tr.model.TransactClass;
@@ -91,8 +90,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
-import com.sun.prism.impl.Disposer.Record;
 
 /**
  * Саид 04.04.2019.

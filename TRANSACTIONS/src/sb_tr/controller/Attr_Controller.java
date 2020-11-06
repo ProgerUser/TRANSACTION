@@ -38,6 +38,7 @@ import sb_tr.model.FN_SESS_AMRA;
 import sb_tr.model.TerminalDAO;
 import sb_tr.model.Transact;
 import sb_tr.model.TransactClass;
+import sverka.AMRA_STMT_CALC;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -144,8 +145,15 @@ public class Attr_Controller {
 		ObservableList<Attributes> empData = TerminalDAO.Attributes_();
 		populate_attr(empData);
 		autoResizeColumns(trans_table);
-		TableFilter<Attributes> filter = new TableFilter<>(trans_table);
-
+	
+		TableFilter<Attributes> tableFilter = TableFilter.forTableView(trans_table).apply();
+		tableFilter.setSearchStrategy((input, target) -> {
+			try {
+				return target.toLowerCase().contains(input.toLowerCase());
+			} catch (Exception e) {
+				return false;
+			}
+		});
 		AttributeName.setCellFactory(col -> new TextFieldTableCell<Attributes, String>() {
 			@Override
 			public void updateItem(String item, boolean empty) {

@@ -1,5 +1,6 @@
 package sb_tr.controller;
 
+import java.awt.SplashScreen;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -133,7 +134,7 @@ public class RootLayoutController {
 		try {
 			Main.Sverka();
 		} catch (Exception e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -148,7 +149,7 @@ public class RootLayoutController {
 		try {
 			Main.showEmployeeView();
 		} catch (Exception e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -157,7 +158,7 @@ public class RootLayoutController {
 		try {
 			Main.Debtinfo();
 		} catch (Exception e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -189,7 +190,7 @@ public class RootLayoutController {
 		try {
 			Main.Ibankk();
 		} catch (Exception e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -198,7 +199,7 @@ public class RootLayoutController {
 		try {
 			Main.Admin_Menu();
 		} catch (Exception e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -207,7 +208,7 @@ public class RootLayoutController {
 		try {
 			Main.showAmTr();
 		} catch (Exception e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -216,7 +217,7 @@ public class RootLayoutController {
 		try {
 			Main.Transact();
 		} catch (Exception e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -225,7 +226,7 @@ public class RootLayoutController {
 		try {
 			Main.Show_Hist();
 		} catch (Exception e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -234,7 +235,7 @@ public class RootLayoutController {
 		try {
 			Main.Termdial_view_();
 		} catch (Exception e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -243,7 +244,7 @@ public class RootLayoutController {
 		try {
 			Main.Transact_Amra();
 		} catch (Exception e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -252,7 +253,7 @@ public class RootLayoutController {
 		try {
 			Main.Terminal();
 		} catch (Exception e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -261,7 +262,7 @@ public class RootLayoutController {
 		try {
 			Main.showKash();
 		} catch (Exception e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -270,7 +271,7 @@ public class RootLayoutController {
 		try {
 			Main.Contact();
 		} catch (Exception e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -299,12 +300,12 @@ public class RootLayoutController {
 
 					}
 				} catch (IOException e) {
-					Msg.Messge(e.getMessage());
+					Msg.Message(e.getMessage());
 				}
 				return null;
 			}
 		};
-		task.setOnFailed(e -> Msg.Messge(task.getException().getMessage()));
+		task.setOnFailed(e -> Msg.Message(task.getException().getMessage()));
 		/* task.setOnSucceeded(e -> ); */
 		exec.execute(task);
 	}
@@ -340,12 +341,12 @@ public class RootLayoutController {
 					}
 				} catch (IOException e) {
 
-					Msg.Messge(e.getMessage());
+					Msg.Message(e.getMessage());
 				}
 				return null;
 			}
 		};
-		task.setOnFailed(e -> Msg.Messge(task.getException().getMessage()));
+		task.setOnFailed(e -> Msg.Message(task.getException().getMessage()));
 		/* task.setOnSucceeded(e -> ); */
 		exec.execute(task);
 	}
@@ -355,7 +356,7 @@ public class RootLayoutController {
 		try {
 			Main.Admin();
 		} catch (Exception e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -364,7 +365,7 @@ public class RootLayoutController {
 		try {
 			Main.Service();
 		} catch (Exception e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -383,7 +384,7 @@ public class RootLayoutController {
 		int ret = 0;
 		Connection conn = DBUtil.conn;
 		try {
-			SqlMap s = new SqlMap().load(System.getenv("TRANSACT_PATH") + "\\report\\SQL.xml");
+			SqlMap s = new SqlMap().load("/SQL.xml");
 			String readRecordSQL = s.getSql("acces_enter");
 			PreparedStatement prepStmt = conn.prepareStatement(readRecordSQL);
 			prepStmt.setString(1, FORM_NAME);
@@ -394,7 +395,7 @@ public class RootLayoutController {
 			}
 			prepStmt.close();
 		} catch (Exception e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 		return ret;
 	}
@@ -410,7 +411,7 @@ public class RootLayoutController {
 		int ret = 0;
 		Connection conn = DBUtil.conn;
 		try {
-			SqlMap s = new SqlMap().load(System.getenv("TRANSACT_PATH") + "\\report\\SQL.xml");
+			SqlMap s = new SqlMap().load("/SQL.xml");
 			String readRecordSQL = s.getSql("acces_menu");
 			PreparedStatement prepStmt = conn.prepareStatement(readRecordSQL);
 			prepStmt.setString(1, FORM_NAME);
@@ -421,7 +422,7 @@ public class RootLayoutController {
 			}
 			prepStmt.close();
 		} catch (Exception e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 		return ret;
 	}
@@ -431,7 +432,7 @@ public class RootLayoutController {
 		try {
 			Main.sepRA();
 		} catch (Exception e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -440,12 +441,16 @@ public class RootLayoutController {
 		try {
 			Main.sep();
 		} catch (Exception e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
 	@FXML
 	void initialize() {
+		final SplashScreen splash = SplashScreen.getSplashScreen();
+		if (splash != null) {
+			splash.close();
+		}
 		exec = Executors.newCachedThreadPool((runnable) -> {
 			Thread t = new Thread(runnable);
 			t.setDaemon(true);

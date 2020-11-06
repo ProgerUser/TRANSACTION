@@ -1,17 +1,21 @@
 package sb_tr.util;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
+import java.util.Properties;
+import org.apache.log4j.Logger;
 import com.sun.rowset.CachedRowSetImpl;
-
-import javafx.scene.control.Alert;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
+import sb_tr.Main;
 import sb_tr.model.Connect;
+import sb_tr.model.SqlMap;
+import sbalert.Msg;
 
-import java.sql.*;
-
-/**
- * Created by Pachuliy Said on 22.02.2016.
- */
 public class DBUtil {
 	// Declare JDBC Driver
 	private static final String JDBC_DRIVER = "oracle.jdbc.OracleDriver";
@@ -19,55 +23,35 @@ public class DBUtil {
 	// Connection
 	public static Connection conn = null;
 
-	// Connection String
-	// String connStr = "jdbc:oracle:thin:Username/Password@IP:Port/SID";
-	// Username=HR, Password=HR, IP=localhost, IP=1521, SID=xe
-	// private static final String connStr =
-	// "jdbc:oracle:thin@10.111.64.21:1521/odb";
-
-	// static String connectionURL =
-	// "jdbc:oracle:thin:"++"/xxx@10.111.64.21:1521/odb";
-
 	// Connect to DB
 	public static void dbConnect() {
 		try {
-			@SuppressWarnings("unused")
-			Connect con = new Connect();
-
 			// Setting Oracle JDBC Driver
 			Class.forName(JDBC_DRIVER);
-
-			System.out.println("Драйвер Oracle JDBC зарегистрирован!");
-
+			Main.logger = Logger.getLogger(DBUtil.class);
 			// Establish the Oracle Connection using Connection String
-			conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_ + "@"
-					+ Connect.connectionURL_ + "");
-
-		} catch (SQLException | ClassNotFoundException e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
-			alert.showAndWait();
+			Properties props = new Properties();
+			props.put("v$session.program", "Transaction");
+			conn = DriverManager.getConnection(
+					"jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_ + "@" + Connect.connectionURL_,
+					props);
+			conn.setAutoCommit(false);
+		} catch (Exception e) {
+			Msg.Message(e.getMessage());
+			Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
 		}
 	}
 
 	// Close Connection
 	public static void dbDisconnect() {
 		try {
+			Main.logger = Logger.getLogger(DBUtil.class);
 			if (conn != null && !conn.isClosed()) {
 				conn.close();
 			}
-		} catch (SQLException e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
-			alert.showAndWait();
+		} catch (Exception e) {
+			Msg.Message(e.getMessage());
+			Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
 		}
 	}
 
@@ -78,46 +62,24 @@ public class DBUtil {
 		ResultSet resultSet = null;
 		CachedRowSetImpl crs = null;
 		try {
+			Main.logger = Logger.getLogger(DBUtil.class);
 			// Connect to DB (Establish Oracle Connection)
 			if (conn == null && !conn.isClosed()) {
 				dbConnect();
 			}
-			System.out.println("Выборка данных: " + queryStmt + "\n");
-
-			// Create statement
 			stmt = conn.createStatement();
-
-			// Execute select (query) operation
 			resultSet = stmt.executeQuery(queryStmt);
-
-			// CachedRowSet Implementation
-			// In order to prevent "java.sql.SQLRecoverableException: Closed
-			// Connection: next" error
-			// We are using CachedRowSet
 			crs = new CachedRowSetImpl();
 			crs.populate(resultSet);
 		} catch (SQLException e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
-			alert.showAndWait();
+			Msg.Message(e.getMessage());
 		} finally {
 			if (resultSet != null) {
 				// Close resultSet
 				try {
 					resultSet.close();
 				} catch (SQLException e) {
-					Alert alert = new Alert(Alert.AlertType.INFORMATION);
-					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-					stage.getIcons().add(new Image("terminal.png"));
-					alert.setTitle("Внимание");
-					alert.setHeaderText(null);
-					alert.setContentText(e.getMessage());
-					alert.showAndWait();
-
+					Msg.Message(e.getMessage());
 				}
 			}
 			if (stmt != null) {
@@ -125,28 +87,105 @@ public class DBUtil {
 				try {
 					stmt.close();
 				} catch (SQLException e) {
-					Alert alert = new Alert(Alert.AlertType.INFORMATION);
-					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-					stage.getIcons().add(new Image("terminal.png"));
-					alert.setTitle("Внимание");
-					alert.setHeaderText(null);
-					alert.setContentText(e.getMessage());
-					alert.showAndWait();
-
+					Msg.Message(e.getMessage());
+					Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
 				}
 			}
-			// Close connection
-			// dbDisconnect();
 		}
 		// Return CachedRowSet
 		return crs;
+	}
+
+	public static Integer ODB_ACTION(Integer usrid, Integer actid) {
+		Main.logger = Logger.getLogger(DBUtil.class);
+		Integer ret = 0;
+		Connection conn = DBUtil.conn;
+		try {
+			CallableStatement callStmt = conn.prepareCall("{ ? = call MJUsers.OdbAccess(?,?)}");
+			callStmt.registerOutParameter(1, Types.INTEGER);
+			callStmt.setInt(2, usrid);
+			callStmt.setInt(3, actid);
+			callStmt.execute();
+			ret = callStmt.getInt(1);
+			callStmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			Msg.Message(e.getMessage());
+			Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+		}
+		return ret;
+	}
+	
+	public static Integer OdbAction(Integer actid) {
+		Main.logger = Logger.getLogger(DBUtil.class);
+		Integer ret = 0;
+		Connection conn = DBUtil.conn;
+		try {
+			CallableStatement callStmt = conn.prepareCall("{ ? = call MJUsers.OdbAccess(?)}");
+			callStmt.registerOutParameter(1, Types.INTEGER);
+			callStmt.setInt(2, actid);
+			callStmt.execute();
+			ret = callStmt.getInt(1);
+			callStmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			Msg.Message(e.getMessage());
+			Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+		}
+		return ret;
+	}
+
+	/* Проверка прав доступа */
+	public static int chk_accesss(String ACT_NAME, String CUSRLOGNAME) {
+		Main.logger = Logger.getLogger(DBUtil.class);
+		int ret = 0;
+		Connection conn = DBUtil.conn;
+		try {
+			SqlMap sql = new SqlMap().load("/SQL.xml");
+			String readRecordSQL = sql.getSql("acces_act");
+			PreparedStatement prepStmt = conn.prepareStatement(readRecordSQL);
+			prepStmt.setString(1, ACT_NAME);
+			prepStmt.setString(2, CUSRLOGNAME);
+			ResultSet rs = prepStmt.executeQuery();
+			if (rs.next()) {
+				ret = rs.getInt("CNT");
+			}
+			prepStmt.close();
+		} catch (Exception e) {
+			Msg.Message(e.getMessage());
+			Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+		}
+		return ret;
+	}
+
+	public static void Rollback() {
+		try {
+			try {
+				conn.rollback();
+			} catch (SQLException e) {
+				Msg.Message(e.getMessage());
+				Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+			}
+		} catch (Exception e) {
+			Msg.Message(e.getMessage());
+			Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+		}
+	}
+
+	public static void Commit() {
+		try {
+			conn.commit();
+		} catch (Exception e) {
+			Msg.Message(e.getMessage());
+			Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+		}
 	}
 
 	// DB Execute Update (For Update/Insert/Delete) Operation
 	public static void dbExecuteUpdate(String sqlStmt) {
 		// Declare statement as null
 		Statement stmt = null;
-		System.out.println("Update: " + sqlStmt + "\n");
+		Main.logger = Logger.getLogger(DBUtil.class);
 		try {
 			// Connect to DB (Establish Oracle Connection)
 			if (conn == null && !conn.isClosed()) {
@@ -156,32 +195,21 @@ public class DBUtil {
 			stmt = conn.createStatement();
 			// Run executeUpdate operation with given sql statement
 			stmt.executeUpdate(sqlStmt);
-
-		} catch (SQLException e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
-			alert.showAndWait();
+			conn.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			Msg.Message(e.getMessage());
+			Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
 		} finally {
 			if (stmt != null) {
 				// Close statement
 				try {
 					stmt.close();
 				} catch (SQLException e) {
-					Alert alert = new Alert(Alert.AlertType.INFORMATION);
-					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-					stage.getIcons().add(new Image("terminal.png"));
-					alert.setTitle("Внимание");
-					alert.setHeaderText(null);
-					alert.setContentText(e.getMessage());
-					alert.showAndWait();
+					Msg.Message(e.getMessage());
+					Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
 				}
 			}
-			// Close connection
-			// dbDisconnect();
 		}
 	}
 }

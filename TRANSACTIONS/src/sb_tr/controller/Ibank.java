@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import org.controlsfx.control.table.TableFilter;
-import com.sun.rowset.CachedRowSetImpl;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,6 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import sb_tr.model.Attributes;
 import sb_tr.model.Connect;
 import sb_tr.model.Ibank2;
 
@@ -160,9 +160,7 @@ public class Ibank {
 			ObservableList<Ibank2> empData = CLIENTS();
 			populate_cli(empData);
 			autoResizeColumns(CLI);
-			/* TableFilter.forTableView(CLI).apply(); */
-			TableFilter<Ibank2> tableFilter = new TableFilter<>(CLI);
-			ObservableList<Ibank2> items = tableFilter.getBackingList();
+			TableFilter<Ibank2> tableFilter = TableFilter.forTableView(CLI).apply();
 			tableFilter.setSearchStrategy((input, target) -> {
 				try {
 					return target.toLowerCase().contains(input.toLowerCase());
@@ -220,7 +218,6 @@ public class Ibank {
 		// Declare statement, resultSet and CachedResultSet as null
 		Statement stmt = null;
 		ResultSet resultSet = null;
-		CachedRowSetImpl crs = null;
 		try {
 			// Connect to DB (Establish Oracle Connection)
 			if (conn == null && !conn.isClosed()) {
@@ -238,8 +235,6 @@ public class Ibank {
 			// In order to prevent "java.sql.SQLRecoverableException: Closed
 			// Connection: next" error
 			// We are using CachedRowSet
-			crs = new CachedRowSetImpl();
-			crs.populate(resultSet);
 		} catch (SQLException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -283,6 +278,6 @@ public class Ibank {
 			// dbDisconnect();
 		}
 		// Return CachedRowSet
-		return crs;
+		return resultSet;
 	}
 }

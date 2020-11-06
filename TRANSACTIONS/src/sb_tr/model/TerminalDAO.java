@@ -1,12 +1,12 @@
 package sb_tr.model;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
@@ -139,31 +139,16 @@ public class TerminalDAO {
 			ldt2_ = " and trunc(DateOfOperation) <= to_date('" + ldt2 + "','dd.mm.yyyy')\n";
 		}
 
-		String selectStmt = "select * from ( select sess_id,\n" + 
-				"       file_name,\n" + 
-				"       date_time,\n" + 
-				"       fileclob,\n" + 
-				"       case\n" + 
-				"         when status = 0 then\n" + 
-				"          'Загружен'\n" + 
-				"         when status = 1 then\n" + 
-				"          'Разобран'\n" + 
-				"         when status = 2 then\n" + 
-				"          'Рассчитан'\n" + 
-				"       end status,\n" +
-				"  case\n" + 
-				"         when length(z_sb_fn_sess_getdate_clob(SESS_ID)) > 10 then\n" + 
-				"          to_date(substr(z_sb_fn_sess_getdate_clob(SESS_ID),\n" + 
-				"                 1,\n" + 
-				"                 instr(z_sb_fn_sess_getdate_clob(SESS_ID), '-') - 1))\n" + 
-				"                 else\n" + 
-				"                  to_date(z_sb_fn_sess_getdate_clob(SESS_ID)) \n" + 
-				"       end DateOfOperation,"+
-				"       path,\n" + 
-				"       user_\n" + 
-				"  from Z_SB_FN_SESS_AMRA)\n" + 
-				" where 1 = 1 "+ ldt1_ + ldt2_ + p_n + bt + clob+"\n" + 
-				" order by DateOfOperation desc";
+		String selectStmt = "select * from ( select sess_id,\n" + "       file_name,\n" + "       date_time,\n"
+				+ "       fileclob,\n" + "       case\n" + "         when status = 0 then\n" + "          'Загружен'\n"
+				+ "         when status = 1 then\n" + "          'Разобран'\n" + "         when status = 2 then\n"
+				+ "          'Рассчитан'\n" + "       end status,\n" + "  case\n"
+				+ "         when length(z_sb_fn_sess_getdate_clob(SESS_ID)) > 10 then\n"
+				+ "          to_date(substr(z_sb_fn_sess_getdate_clob(SESS_ID),\n" + "                 1,\n"
+				+ "                 instr(z_sb_fn_sess_getdate_clob(SESS_ID), '-') - 1))\n" + "                 else\n"
+				+ "                  to_date(z_sb_fn_sess_getdate_clob(SESS_ID)) \n" + "       end DateOfOperation,"
+				+ "       path,\n" + "       user_\n" + "  from Z_SB_FN_SESS_AMRA)\n" + " where 1 = 1 " + ldt1_ + ldt2_
+				+ p_n + bt + clob + "\n" + " order by DateOfOperation desc";
 
 		// Execute SELECT statement
 
@@ -196,21 +181,11 @@ public class TerminalDAO {
 		if (dt != null) {
 			ldt = " and trunc(date_time) = to_date('" + ldt_ + "','dd.mm.yyyy')\n";
 		}
-		String selectStmt = "select sess_id,\n" + 
-		                    "       file_name,\n" + 
-				            "       date_time,\n" + 
-		                    "       fileclob,\n"
-				+ "       case\n" + 
-		                    "         when status = 0 then\n" + 
-				"          'Загружен'\n"
-				+ "         when status = 1 then\n" + 
-				"          'Разобран'\n" +
-				"         when status = 2 then\n"
-				+ "          'Рассчитан'\n" +
-				"       end status,\n" +
-				"       path,\n"
-				+ "       user_ from Z_SB_FN_SESS_AMRA \n" +
-				"where 1=1" + p_n + ldt + "order by date_time desc";
+		String selectStmt = "select sess_id,\n" + "       file_name,\n" + "       date_time,\n" + "       fileclob,\n"
+				+ "       case\n" + "         when status = 0 then\n" + "          'Загружен'\n"
+				+ "         when status = 1 then\n" + "          'Разобран'\n" + "         when status = 2 then\n"
+				+ "          'Рассчитан'\n" + "       end status,\n" + "       path,\n"
+				+ "       user_ from Z_SB_FN_SESS_AMRA \n" + "where 1=1" + p_n + ldt + "order by date_time desc";
 
 		// Get ResultSet from dbExecuteQuery method
 		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
@@ -254,12 +229,10 @@ public class TerminalDAO {
 	// *******************************
 	// SELECT REL
 	// *******************************
-	public static ObservableList<Amra_Trans> Amra_Trans_rel(String chk,String chkper) {
+	public static ObservableList<Amra_Trans> Amra_Trans_rel(String chk, String chkper) {
 
-		String selectStmt = "select rownum,t.*\n" + 
-				"  from Z_SB_TRANSACT_AMRA_DBT t\n" + 
-				" where t.checknumber = '"+chk+"'\n" + 
-				"    or t.checknumber = '"+chkper+"'";
+		String selectStmt = "select rownum,t.*\n" + "  from Z_SB_TRANSACT_AMRA_DBT t\n" + " where t.checknumber = '"
+				+ chk + "'\n" + "    or t.checknumber = '" + chkper + "'";
 
 		// Execute SELECT statement
 
@@ -269,53 +242,46 @@ public class TerminalDAO {
 		// Send ResultSet to the getEmployeeList method and get employee object
 		ObservableList<Amra_Trans> empList = get_amra_trans(rsEmps);
 
-		
 		// Return employee object
 		return empList;
 	}
-	
+
 	// *******************************
 	// SELECT REL
 	// *******************************
 	public static ObservableList<Amra_Trans> Amra_Trans_before(String sid) {
 		try {
-		SqlMap s = new SqlMap().load(System.getenv("TRANSACT_PATH") + "\\report\\SQL.xml");
-		
-		String selectStmt = s.getSql("getBeforeInsert").replace(":p1", ""+sid+"");
+			SqlMap s = new SqlMap().load("/SQL.xml");
 
-		// Execute SELECT statement
+			String selectStmt = s.getSql("getBeforeInsert").replace(":p1", "" + sid + "");
 
-		// Get ResultSet from dbExecuteQuery method
-		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
+			// Execute SELECT statement
 
-		// Send ResultSet to the getEmployeeList method and get employee object
-		ObservableList<Amra_Trans> empList = get_amra_trans(rsEmps);
-		return empList;
-		// Return employee object
+			// Get ResultSet from dbExecuteQuery method
+			ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
+
+			// Send ResultSet to the getEmployeeList method and get employee object
+			ObservableList<Amra_Trans> empList = get_amra_trans(rsEmps);
+			return empList;
+			// Return employee object
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			alert(e.getMessage());
 		}
 		return null;
 	}
-	
+
 	// *******************************
 	// SELECT FN_SESS
 	// *******************************
-	public static ObservableList<Amra_Trans> Amra_Trans_(
-			String SESS_ID,
-			LocalDate dt1,
-			LocalDate dt2,
-			String FIO,
-			boolean chk,
-			boolean chk_pay,
-			String terminal) {
+	public static ObservableList<Amra_Trans> Amra_Trans_(String SESS_ID, LocalDate dt1, LocalDate dt2, String FIO,
+			boolean chk, boolean chk_pay, String terminal) {
 
 		String ldt1 = null;
 		String ldt2 = null;
 
 		String table = null;
-		
+
 		if (chk == true) {
 			table = "z_sb_transact_amra_inkas";
 		} else if (chk_pay == true) {
@@ -323,7 +289,7 @@ public class TerminalDAO {
 		} else if ((chk == false & chk_pay == false)) {
 			table = "Z_SB_TRANSACT_AMRA_DBT";
 		}
-		
+
 		if (dt1 != null)
 			ldt1 = dt1.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 		if (dt2 != null)
@@ -362,8 +328,9 @@ public class TerminalDAO {
 		} else {
 
 		}
-		String selectStmt = " select rownum,t.* from (select rownum,t.* from " + table + " t where 1=1 and (TERMINAL = '"+terminal+"' or '"+terminal+"' = 'Все' ) " + sess + ldt1_
-				+ ldt2_ + bt + FIO_+" order by PAYDATE desc) t";
+		String selectStmt = " select rownum,t.* from (select rownum,t.* from " + table
+				+ " t where 1=1 and (TERMINAL = '" + terminal + "' or '" + terminal + "' = 'Все' ) " + sess + ldt1_
+				+ ldt2_ + bt + FIO_ + " order by PAYDATE desc) t";
 
 		// Execute SELECT statement
 
@@ -373,7 +340,6 @@ public class TerminalDAO {
 		// Send ResultSet to the getEmployeeList method and get employee object
 		ObservableList<Amra_Trans> empList = get_amra_trans(rsEmps);
 
-		
 		// Return employee object
 		return empList;
 	}
@@ -382,29 +348,26 @@ public class TerminalDAO {
 	// SELECT Attributes
 	// *******************************
 	public static ObservableList<Attributes> Attributes_() {
-		
+
 		String selectStmt = "";
 		if (Connect.SESSID != null) {
 			SqlMap s;
 			try {
-				s = new SqlMap().load(System.getenv("TRANSACT_PATH") + "\\report\\SQL.xml");
+				s = new SqlMap().load("/SQL.xml");
 				selectStmt = s.getSql("getAttr_B").replace(":p1", "" + Connect.SESSID + "").replace(":p2",
 						"" + Connect.PNMB_ + "");
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				alert(e.getMessage());
 			}
-		}
-		else
-		{
-		 selectStmt = "SELECT Service, CheckNumber, AttributeName, AttributeValue\n"
-				+ "  FROM (select ATTRIBUTES_\n" + "          from Z_SB_TRANSACT_AMRA_DBT\n"
-				+ "         where CHECKNUMBER = '" + Connect.PNMB_ + "'),\n"
-				+ "       XMLTABLE('/Атрибуты/Атр' PASSING xmltype(ATTRIBUTES_) COLUMNS\n"
-				+ "                Service VARCHAR2(500) PATH '@Услуга',\n"
-				+ "                CheckNumber VARCHAR2(500) PATH '@НомерЧека',\n"
-				+ "                AttributeName VARCHAR2(500) PATH '@ИмяАтрибута',\n"
-				+ "                AttributeValue VARCHAR2(500) PATH '@ЗначениеАтрибута')";
+		} else {
+			selectStmt = "SELECT Service, CheckNumber, AttributeName, AttributeValue\n" + "  FROM (select ATTRIBUTES_\n"
+					+ "          from Z_SB_TRANSACT_AMRA_DBT\n" + "         where CHECKNUMBER = '" + Connect.PNMB_
+					+ "'),\n" + "       XMLTABLE('/Атрибуты/Атр' PASSING xmltype(ATTRIBUTES_) COLUMNS\n"
+					+ "                Service VARCHAR2(500) PATH '@Услуга',\n"
+					+ "                CheckNumber VARCHAR2(500) PATH '@НомерЧека',\n"
+					+ "                AttributeName VARCHAR2(500) PATH '@ИмяАтрибута',\n"
+					+ "                AttributeValue VARCHAR2(500) PATH '@ЗначениеАтрибута')";
 		}
 		// Execute SELECT statement
 
@@ -422,19 +385,17 @@ public class TerminalDAO {
 	// SELECT Dealss
 	// *******************************
 	public static ObservableList<Deal> Deals() {
-		String selectStmt = "select ROW_NO rownumber,\n" + 
-				"       COLUMN1 cheknumber,\n" + 
-				"       to_number(replace(replace(COLUMN2, ' ', ''), '.', ',')) summa,\n" + 
-				"       COLUMN3 terminal,\n" + 
-				"       to_date(COLUMN4,'dd.mm.yyyy hh24:mi:ss') dateoperation\n" + 
-				"  from table(lob2table.separatedcolumns((select CHECKSINCOMING_Clob\n" + 
-				"                                          from Z_SB_TRANSACT_AMRA_DBT t\n" + 
-				"                                         where CHECKSINCOMING_CLOB is not null\n" + 
-				"                                           and t.checknumber =\n" + 
-				"                                               '"+Connect.PNMB_+"'), /* the data LOB */\n" + 
-				"                                        '|', /* row separator */\n" + 
-				"                                        '/', /* column separator */\n" + 
-				"                                        '' /* delimiter (optional) */))";
+		String selectStmt = "select ROW_NO rownumber,\n" + "       COLUMN1 cheknumber,\n"
+				+ "       to_number(replace(replace(COLUMN2, ' ', ''), '.', ',')) summa,\n"
+				+ "       COLUMN3 terminal,\n" + "       to_date(COLUMN4,'dd.mm.yyyy hh24:mi:ss') dateoperation\n"
+				+ "  from table(lob2table.separatedcolumns((select CHECKSINCOMING_Clob\n"
+				+ "                                          from Z_SB_TRANSACT_AMRA_DBT t\n"
+				+ "                                         where CHECKSINCOMING_CLOB is not null\n"
+				+ "                                           and t.checknumber =\n"
+				+ "                                               '" + Connect.PNMB_ + "'), /* the data LOB */\n"
+				+ "                                        '|', /* row separator */\n"
+				+ "                                        '/', /* column separator */\n"
+				+ "                                        '' /* delimiter (optional) */))";
 
 		// Execute SELECT statement
 
@@ -447,7 +408,7 @@ public class TerminalDAO {
 		// Return employee object
 		return empList;
 	}
-	
+
 	// *******************************
 	// SELECT Forms
 	// *******************************
@@ -465,7 +426,7 @@ public class TerminalDAO {
 		// Return employee object
 		return Forms_lst;
 	}
-	
+
 	// *******************************
 	// SELECT Menu
 	// *******************************
@@ -483,24 +444,24 @@ public class TerminalDAO {
 		// Return employee object
 		return Forms_lst;
 	}
-	
+
 	// *******************************
-		// SELECT Menu
-		// *******************************
-		public static ObservableList<BUDCODE> bud(String query) {
-			String selectStmt = query;
+	// SELECT Menu
+	// *******************************
+	public static ObservableList<BUDCODE> bud(String query) {
+		String selectStmt = query;
 
-			// Execute SELECT statement
+		// Execute SELECT statement
 
-			// Get ResultSet from dbExecuteQuery method
-			ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
+		// Get ResultSet from dbExecuteQuery method
+		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
 
-			// Send ResultSet to the getEmployeeList method and get employee object
-			ObservableList<BUDCODE> Forms_lst = getbud(rsEmps);
+		// Send ResultSet to the getEmployeeList method and get employee object
+		ObservableList<BUDCODE> Forms_lst = getbud(rsEmps);
 
-			// Return employee object
-			return Forms_lst;
-		}
+		// Return employee object
+		return Forms_lst;
+	}
 
 	// *******************************
 	// SELECT Z_SB_PENS_4FILE
@@ -519,13 +480,12 @@ public class TerminalDAO {
 		// Return employee object
 		return Forms_lst;
 	}
+
 	// *******************************
 	// SELECT ibank2.CLIENTS
 	// *******************************
-	public static ObservableList<Ibank2> CLIENTS(String db,String login,String pass) {
-		String selectStmt = 
-				"select CLIENT_ID, NAME_CLN\n" + 
-				"  from ibank2.CLIENTS t";
+	public static ObservableList<Ibank2> CLIENTS(String db, String login, String pass) {
+		String selectStmt = "select CLIENT_ID, NAME_CLN\n" + "  from ibank2.CLIENTS t";
 
 		// Execute SELECT statement
 
@@ -538,21 +498,16 @@ public class TerminalDAO {
 		// Return Cli_lst object
 		return Cli_lst;
 	}
-	
+
 	// *******************************
 	// SELECT User_in
 	// *******************************
 	public static ObservableList<User_in> User_in(Integer form_name) {
-		String selectStmt = 
-				"select CUSRLOGNAME, CUSRNAME, T_NAME\n" + 
-				"  from z_sb_access_amra a,\n" + 
-				"       z_sb_access_gr_amra b,\n" + 
-				"       z_sb_access_gr_type_amra c,\n" + 
-				"       (select t.cusrlogname, t.iusrid, t.CUSRNAME from usr t) d\n" + 
-				" where a.id_form = b.form_id\n" + 
-				"   and b.gr_id = c.id_type\n" + 
-				"   and b.usr_id = d.iusrid\n" + 
-				"   and ID_FORM = "+form_name+"\n";
+		String selectStmt = "select CUSRLOGNAME, CUSRNAME, T_NAME\n" + "  from z_sb_access_amra a,\n"
+				+ "       z_sb_access_gr_amra b,\n" + "       z_sb_access_gr_type_amra c,\n"
+				+ "       (select t.cusrlogname, t.iusrid, t.CUSRNAME from usr t) d\n"
+				+ " where a.id_form = b.form_id\n" + "   and b.gr_id = c.id_type\n" + "   and b.usr_id = d.iusrid\n"
+				+ "   and ID_FORM = " + form_name + "\n";
 
 		// Execute SELECT statement
 
@@ -565,21 +520,16 @@ public class TerminalDAO {
 		// Return employee object
 		return Forms_lst;
 	}
-	
+
 	// *******************************
 	// SELECT User_in_Menu
 	// *******************************
 	public static ObservableList<User_in> User_in_menu(Integer form_name) {
-		String selectStmt = 
-				"select CUSRLOGNAME, CUSRNAME, T_NAME\n" + 
-				"  from z_sb_menu_amra a,\n" + 
-				"       z_sb_access_gr_menu_amra b,\n" + 
-				"       z_sb_access_gr_type_amra c,\n" + 
-				"       (select t.cusrlogname, t.iusrid, t.CUSRNAME from usr t) d\n" + 
-				" where a.id_menu = b.menu_id\n" + 
-				"   and b.gr_id = c.id_type\n" + 
-				"   and b.usr_id = d.iusrid\n" + 
-				"   and ID_MENU = "+form_name+"\n";
+		String selectStmt = "select CUSRLOGNAME, CUSRNAME, T_NAME\n" + "  from z_sb_menu_amra a,\n"
+				+ "       z_sb_access_gr_menu_amra b,\n" + "       z_sb_access_gr_type_amra c,\n"
+				+ "       (select t.cusrlogname, t.iusrid, t.CUSRNAME from usr t) d\n"
+				+ " where a.id_menu = b.menu_id\n" + "   and b.gr_id = c.id_type\n" + "   and b.usr_id = d.iusrid\n"
+				+ "   and ID_MENU = " + form_name + "\n";
 
 		// Execute SELECT statement
 
@@ -592,26 +542,83 @@ public class TerminalDAO {
 		// Return employee object
 		return Forms_lst;
 	}
-	
+
 	// *******************************
-		// SELECT User_out
-		// *******************************
-		public static ObservableList<User_out> User_out(Integer form_id) {
-			String selectStmt = 
-					"select CUSRLOGNAME, CUSRNAME\n" + 
-					"  from usr\n" + 
-					" where usr.dusrfire is null\n" + 
-					"   and CUSRLOGNAME not in\n" + 
-					"       (select CUSRLOGNAME\n" + 
-					"          from z_sb_access_amra a,\n" + 
-					"               z_sb_access_gr_amra b,\n" + 
-					"               z_sb_access_gr_type_amra c,\n" + 
-					"               (select t.cusrlogname, t.iusrid, t.CUSRNAME from usr t) d\n" + 
-					"         where a.id_form = b.form_id\n" + 
-					"           and b.gr_id = c.id_type\n" + 
-					"           and b.usr_id = d.iusrid\n" + 
-					"           and ID_FORM = "+form_id+")\n" + 
-					" order by CUSRLOGNAME";
+	// SELECT User_out
+	// *******************************
+	public static ObservableList<User_out> User_out(Integer form_id) {
+		String selectStmt = "select CUSRLOGNAME, CUSRNAME\n" + "  from usr\n" + " where usr.dusrfire is null\n"
+				+ "   and CUSRLOGNAME not in\n" + "       (select CUSRLOGNAME\n"
+				+ "          from z_sb_access_amra a,\n" + "               z_sb_access_gr_amra b,\n"
+				+ "               z_sb_access_gr_type_amra c,\n"
+				+ "               (select t.cusrlogname, t.iusrid, t.CUSRNAME from usr t) d\n"
+				+ "         where a.id_form = b.form_id\n" + "           and b.gr_id = c.id_type\n"
+				+ "           and b.usr_id = d.iusrid\n" + "           and ID_FORM = " + form_id + ")\n"
+				+ " order by CUSRLOGNAME";
+
+		// Execute SELECT statement
+
+		// Get ResultSet from dbExecuteQuery method
+		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
+
+		// Send ResultSet to the getEmployeeList method and get employee object
+		ObservableList<User_out> Forms_lst = get_usr_out(rsEmps);
+
+		// Return employee object
+		return Forms_lst;
+	}
+
+	// *******************************
+	// SELECT User_out
+	// *******************************
+	public static ObservableList<User_out> User_out_menu(Integer form_id) {
+		String selectStmt = "select CUSRLOGNAME, CUSRNAME\n" + "  from usr\n" + " where usr.dusrfire is null\n"
+				+ "   and CUSRLOGNAME not in\n" + "       (select CUSRLOGNAME\n" + "          from z_sb_menu_amra a,\n"
+				+ "               z_sb_access_gr_menu_amra b,\n" + "               z_sb_access_gr_type_amra c,\n"
+				+ "               (select t.cusrlogname, t.iusrid, t.CUSRNAME from usr t) d\n"
+				+ "         where a.id_menu = b.menu_id\n" + "           and b.gr_id = c.id_type\n"
+				+ "           and b.usr_id = d.iusrid\n" + "           and ID_menu = " + form_id + ")\n"
+				+ " order by CUSRLOGNAME";
+
+		// Execute SELECT statement
+
+		// Get ResultSet from dbExecuteQuery method
+		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
+
+		// Send ResultSet to the getEmployeeList method and get employee object
+		ObservableList<User_out> Forms_lst = get_usr_out(rsEmps);
+
+		// Return employee object
+		return Forms_lst;
+	}
+
+	// *************************************
+	// UPDATE usr right
+	// *************************************
+	public static void update_usr_right(String usr_name, String form_name) {
+		String updateStmt = "";
+		DBUtil.dbExecuteUpdate(updateStmt);
+	}
+
+	public static void alert(String mes) {
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+		stage.getIcons().add(new Image("terminal.png"));
+		alert.setTitle("Внимание");
+		alert.setHeaderText(null);
+		alert.setContentText(mes);
+		alert.showAndWait();
+	}
+
+	// *******************************
+	// SELECT Unpiv
+	// *******************************
+	public static ObservableList<Unpiv> Unpiv_View() {
+
+		try {
+			SqlMap s = new SqlMap().load("/SQL.xml");
+
+			String selectStmt = s.getSql("getUnpivot").replace(":p1", "'" + Connect.PNMB_ + "'");
 
 			// Execute SELECT statement
 
@@ -619,91 +626,22 @@ public class TerminalDAO {
 			ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
 
 			// Send ResultSet to the getEmployeeList method and get employee object
-			ObservableList<User_out> Forms_lst = get_usr_out(rsEmps);
-
+			ObservableList<Unpiv> empList = get_unpiv(rsEmps);
+			return empList;
 			// Return employee object
-			return Forms_lst;
-		}
-		// *******************************
-				// SELECT User_out
-				// *******************************
-				public static ObservableList<User_out> User_out_menu(Integer form_id) {
-					String selectStmt = 
-							"select CUSRLOGNAME, CUSRNAME\n" + 
-							"  from usr\n" + 
-							" where usr.dusrfire is null\n" + 
-							"   and CUSRLOGNAME not in\n" + 
-							"       (select CUSRLOGNAME\n" + 
-							"          from z_sb_menu_amra a,\n" + 
-							"               z_sb_access_gr_menu_amra b,\n" + 
-							"               z_sb_access_gr_type_amra c,\n" + 
-							"               (select t.cusrlogname, t.iusrid, t.CUSRNAME from usr t) d\n" + 
-							"         where a.id_menu = b.menu_id\n" + 
-							"           and b.gr_id = c.id_type\n" + 
-							"           and b.usr_id = d.iusrid\n" + 
-							"           and ID_menu = "+form_id+")\n" + 
-							" order by CUSRLOGNAME";
-
-					// Execute SELECT statement
-
-					// Get ResultSet from dbExecuteQuery method
-					ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
-
-					// Send ResultSet to the getEmployeeList method and get employee object
-					ObservableList<User_out> Forms_lst = get_usr_out(rsEmps);
-
-					// Return employee object
-					return Forms_lst;
-				}
-    //*************************************
-    //UPDATE usr right
-    //*************************************
-    public static void update_usr_right(String usr_name, String form_name) {   
-      String updateStmt ="";
-      DBUtil.dbExecuteUpdate(updateStmt);
-    }
-    
-    public static void alert(String mes) {
-    	Alert alert = new Alert(Alert.AlertType.INFORMATION);
-		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-		stage.getIcons().add(new Image("terminal.png"));
-		alert.setTitle("Внимание");
-		alert.setHeaderText(null);
-		alert.setContentText(mes);
-		alert.showAndWait();
-    }
-	// *******************************
-	// SELECT Unpiv
-	// *******************************
-	public static ObservableList<Unpiv> Unpiv_View() {
-		
-		
-		try {
-		SqlMap s = new SqlMap().load(System.getenv("TRANSACT_PATH") + "\\report\\SQL.xml");
-		
-		String selectStmt = s.getSql("getUnpivot").replace(":p1", "'"+Connect.PNMB_+"'");
-
-		// Execute SELECT statement
-
-		// Get ResultSet from dbExecuteQuery method
-		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
-
-		// Send ResultSet to the getEmployeeList method and get employee object
-		ObservableList<Unpiv> empList = get_unpiv(rsEmps);
-		return empList;
-		// Return employee object
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			alert(e.getMessage());
 		}
 		return null;
-		
+
 	}
 
 	// *******************************
 	// SELECT Termdial_
 	// *******************************
-	public static ObservableList<Termdial> Termdial_(LocalDate dt1, LocalDate dt2, String pnmb, String sess_id,boolean chk) {
+	public static ObservableList<Termdial> Termdial_(LocalDate dt1, LocalDate dt2, String pnmb, String sess_id,
+			boolean chk) {
 		String pnmb_ = "\n";
 		String sess_id_ = "\n";
 
@@ -716,7 +654,7 @@ public class TerminalDAO {
 		} else {
 			table = "Z_SB_TERMDEAL_AMRA_FEB";
 		}
-		
+
 		if (dt1 != null)
 			ldt1 = dt1.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 		if (dt2 != null)
@@ -746,7 +684,7 @@ public class TerminalDAO {
 			sess_id_ = "and SESS_ID = '" + sess_id + "'\n";
 		}
 
-		String selectStmt = "select * from "+table+" t where 1=1" + ldt1_ + bt + ldt2_ + pnmb_ + sess_id_;
+		String selectStmt = "select * from " + table + " t where 1=1" + ldt1_ + bt + ldt2_ + pnmb_ + sess_id_;
 
 		// Execute SELECT statement
 
@@ -754,8 +692,8 @@ public class TerminalDAO {
 		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
 
 		// Send ResultSet to the getEmployeeList method and get employee object
-		ObservableList<Termdial> empList = null; 
-		
+		ObservableList<Termdial> empList = null;
+
 		if (chk == true) {
 			empList = get_term(rsEmps);
 		} else {
@@ -775,7 +713,7 @@ public class TerminalDAO {
 				String DateOfOperation = new SimpleDateFormat("dd.MM.yy").format(rs.getDate("DateOfOperation"));
 				fn.setsess_id(rs.getString("sess_id"));
 				fn.setfile_name(rs.getString("file_name"));
-				fn.setdate_(DateOfOperation);  
+				fn.setdate_(DateOfOperation);
 				fn.setdate_time(date_time);
 				fn.setpath_(rs.getString("path"));
 				fn.setuser(rs.getString("user_"));
@@ -847,40 +785,41 @@ public class TerminalDAO {
 	}
 
 	// Select * from fn_sess operation
-		private static ObservableList<Termdial> get_term_2(ResultSet rs) {
-			try {
-				ObservableList<Termdial> fn_list = FXCollections.observableArrayList();
-				while (rs.next()) {
-					Termdial td = new Termdial();
-					// String format = new SimpleDateFormat("MM.dd.yyyy
-					// HH:mm:ss").format(rs.getTimestamp("recdate"));
-					String recdate = new SimpleDateFormat("dd.MM.yy HH:mm:ss").format(rs.getTimestamp("recdate"));
-					String dealstartdate = new SimpleDateFormat("dd.MM.yy HH:mm:ss")
-							.format(rs.getTimestamp("dealstartdate"));
-					String dealenddate = null;
-					if (rs.getString("dealenddate") == null) {
-						dealenddate = rs.getString("dealenddate");
-					} else {
-						dealenddate = new SimpleDateFormat("dd.MM.yy HH:mm:ss").format(rs.getTimestamp("dealenddate"));
-					}
-					td.set_recdate(recdate);
-					td.set_department(rs.getString("department"));
-					td.set_VECTOR(rs.getString("VECTOR"));
-					td.set_paymentnumber(rs.getString("paymentnumber"));
-					td.set_dealstartdate(dealstartdate);
-					td.set_sum_(rs.getString("sum_"));
-					td.set_dealenddate(dealenddate);
-					td.set_dealpaymentnumber(rs.getString("dealpaymentnumber"));
-					td.set_status(rs.getString("status"));
-					td.set_sess_id(rs.getString("sess_id"));
-					fn_list.add(td);
+	private static ObservableList<Termdial> get_term_2(ResultSet rs) {
+		try {
+			ObservableList<Termdial> fn_list = FXCollections.observableArrayList();
+			while (rs.next()) {
+				Termdial td = new Termdial();
+				// String format = new SimpleDateFormat("MM.dd.yyyy
+				// HH:mm:ss").format(rs.getTimestamp("recdate"));
+				String recdate = new SimpleDateFormat("dd.MM.yy HH:mm:ss").format(rs.getTimestamp("recdate"));
+				String dealstartdate = new SimpleDateFormat("dd.MM.yy HH:mm:ss")
+						.format(rs.getTimestamp("dealstartdate"));
+				String dealenddate = null;
+				if (rs.getString("dealenddate") == null) {
+					dealenddate = rs.getString("dealenddate");
+				} else {
+					dealenddate = new SimpleDateFormat("dd.MM.yy HH:mm:ss").format(rs.getTimestamp("dealenddate"));
 				}
-				return fn_list;
-			} catch (SQLException e) {
-				alert(e.getMessage());
+				td.set_recdate(recdate);
+				td.set_department(rs.getString("department"));
+				td.set_VECTOR(rs.getString("VECTOR"));
+				td.set_paymentnumber(rs.getString("paymentnumber"));
+				td.set_dealstartdate(dealstartdate);
+				td.set_sum_(rs.getString("sum_"));
+				td.set_dealenddate(dealenddate);
+				td.set_dealpaymentnumber(rs.getString("dealpaymentnumber"));
+				td.set_status(rs.getString("status"));
+				td.set_sess_id(rs.getString("sess_id"));
+				fn_list.add(td);
 			}
-			return null;
+			return fn_list;
+		} catch (SQLException e) {
+			alert(e.getMessage());
 		}
+		return null;
+	}
+
 	// Select * from fn_sess operation
 	private static ObservableList<Attributes> get_attr(ResultSet rs) {
 		try {
@@ -899,32 +838,32 @@ public class TerminalDAO {
 		}
 		return null;
 	}
-	
-	
+
 	// Select * from Dealss operation
-		private static ObservableList<Deal> get_deals(ResultSet rs) {
-			try {
-				ObservableList<Deal> fn_list = FXCollections.observableArrayList();
-				while (rs.next()) {
-					
-					String DATEOPERATION = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getTimestamp("DATEOPERATION"));
-					
-					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
-					
-					Deal fn = new Deal();
-					fn.set_ROWNUMBER(rs.getInt("ROWNUMBER"));
-					fn.set_CHEKNUMBER(rs.getString("CHEKNUMBER"));
-					fn.set_SUMMA(rs.getDouble("SUMMA"));
-					fn.set_TERMINAL(rs.getString("TERMINAL"));
-					fn.set_DATEOPERATION(LocalDateTime.parse(DATEOPERATION, formatter));
-					fn_list.add(fn);
-				}
-				return fn_list;
-			} catch (SQLException e) {
-				alert(e.getMessage());
+	private static ObservableList<Deal> get_deals(ResultSet rs) {
+		try {
+			ObservableList<Deal> fn_list = FXCollections.observableArrayList();
+			while (rs.next()) {
+
+				String DATEOPERATION = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
+						.format(rs.getTimestamp("DATEOPERATION"));
+
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+
+				Deal fn = new Deal();
+				fn.set_ROWNUMBER(rs.getInt("ROWNUMBER"));
+				fn.set_CHEKNUMBER(rs.getString("CHEKNUMBER"));
+				fn.set_SUMMA(rs.getDouble("SUMMA"));
+				fn.set_TERMINAL(rs.getString("TERMINAL"));
+				fn.set_DATEOPERATION(LocalDateTime.parse(DATEOPERATION, formatter));
+				fn_list.add(fn);
 			}
-			return null;
+			return fn_list;
+		} catch (SQLException e) {
+			alert(e.getMessage());
 		}
+		return null;
+	}
 
 	// Select * from fn_sess Z_SB_ACCESS_AMRA
 	private static ObservableList<Forms> get_forms(ResultSet rs) {
@@ -943,6 +882,7 @@ public class TerminalDAO {
 		}
 		return null;
 	}
+
 	// Select * from fn_sess z_sb_menu_amra
 	private static ObservableList<MenuItems> get_menu(ResultSet rs) {
 		try {
@@ -962,48 +902,48 @@ public class TerminalDAO {
 		}
 		return null;
 	}
-	
-	// Select * from fn_sess z_sb_menu_amra
-		private static ObservableList<BUDCODE> getbud(ResultSet rs) {
-			try {
-				ObservableList<BUDCODE> forms_list = FXCollections.observableArrayList();
-				while (rs.next()) {
-					BUDCODE frms = new BUDCODE();
-					frms.setcode(rs.getString("CCODE"));
-					frms.setcodename(rs.getString("CDESCRIPTION"));
-					forms_list.add(frms);
-				}
-				return forms_list;
-			} catch (SQLException e) {
-				alert(e.getMessage());
-			}
-			return null;
-		}
 
-		// Select * from fn_sess Z_SB_PENS_4FILE
-		private static ObservableList<pensmodel> PENS_4FILE(ResultSet rs) {
-			try {
-				ObservableList<pensmodel> forms_list = FXCollections.observableArrayList();
-				while (rs.next()) {
-					String DATE_LOAD = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getTimestamp("DATE_LOAD"));
-					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");	
-					pensmodel frms = new pensmodel();
-					frms.setid(rs.getInt("ID"));
-					frms.setdateload(LocalDateTime.parse(DATE_LOAD, formatter));
-					frms.setfilename(rs.getString("FILENAME"));
-					/*frms.setone_part("<CLOB>");
-					frms.setTWO_PART("<CLOB>");
-					frms.setTHREE_PART("<CLOB>");
-					frms.setFOUR_PART("<CLOB>");
-					*/
-					forms_list.add(frms);
-				}
-				return forms_list;
-			} catch (SQLException e) {
-				alert(e.getMessage());
+	// Select * from fn_sess z_sb_menu_amra
+	private static ObservableList<BUDCODE> getbud(ResultSet rs) {
+		try {
+			ObservableList<BUDCODE> forms_list = FXCollections.observableArrayList();
+			while (rs.next()) {
+				BUDCODE frms = new BUDCODE();
+				frms.setcode(rs.getString("CCODE"));
+				frms.setcodename(rs.getString("CDESCRIPTION"));
+				forms_list.add(frms);
 			}
-			return null;
+			return forms_list;
+		} catch (SQLException e) {
+			alert(e.getMessage());
 		}
+		return null;
+	}
+
+	// Select * from fn_sess Z_SB_PENS_4FILE
+	private static ObservableList<pensmodel> PENS_4FILE(ResultSet rs) {
+		try {
+			ObservableList<pensmodel> forms_list = FXCollections.observableArrayList();
+			while (rs.next()) {
+				String DATE_LOAD = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getTimestamp("DATE_LOAD"));
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+				pensmodel frms = new pensmodel();
+				frms.setid(rs.getInt("ID"));
+				frms.setdateload(LocalDateTime.parse(DATE_LOAD, formatter));
+				frms.setfilename(rs.getString("FILENAME"));
+				/*
+				 * frms.setone_part("<CLOB>"); frms.setTWO_PART("<CLOB>");
+				 * frms.setTHREE_PART("<CLOB>"); frms.setFOUR_PART("<CLOB>");
+				 */
+				forms_list.add(frms);
+			}
+			return forms_list;
+		} catch (SQLException e) {
+			alert(e.getMessage());
+		}
+		return null;
+	}
+
 	// Select * from usr
 	private static ObservableList<User_in> get_usr_in(ResultSet rs) {
 		try {
@@ -1021,41 +961,23 @@ public class TerminalDAO {
 		}
 		return null;
 	}
-	
-	// Select * from usr menu
-		private static ObservableList<User_in> get_usr_in_menu(ResultSet rs) {
-			try {
-				ObservableList<User_in> user_in_list = FXCollections.observableArrayList();
-				while (rs.next()) {
-					User_in user_in = new User_in();
-					user_in.set_FIO_I(rs.getString("CUSRNAME"));
-					user_in.set_USR_ID_I(rs.getString("CUSRLOGNAME"));
-					user_in.set_TYPE_ACCESS_I(rs.getString("T_NAME"));
-					user_in_list.add(user_in);
-				}
-				return user_in_list;
-			} catch (SQLException e) {
-				alert(e.getMessage());
-			}
-			return null;
-		}
-		
+
 	// Select * from Clients
-		private static ObservableList<Ibank2> get_cli(ResultSet rs) {
-			try {
-				ObservableList<Ibank2> user_in_list = FXCollections.observableArrayList();
-				while (rs.next()) {
-					Ibank2 user_in = new Ibank2();
-					user_in.set_CLIENT_ID(rs.getInt("CLIENT_ID"));
-					user_in.set_NAME_CLN(rs.getString("NAME_CLN"));
-					user_in_list.add(user_in);
-				}
-				return user_in_list;
-			} catch (SQLException e) {
-				alert(e.getMessage());
+	private static ObservableList<Ibank2> get_cli(ResultSet rs) {
+		try {
+			ObservableList<Ibank2> user_in_list = FXCollections.observableArrayList();
+			while (rs.next()) {
+				Ibank2 user_in = new Ibank2();
+				user_in.set_CLIENT_ID(rs.getInt("CLIENT_ID"));
+				user_in.set_NAME_CLN(rs.getString("NAME_CLN"));
+				user_in_list.add(user_in);
 			}
-			return null;
+			return user_in_list;
+		} catch (SQLException e) {
+			alert(e.getMessage());
 		}
+		return null;
+	}
 
 	// Select * from usr
 	private static ObservableList<User_out> get_usr_out(ResultSet rs) {
@@ -1073,6 +995,7 @@ public class TerminalDAO {
 		}
 		return null;
 	}
+
 	// Select * from fn_sess operation
 	private static ObservableList<Unpiv> get_unpiv(ResultSet rs) {
 		try {
@@ -1097,10 +1020,9 @@ public class TerminalDAO {
 			while (rs.next()) {
 				Amra_Trans fn = new Amra_Trans();
 
-				
 				String recdate = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getTimestamp("recdate"));
 				String paydate = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getTimestamp("paydate"));
-				
+
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
 				fn.set_rownum(rs.getInt("rownum"));

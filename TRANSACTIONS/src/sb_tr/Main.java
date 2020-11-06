@@ -1,9 +1,10 @@
 package sb_tr;
 
-import java.awt.SplashScreen;
 import java.io.IOException;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -17,7 +18,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import sb_tr.model.Connect;
-
 import sb_tr.util.DBUtil;
 import sbalert.Msg;
 import sverka.SverkaC;
@@ -28,19 +28,19 @@ public class Main extends Application {
 	public static Stage primaryStage;
 	public static BorderPane rootLayout;
 
-
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 			/* log4j */
 			DOMConfigurator.configure(getClass().getResource("/log4j.xml"));
-			//logger.info("Transact Start: " + Thread.currentThread().getName());
+			logger.info("Transact Start: " + Thread.currentThread().getName());
 			Main.primaryStage = primaryStage;
 			primaryStage.getIcons().add(new Image("icon.png"));
 			Main.primaryStage.setTitle("Транзакции");
 
 			if (Connect.userID_ != null & Connect.trnnum == null & Connect.trnanum == null
-					& Connect.userPassword_ != null & Connect.djdog_id == null) { // primaryStage.setMaximized(true);
+					& Connect.userPassword_ != null & Connect.djdog_id == null) { 
+				//primaryStage.setMaximized(true);
 				primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
 				DBUtil.dbConnect();
 				initRootLayout();
@@ -65,7 +65,7 @@ public class Main extends Application {
 
 			/*
 			 * Connect.connectionURL_ = "10.111.64.21:1521/odb"; Connect.userID_ ="SAIDP";
-			 * Connect.userPassword_ = "xx"; DBUtil.dbConnect(); initRootLayout();
+			 * Connect.userPassword_ = ""; DBUtil.dbConnect(); initRootLayout();
 			 */
 
 			// CopyDover();
@@ -98,7 +98,7 @@ public class Main extends Application {
 			primaryStage.setResizable(true);
 			primaryStage.show(); // Display the primary stage
 		} catch (IOException e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -111,7 +111,7 @@ public class Main extends Application {
 
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -133,7 +133,7 @@ public class Main extends Application {
 			stage.initOwner(primaryStage);
 			stage.show();
 		} catch (IOException e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -145,7 +145,7 @@ public class Main extends Application {
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -157,7 +157,7 @@ public class Main extends Application {
 			BorderPane employeeOperationsView = (BorderPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -180,7 +180,7 @@ public class Main extends Application {
 			stage.initOwner(primaryStage);
 			stage.show();
 		} catch (IOException e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -202,7 +202,7 @@ public class Main extends Application {
 			stage.initOwner(primaryStage);
 			stage.show();
 		} catch (IOException e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -234,7 +234,7 @@ public class Main extends Application {
 			});
 			stage.show();
 		} catch (Exception e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -246,7 +246,7 @@ public class Main extends Application {
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -258,7 +258,7 @@ public class Main extends Application {
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -270,7 +270,7 @@ public class Main extends Application {
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -292,7 +292,7 @@ public class Main extends Application {
 			primaryStage.centerOnScreen();
 			primaryStage.show(); // Display the primary stage
 		} catch (IOException e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -316,7 +316,7 @@ public class Main extends Application {
 			stage.show();
 
 		} catch (IOException e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -339,7 +339,7 @@ public class Main extends Application {
 			stage.initOwner(primaryStage);
 			stage.show();
 		} catch (IOException e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -361,7 +361,7 @@ public class Main extends Application {
 			stage.show();
 
 		} catch (IOException e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -373,7 +373,7 @@ public class Main extends Application {
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -385,7 +385,7 @@ public class Main extends Application {
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -399,7 +399,7 @@ public class Main extends Application {
 			primaryStage.setScene(scene); // Set the scene in primary stage.
 			primaryStage.show(); // Display the primary stage
 		} catch (IOException e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -413,7 +413,7 @@ public class Main extends Application {
 			primaryStage.setScene(scene); // Set the scene in primary stage.
 			primaryStage.show(); // Display the primary stage
 		} catch (IOException e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -439,7 +439,7 @@ public class Main extends Application {
 			stage.show();
 
 		} catch (IOException e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -453,7 +453,7 @@ public class Main extends Application {
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -467,7 +467,7 @@ public class Main extends Application {
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (IOException e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
@@ -494,16 +494,12 @@ public class Main extends Application {
 			stage.initOwner(primaryStage);
 			stage.show();
 		} catch (IOException e) {
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 
 	public static void main(String[] args) {
 		try {
-			final SplashScreen splash = SplashScreen.getSplashScreen();
-			if (splash != null) {
-				splash.close();
-			}
 			if (args.length != 0 & args.length == 3) {
 				Connect.userID_ = args[0];
 				Connect.userPassword_ = args[1];
@@ -523,7 +519,7 @@ public class Main extends Application {
 			launch(args);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Msg.Messge(e.getMessage());
+			Msg.Message(e.getMessage());
 		}
 	}
 }

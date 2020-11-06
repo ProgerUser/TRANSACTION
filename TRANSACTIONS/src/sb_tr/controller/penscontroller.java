@@ -447,7 +447,7 @@ public class penscontroller {
 	public String retclob(int id, int sess_id, Connection conn, File file) {
 		String str = "";
 		try {
-			SqlMap s = new SqlMap().load(System.getenv("TRANSACT_PATH") + "\\report\\SQL.xml");
+			SqlMap s = new SqlMap().load("/SQL.xml");
 			String readRecordSQL = s.getSql("getPens");
 			PreparedStatement prepStmt = conn.prepareStatement(readRecordSQL);
 			prepStmt.setInt(1, id);
@@ -531,7 +531,6 @@ public class penscontroller {
 					+ "                                        chr(13) || chr(10), \n"
 					+ "                                        '|', \n"
 					+ "                                        '')) h\n";
-			String createfolder = file.getParent() + "\\" + file.getName() + "_0" + id + ".xlsx";
 			ResultSet rs = sqlStatement.executeQuery(readRecordSQL);
 
 			XSSFWorkbook workbook = new XSSFWorkbook();

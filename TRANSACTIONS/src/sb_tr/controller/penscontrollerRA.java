@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -24,6 +23,7 @@ import java.util.List;
 
 import org.controlsfx.control.table.TableFilter;
 import org.mozilla.universalchardet.UniversalDetector;
+
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -278,7 +278,7 @@ public class penscontrollerRA {
 					pstmt.executeUpdate();
 				}
 				/*Выгрузка*/
-				SqlMap s = new SqlMap().load(System.getenv("TRANSACT_PATH") + "/report/SQL.xml");
+				SqlMap s = new SqlMap().load("/SQL.xml");
 				String readRecordSQL = s.getSql("PensRa");
 				System.out.println(readRecordSQL);
 				PreparedStatement exec = conn.prepareStatement(readRecordSQL);
@@ -446,7 +446,7 @@ public class penscontrollerRA {
 	public String retclob(int id, int sess_id, Connection conn, File file) {
 		String str = "";
 		try {
-			SqlMap s = new SqlMap().load(System.getenv("TRANSACT_PATH") + "\\report\\SQL.xml");
+			SqlMap s = new SqlMap().load("/SQL.xml");
 			String readRecordSQL = s.getSql("getPens");
 			PreparedStatement prepStmt = conn.prepareStatement(readRecordSQL);
 			prepStmt.setInt(1, id);
@@ -476,7 +476,7 @@ public class penscontrollerRA {
 	public String retclob_xlsx(int id, int sess_id, Connection conn, File file) {
 		String str = "";
 		try {
-			SqlMap s = new SqlMap().load(System.getenv("TRANSACT_PATH") + "\\report\\SQL.xml");
+			SqlMap s = new SqlMap().load("/SQL.xml");
 			String readRecordSQL = s.getSql("getPens");
 			PreparedStatement prepStmt = conn.prepareStatement(readRecordSQL);
 			prepStmt.setInt(1, id);

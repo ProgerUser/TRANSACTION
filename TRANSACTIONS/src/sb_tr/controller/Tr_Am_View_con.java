@@ -66,7 +66,6 @@ import sb_tr.model.Amra_Trans;
 import sb_tr.model.Attributes;
 import sb_tr.model.Connect;
 import sb_tr.model.FN_SESS_AMRA;
-import sb_tr.model.GUIUtils;
 import sb_tr.model.Ibank2;
 import sb_tr.model.TerminalClass;
 import sb_tr.model.TerminalDAO;
@@ -101,6 +100,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.TimeZone;
 
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -151,7 +151,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import com.sun.prism.impl.Disposer.Record;
 
 /**
  * Саид 04.04.2019.
@@ -2400,6 +2399,9 @@ public class Tr_Am_View_con {
 			exec.execute(task);
 			/*-----------------------------------------*/
 		} catch (Exception e) {
+			Main.logger = Logger.getLogger(getClass());
+			Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+			e.printStackTrace();
 			Alert(e.getMessage());
 		}
 	}

@@ -1,7 +1,7 @@
 package sb_tr.controller;
 
+import java.awt.SplashScreen;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.sql.Connection;
@@ -279,6 +279,7 @@ public class EnterController {
 
 			conurl.setItems(filteredItems_2);
 
+			
 		} catch (Exception e) {
 			alert(e.getMessage());
 		}
@@ -289,7 +290,7 @@ public class EnterController {
 		int ret = 0;
 		Connection conn = DBUtil.conn;
 		try {
-			SqlMap sql = new SqlMap().load(System.getenv("TRANSACT_PATH") + "\\report\\SQL.xml");
+			SqlMap sql = new SqlMap().load("/SQL.xml");
 			String selectStmt = sql.getSql("acces_enter");
 			PreparedStatement prepStmt = conn.prepareStatement(selectStmt);
 			prepStmt.setString(1, FORM_NAME);

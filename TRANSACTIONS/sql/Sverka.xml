@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sqlMap>
+	<sqls>
+		<entry>
+			<key>GetVector</key>
+			<value><![CDATA[
+select t.AMOUNT SUMM, t.dt_date DT, 'Амра' N
+  from AMRA_STMT_CALC_ROW t
+ where DT_DATE = ?
+   and regexp_like(t.purposeofpayment, '[0-9]{2}.[0-9]{2}.[0-9]{4}')
+   and t.amount in
+       (select ST_SUM from table(z_sb_create_tr_amra.STMT_CHECK(?)))
+union all
+select trn.MTRNRSUM SUMM, trunc(trn.DTRNCREATE) DT, 'Сбер' N
+  from Z_SB_POSTDOC_AMRA_DBT pdoc, trn
+ where pdoc.kindpayment = trn.ITRNNUM
+   and exists
+ (select null
+          from table(lob2table.separatedcolumns(pdoc.paymentnumbers, /* the data LOB */
+                                                chr(10), /* row separator */
+                                                ';', /* column separator */
+                                                '' /* delimiter (optional) */))
+         where COLUMN1 in (select tr.checknumber
+                             from Z_SB_TRANSACT_AMRA_DBT tr
+                            where trunc(tr.paydate) = ?))
+   and pdoc.sess_id in (select tr.sess_id
+                          from Z_SB_TRANSACT_AMRA_DBT tr
+                         where trunc(tr.paydate) = ?
+                         group by sess_id)
+   and trunc(pdoc.date_document) = ?
+   and (trn.CTRNACCD = '30110810100000000003' or
+       trn.CTRNACCC = '30110810100000000003')
+   and trn.MTRNRSUM in
+       (select ST_SUM from table(z_sb_create_tr_amra.STMT_CHECK(?)))
+			
+			]]></value>
+		</entry>
+	</sqls>
+</sqlMap>
+		

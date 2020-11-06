@@ -287,7 +287,6 @@ public class KashController {
 					default:
 						break;
 					}
-
 					{
 						CellStyle styleIn = cellIn.getCellStyle();
 						CellStyle styleOut = cellOut.getCellStyle();
@@ -301,6 +300,7 @@ public class KashController {
 			}
 		}
 		in.close();
+		wbIn.close();
 		return wbOut;
 	}
 
