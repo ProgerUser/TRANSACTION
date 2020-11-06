@@ -35,7 +35,7 @@
 			<resource>
 				<directory>resources</directory>
 				<excludes>
-					<exclude>**/*.java</exclude>
+					<exclude>**/*.xml</exclude>
 				</excludes>
 			</resource>
 		</resources>

@@ -1,7 +1,11 @@
 package sb_tr;
 
 import java.awt.SplashScreen;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
@@ -29,64 +33,85 @@ public class Main extends Application {
 	public static Stage primaryStage;
 	public static BorderPane rootLayout;
 
+	public static File getResourceAsFile(String resourcePath) {
+	    try {
+	        InputStream in = ClassLoader.getSystemClassLoader().getResourceAsStream(resourcePath);
+	        if (in == null) {
+	            return null;
+	        }
+
+	        File tempFile = File.createTempFile(String.valueOf(in.hashCode()), ".tmp");
+	        tempFile.deleteOnExit();
+
+	        try (FileOutputStream out = new FileOutputStream(tempFile)) {
+	            //copy stream
+	            byte[] buffer = new byte[1024];
+	            int bytesRead;
+	            while ((bytesRead = in.read(buffer)) != -1) {
+	                out.write(buffer, 0, bytesRead);
+	            }
+	        }
+	        return tempFile;
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        return null;
+	    }
+	}
 	@Override
 	public void start(Stage primaryStage) {
-   try {
-		/* log4j */
-	    DOMConfigurator.configure(getClass().getResource("/log/log4j.xml"));
-	    logger.info("Transact Start: " + Thread.currentThread().getName());
-	    this.primaryStage = primaryStage;
-		this.primaryStage.getIcons().add(new Image("icon.png"));
-		this.primaryStage.setTitle("Транзакции");
+		try {
+			/* log4j */
+			getResourceAsFile("log4j.xml");
+			DOMConfigurator.configure(getResourceAsFile("log4j.xml"));
+			logger.info("Transact Start: " + Thread.currentThread().getName());
+			Main.primaryStage = primaryStage;
+			primaryStage.getIcons().add(new Image("icon.png"));
+			Main.primaryStage.setTitle("Транзакции");
 
-		
-		if (Connect.userID_ != null & Connect.trnnum == null & Connect.trnanum == null & Connect.userPassword_ != null
-				& Connect.djdog_id == null) { // primaryStage.setMaximized(true);
-			primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
-			DBUtil.dbConnect();
-			initRootLayout();
-			showFirst();
-		} else if (Connect.userID_ != null & Connect.trnnum != null & Connect.trnanum != null
-				& Connect.userPassword_ != null) {
-			primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
-			DBUtil.dbConnect();
-			initRootLayout();
-			Debtinfo();
-		} else if (Connect.userID_ != null & Connect.userPassword_ != null & Connect.djdog_id != null) {
-			primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
-			DBUtil.dbConnect();
-			CopyDover();
-		} else if (Connect.trnnum == null & Connect.trnanum == null & Connect.userID_ != null
-				& Connect.userPassword_ != null) {
-			Platform.exit();
-			System.exit(0);
-		} else if (Connect.userID_ == null & Connect.userPassword_ == null) {
-			Enter();
-		}
-		
-		/*
-		  Connect.connectionURL_ = "10.111.64.21:1521/odb";
-		  Connect.userID_ ="SAIDP";
-		  Connect.userPassword_ = "xx";
-		  DBUtil.dbConnect(); 
-		  initRootLayout();
-		  */
-		 
-		// CopyDover();
+			if (Connect.userID_ != null & Connect.trnnum == null & Connect.trnanum == null
+					& Connect.userPassword_ != null & Connect.djdog_id == null) { // primaryStage.setMaximized(true);
+				primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
+				DBUtil.dbConnect();
+				initRootLayout();
+				showFirst();
+			} else if (Connect.userID_ != null & Connect.trnnum != null & Connect.trnanum != null
+					& Connect.userPassword_ != null) {
+				primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
+				DBUtil.dbConnect();
+				initRootLayout();
+				Debtinfo();
+			} else if (Connect.userID_ != null & Connect.userPassword_ != null & Connect.djdog_id != null) {
+				primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
+				DBUtil.dbConnect();
+				CopyDover();
+			} else if (Connect.trnnum == null & Connect.trnanum == null & Connect.userID_ != null
+					& Connect.userPassword_ != null) {
+				Platform.exit();
+				System.exit(0);
+			} else if (Connect.userID_ == null & Connect.userPassword_ == null) {
+				Enter();
+			}
 
-		primaryStage.setOnCloseRequest(e -> {
-			DBUtil.dbDisconnect();
-			Platform.exit();
-			System.exit(0);
+			/*
+			 * Connect.connectionURL_ = "10.111.64.21:1521/odb"; Connect.userID_ ="SAIDP";
+			 * Connect.userPassword_ = "xx"; DBUtil.dbConnect(); initRootLayout();
+			 */
 
-		});
+			// CopyDover();
 
-		/* this.primaryStage.setMaximized(true); */
-   }
-		catch (Exception e) {
-	// TODO: handle exception
+			primaryStage.setOnCloseRequest(e -> {
+				DBUtil.dbDisconnect();
+				Platform.exit();
+				System.exit(0);
+
+			});
+
+			/* this.primaryStage.setMaximized(true); */
+		} catch (Exception e) {
+			// TODO: handle exception
 			e.printStackTrace();
-}
+			logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+		}
 	}
 
 	// Initializes the root layout.
@@ -229,7 +254,7 @@ public class Main extends Application {
 			stage.setTitle("Сверка");
 			stage.initOwner(stage_);
 			stage.setResizable(false);
-			
+
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				@Override
 				public void handle(WindowEvent paramT) {
