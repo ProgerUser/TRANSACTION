@@ -33,15 +33,13 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
    try {
 		/* log4j */
-		String log4jConfigFile = System.getenv("TRANSACT_PATH") + "log4j.xml";
-		System.out.print(log4jConfigFile + "\r\n");
-		DOMConfigurator.configure(log4jConfigFile);
-		/* logger.info("Transact Start: " + Thread.currentThread().getName()); */
-		this.primaryStage = primaryStage;
-		primaryStage.getIcons().add(new Image("icon.png"));
+	    DOMConfigurator.configure(getClass().getResource("/log/log4j.xml"));
+	    logger.info("Transact Start: " + Thread.currentThread().getName());
+	    this.primaryStage = primaryStage;
+		this.primaryStage.getIcons().add(new Image("icon.png"));
 		this.primaryStage.setTitle("Транзакции");
 
-		/*
+		
 		if (Connect.userID_ != null & Connect.trnnum == null & Connect.trnanum == null & Connect.userPassword_ != null
 				& Connect.djdog_id == null) { // primaryStage.setMaximized(true);
 			primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
@@ -65,13 +63,14 @@ public class Main extends Application {
 		} else if (Connect.userID_ == null & Connect.userPassword_ == null) {
 			Enter();
 		}
-*/
 		
+		/*
 		  Connect.connectionURL_ = "10.111.64.21:1521/odb";
 		  Connect.userID_ ="SAIDP";
-		  Connect.userPassword_ = "ipman165";
+		  Connect.userPassword_ = "xx";
 		  DBUtil.dbConnect(); 
 		  initRootLayout();
+		  */
 		 
 		// CopyDover();
 

@@ -1,0 +1,8 @@
+INFO    2020-11-06 10:28:59,967 [JavaFX Application Thread] sb_tr.Main  - Transact Start: JavaFX Application Thread
+INFO    2020-11-06 10:31:03,478 [JavaFX Application Thread] sb_tr.Main  - Transact Start: JavaFX Application Thread
+INFO    2020-11-06 10:31:50,816 [JavaFX Application Thread] sb_tr.Main  - Transact Start: JavaFX Application Thread
+INFO    2020-11-06 10:32:33,242 [JavaFX Application Thread] sb_tr.Main  - Transact Start: JavaFX Application Thread
+INFO    2020-11-06 10:33:43,860 [JavaFX Application Thread] sb_tr.Main  - Transact Start: JavaFX Application Thread
+INFO    2020-11-06 10:43:56,617 [JavaFX Application Thread] sb_tr.Main  - Transact Start: JavaFX Application Thread
+INFO    2020-11-06 10:49:23,201 [JavaFX Application Thread] sb_tr.Main  - Transact Start: JavaFX Application Thread
+INFO    2020-11-06 10:50:15,757 [JavaFX Application Thread] sb_tr.Main  - Transact Start: JavaFX Application Thread

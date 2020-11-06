@@ -20,7 +20,7 @@ public class AMRA_STMT_CALC {
 	private StringProperty CH_ACCOUNT;/* Расчетный счет */
 	private SimpleObjectProperty<LocalDate> STMT_END;/* Дата конца выписки */
 	private SimpleObjectProperty<LocalDate> STMT_BEGIN;/* Дата начала выписки */
-	private SimpleObjectProperty<LocalDate> CREATION_DATETIME;/* Дата создания/Время создания */
+	private SimpleObjectProperty<LocalDateTime> CREATION_DATETIME;/* Дата/Время создания */
 	private SimpleObjectProperty<LocalDateTime> LOAD_DATE;/* Дата загрузки выписки */
 	private IntegerProperty ID;/* ИД выписки */
 	private StringProperty STATUS;/* Статус */
@@ -84,7 +84,7 @@ public class AMRA_STMT_CALC {
 		this.STMT_BEGIN.set(STMT_BEGIN);
 	}
 
-	public void setCREATION_DATETIME(LocalDate CREATION_DATETIME) {
+	public void setCREATION_DATETIME(LocalDateTime CREATION_DATETIME) {
 		this.CREATION_DATETIME.set(CREATION_DATETIME);
 	}
 
@@ -172,7 +172,7 @@ public class AMRA_STMT_CALC {
 		return STMT_BEGIN;
 	}
 
-	public SimpleObjectProperty<LocalDate> CREATION_DATETIMEProperty() {
+	public SimpleObjectProperty<LocalDateTime> CREATION_DATETIMEProperty() {
 		return CREATION_DATETIME;
 	}
 

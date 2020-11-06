@@ -21,16 +21,17 @@
             <ToolBar>
                <items>
                   <Button mnemonicParsing="false" onAction="#LoadFile" text="Загрузить" />
-                  <Button mnemonicParsing="false" text="Открыть выписку" />
+                  <Button mnemonicParsing="false" onAction="#Check" text="Сверка" />
                </items>
             </ToolBar>
       		<GridPane>
       			<children>
-      				<TableView fx:id="STMT" prefHeight="466.0" tableMenuButtonVisible="true" BorderPane.alignment="CENTER" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS">
+      				<TableView fx:id="STMT" editable="true" prefHeight="466.0" tableMenuButtonVisible="true" BorderPane.alignment="CENTER" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS">
       					<columns>
       						<TableColumn fx:id="ID" prefWidth="61.0" text="ИД" />
-                        <TableColumn prefWidth="100.0" text="Дата загрузки" />
-      						<TableColumn fx:id="StatusFile" prefWidth="185.0" text="Даты">
+                        <TableColumn fx:id="CREATION_DATETIME" prefWidth="113.0" text="Дата загрузки" />
+                        <TableColumn fx:id="LOAD_DATE" prefWidth="113.0" text="Дата выгрузки" />
+      						<TableColumn fx:id="StatusFile" prefWidth="187.0" text="Даты">
                            <columns>
                               <TableColumn fx:id="STMT_BEGIN" prefWidth="100.0" text="С" />
                               <TableColumn fx:id="STMT_END" prefWidth="100.0" text="ПО" />
@@ -41,7 +42,7 @@
                               <TableColumn fx:id="END_REST" prefWidth="100.0" text="На конец" />
                            </columns>
                         </TableColumn>
-                        <TableColumn prefWidth="75.0" text="Оброты">
+                        <TableColumn prefWidth="75.0" text="Обороты">
                            <columns>
                               <TableColumn fx:id="DEB_OB" prefWidth="75.0" text="ДТ" />
                               <TableColumn fx:id="CRED_OB" prefWidth="75.0" text="КТ" />
