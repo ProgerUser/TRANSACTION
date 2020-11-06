@@ -56,16 +56,39 @@
 					<vendor>SBRA</vendor>
 					<mainClass>sb_tr.Main</mainClass>
 				</configuration>
-			</plugin>	
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>create-executable</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<outputDirectory>${test.pack.dir}</outputDirectory>
+					<appendAssemblyId>false</appendAssemblyId>
+					<finalName>Transact</finalName>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<archive>
+						<manifest>
+							<mainClass>sb_tr.Main</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
 		<dependency>
 			<groupId>com.oracle</groupId>
-			<artifactId>ojdbc</artifactId>
-			<version>8</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/ojdbc8.jar</systemPath>
+			<artifactId>ojdbc8</artifactId>
+			<version>19.3</version>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.juniversalchardet</groupId>

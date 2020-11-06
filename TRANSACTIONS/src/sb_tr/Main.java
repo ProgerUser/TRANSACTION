@@ -34,7 +34,7 @@ public class Main extends Application {
 		try {
 			/* log4j */
 			DOMConfigurator.configure(getClass().getResource("/log4j.xml"));
-			logger.info("Transact Start: " + Thread.currentThread().getName());
+			//logger.info("Transact Start: " + Thread.currentThread().getName());
 			Main.primaryStage = primaryStage;
 			primaryStage.getIcons().add(new Image("icon.png"));
 			Main.primaryStage.setTitle("Транзакции");
