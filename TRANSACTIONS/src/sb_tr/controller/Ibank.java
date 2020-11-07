@@ -5,7 +5,12 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import org.apache.log4j.Logger;
 import org.controlsfx.control.table.TableFilter;
+
+import com.sun.rowset.CachedRowSetImpl;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,9 +24,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import sb_tr.Main;
 import sb_tr.model.Attributes;
 import sb_tr.model.Connect;
 import sb_tr.model.Ibank2;
+import sb_tr.util.DBUtil;
+import sbalert.Msg;
 
 /**
  * Пачулия Саид 04.06.2020.
@@ -99,23 +107,19 @@ public class Ibank {
 					String readRecordSQL = "select filtering\n" + "  from (select '[224100017]' filtering\n"
 							+ "          from dual\n" + "        union all\n" + "        select ACCOUNT filtering\n"
 							+ "          from ibank2.ACCOUNTS t\n" + "         where ID in\n"
-							+ "               (select ACCOUNT_ID from ibank2.C2ACCOUNTS t where client_id = " + IbMod.get_CLIENT_ID()
-							+ "))\n" + " order by case\n" + "            when substr(filtering, 1, 1) = '[' then\n"
-							+ "             1\n" + "            else\n" + "             2\n" + "          end";
+							+ "               (select ACCOUNT_ID from ibank2.C2ACCOUNTS t where client_id = "
+							+ IbMod.get_CLIENT_ID() + "))\n" + " order by case\n"
+							+ "            when substr(filtering, 1, 1) = '[' then\n" + "             1\n"
+							+ "            else\n" + "             2\n" + "          end";
 					ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
 					while (myResultSet.next()) {
 						if (acc_.equals("")) {
 							acc_ = myResultSet.getString("FILTERING");
-						}else
-						{
+						} else {
 							acc_ = acc_ + "\r\n" + myResultSet.getString("FILTERING");
 						}
 					}
 					acc.setText(acc_);
-					
-					{
-						
-					}
 				} catch (Exception e) {
 					altert(e.getMessage());
 				}
@@ -202,13 +206,7 @@ public class Ibank {
 			}
 			return user_in_list;
 		} catch (SQLException e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
-			alert.showAndWait();
+			Msg.Message(e.getMessage());
 		}
 		return null;
 	}
@@ -218,45 +216,26 @@ public class Ibank {
 		// Declare statement, resultSet and CachedResultSet as null
 		Statement stmt = null;
 		ResultSet resultSet = null;
+		CachedRowSetImpl crs = null;
 		try {
+			Main.logger = Logger.getLogger(DBUtil.class);
 			// Connect to DB (Establish Oracle Connection)
 			if (conn == null && !conn.isClosed()) {
-				this.dbConnect();
+				dbConnect();
 			}
-			System.out.println("Выборка данных: " + queryStmt + "\n");
-
-			// Create statement
 			stmt = conn.createStatement();
-
-			// Execute select (query) operation
 			resultSet = stmt.executeQuery(queryStmt);
-
-			// CachedRowSet Implementation
-			// In order to prevent "java.sql.SQLRecoverableException: Closed
-			// Connection: next" error
-			// We are using CachedRowSet
+			crs = new CachedRowSetImpl();
+			crs.populate(resultSet);
 		} catch (SQLException e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
-			alert.showAndWait();
+			Msg.Message(e.getMessage());
 		} finally {
 			if (resultSet != null) {
 				// Close resultSet
 				try {
 					resultSet.close();
 				} catch (SQLException e) {
-					Alert alert = new Alert(Alert.AlertType.INFORMATION);
-					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-					stage.getIcons().add(new Image("terminal.png"));
-					alert.setTitle("Внимание");
-					alert.setHeaderText(null);
-					alert.setContentText(e.getMessage());
-					alert.showAndWait();
-
+					Msg.Message(e.getMessage());
 				}
 			}
 			if (stmt != null) {
@@ -264,20 +243,12 @@ public class Ibank {
 				try {
 					stmt.close();
 				} catch (SQLException e) {
-					Alert alert = new Alert(Alert.AlertType.INFORMATION);
-					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-					stage.getIcons().add(new Image("terminal.png"));
-					alert.setTitle("Внимание");
-					alert.setHeaderText(null);
-					alert.setContentText(e.getMessage());
-					alert.showAndWait();
-
+					Msg.Message(e.getMessage());
+					Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
 				}
 			}
-			// Close connection
-			// dbDisconnect();
 		}
 		// Return CachedRowSet
-		return resultSet;
+		return crs;
 	}
 }

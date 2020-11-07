@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane prefHeight="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="trlist.Tr_Am_View_con">
+	<center>
+		<StackPane BorderPane.alignment="CENTER">
+			<children>
+				<TableView fx:id="trans_table" onKeyPressed="#show_" prefWidth="994.0" styleClass="mylistview" stylesheets="/TableView.css" tableMenuButtonVisible="true">
+					<columns>
+						<TableColumn fx:id="chk_row" prefWidth="60.0" text="Выбор" />
+						<TableColumn fx:id="checkparent" prefWidth="135.0" text="ЧекРодитель" />
+						<TableColumn fx:id="paydate" prefWidth="132.0" text="ДатаПлатежа" />
+						<TableColumn fx:id="status" prefWidth="128.0" text="Статус" />
+						<TableColumn fx:id="checknumber" prefWidth="152.0" text="НомерЧека" />
+								<TableColumn fx:id="service" prefWidth="160.0" text="Услуга" />
+								<TableColumn fx:id="provider" prefWidth="136.0" text="Провайдер" />
+						<TableColumn fx:id="terminal" prefWidth="100.0" text="Терминал" />
+								<TableColumn fx:id="amounttocheck" prefWidth="100.0" text="СуммаНаЧек" />
+								<TableColumn fx:id="sumnalprimal" prefWidth="150.0" text="СуммаНалИзначальная" />
+								<TableColumn fx:id="amountwithchecks" prefWidth="88.0" text="СуммаСЧеков" />
+								<TableColumn fx:id="cashamount" prefWidth="112.0" text="СуммаНаличных" />
+								<TableColumn fx:id="amountofpayment" prefWidth="100.0" text="СуммаПлатежа" />
+								<TableColumn fx:id="commissionamount" prefWidth="110.0" text="СуммаКомиссии" />
+								<TableColumn fx:id="nkamount" prefWidth="100.0" text="СуммаНК" />
+						<TableColumn fx:id="currency" prefWidth="100.0" text="Валюта" />
+						<TableColumn fx:id="vk" prefWidth="100.0" text="ВК" />
+						<TableColumn fx:id="dealer" prefWidth="100.0" text="Дилер" />
+						<TableColumn fx:id="accountpayer" prefWidth="113.0" text="ЛСПлательщика" />
+						<TableColumn fx:id="operationnumber" prefWidth="124.0" text="НомерОперации" />
+						<TableColumn fx:id="owninown" prefWidth="137.0" text="СвойВСвоем" />
+						<TableColumn fx:id="terminalnetwork" prefWidth="137.0" text="ТерминальнаяСеть" />
+						<TableColumn fx:id="transactiontype" prefWidth="137.0" text="ТипТранзакции" />
+						<TableColumn fx:id="rownum" prefWidth="137.0" text="НомерСтроки" />
+						<TableColumn fx:id="recdate" prefWidth="137.0" text="ДатаЗагрузки" />
+						<TableColumn fx:id="statusabs" prefWidth="137.0" text="СтатусвАБС" />
+						<TableColumn fx:id="sess_id" prefWidth="137.0" text="НомерЗагрузки" />
+					</columns>
+					<contextMenu>
+						<ContextMenu fx:id="menubar">
+							<items>
+								<MenuItem mnemonicParsing="false" onAction="#show_rel" text="Связанные" />
+								<MenuItem mnemonicParsing="false" onAction="#show_all_col" text="Показать все строки" />
+								<MenuItem mnemonicParsing="false" onAction="#show_all_atr" text="Показать атрибуты" />
+								<MenuItem mnemonicParsing="false" onAction="#show_all_deal" text="Показать сдачи" />
+								<MenuItem mnemonicParsing="false" onAction="#show_all_trn" text="Показать документы в главной книге" />
+								<MenuItem mnemonicParsing="false" onAction="#jasperkinder" text="Печать чек дет. сад" />
+							</items>
+						</ContextMenu>
+					</contextMenu>
+				</TableView>
+				<ProgressIndicator fx:id="pb" maxHeight="80.0" maxWidth="80.0" visible="false" />
+			</children>
+			<BorderPane.margin>
+				<Insets bottom="10.0" left="10.0" right="10.0" />
+			</BorderPane.margin>
+		</StackPane>
+	</center>
+	<top>
+		<VBox fx:id="CONTROL" BorderPane.alignment="CENTER">
+			<children>
+				<ToolBar stylesheets="/borderpane.css">
+					<items>
+						<DatePicker fx:id="dt1" prefWidth="100.0" promptText="Дата с:">
+							<tooltip>
+								<Tooltip text="Дата с" />
+							</tooltip>
+						</DatePicker>
+						<DatePicker fx:id="dt2" prefWidth="100.0" promptText="Дата по:">
+							<tooltip>
+								<Tooltip text="Дата по" />
+							</tooltip>
+						</DatePicker>
+						<TextField fx:id="id_sess" prefWidth="100.0" promptText="ИД загрузки">
+							<tooltip>
+								<Tooltip text="Идентификатор загрузки" />
+							</tooltip>
+						</TextField>
+						<TextField fx:id="FIO" maxHeight="25.0" prefWidth="211.0" promptText="ФИО, тел., и т.д.">
+							<tooltip>
+								<Tooltip text="ФИО, тел., и т.д." />
+							</tooltip>
+						</TextField>
+						<Button fx:id="search" mnemonicParsing="false" onAction="#filter" prefHeight="25.0" prefWidth="25.0">
+							<tooltip>
+								<Tooltip text="Поиск" />
+							</tooltip>
+						</Button>
+						<Button fx:id="view" mnemonicParsing="false" onAction="#view_unpivot" prefHeight="25.0" prefWidth="25.0">
+							<tooltip>
+								<Tooltip text="Показать транзакцию" />
+							</tooltip>
+						</Button>
+						<Button fx:id="attributes" mnemonicParsing="false" onAction="#view_attr" prefHeight="25.0" prefWidth="25.0">
+							<tooltip>
+								<Tooltip text="Показать дополнительные атрибуты" />
+							</tooltip>
+						</Button>
+						<Button mnemonicParsing="false" onAction="#excel_export" prefHeight="25.0" prefWidth="25.0" fx:id="xlsx">
+							<tooltip>
+								<Tooltip text="Выгрузка в Excel" />
+							</tooltip>
+						</Button>
+						<Button fx:id="post" mnemonicParsing="false" onAction="#view_post" prefHeight="25.0" prefWidth="25.0">
+							<tooltip>
+								<Tooltip text="Показать проводки" />
+							</tooltip>
+						</Button>
+						<Button fx:id="print_check" mnemonicParsing="false" onAction="#print_" prefHeight="25.0" prefWidth="25.0">
+							<tooltip>
+								<Tooltip text="Печать чека JasperReport" />
+							</tooltip>
+						</Button>
+						<Button fx:id="chk_nmbers" ellipsisString="" minHeight="25.0" mnemonicParsing="false" onAction="#showdeal" prefWidth="25.0">
+							<tooltip>
+								<Tooltip text="Показать сдачи" />
+							</tooltip>
+						</Button>
+						<Button fx:id="trn_" minHeight="25.0" mnemonicParsing="false" onAction="#view_trn" prefWidth="25.0">
+							<tooltip>
+								<Tooltip text="Реестр документов" />
+							</tooltip>
+						</Button>
+					</items>
+				</ToolBar>
+				<ToolBar>
+					<items>
+						<Button mnemonicParsing="false" onAction="#chk_all" prefHeight="25.0" prefWidth="44.0" text="VVV">
+							<tooltip>
+								<Tooltip text="Отметить все" />
+							</tooltip>
+							<font>
+								<Font name="System Bold" size="12.0" />
+							</font>
+						</Button>
+						<Button mnemonicParsing="false" onAction="#unchk_all" prefHeight="25.0" prefWidth="44.0" text="OOO">
+							<tooltip>
+								<Tooltip text="Убрать пометки" />
+							</tooltip>
+							<font>
+								<Font name="System Bold" size="12.0" />
+							</font>
+						</Button>
+						<TextField fx:id="summa_plat" prefHeight="25.0" prefWidth="100.0" promptText="Σ платежа">
+							<tooltip>
+								<Tooltip text="Сумма платежа" />
+							</tooltip>
+						</TextField>
+						<TextField fx:id="summa_nal" prefHeight="25.0" prefWidth="100.0" promptText="Σ наличных">
+							<tooltip>
+								<Tooltip text="Сумма наличных" />
+							</tooltip>
+						</TextField>
+                  <TextField fx:id="nk_summ_" layoutX="210.0" layoutY="10.0" prefHeight="25.0" prefWidth="100.0" promptText="Σ НК списали">
+                     <tooltip>
+                        <Tooltip text="Сумма НК списанных" />
+                     </tooltip>
+                  </TextField>
+                  <TextField fx:id="nk_summ_1" layoutX="314.0" layoutY="10.0" prefHeight="25.0" prefWidth="100.0" promptText="Σ НК зачислили">
+                     <tooltip>
+                        <Tooltip text="Сумма НК зачисленных" />
+                     </tooltip>
+                  </TextField>
+						<TextField fx:id="cnt_all_" prefHeight="25.0" prefWidth="100.0" promptText="Кол-во ">
+							<tooltip>
+								<Tooltip text="Количество" />
+							</tooltip>
+						</TextField>
+
+						<ComboBox fx:id="terminal_name" editable="true" prefHeight="25.0" prefWidth="105.0" promptText="Терминал">
+							<tooltip>
+								<Tooltip text="Выбор терминала" />
+							</tooltip>
+						</ComboBox>
+						<CheckBox fx:id="inkass" mnemonicParsing="false" onAction="#check_table" prefHeight="20.0" prefWidth="82.0" text="Инкасс.">
+							<tooltip>
+								<Tooltip text="Показать инкассации" />
+							</tooltip>
+						</CheckBox>
+						<CheckBox fx:id="ret_pay" mnemonicParsing="false" onAction="#check_table_ret" prefHeight="20.0" prefWidth="95.0" text="Возвраты">
+							<tooltip>
+								<Tooltip text="Показать возвраты" />
+							</tooltip>
+						</CheckBox>
+					</items>
+					<VBox.margin>
+						<Insets bottom="10.0" />
+					</VBox.margin>
+				</ToolBar>
+			</children>
+			<BorderPane.margin>
+				<Insets left="10.0" right="10.0" top="10.0" />
+			</BorderPane.margin>
+		</VBox>
+	</top>
+</BorderPane>

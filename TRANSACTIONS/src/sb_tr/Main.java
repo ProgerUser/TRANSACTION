@@ -38,6 +38,7 @@ public class Main extends Application {
 			primaryStage.getIcons().add(new Image("icon.png"));
 			Main.primaryStage.setTitle("Транзакции");
 
+			/*
 			if (Connect.userID_ != null & Connect.trnnum == null & Connect.trnanum == null
 					& Connect.userPassword_ != null & Connect.djdog_id == null) { 
 				//primaryStage.setMaximized(true);
@@ -62,11 +63,11 @@ public class Main extends Application {
 			} else if (Connect.userID_ == null & Connect.userPassword_ == null) {
 				Enter();
 			}
-
-			/*
-			 * Connect.connectionURL_ = "10.111.64.21:1521/odb"; Connect.userID_ ="SAIDP";
-			 * Connect.userPassword_ = ""; DBUtil.dbConnect(); initRootLayout();
-			 */
+*/
+			
+			  Connect.connectionURL_ = "10.111.64.21:1521/odb"; Connect.userID_ ="SAIDP";
+			 Connect.userPassword_ = "ipman165"; DBUtil.dbConnect(); initRootLayout();
+			 
 
 			// CopyDover();
 
@@ -173,13 +174,14 @@ public class Main extends Application {
 
 			Stage stage = new Stage();
 			Parent root;
-			root = FXMLLoader.load(Main.class.getResource("view/Transact_Amra_viewer.fxml"));
+			root = FXMLLoader.load(Main.class.getResource("/trlist/Transact_Amra_viewer.fxml"));
 			stage.setScene(new Scene(root));
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("Загруженные транзакции");
 			stage.initOwner(primaryStage);
 			stage.show();
-		} catch (IOException e) {
+		} catch (Exception e) {
+            e.printStackTrace();
 			Msg.Message(e.getMessage());
 		}
 	}
@@ -485,7 +487,7 @@ public class Main extends Application {
 			 */
 			Stage stage = new Stage();
 			Parent root;
-			root = FXMLLoader.load(Main.class.getResource("view/Amra_Trans.fxml"));
+			root = FXMLLoader.load(Main.class.getResource("trlist/Amra_Trans.fxml"));
 			stage.setScene(new Scene(root));
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("Загрузка транзакции");
@@ -493,7 +495,8 @@ public class Main extends Application {
 			stage.initModality(Modality.WINDOW_MODAL);
 			stage.initOwner(primaryStage);
 			stage.show();
-		} catch (IOException e) {
+		} catch (Exception e) {
+			e.printStackTrace();
 			Msg.Message(e.getMessage());
 		}
 	}

@@ -85,6 +85,7 @@ import sb_tr.model.Connect;
 import sb_tr.model.FN_SESS_AMRA;
 import sb_tr.model.TerminalDAO;
 import sb_tr.util.DBUtil;
+import trlist.Tr_Am_View_con;
 import javafx.stage.Stage;
 
 @SuppressWarnings("unused")
