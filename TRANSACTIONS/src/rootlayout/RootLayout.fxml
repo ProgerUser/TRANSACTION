@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="721.0" prefWidth="1030.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rootlayout.RootLayoutController">
+	<top>
+		<MenuBar fx:id="menubar" prefHeight="29.0" prefWidth="688.0" BorderPane.alignment="CENTER">
+			<menus>
+				<Menu fx:id="file" mnemonicParsing="false" text="Файл">
+					<items>
+						<MenuItem fx:id="exitapp" mnemonicParsing="false" onAction="#handleExit" text="Close" />
+					</items>
+				</Menu>
+				<!--<Menu mnemonicParsing="false" text="Терминалы Квант-Капитал"> <items> 
+					<MenuItem mnemonicParsing="false" onAction="#loadtransact" text="Загрузка 
+					транзакции" /> <MenuItem mnemonicParsing="false" onAction="#chektransact" 
+					text="Печать чеков" /> </items> </Menu> -->
+				<Menu fx:id="kash" mnemonicParsing="false" text="Кассовый офис">
+					<items>
+						<MenuItem fx:id="createpsevdo" mnemonicParsing="false" onAction="#Kash" text="Сформировать псевдоним" />
+						<MenuItem fx:id="contactload" mnemonicParsing="false" onAction="#ContactLoad" text="Комиссии Контакт" />
+					</items>
+				</Menu>
+				<Menu fx:id="amraterminal" mnemonicParsing="false" text="Терминалы Амра">
+					<items>
+						<MenuItem fx:id="executeamratrans" mnemonicParsing="false" onAction="#amra_trans" text="Загрузка Транзакции" />
+						<MenuItem fx:id="historyload" mnemonicParsing="false" onAction="#loadhistory" text="История загрузок" />
+						<MenuItem fx:id="transactlist" mnemonicParsing="false" onAction="#term_view" text="Загруженные транзакции" />
+						<MenuItem fx:id="deals" mnemonicParsing="false" onAction="#Termdial_view" text="Сдачи" />
+						<MenuItem fx:id="terminals" mnemonicParsing="false" onAction="#termview" text="Терминалы" />
+						<MenuItem fx:id="services" mnemonicParsing="false" onAction="#service" text="Сервисы" />
+						<MenuItem fx:id="Sverka" mnemonicParsing="false" onAction="#Sverka" text="Сверка" />
+						<MenuItem fx:id="print" mnemonicParsing="false" onAction="#ap_print" text="Печать" />
+						<MenuItem fx:id="printapmain" mnemonicParsing="false" onAction="#ap_printfmx" text="Печать AP_MAIN" />
+					</items>
+				</Menu>
+				<Menu fx:id="administrator" mnemonicParsing="false" text="Администратор">
+					<items>
+						<!--  <MenuItem fx:id="adminright" mnemonicParsing="false" onAction="#Access" text="Права доступа" />-->
+                  <MenuItem fx:id="adminmenuitems" mnemonicParsing="false" onAction="#access_menuitems" text="Доступность пунктов меню" />
+					</items>
+				</Menu>
+				<Menu fx:id="bankklient" mnemonicParsing="false" text="Банк-Клиент">
+					<items>
+						<MenuItem fx:id="bankklients" mnemonicParsing="false" onAction="#Ibank" text="Клиенты" />
+					</items>
+				</Menu>
+				<!-- <Menu mnemonicParsing="false" text="Помощь"> <items> <MenuItem mnemonicParsing="false" 
+					onAction="#handleHelp" text="About" /> <MenuItem mnemonicParsing="false" 
+					onAction="#DBCONNECT" text="DBCONNECT" /> </items> </Menu> -->
+				<Menu fx:id="pensiarf" mnemonicParsing="false" text="Пенсия РФ">
+					<items>
+						<MenuItem fx:id="seporatepensrf" mnemonicParsing="false" onAction="#divide" text="Разбить файл" />
+					</items>
+				</Menu>
+				<Menu fx:id="pensiara" mnemonicParsing="false" text="Пенсия РА">
+					<items>
+						<MenuItem fx:id="seporatepensra" mnemonicParsing="false" onAction="#divide_RA" text="Разбить файл" />
+					</items>
+				</Menu>
+								<Menu fx:id="budcode" mnemonicParsing="false" text="Бюджетная информация">
+					<items>
+						<MenuItem fx:id="savebudcode" mnemonicParsing="false" onAction="#save_budcode" text="Сохранить данные" />
+					</items>
+				</Menu>
+			</menus>
+		</MenuBar>
+	</top>
+</BorderPane>

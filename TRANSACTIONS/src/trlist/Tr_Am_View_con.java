@@ -36,6 +36,14 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.controlsfx.control.table.TableFilter;
 
+import app.Main;
+import app.controller.PrintCheck;
+import app.controller.PrintReport2;
+import app.model.Amra_Trans;
+import app.model.Connect;
+import app.model.TerminalDAO;
+import app.model.TerminalForCombo;
+import app.util.DBUtil;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -76,14 +84,6 @@ import javafx.stage.Stage;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LocalDateTimeStringConverter;
-import sb_tr.Main;
-import sb_tr.controller.PrintCheck;
-import sb_tr.controller.PrintReport2;
-import sb_tr.model.Amra_Trans;
-import sb_tr.model.Connect;
-import sb_tr.model.TerminalDAO;
-import sb_tr.model.TerminalForCombo;
-import sb_tr.util.DBUtil;
 import sbalert.Msg;
 
 /**
@@ -412,14 +412,14 @@ public class Tr_Am_View_con {
 
 				if (item.nkamountProperty().getValue() < 0) {
 					nk_summ = Double.parseDouble(nk_summ_.getText().replace(",", ".").replace(" ", ""))
-							+ item.nkamountProperty().getValue();
+							- item.nkamountProperty().getValue();
 					nk_summ_.setText(decimalFormat.format(nk_summ));
 					
 					nk_summ_1.setText(decimalFormat
 							.format(Double.parseDouble(nk_summ_1.getText().replace(",", ".").replace(" ", ""))));
 				} else if (item.nkamountProperty().getValue() > 0) {
 					nk_summ1 = Double.parseDouble(nk_summ_1.getText().replace(",", ".").replace(" ", ""))
-							+ item.nkamountProperty().getValue();
+							- item.nkamountProperty().getValue();
 
 					nk_summ_1.setText(decimalFormat.format(nk_summ1));
 
@@ -440,14 +440,14 @@ public class Tr_Am_View_con {
 
 				if (item.nkamountProperty().getValue() < 0) {
 					nk_summ = Double.parseDouble(nk_summ_.getText().replace(",", ".").replace(" ", ""))
-							+ item.nkamountProperty().getValue();
+							- item.nkamountProperty().getValue();
 					nk_summ_.setText(decimalFormat.format(nk_summ));
 					
 					nk_summ_1.setText(decimalFormat
 							.format(Double.parseDouble(nk_summ_1.getText().replace(",", ".").replace(" ", ""))));
 				} else if (item.nkamountProperty().getValue() > 0) {
 					nk_summ1 = Double.parseDouble(nk_summ_1.getText().replace(",", ".").replace(" ", ""))
-							+ item.nkamountProperty().getValue();
+							- item.nkamountProperty().getValue();
 
 					nk_summ_1.setText(decimalFormat.format(nk_summ1));
 
@@ -1100,7 +1100,6 @@ public class Tr_Am_View_con {
 				String ldt1_ = "\n";
 				String ldt2_ = "\n";
 				String bt = "\n";
-				String rownum = "\n";
 				if (dt1.getValue() != null & dt2.getValue() != null) {
 					bt = " and trunc(paydate) between to_date('" + ldt1 + "','dd.mm.yyyy') and to_date('" + ldt2
 							+ "','dd.mm.yyyy') \n";
@@ -2309,32 +2308,6 @@ public class Tr_Am_View_con {
 
 	@FXML
 	private void view_unpivot(ActionEvent actionEvent) {
-		try {
-			if (trans_table.getSelectionModel().getSelectedItem() == null) {
-				Msg.Message("Выберите сначала данные из таблицы!");
-			} else {
-				Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
-
-				Connect.PNMB_ = fn.get_checknumber();
-
-				Stage stage = new Stage();
-				Parent root;
-
-				root = FXMLLoader.load(Main.class.getResource("view/Transact_Unpiv.fxml"));
-
-				stage.setScene(new Scene(root));
-				stage.getIcons().add(new Image("icon.png"));
-				stage.setTitle("Подробно " + fn.get_checknumber());
-				// stage.initModality(Modality.WINDOW_MODAL);
-				stage.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
-				stage.show();
-			}
-		} catch (Exception e) {
-			Msg.Message(e.getMessage());
-		}
-	}
-
-	private void view_unpivot2(ActionEvent actionEvent) {
 		try {
 			if (trans_table.getSelectionModel().getSelectedItem() == null) {
 				Msg.Message("Выберите сначала данные из таблицы!");

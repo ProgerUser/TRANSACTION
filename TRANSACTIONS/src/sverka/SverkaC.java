@@ -35,6 +35,9 @@ import org.mozilla.universalchardet.UniversalDetector;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import app.model.Connect;
+import app.model.SqlMap;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -54,8 +57,6 @@ import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LocalDateStringConverter;
 import javafx.util.converter.LocalDateTimeStringConverter;
-import sb_tr.model.Connect;
-import sb_tr.model.SqlMap;
 
 /**
  * Сверка по Кор. счету, выгрузка в формате 1с
