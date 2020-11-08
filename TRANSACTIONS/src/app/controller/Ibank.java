@@ -127,7 +127,7 @@ public class Ibank {
 		});
 	}
 
-	public static void autoResizeColumns(TableView<?> table) {
+	public  void autoResizeColumns(TableView<?> table) {
 		// Set the right policy
 		table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
 		table.getColumns().stream().forEach((column) -> {

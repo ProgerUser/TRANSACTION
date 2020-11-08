@@ -60,7 +60,7 @@
 				<version>8.1.2</version>
 				<configuration>
 					<vendor>SBRA</vendor>
-					<mainClass>sb_tr.Main</mainClass>
+					<mainClass>app.Main</mainClass>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -83,7 +83,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>sb_tr.Main</mainClass>
+							<mainClass>app.Main</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
@@ -100,6 +100,11 @@
 			<groupId>com.googlecode.juniversalchardet</groupId>
 			<artifactId>juniversalchardet</artifactId>
 			<version>1.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>24.1.1-jre</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
@@ -165,6 +170,11 @@
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 			<version>4.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.prowidesoftware</groupId>
+			<artifactId>pw-swift-core</artifactId>
+			<version>SRU2020-9.1.2</version>
 		</dependency>
 	</dependencies>
 </project>

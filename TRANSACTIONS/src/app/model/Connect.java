@@ -14,6 +14,7 @@ public class Connect {
 	public static String connectionURL_= null;
 	public static String userID_ = null;
 	public static String userPassword_= null;
+	public static String SWIFT;
 	
 	// Declare Employees Table Columns
 	private StringProperty connectionURL;

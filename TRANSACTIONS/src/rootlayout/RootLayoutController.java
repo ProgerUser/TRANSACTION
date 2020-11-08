@@ -117,7 +117,10 @@ public class RootLayoutController {
 	private Menu budcode;
 
 	@FXML
-	private MenuItem savebudcode;
+	private Menu swift;
+	
+	@FXML
+	private MenuItem swtr;
 
 	/**
 	 * Для сверки
@@ -144,7 +147,15 @@ public class RootLayoutController {
 		Platform.exit();
 		System.exit(0);
 	}
-
+	
+	@FXML
+	void swift(ActionEvent event) {
+		try {
+			Main.swift();
+		} catch (Exception e) {
+			Msg.Message(e.getMessage());
+		}
+	}
 	@FXML
 	void chektransact(ActionEvent event) {
 		try {

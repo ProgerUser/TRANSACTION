@@ -18,9 +18,11 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import sbalert.Msg;
 import sverka.SverkaC;
+import swift.SWC;
 
 /**
  * Точка входа
+ * 
  * @author Said
  *
  */
@@ -30,49 +32,37 @@ public class Main extends Application {
 	public static Stage primaryStage;
 	public static BorderPane rootLayout;
 
+	static String MODULE = null;
+
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 			/* log4j */
 			DOMConfigurator.configure(getClass().getResource("/log4j.xml"));
-			logger.info("Transact Start: " + Thread.currentThread().getName());
 			Main.primaryStage = primaryStage;
 			primaryStage.getIcons().add(new Image("icon.png"));
 			Main.primaryStage.setTitle("Транзакции");
 
-			/*
-			if (Connect.userID_ != null & Connect.trnnum == null & Connect.trnanum == null
-					& Connect.userPassword_ != null & Connect.djdog_id == null) { 
-				//primaryStage.setMaximized(true);
-				primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
-				DBUtil.dbConnect();
-				initRootLayout();
-				showFirst();
-			} else if (Connect.userID_ != null & Connect.trnnum != null & Connect.trnanum != null
-					& Connect.userPassword_ != null) {
-				primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
+			if (MODULE == null) {
+				Enter();
+			} else if (MODULE.equals("DEBTINFO")) {
 				DBUtil.dbConnect();
 				initRootLayout();
 				Debtinfo();
-			} else if (Connect.userID_ != null & Connect.userPassword_ != null & Connect.djdog_id != null) {
-				primaryStage.setTitle(Connect.userID_ + "@" + Connect.connectionURL_);
+			} else if (MODULE.equals("BUH")) {
 				DBUtil.dbConnect();
-				CopyDover();
-			} else if (Connect.trnnum == null & Connect.trnanum == null & Connect.userID_ != null
-					& Connect.userPassword_ != null) {
-				Platform.exit();
-				System.exit(0);
-			} else if (Connect.userID_ == null & Connect.userPassword_ == null) {
-				Enter();
+				initRootLayout();
+				showFirst();
+			} else if (MODULE.equals("SWIFT")) {
+				DBUtil.dbConnect();
+				initRootLayout();
+				swift2();
 			}
-*/
-			
-			  Connect.connectionURL_ = "10.111.64.21:1521/odb"; Connect.userID_ ="SAIDP";
-			 Connect.userPassword_ = "ipman165"; DBUtil.dbConnect(); initRootLayout();
-			 
 
-			// CopyDover();
-
+			/*
+			 * Connect.connectionURL_ = "10.111.64.21:1521/odb"; Connect.userID_ = "SAIDP";
+			 * Connect.userPassword_ = ""; DBUtil.dbConnect(); initRootLayout();
+			 */
 			primaryStage.setOnCloseRequest(e -> {
 				DBUtil.dbDisconnect();
 				Platform.exit();
@@ -80,32 +70,34 @@ public class Main extends Application {
 
 			});
 
-			/* this.primaryStage.setMaximized(true); */
+			// this.primaryStage.setMaximized(true);
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 			logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
 		}
 	}
 
-	// Initializes the root layout.
+	/**
+	 * Initializes the root layout.
+	 */
 	public static void initRootLayout() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("/rootlayout/RootLayout.fxml"));
 			rootLayout = (BorderPane) loader.load();
-			Scene scene = new Scene(rootLayout); // We are sending rootLayout to the Scene.
-			primaryStage.setScene(scene); // Set the scene in primary stage.
+			Scene scene = new Scene(rootLayout);
+			primaryStage.setScene(scene);
 			primaryStage.centerOnScreen();
-			// primaryStage.setMaximized(true);
 			primaryStage.setResizable(true);
-			primaryStage.show(); // Display the primary stage
+			primaryStage.show();
 		} catch (Exception e) {
 			Msg.Message(e.getMessage());
 		}
 	}
 
-	/* Не используется */
+	/**
+	 * Не используется
+	 */
 	public static void showEmployeeView() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
@@ -119,7 +111,7 @@ public class Main extends Application {
 	}
 
 	/**
-	 *  Формирование псевдонимов
+	 * Формирование псевдонимов
 	 */
 	public static void showKash() {
 		try {
@@ -143,16 +135,16 @@ public class Main extends Application {
 	}
 
 	/**
-	 * Contact 
+	 * Contact
 	 */
 	public static void Contact() {
 		try {
 			/*
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("view/Contact.fxml"));
-			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
-			rootLayout.setCenter(employeeOperationsView);
-			*/
+			 * FXMLLoader loader = new FXMLLoader();
+			 * loader.setLocation(Main.class.getResource("view/Contact.fxml")); AnchorPane
+			 * employeeOperationsView = (AnchorPane) loader.load();
+			 * rootLayout.setCenter(employeeOperationsView);
+			 */
 			Stage stage = new Stage();
 			Parent root;
 			root = FXMLLoader.load(Main.class.getResource("view/Contact.fxml"));
@@ -172,12 +164,12 @@ public class Main extends Application {
 	public static void Termdial_view_() {
 		try {
 			/*
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("view/Termdial.fxml"));
-			BorderPane employeeOperationsView = (BorderPane) loader.load();
-			rootLayout.setCenter(employeeOperationsView);
-			*/
-			
+			 * FXMLLoader loader = new FXMLLoader();
+			 * loader.setLocation(Main.class.getResource("view/Termdial.fxml")); BorderPane
+			 * employeeOperationsView = (BorderPane) loader.load();
+			 * rootLayout.setCenter(employeeOperationsView);
+			 */
+
 			Stage stage = new Stage();
 			Parent root;
 			root = FXMLLoader.load(Main.class.getResource("view/Termdial.fxml"));
@@ -212,7 +204,7 @@ public class Main extends Application {
 			stage.initOwner(primaryStage);
 			stage.show();
 		} catch (Exception e) {
-            e.printStackTrace();
+			e.printStackTrace();
 			Msg.Message(e.getMessage());
 		}
 	}
@@ -236,6 +228,69 @@ public class Main extends Application {
 			stage.setTitle("Клиенты");
 			stage.initOwner(primaryStage);
 			stage.show();
+		} catch (Exception e) {
+			Msg.Message(e.getMessage());
+		}
+	}
+
+	/**
+	 * swift
+	 */
+	public static void swift() {
+		try {
+			Stage stage = new Stage();
+			Stage stage_ = (Stage) primaryStage.getScene().getWindow();
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Main.class.getResource("/swift/SWTR.fxml"));
+
+			SWC controller = new SWC();
+			loader.setController(controller);
+
+			Parent root = loader.load();
+			stage.setScene(new Scene(root));
+			stage.getIcons().add(new Image("icon.png"));
+			stage.setTitle("SWIFT");
+			stage.initOwner(stage_);
+			stage.setResizable(false);
+
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent paramT) {
+					controller.EndTask();
+					controller.dbDisconnect();
+				}
+			});
+			stage.show();
+		} catch (Exception e) {
+			Msg.Message(e.getMessage());
+		}
+	}
+
+	/**
+	 * swift
+	 */
+	public static void swift2() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+
+			SWC controller = new SWC();
+			loader.setController(controller);
+
+			loader.setLocation(Main.class.getResource("/swift/SWTR.fxml"));
+			BorderPane employeeOperationsView = (BorderPane) loader.load();
+			Scene scene = new Scene(employeeOperationsView); // We are sending rootLayout to the Scene.
+
+			primaryStage.setTitle("SWIFT IN");
+			primaryStage.setScene(scene); // Set the scene in primary stage.
+			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent paramT) {
+					controller.EndTask();
+					controller.dbDisconnect();
+				}
+			});
+			primaryStage.show(); // Display the primary stage
+
 		} catch (Exception e) {
 			Msg.Message(e.getMessage());
 		}
@@ -274,7 +329,7 @@ public class Main extends Application {
 	}
 
 	/**
-	 *  История загрузок Квант
+	 * История загрузок Квант
 	 */
 	public static void Load_Hist() {
 		try {
@@ -302,7 +357,7 @@ public class Main extends Application {
 	}
 
 	/**
-	 *  Меню
+	 * Меню
 	 */
 	public static void RT() {
 		try {
@@ -406,15 +461,15 @@ public class Main extends Application {
 		}
 	}
 
-	/* Доступ не используется*/
+	/* Доступ не используется */
 	public static void Admin() {
 		try {
 			/*
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("view/Admin.fxml"));
-			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
-			rootLayout.setCenter(employeeOperationsView);
-			*/
+			 * FXMLLoader loader = new FXMLLoader();
+			 * loader.setLocation(Main.class.getResource("view/Admin.fxml")); AnchorPane
+			 * employeeOperationsView = (AnchorPane) loader.load();
+			 * rootLayout.setCenter(employeeOperationsView);
+			 */
 			Stage stage = new Stage();
 			Parent root;
 			root = FXMLLoader.load(Main.class.getResource("view/Admin.fxml"));
@@ -432,12 +487,12 @@ public class Main extends Application {
 	public static void Admin_Menu() {
 		try {
 			/*
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("view/Admin_Menu.fxml"));
-			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
-			rootLayout.setCenter(employeeOperationsView);
-			*/
-			
+			 * FXMLLoader loader = new FXMLLoader();
+			 * loader.setLocation(Main.class.getResource("view/Admin_Menu.fxml"));
+			 * AnchorPane employeeOperationsView = (AnchorPane) loader.load();
+			 * rootLayout.setCenter(employeeOperationsView);
+			 */
+
 			Stage stage = new Stage();
 			Parent root;
 			root = FXMLLoader.load(Main.class.getResource("view/Admin_Menu.fxml"));
@@ -452,7 +507,7 @@ public class Main extends Application {
 	}
 
 	/**
-	 *  Доступ Ведомственная информация
+	 * Доступ Ведомственная информация
 	 */
 	public static void Debtinfo() {
 		try {
@@ -468,7 +523,7 @@ public class Main extends Application {
 	}
 
 	/**
-	 *  Копировать доверенность Не используется
+	 * Копировать доверенность Не используется
 	 */
 	public static void CopyDover() {
 		try {
@@ -517,11 +572,11 @@ public class Main extends Application {
 	public static void sepRA() {
 		try {
 			/*
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("view/Pens_RA.fxml"));
-			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
-			rootLayout.setCenter(employeeOperationsView);
-			*/
+			 * FXMLLoader loader = new FXMLLoader();
+			 * loader.setLocation(Main.class.getResource("view/Pens_RA.fxml")); AnchorPane
+			 * employeeOperationsView = (AnchorPane) loader.load();
+			 * rootLayout.setCenter(employeeOperationsView);
+			 */
 			Stage stage = new Stage();
 			Parent root;
 			root = FXMLLoader.load(Main.class.getResource("view/Pens_RA.fxml"));
@@ -579,21 +634,18 @@ public class Main extends Application {
 
 	public static void main(String[] args) {
 		try {
-			if (args.length != 0 & args.length == 3) {
-				Connect.userID_ = args[0];
-				Connect.userPassword_ = args[1];
-				Connect.connectionURL_ = args[2];
-			} else if (args.length != 0 & args.length == 5) {
+			if (args.length != 0 & args.length == 5) {
 				Connect.userID_ = args[0];
 				Connect.userPassword_ = args[1];
 				Connect.connectionURL_ = args[2];
 				Connect.trnnum = args[3];
 				Connect.trnanum = args[4];
+				MODULE = "DEBTINFO";
 			} else if (args.length != 0 & args.length == 4) {
 				Connect.userID_ = args[0];
 				Connect.userPassword_ = args[1];
 				Connect.connectionURL_ = args[2];
-				Connect.djdog_id = args[3];
+				MODULE = args[3];
 			}
 			launch(args);
 		} catch (Exception e) {
