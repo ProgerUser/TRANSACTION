@@ -16,68 +16,156 @@
 	<center>
 	</center>
    <center>
-      <TabPane tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
-        <tabs>
-          <Tab text="Входящие">
-               <content>
-                  <VBox>
-                     <children>
-                  		<ToolBar stylesheets="/borderpane.css">
-                  			<items>
-                  				<Button mnemonicParsing="false" onAction="#LoadFile" prefHeight="30.0" prefWidth="30.0" styleClass="Move">
-                                 <tooltip>
-                                    <Tooltip text="Перенести в локальную директорию">
+      <StackPane fx:id="StPn" BorderPane.alignment="CENTER">
+         <children>
+            <TabPane fx:id="RootTab" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab fx:id="INOUT" text="Вх./Исх.">
+                     <content>
+                        <VBox>
+                           <children>
+                        		<ToolBar stylesheets="/borderpane.css">
+                        			<items>
+                        				<Button fx:id="ModeINbox" mnemonicParsing="false" onAction="#LoadFile" prefHeight="30.0" prefWidth="30.0">
+                                       <tooltip>
+                                          <Tooltip text="Перенести в локальную директорию для последующей загрузки">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Tooltip>
+                                       </tooltip>
                                        <font>
                                           <Font size="14.0" />
                                        </font>
-                                    </Tooltip>
-                                 </tooltip>
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font></Button>
-                  				<Button mnemonicParsing="false" onAction="#Refresh" prefHeight="30.0" prefWidth="30.0" styleClass="Refresh1" visible="false">
-                                 <tooltip>
-                                    <Tooltip text="Обновить">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Tooltip>
-                                 </tooltip></Button>
-                              <ComboBox fx:id="TMREFR" prefHeight="30.0" prefWidth="70.0" visible="false">
-                                 <tooltip>
-                                    <Tooltip text="Частота обновления">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Tooltip>
-                                 </tooltip>
-                              </ComboBox>
-                  			</items>
-                           <VBox.margin>
-                              <Insets bottom="10.0" top="10.0" />
-                           </VBox.margin>
-                  		</ToolBar>
-                        <TableView fx:id="STMT" editable="true" styleClass="mylistview" stylesheets="/TableView.css" tableMenuButtonVisible="true">
-                           <columns>
-                              <TableColumn fx:id="CHK" prefWidth="46.0" text="Выб." />
-                              <TableColumn fx:id="MTTYPE" prefWidth="75.0" text="Тип" />
-                              <TableColumn fx:id="MTNAME" prefWidth="200.0" text="Название документа" />
-                              <TableColumn fx:id="DOCDATE" prefWidth="136.0" text="Дата документа" />
-                              <TableColumn fx:id="CUR" prefWidth="61.0" text="Валюта" />
-                              <TableColumn fx:id="SUMM" prefWidth="70.0" text="Сумма" />
-      								<TableColumn fx:id="FILE_NAME" prefWidth="218.0" text="Название файла" />
-      								<TableColumn fx:id="DT_CH" prefWidth="120.0" text="Дата изменения" />
-                           </columns>
-                        </TableView>
-                     </children>
-                  </VBox>
-               </content>
-          </Tab>
-          <Tab text="Архив входящих" />
-        </tabs>
+                                    </Button>
+                                    <ComboBox fx:id="DIRNAME" onAction="#ChTabName" prefHeight="30.0" prefWidth="108.0">
+                                       <tooltip>
+                                          <Tooltip text="Тип прослушиваемой папки">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Tooltip>
+                                       </tooltip>
+                                    </ComboBox>
+                        			</items>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                        		</ToolBar>
+                              <TableView fx:id="STMT" editable="true" styleClass="mylistview" stylesheets="/TableView.css" tableMenuButtonVisible="true">
+                                 <columns>
+                                    <TableColumn fx:id="CHK" prefWidth="46.0" text="Выб." />
+                                    <TableColumn fx:id="MTTYPE" prefWidth="75.0" text="Тип SWIFT" />
+                                    <TableColumn fx:id="MTNAME" prefWidth="224.0" text="Название документа" />
+                                    <TableColumn fx:id="DOCDATE" prefWidth="112.0" text="Дата документа" />
+                                    <TableColumn fx:id="CUR" prefWidth="61.0" text="Валюта" />
+                                    <TableColumn fx:id="SUMM" prefWidth="70.0" text="Сумма" />
+            								<TableColumn fx:id="FILE_NAME" prefWidth="218.0" text="Название файла" />
+            								<TableColumn fx:id="DT_CH" prefWidth="120.0" text="Дата изменения" />
+                                 </columns>
+                                 <contextMenu>
+                                    <ContextMenu>
+                                      <items>
+                                        <MenuItem mnemonicParsing="false" onAction="#OpenDB" text="Печать" />
+                                      </items>
+                                    </ContextMenu>
+                                 </contextMenu>
+                              </TableView>
+                           </children>
+                        </VBox>
+                     </content>
+                     <tooltip>
+                        <Tooltip text="Входящие или исходящие каталоги по системе Транзит в S.W.I.F.T. формате">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Tooltip>
+                     </tooltip>
+                </Tab>
+                <Tab fx:id="ArchiveInOut" text="Архив">
+                     <content>
+                        <VBox>
+                           <children>
+                              <ToolBar stylesheets="/borderpane.css">
+                                 <items>
+                                    <Button fx:id="RefreshDB" mnemonicParsing="false" onAction="#RefreshDB" prefHeight="30.0" prefWidth="30.0" styleClass="Reload">
+                                       <tooltip>
+                                          <Tooltip text="Выполнить поиск">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Tooltip>
+                                       </tooltip>
+                                    </Button>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="C:" />
+                                    <DatePicker fx:id="dt1" prefWidth="100.0">
+                                       <tooltip>
+                                          <Tooltip text="Дата загрузки файла с">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Tooltip>
+                                       </tooltip>
+                                    </DatePicker>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ПО:" />
+                                    <DatePicker fx:id="dt2" prefWidth="100.0">
+                                       <tooltip>
+                                          <Tooltip text="Дата загрузки файла по">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Tooltip>
+                                       </tooltip>
+                                    </DatePicker>
+                                    <ComboBox fx:id="ArchType" prefHeight="25.0" prefWidth="70.0">
+                                       <tooltip>
+                                          <Tooltip text="IN-Входящие, OUT-Исходящие">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Tooltip>
+                                       </tooltip>
+                                    </ComboBox>
+                                 </items>
+                              </ToolBar>
+                              <TableView fx:id="Achive" editable="true" styleClass="mylistview" stylesheets="/TableView.css" tableMenuButtonVisible="true">
+                                 <columns>
+                                    <TableColumn fx:id="MTTYPEdb" prefWidth="75.0" text="Тип SWIFT" />
+                                    <TableColumn fx:id="MTNAMEdb" prefWidth="200.0" text="Название документа" />
+                                    <TableColumn fx:id="Typedb" prefWidth="75.0" text="Вх/Исх" />
+                                    <TableColumn fx:id="DOCDATEdb" prefWidth="136.0" text="Дата документа" />
+                                    <TableColumn fx:id="CURdb" prefWidth="61.0" text="Валюта" />
+                                    <TableColumn fx:id="SUMMdb" prefWidth="70.0" text="Сумма" />
+                                    <TableColumn fx:id="FILE_NAMEdb" prefWidth="218.0" text="Название файла" />
+                                    <TableColumn fx:id="DT_CHdb" prefWidth="120.0" text="Дата изменения" />
+                                 </columns>
+                                 <contextMenu>
+                                    <ContextMenu>
+                                       <items>
+                                          <MenuItem mnemonicParsing="false" onAction="#Open" text="Печать" />
+                                          <MenuItem mnemonicParsing="false" onAction="#LoadFileDB" text="Повторно обработать" />
+                                       </items>
+                                    </ContextMenu>
+                                 </contextMenu>
+                              </TableView>
+                           </children>
+                        </VBox>
+                     </content>
+                     <tooltip>
+                        <Tooltip text="Архив входящих или исходящих сообщении">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Tooltip>
+                     </tooltip>
+                  </Tab>
+              </tabs>
+            </TabPane>
+            <ProgressIndicator fx:id="PrgInd" maxHeight="60.0" maxWidth="60.0" visible="false" />
+         </children>
          <BorderPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </BorderPane.margin>
-      </TabPane>
+      </StackPane>
    </center>
 </BorderPane>

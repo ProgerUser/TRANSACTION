@@ -32,7 +32,7 @@ public class Main extends Application {
 	public static Stage primaryStage;
 	public static BorderPane rootLayout;
 
-	static String MODULE = null;
+	public static String MODULE = null;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -43,6 +43,8 @@ public class Main extends Application {
 			primaryStage.getIcons().add(new Image("icon.png"));
 			Main.primaryStage.setTitle("Транзакции");
 
+			//System.out.println(MODULE);
+			/*
 			if (MODULE == null) {
 				Enter();
 			} else if (MODULE.equals("DEBTINFO")) {
@@ -58,11 +60,17 @@ public class Main extends Application {
 				initRootLayout();
 				swift2();
 			}
+			*/
+			
 
-			/*
-			 * Connect.connectionURL_ = "10.111.64.21:1521/odb"; Connect.userID_ = "SAIDP";
-			 * Connect.userPassword_ = ""; DBUtil.dbConnect(); initRootLayout();
-			 */
+			
+			  Connect.connectionURL_ = "10.111.64.21:1521/odb";
+			  Connect.userID_ = "SAIDP";
+			  Connect.userPassword_ = "ipman165"; 
+			  DBUtil.dbConnect(); 
+			  //initRootLayout();
+			  swift2();
+			 
 			primaryStage.setOnCloseRequest(e -> {
 				DBUtil.dbDisconnect();
 				Platform.exit();
@@ -244,6 +252,7 @@ public class Main extends Application {
 			loader.setLocation(Main.class.getResource("/swift/SWTR.fxml"));
 
 			SWC controller = new SWC();
+			controller.SetStageForClose(stage);
 			loader.setController(controller);
 
 			Parent root = loader.load();
@@ -274,13 +283,14 @@ public class Main extends Application {
 			FXMLLoader loader = new FXMLLoader();
 
 			SWC controller = new SWC();
+			controller.SetStageForClose(primaryStage);
 			loader.setController(controller);
 
 			loader.setLocation(Main.class.getResource("/swift/SWTR.fxml"));
 			BorderPane employeeOperationsView = (BorderPane) loader.load();
 			Scene scene = new Scene(employeeOperationsView); // We are sending rootLayout to the Scene.
 
-			primaryStage.setTitle("SWIFT IN");
+			primaryStage.setTitle("S.W.I.F.T "+Connect.userID_+"@"+Connect.connectionURL_);
 			primaryStage.setScene(scene); // Set the scene in primary stage.
 			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				@Override
@@ -618,7 +628,7 @@ public class Main extends Application {
 			 */
 			Stage stage = new Stage();
 			Parent root;
-			root = FXMLLoader.load(Main.class.getResource("trlist/Amra_Trans.fxml"));
+			root = FXMLLoader.load(Main.class.getResource("view/Amra_Trans.fxml"));
 			stage.setScene(new Scene(root));
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("Загрузка транзакции");
@@ -646,6 +656,7 @@ public class Main extends Application {
 				Connect.userPassword_ = args[1];
 				Connect.connectionURL_ = args[2];
 				MODULE = args[3];
+				System.out.println(args[3]);
 			}
 			launch(args);
 		} catch (Exception e) {

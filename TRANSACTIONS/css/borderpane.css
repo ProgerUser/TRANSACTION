@@ -65,6 +65,12 @@
 }
 
 
+.SWIFTPRINT {          
+    -fx-background-image: url("SWIFTPRINT.svg");
+    -fx-background-size: 30.0 30.0;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position:center;
+}
 
 #calc {          
     -fx-background-image: url("post.png");

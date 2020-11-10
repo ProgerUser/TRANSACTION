@@ -17,7 +17,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLType;
 import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -26,24 +25,41 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Properties;
 import java.util.Timer;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
+import org.apache.log4j.Logger;
 import org.controlsfx.control.table.TableFilter;
 import org.mozilla.universalchardet.UniversalDetector;
+
 import com.google.common.io.Files;
 import com.prowidesoftware.swift.model.field.Field32A;
 import com.prowidesoftware.swift.model.mt.AbstractMT;
 import com.prowidesoftware.swift.model.mt.mt1xx.MT103;
+
+import afester.javafx.svg.SvgLoader;
+import app.Main;
 import app.model.Connect;
-import javafx.animation.KeyValue.Type;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
@@ -51,9 +67,14 @@ import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
-import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.LocalDateStringConverter;
 import javafx.util.converter.LocalDateTimeStringConverter;
 import sbalert.Msg;
@@ -69,10 +90,68 @@ import sbalert.Msg;
 public class SWC {
 
 	/**
-	 * Не используется, интервал обновления
+	 * Дата с
 	 */
 	@FXML
-	private ComboBox<String> TMREFR;
+	private DatePicker dt1;
+
+	/**
+	 * Дата по
+	 */
+	@FXML
+	private DatePicker dt2;
+	/**
+	 * Таб архива
+	 */
+	@FXML
+	private Tab ArchiveInOut;
+
+	/**
+	 * Наш TabPane
+	 */
+	@FXML
+	private TabPane RootTab;
+
+	/**
+	 * Кнопка обработки только, если их входящих папок
+	 */
+	@FXML
+	private Button ModeINbox;
+
+	/**
+	 * Поиск их базы
+	 */
+	@FXML
+	private Button RefreshDB;
+
+	/**
+	 * Контейнер входящих сообщении
+	 */
+	@FXML
+	private StackPane StPn;
+
+	/**
+	 * Индикатор завершения процесса
+	 */
+	@FXML
+	private ProgressIndicator PrgInd;
+
+	/**
+	 * Тип вкладки
+	 */
+	@FXML
+	private Tab INOUT;
+	/**
+	 * Не используется, тип папки
+	 */
+	@FXML
+	private ComboBox<String> DIRNAME;
+
+	/**
+	 * Тип архива
+	 */
+	@FXML
+	private ComboBox<String> ArchType;
 
 	/**
 	 * Выделена ли строка
@@ -90,7 +169,7 @@ public class SWC {
 	 * Сумма документа, если MT103...
 	 */
 	@FXML
-	private TableColumn<SWIFT_FILES, Double> SUMM;
+	private TableColumn<SWIFT_FILES, String> SUMM;
 
 	/**
 	 * Название операции
@@ -122,11 +201,66 @@ public class SWC {
 	@FXML
 	private TableColumn<SWIFT_FILES, String> FILE_NAME;
 
+	/*---------------------------*/
 	/**
-	 * Таблица
+	 * Валюта
+	 */
+	@FXML
+	private TableColumn<SWIFT_FILES, String> CURdb;
+
+	/**
+	 * Сумма документа, если MT103...
+	 */
+	@FXML
+	private TableColumn<SWIFT_FILES, String> SUMMdb;
+
+	/**
+	 * Название операции
+	 */
+	@FXML
+	private TableColumn<SWIFT_FILES, String> MTNAMEdb;
+
+	/**
+	 * MT.., из базы
+	 */
+	@FXML
+	private TableColumn<SWIFT_FILES, String> MTTYPEdb;
+
+	/**
+	 * Дата создания файла
+	 */
+	@FXML
+	private TableColumn<SWIFT_FILES, LocalDateTime> DT_CHdb;
+
+	/**
+	 * Дата документа
+	 */
+	@FXML
+	private TableColumn<SWIFT_FILES, LocalDate> DOCDATEdb;
+
+	/**
+	 * Название файла
+	 */
+	@FXML
+	private TableColumn<SWIFT_FILES, String> FILE_NAMEdb;
+
+	/**
+	 * IN-OUT база
+	 */
+	@FXML
+	private TableColumn<SWIFT_FILES, String> Typedb;
+
+	/**
+	 * Таблица Вх-Исх каталогов
 	 */
 	@FXML
 	private TableView<SWIFT_FILES> STMT;
+
+	/**
+	 * Таблица Архива
+	 */
+	@FXML
+	private TableView<SWIFT_FILES> Achive;
 
 	/**
 	 * Возврат суммы документа , если MT103...пока
@@ -134,21 +268,22 @@ public class SWC {
 	 * @param path
 	 * @return
 	 */
-	Double getMtAmount(String path) {
-		Double ret = null;
+	String getMtAmount(String path) {
+		String ret = null;
 		try {
 			InputStream inputstream = new FileInputStream(path);
 			AbstractMT msg = AbstractMT.parse(inputstream);
 			if (msg.isType(103)) {
 				MT103 mt = (MT103) msg;
 				Field32A f = mt.getField32A();
-				ret = f.getAmountAsNumber().doubleValue();
+				ret = f.getAmount();
 			}
+			inputstream.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			Msg.Message(e.getMessage());
 		}
-		return (ret == null) ? 0 : ret;
+		return ret;
 	}
 
 	/**
@@ -167,6 +302,7 @@ public class SWC {
 				Field32A f = mt.getField32A();
 				ret = f.getCurrency();
 			}
+			inputstream.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			Msg.Message(e.getMessage());
@@ -191,6 +327,7 @@ public class SWC {
 				Field32A f = mt.getField32A();
 				ret = sdf.format(f.getDateAsCalendar().getTime());
 			}
+			inputstream.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			Msg.Message(e.getMessage());
@@ -210,6 +347,7 @@ public class SWC {
 			InputStream inputstream = new FileInputStream(path);
 			AbstractMT msg = AbstractMT.parse(inputstream);
 			ret = msg.getMessageType();
+			inputstream.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			Msg.Message(e.getMessage());
@@ -217,18 +355,18 @@ public class SWC {
 		return ret;
 	}
 
-	String InsertDB(LocalDate DOCDATE_, Double SUMM_, String CUR_, String MTNAME_, String MTTYPE_, LocalDateTime DT_CH_,
+	String InsertDB(LocalDate DOCDATE_, String SUMM_, String CUR_, String MTNAME_, String MTTYPE_, LocalDateTime DT_CH_,
 			String FILENAME_) {
 		String ret = "error";
 		try {
 			CallableStatement clstmt = conn.prepareCall("{ ? = call z_sb_mmbank.VTB_SWIFT(?,?,?,?,?,?,?,?,?,?,?) }");
 			clstmt.registerOutParameter(1, Types.VARCHAR);
 			clstmt.setDate(2, (DOCDATE_ != null) ? java.sql.Date.valueOf(DOCDATE_) : null);
-			if (SUMM_ != null) {
-				clstmt.setDouble(3, SUMM_);
-			} else {
-				clstmt.setNull(3, java.sql.Types.DOUBLE);
-			}
+			// if (SUMM_ != null) {
+			clstmt.setString(3, SUMM_);
+			// } else {
+			// clstmt.setNull(3, java.sql.Types.DOUBLE);
+			// }
 			clstmt.setString(4, "IN");
 			clstmt.setString(5, CUR_);
 			clstmt.setString(6, MTNAME_);
@@ -252,18 +390,89 @@ public class SWC {
 			clstmt.registerOutParameter(11, java.sql.Types.VARCHAR);
 			clstmt.registerOutParameter(12, java.sql.Types.INTEGER);
 			clstmt.execute();
-
 			if (!clstmt.getString(1).equals("ok")) {
 				ret = clstmt.getString(11);
-				conn.rollback();
+				// conn.rollback();
 			} else {
 				ret = "ok";
-				conn.commit();
+				// conn.commit();
 			}
-		} catch (SQLException e) {
+			clstmt.close();
+			is.close();
+		} catch (SQLException | IOException e) {
 			e.printStackTrace();
 		}
 		return ret;
+	}
+
+	/**
+	 * Перенести файл в локальную директорию из базы, по выделенным строкам
+	 * 
+	 * @param event
+	 */
+	@FXML
+	void LoadFileDB(ActionEvent event) {
+		try {
+			if (Achive.getSelectionModel().getSelectedItem() == null) {
+				Msg.Message("Выберите строку");
+			} else {
+				SWIFT_FILES st = Achive.getSelectionModel().getSelectedItem();
+				String mes = "";
+				if (st.getVECTOR().equals("IN")) {
+					mes = "Скопировать в локальную директорию?";
+				} else if (st.getVECTOR().equals("OUT")) {
+					mes = "Переотправить в ВТБ?";
+				}
+				Stage stage = (Stage) Achive.getScene().getWindow();
+				Label alert = new Label(mes);
+				alert.setLayoutX(75.0);
+				alert.setLayoutY(11.0);
+				alert.setPrefHeight(17.0);
+
+				Button no = new Button();
+				no.setText("Нет");
+				no.setLayoutX(111.0);
+				no.setLayoutY(56.0);
+				no.setPrefWidth(72.0);
+				no.setPrefHeight(21.0);
+
+				Button yes = new Button();
+				yes.setText("Да");
+				yes.setLayoutX(14.0);
+				yes.setLayoutY(56.0);
+				yes.setPrefWidth(72.0);
+				yes.setPrefHeight(21.0);
+
+				AnchorPane yn = new AnchorPane();
+				yn.getChildren().add(alert);
+				yn.getChildren().add(no);
+				yn.getChildren().add(yes);
+				Scene ynScene = new Scene(yn, 250, 100);
+				Stage newWindow_yn = new Stage();
+				no.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent event) {
+						newWindow_yn.close();
+					}
+				});
+				yes.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent event) {
+						if (st.getVECTOR().equals("IN")) {
+						} else if (st.getVECTOR().equals("OUT")) {
+						}
+						newWindow_yn.close();
+					}
+				});
+				newWindow_yn.setTitle("Внимание");
+				newWindow_yn.setScene(ynScene);
+				newWindow_yn.initModality(Modality.WINDOW_MODAL);
+				newWindow_yn.initOwner(stage);
+				newWindow_yn.setResizable(false);
+				newWindow_yn.getIcons().add(new Image("/icon.png"));
+				newWindow_yn.show();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -275,71 +484,126 @@ public class SWC {
 	@FXML
 	void LoadFile(ActionEvent event) {
 		try {
-			LocalDate docdt = null;
-			LocalDateTime crdate = null;
-			Double amount = null;
-			String cur = null;
-			String docname = null;
-			String doctype = null;
-			String filename = null;
-			String ret = null;
-			// Цикл по ячейкам
-			for (int i = 0; i < STMT.getItems().size(); i++) {
-				// Цикл по столбцам
-				for (int j = 0; j < STMT.getColumns().size(); j++) {
-					// Если Не пусто
-					if (STMT.getColumns().get(j).getCellData(i) != null) {
-						// Если выделена строка
-						if (j == 0) {
-							if ((Boolean) STMT.getColumns().get(j).getCellData(i) == true) {
 
-								// инициализация переменных
-								docdt = null;
-								crdate = null;
-								amount = null;
-								cur = null;
-								docname = null;
-								doctype = null;
-								filename = null;
-								ret = null;
-								// проверка на наличие данных
-								if (STMT.getColumns().get(3).getCellData(i) != null) {
-									docdt = (LocalDate) STMT.getColumns().get(3).getCellData(i);
-								}
-								if (STMT.getColumns().get(5).getCellData(i) != null) {
-									amount = (Double) STMT.getColumns().get(5).getCellData(i);
-								}
-								if (STMT.getColumns().get(7).getCellData(i) != null) {
-									crdate = (LocalDateTime) STMT.getColumns().get(7).getCellData(i);
-								}
-								if (STMT.getColumns().get(4).getCellData(i) != null) {
-									cur = (String) STMT.getColumns().get(4).getCellData(i);
-								}
-								if (STMT.getColumns().get(2).getCellData(i) != null) {
-									docname = (String) STMT.getColumns().get(2).getCellData(i);
-								}
-								if (STMT.getColumns().get(1).getCellData(i) != null) {
-									doctype = (String) STMT.getColumns().get(1).getCellData(i);
-								}
-								if (STMT.getColumns().get(6).getCellData(i) != null) {
-									filename = (String) STMT.getColumns().get(6).getCellData(i);
-								}
-								ret = InsertDB(docdt, amount, cur, docname, doctype, crdate, filename);
-								if (ret.equals("ok")) {
-									Msg.Message(
-											"Файл " + filename + " перенесен в локальную директорию и архивирован!");
-								} else {
-									Msg.Message(ret);
+			StPn.setDisable(true);
+			PrgInd.setVisible(true);
+			Task<Object> task = new Task<Object>() {
+				@Override
+				public Object call() throws Exception {
+
+					LocalDate docdt = null;
+					LocalDateTime crdate = null;
+					String amount = null;
+					String cur = null;
+					String docname = null;
+					String doctype = null;
+					String filename = null;
+					String ret = null;
+					// Цикл по ячейкам
+					for (int i = 0; i < STMT.getItems().size(); i++) {
+						// Цикл по столбцам
+						for (int j = 0; j < STMT.getColumns().size(); j++) {
+							// Если Не пусто
+							if (STMT.getColumns().get(j).getCellData(i) != null) {
+								// Если выделена строка
+								if (j == 0) {
+									if ((Boolean) STMT.getColumns().get(j).getCellData(i) == true) {
+										// инициализация переменных
+										docdt = null;
+										crdate = null;
+										amount = null;
+										cur = null;
+										docname = null;
+										doctype = null;
+										filename = null;
+										ret = null;
+										// проверка на наличие данных
+										if (STMT.getColumns().get(3).getCellData(i) != null) {
+											docdt = (LocalDate) STMT.getColumns().get(3).getCellData(i);
+										}
+										if (STMT.getColumns().get(5).getCellData(i) != null) {
+											amount = (String) STMT.getColumns().get(5).getCellData(i);
+										}
+										if (STMT.getColumns().get(7).getCellData(i) != null) {
+											crdate = (LocalDateTime) STMT.getColumns().get(7).getCellData(i);
+										}
+										if (STMT.getColumns().get(4).getCellData(i) != null) {
+											cur = (String) STMT.getColumns().get(4).getCellData(i);
+										}
+										if (STMT.getColumns().get(2).getCellData(i) != null) {
+											docname = (String) STMT.getColumns().get(2).getCellData(i);
+										}
+										if (STMT.getColumns().get(1).getCellData(i) != null) {
+											doctype = (String) STMT.getColumns().get(1).getCellData(i);
+										}
+										if (STMT.getColumns().get(6).getCellData(i) != null) {
+											filename = (String) STMT.getColumns().get(6).getCellData(i);
+										}
+										ret = InsertDB(docdt, amount, cur, docname, doctype, crdate, filename);
+										if (ret.equals("ok")) {
+											/*
+											 * Msg.Message( "Файл " + filename +
+											 * " перенесен в локальную директорию и архивирован!");
+											 */
+											File destinationFolder = new File(System.getenv("SWIFT_IN") + "/"
+													+ STMT.getColumns().get(6).getCellData(i));
+											File sourceFolder = new File(System.getenv("SWIFT_MSG") + "/"
+													+ STMT.getColumns().get(6).getCellData(i));
+											try {
+												moveFileWithOverwrite(sourceFolder, destinationFolder);
+												InitTable();
+												conn.commit();
+											} catch (IOException e) {
+												conn.rollback();
+												e.printStackTrace();
+												Msg.Message(e.getMessage());
+											}
+										} else {
+											System.out.println(ret);
+											Msg.Message(ret);
+										}
+									}
 								}
 							}
 						}
 					}
+					return null;
 				}
-			}
+			};
+			task.setOnFailed(e -> {
+				Msg.Message(task.getException().getMessage());
+				task.getException().printStackTrace();
+			});
+			task.setOnSucceeded(e -> {
+				try {
+					StPn.setDisable(false);
+					PrgInd.setVisible(false);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+					Msg.Message(e1.getMessage());
+					Main.logger.error(e1.getMessage() + "~" + Thread.currentThread().getName());
+				}
+			});
+			exec.execute(task);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			Msg.Message(e.getMessage());
 		}
+	}
+
+	/**
+	 * Deletes the destination file if it exists then calls org.apache.commons
+	 * moveFile.
+	 * 
+	 * @param srcFile
+	 * @param destFile
+	 */
+	public void moveFileWithOverwrite(File srcFile, File destFile) throws IOException {
+		if (destFile.exists()) {
+			org.apache.commons.io.FileUtils.deleteQuietly(destFile);
+		}
+		org.apache.commons.io.FileUtils.moveFile(srcFile, destFile);
 	}
 
 	/**
@@ -383,7 +647,8 @@ public class SWC {
 					if (empty) {
 						setText(null);
 					} else {
-						setText(format.format(item));
+						if (item != null)
+							setText(format.format(item));
 					}
 				}
 			};
@@ -445,15 +710,210 @@ public class SWC {
 	}
 
 	/**
+	 * Изменить название вкладки исходя из типа папки
+	 * 
+	 * @param event
+	 */
+	@FXML
+	private void ChTabName(ActionEvent event) {
+		try {
+			if (DIRNAME.getValue().equals("MSG") | DIRNAME.getValue().equals("ACK") | DIRNAME.getValue().equals("KVT")
+					| DIRNAME.getValue().equals("OTHER")) {
+				INOUT.setText("Входящие");
+				FolserName = "SWIFT_" + DIRNAME.getValue();
+				ModeINbox.setDisable(false);
+			} else if (DIRNAME.getValue().equals("OUT")) {
+				INOUT.setText("Исходящие");
+				FolserName = "SWIFT_" + DIRNAME.getValue();
+				ModeINbox.setDisable(true);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			Msg.Message(e.getMessage());
+		}
+	}
+
+	/**
+	 * Stage для закрытия
+	 */
+	@SuppressWarnings("unused")
+	private Stage STFCLS;
+
+	/**
+	 * Инициализация Stage для закрытия
+	 */
+	public void SetStageForClose(Stage mnst) {
+		this.STFCLS = mnst;
+	}
+
+	/**
+	 * Закрытие формы
+	 */
+	void onclose() {
+		Stage stage = (Stage) StPn.getScene().getWindow();
+		stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+	}
+
+	/**
+	 * Запуск процесса
+	 */
+	void RunProcess(String type) {
+		Timer time = new Timer(); // Instantiate Timer Object
+		st = new ScheduledTask(); // Instantiate SheduledTask class
+		st.setSWC(this, type);
+		time.schedule(st, 0, 1000); // Create task repeating every 1 sec
+	}
+
+	/**
 	 * Инициализация
 	 */
 	@FXML
 	private void initialize() {
 		try {
+
+			// System.out.println(System.getenv("SWIFT_MSG"));
+			// System.out.println(System.getenv("SWIFT_ACK"));
+			// System.out.println(System.getenv("SWIFT_KVT"));
+			// System.out.println(System.getenv("SWIFT_OTHER"));
+			// System.out.println(System.getenv("SWIFT_OUT"));
+			// System.out.println(System.getenv("SWIFT_IN"));
+			// System.out.println(System.getenv("SWIFT_OUTLOCAL"));
+
+			// Перемещение по Tab-ам
+			{
+				RootTab.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
+					@Override
+					public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
+
+						if (t1.getId().equals("INOUT")) {
+							// System.out.println("Start task!!!!! " + t1.getId());
+							st.cancel();
+							RunProcess("INOUT");
+						} else {
+							// System.out.println("Closed task!!!!! " + t1.getId());
+							st.cancel();
+						}
+					}
+				});
+			}
+			DIRNAME.getItems().addAll("MSG", "OUT", "ACK", "KVT", "OTHER");
+			DIRNAME.getSelectionModel().select(0);
+			FolserName = "SWIFT_MSG";
+			INOUT.setText("Входящие");
+			{
+				InputStream svgFile = getClass().getResourceAsStream("/search_swift.svg");
+				SvgLoader loader = new SvgLoader();
+				Group svgImage = loader.loadSvg(svgFile);
+				svgImage.setScaleX(0.05);
+				svgImage.setScaleY(0.05);
+				Group graphic = new Group(svgImage);
+				RefreshDB.setGraphic(graphic);
+			}
+			{
+				InputStream svgFile = getClass().getResourceAsStream("/file.svg");
+				SvgLoader loader = new SvgLoader();
+				Group svgImage = loader.loadSvg(svgFile);
+				svgImage.setScaleX(0.4);
+				svgImage.setScaleY(0.4);
+				Group graphic = new Group(svgImage);
+				ModeINbox.setGraphic(graphic);
+			}
+			exec = Executors.newCachedThreadPool((runnable) -> {
+				Thread t = new Thread(runnable);
+				t.setDaemon(true);
+				return t;
+			});
+
 			STMT.setEditable(true);
+			Achive.setEditable(true);
+
 			dbConnect();
-			// TMREFR.getItems().addAll("1", "5", "10");
-			// TMREFR.getSelectionModel().select(0);
+
+			// При выборе строки, что бы не исчезало после обновления
+			STMT.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+				if (newSelection != null) {
+					selrow = STMT.getSelectionModel().getSelectedIndex();
+				}
+			});
+			// Тип архива
+			ArchType.getItems().addAll("IN", "OUT");
+			// *****************************Архив IN-OUT********************
+			DT_CHdb.setCellValueFactory(cellData -> cellData.getValue().DT_CHProperty());
+			DOCDATEdb.setCellValueFactory(cellData -> cellData.getValue().DOCDATEProperty());
+			FILE_NAMEdb.setCellValueFactory(cellData -> cellData.getValue().FILENAMEProperty());
+			MTTYPEdb.setCellValueFactory(cellData -> cellData.getValue().MTTYPEProperty());
+			MTNAMEdb.setCellValueFactory(cellData -> cellData.getValue().MTNAMEProperty());
+			CURdb.setCellValueFactory(cellData -> cellData.getValue().CURProperty());
+			SUMMdb.setCellValueFactory(cellData -> cellData.getValue().SUMMProperty());
+			Typedb.setCellValueFactory(cellData -> cellData.getValue().VECTORProperty());
+			// Редактирование
+			DOCDATEdb.setCellFactory(
+					TextFieldTableCell.<SWIFT_FILES, LocalDate>forTableColumn(new LocalDateStringConverter()));
+			MTTYPEdb.setCellFactory(TextFieldTableCell.forTableColumn());
+			MTNAMEdb.setCellFactory(TextFieldTableCell.forTableColumn());
+			CURdb.setCellFactory(TextFieldTableCell.forTableColumn());
+			SUMMdb.setCellFactory(TextFieldTableCell.forTableColumn());
+			FILE_NAMEdb.setCellFactory(TextFieldTableCell.forTableColumn());
+			DT_CHdb.setCellFactory(
+					TextFieldTableCell.<SWIFT_FILES, LocalDateTime>forTableColumn(new LocalDateTimeStringConverter()));
+
+			DOCDATEdb.setOnEditCommit(new EventHandler<CellEditEvent<SWIFT_FILES, LocalDate>>() {
+				@Override
+				public void handle(CellEditEvent<SWIFT_FILES, LocalDate> t) {
+					((SWIFT_FILES) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+							.setDOCDATE(t.getNewValue());
+				}
+			});
+
+			SUMMdb.setOnEditCommit(new EventHandler<CellEditEvent<SWIFT_FILES, String>>() {
+				@Override
+				public void handle(CellEditEvent<SWIFT_FILES, String> t) {
+					((SWIFT_FILES) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+							.setSUMM(t.getNewValue());
+				}
+			});
+
+			MTTYPEdb.setOnEditCommit(new EventHandler<CellEditEvent<SWIFT_FILES, String>>() {
+				@Override
+				public void handle(CellEditEvent<SWIFT_FILES, String> t) {
+					((SWIFT_FILES) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+							.setMTTYPE(t.getNewValue());
+				}
+			});
+			MTNAMEdb.setOnEditCommit(new EventHandler<CellEditEvent<SWIFT_FILES, String>>() {
+				@Override
+				public void handle(CellEditEvent<SWIFT_FILES, String> t) {
+					((SWIFT_FILES) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+							.setMTNAME(t.getNewValue());
+				}
+			});
+			CURdb.setOnEditCommit(new EventHandler<CellEditEvent<SWIFT_FILES, String>>() {
+				@Override
+				public void handle(CellEditEvent<SWIFT_FILES, String> t) {
+					((SWIFT_FILES) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+							.setCUR(t.getNewValue());
+				}
+			});
+			DT_CHdb.setOnEditCommit(new EventHandler<CellEditEvent<SWIFT_FILES, LocalDateTime>>() {
+				@Override
+				public void handle(CellEditEvent<SWIFT_FILES, LocalDateTime> t) {
+					((SWIFT_FILES) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+							.setDT_CH(t.getNewValue());
+				}
+			});
+
+			FILE_NAMEdb.setOnEditCommit(new EventHandler<CellEditEvent<SWIFT_FILES, String>>() {
+				@Override
+				public void handle(CellEditEvent<SWIFT_FILES, String> t) {
+					((SWIFT_FILES) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+							.setFILENAME(t.getNewValue());
+				}
+			});
+
+			DateFormatDTTM(DT_CHdb);
+			DateFormatDT(DOCDATEdb);
+			// ________________________________________________________
+			// *****************************Транзит********************
 			CHK.setCellValueFactory(cellData -> cellData.getValue().CHKProperty());
 			DT_CH.setCellValueFactory(cellData -> cellData.getValue().DT_CHProperty());
 			DOCDATE.setCellValueFactory(cellData -> cellData.getValue().DOCDATEProperty());
@@ -461,14 +921,14 @@ public class SWC {
 			MTTYPE.setCellValueFactory(cellData -> cellData.getValue().MTTYPEProperty());
 			MTNAME.setCellValueFactory(cellData -> cellData.getValue().MTNAMEProperty());
 			CUR.setCellValueFactory(cellData -> cellData.getValue().CURProperty());
-			SUMM.setCellValueFactory(cellData -> cellData.getValue().SUMMProperty().asObject());
+			SUMM.setCellValueFactory(cellData -> cellData.getValue().SUMMProperty());
 			// Редактирование
 			DOCDATE.setCellFactory(
 					TextFieldTableCell.<SWIFT_FILES, LocalDate>forTableColumn(new LocalDateStringConverter()));
 			MTTYPE.setCellFactory(TextFieldTableCell.forTableColumn());
 			MTNAME.setCellFactory(TextFieldTableCell.forTableColumn());
 			CUR.setCellFactory(TextFieldTableCell.forTableColumn());
-			SUMM.setCellFactory(TextFieldTableCell.<SWIFT_FILES, Double>forTableColumn(new DoubleStringConverter()));
+			SUMM.setCellFactory(TextFieldTableCell.forTableColumn());
 			FILE_NAME.setCellFactory(TextFieldTableCell.forTableColumn());
 			DT_CH.setCellFactory(
 					TextFieldTableCell.<SWIFT_FILES, LocalDateTime>forTableColumn(new LocalDateTimeStringConverter()));
@@ -481,9 +941,9 @@ public class SWC {
 				}
 			});
 
-			SUMM.setOnEditCommit(new EventHandler<CellEditEvent<SWIFT_FILES, Double>>() {
+			SUMM.setOnEditCommit(new EventHandler<CellEditEvent<SWIFT_FILES, String>>() {
 				@Override
-				public void handle(CellEditEvent<SWIFT_FILES, Double> t) {
+				public void handle(CellEditEvent<SWIFT_FILES, String> t) {
 					((SWIFT_FILES) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 							.setSUMM(t.getNewValue());
 				}
@@ -527,7 +987,8 @@ public class SWC {
 			});
 
 			DateFormatDTTM(DT_CH);
-
+			DateFormatDT(DOCDATE);
+			// ________________________________________________________
 			// ==== CHK? (CHECH BOX) ===
 			CHK.setCellValueFactory(new Callback<CellDataFeatures<SWIFT_FILES, Boolean>, ObservableValue<Boolean>>() {
 
@@ -569,13 +1030,9 @@ public class SWC {
 			InitTable();
 
 			/**
-			 * Auto Refresh
+			 * Auto Refresh Запуск задачи через одну секунду
 			 */
-			Timer time = new Timer(); // Instantiate Timer Object
-			st = new ScheduledTask(); // Instantiate SheduledTask class
-			st.setSWC(this);
-			time.schedule(st, 0, 1000); // Create task repeating every 1 sec
-			// st.cancel();
+			RunProcess("INOUT");
 		} catch (Exception e) {
 			e.printStackTrace();
 			Msg.Message(e.getMessage());
@@ -599,6 +1056,87 @@ public class SWC {
 		} catch (Exception e) {
 			e.printStackTrace();
 			Msg.Message(e.getMessage());
+		}
+	}
+
+	/**
+	 * Обновить Из базы
+	 * 
+	 * @param event
+	 */
+	@FXML
+	void RefreshDB(ActionEvent event) {
+		try {
+			Main.logger = Logger.getLogger(getClass());
+
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+			String dt1_ = "";
+			String dt2_ = "";
+			String in_out = "";
+
+			if (dt1.getValue() != null) {
+				dt1_ = "and trunc(CR_DT) >= to_date('" + dt1.getValue().format(formatter) + "','dd.mm.yyyy') \r\n";
+			}
+
+			if (dt2.getValue() != null) {
+				dt2_ = "and trunc(CR_DT) <= to_date('" + dt2.getValue().format(formatter) + "','dd.mm.yyyy') \r\n";
+			}
+
+			if (ArchType.getValue() != null) {
+				in_out = "and upper(VECTOR) = '" + ArchType.getValue() + "' \r\n";
+			}
+
+			String selectStmt = "select id,\r\n" + "       filename,\r\n" + "       dt_ch,\r\n" + "       swfile,\r\n"
+					+ "       oper,\r\n" + "       cr_dt,\r\n" + "       mttype,\r\n" + "       mtname,\r\n"
+					+ "       cur,\r\n" + "       vector,\r\n" + "       nvl(summ,'') summ,\r\n"
+					+ "       docdate from SWIFT_FILES where 1=1\r\n" + dt1_ + dt2_ + in_out + "order by CR_DT desc";
+			PreparedStatement prepStmt = conn.prepareStatement(selectStmt);
+			ResultSet rs = prepStmt.executeQuery();
+			ObservableList<SWIFT_FILES> cus_list = FXCollections.observableArrayList();
+			DateTimeFormatter dtformatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+			while (rs.next()) {
+				SWIFT_FILES list = new SWIFT_FILES();
+
+				list.setDOCDATE((rs.getDate("DOCDATE") != null)
+						? LocalDate.parse(new SimpleDateFormat("dd.MM.yyyy").format(rs.getDate("DOCDATE")), formatter)
+						: null);
+				list.setSUMM(String.valueOf(rs.getInt("SUMM")));
+				list.setVECTOR(rs.getString("VECTOR"));
+				list.setCUR(rs.getString("CUR"));
+				list.setMTNAME(rs.getString("MTNAME"));
+				list.setMTTYPE(rs.getString("MTTYPE"));
+				list.setCR_DT((rs.getDate("CR_DT") != null) ? LocalDateTime.parse(
+						new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("CR_DT")), dtformatter) : null);
+				list.setOPER(rs.getString("OPER"));
+				list.setDT_CH((rs.getDate("DT_CH") != null) ? LocalDateTime.parse(
+						new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("DT_CH")), dtformatter) : null);
+				list.setFILENAME(rs.getString("FILENAME"));
+				list.setID(rs.getInt("ID"));
+				cus_list.add(list);
+			}
+			prepStmt.close();
+			rs.close();
+			Achive.setItems(cus_list);
+
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					TableFilter<SWIFT_FILES> tableFilter = TableFilter.forTableView(Achive).apply();
+					tableFilter.setSearchStrategy((input, target) -> {
+						try {
+							return target.toLowerCase().contains(input.toLowerCase());
+						} catch (Exception e) {
+							return false;
+						}
+					});
+				}
+			});
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			Msg.Message(e.getMessage());
+			Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
 		}
 	}
 
@@ -651,15 +1189,31 @@ public class SWC {
 	}
 
 	/**
+	 * Название переменной среды для каталогов
+	 */
+	String FolserName;
+	/**
+	 * Выделенная строка
+	 */
+	Integer selrow;
+
+	/**
 	 * Инициализация данных
 	 */
 	void InitTable() {
 		try {
+
+			/*
+			 * try { if (StPn.getScene().getWindow() != null) { // Проверка на существование
+			 * переменных среды if (System.getenv("SWIFT_MSG1") == null) {
+			 * Msg.Message("Переменная среды \"SWIFT_MSG1\" не существует"); onclose(); } }
+			 * } catch (Exception e) { e.printStackTrace(); }
+			 */
 			SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 			DateTimeFormatter formatterwt = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-			// MSG
-			File dir = new File(System.getenv("SWIFT_MSG"));
+			// MSG or another folder
+			File dir = new File(System.getenv(FolserName));
 			File[] directoryListing = dir.listFiles();
 			ObservableList<SWIFT_FILES> dlist = FXCollections.observableArrayList();
 			Boolean ifchk = false;
@@ -685,6 +1239,7 @@ public class SWC {
 					/**
 					 * Перебор отмеченных
 					 */
+
 					for (int i = 0; i < STMT.getItems().size(); i++) {
 						for (int j = 0; j < STMT.getColumns().size(); j++) {
 							if (STMT.getColumns().get(j).getCellData(i) != null) {
@@ -696,23 +1251,33 @@ public class SWC {
 					}
 					list.setCHK(ifchk);
 					dlist.add(list);
+
 				}
 			}
-			STMT.setItems(dlist);
-			autoResizeColumns(STMT);
-			TableFilter<SWIFT_FILES> tableFilter = TableFilter.forTableView(STMT).apply();
-			tableFilter.setSearchStrategy((input, target) -> {
+			Platform.runLater(() -> {
 				try {
-					return target.toLowerCase().contains(input.toLowerCase());
+					STMT.setItems(dlist);
+					if (selrow != null) {
+						STMT.getSelectionModel().select(selrow);
+						STMT.getFocusModel().focus(selrow);
+					}
+					/*
+					 * autoResizeColumns(STMT); TableFilter<SWIFT_FILES> tableFilter =
+					 * TableFilter.forTableView(STMT).apply(); tableFilter.setSearchStrategy((input,
+					 * target) -> { try { return target.toLowerCase().contains(input.toLowerCase());
+					 * } catch (Exception e) { return false; } });
+					 */
+					// clear
+					// dlist.clear();
 				} catch (Exception e) {
-					return false;
+					e.printStackTrace();
+					Msg.Message(e.getMessage());
 				}
 			});
 		} catch (Exception e) {
 			e.printStackTrace();
 			Msg.Message(e.getMessage());
 		}
-
 	}
 
 	/**
@@ -786,4 +1351,91 @@ public class SWC {
 		}
 	}
 
+	private Executor exec;
+
+	/**
+	 * Печать из файла
+	 * 
+	 * @param event
+	 */
+	@FXML
+	private void Open(ActionEvent event) {
+		try {
+			Main.logger = Logger.getLogger(getClass());
+			if (STMT.getSelectionModel().getSelectedItem() != null) {
+				StPn.setDisable(true);
+				PrgInd.setVisible(true);
+				Task<Object> task = new Task<Object>() {
+					@Override
+					public Object call() throws Exception {
+
+						SWIFT_FILES selrow = STMT.getSelectionModel().getSelectedItem();
+						new SwiftPrint().showReport(System.getenv("SWIFT_MSG") + "/" + selrow.getFILENAME());
+
+						return null;
+					}
+				};
+				task.setOnFailed(e -> Msg.Message(task.getException().getMessage()));
+				task.setOnSucceeded(e -> {
+					try {
+						StPn.setDisable(false);
+						PrgInd.setVisible(false);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+						Msg.Message(e1.getMessage());
+						Main.logger.error(e1.getMessage() + "~" + Thread.currentThread().getName());
+					}
+				});
+				exec.execute(task);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			Msg.Message(e.getMessage());
+			Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+		}
+
+	}
+
+	/**
+	 * Печать из базы
+	 * 
+	 * @param event
+	 */
+	@FXML
+	private void OpenDB(ActionEvent event) {
+		try {
+			Main.logger = Logger.getLogger(getClass());
+			if (STMT.getSelectionModel().getSelectedItem() != null) {
+				StPn.setDisable(true);
+				PrgInd.setVisible(true);
+				Task<Object> task = new Task<Object>() {
+					@Override
+					public Object call() throws Exception {
+
+						SWIFT_FILES selrow = STMT.getSelectionModel().getSelectedItem();
+						new SwiftPrint().showReport(System.getenv("SWIFT_MSG") + "/" + selrow.getFILENAME());
+
+						return null;
+					}
+				};
+				task.setOnFailed(e -> Msg.Message(task.getException().getMessage()));
+				task.setOnSucceeded(e -> {
+					try {
+						StPn.setDisable(false);
+						PrgInd.setVisible(false);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+						Msg.Message(e1.getMessage());
+						Main.logger.error(e1.getMessage() + "~" + Thread.currentThread().getName());
+					}
+				});
+				exec.execute(task);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			Msg.Message(e.getMessage());
+			Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+		}
+
+	}
 }
