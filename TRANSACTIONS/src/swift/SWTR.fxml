@@ -28,7 +28,7 @@
                         			<items>
                         				<Button fx:id="ModeINbox" mnemonicParsing="false" onAction="#LoadFile" prefHeight="30.0" prefWidth="30.0">
                                        <tooltip>
-                                          <Tooltip text="Перенести в локальную директорию для последующей загрузки">
+                                          <Tooltip text="Обработать">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
@@ -47,6 +47,7 @@
                                           </Tooltip>
                                        </tooltip>
                                     </ComboBox>
+                                    <Text fx:id="FolderN" strokeType="OUTSIDE" strokeWidth="0.0" />
                         			</items>
                                  <VBox.margin>
                                     <Insets />
@@ -66,7 +67,7 @@
                                  <contextMenu>
                                     <ContextMenu>
                                       <items>
-                                        <MenuItem mnemonicParsing="false" onAction="#OpenDB" text="Печать" />
+                                        <MenuItem mnemonicParsing="false" onAction="#Open" text="Печать" />
                                       </items>
                                     </ContextMenu>
                                  </contextMenu>
@@ -142,7 +143,7 @@
                                  <contextMenu>
                                     <ContextMenu>
                                        <items>
-                                          <MenuItem mnemonicParsing="false" onAction="#Open" text="Печать" />
+                                          <MenuItem mnemonicParsing="false" onAction="#OpenDB" text="Печать" />
                                           <MenuItem mnemonicParsing="false" onAction="#LoadFileDB" text="Повторно обработать" />
                                        </items>
                                     </ContextMenu>

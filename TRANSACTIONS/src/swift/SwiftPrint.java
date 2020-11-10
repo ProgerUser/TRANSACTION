@@ -1,6 +1,5 @@
 package swift;
 
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -11,6 +10,7 @@ import java.util.Map;
 
 import javax.swing.JFrame;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import com.google.common.base.Charsets;
@@ -35,9 +35,10 @@ public class SwiftPrint extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	public void showReport(String path) {
+	public void showReport(InputStream inputstream) {
 		try {
 			Main.logger = Logger.getLogger(getClass());
+			Main.logger.setLevel(Level.INFO);
 			InputStream input = this.getClass().getResourceAsStream("/swift/SwRep.jrxml");
 			JasperDesign design = JRXmlLoader.load(input);
 			JasperReport jasperReport = JasperCompileManager.compileReport(design);
@@ -47,7 +48,7 @@ public class SwiftPrint extends JFrame {
 			SwiftPrintModel list = null;
 
 			Locale locale = new Locale("ru", "RU");
-			InputStream inputstream = new FileInputStream(path);
+
 			String result = CharStreams.toString(new InputStreamReader(inputstream, Charsets.UTF_8));
 			SwiftMessage sm = SwiftMessage.parse(result);
 

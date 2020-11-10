@@ -1,5 +1,6 @@
 package app;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 import app.model.Connect;
@@ -42,7 +43,7 @@ public class Main extends Application {
 			Main.primaryStage = primaryStage;
 			primaryStage.getIcons().add(new Image("icon.png"));
 			Main.primaryStage.setTitle("Транзакции");
-
+			logger.setLevel(Level.INFO);
 			//System.out.println(MODULE);
 			/*
 			if (MODULE == null) {
