@@ -29,6 +29,7 @@ import java.util.Timer;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Level;
@@ -64,6 +65,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableCell;
@@ -71,6 +73,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
@@ -83,7 +87,6 @@ import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.converter.LocalDateStringConverter;
 import javafx.util.converter.LocalDateTimeStringConverter;
-import sbalert.Msg;
 
 /**
  * SWIFT
@@ -94,6 +97,19 @@ import sbalert.Msg;
  *
  */
 public class SWC {
+	/* __________Кнопки_для_быстрого_перемещения__________ */
+	@FXML
+	private RadioButton Kvt;
+	@FXML
+	private RadioButton OutLocal;
+	@FXML
+	private RadioButton InLocal;
+	@FXML
+	private RadioButton Msg;
+	@FXML
+	private RadioButton Ack;
+	@FXML
+	private RadioButton Other;
 
 	/**
 	 * Расшифровка типа каталога
@@ -368,7 +384,7 @@ public class SWC {
 	}
 
 	String InsertDB(LocalDate DOCDATE_, String SUMM_, String CUR_, String MTNAME_, String MTTYPE_, LocalDateTime DT_CH_,
-			String FILENAME_) {
+			String FILENAME_, String VECTOR) {
 		String ret = "error";
 		try {
 			CallableStatement clstmt = conn.prepareCall("{ ? = call z_sb_mmbank.VTB_SWIFT(?,?,?,?,?,?,?,?,?,?,?) }");
@@ -379,13 +395,13 @@ public class SWC {
 			// } else {
 			// clstmt.setNull(3, java.sql.Types.DOUBLE);
 			// }
-			clstmt.setString(4, "IN");
+			clstmt.setString(4, VECTOR);
 			clstmt.setString(5, CUR_);
 			clstmt.setString(6, MTNAME_);
 			clstmt.setString(7, MTTYPE_);
 
 			byte[] bArray = null;
-			Path path = Paths.get(System.getenv("SWIFT_MSG") + "/" + FILENAME_);
+			Path path = Paths.get(System.getenv(FolderName) + "/" + FILENAME_);
 			try {
 				bArray = java.nio.file.Files.readAllBytes(path);
 				// reading content from byte array
@@ -438,7 +454,7 @@ public class SWC {
 				}
 				Stage stage = (Stage) Achive.getScene().getWindow();
 				Label alert = new Label(mes);
-				alert.setLayoutX(75.0);
+				alert.setLayoutX(10.0);
 				alert.setLayoutY(11.0);
 				alert.setPrefHeight(17.0);
 
@@ -460,7 +476,7 @@ public class SWC {
 				yn.getChildren().add(alert);
 				yn.getChildren().add(no);
 				yn.getChildren().add(yes);
-				Scene ynScene = new Scene(yn, 350, 100);
+				Scene ynScene = new Scene(yn, 250, 100);
 				Stage newWindow_yn = new Stage();
 				no.setOnAction(new EventHandler<ActionEvent>() {
 					public void handle(ActionEvent event) {
@@ -470,9 +486,49 @@ public class SWC {
 				yes.setOnAction(new EventHandler<ActionEvent>() {
 					public void handle(ActionEvent event) {
 						if (st.getVECTOR().equals("IN")) {
-
+							try {
+								String sel = "select * from SWIFT_FILES where ID = ?";
+								PreparedStatement prepStmt = conn.prepareStatement(sel);
+								prepStmt.setInt(1, st.getID());
+								ResultSet rs = prepStmt.executeQuery();
+								if (rs.next()) {
+									Blob blob = rs.getBlob("SWFILE");
+									int blobLength = (int) blob.length();
+									byte[] blobAsBytes = blob.getBytes(1, blobLength);
+									// release the blob and free up memory. (since JDBC 4.0)
+									blob.free();
+									FileUtils.writeByteArrayToFile(
+											new File(System.getenv("SWIFT_INLOCAL") + "/" + rs.getString("FILENAME")),
+											blobAsBytes);
+								}
+								rs.close();
+								prepStmt.close();
+							} catch (Exception e) {
+								ErrorMessage(e.getMessage());
+								SWLogger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+							}
 						} else if (st.getVECTOR().equals("OUT")) {
-
+							try {
+								String sel = "select * from SWIFT_FILES where ID = ?";
+								PreparedStatement prepStmt = conn.prepareStatement(sel);
+								prepStmt.setInt(1, st.getID());
+								ResultSet rs = prepStmt.executeQuery();
+								if (rs.next()) {
+									Blob blob = rs.getBlob("SWFILE");
+									int blobLength = (int) blob.length();
+									byte[] blobAsBytes = blob.getBytes(1, blobLength);
+									// release the blob and free up memory. (since JDBC 4.0)
+									blob.free();
+									FileUtils.writeByteArrayToFile(
+											new File(System.getenv("SWIFT_OUT") + "/" + rs.getString("FILENAME")),
+											blobAsBytes);
+								}
+								rs.close();
+								prepStmt.close();
+							} catch (Exception e) {
+								ErrorMessage(e.getMessage());
+								SWLogger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+							}
 						}
 						newWindow_yn.close();
 					}
@@ -508,7 +564,6 @@ public class SWC {
 			Task<Object> task = new Task<Object>() {
 				@Override
 				public Object call() throws Exception {
-
 					LocalDate docdt = null;
 					LocalDateTime crdate = null;
 					String amount = null;
@@ -557,28 +612,51 @@ public class SWC {
 										if (STMT.getColumns().get(6).getCellData(i) != null) {
 											filename = (String) STMT.getColumns().get(6).getCellData(i);
 										}
-										ret = InsertDB(docdt, amount, cur, docname, doctype, crdate, filename);
-										if (ret.equals("ok")) {
-											/*
-											 * ErrorMessage( "Файл " + filename +
-											 * " перенесен в локальную директорию и архивирован!");
-											 */
-											File destinationFolder = new File(System.getenv("SWIFT_IN") + "/"
-													+ STMT.getColumns().get(6).getCellData(i));
-											File sourceFolder = new File(System.getenv("SWIFT_MSG") + "/"
-													+ STMT.getColumns().get(6).getCellData(i));
-											try {
-												moveFileWithOverwrite(sourceFolder, destinationFolder);
-												InitTable();
-												conn.commit();
-											} catch (IOException e) {
-												conn.rollback();
-
-												ErrorMessage(e.getMessage());
+										// если папки входящие
+										if (FolderName.equals("SWIFT_MSG") | FolderName.equals("SWIFT_ACK")
+												| FolderName.equals("SWIFT_KVT") || FolderName.equals("SWIFT_OTHER")) {
+											ret = InsertDB(docdt, amount, cur, docname, doctype, crdate, filename,
+													"IN");
+											if (ret.equals("ok")) {
+												File destinationFolder = new File(System.getenv("SWIFT_IN") + "/"
+														+ STMT.getColumns().get(6).getCellData(i));
+												File sourceFolder = new File(System.getenv(FolderName) + "/"
+														+ STMT.getColumns().get(6).getCellData(i));
+												try {
+													moveFileWithOverwrite(sourceFolder, destinationFolder);
+													InitTable();
+													conn.commit();
+												} catch (IOException e) {
+													conn.rollback();
+													SWLogger.error(
+															e.getMessage() + "~" + Thread.currentThread().getName());
+													ErrorMessage(e.getMessage());
+												}
+											} else {
+												ErrorMessage(ret);
 											}
-										} else {
-											System.out.println(ret);
-											ErrorMessage(ret);
+											// если папка исходящая
+										} else if (FolderName.equals("SWIFT_OUTLOCAL")) {
+											ret = InsertDB(docdt, amount, cur, docname, doctype, crdate, filename,
+													"OUT");
+											if (ret.equals("ok")) {
+												File destinationFolder = new File(System.getenv("SWIFT_OUT") + "/"
+														+ STMT.getColumns().get(6).getCellData(i));
+												File sourceFolder = new File(System.getenv(FolderName) + "/"
+														+ STMT.getColumns().get(6).getCellData(i));
+												try {
+													moveFileWithOverwrite(sourceFolder, destinationFolder);
+													InitTable();
+													conn.commit();
+												} catch (IOException e) {
+													conn.rollback();
+													SWLogger.error(
+															e.getMessage() + "~" + Thread.currentThread().getName());
+													ErrorMessage(e.getMessage());
+												}
+											} else {
+												ErrorMessage(ret);
+											}
 										}
 									}
 								}
@@ -742,7 +820,7 @@ public class SWC {
 				FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
 				ModeINbox.setDisable(false);
 
-				FolderN.setText("Входящие документы ВТБ msg");
+				FolderN.setText("Входящие документы ВТБ " + System.getenv("SWIFT_MSG"));
 
 			} else if (DIRNAME.getValue().toUpperCase().equals("ACK")) {
 
@@ -750,7 +828,7 @@ public class SWC {
 				FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
 				ModeINbox.setDisable(false);
 
-				FolderN.setText("Входящие документы ВТБ");
+				FolderN.setText("Входящие документы ВТБ " + System.getenv("SWIFT_ACK"));
 
 			} else if (DIRNAME.getValue().toUpperCase().equals("KVT")) {
 
@@ -758,7 +836,7 @@ public class SWC {
 				FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
 				ModeINbox.setDisable(false);
 
-				FolderN.setText("Входящие документы ВТБ для квитанции");
+				FolderN.setText("Входящие документы ВТБ для квитанции " + System.getenv("SWIFT_KVT"));
 
 			} else if (DIRNAME.getValue().toUpperCase().equals("OTHER")) {
 
@@ -766,7 +844,7 @@ public class SWC {
 				FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
 				ModeINbox.setDisable(false);
 
-				FolderN.setText("Входящие документы ВТБ, другие...");
+				FolderN.setText("Входящие документы ВТБ, другие=" + System.getenv("SWIFT_OTHER"));
 
 			} else if (DIRNAME.getValue().toUpperCase().equals("OUT")) {
 
@@ -774,14 +852,14 @@ public class SWC {
 				FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
 				ModeINbox.setDisable(true);
 
-				FolderN.setText("Исходящие документы ВТБ");
+				FolderN.setText("Исходящие документы ВТБ " + System.getenv("SWIFT_OUT"));
 			} else if (DIRNAME.getValue().toUpperCase().equals("INLOCAL")) {
 
 				INOUT.setText("Входящие,локальный каталог");
 				FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
 				ModeINbox.setDisable(true);
 
-				FolderN.setText("Входящие,локальный каталог C:/Temp/Swift/in");
+				FolderN.setText("Входящие,локальный каталог " + System.getenv("SWIFT_INLOCAL"));
 			}
 
 			else if (DIRNAME.getValue().toUpperCase().equals("OUTLOCAL")) {
@@ -790,7 +868,7 @@ public class SWC {
 				FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
 				ModeINbox.setDisable(false);
 
-				FolderN.setText("Исходящие, локальный каталог C:/Temp/Swift/out");
+				FolderN.setText("Исходящие, локальный каталог " + System.getenv("SWIFT_OUTLOCAL"));
 			}
 
 		} catch (Exception e) {
@@ -870,6 +948,29 @@ public class SWC {
 			// System.out.println(System.getenv("SWIFT_INLOCAL"));
 			// System.out.println(System.getenv("SWIFT_OUTLOCAL"));
 
+			// ______________________RadioButtonGroup_________________
+
+			// Kvt; OutLocal; InLocal; Msg; Ack; Other
+
+			// Group
+			ToggleGroup group = new ToggleGroup();
+
+			group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+				@Override
+				public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
+					// Has selection.
+					if (group.getSelectedToggle() != null) {
+						RadioButton button = (RadioButton) group.getSelectedToggle();
+						DIRNAME.getSelectionModel().select(button.getText());
+					}
+				}
+			});
+			Kvt.setToggleGroup(group);
+			OutLocal.setToggleGroup(group);
+			InLocal.setToggleGroup(group);
+			Msg.setToggleGroup(group);
+			Ack.setToggleGroup(group);
+			Other.setToggleGroup(group);
 			// _____________________LOG______________________________
 			ConsoleAppender console = new ConsoleAppender(); // create appender
 			// configure the appender
@@ -913,7 +1014,7 @@ public class SWC {
 			DIRNAME.getSelectionModel().select(0);
 			FolderName = "SWIFT_MSG";
 			INOUT.setText("Входящие");
-			FolderN.setText("Входящая папка от ВТБ");
+			FolderN.setText("Входящие документы ВТБ " + System.getenv("SWIFT_MSG"));
 			{
 				InputStream svgFile = getClass().getResourceAsStream("/search_swift.svg");
 				SvgLoader loader = new SvgLoader();
@@ -950,7 +1051,7 @@ public class SWC {
 				}
 			});
 			// Тип архива
-			ArchType.getItems().addAll("IN", "OUT");
+			ArchType.getItems().addAll("IN", "OUT", "ВСЕ");
 			// *****************************Архив IN-OUT********************
 			DT_CHdb.setCellValueFactory(cellData -> cellData.getValue().DT_CHProperty());
 			DOCDATEdb.setCellValueFactory(cellData -> cellData.getValue().DOCDATEProperty());
@@ -1206,7 +1307,7 @@ public class SWC {
 				dt2_ = "and trunc(CR_DT) <= to_date('" + dt2.getValue().format(formatter) + "','dd.mm.yyyy') \r\n";
 			}
 
-			if (ArchType.getValue() != null) {
+			if (ArchType.getValue() != null && !ArchType.getValue().equals("ВСЕ")) {
 				in_out = "and upper(VECTOR) = '" + ArchType.getValue() + "' \r\n";
 			}
 
@@ -1324,82 +1425,76 @@ public class SWC {
 	 */
 	void InitTable() {
 		try {
+			if (System.getenv(FolderName) != null) {
+				SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+				DateTimeFormatter formatterwt = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+				// MSG or another folder
+				File dir = new File(System.getenv(FolderName));
+				File[] directoryListing = dir.listFiles();
+				ObservableList<SWIFT_FILES> dlist = FXCollections.observableArrayList();
+				Boolean ifchk = false;
+				if (directoryListing != null) {
+					for (File child : directoryListing) {
+						//если файли и если существует
+						if (child.isFile() & child.exists()) {
+							Path filePath = child.toPath();
+							/**
+							 * Атрибуты файла...
+							 */
+							BasicFileAttributes attr = java.nio.file.Files.readAttributes(filePath,
+									BasicFileAttributes.class);
+							SWIFT_FILES list = new SWIFT_FILES();
+							list.setFILENAME(child.getName());
+							list.setDT_CH(LocalDateTime.parse(format.format(new Date(attr.creationTime().toMillis())),
+									formatterwt));
+							list.setCUR(getMtCur(child.getAbsolutePath()));
+							list.setSUMM(getMtAmount(child.getAbsolutePath()));
+							list.setMTTYPE(getMT(getMtType(child.getAbsolutePath()), "TYPE"));
+							list.setMTNAME(getMT(getMtType(child.getAbsolutePath()), "NAME"));
+							list.setDOCDATE((getMtDate(child.getAbsolutePath()) != null)
+									? LocalDate.parse(getMtDate(child.getAbsolutePath()), formatter)
+									: null);
+							/**
+							 * Перебор отмеченных
+							 */
 
-			/*
-			 * try { if (StPn.getScene().getWindow() != null) { // Проверка на существование
-			 * переменных среды if (System.getenv("SWIFT_MSG1") == null) {
-			 * ErrorMessage("Переменная среды \"SWIFT_MSG1\" не существует"); onclose(); } }
-			 * } catch (Exception e) { }
-			 */
-			SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-			DateTimeFormatter formatterwt = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-			// MSG or another folder
-			File dir = new File(System.getenv(FolderName));
-			File[] directoryListing = dir.listFiles();
-			ObservableList<SWIFT_FILES> dlist = FXCollections.observableArrayList();
-			Boolean ifchk = false;
-			if (directoryListing != null) {
-				for (File child : directoryListing) {
-
-					if (child.isFile()) {
-						Path filePath = child.toPath();
-						/**
-						 * Атрибуты файла...
-						 */
-						BasicFileAttributes attr = java.nio.file.Files.readAttributes(filePath,
-								BasicFileAttributes.class);
-						SWIFT_FILES list = new SWIFT_FILES();
-						list.setFILENAME(child.getName());
-						list.setDT_CH(LocalDateTime.parse(format.format(new Date(attr.creationTime().toMillis())),
-								formatterwt));
-						list.setCUR(getMtCur(child.getAbsolutePath()));
-						list.setSUMM(getMtAmount(child.getAbsolutePath()));
-						list.setMTTYPE(getMT(getMtType(child.getAbsolutePath()), "TYPE"));
-						list.setMTNAME(getMT(getMtType(child.getAbsolutePath()), "NAME"));
-						list.setDOCDATE((getMtDate(child.getAbsolutePath()) != null)
-								? LocalDate.parse(getMtDate(child.getAbsolutePath()), formatter)
-								: null);
-						/**
-						 * Перебор отмеченных
-						 */
-
-						for (int i = 0; i < STMT.getItems().size(); i++) {
-							for (int j = 0; j < STMT.getColumns().size(); j++) {
-								if (STMT.getColumns().get(j).getCellData(i) != null) {
-									if (j == 6 & STMT.getColumns().get(j).getCellData(i).equals(child.getName())) {
-										ifchk = (Boolean) STMT.getColumns().get(0).getCellData(i);
+							for (int i = 0; i < STMT.getItems().size(); i++) {
+								for (int j = 0; j < STMT.getColumns().size(); j++) {
+									if (STMT.getColumns().get(j).getCellData(i) != null) {
+										if (j == 6 & STMT.getColumns().get(j).getCellData(i).equals(child.getName())) {
+											ifchk = (Boolean) STMT.getColumns().get(0).getCellData(i);
+										}
 									}
 								}
 							}
-						}
-						list.setCHK(ifchk);
-						dlist.add(list);
+							list.setCHK(ifchk);
+							dlist.add(list);
 
+						}
 					}
+					Platform.runLater(() -> {
+						try {
+							STMT.setItems(dlist);
+							if (selrow != null) {
+								STMT.getSelectionModel().select(selrow);
+								STMT.getFocusModel().focus(selrow);
+							}
+							/*
+							 * autoResizeColumns(STMT); TableFilter<SWIFT_FILES> tableFilter =
+							 * TableFilter.forTableView(STMT).apply(); tableFilter.setSearchStrategy((input,
+							 * target) -> { try { return target.toLowerCase().contains(input.toLowerCase());
+							 * } catch (Exception e) { return false; } });
+							 */
+							// clear
+							// dlist.clear();
+						} catch (Exception e) {
+							ErrorMessage(e.getMessage());
+							SWLogger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+						}
+					});
 				}
-				Platform.runLater(() -> {
-					try {
-						STMT.setItems(dlist);
-						if (selrow != null) {
-							STMT.getSelectionModel().select(selrow);
-							STMT.getFocusModel().focus(selrow);
-						}
-						/*
-						 * autoResizeColumns(STMT); TableFilter<SWIFT_FILES> tableFilter =
-						 * TableFilter.forTableView(STMT).apply(); tableFilter.setSearchStrategy((input,
-						 * target) -> { try { return target.toLowerCase().contains(input.toLowerCase());
-						 * } catch (Exception e) { return false; } });
-						 */
-						// clear
-						// dlist.clear();
-					} catch (Exception e) {
-						ErrorMessage(e.getMessage());
-						SWLogger.error(e.getMessage() + "~" + Thread.currentThread().getName());
-					}
-				});
 			}
-
 		} catch (Exception e) {
 			ErrorMessage(e.getMessage());
 			SWLogger.error(e.getMessage() + "~" + Thread.currentThread().getName());
@@ -1536,7 +1631,6 @@ public class SWC {
 	@FXML
 	private void OpenDB(ActionEvent event) {
 		try {
-
 			if (Achive.getSelectionModel().getSelectedItem() != null) {
 				StPn.setDisable(true);
 				PrgInd.setVisible(true);

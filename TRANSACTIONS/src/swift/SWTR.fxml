@@ -21,60 +21,6 @@
             <TabPane fx:id="RootTab" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab fx:id="INOUT" text="Вх./Исх.">
-                     <content>
-                        <VBox>
-                           <children>
-                        		<ToolBar stylesheets="/borderpane.css">
-                        			<items>
-                        				<Button fx:id="ModeINbox" mnemonicParsing="false" onAction="#LoadFile" prefHeight="30.0" prefWidth="30.0">
-                                       <tooltip>
-                                          <Tooltip text="Обработать">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Tooltip>
-                                       </tooltip>
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Button>
-                                    <ComboBox fx:id="DIRNAME" onAction="#ChTabName" prefHeight="30.0" prefWidth="108.0">
-                                       <tooltip>
-                                          <Tooltip text="Тип прослушиваемой папки">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Tooltip>
-                                       </tooltip>
-                                    </ComboBox>
-                                    <Text fx:id="FolderN" strokeType="OUTSIDE" strokeWidth="0.0" />
-                        			</items>
-                                 <VBox.margin>
-                                    <Insets />
-                                 </VBox.margin>
-                        		</ToolBar>
-                              <TableView fx:id="STMT" editable="true" styleClass="mylistview" stylesheets="/TableView.css" tableMenuButtonVisible="true">
-                                 <columns>
-                                    <TableColumn fx:id="CHK" prefWidth="46.0" text="Выб." />
-                                    <TableColumn fx:id="MTTYPE" prefWidth="75.0" text="Тип SWIFT" />
-                                    <TableColumn fx:id="MTNAME" prefWidth="224.0" text="Название документа" />
-                                    <TableColumn fx:id="DOCDATE" prefWidth="112.0" text="Дата документа" />
-                                    <TableColumn fx:id="CUR" prefWidth="61.0" text="Валюта" />
-                                    <TableColumn fx:id="SUMM" prefWidth="70.0" text="Сумма" />
-            								<TableColumn fx:id="FILE_NAME" prefWidth="218.0" text="Название файла" />
-            								<TableColumn fx:id="DT_CH" prefWidth="120.0" text="Дата изменения" />
-                                 </columns>
-                                 <contextMenu>
-                                    <ContextMenu>
-                                      <items>
-                                        <MenuItem mnemonicParsing="false" onAction="#Open" text="Печать" />
-                                      </items>
-                                    </ContextMenu>
-                                 </contextMenu>
-                              </TableView>
-                           </children>
-                        </VBox>
-                     </content>
                      <tooltip>
                         <Tooltip text="Входящие или исходящие каталоги по системе Транзит в S.W.I.F.T. формате">
                            <font>
@@ -82,6 +28,89 @@
                            </font>
                         </Tooltip>
                      </tooltip>
+                     <content>
+                        <SplitPane dividerPositions="0.5">
+                           <items>
+                              <VBox maxWidth="100.0">
+                                 <children>
+                                    <GridPane>
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <children>
+                                          <RadioButton fx:id="Msg" mnemonicParsing="false" text="Msg" />
+                                          <RadioButton fx:id="Ack" mnemonicParsing="false" text="Ack" GridPane.rowIndex="1" />
+                                          <RadioButton fx:id="Kvt" layoutX="10.0" layoutY="47.0" mnemonicParsing="false" text="Kvt" GridPane.rowIndex="2" />
+                                          <RadioButton fx:id="Other" mnemonicParsing="false" text="Other" GridPane.rowIndex="3" />
+                                          <RadioButton fx:id="InLocal" layoutX="10.0" layoutY="107.0" mnemonicParsing="false" text="InLocal" GridPane.rowIndex="4" />
+                                          <RadioButton fx:id="OutLocal" layoutX="10.0" layoutY="137.0" mnemonicParsing="false" text="OutLocal" GridPane.rowIndex="5" />
+                                       </children>
+                                    </GridPane>
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                              		<ToolBar stylesheets="/borderpane.css">
+                              			<items>
+                              				<Button fx:id="ModeINbox" mnemonicParsing="false" onAction="#LoadFile" prefHeight="30.0" prefWidth="30.0">
+                                             <tooltip>
+                                                <Tooltip text="Обработать">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Tooltip>
+                                             </tooltip>
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Button>
+                                          <ComboBox fx:id="DIRNAME" onAction="#ChTabName" prefHeight="30.0" prefWidth="108.0">
+                                             <tooltip>
+                                                <Tooltip text="Тип прослушиваемой папки">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Tooltip>
+                                             </tooltip>
+                                          </ComboBox>
+                                          <Text fx:id="FolderN" strokeType="OUTSIDE" strokeWidth="0.0" />
+                              			</items>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                              		</ToolBar>
+                                    <TableView fx:id="STMT" editable="true" styleClass="mylistview" stylesheets="/TableView.css" tableMenuButtonVisible="true">
+                                       <columns>
+                                          <TableColumn fx:id="CHK" prefWidth="46.0" text="Выб." />
+                                          <TableColumn fx:id="MTTYPE" prefWidth="75.0" text="Тип SWIFT" />
+                                          <TableColumn fx:id="MTNAME" prefWidth="224.0" text="Название документа" />
+                                          <TableColumn fx:id="DOCDATE" prefWidth="112.0" text="Дата документа" />
+                                          <TableColumn fx:id="CUR" prefWidth="61.0" text="Валюта" />
+                                          <TableColumn fx:id="SUMM" prefWidth="70.0" text="Сумма" />
+                  								<TableColumn fx:id="FILE_NAME" prefWidth="218.0" text="Название файла" />
+                  								<TableColumn fx:id="DT_CH" prefWidth="120.0" text="Дата изменения" />
+                                       </columns>
+                                       <contextMenu>
+                                          <ContextMenu>
+                                            <items>
+                                              <MenuItem mnemonicParsing="false" onAction="#Open" text="Печать" />
+                                            </items>
+                                          </ContextMenu>
+                                       </contextMenu>
+                                    </TableView>
+                                 </children>
+                              </VBox>
+                           </items>
+                        </SplitPane>
+                     </content>
                 </Tab>
                 <Tab fx:id="ArchiveInOut" text="Архив">
                      <content>

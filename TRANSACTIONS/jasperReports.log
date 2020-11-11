@@ -1469,3 +1469,6 @@
 [10-11-2020 22:38:03] [ThreadPoolSubreportRunnerFactory] DEBUG:91 - shutting down java.util.concurrent.ThreadPoolExecutor@7c5c9488[Running, pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 1]
 [10-11-2020 22:38:03] [PrintDrawVisitor] DEBUG:276 - No Graphics2D generic element handler for http://jasperreports.sourceforge.net/jasperreports#headertoolbar
 [10-11-2020 23:50:52] [SWC] INFO :871 - SWIFFFFTTT
+[11-11-2020 12:07:25] [SWC] ERROR:1362 - null~JavaFX Application Thread
+[11-11-2020 12:09:20] [SWC] ERROR:381 - C:\Temp\swift\in\SBRARUMMXXX_215559552.103 (Не удается найти указанный файл)~Timer-2
+[11-11-2020 12:09:20] [SWC] ERROR:361 - C:\Temp\swift\in\SBRARUMMXXX_215559552.103 (Не удается найти указанный файл)~Timer-2
