@@ -59,6 +59,7 @@ class TestAD {
 				MYLogger.error(e.getMessage());
 			}
 
+			MYLogger.info("Start");
 			scheduler = new StdSchedulerFactory().getScheduler();
 			scheduler.start();
 			Trigger trigger = buildCronSchedulerTrigger();
