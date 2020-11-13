@@ -14,7 +14,7 @@
 
 	<appender name="Appender2"
 		class="org.apache.log4j.FileAppender">
-		<param name="File" value="applog.txt" />
+		<param name="File" value="trapp.txt" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
 				value="%-7p %d [%t] %c %x - %m LineNumber %L%n" />
@@ -39,6 +39,5 @@
 		<appender-ref ref="Appender2" />
 		<appender-ref ref="jasper" />
 	</root>
-
 
 </log4j:configuration>

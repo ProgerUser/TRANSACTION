@@ -49,11 +49,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
+import org.apache.log4j.xml.DOMConfigurator;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -111,6 +108,8 @@ public class QuartzJob implements Job {
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		try {
+			DOMConfigurator.configure(TestAD.class.getResource("/log4j.xml"));
+			/*
 			// _____________________LOG______________________________
 			ConsoleAppender console = new ConsoleAppender(); // create appender
 			// configure the appender
@@ -131,6 +130,7 @@ public class QuartzJob implements Job {
 
 			// add appender to any Logger (here is root)
 			Logger.getRootLogger().addAppender(fa);
+			*/
 			// repeat with all other desired appenders
 			// ______________________________________________________
 			MYLogger.info("Start " + Thread.currentThread().getName());

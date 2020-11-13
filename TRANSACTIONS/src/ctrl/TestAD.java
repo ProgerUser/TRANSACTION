@@ -3,12 +3,11 @@ package ctrl;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Properties;
+
 import javax.naming.NamingException;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.Level;
+
 import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
+import org.apache.log4j.xml.DOMConfigurator;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
@@ -26,6 +25,8 @@ class TestAD {
 
 	public static void main(String[] args) throws NamingException {
 		try {
+			DOMConfigurator.configure(TestAD.class.getResource("/log4j.xml"));
+			/*
 			// _____________________LOG______________________________
 			ConsoleAppender console = new ConsoleAppender(); // create appender
 			// configure the appender
@@ -46,6 +47,7 @@ class TestAD {
 
 			// add appender to any Logger (here is root)
 			Logger.getRootLogger().addAppender(fa);
+			*/
 			// repeat with all other desired appenders
 			// ______________________________________________________
 
@@ -65,6 +67,7 @@ class TestAD {
 			Trigger trigger = buildCronSchedulerTrigger();
 			scheduleJob(trigger);
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.exit(0);
 		}
 	}
