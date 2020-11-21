@@ -60,7 +60,7 @@
 						<jr:columnHeader style="Table_CH" height="20" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="540" height="20" uuid="37eff2d5-2ab9-411e-94fb-f163b42b70cf"/>
-								<text><![CDATA[Расшифровка]]></text>
+								<text><![CDATA[Содержимое файла]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="20">

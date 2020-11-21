@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -46,7 +47,7 @@ public class Main extends Application {
 			logger.setLevel(Level.INFO);
 			//System.out.println(MODULE);
 			
-			
+			/*
 			if (MODULE == null) {
 				Enter();
 			} else if (MODULE.equals("DEBTINFO")) {
@@ -62,17 +63,17 @@ public class Main extends Application {
 				initRootLayout();
 				swift2();
 			}
-			
+			*/
 			
 
-			/*
+			
 			  Connect.connectionURL_ = "10.111.64.21:1521/odb";
 			  Connect.userID_ = "SAIDP";
-			  Connect.userPassword_ = "xxx"; 
+			  Connect.userPassword_ = "ipman165"; 
 			  DBUtil.dbConnect(); 
 			  //initRootLayout();
 			  swift2();
-			 */
+			
 			primaryStage.setOnCloseRequest(e -> {
 				DBUtil.dbDisconnect();
 				Platform.exit();
@@ -289,7 +290,7 @@ public class Main extends Application {
 			loader.setController(controller);
 
 			loader.setLocation(Main.class.getResource("/swift/SWTR.fxml"));
-			BorderPane employeeOperationsView = (BorderPane) loader.load();
+			StackPane employeeOperationsView = (StackPane) loader.load();
 			Scene scene = new Scene(employeeOperationsView); // We are sending rootLayout to the Scene.
 
 			primaryStage.setTitle("S.W.I.F.T "+Connect.userID_+"@"+Connect.connectionURL_);

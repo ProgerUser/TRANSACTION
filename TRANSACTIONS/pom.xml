@@ -70,7 +70,7 @@
 				<version>8.1.2</version>
 				<configuration>
 					<vendor>SBRA</vendor>
-					<mainClass>ctrl.TestAD</mainClass>
+					<mainClass>app.Main</mainClass>
 				</configuration>
 			</plugin>
 
@@ -94,7 +94,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>ctrl.TestAD</mainClass>
+							<mainClass>app.Main</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

@@ -23,6 +23,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Properties;
 import java.util.Timer;
@@ -62,6 +64,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
@@ -72,15 +75,19 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -99,6 +106,8 @@ import javafx.util.converter.LocalDateTimeStringConverter;
 public class SWC {
 	/* __________Кнопки_для_быстрого_перемещения__________ */
 	@FXML
+	private RadioButton Out;
+	@FXML
 	private RadioButton Kvt;
 	@FXML
 	private RadioButton OutLocal;
@@ -110,6 +119,12 @@ public class SWC {
 	private RadioButton Ack;
 	@FXML
 	private RadioButton Other;
+
+	@FXML
+	private DatePicker FileDate;
+
+	@FXML
+	private ComboBox<String> FileExtens;
 
 	/**
 	 * Расшифровка типа каталога
@@ -298,15 +313,18 @@ public class SWC {
 	 */
 	String getMtAmount(String path) {
 		String ret = null;
+
 		try {
-			InputStream inputstream = new FileInputStream(path);
-			AbstractMT msg = AbstractMT.parse(inputstream);
-			if (msg.isType(103)) {
-				MT103 mt = (MT103) msg;
-				Field32A f = mt.getField32A();
-				ret = f.getAmount();
+			if (!getFExt(path).equals("xml")) {
+				InputStream inputstream = new FileInputStream(path);
+				AbstractMT msg = AbstractMT.parse(inputstream);
+				if (msg != null && msg.isType(103)) {
+					MT103 mt = (MT103) msg;
+					Field32A f = mt.getField32A();
+					ret = f.getAmount();
+				}
+				inputstream.close();
 			}
-			inputstream.close();
 		} catch (Exception e) {
 			ErrorMessage(e.getMessage());
 			SWLogger.error(e.getMessage() + "~" + Thread.currentThread().getName());
@@ -323,15 +341,18 @@ public class SWC {
 	String getMtCur(String path) {
 		String ret = null;
 		try {
-			InputStream inputstream = new FileInputStream(path);
-			AbstractMT msg = AbstractMT.parse(inputstream);
-			if (msg.isType(103)) {
-				MT103 mt = (MT103) msg;
-				Field32A f = mt.getField32A();
-				ret = f.getCurrency();
+			if (!getFExt(path).equals("xml")) {
+				InputStream inputstream = new FileInputStream(path);
+				AbstractMT msg = AbstractMT.parse(inputstream);
+				if (msg != null && msg.isType(103)) {
+					MT103 mt = (MT103) msg;
+					Field32A f = mt.getField32A();
+					ret = f.getCurrency();
+				}
+				inputstream.close();
 			}
-			inputstream.close();
 		} catch (Exception e) {
+			e.printStackTrace();
 			ErrorMessage(e.getMessage());
 			SWLogger.error(e.getMessage() + "~" + Thread.currentThread().getName());
 		}
@@ -347,15 +368,17 @@ public class SWC {
 	String getMtDate(String path) {
 		String ret = null;
 		try {
-			InputStream inputstream = new FileInputStream(path);
-			AbstractMT msg = AbstractMT.parse(inputstream);
-			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-			if (msg.isType(103)) {
-				MT103 mt = (MT103) msg;
-				Field32A f = mt.getField32A();
-				ret = sdf.format(f.getDateAsCalendar().getTime());
+			if (!getFExt(path).toLowerCase().equals("xml")) {
+				InputStream inputstream = new FileInputStream(path);
+				AbstractMT msg = AbstractMT.parse(inputstream);
+				SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+				if (msg != null && msg.isType(103)) {
+					MT103 mt = (MT103) msg;
+					Field32A f = mt.getField32A();
+					ret = sdf.format(f.getDateAsCalendar().getTime());
+				}
+				inputstream.close();
 			}
-			inputstream.close();
 		} catch (Exception e) {
 			ErrorMessage(e.getMessage());
 			SWLogger.error(e.getMessage() + "~" + Thread.currentThread().getName());
@@ -372,10 +395,13 @@ public class SWC {
 	String getMtType(String path) {
 		String ret = null;
 		try {
-			InputStream inputstream = new FileInputStream(path);
-			AbstractMT msg = AbstractMT.parse(inputstream);
-			ret = msg.getMessageType();
-			inputstream.close();
+			if (!getFExt(path).equals("xml")) {
+				InputStream inputstream = new FileInputStream(path);
+				AbstractMT msg = AbstractMT.parse(inputstream);
+				if (msg != null)
+					ret = msg.getMessageType();
+				inputstream.close();
+			}
 		} catch (Exception e) {
 			ErrorMessage(e.getMessage());
 			SWLogger.error(e.getMessage() + "~" + Thread.currentThread().getName());
@@ -387,7 +413,7 @@ public class SWC {
 			String FILENAME_, String VECTOR) {
 		String ret = "error";
 		try {
-			CallableStatement clstmt = conn.prepareCall("{ ? = call z_sb_mmbank.VTB_SWIFT(?,?,?,?,?,?,?,?,?,?,?) }");
+			CallableStatement clstmt = conn.prepareCall("{ ? = call SBRA_VTB_SWIF.VTB_SWIFT(?,?,?,?,?,?,?,?,?,?,?) }");
 			clstmt.registerOutParameter(1, Types.VARCHAR);
 			clstmt.setDate(2, (DOCDATE_ != null) ? java.sql.Date.valueOf(DOCDATE_) : null);
 			// if (SUMM_ != null) {
@@ -559,7 +585,7 @@ public class SWC {
 	void LoadFile(ActionEvent event) {
 		try {
 
-			StPn.setDisable(true);
+			RootTab.setDisable(true);
 			PrgInd.setVisible(true);
 			Task<Object> task = new Task<Object>() {
 				@Override
@@ -673,7 +699,7 @@ public class SWC {
 			});
 			task.setOnSucceeded(e -> {
 				try {
-					StPn.setDisable(false);
+					RootTab.setDisable(false);
 					PrgInd.setVisible(false);
 				} catch (Exception e1) {
 					ErrorMessage(e1.getMessage());
@@ -816,6 +842,12 @@ public class SWC {
 
 			if (DIRNAME.getValue().toUpperCase().equals("MSG")) {
 
+				MTTYPE.setVisible(true);
+				MTNAME.setVisible(true);
+				DOCDATE.setVisible(true);
+				CUR.setVisible(true);
+				SUMM.setVisible(true);
+
 				INOUT.setText("Входящие");
 				FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
 				ModeINbox.setDisable(false);
@@ -823,6 +855,12 @@ public class SWC {
 				FolderN.setText("Входящие документы ВТБ " + System.getenv("SWIFT_MSG"));
 
 			} else if (DIRNAME.getValue().toUpperCase().equals("ACK")) {
+
+				MTTYPE.setVisible(true);
+				MTNAME.setVisible(true);
+				DOCDATE.setVisible(true);
+				CUR.setVisible(true);
+				SUMM.setVisible(true);
 
 				INOUT.setText("Входящие");
 				FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
@@ -832,6 +870,12 @@ public class SWC {
 
 			} else if (DIRNAME.getValue().toUpperCase().equals("KVT")) {
 
+				MTTYPE.setVisible(true);
+				MTNAME.setVisible(true);
+				DOCDATE.setVisible(true);
+				CUR.setVisible(true);
+				SUMM.setVisible(true);
+
 				INOUT.setText("Входящие");
 				FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
 				ModeINbox.setDisable(false);
@@ -839,6 +883,12 @@ public class SWC {
 				FolderN.setText("Входящие документы ВТБ для квитанции " + System.getenv("SWIFT_KVT"));
 
 			} else if (DIRNAME.getValue().toUpperCase().equals("OTHER")) {
+
+				MTTYPE.setVisible(false);
+				MTNAME.setVisible(false);
+				DOCDATE.setVisible(false);
+				CUR.setVisible(false);
+				SUMM.setVisible(false);
 
 				INOUT.setText("Входящие");
 				FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
@@ -848,12 +898,24 @@ public class SWC {
 
 			} else if (DIRNAME.getValue().toUpperCase().equals("OUT")) {
 
+				MTTYPE.setVisible(true);
+				MTNAME.setVisible(true);
+				DOCDATE.setVisible(true);
+				CUR.setVisible(true);
+				SUMM.setVisible(true);
+
 				INOUT.setText("Исходящие");
 				FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
 				ModeINbox.setDisable(true);
 
 				FolderN.setText("Исходящие документы ВТБ " + System.getenv("SWIFT_OUT"));
 			} else if (DIRNAME.getValue().toUpperCase().equals("INLOCAL")) {
+
+				MTTYPE.setVisible(true);
+				MTNAME.setVisible(true);
+				DOCDATE.setVisible(true);
+				CUR.setVisible(true);
+				SUMM.setVisible(true);
 
 				INOUT.setText("Входящие,локальный каталог");
 				FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
@@ -863,6 +925,12 @@ public class SWC {
 			}
 
 			else if (DIRNAME.getValue().toUpperCase().equals("OUTLOCAL")) {
+
+				MTTYPE.setVisible(true);
+				MTNAME.setVisible(true);
+				DOCDATE.setVisible(true);
+				CUR.setVisible(true);
+				SUMM.setVisible(true);
 
 				INOUT.setText("Исходящие, локальный каталог");
 				FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
@@ -952,6 +1020,38 @@ public class SWC {
 
 			// Kvt; OutLocal; InLocal; Msg; Ack; Other
 
+			// FileDate.setValue(LocalDate.now());
+
+			WebView  web = new WebView();
+			WebEngine webEngine = web.getEngine();
+			webEngine.loadContent
+			(
+			    "<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:107%;font-size:15px;font-family:\"Calibri\",sans-serif;'><u>ТИПЫ ФАЙЛОВ</u><u>:</u></p>\r\n" + 
+			    "<ol style=\"list-style-type: decimal;\">\r\n" + 
+			    "    <li><span style=\"color:#385723;\">xml &nbsp;=&nbsp;</span><span style=\"color:#385723;\">Протокол отправки (принятия)</span></li>\r\n" + 
+			    "    <li><span style=\"color:#C00000;\">nak &nbsp;=&nbsp;</span><span style=\"color:#C00000;\">Отвергнут</span></li>\r\n" + 
+			    "    <li><span style=\"color:#00B050;\">ack &nbsp;=&nbsp;</span><span style=\"color:#00B050;\">Принят</span></li>\r\n" + 
+			    "</ol>"
+			);
+			Tooltip  tip = new Tooltip();
+			tip.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+			tip.setPrefSize(300, 200);
+			tip.setGraphic(web);
+			
+			FileExtens.setTooltip(tip);
+			
+			FileExtens.getItems().addAll("xml", "ack", "nak");
+
+			STMT.setRowFactory(tv -> {
+				TableRow<SWIFT_FILES> row = new TableRow<>();
+				row.setOnMouseClicked(event -> {
+					if (event.getClickCount() == 2 && (!row.isEmpty())) {
+						Open(null);
+					}
+				});
+				return row;
+			});
+
 			// Group
 			ToggleGroup group = new ToggleGroup();
 
@@ -965,6 +1065,7 @@ public class SWC {
 					}
 				}
 			});
+			Out.setToggleGroup(group);
 			Kvt.setToggleGroup(group);
 			OutLocal.setToggleGroup(group);
 			InLocal.setToggleGroup(group);
@@ -1293,69 +1394,97 @@ public class SWC {
 	void RefreshDB(ActionEvent event) {
 		try {
 
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-
-			String dt1_ = "";
-			String dt2_ = "";
-			String in_out = "";
-
-			if (dt1.getValue() != null) {
-				dt1_ = "and trunc(CR_DT) >= to_date('" + dt1.getValue().format(formatter) + "','dd.mm.yyyy') \r\n";
-			}
-
-			if (dt2.getValue() != null) {
-				dt2_ = "and trunc(CR_DT) <= to_date('" + dt2.getValue().format(formatter) + "','dd.mm.yyyy') \r\n";
-			}
-
-			if (ArchType.getValue() != null && !ArchType.getValue().equals("ВСЕ")) {
-				in_out = "and upper(VECTOR) = '" + ArchType.getValue() + "' \r\n";
-			}
-
-			String selectStmt = "select id,\r\n" + "       filename,\r\n" + "       dt_ch,\r\n" + "       swfile,\r\n"
-					+ "       oper,\r\n" + "       cr_dt,\r\n" + "       mttype,\r\n" + "       mtname,\r\n"
-					+ "       cur,\r\n" + "       vector,\r\n" + "       nvl(summ,'') summ,\r\n"
-					+ "       docdate from SWIFT_FILES where 1=1\r\n" + dt1_ + dt2_ + in_out + "order by CR_DT desc";
-			PreparedStatement prepStmt = conn.prepareStatement(selectStmt);
-			ResultSet rs = prepStmt.executeQuery();
-			ObservableList<SWIFT_FILES> cus_list = FXCollections.observableArrayList();
-			DateTimeFormatter dtformatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
-			while (rs.next()) {
-				SWIFT_FILES list = new SWIFT_FILES();
-
-				list.setDOCDATE((rs.getDate("DOCDATE") != null)
-						? LocalDate.parse(new SimpleDateFormat("dd.MM.yyyy").format(rs.getDate("DOCDATE")), formatter)
-						: null);
-				list.setSUMM(String.valueOf(rs.getInt("SUMM")));
-				list.setVECTOR(rs.getString("VECTOR"));
-				list.setCUR(rs.getString("CUR"));
-				list.setMTNAME(rs.getString("MTNAME"));
-				list.setMTTYPE(rs.getString("MTTYPE"));
-				list.setCR_DT((rs.getDate("CR_DT") != null) ? LocalDateTime.parse(
-						new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("CR_DT")), dtformatter) : null);
-				list.setOPER(rs.getString("OPER"));
-				list.setDT_CH((rs.getDate("DT_CH") != null) ? LocalDateTime.parse(
-						new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("DT_CH")), dtformatter) : null);
-				list.setFILENAME(rs.getString("FILENAME"));
-				list.setID(rs.getInt("ID"));
-				cus_list.add(list);
-			}
-			prepStmt.close();
-			rs.close();
-			Achive.setItems(cus_list);
-
-			Platform.runLater(new Runnable() {
+			RootTab.setDisable(true);
+			PrgInd.setVisible(true);
+			Task<Object> task = new Task<Object>() {
 				@Override
-				public void run() {
-					TableFilter<SWIFT_FILES> tableFilter = TableFilter.forTableView(Achive).apply();
-					tableFilter.setSearchStrategy((input, target) -> {
-						try {
-							return target.toLowerCase().contains(input.toLowerCase());
-						} catch (Exception e) {
-							return false;
+				public Object call() throws Exception {
+
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+					String dt1_ = "";
+					String dt2_ = "";
+					String in_out = "";
+
+					if (dt1.getValue() != null) {
+						dt1_ = "and trunc(CR_DT) >= to_date('" + dt1.getValue().format(formatter)
+								+ "','dd.mm.yyyy') \r\n";
+					}
+
+					if (dt2.getValue() != null) {
+						dt2_ = "and trunc(CR_DT) <= to_date('" + dt2.getValue().format(formatter)
+								+ "','dd.mm.yyyy') \r\n";
+					}
+
+					if (ArchType.getValue() != null && !ArchType.getValue().equals("ВСЕ")) {
+						in_out = "and upper(VECTOR) = '" + ArchType.getValue() + "' \r\n";
+					}
+
+					String selectStmt = "select id,\r\n" + "       filename,\r\n" + "       dt_ch,\r\n"
+							+ "       swfile,\r\n" + "       oper,\r\n" + "       cr_dt,\r\n" + "       mttype,\r\n"
+							+ "       mtname,\r\n" + "       cur,\r\n" + "       vector,\r\n"
+							+ "       nvl(summ,'') summ,\r\n" + "       docdate from SWIFT_FILES where 1=1\r\n" + dt1_
+							+ dt2_ + in_out + "order by CR_DT desc";
+					PreparedStatement prepStmt = conn.prepareStatement(selectStmt);
+					ResultSet rs = prepStmt.executeQuery();
+					ObservableList<SWIFT_FILES> cus_list = FXCollections.observableArrayList();
+					DateTimeFormatter dtformatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+					while (rs.next()) {
+						SWIFT_FILES list = new SWIFT_FILES();
+
+						list.setDOCDATE((rs.getDate("DOCDATE") != null) ? LocalDate.parse(
+								new SimpleDateFormat("dd.MM.yyyy").format(rs.getDate("DOCDATE")), formatter) : null);
+						list.setSUMM(String.valueOf(rs.getInt("SUMM")));
+						list.setVECTOR(rs.getString("VECTOR"));
+						list.setCUR(rs.getString("CUR"));
+						list.setMTNAME(rs.getString("MTNAME"));
+						list.setMTTYPE(rs.getString("MTTYPE"));
+						list.setCR_DT((rs.getDate("CR_DT") != null) ? LocalDateTime.parse(
+								new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("CR_DT")), dtformatter)
+								: null);
+						list.setOPER(rs.getString("OPER"));
+						list.setDT_CH((rs.getDate("DT_CH") != null) ? LocalDateTime.parse(
+								new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("DT_CH")), dtformatter)
+								: null);
+						list.setFILENAME(rs.getString("FILENAME"));
+						list.setID(rs.getInt("ID"));
+						cus_list.add(list);
+					}
+					prepStmt.close();
+					rs.close();
+					Achive.setItems(cus_list);
+
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							TableFilter<SWIFT_FILES> tableFilter = TableFilter.forTableView(Achive).apply();
+							tableFilter.setSearchStrategy((input, target) -> {
+								try {
+									return target.toLowerCase().contains(input.toLowerCase());
+								} catch (Exception e) {
+									return false;
+								}
+							});
 						}
 					});
+
+					return null;
+				}
+			};
+			task.setOnFailed(e -> {
+				ErrorMessage(task.getException().getMessage());
+				SWLogger.error(task.getException().getMessage() + "~" + Thread.currentThread().getName());
+			});
+			task.setOnSucceeded(e -> {
+				try {
+					RootTab.setDisable(false);
+					PrgInd.setVisible(false);
+				} catch (Exception e1) {
+					ErrorMessage(e1.getMessage());
+					SWLogger.error(e1.getMessage() + "~" + Thread.currentThread().getName());
 				}
 			});
+			exec.execute(task);
 
 		} catch (Exception e) {
 			ErrorMessage(e.getMessage());
@@ -1427,23 +1556,33 @@ public class SWC {
 		try {
 			if (System.getenv(FolderName) != null) {
 				SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+				SimpleDateFormat formatdt = new SimpleDateFormat("dd.MM.yyyy");
 				DateTimeFormatter formatterwt = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 				// MSG or another folder
 				File dir = new File(System.getenv(FolderName));
 				File[] directoryListing = dir.listFiles();
+				
+				Arrays.sort(directoryListing, Comparator.comparingLong(File::lastModified).reversed());
+				
 				ObservableList<SWIFT_FILES> dlist = FXCollections.observableArrayList();
 				Boolean ifchk = false;
 				if (directoryListing != null) {
 					for (File child : directoryListing) {
-						//если файли и если существует
-						if (child.isFile() & child.exists()) {
-							Path filePath = child.toPath();
-							/**
-							 * Атрибуты файла...
-							 */
-							BasicFileAttributes attr = java.nio.file.Files.readAttributes(filePath,
-									BasicFileAttributes.class);
+						Path filePath = child.toPath();
+						// Атрибуты файла...
+						BasicFileAttributes attr = java.nio.file.Files.readAttributes(filePath,
+								BasicFileAttributes.class);
+						// если файли и если существует
+						if ((child.isFile() & child.exists())
+								& ((FileDate.getValue() != null && (FileDate.getValue()
+										.equals(LocalDate.parse(
+												formatdt.format(new Date(attr.creationTime().toMillis())), formatter))))
+										| FileDate.getValue() == null)
+								& ((FileExtens.getValue() != null
+										& getFExt(child.getAbsolutePath()).toLowerCase().equals(FileExtens.getValue()))
+										| FileExtens.getValue() == null)) {
+
 							SWIFT_FILES list = new SWIFT_FILES();
 							list.setFILENAME(child.getName());
 							list.setDT_CH(LocalDateTime.parse(format.format(new Date(attr.creationTime().toMillis())),
@@ -1496,6 +1635,7 @@ public class SWC {
 				}
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			ErrorMessage(e.getMessage());
 			SWLogger.error(e.getMessage() + "~" + Thread.currentThread().getName());
 		}
@@ -1584,9 +1724,8 @@ public class SWC {
 	@FXML
 	private void Open(ActionEvent event) {
 		try {
-
 			if (STMT.getSelectionModel().getSelectedItem() != null /* & !FolderName.equals("SWIFT_OUT") */) {
-				StPn.setDisable(true);
+				RootTab.setDisable(true);
 				PrgInd.setVisible(true);
 				Task<Object> task = new Task<Object>() {
 					@Override
@@ -1595,7 +1734,7 @@ public class SWC {
 						InputStream inputstream = new FileInputStream(
 								System.getenv(FolderName) + "/" + selrow.getFILENAME());
 
-						new SwiftPrint().showReport(inputstream);
+						new SwiftPrintFile().showReport(inputstream);
 
 						return null;
 					}
@@ -1606,7 +1745,7 @@ public class SWC {
 				});
 				task.setOnSucceeded(e -> {
 					try {
-						StPn.setDisable(false);
+						RootTab.setDisable(false);
 						PrgInd.setVisible(false);
 					} catch (Exception e1) {
 						ErrorMessage(e1.getMessage());
@@ -1632,7 +1771,7 @@ public class SWC {
 	private void OpenDB(ActionEvent event) {
 		try {
 			if (Achive.getSelectionModel().getSelectedItem() != null) {
-				StPn.setDisable(true);
+				RootTab.setDisable(true);
 				PrgInd.setVisible(true);
 				Task<Object> task = new Task<Object>() {
 					@Override
@@ -1652,7 +1791,7 @@ public class SWC {
 							// release the blob and free up memory. (since JDBC 4.0)
 							blob.free();
 							InputStream targetStream = new ByteArrayInputStream(blobAsBytes);
-							new SwiftPrint().showReport(targetStream);
+							new SwiftPrintFile().showReport(targetStream);
 							targetStream.close();
 						}
 						rs.close();
@@ -1667,7 +1806,7 @@ public class SWC {
 				});
 				task.setOnSucceeded(e -> {
 					try {
-						StPn.setDisable(false);
+						RootTab.setDisable(false);
 						PrgInd.setVisible(false);
 
 					} catch (Exception e1) {
