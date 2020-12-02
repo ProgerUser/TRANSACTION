@@ -275,7 +275,7 @@ public class TerminalDAO {
 	// SELECT FN_SESS
 	// *******************************
 	public static ObservableList<Amra_Trans> Amra_Trans_(String SESS_ID, LocalDate dt1, LocalDate dt2, String FIO,
-			boolean chk, boolean chk_pay, String terminal) {
+			boolean chk, boolean chk_pay, String terminal,boolean DOKATKA ) {
 
 		String ldt1 = null;
 		String ldt2 = null;
@@ -286,8 +286,10 @@ public class TerminalDAO {
 			table = "z_sb_transact_amra_inkas";
 		} else if (chk_pay == true) {
 			table = "z_sb_transact_amra_ret";
-		} else if ((chk == false & chk_pay == false)) {
+		} else if ((chk == false & chk_pay == false & DOKATKA == false)) {
 			table = "Z_SB_TRANSACT_AMRA_DBT";
+		}else if (DOKATKA == true ) {
+			table = "AMRA_ERROR_TR";
 		}
 
 		if (dt1 != null)

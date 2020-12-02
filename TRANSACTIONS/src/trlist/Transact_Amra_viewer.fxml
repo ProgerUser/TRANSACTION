@@ -176,16 +176,21 @@
 								<Tooltip text="Выбор терминала" />
 							</tooltip>
 						</ComboBox>
-						<CheckBox fx:id="inkass" mnemonicParsing="false" onAction="#check_table" prefHeight="20.0" prefWidth="82.0" text="Инкасс.">
+						<CheckBox fx:id="inkass" mnemonicParsing="false" onAction="#check_table" prefHeight="20.0" prefWidth="68.0" text="Инкасс.">
 							<tooltip>
 								<Tooltip text="Показать инкассации" />
 							</tooltip>
 						</CheckBox>
-						<CheckBox fx:id="ret_pay" mnemonicParsing="false" onAction="#check_table_ret" prefHeight="20.0" prefWidth="95.0" text="Возвраты">
+						<CheckBox fx:id="ret_pay" mnemonicParsing="false" onAction="#check_table_ret" prefHeight="20.0" prefWidth="78.0" text="Возвраты">
 							<tooltip>
 								<Tooltip text="Показать возвраты" />
 							</tooltip>
 						</CheckBox>
+                  <CheckBox fx:id="DOKATKA" layoutX="807.0" layoutY="13.0" mnemonicParsing="false" onAction="#DOKATKA" prefHeight="20.0" prefWidth="105.0" text="Докат. Ошибка">
+                     <tooltip>
+                        <Tooltip text="Показать возвраты" />
+                     </tooltip>
+                  </CheckBox>
 					</items>
 					<VBox.margin>
 						<Insets bottom="10.0" />

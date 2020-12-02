@@ -404,7 +404,7 @@ public class Amra_Transact {
 				Connect.SESSID = fn.get_FileId();
 				Stage stage = new Stage();
 				Parent root;
-				root = FXMLLoader.load(Main.class.getResource("view/Transact_Amra_viewer.fxml"));
+				root = FXMLLoader.load(Main.class.getResource("/trlist/Transact_Amra_viewer.fxml"));
 				stage.setScene(new Scene(root));
 				stage.getIcons().add(new Image("icon.png"));
 				stage.setTitle("Подробно " + fn.get_FileId());

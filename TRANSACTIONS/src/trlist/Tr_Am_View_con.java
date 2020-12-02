@@ -102,6 +102,9 @@ public class Tr_Am_View_con {
 	private CheckBox inkass;
 
 	@FXML
+	private CheckBox DOKATKA;
+
+	@FXML
 	private CheckBox ret_pay;
 
 	@FXML
@@ -352,7 +355,7 @@ public class Tr_Am_View_con {
 					nk_summ = Double.parseDouble(nk_summ_.getText().replace(",", ".").replace(" ", ""))
 							+ item.nkamountProperty().getValue();
 					nk_summ_.setText(decimalFormat.format(nk_summ));
-					
+
 					nk_summ_1.setText(decimalFormat
 							.format(Double.parseDouble(nk_summ_1.getText().replace(",", ".").replace(" ", ""))));
 				} else if (item.nkamountProperty().getValue() > 0) {
@@ -381,7 +384,7 @@ public class Tr_Am_View_con {
 					nk_summ = Double.parseDouble(nk_summ_.getText().replace(",", ".").replace(" ", ""))
 							+ item.nkamountProperty().getValue();
 					nk_summ_.setText(decimalFormat.format(nk_summ));
-					
+
 					nk_summ_1.setText(decimalFormat
 							.format(Double.parseDouble(nk_summ_1.getText().replace(",", ".").replace(" ", ""))));
 				} else if (item.nkamountProperty().getValue() > 0) {
@@ -414,7 +417,7 @@ public class Tr_Am_View_con {
 					nk_summ = Double.parseDouble(nk_summ_.getText().replace(",", ".").replace(" ", ""))
 							- item.nkamountProperty().getValue();
 					nk_summ_.setText(decimalFormat.format(nk_summ));
-					
+
 					nk_summ_1.setText(decimalFormat
 							.format(Double.parseDouble(nk_summ_1.getText().replace(",", ".").replace(" ", ""))));
 				} else if (item.nkamountProperty().getValue() > 0) {
@@ -442,7 +445,7 @@ public class Tr_Am_View_con {
 					nk_summ = Double.parseDouble(nk_summ_.getText().replace(",", ".").replace(" ", ""))
 							- item.nkamountProperty().getValue();
 					nk_summ_.setText(decimalFormat.format(nk_summ));
-					
+
 					nk_summ_1.setText(decimalFormat
 							.format(Double.parseDouble(nk_summ_1.getText().replace(",", ".").replace(" ", ""))));
 				} else if (item.nkamountProperty().getValue() > 0) {
@@ -1654,7 +1657,7 @@ public class Tr_Am_View_con {
 	private void term_view_(ActionEvent actionEvent) {
 		try {
 			ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(),
-					dt2.getValue(), "", false, false, terminal_name.getValue().toString());
+					dt2.getValue(), "", false, false, terminal_name.getValue().toString(), false);
 			populate_fn_sess(empData);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1664,15 +1667,25 @@ public class Tr_Am_View_con {
 
 	@FXML
 	private void check_table(ActionEvent actionEvent) {
-		if (ret_pay.isSelected()) {
+		if (inkass.isSelected()) {
 			ret_pay.setSelected(false);
+			DOKATKA.setSelected(false);
 		}
 	}
 
 	@FXML
 	private void check_table_ret(ActionEvent actionEvent) {
-		if (inkass.isSelected()) {
+		if (ret_pay.isSelected()) {
 			inkass.setSelected(false);
+			DOKATKA.setSelected(false);
+		}
+	}
+
+	@FXML
+	private void DOKATKA(ActionEvent actionEvent) {
+		if (DOKATKA.isSelected()) {
+			inkass.setSelected(false);
+			ret_pay.setSelected(false);
 		}
 	}
 
@@ -1887,8 +1900,8 @@ public class Tr_Am_View_con {
 				@Override
 				public ObservableList<Amra_Trans> call() throws Exception {
 					return TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(), FIO.getText(),
-							(inkass.isSelected()) ? true : false, (ret_pay.isSelected()) ? true : false,
-							terminal_name.getValue().toString());
+							((inkass.isSelected()) ? true : false), ((ret_pay.isSelected()) ? true : false),
+							terminal_name.getValue().toString(), ((DOKATKA.isSelected()) ? true : false));
 				}
 			};
 
