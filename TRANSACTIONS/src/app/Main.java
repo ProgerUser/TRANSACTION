@@ -59,9 +59,9 @@ public class Main extends Application {
 				initRootLayout();
 				showFirst();
 			} else if (MODULE.equals("SWIFT")) {
-				DBUtil.dbConnect();
-				initRootLayout();
-				swift2();
+				//DBUtil.dbConnect();
+				//initRootLayout();
+				//swift2();
 			}
 			
 			
