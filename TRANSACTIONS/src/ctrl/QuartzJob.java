@@ -150,12 +150,14 @@ public class QuartzJob implements Job {
 			// _____________Get__XML____________________
 			String users = UserList();
 			// ______Create_Session___________
-			if (conn == null) {
-				dbConnect();
-			} else {
-				dbDisconnect();
-				dbConnect();
-			}
+			dbDisconnect();
+			dbConnect();
+			
+			//if (conn == null) {
+			//	dbConnect();
+			//} else {
+			//	dbConnect();
+			//}
 			MYLogger.info("StartJob");
 			// ________Insert_Users_________
 			String retusr = InsertUsrDb(users);

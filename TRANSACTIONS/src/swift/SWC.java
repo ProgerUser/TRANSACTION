@@ -584,7 +584,6 @@ public class SWC {
 	@FXML
 	void LoadFile(ActionEvent event) {
 		try {
-
 			RootTab.setDisable(true);
 			PrgInd.setVisible(true);
 			Task<Object> task = new Task<Object>() {
@@ -693,7 +692,6 @@ public class SWC {
 				}
 			};
 			task.setOnFailed(e -> {
-
 				ErrorMessage(task.getException().getMessage());
 				SWLogger.error(task.getException().getMessage() + "~" + Thread.currentThread().getName());
 			});
@@ -1573,7 +1571,7 @@ public class SWC {
 						// Атрибуты файла...
 						BasicFileAttributes attr = java.nio.file.Files.readAttributes(filePath,
 								BasicFileAttributes.class);
-						// если файли и если существует
+						// если файл и если существует
 						if ((child.isFile() & child.exists())
 								& ((FileDate.getValue() != null && (FileDate.getValue()
 										.equals(LocalDate.parse(
@@ -1689,7 +1687,7 @@ public class SWC {
 		try {
 			Class.forName("oracle.jdbc.OracleDriver");
 			Properties props = new Properties();
-			props.put("v$session.program", "CusList");
+			props.put("v$session.program", "SWIFT_VTB");
 			conn = DriverManager.getConnection(
 					"jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_ + "@" + Connect.connectionURL_,
 					props);
