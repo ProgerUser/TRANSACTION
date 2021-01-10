@@ -8,11 +8,8 @@ import java.sql.Statement;
 
 import org.apache.log4j.Logger;
 import org.controlsfx.control.table.TableFilter;
-
 import com.sun.rowset.CachedRowSetImpl;
-
 import app.Main;
-import app.model.Attributes;
 import app.model.Connect;
 import app.model.Ibank2;
 import app.util.DBUtil;
@@ -34,6 +31,7 @@ import sbalert.Msg;
 /**
  * Пачулия Саид 04.06.2020.
  */
+@SuppressWarnings({"restriction" })
 public class Ibank {
 
 	@FXML
@@ -212,6 +210,7 @@ public class Ibank {
 	}
 
 	// DB Execute Query Operation
+	@SuppressWarnings({})
 	public ResultSet dbExecuteQuery(String queryStmt) {
 		// Declare statement, resultSet and CachedResultSet as null
 		Statement stmt = null;

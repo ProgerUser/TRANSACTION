@@ -1,6 +1,5 @@
 package app.controller;
 
-import java.awt.SplashScreen;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;

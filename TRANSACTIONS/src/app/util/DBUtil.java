@@ -17,6 +17,7 @@ import app.model.Connect;
 import app.model.SqlMap;
 import sbalert.Msg;
 
+@SuppressWarnings("restriction")
 public class DBUtil {
 	// Declare JDBC Driver
 	private static final String JDBC_DRIVER = "oracle.jdbc.OracleDriver";

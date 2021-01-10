@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -26,6 +27,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Timer;
 import java.util.concurrent.Executor;
@@ -42,6 +44,9 @@ import org.mozilla.universalchardet.UniversalDetector;
 
 import com.google.common.io.Files;
 import com.prowidesoftware.swift.model.field.Field32A;
+import com.prowidesoftware.swift.model.field.Field50F;
+import com.prowidesoftware.swift.model.field.Field59;
+import com.prowidesoftware.swift.model.field.Field70;
 import com.prowidesoftware.swift.model.mt.AbstractMT;
 import com.prowidesoftware.swift.model.mt.mt1xx.MT103;
 
@@ -77,6 +82,7 @@ import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
@@ -105,6 +111,23 @@ import javafx.util.converter.LocalDateTimeStringConverter;
  */
 public class SWC {
 	/* __________Кнопки_для_быстрого_перемещения__________ */
+
+	@FXML
+	private TextField CDETAIL;
+
+	@FXML
+	private TextField PAY_ACC;
+
+	@FXML
+	private TextField PAY_NAME;
+	
+	@FXML
+	private TextField REC_NAME;
+	
+	@FXML
+	private TextField REC_ACC;
+	
+
 	@FXML
 	private RadioButton Out;
 	@FXML
@@ -322,6 +345,116 @@ public class SWC {
 					MT103 mt = (MT103) msg;
 					Field32A f = mt.getField32A();
 					ret = f.getAmount();
+				}
+				inputstream.close();
+			}
+		} catch (Exception e) {
+			ErrorMessage(e.getMessage());
+			SWLogger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+		}
+		return ret;
+	}
+
+	/**
+	 * Получить детали платежа
+	 * 
+	 * @param path
+	 * @return
+	 */
+	String getMtDetail(String path) {
+		String ret = null;
+
+		try {
+			if (!getFExt(path).equals("xml")) {
+				InputStream inputstream = new FileInputStream(path);
+				AbstractMT msg = AbstractMT.parse(inputstream);
+				if (msg != null && msg.isType(103)) {
+					MT103 mt = (MT103) msg;
+					Field70 f70 = mt.getField70();
+					ret = f70.getValue();
+				}
+				inputstream.close();
+			}
+		} catch (Exception e) {
+			ErrorMessage(e.getMessage());
+			SWLogger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+		}
+		return ret;
+	}
+
+	String get50F(String path) {
+		String ret = null;
+		try {
+			if (!getFExt(path).equals("xml")) {
+				InputStream inputstream = new FileInputStream(path);
+				AbstractMT msg = AbstractMT.parse(inputstream);
+				if (msg != null && msg.isType(103)) {
+					MT103 mt = (MT103) msg;
+					Field50F f50 = mt.getField50F();
+					ret = f50.getComponent1();
+				}
+				inputstream.close();
+			}
+		} catch (Exception e) {
+			ErrorMessage(e.getMessage());
+			SWLogger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+		}
+		return ret;
+	}
+	
+	String get59ACC(String path) {
+		String ret = null;
+		try {
+			if (!getFExt(path).equals("xml")) {
+				InputStream inputstream = new FileInputStream(path);
+				AbstractMT msg = AbstractMT.parse(inputstream);
+				if (msg != null && msg.isType(103)) {
+					MT103 mt = (MT103) msg;
+					Field59 f59 = mt.getField59();
+					ret = f59.getAccount();
+				}
+				inputstream.close();
+			}
+		} catch (Exception e) {
+			ErrorMessage(e.getMessage());
+			SWLogger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+		}
+		return ret;
+	}
+	
+	String get59NAME(String path) {
+		String ret = null;
+		try {
+			if (!getFExt(path).equals("xml")) {
+				InputStream inputstream = new FileInputStream(path);
+				AbstractMT msg = AbstractMT.parse(inputstream);
+				if (msg != null && msg.isType(103)) {
+					MT103 mt = (MT103) msg;
+					Field59 f59 = mt.getField59();
+					ret = f59.getComponent2();
+				}
+				inputstream.close();
+			}
+		} catch (Exception e) {
+			ErrorMessage(e.getMessage());
+			SWLogger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+		}
+		return ret;
+	}
+
+
+	String get50FNAME(String path) {
+		String ret = null;
+		try {
+			if (!getFExt(path).equals("xml")) {
+				InputStream inputstream = new FileInputStream(path);
+				AbstractMT msg = AbstractMT.parse(inputstream);
+				if (msg != null && msg.isType(103)) {
+					MT103 mt = (MT103) msg;
+					Field50F f50 = mt.getField50F();
+					ret = f50.getComponent2() + " " + f50.getComponent3() + " " + f50.getComponent4() + " "
+							+ f50.getComponent5() + " " + f50.getComponent6() + " " + f50.getComponent7() + " "
+							+ f50.getComponent8() + " " + f50.getComponent9();
 				}
 				inputstream.close();
 			}
@@ -643,7 +776,7 @@ public class SWC {
 											ret = InsertDB(docdt, amount, cur, docname, doctype, crdate, filename,
 													"IN");
 											if (ret.equals("ok")) {
-												File destinationFolder = new File(System.getenv("SWIFT_IN") + "/"
+												File destinationFolder = new File(System.getenv("SWIFT_INLOCAL") + "/"
 														+ STMT.getColumns().get(6).getCellData(i));
 												File sourceFolder = new File(System.getenv(FolderName) + "/"
 														+ STMT.getColumns().get(6).getCellData(i));
@@ -976,19 +1109,21 @@ public class SWC {
 
 	void ErrorMessage(String mes) {
 		try {
-			Platform.runLater(() -> {
-				try {
-					Alert alert = new Alert(Alert.AlertType.INFORMATION);
-					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-					stage.getIcons().add(new Image("terminal.png"));
-					alert.setTitle("Внимание");
-					alert.setHeaderText(null);
-					alert.setContentText(mes);
-					alert.showAndWait();
-				} catch (Exception e) {
-					SWLogger.error(e.getMessage());
-				}
-			});
+			if (mes != null && !mes.equals("")) {
+				Platform.runLater(() -> {
+					try {
+						Alert alert = new Alert(Alert.AlertType.INFORMATION);
+						Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+						stage.getIcons().add(new Image("terminal.png"));
+						alert.setTitle("Внимание");
+						alert.setHeaderText(null);
+						alert.setContentText(mes);
+						alert.showAndWait();
+					} catch (Exception e) {
+						SWLogger.error(e.getMessage());
+					}
+				});
+			}
 		} catch (Exception e) {
 			SWLogger.error(e.getMessage());
 		}
@@ -999,13 +1134,17 @@ public class SWC {
 	 */
 	Logger SWLogger = Logger.getLogger(getClass());
 
+	Properties swift_mt;
+
 	/**
 	 * Инициализация
 	 */
 	@FXML
 	private void initialize() {
 		try {
-
+			FileInputStream input = new FileInputStream(new File(System.getenv("TRANSACT_PATH") + "sw_mt.properties"));
+			swift_mt = new Properties();
+			swift_mt.load(new InputStreamReader(input, Charset.forName("UTF-8")));
 			// System.out.println(System.getenv("SWIFT_MSG"));
 			// System.out.println(System.getenv("SWIFT_ACK"));
 			// System.out.println(System.getenv("SWIFT_KVT"));
@@ -1020,24 +1159,22 @@ public class SWC {
 
 			// FileDate.setValue(LocalDate.now());
 
-			WebView  web = new WebView();
+			WebView web = new WebView();
 			WebEngine webEngine = web.getEngine();
-			webEngine.loadContent
-			(
-			    "<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:107%;font-size:15px;font-family:\"Calibri\",sans-serif;'><u>ТИПЫ ФАЙЛОВ</u><u>:</u></p>\r\n" + 
-			    "<ol style=\"list-style-type: decimal;\">\r\n" + 
-			    "    <li><span style=\"color:#385723;\">xml &nbsp;=&nbsp;</span><span style=\"color:#385723;\">Протокол отправки (принятия)</span></li>\r\n" + 
-			    "    <li><span style=\"color:#C00000;\">nak &nbsp;=&nbsp;</span><span style=\"color:#C00000;\">Отвергнут</span></li>\r\n" + 
-			    "    <li><span style=\"color:#00B050;\">ack &nbsp;=&nbsp;</span><span style=\"color:#00B050;\">Принят</span></li>\r\n" + 
-			    "</ol>"
-			);
-			Tooltip  tip = new Tooltip();
+			webEngine.loadContent(
+					"<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:107%;font-size:15px;font-family:\"Calibri\",sans-serif;'><u>ТИПЫ ФАЙЛОВ</u><u>:</u></p>\r\n"
+							+ "<ol style=\"list-style-type: decimal;\">\r\n"
+							+ "    <li><span style=\"color:#385723;\">xml &nbsp;=&nbsp;</span><span style=\"color:#385723;\">Протокол отправки (принятия)</span></li>\r\n"
+							+ "    <li><span style=\"color:#C00000;\">nak &nbsp;=&nbsp;</span><span style=\"color:#C00000;\">Отвергнут</span></li>\r\n"
+							+ "    <li><span style=\"color:#00B050;\">ack &nbsp;=&nbsp;</span><span style=\"color:#00B050;\">Принят</span></li>\r\n"
+							+ "</ol>");
+			Tooltip tip = new Tooltip();
 			tip.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
 			tip.setPrefSize(300, 200);
 			tip.setGraphic(web);
-			
+
 			FileExtens.setTooltip(tip);
-			
+
 			FileExtens.getItems().addAll("xml", "ack", "nak");
 
 			STMT.setRowFactory(tv -> {
@@ -1143,10 +1280,34 @@ public class SWC {
 
 			dbConnect();
 
-			// При выборе строки, что бы не исчезало после обновления
+			// При выборе строки, что бы не исчезало после обновления_________________________________________________________________________-
 			STMT.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
 				if (newSelection != null) {
 					selrow = STMT.getSelectionModel().getSelectedIndex();
+				}
+				if (newSelection != null) {
+					// Заполнить поля платежа, если MT103!
+					SWIFT_FILES sw = STMT.getSelectionModel().getSelectedItem();
+					if (sw != null && sw.getMTTYPE().equals("MT103")) {
+						String TF = CDETAIL.getText().replace("\r\n", "");
+						String GE = getMtDetail(sw.getPATH()).replace("\r\n", "");
+						// System.out.println("TF=" + TF);
+						// System.out.println("GE=" + GE);
+						if (!TF.equals(GE)) {
+							CDETAIL.setText(GE);
+							PAY_NAME.setText(get50FNAME(sw.getPATH()));
+							PAY_ACC.setText(get50F(sw.getPATH()));
+							REC_NAME.setText(get59NAME(sw.getPATH()));
+							REC_ACC.setText(get59ACC(sw.getPATH()));
+							// System.out.println("~~~~~~~~~~~~");
+						}
+					}else {
+						CDETAIL.setText("");
+						PAY_NAME.setText("");
+						PAY_ACC.setText("");
+						REC_NAME.setText("");
+						REC_ACC.setText("");
+					}
 				}
 			});
 			// Тип архива
@@ -1519,7 +1680,7 @@ public class SWC {
 	 * @param Col
 	 * @return
 	 */
-	String getMT(String MT, String Col) {
+	String getMT_2(String MT, String Col) {
 		String ret = null;
 		try {
 			String sel = "select TYPE, NAME, MT_CAT from VTB_MTTYPE a, VTB_MTCAT b where a.cat = b.mtc_id and lower(TYPE) like '%"
@@ -1531,6 +1692,40 @@ public class SWC {
 			}
 			rs.close();
 			prepStmt.close();
+		} catch (Exception e) {
+			ErrorMessage(e.getMessage());
+			SWLogger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+		}
+		return ret;
+	}
+
+	/**
+	 * Получить название MT и тип, из properties файла
+	 * 
+	 * @param MT
+	 * @param Col
+	 * @return
+	 */
+	String getMT(String MT, String Col) {
+		String ret = null;
+		try {
+			if (Col.equals("NAME") & (MT != null && !MT.equals(""))) {
+				ret = swift_mt.getProperty(MT);
+				if (ret == null) {
+					for (Map.Entry<Object, Object> entry : swift_mt.entrySet()) {
+						if (entry.getKey().toString().contains(MT)) {
+							ret = entry.getValue().toString();
+						}
+					}
+				}
+			} else if (Col.equals("TYPE") & (MT != null && !MT.equals(""))) {
+				// ret = MT;
+				for (Map.Entry<Object, Object> entry : swift_mt.entrySet()) {
+					if (entry.getKey().toString().contains(MT)) {
+						ret = entry.getKey().toString();
+					}
+				}
+			}
 		} catch (Exception e) {
 			ErrorMessage(e.getMessage());
 			SWLogger.error(e.getMessage() + "~" + Thread.currentThread().getName());
@@ -1560,9 +1755,9 @@ public class SWC {
 				// MSG or another folder
 				File dir = new File(System.getenv(FolderName));
 				File[] directoryListing = dir.listFiles();
-				
+
 				Arrays.sort(directoryListing, Comparator.comparingLong(File::lastModified).reversed());
-				
+
 				ObservableList<SWIFT_FILES> dlist = FXCollections.observableArrayList();
 				Boolean ifchk = false;
 				if (directoryListing != null) {
@@ -1592,6 +1787,7 @@ public class SWC {
 							list.setDOCDATE((getMtDate(child.getAbsolutePath()) != null)
 									? LocalDate.parse(getMtDate(child.getAbsolutePath()), formatter)
 									: null);
+							list.setPATH(child.getAbsolutePath());
 							/**
 							 * Перебор отмеченных
 							 */

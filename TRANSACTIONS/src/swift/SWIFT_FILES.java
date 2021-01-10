@@ -23,9 +23,12 @@ public class SWIFT_FILES {
 	private StringProperty OPER;/* ﬁ«≈– */
 	private SimpleObjectProperty<LocalDateTime> DT_CH;/* ƒ¿“¿ »«Ã≈Õ≈Õ»ﬂ */
 	private StringProperty FILENAME;/* Õ¿«¬¿Õ»≈ ‘¿…À¿ */
+	private StringProperty PATH;/* œÛÚ¸ */
 	private IntegerProperty ID;/* ID */
 
 	public SWIFT_FILES() {
+		
+		this.PATH = new SimpleStringProperty();
 		this.CHK = new SimpleBooleanProperty();
 		this.SUMM = new SimpleStringProperty();
 		this.VECTOR = new SimpleStringProperty();
@@ -40,6 +43,14 @@ public class SWIFT_FILES {
 		this.DOCDATE = new SimpleObjectProperty<>();
 	}
 
+	public void setPATH(String PATH) {
+		this.PATH.set(PATH);
+	}
+	
+	public String getPATH() {
+		return PATH.get();
+	}
+	
 	public void setDOCDATE(LocalDate DOCDATE) {
 		this.DOCDATE.set(DOCDATE);
 	}
