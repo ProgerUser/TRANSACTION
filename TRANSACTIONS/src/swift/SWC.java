@@ -120,13 +120,12 @@ public class SWC {
 
 	@FXML
 	private TextField PAY_NAME;
-	
+
 	@FXML
 	private TextField REC_NAME;
-	
+
 	@FXML
 	private TextField REC_ACC;
-	
 
 	@FXML
 	private RadioButton Out;
@@ -145,6 +144,9 @@ public class SWC {
 
 	@FXML
 	private DatePicker FileDate;
+
+	@FXML
+	private DatePicker DT2;
 
 	@FXML
 	private ComboBox<String> FileExtens;
@@ -401,7 +403,7 @@ public class SWC {
 		}
 		return ret;
 	}
-	
+
 	String get59ACC(String path) {
 		String ret = null;
 		try {
@@ -421,7 +423,7 @@ public class SWC {
 		}
 		return ret;
 	}
-	
+
 	String get59NAME(String path) {
 		String ret = null;
 		try {
@@ -441,7 +443,6 @@ public class SWC {
 		}
 		return ret;
 	}
-
 
 	String get50FNAME(String path) {
 		String ret = null;
@@ -1280,7 +1281,8 @@ public class SWC {
 
 			dbConnect();
 
-			// ѕри выборе строки, что бы не исчезало после обновлени€_________________________________________________________________________-
+			// ѕри выборе строки, что бы не исчезало после
+			// обновлени€_________________________________________________________________________-
 			STMT.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
 				if (newSelection != null) {
 					selrow = STMT.getSelectionModel().getSelectedIndex();
@@ -1301,7 +1303,7 @@ public class SWC {
 							REC_ACC.setText(get59ACC(sw.getPATH()));
 							// System.out.println("~~~~~~~~~~~~");
 						}
-					}else {
+					} else {
 						CDETAIL.setText("");
 						PAY_NAME.setText("");
 						PAY_ACC.setText("");
@@ -1767,11 +1769,19 @@ public class SWC {
 						BasicFileAttributes attr = java.nio.file.Files.readAttributes(filePath,
 								BasicFileAttributes.class);
 						// если файл и если существует
-						if ((child.isFile() & child.exists())
-								& ((FileDate.getValue() != null && (FileDate.getValue()
-										.equals(LocalDate.parse(
-												formatdt.format(new Date(attr.creationTime().toMillis())), formatter))))
-										| FileDate.getValue() == null)
+						if ((child.isFile() & child.exists()) & ((FileDate.getValue() != null &&
+						// FileDate.getValue().equals(LocalDate.parse(formatdt.format(new
+						// Date(attr.creationTime().toMillis())), formatter))
+								(FileDate.getValue().compareTo(LocalDate.parse(
+										formatdt.format(new Date(attr.creationTime().toMillis())), formatter)) <= 0)
+
+						) | FileDate.getValue() == null) & ((DT2.getValue() != null &&
+						// FileDate.getValue().equals(LocalDate.parse(formatdt.format(new
+						// Date(attr.creationTime().toMillis())), formatter))
+								(DT2.getValue().compareTo(LocalDate.parse(
+										formatdt.format(new Date(attr.creationTime().toMillis())), formatter)) >= 0)
+
+						) | DT2.getValue() == null)
 								& ((FileExtens.getValue() != null
 										& getFExt(child.getAbsolutePath()).toLowerCase().equals(FileExtens.getValue()))
 										| FileExtens.getValue() == null)) {

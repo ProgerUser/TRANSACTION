@@ -87,7 +87,16 @@
                                           <Font size="14.0" />
                                        </font>
                                     </Button>
-                                    <DatePicker fx:id="FileDate" maxWidth="100.0" prefHeight="25.0">
+                                    <DatePicker fx:id="FileDate" maxWidth="100.0" prefHeight="25.0" promptText="С">
+                                       <tooltip>
+                                          <Tooltip text="Дата создания файлов">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Tooltip>
+                                       </tooltip>
+                                    </DatePicker>
+                                    <DatePicker fx:id="DT2" layoutX="44.0" layoutY="13.0" maxWidth="100.0" prefHeight="25.0" promptText="ПО">
                                        <tooltip>
                                           <Tooltip text="Дата создания файлов">
                                              <font>

@@ -390,3 +390,8 @@ ERROR   2021-01-10 17:00:59,720 [Timer-1] swift.SWC  - null~Timer-1 LineNumber 1
 ERROR   2021-01-10 17:00:59,720 [Timer-1] swift.SWC  - null~Timer-1 LineNumber 1574
 ERROR   2021-01-10 17:00:59,721 [Timer-1] swift.SWC  - null~Timer-1 LineNumber 1574
 ERROR   2021-01-10 17:00:59,721 [Timer-1] swift.SWC  - null~Timer-1 LineNumber 1574
+ERROR   2021-01-11 21:17:38,180 [JavaFX Application Thread] swift.SWC  - null~JavaFX Application Thread LineNumber 1863
+ERROR   2021-01-11 21:17:38,187 [Timer-1] swift.SWC  - null~Timer-1 LineNumber 1863
+ERROR   2021-01-11 21:17:39,187 [Timer-1] swift.SWC  - null~Timer-1 LineNumber 1863
+ERROR   2021-01-11 21:17:40,187 [Timer-1] swift.SWC  - null~Timer-1 LineNumber 1863
+ERROR   2021-01-11 21:17:41,187 [Timer-1] swift.SWC  - null~Timer-1 LineNumber 1863
