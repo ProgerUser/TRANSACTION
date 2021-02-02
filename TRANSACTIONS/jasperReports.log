@@ -395,3 +395,7 @@
 [11-01-2021 21:17:39] [SWC] ERROR:1863 - null~Timer-1
 [11-01-2021 21:17:40] [SWC] ERROR:1863 - null~Timer-1
 [11-01-2021 21:17:41] [SWC] ERROR:1863 - null~Timer-1
+[13-01-2021 23:59:42] [DBUtil] ERROR:43 - ORA-01017: invalid username/password; logon denied
+~JavaFX Application Thread
+[13-01-2021 23:59:44] [SWC] ERROR:1903 - ORA-01017: invalid username/password; logon denied
+~JavaFX Application Thread

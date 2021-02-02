@@ -12,7 +12,7 @@
 
 <StackPane fx:id="StPn" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 <children>
-      <TabPane fx:id="RootTab" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id="RootTab" styleClass="floating" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab fx:id="INOUT" text="Вх./Исх.">
                <tooltip>
@@ -25,11 +25,11 @@
                <content>
                   <SplitPane dividerPositions="0.5">
                      <items>
-                        <VBox maxWidth="100.0">
+                        <VBox maxWidth="-Infinity">
                            <children>
                               <GridPane>
                                 <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" />
                                 </columnConstraints>
                                 <rowConstraints>
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -45,33 +45,15 @@
                                     <RadioButton fx:id="OutLocal" layoutX="10.0" layoutY="137.0" mnemonicParsing="false" text="OutLocal" GridPane.rowIndex="4" />
                                     <RadioButton fx:id="Out" mnemonicParsing="false" text="Out" GridPane.rowIndex="1" />
                                  </children>
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </VBox.margin>
                               </GridPane>
                               <RadioButton fx:id="Ack" mnemonicParsing="false" text="Ack" visible="false" />
                               <RadioButton fx:id="Kvt" mnemonicParsing="false" text="Kvt" visible="false" />
                            </children>
                         </VBox>
                         <BorderPane>
-                           <center>
-                              <TableView fx:id="STMT" editable="true" styleClass="mylistview" stylesheets="/TableView.css" tableMenuButtonVisible="true" BorderPane.alignment="CENTER">
-                                 <columns>
-                                    <TableColumn fx:id="CHK" prefWidth="46.0" text="Выб." />
-                                    <TableColumn fx:id="MTTYPE" prefWidth="75.0" text="Тип SWIFT" />
-                                    <TableColumn fx:id="MTNAME" prefWidth="224.0" text="Название документа" />
-                                    <TableColumn fx:id="DOCDATE" prefWidth="112.0" text="Дата документа" />
-                                    <TableColumn fx:id="CUR" prefWidth="61.0" text="Валюта" />
-                                    <TableColumn fx:id="SUMM" prefWidth="70.0" text="Сумма" />
-                  								<TableColumn fx:id="FILE_NAME" prefWidth="218.0" text="Название файла" />
-                  								<TableColumn fx:id="DT_CH" prefWidth="120.0" text="Дата изменения" />
-                                 </columns>
-                                 <contextMenu>
-                                    <ContextMenu>
-                                      <items>
-                                        <MenuItem mnemonicParsing="false" onAction="#Open" text="Печать" />
-                                      </items>
-                                    </ContextMenu>
-                                 </contextMenu>
-                              </TableView>
-                           </center>
                            <top>
                         		<ToolBar stylesheets="/borderpane.css" BorderPane.alignment="CENTER">
                         			<items>
@@ -244,6 +226,32 @@
                                  </children>
                               </VBox>
                            </bottom>
+                           <center>
+                              <SplitPane dividerPositions="0.31209735146743023" BorderPane.alignment="CENTER">
+                                 <items>
+                                    <TextArea fx:id="FileTextArea" />
+                                    <TableView fx:id="STMT" editable="true" styleClass="mylistview" stylesheets="/TableView.css" tableMenuButtonVisible="true">
+                                       <columns>
+                                          <TableColumn fx:id="CHK" prefWidth="46.0" text="Выб." />
+                                          <TableColumn fx:id="MTTYPE" prefWidth="75.0" text="Тип SWIFT" />
+                                          <TableColumn fx:id="MTNAME" prefWidth="224.0" text="Название документа" />
+                                          <TableColumn fx:id="DOCDATE" prefWidth="112.0" text="Дата документа" />
+                                          <TableColumn fx:id="CUR" prefWidth="61.0" text="Валюта" />
+                                          <TableColumn fx:id="SUMM" prefWidth="70.0" text="Сумма" />
+                              								<TableColumn fx:id="FILE_NAME" prefWidth="218.0" text="Название файла" />
+                              								<TableColumn fx:id="DT_CH" prefWidth="120.0" text="Дата изменения" />
+                                       </columns>
+                                       <contextMenu>
+                                          <ContextMenu>
+                                            <items>
+                                              <MenuItem mnemonicParsing="false" onAction="#Open" text="Печать" />
+                                            </items>
+                                          </ContextMenu>
+                                       </contextMenu>
+                                    </TableView>
+                                 </items>
+                              </SplitPane>
+                           </center>
                         </BorderPane>
                      </items>
                   </SplitPane>

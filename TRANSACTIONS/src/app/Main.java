@@ -33,7 +33,6 @@ public class Main extends Application {
 	public static Logger logger = Logger.getLogger(Main.class);
 	public static Stage primaryStage;
 	public static BorderPane rootLayout;
-
 	public static String MODULE = null;
 
 	@Override
@@ -47,7 +46,7 @@ public class Main extends Application {
 			logger.setLevel(Level.INFO);
 			//System.out.println(MODULE);
 			
-			
+			/*
 			if (MODULE == null) {
 				Enter();
 			} else if (MODULE.equals("DEBTINFO")) {
@@ -60,19 +59,19 @@ public class Main extends Application {
 				showFirst();
 			} else if (MODULE.equals("SWIFT")) {
 				DBUtil.dbConnect();
-				//initRootLayout();
+				initRootLayout();
 				swift2();
 			}
-			
+			*/
 
-			/*
+			
 			  Connect.connectionURL_ = "10.111.64.21:1521/odb";
 			  Connect.userID_ = "SAIDP";
-			  Connect.userPassword_ = ""; 
+			  Connect.userPassword_ = "ipman165"; 
 			  DBUtil.dbConnect(); 
 			  //initRootLayout();
 			  swift2();
-			*/
+			
 			
 			primaryStage.setOnCloseRequest(e -> {
 				DBUtil.dbDisconnect();

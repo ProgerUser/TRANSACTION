@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -32,6 +33,7 @@ import java.util.Properties;
 import java.util.Timer;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.ConsoleAppender;
@@ -82,6 +84,7 @@ import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
@@ -150,6 +153,9 @@ public class SWC {
 
 	@FXML
 	private ComboBox<String> FileExtens;
+
+	@FXML
+	private TextArea FileTextArea;
 
 	/**
 	 * Расшифровка типа каталога
@@ -1140,6 +1146,7 @@ public class SWC {
 	/**
 	 * Инициализация
 	 */
+	@SuppressWarnings("resource")
 	@FXML
 	private void initialize() {
 		try {
@@ -1288,9 +1295,26 @@ public class SWC {
 					selrow = STMT.getSelectionModel().getSelectedIndex();
 				}
 				if (newSelection != null) {
+
 					// Заполнить поля платежа, если MT103!
 					SWIFT_FILES sw = STMT.getSelectionModel().getSelectedItem();
-					if (sw != null && sw.getMTTYPE().equals("MT103")) {
+					try {
+						if (sw != null) {
+							InputStream is = new FileInputStream(sw.getPATH());
+							BufferedReader buf = new BufferedReader(new InputStreamReader(is));
+							String line = buf.readLine();
+							StringBuilder sb = new StringBuilder();
+							while (line != null) {
+								sb.append(line).append("\n");
+								line = buf.readLine();
+							}
+							FileTextArea.setText(sb.toString());
+						}
+					} catch (Exception e) {
+
+					}
+
+					if (sw != null && (sw.getMTTYPE() != null && sw.getMTTYPE().equals("MT103"))) {
 						String TF = CDETAIL.getText().replace("\r\n", "");
 						String GE = getMtDetail(sw.getPATH()).replace("\r\n", "");
 						// System.out.println("TF=" + TF);
