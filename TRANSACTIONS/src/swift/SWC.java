@@ -1150,6 +1150,8 @@ public class SWC {
 	@FXML
 	private void initialize() {
 		try {
+			FileTextArea.setEditable(false);
+			
 			FileInputStream input = new FileInputStream(new File(System.getenv("TRANSACT_PATH") + "sw_mt.properties"));
 			swift_mt = new Properties();
 			swift_mt.load(new InputStreamReader(input, Charset.forName("UTF-8")));

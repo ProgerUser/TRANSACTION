@@ -46,7 +46,7 @@ public class Main extends Application {
 			logger.setLevel(Level.INFO);
 			//System.out.println(MODULE);
 			
-			/*
+			
 			if (MODULE == null) {
 				Enter();
 			} else if (MODULE.equals("DEBTINFO")) {
@@ -62,15 +62,15 @@ public class Main extends Application {
 				initRootLayout();
 				swift2();
 			}
-			*/
+			
 
 			
-			  Connect.connectionURL_ = "10.111.64.21:1521/odb";
-			  Connect.userID_ = "SAIDP";
-			  Connect.userPassword_ = "ipman165"; 
-			  DBUtil.dbConnect(); 
-			  //initRootLayout();
-			  swift2();
+//			  Connect.connectionURL_ = "10.111.64.21:1521/odb";
+//			  Connect.userID_ = "SAIDP";
+//			  Connect.userPassword_ = "xxx"; 
+//			  DBUtil.dbConnect(); 
+//			  //initRootLayout();
+//			  swift2();
 			
 			
 			primaryStage.setOnCloseRequest(e -> {

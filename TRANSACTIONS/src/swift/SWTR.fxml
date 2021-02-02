@@ -229,7 +229,7 @@
                            <center>
                               <SplitPane dividerPositions="0.31209735146743023" BorderPane.alignment="CENTER">
                                  <items>
-                                    <TextArea fx:id="FileTextArea" />
+                                    <TextArea fx:id="FileTextArea" editable="false" styleClass="mylistview" stylesheets="/TableView.css" />
                                     <TableView fx:id="STMT" editable="true" styleClass="mylistview" stylesheets="/TableView.css" tableMenuButtonVisible="true">
                                        <columns>
                                           <TableColumn fx:id="CHK" prefWidth="46.0" text="Выб." />
