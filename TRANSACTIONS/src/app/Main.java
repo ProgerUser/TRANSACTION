@@ -1,5 +1,7 @@
 package app;
 
+import java.sql.PreparedStatement;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
@@ -49,30 +51,30 @@ public class Main extends Application {
 			//System.out.println(MODULE);
 			
 			
-			if (MODULE == null) {
-				Enter();
-			} else if (MODULE.equals("DEBTINFO")) {
-				DBUtil.dbConnect();
-				initRootLayout();
-				Debtinfo();
-			} else if (MODULE.equals("BUH")) {
-				DBUtil.dbConnect();
-				initRootLayout();
-				showFirst();
-			} else if (MODULE.equals("SWIFT")) {
-				DBUtil.dbConnect();
-				initRootLayout();
-				swift2();
-			}
+//			if (MODULE == null) {
+//				Enter();
+//			} else if (MODULE.equals("DEBTINFO")) {
+//				DBUtil.dbConnect();
+//				initRootLayout();
+//				Debtinfo();
+//			} else if (MODULE.equals("BUH")) {
+//				DBUtil.dbConnect();
+//				initRootLayout();
+//				showFirst();
+//			} else if (MODULE.equals("SWIFT")) {
+//				DBUtil.dbConnect();
+//				initRootLayout();
+//				swift2();
+//			}
 			
 
 			
-//			  Connect.connectionURL_ = "10.111.64.21:1521/odb";
-//			  Connect.userID_ = "SAIDP";
-//			  Connect.userPassword_ = "xxx"; 
-//			  DBUtil.dbConnect(); 
-//			  //initRootLayout();
-//			  swift2();
+			  Connect.connectionURL_ = "10.111.64.21:1521/odb";
+			  Connect.userID_ = "SAIDP";
+			  Connect.userPassword_ = "ipman165"; 
+			  DBUtil.dbConnect(); 
+			  //initRootLayout();
+			  swift2();
 			
 			
 			primaryStage.setOnCloseRequest(e -> {
@@ -297,6 +299,7 @@ public class Main extends Application {
 			JMetro jMetro = new JMetro(startingStyle);
 			System.setProperty("prism.lcdtext", "false");
 			jMetro.setScene(scene);
+			
 			
 			primaryStage.setTitle("S.W.I.F.T "+Connect.userID_+"@"+Connect.connectionURL_);
 			primaryStage.setScene(scene); // Set the scene in primary stage.

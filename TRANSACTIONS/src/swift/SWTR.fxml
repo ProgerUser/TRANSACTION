@@ -57,18 +57,7 @@
                            <top>
                         		<ToolBar stylesheets="/borderpane.css" BorderPane.alignment="CENTER">
                         			<items>
-                        				<Button fx:id="ModeINbox" mnemonicParsing="false" onAction="#LoadFile" prefHeight="30.0" prefWidth="30.0">
-                                       <tooltip>
-                                          <Tooltip text="Обработать">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Tooltip>
-                                       </tooltip>
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Button>
+                        				<Button fx:id="ModeINbox" mnemonicParsing="false" onAction="#LoadFile" style="-shrink-animate-on-press: true; -fx-background-color: #2596be; -fx-text-fill: white;" text="Обработать" textFill="WHITE" />
                                     <DatePicker fx:id="FileDate" maxWidth="120.0" prefHeight="25.0" promptText="С">
                                        <tooltip>
                                           <Tooltip text="Дата создания файлов">
@@ -97,6 +86,7 @@
                                           </Tooltip>
                                        </tooltip>
                                     </ComboBox>
+                                    <Button fx:id="ClearFilter" mnemonicParsing="false" onAction="#ClearFilter" style="-shrink-animate-on-press: true; -fx-background-color: #2596be; -fx-text-fill: white;" text="Очистить фильтры" textFill="WHITE" />
                                     <Text fx:id="FolderN" strokeType="OUTSIDE" strokeWidth="0.0" />
                         			</items>
                         		</ToolBar>
@@ -227,9 +217,12 @@
                               </VBox>
                            </bottom>
                            <center>
-                              <SplitPane dividerPositions="0.31209735146743023" BorderPane.alignment="CENTER">
+                              <SplitPane dividerPositions="0.24354657687991021" BorderPane.alignment="CENTER">
                                  <items>
-                                    <TextArea fx:id="FileTextArea" editable="false" styleClass="mylistview" stylesheets="/TableView.css" />
+                                    <TextArea fx:id="FileTextArea" editable="false" styleClass="mylistview" stylesheets="/TableView.css">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font></TextArea>
                                     <TableView fx:id="STMT" editable="true" styleClass="mylistview" stylesheets="/TableView.css" tableMenuButtonVisible="true">
                                        <columns>
                                           <TableColumn fx:id="CHK" prefWidth="150.0" text="Выб." />
@@ -292,15 +285,7 @@
                      <top>
                         <ToolBar stylesheets="/borderpane.css" BorderPane.alignment="CENTER">
                            <items>
-                              <Button fx:id="RefreshDB" mnemonicParsing="false" onAction="#RefreshDB" prefHeight="30.0" prefWidth="30.0" styleClass="Reload">
-                                 <tooltip>
-                                    <Tooltip text="Выполнить поиск">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Tooltip>
-                                 </tooltip>
-                              </Button>
+                              <Button fx:id="RefreshDB" mnemonicParsing="false" onAction="#RefreshDB" style="-shrink-animate-on-press: true; -fx-background-color: #2596be; -fx-text-fill: white;" styleClass="Reload" text="Поиск" />
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="C:" />
                               <DatePicker fx:id="dt1" prefWidth="120.0">
                                  <tooltip>

@@ -70,6 +70,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.DatePicker;
@@ -1137,28 +1138,55 @@ public class SWC {
 		}
 	}
 
+	
+	@FXML
+	private void ClearFilter(ActionEvent event) {
+		FileDate.setValue(null);
+		DT2.setValue(null);
+		FileExtens.setValue(null);
+	}
+	
+	@FXML
+	private Button ClearFilter;
+	
 	/**
 	 * Логирование
 	 */
 	Logger SWLogger = Logger.getLogger(getClass());
 
 	Properties swift_mt;
-
 	/**
 	 * Инициализация
 	 */
+	@SuppressWarnings("resource")
 	@FXML
 	private void initialize() {
 		try {
+
+			
+			addIfNotPresent(StPn.getStyleClass(), JMetroStyleClass.UNDERLINE_TAB_PANE);
+			
+			CheckBox selecteAllCheckBox = new CheckBox();
+			selecteAllCheckBox.setOnAction(event -> {
+				event.consume();
+				STMT.getItems().forEach(item -> item.setCHK(selecteAllCheckBox.isSelected()));
+			});
+
+			CHK.setGraphic(selecteAllCheckBox);
+			CHK.setSortable(false);
+			CHK.setCellValueFactory(data -> data.getValue().CHKProperty());
+			CHK.setCellFactory(CheckBoxTableCell.forTableColumn(CHK));
+
+			Msg.setSelected(true);
 			addIfNotPresent(StPn.getStyleClass(), JMetroStyleClass.BACKGROUND);
 			addIfNotPresent(STMT.getStyleClass(), JMetroStyleClass.TABLE_GRID_LINES);
 			addIfNotPresent(STMT.getStyleClass(), JMetroStyleClass.ALTERNATING_ROW_COLORS);
-			
+
 			addIfNotPresent(Achive.getStyleClass(), JMetroStyleClass.TABLE_GRID_LINES);
 			addIfNotPresent(Achive.getStyleClass(), JMetroStyleClass.ALTERNATING_ROW_COLORS);
-			
+
 			FileTextArea.setEditable(false);
-			
+
 			FileInputStream input = new FileInputStream(new File(System.getenv("TRANSACT_PATH") + "sw_mt.properties"));
 			swift_mt = new Properties();
 			swift_mt.load(new InputStreamReader(input, Charset.forName("UTF-8")));
@@ -1268,24 +1296,24 @@ public class SWC {
 			FolderName = "SWIFT_MSG";
 			INOUT.setText("Входящие");
 			FolderN.setText("Входящие документы ВТБ " + System.getenv("SWIFT_MSG"));
-			{
-				InputStream svgFile = getClass().getResourceAsStream("/search_swift.svg");
-				SvgLoader loader = new SvgLoader();
-				Group svgImage = loader.loadSvg(svgFile);
-				svgImage.setScaleX(0.05);
-				svgImage.setScaleY(0.05);
-				Group graphic = new Group(svgImage);
-				RefreshDB.setGraphic(graphic);
-			}
-			{
-				InputStream svgFile = getClass().getResourceAsStream("/file.svg");
-				SvgLoader loader = new SvgLoader();
-				Group svgImage = loader.loadSvg(svgFile);
-				svgImage.setScaleX(0.4);
-				svgImage.setScaleY(0.4);
-				Group graphic = new Group(svgImage);
-				ModeINbox.setGraphic(graphic);
-			}
+//			{
+//				InputStream svgFile = getClass().getResourceAsStream("/search_swift.svg");
+//				SvgLoader loader = new SvgLoader();
+//				Group svgImage = loader.loadSvg(svgFile);
+//				svgImage.setScaleX(0.05);
+//				svgImage.setScaleY(0.05);
+//				Group graphic = new Group(svgImage);
+//				RefreshDB.setGraphic(graphic);
+//			}
+//			{
+//				InputStream svgFile = getClass().getResourceAsStream("/file.svg");
+//				SvgLoader loader = new SvgLoader();
+//				Group svgImage = loader.loadSvg(svgFile);
+//				svgImage.setScaleX(0.4);
+//				svgImage.setScaleY(0.4);
+//				Group graphic = new Group(svgImage);
+//				ModeINbox.setGraphic(graphic);
+//			}
 			exec = Executors.newCachedThreadPool((runnable) -> {
 				Thread t = new Thread(runnable);
 				t.setDaemon(true);
@@ -1307,21 +1335,6 @@ public class SWC {
 
 					// Заполнить поля платежа, если MT103!
 					SWIFT_FILES sw = STMT.getSelectionModel().getSelectedItem();
-					try {
-						if (sw != null) {
-							InputStream is = new FileInputStream(sw.getPATH());
-							BufferedReader buf = new BufferedReader(new InputStreamReader(is));
-							String line = buf.readLine();
-							StringBuilder sb = new StringBuilder();
-							while (line != null) {
-								sb.append(line).append("\n");
-								line = buf.readLine();
-							}
-							FileTextArea.setText(sb.toString());
-						}
-					} catch (Exception e) {
-
-					}
 
 					if (sw != null && (sw.getMTTYPE() != null && sw.getMTTYPE().equals("MT103"))) {
 						String TF = CDETAIL.getText().replace("\r\n", "");
@@ -1342,6 +1355,25 @@ public class SWC {
 						PAY_ACC.setText("");
 						REC_NAME.setText("");
 						REC_ACC.setText("");
+					}
+					if (sw != null) {
+						try {
+							InputStream is = new FileInputStream(sw.getPATH());
+							BufferedReader buf = new BufferedReader(new InputStreamReader(is));
+							String line = buf.readLine();
+							StringBuilder sb = new StringBuilder();
+							while (line != null) {
+								sb.append(line).append("\n");
+								line = buf.readLine();
+							}
+							FileTextArea.setText(sb.toString());
+
+						} catch (Exception e) {
+							SWLogger.error(e.getMessage());
+							ErrorMessage(e.getMessage());
+						}
+					} else {
+						FileTextArea.setText("");
 					}
 				}
 			});
@@ -1553,7 +1585,6 @@ public class SWC {
 			 */
 			RunProcess("INOUT");
 		} catch (Exception e) {
-
 			SWLogger.error(e.getMessage());
 			ErrorMessage(e.getMessage());
 		}

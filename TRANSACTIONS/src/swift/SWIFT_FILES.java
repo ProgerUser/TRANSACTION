@@ -25,7 +25,7 @@ public class SWIFT_FILES {
 	private StringProperty FILENAME;/* ÍÀÇÂÀÍÈÅ ÔÀÉËÀ */
 	private StringProperty PATH;/* Ïóòü */
 	private IntegerProperty ID;/* ID */
-
+	
 	public SWIFT_FILES() {
 		
 		this.PATH = new SimpleStringProperty();

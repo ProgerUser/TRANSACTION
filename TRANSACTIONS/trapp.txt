@@ -1,0 +1,5 @@
+ERROR   2021-02-02 20:16:29,025 [JavaFX Application Thread] app.util.DBUtil  - ORA-01017: invalid username/password; logon denied
+~JavaFX Application Thread LineNumber 43
+ERROR   2021-02-02 20:16:30,389 [JavaFX Application Thread] swift.SWC  - ORA-01017: invalid username/password; logon denied
+~JavaFX Application Thread LineNumber 1936
+ERROR   2021-02-02 20:43:33,514 [JavaFX Application Thread] swift.SWC  - null~JavaFX Application Thread LineNumber 1084
