@@ -18,6 +18,8 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import jfxtras.styles.jmetro.JMetro;
+import jfxtras.styles.jmetro.Style;
 import sbalert.Msg;
 import sverka.SverkaC;
 import swift.SWC;
@@ -291,7 +293,11 @@ public class Main extends Application {
 			loader.setLocation(Main.class.getResource("/swift/SWTR.fxml"));
 			StackPane employeeOperationsView = (StackPane) loader.load();
 			Scene scene = new Scene(employeeOperationsView); // We are sending rootLayout to the Scene.
-
+			Style startingStyle = Style.LIGHT;
+			JMetro jMetro = new JMetro(startingStyle);
+			System.setProperty("prism.lcdtext", "false");
+			jMetro.setScene(scene);
+			
 			primaryStage.setTitle("S.W.I.F.T "+Connect.userID_+"@"+Connect.connectionURL_);
 			primaryStage.setScene(scene); // Set the scene in primary stage.
 			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -395,6 +401,8 @@ public class Main extends Application {
 			loader.setLocation(Main.class.getResource("view/Enter.fxml"));
 			rootLayout = (BorderPane) loader.load();
 			Scene scene = new Scene(rootLayout); // We are sending rootLayout to the Scene.
+			
+			
 			primaryStage.setScene(scene); // Set the scene in primary stage.
 			primaryStage.setResizable(false);
 			primaryStage.centerOnScreen();

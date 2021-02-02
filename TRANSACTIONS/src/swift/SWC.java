@@ -1,5 +1,7 @@
 package swift;
 
+import static jfxtras.styles.jmetro.JMetroStyleClass.addIfNotPresent;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -9,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -33,7 +34,6 @@ import java.util.Properties;
 import java.util.Timer;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.ConsoleAppender;
@@ -103,6 +103,7 @@ import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.converter.LocalDateStringConverter;
 import javafx.util.converter.LocalDateTimeStringConverter;
+import jfxtras.styles.jmetro.JMetroStyleClass;
 
 /**
  * SWIFT
@@ -1146,10 +1147,16 @@ public class SWC {
 	/**
 	 * Инициализация
 	 */
-	@SuppressWarnings("resource")
 	@FXML
 	private void initialize() {
 		try {
+			addIfNotPresent(StPn.getStyleClass(), JMetroStyleClass.BACKGROUND);
+			addIfNotPresent(STMT.getStyleClass(), JMetroStyleClass.TABLE_GRID_LINES);
+			addIfNotPresent(STMT.getStyleClass(), JMetroStyleClass.ALTERNATING_ROW_COLORS);
+			
+			addIfNotPresent(Achive.getStyleClass(), JMetroStyleClass.TABLE_GRID_LINES);
+			addIfNotPresent(Achive.getStyleClass(), JMetroStyleClass.ALTERNATING_ROW_COLORS);
+			
 			FileTextArea.setEditable(false);
 			
 			FileInputStream input = new FileInputStream(new File(System.getenv("TRANSACT_PATH") + "sw_mt.properties"));
