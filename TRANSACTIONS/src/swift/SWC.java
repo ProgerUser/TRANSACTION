@@ -1,7 +1,5 @@
 package swift;
 
-import static jfxtras.styles.jmetro.JMetroStyleClass.addIfNotPresent;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -52,7 +50,6 @@ import com.prowidesoftware.swift.model.field.Field70;
 import com.prowidesoftware.swift.model.mt.AbstractMT;
 import com.prowidesoftware.swift.model.mt.mt1xx.MT103;
 
-import afester.javafx.svg.SvgLoader;
 import app.Main;
 import app.model.Connect;
 import javafx.application.Platform;
@@ -66,7 +63,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -104,7 +100,6 @@ import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.converter.LocalDateStringConverter;
 import javafx.util.converter.LocalDateTimeStringConverter;
-import jfxtras.styles.jmetro.JMetroStyleClass;
 
 /**
  * SWIFT
@@ -1004,7 +999,7 @@ public class SWC {
 
 				INOUT.setText("Входящие");
 				FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
-				ModeINbox.setDisable(false);
+				ModeINbox.setDisable(true);
 
 				FolderN.setText("Входящие документы ВТБ " + System.getenv("SWIFT_ACK"));
 
@@ -1018,7 +1013,7 @@ public class SWC {
 
 				INOUT.setText("Входящие");
 				FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
-				ModeINbox.setDisable(false);
+				ModeINbox.setDisable(true);
 
 				FolderN.setText("Входящие документы ВТБ для квитанции " + System.getenv("SWIFT_KVT"));
 
@@ -1032,7 +1027,7 @@ public class SWC {
 
 				INOUT.setText("Входящие");
 				FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
-				ModeINbox.setDisable(false);
+				ModeINbox.setDisable(true);
 
 				FolderN.setText("Входящие документы ВТБ, другие=" + System.getenv("SWIFT_OTHER"));
 
@@ -1059,7 +1054,7 @@ public class SWC {
 
 				INOUT.setText("Входящие,локальный каталог");
 				FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
-				ModeINbox.setDisable(true);
+				ModeINbox.setDisable(false);
 
 				FolderN.setText("Входящие,локальный каталог " + System.getenv("SWIFT_INLOCAL"));
 			}
@@ -1138,34 +1133,32 @@ public class SWC {
 		}
 	}
 
-	
 	@FXML
 	private void ClearFilter(ActionEvent event) {
 		FileDate.setValue(null);
 		DT2.setValue(null);
 		FileExtens.setValue(null);
 	}
-	
+
 	@FXML
 	private Button ClearFilter;
-	
+
 	/**
 	 * Логирование
 	 */
 	Logger SWLogger = Logger.getLogger(getClass());
 
 	Properties swift_mt;
+
 	/**
 	 * Инициализация
 	 */
-	@SuppressWarnings("resource")
 	@FXML
 	private void initialize() {
 		try {
 
-			
-			addIfNotPresent(StPn.getStyleClass(), JMetroStyleClass.UNDERLINE_TAB_PANE);
-			
+//			addIfNotPresent(StPn.getStyleClass(), JMetroStyleClass.UNDERLINE_TAB_PANE);
+
 			CheckBox selecteAllCheckBox = new CheckBox();
 			selecteAllCheckBox.setOnAction(event -> {
 				event.consume();
@@ -1173,17 +1166,15 @@ public class SWC {
 			});
 
 			CHK.setGraphic(selecteAllCheckBox);
-			CHK.setSortable(false);
-			CHK.setCellValueFactory(data -> data.getValue().CHKProperty());
-			CHK.setCellFactory(CheckBoxTableCell.forTableColumn(CHK));
 
 			Msg.setSelected(true);
-			addIfNotPresent(StPn.getStyleClass(), JMetroStyleClass.BACKGROUND);
-			addIfNotPresent(STMT.getStyleClass(), JMetroStyleClass.TABLE_GRID_LINES);
-			addIfNotPresent(STMT.getStyleClass(), JMetroStyleClass.ALTERNATING_ROW_COLORS);
 
-			addIfNotPresent(Achive.getStyleClass(), JMetroStyleClass.TABLE_GRID_LINES);
-			addIfNotPresent(Achive.getStyleClass(), JMetroStyleClass.ALTERNATING_ROW_COLORS);
+//			addIfNotPresent(StPn.getStyleClass(), JMetroStyleClass.BACKGROUND);
+//			addIfNotPresent(STMT.getStyleClass(), JMetroStyleClass.TABLE_GRID_LINES);
+//			addIfNotPresent(STMT.getStyleClass(), JMetroStyleClass.ALTERNATING_ROW_COLORS);
+//
+//			addIfNotPresent(Achive.getStyleClass(), JMetroStyleClass.TABLE_GRID_LINES);
+//			addIfNotPresent(Achive.getStyleClass(), JMetroStyleClass.ALTERNATING_ROW_COLORS);
 
 			FileTextArea.setEditable(false);
 
@@ -1332,7 +1323,6 @@ public class SWC {
 					selrow = STMT.getSelectionModel().getSelectedIndex();
 				}
 				if (newSelection != null) {
-
 					// Заполнить поля платежа, если MT103!
 					SWIFT_FILES sw = STMT.getSelectionModel().getSelectedItem();
 
@@ -1356,6 +1346,7 @@ public class SWC {
 						REC_NAME.setText("");
 						REC_ACC.setText("");
 					}
+					//Файл
 					if (sw != null) {
 						try {
 							InputStream is = new FileInputStream(sw.getPATH());
@@ -1366,8 +1357,11 @@ public class SWC {
 								sb.append(line).append("\n");
 								line = buf.readLine();
 							}
-							FileTextArea.setText(sb.toString());
-
+							if (FileTextArea != null && !FileTextArea.getText().equals(sb.toString())) {
+								FileTextArea.setText(sb.toString());
+							}
+							is.close();
+							buf.close();
 						} catch (Exception e) {
 							SWLogger.error(e.getMessage());
 							ErrorMessage(e.getMessage());
@@ -1814,10 +1808,12 @@ public class SWC {
 	void InitTable() {
 		try {
 			if (System.getenv(FolderName) != null) {
+
 				SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 				SimpleDateFormat formatdt = new SimpleDateFormat("dd.MM.yyyy");
 				DateTimeFormatter formatterwt = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
 				// MSG or another folder
 				File dir = new File(System.getenv(FolderName));
 				File[] directoryListing = dir.listFiles();
@@ -1862,10 +1858,7 @@ public class SWC {
 									? LocalDate.parse(getMtDate(child.getAbsolutePath()), formatter)
 									: null);
 							list.setPATH(child.getAbsolutePath());
-							/**
-							 * Перебор отмеченных
-							 */
-
+							// Перебор отмеченных
 							for (int i = 0; i < STMT.getItems().size(); i++) {
 								for (int j = 0; j < STMT.getColumns().size(); j++) {
 									if (STMT.getColumns().get(j).getCellData(i) != null) {
@@ -1877,7 +1870,6 @@ public class SWC {
 							}
 							list.setCHK(ifchk);
 							dlist.add(list);
-
 						}
 					}
 					Platform.runLater(() -> {
@@ -1887,12 +1879,17 @@ public class SWC {
 								STMT.getSelectionModel().select(selrow);
 								STMT.getFocusModel().focus(selrow);
 							}
-							/*
-							 * autoResizeColumns(STMT); TableFilter<SWIFT_FILES> tableFilter =
-							 * TableFilter.forTableView(STMT).apply(); tableFilter.setSearchStrategy((input,
-							 * target) -> { try { return target.toLowerCase().contains(input.toLowerCase());
-							 * } catch (Exception e) { return false; } });
-							 */
+
+//							autoResizeColumns(STMT);
+//							TableFilter<SWIFT_FILES> tableFilter = TableFilter.forTableView(STMT).apply();
+//							tableFilter.setSearchStrategy((input, target) -> {
+//								try {
+//									return target.toLowerCase().contains(input.toLowerCase());
+//								} catch (Exception e) {
+//									return false;
+//								}
+//							});
+
 							// clear
 							// dlist.clear();
 						} catch (Exception e) {
@@ -1900,6 +1897,7 @@ public class SWC {
 							SWLogger.error(e.getMessage() + "~" + Thread.currentThread().getName());
 						}
 					});
+					// autoResizeColumns(STMT);
 				}
 			}
 		} catch (Exception e) {
@@ -1929,16 +1927,18 @@ public class SWC {
 				for (int i = 0; i < table.getItems().size(); i++) {
 					// cell must not be empty
 					if (column_.getCellData(i) != null) {
-						t = new Text(column_.getCellData(i).toString());
-						double calcwidth = t.getLayoutBounds().getWidth();
-						// remember new max-width
-						if (calcwidth > max) {
-							max = calcwidth;
+						if (column_.getCellData(i) != null) {
+							t = new Text(column_.getCellData(i).toString());
+							double calcwidth = t.getLayoutBounds().getWidth();
+							// remember new max-width
+							if (calcwidth > max) {
+								max = calcwidth;
+							}
 						}
 					}
 				}
 				// set the new max-widht with some extra space
-				column_.setPrefWidth(max + 10.0d);
+				column_.setPrefWidth(max + 20.0d);
 			}
 			// });
 
