@@ -13,13 +13,18 @@
     -fx-font-size:12px;
 }
 
+/*
 .table-row-cell{
 	-fx-table-cell-border-color:black;
 }
+* */
 
+/*
 .scroll-bar {
     -fx-font-size: 15.0pt;
 }
+* 
+*/
 
 /*Style of each entire row in the table view*/
 .table-row-cell:selected {

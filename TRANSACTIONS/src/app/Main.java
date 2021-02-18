@@ -17,6 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -66,11 +67,11 @@ public class Main extends Application {
 				ConvVal();
 			}
 
-			  Connect.connectionURL_ = "10.111.64.21:1521/ODB";
-			  Connect.userID_ = "SAIDP";
-			  Connect.userPassword_ = "ipman165"; 
-			  DBUtil.dbConnect(); 
-			  swift2();
+//			Connect.connectionURL_ = "10.111.64.21:1521/ODB";
+//			Connect.userID_ = "SAIDP";
+//			Connect.userPassword_ = "÷÷÷";
+//			DBUtil.dbConnect();
+//			ConvVal();
 
 			primaryStage.setOnCloseRequest(e -> {
 				DBUtil.dbDisconnect();
@@ -312,30 +313,30 @@ public class Main extends Application {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
-
 	public static void ConvVal() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-
 			ConvVal controller = new ConvVal();
 			loader.setController(controller);
-			loader.setLocation(Main.class.getResource("/valconv/ConvVals.fxml"));
-			StackPane employeeOperationsView = (StackPane) loader.load();
-			Scene scene = new Scene(employeeOperationsView); // We are sending rootLayout to the Scene.
+			loader.setLocation(Main.class.getResource("/valconv/ConvVal.fxml"));
+			VBox employeeOperationsView = (VBox) loader.load();
+			Scene scene = new Scene(employeeOperationsView);
 			primaryStage.setTitle("CONV_VAL " + Connect.userID_ + "@" + Connect.connectionURL_);
-			primaryStage.setScene(scene); // Set the scene in primary stage.
+			primaryStage.setScene(scene);
+			primaryStage.setResizable(false);
 			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				@Override
 				public void handle(WindowEvent paramT) {
 					controller.dbDisconnect();
 				}
 			});
-			primaryStage.show(); // Display the primary stage
+			primaryStage.show();
 		} catch (Exception e) {
+			e.printStackTrace();
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
-	
+
 	/**
 	 * Ñâåðêà
 	 */
@@ -676,6 +677,8 @@ public class Main extends Application {
 
 	public static void main(String[] args) {
 		try {
+			System.out.println("MODULE=<" + args[3] + ">");
+			System.out.println("length=<" + args.length + ">");
 			if (args.length != 0 & args.length == 5) {
 				Connect.userID_ = args[0];
 				Connect.userPassword_ = args[1];
@@ -689,8 +692,8 @@ public class Main extends Application {
 				Connect.connectionURL_ = args[2];
 				MODULE = args[3];
 				System.out.println(args[3]);
-			}
-			else if (args.length != 0 & args.length == 6) {
+			} else if (args.length != 0 & args.length == 7) {
+				System.out.println("2MODULE=<" + args[3] + ">");
 				Connect.userID_ = args[0];
 				Connect.userPassword_ = args[1];
 				Connect.connectionURL_ = args[2];
