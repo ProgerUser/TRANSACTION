@@ -67,12 +67,12 @@ public class ConvVal {
 	@FXML
 	void sava(ActionEvent event) {
 		try {
-			//Проверка полей
-			if (f20.getText() ==null ||f20.getText().equals("")) {
+			// Проверка полей
+			if (f20.getText() == null || f20.getText().equals("")) {
 				Msg.Message("Поле f20 не может быть пустым!");
 				return;
 			}
-			if (f21.getText() ==null ||f21.getText().equals("")) {
+			if (f21.getText() == null || f21.getText().equals("")) {
 				Msg.Message("Поле f21 не может быть пустым!");
 				return;
 			}
@@ -80,33 +80,40 @@ public class ConvVal {
 				Msg.Message("Поле f32a_date не может быть пустым!");
 				return;
 			}
-			if (f32a_cur.getText() ==null ||f32a_cur.getText().equals("")) {
+			if (f32a_cur.getText() == null || f32a_cur.getText().equals("")) {
 				Msg.Message("Поле f32a_cur не может быть пустым!");
 				return;
 			}
-			if (f32a_sum.getText() ==null ||f32a_sum.getText().equals("")) {
+			if (f32a_sum.getText() == null || f32a_sum.getText().equals("")) {
 				Msg.Message("Поле f32a_sum не может быть пустым!");
 				return;
 			}
-			if (f53b.getText() ==null ||f53b.getText().equals("")) {
+			if (f53b.getText() == null || f53b.getText().equals("")) {
 				Msg.Message("Поле f53b не может быть пустым!");
 				return;
 			}
-			if (f58a.getText() ==null || f58a.getText().equals("")) {
+			if (f58a.getText() == null || f58a.getText().equals("")) {
 				Msg.Message("Поле f58a не может быть пустым!");
 				return;
 			}
-			if (f58a_detail.getText() ==null ||f58a_detail.getText().equals("")) {
+			if (f58a_detail.getText() == null || f58a_detail.getText().equals("")) {
 				Msg.Message("Поле f58a_detail не может быть пустым!");
 				return;
 			}
-			if (f72.getText() ==null ||f72.getText().equals("")) {
+			if (f72.getText() == null || f72.getText().equals("")) {
 				Msg.Message("Поле f72 не может быть пустым!");
 				return;
 			}
-			if (FILENAME.getText() ==null || FILENAME.getText().equals("")) {
+			if (FILENAME.getText() == null || FILENAME.getText().equals("")) {
 				Msg.Message("Поле FILENAME не может быть пустым!");
 				return;
+			}
+			// Формирование файла
+//1
+			//Создаем 227! пробелов, ? для чего но "Инверсия" делает
+			String space = "";
+			for (int i = 1; i <= 227; i++) {
+				space = space + " ";
 			}
 			
 			String txt="{1:F01SBRARUMMAXXX0000000000}{2:I202VTBRRUMMXXXXN}{3:{113:RUR6}}{4:\r\n"
@@ -114,17 +121,54 @@ public class ConvVal {
 					+":21:NONREF\r\n"
 					+":32A:"+f32a_date.getText()+f32a_cur.getText()+f32a_sum.getText()+"\r\n"
 					+":53B:"+f53b.getText()+"\r\n"
-					+":58A:"+f58a.getText()+"\r\n"
-					+f58a_detail.getText()+"\r\n"
-					+":72:"+f72.getText()+"-}";
-			
+					+":58A:"+f58a.getText()+"\r\n"+f58a_detail.getText()+"\r\n"
+					+":72:"+f72.getText()
+					+"-}"+space;
+
 			OutputStream os = new FileOutputStream(System.getenv("SWIFT_OUTLOCAL") + "/" + FILENAME.getText() + ".swt");
-			
-			PrintWriter out = new PrintWriter(new OutputStreamWriter(os, "Cp1252"));
-			out.println(txt);
+			PrintWriter out = new PrintWriter(new OutputStreamWriter(os, "windows-1251"));
+			out.print(txt);
 			out.close();
 			os.close();
-			Msg.Message("Файл " + FILENAME.getText() + ".swt" + " успешно создан в папке " + System.getenv("SWIFT_OUTLOCAL"));
+//2
+			
+//			List<String> lines = new ArrayList<String>();
+//			lines.add("{1:F01SBRARUMMAXXX0000000000}{2:I202VTBRRUMMXXXXN}{3:{113:RUR6}}{4:");
+//			lines.add(":21:NONREF");
+//			lines.add(":32A:" + f32a_date.getText() + f32a_cur.getText() + f32a_sum.getText());
+//			lines.add(":53B:" + f53b.getText());
+//			lines.add(":58A:" + f58a.getText());
+//			lines.add(f58a_detail.getText());
+//			lines.add(":72:" + f72.getText() + "-}");
+//
+//			Files.write(Paths.get(System.getenv("SWIFT_OUTLOCAL") + "/" + FILENAME.getText() + ".swt"), lines,
+//					StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+//3
+//			FileOutputStream outputStream = new FileOutputStream("MyFile.txt");
+//			OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, "CP1252");
+//			BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
+//
+//			bufferedWriter.write("{1:F01SBRARUMMAXXX0000000000}{2:I202VTBRRUMMXXXXN}{3:{113:RUR6}}{4:");
+//			bufferedWriter.newLine();
+//			bufferedWriter.write(":21:NONREF");
+//			bufferedWriter.newLine();
+//			bufferedWriter.write(":32A:" + f32a_date.getText() + f32a_cur.getText() + f32a_sum.getText());
+//			bufferedWriter.newLine();
+//			bufferedWriter.write(":53B:" + f53b.getText());
+//			bufferedWriter.newLine();
+//			bufferedWriter.write(":58A:" + f58a.getText());
+//			bufferedWriter.newLine();
+//			bufferedWriter.write(f58a_detail.getText());
+//			bufferedWriter.newLine();
+//			bufferedWriter.write(":72:" + f72.getText());
+//			bufferedWriter.newLine();
+//			bufferedWriter.write("-}");
+//			bufferedWriter.close();
+//			outputStream.close();
+//			outputStreamWriter.close();
+			
+			Msg.Message("Файл \"" + FILENAME.getText() + ".swt\"" + " успешно создан в папке "
+					+ System.getenv("SWIFT_OUTLOCAL"));
 			onclose();
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
