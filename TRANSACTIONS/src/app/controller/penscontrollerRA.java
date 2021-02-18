@@ -21,6 +21,7 @@ import java.sql.Types;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.controlsfx.control.table.TableFilter;
 import org.mozilla.universalchardet.UniversalDetector;
 
@@ -224,7 +225,7 @@ public class penscontrollerRA {
 			bufferedInputStream.close();
 			return encoding;
 		} catch (IOException e) {
-			showalert(e.getMessage());
+			showalert(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -245,7 +246,7 @@ public class penscontrollerRA {
 			br.close();
 			return clobData;
 		} catch (IOException e) {
-			showalert(e.getMessage());
+			showalert(ExceptionUtils.getStackTrace(e));
 		}
 		return "Error";
 	}
@@ -315,7 +316,7 @@ public class penscontrollerRA {
 				pstmt.close();
 			}
 		} catch (Exception e) {
-			showalert(e.getMessage());
+			showalert(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -413,7 +414,7 @@ public class penscontrollerRA {
 				}
 			}
 		} catch (SQLException e) {
-			showalert(e.getMessage());
+			showalert(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -438,7 +439,7 @@ public class penscontrollerRA {
 			pb.start();
 
 		} catch (Exception e) {
-			showalert(e.getMessage());
+			showalert(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -467,7 +468,7 @@ public class penscontrollerRA {
 			prepStmt.close();
 
 		} catch (Exception e) {
-			showalert(e.getMessage());
+			showalert(ExceptionUtils.getStackTrace(e));
 		}
 		return str;
 	}
@@ -497,7 +498,7 @@ public class penscontrollerRA {
 			prepStmt.close();
 
 		} catch (Exception e) {
-			showalert(e.getMessage());
+			showalert(ExceptionUtils.getStackTrace(e));
 		}
 		return str;
 	}
@@ -528,7 +529,7 @@ public class penscontrollerRA {
 			sqlStatement.close();
 
 		} catch (Exception e) {
-			showalert(e.getMessage());
+			showalert(ExceptionUtils.getStackTrace(e));
 		}
 	}
 

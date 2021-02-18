@@ -34,6 +34,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.mozilla.universalchardet.UniversalDetector;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -119,7 +120,7 @@ public class Amra_Transact {
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
+			alert.setContentText(ExceptionUtils.getStackTrace(e));
 			alert.showAndWait();
 		}
 		return null;
@@ -251,7 +252,7 @@ public class Amra_Transact {
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
+			alert.setContentText(ExceptionUtils.getStackTrace(e));
 			alert.showAndWait();
 		}
 	}
@@ -412,7 +413,7 @@ public class Amra_Transact {
 				stage.show();
 			}
 		} catch (IOException e) {
-			Tr_Am_View_con.Alert(e.getMessage());
+			Tr_Am_View_con.Alert(ExceptionUtils.getStackTrace(e));
 			Connect.SESSID = null;
 		}
 	}
@@ -461,7 +462,7 @@ public class Amra_Transact {
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
+			alert.setContentText(ExceptionUtils.getStackTrace(e));
 			alert.showAndWait();
 		}
 	}
@@ -632,7 +633,7 @@ public class Amra_Transact {
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
+			alert.setContentText(ExceptionUtils.getStackTrace(e));
 			alert.showAndWait();
 		}
 		rcff = 0;
@@ -659,7 +660,7 @@ public class Amra_Transact {
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
+			alert.setContentText(ExceptionUtils.getStackTrace(e));
 			alert.showAndWait();
 		}
 		return null;
@@ -714,7 +715,7 @@ public class Amra_Transact {
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
+			alert.setContentText(ExceptionUtils.getStackTrace(e));
 			alert.showAndWait();
 		}
 	}
@@ -828,7 +829,7 @@ public class Amra_Transact {
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
+			alert.setContentText(ExceptionUtils.getStackTrace(e));
 			alert.showAndWait();
 		}
 	}

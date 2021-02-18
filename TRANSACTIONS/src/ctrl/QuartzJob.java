@@ -49,6 +49,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.quartz.Job;
@@ -97,7 +98,7 @@ public class QuartzJob implements Job {
 			System.out.println("Done");
 
 		} catch (Exception e) {
-			MYLogger.error(e.getMessage() + "~" + Thread.currentThread().getName() + " line = "
+			MYLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName() + " line = "
 					+ Thread.currentThread().getStackTrace()[2].getLineNumber());
 		}
 	}
@@ -144,7 +145,7 @@ public class QuartzJob implements Job {
 				DBUrl = prop.getProperty("url");
 				MailTo = prop.getProperty("mailto");
 			} catch (Exception e) {
-				MYLogger.error(e.getMessage() + "~" + Thread.currentThread().getName() + " line = "
+				MYLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName() + " line = "
 						+ Thread.currentThread().getStackTrace()[2].getLineNumber());
 			}
 			// _____________Get__XML____________________
@@ -210,7 +211,7 @@ public class QuartzJob implements Job {
 			String clobData = sb.toString();
 			return clobData;
 		} catch (Exception e) {
-			MYLogger.error(e.getMessage() + "~" + Thread.currentThread().getName() + " line = "
+			MYLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName() + " line = "
 					+ Thread.currentThread().getStackTrace()[2].getLineNumber());
 		}
 		return null;
@@ -259,7 +260,7 @@ public class QuartzJob implements Job {
 			}
 		} catch (SQLException | IOException e) {
 			ret = 0;
-			MYLogger.error(e.getMessage() + "~" + Thread.currentThread().getName() + " line = "
+			MYLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName() + " line = "
 					+ Thread.currentThread().getStackTrace()[2].getLineNumber());
 		}
 		return ret;
@@ -284,7 +285,7 @@ public class QuartzJob implements Job {
 				conn.commit();
 			}
 		} catch (SQLException e) {
-			MYLogger.error(e.getMessage() + "~" + Thread.currentThread().getName() + " line = "
+			MYLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName() + " line = "
 					+ Thread.currentThread().getStackTrace()[2].getLineNumber());
 		}
 		return ret;
@@ -300,7 +301,7 @@ public class QuartzJob implements Job {
 			props = new Properties();
 			props.load(input);
 		} catch (Exception e) {
-			MYLogger.error(e.getMessage() + "~" + Thread.currentThread().getName() + " line = "
+			MYLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName() + " line = "
 					+ Thread.currentThread().getStackTrace()[2].getLineNumber());
 		}
 		Session session = Session.getInstance(props, new javax.mail.Authenticator() {
@@ -444,7 +445,7 @@ public class QuartzJob implements Job {
 			ret = writer.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
-			MYLogger.error(e.getMessage() + "~" + Thread.currentThread().getName() + " line = "
+			MYLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName() + " line = "
 					+ Thread.currentThread().getStackTrace()[2].getLineNumber());
 		}
 		return ret;
@@ -472,7 +473,7 @@ public class QuartzJob implements Job {
 					props);
 			conn.setAutoCommit(false);
 		} catch (SQLException | ClassNotFoundException e) {
-			MYLogger.error(e.getMessage() + "~" + Thread.currentThread().getName() + " line = "
+			MYLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName() + " line = "
 					+ Thread.currentThread().getStackTrace()[2].getLineNumber());
 		}
 	}
@@ -486,7 +487,7 @@ public class QuartzJob implements Job {
 				conn.close();
 			}
 		} catch (SQLException e) {
-			MYLogger.error(e.getMessage() + "~" + Thread.currentThread().getName() + " line = "
+			MYLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName() + " line = "
 					+ Thread.currentThread().getStackTrace()[2].getLineNumber());
 		}
 	}

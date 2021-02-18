@@ -11,6 +11,8 @@ import java.util.Map;
 
 import javax.swing.JFrame;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+
 import app.model.Item;
 import app.util.DBUtil;
 import javafx.scene.control.Alert;
@@ -130,7 +132,7 @@ public class PrintReport extends JFrame {
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
+			alert.setContentText(ExceptionUtils.getStackTrace(e));
 			alert.showAndWait();
 		}
 	}

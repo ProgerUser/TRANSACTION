@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -150,7 +151,7 @@ public class ContactC {
 				sql_statement.close();
 			}
 		} catch (SQLException | IOException e) {
-			Msg.MessageBox(e.getMessage(), (Stage) path.getScene().getWindow());
+			Msg.MessageBox(ExceptionUtils.getStackTrace(e), (Stage) path.getScene().getWindow());
 		}
 	}
 	@FXML

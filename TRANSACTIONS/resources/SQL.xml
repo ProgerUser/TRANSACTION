@@ -207,7 +207,7 @@ select atr.*
        MIDDLE_NAME||'|'||
        COLUMN5||'|'||
        ACC||'|'||
-       SUMM||'|'||
+       replace(to_char(SUMM),',','.')||'|'||
        to_char(ABS_BDATE,'dd.mm.rrrr')||'|'||
        COLUMN9||'|'||
        COLUMN10||'|'||

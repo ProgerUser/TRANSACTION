@@ -18,6 +18,7 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.time.LocalDateTime;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -83,9 +84,7 @@ public class penscontroller {
 
 	@FXML
 	private CheckBox pensrachk;
-
-	/* Пакет для разбора */
-	private final String sepfile = "{ ? = call z_sb_pens_sepfile.z_sb_pens_sepfile(?,?)}";
+	
 	Connection conn = DBUtil.conn;
 	@FXML
 	void pensrachk(ActionEvent event) {
@@ -115,7 +114,7 @@ public class penscontroller {
 			}
 			conn.commit();
 		} catch (Exception e) {
-			Alerts(e.getMessage());
+			Alerts(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -136,7 +135,7 @@ public class penscontroller {
 				}
 			}
 		} catch (Exception e) {
-			Alerts(e.getMessage());
+			Alerts(ExceptionUtils.getStackTrace(e));
 		}
 		sep_pens.setEditable(true);
 
@@ -275,7 +274,7 @@ public class penscontroller {
 			bufferedInputStream.close();
 			return encoding;
 		} catch (IOException e) {
-			showalert(e.getMessage());
+			showalert(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -296,7 +295,7 @@ public class penscontroller {
 			br.close();
 			return clobData;
 		} catch (IOException e) {
-			showalert(e.getMessage());
+			showalert(ExceptionUtils.getStackTrace(e));
 		}
 		return "Error";
 	}
@@ -320,12 +319,18 @@ public class penscontroller {
 				Connection conn = DBUtil.conn;
 				CallableStatement callStmt = null;
 				String reviewContent = null;
-				callStmt = conn.prepareCall(sepfile);
+				callStmt = conn.prepareCall("{ ? = call z_sb_pens_sepfile.z_sb_pens_sepfile(?,?)}");
+				
 				String reviewStr = readFile(file.getParent() + "\\" + file.getName());
 				Clob clob = conn.createClob();
 				clob.setString(1, reviewStr);
 				callStmt.registerOutParameter(1, Types.VARCHAR);
+				
+//				File blob = new File(file.getParent() + "\\" + file.getName());
+//				FileInputStream in = new FileInputStream(blob);
+//				callStmt.setBinaryStream(2, in, (int)blob.length());
 				callStmt.setClob(2, clob);
+				
 				callStmt.setString(3, file.getName());
 				callStmt.execute();
 				reviewContent = callStmt.getString(1);
@@ -415,7 +420,7 @@ public class penscontroller {
 				}
 			}
 		} catch (SQLException e) {
-			showalert(e.getMessage());
+			showalert(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -440,7 +445,7 @@ public class penscontroller {
 			pb.start();
 
 		} catch (Exception e) {
-			showalert(e.getMessage());
+			showalert(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -469,7 +474,7 @@ public class penscontroller {
 			prepStmt.close();
 
 		} catch (Exception e) {
-			showalert(e.getMessage());
+			showalert(ExceptionUtils.getStackTrace(e));
 		}
 		return str;
 	}
@@ -504,7 +509,7 @@ public class penscontroller {
 			sqlStatement.close();
 
 		} catch (Exception e) {
-			showalert(e.getMessage());
+			showalert(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -575,7 +580,7 @@ public class penscontroller {
 			workbook.close();
 
 		} catch (Exception e) {
-			showalert(e.getMessage());
+			showalert(ExceptionUtils.getStackTrace(e));
 		}
 	}
 

@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.controlsfx.control.table.TableFilter;
 
 import app.Main;
@@ -321,7 +322,7 @@ public class ServiceController {
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
+			alert.setContentText(ExceptionUtils.getStackTrace(e));
 			alert.showAndWait();
 		}
 	}
@@ -916,7 +917,7 @@ public class ServiceController {
 							stage_.getIcons().add(new Image("terminal.png"));
 							alert_.setTitle("Внимание");
 							alert_.setHeaderText(null);
-							alert_.setContentText(e.getMessage());
+							alert_.setContentText(ExceptionUtils.getStackTrace(e));
 							alert_.showAndWait();
 						}
 					}

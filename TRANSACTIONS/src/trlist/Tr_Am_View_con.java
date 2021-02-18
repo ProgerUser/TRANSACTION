@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -621,7 +622,7 @@ public class Tr_Am_View_con {
 					try {
 						validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
 					} catch (Exception e) {
-						Alert(e.getMessage());
+						Alert(ExceptionUtils.getStackTrace(e));
 					}
 				});
 
@@ -630,7 +631,7 @@ public class Tr_Am_View_con {
 						try {
 							validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
 						} catch (Exception e) {
-							Alert(e.getMessage());
+							Alert(ExceptionUtils.getStackTrace(e));
 						}
 				});
 
@@ -819,7 +820,7 @@ public class Tr_Am_View_con {
 				sqlStatement.close();
 
 			} catch (SQLException e) {
-				Msg.Message(e.getMessage());
+				Msg.Message(ExceptionUtils.getStackTrace(e));
 			}
 
 			if (Connect.SESSID != null) {
@@ -836,7 +837,7 @@ public class Tr_Am_View_con {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -852,7 +853,7 @@ public class Tr_Am_View_con {
 			});
 		} catch (Exception e) {
 			e.printStackTrace();
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1398,7 +1399,7 @@ public class Tr_Am_View_con {
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
+			alert.setContentText(ExceptionUtils.getStackTrace(e));
 			alert.showAndWait();
 		}
 	}
@@ -1592,7 +1593,7 @@ public class Tr_Am_View_con {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1633,7 +1634,7 @@ public class Tr_Am_View_con {
 								System.out.println(line);
 							}
 						} catch (Exception e) {
-							Msg.Message(e.getMessage());
+							Msg.Message(ExceptionUtils.getStackTrace(e));
 						}
 						return null;
 					}
@@ -1649,7 +1650,7 @@ public class Tr_Am_View_con {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1661,7 +1662,7 @@ public class Tr_Am_View_con {
 			populate_fn_sess(empData);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1712,7 +1713,7 @@ public class Tr_Am_View_con {
 				stage.show();
 			}
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1735,7 +1736,7 @@ public class Tr_Am_View_con {
 				stage.show();
 			}
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1880,7 +1881,7 @@ public class Tr_Am_View_con {
 			CONTROL.setDisable(false);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1917,9 +1918,9 @@ public class Tr_Am_View_con {
 			/*-----------------------------------------*/
 		} catch (Exception e) {
 			Main.logger = Logger.getLogger(getClass());
-			Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 			e.printStackTrace();
-			Alert(e.getMessage());
+			Alert(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -2004,7 +2005,7 @@ public class Tr_Am_View_con {
 				try {
 					validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
 				} catch (Exception e) {
-					Alert(e.getMessage());
+					Alert(ExceptionUtils.getStackTrace(e));
 				}
 			});
 
@@ -2013,7 +2014,7 @@ public class Tr_Am_View_con {
 					try {
 						validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
 					} catch (Exception e) {
-						Alert(e.getMessage());
+						Alert(ExceptionUtils.getStackTrace(e));
 					}
 			});
 			tableCell.setAlignment(Pos.CENTER);
@@ -2095,7 +2096,7 @@ public class Tr_Am_View_con {
 				try {
 					validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
 				} catch (Exception e) {
-					Alert(e.getMessage());
+					Alert(ExceptionUtils.getStackTrace(e));
 				}
 			});
 
@@ -2104,7 +2105,7 @@ public class Tr_Am_View_con {
 					try {
 						validate(checkBox, (Amra_Trans) tableCell.getTableRow().getItem(), event);
 					} catch (Exception e) {
-						Alert(e.getMessage());
+						Alert(ExceptionUtils.getStackTrace(e));
 					}
 			});
 			tableCell.setAlignment(Pos.CENTER);
@@ -2161,7 +2162,7 @@ public class Tr_Am_View_con {
 				stage.show();
 			}
 		} catch (Exception e) {
-			Alert(e.getMessage());
+			Alert(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -2184,7 +2185,7 @@ public class Tr_Am_View_con {
 				stage.show();
 			}
 		} catch (Exception e) {
-			Alert(e.getMessage());
+			Alert(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -2207,7 +2208,7 @@ public class Tr_Am_View_con {
 				stage.show();
 			}
 		} catch (Exception e) {
-			Alert(e.getMessage());
+			Alert(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -2243,7 +2244,7 @@ public class Tr_Am_View_con {
 						System.out.println(line);
 					}
 				} catch (Exception e) {
-					Msg.Message(e.getMessage());
+					Msg.Message(ExceptionUtils.getStackTrace(e));
 				}
 				return null;
 			}
@@ -2308,7 +2309,7 @@ public class Tr_Am_View_con {
 						}
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
-						Msg.Message(e.getMessage());
+						Msg.Message(ExceptionUtils.getStackTrace(e));
 					}
 					return null;
 				}
@@ -2342,7 +2343,7 @@ public class Tr_Am_View_con {
 				stage.show();
 			}
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 }

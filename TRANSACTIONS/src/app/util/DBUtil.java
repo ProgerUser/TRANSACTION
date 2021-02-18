@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.Properties;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 import com.sun.rowset.CachedRowSetImpl;
 
@@ -39,8 +41,8 @@ public class DBUtil {
 					props);
 			conn.setAutoCommit(false);
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
-			Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
 
@@ -52,8 +54,8 @@ public class DBUtil {
 				conn.close();
 			}
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
-			Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
 
@@ -74,14 +76,14 @@ public class DBUtil {
 			crs = new CachedRowSetImpl();
 			crs.populate(resultSet);
 		} catch (SQLException e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		} finally {
 			if (resultSet != null) {
 				// Close resultSet
 				try {
 					resultSet.close();
 				} catch (SQLException e) {
-					Msg.Message(e.getMessage());
+					Msg.Message(ExceptionUtils.getStackTrace(e));
 				}
 			}
 			if (stmt != null) {
@@ -89,8 +91,8 @@ public class DBUtil {
 				try {
 					stmt.close();
 				} catch (SQLException e) {
-					Msg.Message(e.getMessage());
-					Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+					Msg.Message(ExceptionUtils.getStackTrace(e));
+					Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 				}
 			}
 		}
@@ -112,8 +114,8 @@ public class DBUtil {
 			callStmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			Msg.Message(e.getMessage());
-			Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 		return ret;
 	}
@@ -131,8 +133,8 @@ public class DBUtil {
 			callStmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			Msg.Message(e.getMessage());
-			Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 		return ret;
 	}
@@ -154,8 +156,8 @@ public class DBUtil {
 			}
 			prepStmt.close();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
-			Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 		return ret;
 	}
@@ -165,12 +167,12 @@ public class DBUtil {
 			try {
 				conn.rollback();
 			} catch (SQLException e) {
-				Msg.Message(e.getMessage());
-				Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+				Msg.Message(ExceptionUtils.getStackTrace(e));
+				Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 			}
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
-			Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
 
@@ -178,8 +180,8 @@ public class DBUtil {
 		try {
 			conn.commit();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
-			Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
 
@@ -200,16 +202,16 @@ public class DBUtil {
 			conn.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-			Msg.Message(e.getMessage());
-			Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		} finally {
 			if (stmt != null) {
 				// Close statement
 				try {
 					stmt.close();
 				} catch (SQLException e) {
-					Msg.Message(e.getMessage());
-					Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+					Msg.Message(ExceptionUtils.getStackTrace(e));
+					Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 				}
 			}
 		}

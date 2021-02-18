@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.controlsfx.control.table.TableFilter;
 
 import app.model.BUDCODE;
@@ -221,7 +222,7 @@ public class Debt_InfoController {
 						newWindow_yn.close();
 					}
 				} catch (Exception e) {
-					Alert(e.getMessage());
+					Alert(ExceptionUtils.getStackTrace(e));
 				}
 			}
 		});
@@ -645,7 +646,7 @@ public class Debt_InfoController {
 			}
 			rs.close();
 		} catch (Exception e) {
-			Alert(e.getMessage());
+			Alert(ExceptionUtils.getStackTrace(e));
 		}
 
 	}
@@ -678,7 +679,7 @@ public class Debt_InfoController {
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
+			alert.setContentText(ExceptionUtils.getStackTrace(e));
 			alert.showAndWait();
 		}
 		return ret;

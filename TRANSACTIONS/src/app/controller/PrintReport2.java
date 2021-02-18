@@ -14,6 +14,7 @@ import java.util.Map;
 
 import javax.swing.JFrame;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -133,7 +134,7 @@ public class PrintReport2 extends JFrame {
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
+			alert.setContentText(ExceptionUtils.getStackTrace(e));
 			alert.showAndWait();
 		}
 	}

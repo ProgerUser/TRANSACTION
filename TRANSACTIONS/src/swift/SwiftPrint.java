@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.swing.JFrame;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -101,8 +102,8 @@ public class SwiftPrint extends JFrame {
 			inputstream.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			Msg.Message(e.getMessage());
-			Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
 }

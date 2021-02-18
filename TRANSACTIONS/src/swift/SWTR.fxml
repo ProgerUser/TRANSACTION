@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.effect.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<StackPane fx:id="StPn" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane fx:id="StPn" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.261" xmlns:fx="http://javafx.com/fxml/1">
 <children>
       <TabPane fx:id="RootTab" styleClass="floating" tabClosingPolicy="UNAVAILABLE">
         <tabs>
@@ -108,7 +124,7 @@
                                         <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
                                       </rowConstraints>
                                        <children>
-                                          <TextField GridPane.columnIndex="2" />
+                                          <TextField fx:id="PLAT_KORR" GridPane.columnIndex="2" />
                                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Плательщик Корсчет" />
                                           <TextField fx:id="PAY_ACC" GridPane.columnIndex="6" />
                                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Счет" GridPane.columnIndex="4" />
@@ -197,7 +213,7 @@
                            <center>
                               <SplitPane dividerPositions="0.7014925373134329" orientation="VERTICAL" BorderPane.alignment="CENTER">
                                  <items>
-                                    <TableView fx:id="STMT" editable="true" prefHeight="300.0" styleClass="mylistview" stylesheets="/TableView.css" tableMenuButtonVisible="true">
+                                    <TableView fx:id="STMT" prefHeight="300.0" styleClass="mylistview" stylesheets="/TableView.css" tableMenuButtonVisible="true">
                                        <columns>
                                           <TableColumn fx:id="CHK" prefWidth="70.0" text="Выб." />
                                           <TableColumn fx:id="MTTYPE" prefWidth="90.0" text="Тип SWIFT" />

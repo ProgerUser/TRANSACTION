@@ -52,6 +52,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -244,7 +245,7 @@ public class KashController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			Alert(e.getMessage());
+			Alert(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -363,7 +364,7 @@ public class KashController {
 			rs.close();
 			// conn.close();
 		} catch (SQLException e) {
-			Alert(e.getMessage());
+			Alert(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -389,7 +390,7 @@ public class KashController {
 			}
 			rs.close();
 		} catch (SQLException e) {
-			Alert(e.getMessage());
+			Alert(ExceptionUtils.getStackTrace(e));
 		}
 	}
 

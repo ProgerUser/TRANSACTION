@@ -30,6 +30,8 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.controlsfx.control.table.TableFilter;
 import org.mozilla.universalchardet.UniversalDetector;
 import org.w3c.dom.Attr;
@@ -147,7 +149,7 @@ public class SverkaC {
 
 		Exception e) {
 			e.printStackTrace();
-			Message(e.getMessage());
+			Message(ExceptionUtils.getStackTrace(e));
 		}
 
 	}
@@ -344,7 +346,7 @@ public class SverkaC {
 			ret = writer.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
-			Message(e.getMessage());
+			Message(ExceptionUtils.getStackTrace(e));
 		}
 		return ret;
 	}
@@ -409,7 +411,7 @@ public class SverkaC {
 			});
 		} catch (Exception e) {
 			e.printStackTrace();
-			Message(e.getMessage());
+			Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -482,7 +484,7 @@ public class SverkaC {
 			return clobData;
 		} catch (Exception e) {
 			e.printStackTrace();
-			Message(e.getMessage());
+			Message(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -509,7 +511,7 @@ public class SverkaC {
 			return encoding;
 		} catch (Exception e) {
 			e.printStackTrace();
-			Message(e.getMessage());
+			Message(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -664,7 +666,7 @@ public class SverkaC {
 			});
 		} catch (Exception e) {
 			e.printStackTrace();
-			Message(e.getMessage());
+			Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -701,7 +703,7 @@ public class SverkaC {
 					props);
 			conn.setAutoCommit(false);
 		} catch (SQLException | ClassNotFoundException e) {
-			Message(e.getMessage());
+			Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -714,7 +716,7 @@ public class SverkaC {
 				conn.close();
 			}
 		} catch (SQLException e) {
-			Message(e.getMessage());
+			Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -782,7 +784,7 @@ public class SverkaC {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			Message(e.getMessage());
+			Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -819,7 +821,7 @@ public class SverkaC {
 			pb.start();
 		} catch (Exception e) {
 			e.printStackTrace();
-			Message(e.getMessage());
+			Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 }

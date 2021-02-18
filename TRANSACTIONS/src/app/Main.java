@@ -1,5 +1,6 @@
 package app;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
@@ -22,6 +23,7 @@ import javafx.stage.WindowEvent;
 import sbalert.Msg;
 import sverka.SverkaC;
 import swift.SWC;
+import valconv.ConvVal;
 
 /**
  * Точка входа
@@ -45,14 +47,12 @@ public class Main extends Application {
 			primaryStage.getIcons().add(new Image("icon.png"));
 			Main.primaryStage.setTitle("Транзакции");
 			logger.setLevel(Level.INFO);
-			//System.out.println(MODULE);
-			
-			
+			// System.out.println(MODULE);
+
 			if (MODULE == null) {
 				Enter();
 			} else if (MODULE.equals("DEBTINFO")) {
 				DBUtil.dbConnect();
-				initRootLayout();
 				Debtinfo();
 			} else if (MODULE.equals("BUH")) {
 				DBUtil.dbConnect();
@@ -60,20 +60,18 @@ public class Main extends Application {
 				showFirst();
 			} else if (MODULE.equals("SWIFT")) {
 				DBUtil.dbConnect();
-				initRootLayout();
 				swift2();
+			} else if (MODULE.equals("VTB_CONV")) {
+				DBUtil.dbConnect();
+				ConvVal();
 			}
-			
 
-			
-//			  Connect.connectionURL_ = "10.111.64.21:1521/odb";
-//			  Connect.userID_ = "SAIDP";
-//			  Connect.userPassword_ = ""; 
-//			  DBUtil.dbConnect(); 
-//			  //initRootLayout();
-//			  swift2();
-			
-			
+			  Connect.connectionURL_ = "10.111.64.21:1521/ODB";
+			  Connect.userID_ = "SAIDP";
+			  Connect.userPassword_ = "ipman165"; 
+			  DBUtil.dbConnect(); 
+			  swift2();
+
 			primaryStage.setOnCloseRequest(e -> {
 				DBUtil.dbDisconnect();
 				Platform.exit();
@@ -84,7 +82,7 @@ public class Main extends Application {
 			// this.primaryStage.setMaximized(true);
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+			logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
 
@@ -102,7 +100,7 @@ public class Main extends Application {
 			primaryStage.setResizable(true);
 			primaryStage.show();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -117,7 +115,7 @@ public class Main extends Application {
 
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -141,7 +139,7 @@ public class Main extends Application {
 			stage.initOwner(primaryStage);
 			stage.show();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -165,7 +163,7 @@ public class Main extends Application {
 			stage.initOwner(primaryStage);
 			stage.show();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -190,7 +188,7 @@ public class Main extends Application {
 			stage.initOwner(primaryStage);
 			stage.show();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -216,7 +214,7 @@ public class Main extends Application {
 			stage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -240,7 +238,7 @@ public class Main extends Application {
 			stage.initOwner(primaryStage);
 			stage.show();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -274,7 +272,7 @@ public class Main extends Application {
 			});
 			stage.show();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -291,16 +289,15 @@ public class Main extends Application {
 
 			loader.setLocation(Main.class.getResource("/swift/SWTR.fxml"));
 			StackPane employeeOperationsView = (StackPane) loader.load();
-			
+
 			Scene scene = new Scene(employeeOperationsView); // We are sending rootLayout to the Scene.
-			
+
 //			Style startingStyle = Style.LIGHT;
 //			JMetro jMetro = new JMetro(startingStyle);
 //			System.setProperty("prism.lcdtext", "false");
 //			jMetro.setScene(scene);
-			
-			
-			primaryStage.setTitle("S.W.I.F.T "+Connect.userID_+"@"+Connect.connectionURL_);
+
+			primaryStage.setTitle("S.W.I.F.T " + Connect.userID_ + "@" + Connect.connectionURL_);
 			primaryStage.setScene(scene); // Set the scene in primary stage.
 			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				@Override
@@ -312,10 +309,33 @@ public class Main extends Application {
 			primaryStage.show(); // Display the primary stage
 
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
+	public static void ConvVal() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+
+			ConvVal controller = new ConvVal();
+			loader.setController(controller);
+			loader.setLocation(Main.class.getResource("/valconv/ConvVals.fxml"));
+			StackPane employeeOperationsView = (StackPane) loader.load();
+			Scene scene = new Scene(employeeOperationsView); // We are sending rootLayout to the Scene.
+			primaryStage.setTitle("CONV_VAL " + Connect.userID_ + "@" + Connect.connectionURL_);
+			primaryStage.setScene(scene); // Set the scene in primary stage.
+			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent paramT) {
+					controller.dbDisconnect();
+				}
+			});
+			primaryStage.show(); // Display the primary stage
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+	
 	/**
 	 * Сверка
 	 */
@@ -344,7 +364,7 @@ public class Main extends Application {
 			});
 			stage.show();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -358,7 +378,7 @@ public class Main extends Application {
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -372,7 +392,7 @@ public class Main extends Application {
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -386,7 +406,7 @@ public class Main extends Application {
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -403,14 +423,13 @@ public class Main extends Application {
 			loader.setLocation(Main.class.getResource("view/Enter.fxml"));
 			rootLayout = (BorderPane) loader.load();
 			Scene scene = new Scene(rootLayout); // We are sending rootLayout to the Scene.
-			
-			
+
 			primaryStage.setScene(scene); // Set the scene in primary stage.
 			primaryStage.setResizable(false);
 			primaryStage.centerOnScreen();
 			primaryStage.show(); // Display the primary stage
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -434,7 +453,7 @@ public class Main extends Application {
 			stage.show();
 
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -457,7 +476,7 @@ public class Main extends Application {
 			stage.initOwner(primaryStage);
 			stage.show();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -479,7 +498,7 @@ public class Main extends Application {
 			stage.show();
 
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -501,7 +520,7 @@ public class Main extends Application {
 			stage.initOwner(primaryStage);
 			stage.show();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -524,7 +543,7 @@ public class Main extends Application {
 			stage.initOwner(primaryStage);
 			stage.show();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -540,7 +559,7 @@ public class Main extends Application {
 			primaryStage.setScene(scene); // Set the scene in primary stage.
 			primaryStage.show(); // Display the primary stage
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -556,7 +575,7 @@ public class Main extends Application {
 			primaryStage.setScene(scene); // Set the scene in primary stage.
 			primaryStage.show(); // Display the primary stage
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -584,7 +603,8 @@ public class Main extends Application {
 			stage.show();
 
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			e.printStackTrace();
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -608,7 +628,7 @@ public class Main extends Application {
 			stage.initOwner(primaryStage);
 			stage.show();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -622,7 +642,7 @@ public class Main extends Application {
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -650,7 +670,7 @@ public class Main extends Application {
 			stage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -670,10 +690,18 @@ public class Main extends Application {
 				MODULE = args[3];
 				System.out.println(args[3]);
 			}
+			else if (args.length != 0 & args.length == 6) {
+				Connect.userID_ = args[0];
+				Connect.userPassword_ = args[1];
+				Connect.connectionURL_ = args[2];
+				MODULE = args[3];
+				Connect.trnnum = args[4];
+				Connect.trnanum = args[5];
+			}
 			launch(args);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 }

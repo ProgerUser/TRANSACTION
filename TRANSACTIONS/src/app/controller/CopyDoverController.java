@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.Types;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.controlsfx.control.table.TableFilter;
 
 import app.model.Connect;
@@ -68,7 +70,7 @@ public class CopyDoverController {
 				}
 			});
 		} catch (Exception e) {
-			Alert(e.getMessage());
+			Alert(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -85,7 +87,7 @@ public class CopyDoverController {
 			}
 			return forms_list;
 		} catch (Exception e) {
-			Alert(e.getMessage());
+			Alert(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -114,7 +116,7 @@ public class CopyDoverController {
 				}
 
 			} catch (Exception e) {
-				Alert(e.getMessage());
+				Alert(ExceptionUtils.getStackTrace(e));
 			}
 		}
 

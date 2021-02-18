@@ -29,6 +29,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.mozilla.universalchardet.UniversalDetector;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -96,7 +97,7 @@ public class AAAAAAmra_Transact_ {
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
+			alert.setContentText(ExceptionUtils.getStackTrace(e));
 			alert.showAndWait();
 		}
 		return null;
@@ -292,7 +293,7 @@ public class AAAAAAmra_Transact_ {
 				stage.getIcons().add(new Image("terminal.png"));
 				alert.setTitle("Внимание");
 				alert.setHeaderText(null);
-				alert.setContentText(e.getMessage());
+				alert.setContentText(ExceptionUtils.getStackTrace(e));
 				alert.showAndWait();
 			}
 		}
@@ -326,7 +327,7 @@ public class AAAAAAmra_Transact_ {
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
+			alert.setContentText(ExceptionUtils.getStackTrace(e));
 			alert.showAndWait();
 
 		}
@@ -455,7 +456,7 @@ public class AAAAAAmra_Transact_ {
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
+			alert.setContentText(ExceptionUtils.getStackTrace(e));
 			alert.showAndWait();
 		}
 	}
@@ -590,7 +591,7 @@ public class AAAAAAmra_Transact_ {
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
+			alert.setContentText(ExceptionUtils.getStackTrace(e));
 			alert.showAndWait();
 		}
 	}
@@ -622,7 +623,7 @@ public class AAAAAAmra_Transact_ {
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
+			alert.setContentText(ExceptionUtils.getStackTrace(e));
 			alert.showAndWait();
 		}
 	}

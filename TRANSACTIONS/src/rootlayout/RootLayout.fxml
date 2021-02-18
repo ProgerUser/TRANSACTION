@@ -20,8 +20,8 @@
 				<Menu fx:id="administrator" mnemonicParsing="false"
 					text="Администратор">
 					<items>
-						<!-- <MenuItem fx:id="adminright" mnemonicParsing="false" onAction="#Access" 
-							text="Права доступа" /> -->
+						 <MenuItem fx:id="adminright" mnemonicParsing="false" onAction="#Access" 
+							text="Права доступа" /> 
 						<MenuItem fx:id="adminmenuitems" mnemonicParsing="false"
 							onAction="#access_menuitems" text="Доступность пунктов меню" />
 					</items>

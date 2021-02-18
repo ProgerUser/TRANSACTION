@@ -42,6 +42,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -898,7 +899,7 @@ public class Tr_Am_View_con_from_show {
 				Alerts("Файл сформирован в папку "+file.getPath());
 			}
 		} catch (Exception e) {
-			Alerts(e.getMessage());
+			Alerts(ExceptionUtils.getStackTrace(e));
 		}
 
 	}
@@ -1452,7 +1453,7 @@ public class Tr_Am_View_con_from_show {
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
+			alert.setContentText(ExceptionUtils.getStackTrace(e));
 			alert.showAndWait();
 		}
 	}
@@ -1501,7 +1502,7 @@ public class Tr_Am_View_con_from_show {
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
+			alert.setContentText(ExceptionUtils.getStackTrace(e));
 			alert.showAndWait();
 		}
 	}

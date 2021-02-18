@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.mozilla.universalchardet.UniversalDetector;
 
 import app.model.Connect;
@@ -82,7 +83,7 @@ public class TransactLoad {
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
+			alert.setContentText(ExceptionUtils.getStackTrace(e));
 			alert.showAndWait();
 		}
 		return null;
@@ -269,7 +270,7 @@ public class TransactLoad {
 
 				IOException e) {
 			// TODO Auto-generated catch block
-			result.setText(e.getMessage());
+			result.setText(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -293,7 +294,7 @@ public class TransactLoad {
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
+			alert.setContentText(ExceptionUtils.getStackTrace(e));
 			alert.showAndWait();
 		}
 		return null;
@@ -383,7 +384,7 @@ public class TransactLoad {
 			myResultSet.close();
 		} catch (SQLException | IOException e) {
 			// TODO Auto-generated catch block
-			result.setText(e.getMessage());
+			result.setText(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -466,7 +467,7 @@ public class TransactLoad {
 			}
 		} catch (SQLException | IOException e) {
 			// TODO Auto-generated catch block
-			result.setText(e.getMessage());
+			result.setText(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -493,7 +494,7 @@ public class TransactLoad {
 			stage.show();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			result.setText(e.getMessage());
+			result.setText(ExceptionUtils.getStackTrace(e));
 		}
 	}
 

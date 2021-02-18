@@ -6,6 +6,7 @@ import java.util.Properties;
 
 import javax.naming.NamingException;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.quartz.CronScheduleBuilder;
@@ -58,7 +59,7 @@ class TestAD {
 				prop.load(input);
 				Cron = prop.getProperty("cron");
 			} catch (Exception e) {
-				MYLogger.error(e.getMessage());
+				MYLogger.error(ExceptionUtils.getStackTrace(e));
 			}
 
 			MYLogger.info("Start");

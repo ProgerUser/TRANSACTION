@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 import org.controlsfx.control.table.TableFilter;
 import com.sun.rowset.CachedRowSetImpl;
@@ -85,7 +86,7 @@ public class Ibank {
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
+			alert.setContentText(ExceptionUtils.getStackTrace(e));
 			alert.showAndWait();
 		}
 	}
@@ -119,7 +120,7 @@ public class Ibank {
 					}
 					acc.setText(acc_);
 				} catch (Exception e) {
-					altert(e.getMessage());
+					altert(ExceptionUtils.getStackTrace(e));
 				}
 			}
 		});
@@ -204,7 +205,7 @@ public class Ibank {
 			}
 			return user_in_list;
 		} catch (SQLException e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -227,14 +228,14 @@ public class Ibank {
 			crs = new CachedRowSetImpl();
 			crs.populate(resultSet);
 		} catch (SQLException e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		} finally {
 			if (resultSet != null) {
 				// Close resultSet
 				try {
 					resultSet.close();
 				} catch (SQLException e) {
-					Msg.Message(e.getMessage());
+					Msg.Message(ExceptionUtils.getStackTrace(e));
 				}
 			}
 			if (stmt != null) {
@@ -242,8 +243,8 @@ public class Ibank {
 				try {
 					stmt.close();
 				} catch (SQLException e) {
-					Msg.Message(e.getMessage());
-					Main.logger.error(e.getMessage() + "~" + Thread.currentThread().getName());
+					Msg.Message(ExceptionUtils.getStackTrace(e));
+					Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 				}
 			}
 		}

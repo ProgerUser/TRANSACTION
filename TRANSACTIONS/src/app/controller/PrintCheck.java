@@ -10,6 +10,8 @@ import java.util.HashMap;
 
 import javax.swing.JFrame;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+
 import app.Main;
 import app.util.DBUtil;
 import javafx.scene.control.Alert;
@@ -135,9 +137,9 @@ public class PrintCheck extends JFrame {
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
+			alert.setContentText(ExceptionUtils.getStackTrace(e));
 			alert.showAndWait();
-			Main.logger.error(e.getMessage() + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + Thread.currentThread().getName());
 		}
 	}
 }

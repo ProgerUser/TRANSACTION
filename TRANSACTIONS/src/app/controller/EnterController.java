@@ -12,6 +12,8 @@ import java.util.Enumeration;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+
 import app.Main;
 import app.model.Connect;
 import app.model.InputFilter;
@@ -159,7 +161,7 @@ public class EnterController {
 					stage.getIcons().add(new Image("terminal.png"));
 					alert.setTitle("Внимание");
 					alert.setHeaderText(null);
-					alert.setContentText(e.getMessage());
+					alert.setContentText(ExceptionUtils.getStackTrace(e));
 					alert.showAndWait();
 				}
 
@@ -179,7 +181,7 @@ public class EnterController {
 		 * Alert(Alert.AlertType.INFORMATION); Stage stage = (Stage)
 		 * alert.getDialogPane().getScene().getWindow(); stage.getIcons().add(new
 		 * Image("terminal.png")); alert.setTitle("Внимание");
-		 * alert.setHeaderText(null); alert.setContentText(e.getMessage());
+		 * alert.setHeaderText(null); alert.setContentText(ExceptionUtils.getStackTrace(e));
 		 * alert.showAndWait(); }
 		 */
 	}
@@ -204,7 +206,7 @@ public class EnterController {
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
+			alert.setContentText(ExceptionUtils.getStackTrace(e));
 			alert.showAndWait();
 		}
 
@@ -225,7 +227,7 @@ public class EnterController {
 				stage.getIcons().add(new Image("terminal.png"));
 				alert.setTitle("Внимание");
 				alert.setHeaderText(null);
-				alert.setContentText(e.getMessage());
+				alert.setContentText(ExceptionUtils.getStackTrace(e));
 				alert.showAndWait();
 			}
 		}
@@ -280,7 +282,7 @@ public class EnterController {
 
 			
 		} catch (Exception e) {
-			alert(e.getMessage());
+			alert(ExceptionUtils.getStackTrace(e));
 		}
 		conurl.getSelectionModel().select(0);
 	}
@@ -303,7 +305,7 @@ public class EnterController {
 			}
 			// conn.close();
 		} catch (Exception e) {
-			alert(e.getMessage());
+			alert(ExceptionUtils.getStackTrace(e));
 		}
 		return ret;
 	}

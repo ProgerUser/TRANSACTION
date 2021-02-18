@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+
 import app.util.DBUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -56,7 +58,7 @@ public class TerminalDAO {
 			}
 			return tr;
 		} catch (SQLException e) {
-			alert(e.getMessage());
+			alert(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 
@@ -266,7 +268,7 @@ public class TerminalDAO {
 			// Return employee object
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			alert(e.getMessage());
+			alert(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -360,7 +362,7 @@ public class TerminalDAO {
 						"" + Connect.PNMB_ + "");
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				alert(e.getMessage());
+				alert(ExceptionUtils.getStackTrace(e));
 			}
 		} else {
 			selectStmt = "SELECT Service, CheckNumber, AttributeName, AttributeValue\n" + "  FROM (select ATTRIBUTES_\n"
@@ -633,7 +635,7 @@ public class TerminalDAO {
 			// Return employee object
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			alert(e.getMessage());
+			alert(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 
@@ -724,7 +726,7 @@ public class TerminalDAO {
 			}
 			return fn_list;
 		} catch (SQLException e) {
-			alert(e.getMessage());
+			alert(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -746,7 +748,7 @@ public class TerminalDAO {
 			}
 			return fn_list;
 		} catch (SQLException e) {
-			alert(e.getMessage());
+			alert(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -781,7 +783,7 @@ public class TerminalDAO {
 			}
 			return fn_list;
 		} catch (SQLException e) {
-			alert(e.getMessage());
+			alert(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -817,7 +819,7 @@ public class TerminalDAO {
 			}
 			return fn_list;
 		} catch (SQLException e) {
-			alert(e.getMessage());
+			alert(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -836,7 +838,7 @@ public class TerminalDAO {
 			}
 			return fn_list;
 		} catch (SQLException e) {
-			alert(e.getMessage());
+			alert(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -862,7 +864,7 @@ public class TerminalDAO {
 			}
 			return fn_list;
 		} catch (SQLException e) {
-			alert(e.getMessage());
+			alert(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -880,7 +882,7 @@ public class TerminalDAO {
 			}
 			return forms_list;
 		} catch (SQLException e) {
-			alert(e.getMessage());
+			alert(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -900,7 +902,7 @@ public class TerminalDAO {
 			}
 			return forms_list;
 		} catch (SQLException e) {
-			alert(e.getMessage());
+			alert(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -917,7 +919,7 @@ public class TerminalDAO {
 			}
 			return forms_list;
 		} catch (SQLException e) {
-			alert(e.getMessage());
+			alert(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -941,7 +943,7 @@ public class TerminalDAO {
 			}
 			return forms_list;
 		} catch (SQLException e) {
-			alert(e.getMessage());
+			alert(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -959,7 +961,7 @@ public class TerminalDAO {
 			}
 			return user_in_list;
 		} catch (SQLException e) {
-			alert(e.getMessage());
+			alert(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -976,7 +978,7 @@ public class TerminalDAO {
 			}
 			return user_in_list;
 		} catch (SQLException e) {
-			alert(e.getMessage());
+			alert(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -993,7 +995,7 @@ public class TerminalDAO {
 			}
 			return user_o_list;
 		} catch (SQLException e) {
-			alert(e.getMessage());
+			alert(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -1010,7 +1012,7 @@ public class TerminalDAO {
 			}
 			return fn_list;
 		} catch (SQLException e) {
-			alert(e.getMessage());
+			alert(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -1090,7 +1092,7 @@ public class TerminalDAO {
 			}
 			return fn_list;
 		} catch (SQLException e) {
-			alert(e.getMessage());
+			alert(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -1116,7 +1118,7 @@ public class TerminalDAO {
 			// return empList (ObservableList of Employees)
 			return empList;
 		} catch (SQLException e) {
-			alert(e.getMessage());
+			alert(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}

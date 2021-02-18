@@ -12,6 +12,8 @@ import java.util.ResourceBundle;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+
 import app.Main;
 import app.model.Connect;
 import app.model.SqlMap;
@@ -138,7 +140,7 @@ public class RootLayoutController {
 		try {
 			Main.Sverka();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -153,7 +155,7 @@ public class RootLayoutController {
 		try {
 			Main.swift();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 	@FXML
@@ -161,7 +163,7 @@ public class RootLayoutController {
 		try {
 			Main.showEmployeeView();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -170,7 +172,7 @@ public class RootLayoutController {
 		try {
 			Main.Debtinfo();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -202,7 +204,7 @@ public class RootLayoutController {
 		try {
 			Main.Ibankk();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -211,7 +213,7 @@ public class RootLayoutController {
 		try {
 			Main.Admin_Menu();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -220,7 +222,7 @@ public class RootLayoutController {
 		try {
 			Main.showAmTr();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -229,7 +231,7 @@ public class RootLayoutController {
 		try {
 			Main.Transact();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -238,7 +240,7 @@ public class RootLayoutController {
 		try {
 			Main.Show_Hist();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -247,7 +249,7 @@ public class RootLayoutController {
 		try {
 			Main.Termdial_view_();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -256,7 +258,7 @@ public class RootLayoutController {
 		try {
 			Main.Transact_Amra();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -265,7 +267,7 @@ public class RootLayoutController {
 		try {
 			Main.Terminal();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -274,7 +276,7 @@ public class RootLayoutController {
 		try {
 			Main.showKash();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -283,7 +285,7 @@ public class RootLayoutController {
 		try {
 			Main.Contact();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -312,7 +314,7 @@ public class RootLayoutController {
 
 					}
 				} catch (IOException e) {
-					Msg.Message(e.getMessage());
+					Msg.Message(ExceptionUtils.getStackTrace(e));
 				}
 				return null;
 			}
@@ -353,7 +355,7 @@ public class RootLayoutController {
 					}
 				} catch (IOException e) {
 
-					Msg.Message(e.getMessage());
+					Msg.Message(ExceptionUtils.getStackTrace(e));
 				}
 				return null;
 			}
@@ -368,7 +370,7 @@ public class RootLayoutController {
 		try {
 			Main.Admin();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -377,7 +379,7 @@ public class RootLayoutController {
 		try {
 			Main.Service();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -407,7 +409,7 @@ public class RootLayoutController {
 			}
 			prepStmt.close();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 		return ret;
 	}
@@ -434,7 +436,7 @@ public class RootLayoutController {
 			}
 			prepStmt.close();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 		return ret;
 	}
@@ -444,7 +446,7 @@ public class RootLayoutController {
 		try {
 			Main.sepRA();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -453,7 +455,7 @@ public class RootLayoutController {
 		try {
 			Main.sep();
 		} catch (Exception e) {
-			Msg.Message(e.getMessage());
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 

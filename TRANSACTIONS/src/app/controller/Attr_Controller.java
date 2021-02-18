@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -220,7 +221,7 @@ public class Attr_Controller {
 				Alerts("Файл сформирован в папку " + file.getPath());
 			}
 		} catch (Exception e) {
-			Alerts(e.getMessage());
+			Alerts(ExceptionUtils.getStackTrace(e));
 		}
 
 	}

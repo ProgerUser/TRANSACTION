@@ -14,6 +14,7 @@ import java.util.HashMap;
 
 import javax.swing.JFrame;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.controlsfx.control.table.TableFilter;
 
 import app.Main;
@@ -265,7 +266,7 @@ public class ShowHistoryController {
 			stage.getIcons().add(new Image("terminal.png"));
 			alert.setTitle("Внимание");
 			alert.setHeaderText(null);
-			alert.setContentText(e.getMessage());
+			alert.setContentText(ExceptionUtils.getStackTrace(e));
 			alert.showAndWait();
 		}
 	}
