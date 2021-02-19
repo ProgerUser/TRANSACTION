@@ -507,7 +507,6 @@ public class penscontroller {
 			writer.close();
 			rs.close();
 			sqlStatement.close();
-
 		} catch (Exception e) {
 			showalert(ExceptionUtils.getStackTrace(e));
 		}

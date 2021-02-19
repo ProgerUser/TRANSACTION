@@ -677,8 +677,6 @@ public class Main extends Application {
 
 	public static void main(String[] args) {
 		try {
-			System.out.println("MODULE=<" + args[3] + ">");
-			System.out.println("length=<" + args.length + ">");
 			if (args.length != 0 & args.length == 5) {
 				Connect.userID_ = args[0];
 				Connect.userPassword_ = args[1];
@@ -693,7 +691,6 @@ public class Main extends Application {
 				MODULE = args[3];
 				System.out.println(args[3]);
 			} else if (args.length != 0 & args.length == 7) {
-				System.out.println("2MODULE=<" + args[3] + ">");
 				Connect.userID_ = args[0];
 				Connect.userPassword_ = args[1];
 				Connect.connectionURL_ = args[2];

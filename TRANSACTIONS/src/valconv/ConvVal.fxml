@@ -111,7 +111,7 @@
 		</GridPane>
 		<ButtonBar prefHeight="40.0">
 			<buttons>
-				<Button mnemonicParsing="false" onAction="#sava" text="Сохранить" />
+				<Button mnemonicParsing="false" onAction="#save" text="Сохранить" />
 				<Button mnemonicParsing="false" onAction="#cencel" text="Отмена" />
 			</buttons>
 		</ButtonBar>

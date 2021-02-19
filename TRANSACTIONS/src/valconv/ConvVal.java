@@ -1,9 +1,10 @@
 package valconv;
 
+import java.awt.SplashScreen;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -29,6 +30,15 @@ public class ConvVal {
 		Main.logger = Logger.getLogger(getClass());
 	}
 
+	static String fl20;
+	static String fl32a_date;
+	static String fl32a_cur;
+	static String fl32a_sum;
+	static String fl58a;
+	static String fl58a_detail;
+	static String fl53b;
+	static String fl72;
+	
 	@FXML
 	private TextField FILENAME;
 
@@ -64,8 +74,9 @@ public class ConvVal {
 		onclose();
 	}
 
+	@SuppressWarnings("resource")
 	@FXML
-	void sava(ActionEvent event) {
+	void save(ActionEvent event) {
 		try {
 			// Проверка полей
 			if (f20.getText() == null || f20.getText().equals("")) {
@@ -110,27 +121,39 @@ public class ConvVal {
 			}
 			// Формирование файла
 //1
-			//Создаем 227! пробелов, ? для чего но "Инверсия" делает
+			//Создаем 227! пробелов, хз для чего, но "Инверсия" делает
 			String space = "";
 			for (int i = 1; i <= 227; i++) {
 				space = space + " ";
 			}
 			
-			String txt="{1:F01SBRARUMMAXXX0000000000}{2:I202VTBRRUMMXXXXN}{3:{113:RUR6}}{4:\r\n"
-					+":20:"+f20.getText()+"\r\n"
-					+":21:NONREF\r\n"
-					+":32A:"+f32a_date.getText()+f32a_cur.getText()+f32a_sum.getText()+"\r\n"
-					+":53B:"+f53b.getText()+"\r\n"
-					+":58A:"+f58a.getText()+"\r\n"+f58a_detail.getText()+"\r\n"
-					+":72:"+f72.getText()
-					+"-}"+space;
+			String txt = "{1:F01SBRARUMMAXXX0000000000}{2:I202VTBRRUMMXXXXN}{3:{113:RUR6}}{4:\r\n"
+					+ ":20:" + fl20 + "\r\n"
+					+ ":21:NONREF\r\n"
+					+ ":32A:" + fl32a_date + fl32a_cur + fl32a_sum + "\r\n"
+					+ ":53B:" + fl53b + "\r\n"
+					+ ":58A:" + fl58a + "\r\n" + fl58a_detail + "\r\n"
+					+ ":72:" + fl72
+					+ "-}" + space;
 
-			OutputStream os = new FileOutputStream(System.getenv("SWIFT_OUTLOCAL") + "/" + FILENAME.getText() + ".swt");
-			PrintWriter out = new PrintWriter(new OutputStreamWriter(os, "windows-1251"));
-			out.print(txt);
-			out.close();
-			os.close();
-//2
+//			OutputStream os = new FileOutputStream(System.getenv("SWIFT_OUTLOCAL") + "/" + FILENAME.getText() + ".swt");
+//			PrintWriter out = new PrintWriter(new OutputStreamWriter(os, "CP1251"));
+//			out.write(txt);
+//			out.print(txt);
+//			out.close();
+//			os.close();
+
+//1.1
+			
+//			FileUtils.writeByteArrayToFile(
+//					new File(System.getenv("SWIFT_OUTLOCAL") + "/" + FILENAME.getText() + ".swt"),
+//					txt.getBytes(StandardCharsets.UTF_8));
+			
+//1.2
+			File swtFile = new File(System.getenv("SWIFT_OUTLOCAL") + "/" + FILENAME.getText() + ".swt");
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(swtFile), "Cp1252"));
+			writer.write(txt);
+			writer.close();
 			
 //			List<String> lines = new ArrayList<String>();
 //			lines.add("{1:F01SBRARUMMAXXX0000000000}{2:I202VTBRRUMMXXXXN}{3:{113:RUR6}}{4:");
@@ -224,6 +247,12 @@ public class ConvVal {
 	@FXML
 	private void initialize() {
 		try {
+			
+			final SplashScreen splash = SplashScreen.getSplashScreen();
+			if (splash != null) {
+				splash.close();
+			}
+			
 			dbConnect();
 			// Инициализация полей
 			{
@@ -244,19 +273,18 @@ public class ConvVal {
 				if (clstmt.getString(3) != null) {
 					Msg.Message(clstmt.getString(3));
 				} else {
-					f20.setText(clstmt.getString(4));
+					fl20=clstmt.getString(4);f20.setText(fl20);
 					f21.setText("NONREF");
-					f32a_date.setText(clstmt.getString(5));
-					f32a_cur.setText(clstmt.getString(6));
-					f32a_sum.setText(clstmt.getString(7));
-					f58a.setText(clstmt.getString(8));
-					f58a_detail.setText(clstmt.getString(9));
-					f53b.setText(clstmt.getString(10));
-					f72.setText(clstmt.getString(11));
+					fl32a_date = clstmt.getString(5);f32a_date.setText(fl32a_date);
+					fl32a_cur = clstmt.getString(6);f32a_cur.setText(fl32a_cur);
+					fl32a_sum = clstmt.getString(7);f32a_sum.setText(fl32a_sum);
+					fl58a = clstmt.getString(8);f58a.setText(fl58a);
+					fl58a_detail = clstmt.getString(9);f58a_detail.setText(fl58a_detail);
+					fl53b = clstmt.getString(10);f53b.setText(fl53b);
+					fl72 = clstmt.getString(11);f72.setText(fl72);
 					FILENAME.setText(clstmt.getString(12));
 				}
 			}
-
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
