@@ -74,7 +74,6 @@ public class ConvVal {
 		onclose();
 	}
 
-	@SuppressWarnings("resource")
 	@FXML
 	void save(ActionEvent event) {
 		try {
