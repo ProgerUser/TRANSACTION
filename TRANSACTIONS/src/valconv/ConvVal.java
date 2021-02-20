@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.Types;
 import java.util.Properties;
 
@@ -190,6 +191,18 @@ public class ConvVal {
 //			outputStream.close();
 //			outputStreamWriter.close();
 			
+			//Сохраним ссылки для возврата
+			{
+				PreparedStatement prp = conn.prepareStatement("insert into VTB_MT202_CONV (REF,TRN_NUM,TRN_ANUM,FILE_T) values (?,?,?,?)");
+				prp.setString(1, fl20);
+				prp.setInt(2, Integer.valueOf(Connect.trnnum));
+				prp.setInt(3, Integer.valueOf(Connect.trnanum));
+				prp.setString(4, txt);
+				prp.executeUpdate();
+				prp.close();
+				conn.commit();
+			}
+			
 			Msg.Message("Файл \"" + FILENAME.getText() + ".swt\"" + " успешно создан в папке "
 					+ System.getenv("SWIFT_OUTLOCAL"));
 			onclose();
@@ -284,6 +297,7 @@ public class ConvVal {
 					fl72 = clstmt.getString(11);f72.setText(fl72);
 					FILENAME.setText(clstmt.getString(12));
 				}
+				clstmt.close();
 			}
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
