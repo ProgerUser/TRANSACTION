@@ -75,6 +75,10 @@ public class ConvVal {
 		onclose();
 	}
 
+	/**
+	 * Сохранение
+	 * @param event
+	 */
 	@FXML
 	void save(ActionEvent event) {
 		try {
@@ -150,11 +154,57 @@ public class ConvVal {
 //					txt.getBytes(StandardCharsets.UTF_8));
 			
 //1.2
+			try{
+			//Сохраним все поля в таблице со связкой к trn
+			{
+				PreparedStatement prp = conn.prepareStatement(
+					    "insert into VTB_MT202_CONV\n" + 
+						"  (ref,\n" + 
+						"   trn_num,\n" + 
+						"   trn_anum,\n" + 
+						"   f72,\n" + 
+						"   f58a,\n" + 
+						"   f53b,\n" + 
+						"   fl32a_date,\n" + 
+						"   fl32a_cur,\n" + 
+						"   fl32a_sum,\n" + 
+						"   f21,\n" + 
+						"   fl58a_detail)\n" + 
+						"values\n" + 
+						"  (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+				prp.setString(1, fl20);
+				prp.setInt(2, Integer.valueOf(Connect.trnnum));
+				prp.setInt(3, Integer.valueOf(Connect.trnanum));
+				prp.setString(4, fl72);
+				prp.setString(5, fl58a);
+				prp.setString(6, fl53b);
+				prp.setString(7, fl32a_date);
+				prp.setString(8, fl32a_cur);
+				prp.setString(9, fl32a_sum);
+				prp.setString(10, f21.getText());
+				prp.setString(11, fl58a_detail);
+				prp.executeUpdate();
+				prp.close();
+			}
+			//Только если нет ошибок при сохранении в таблицу
+			
 			File swtFile = new File(System.getenv("SWIFT_OUTLOCAL") + "/" + FILENAME.getText() + ".swt");
 			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(swtFile), "Cp1252"));
 			writer.write(txt);
 			writer.close();
 			
+			Msg.Message("Файл \"" + FILENAME.getText() + ".swt\"" + " создан в папке \""
+					+ System.getenv("SWIFT_OUTLOCAL")+"\"");
+			
+			//Если и при формировании файла нет ошибки
+			conn.commit();
+			}catch(Exception e) {
+				//отмена транзакции
+				conn.rollback();
+				Msg.Message(ExceptionUtils.getStackTrace(e));
+				Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			}
+
 //			List<String> lines = new ArrayList<String>();
 //			lines.add("{1:F01SBRARUMMAXXX0000000000}{2:I202VTBRRUMMXXXXN}{3:{113:RUR6}}{4:");
 //			lines.add(":21:NONREF");
@@ -166,7 +216,9 @@ public class ConvVal {
 //
 //			Files.write(Paths.get(System.getenv("SWIFT_OUTLOCAL") + "/" + FILENAME.getText() + ".swt"), lines,
 //					StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+			
 //3
+			
 //			FileOutputStream outputStream = new FileOutputStream("MyFile.txt");
 //			OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, "CP1252");
 //			BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
@@ -190,20 +242,8 @@ public class ConvVal {
 //			outputStream.close();
 //			outputStreamWriter.close();
 			
-			//Сохраним ссылки для возврата
-			{
-				PreparedStatement prp = conn.prepareStatement("insert into VTB_MT202_CONV (REF,TRN_NUM,TRN_ANUM,FILE_T) values (?,?,?,?)");
-				prp.setString(1, fl20);
-				prp.setInt(2, Integer.valueOf(Connect.trnnum));
-				prp.setInt(3, Integer.valueOf(Connect.trnanum));
-				prp.setString(4, txt);
-				prp.executeUpdate();
-				prp.close();
-				conn.commit();
-			}
-			
-			Msg.Message("Файл \"" + FILENAME.getText() + ".swt\"" + " успешно создан в папке "
-					+ System.getenv("SWIFT_OUTLOCAL"));
+		
+			//закроем форму
 			onclose();
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
@@ -260,6 +300,7 @@ public class ConvVal {
 	private void initialize() {
 		try {
 			
+			//закрыть splash картинку
 			final SplashScreen splash = SplashScreen.getSplashScreen();
 			if (splash != null) {
 				splash.close();
