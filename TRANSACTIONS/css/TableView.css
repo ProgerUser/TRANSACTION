@@ -1,9 +1,10 @@
 
 /** CSS **/
-.mylistview{
+/*.mylistview{
 	-fx-border-color:derive(gray,80.0%);
 }
- 
+  */
+
 /* The main scrollbar CSS class of ListView */
 .mylistview .scroll-bar:horizontal ,
 .mylistview  .scroll-bar:vertical{

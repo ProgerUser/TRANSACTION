@@ -156,7 +156,7 @@ public class ConvVal {
 //1.2
 			try{
 			//—охраним все пол€ в таблице со св€зкой к trn
-			{
+			
 				PreparedStatement prp = conn.prepareStatement(
 					    "insert into VTB_MT202_CONV\n" + 
 						"  (ref,\n" + 
@@ -185,7 +185,7 @@ public class ConvVal {
 				prp.setString(11, fl58a_detail);
 				prp.executeUpdate();
 				prp.close();
-			}
+			
 			//“олько если нет ошибок при сохранении в таблицу
 			
 			File swtFile = new File(System.getenv("SWIFT_OUTLOCAL") + "/" + FILENAME.getText() + ".swt");

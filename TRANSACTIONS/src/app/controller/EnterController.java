@@ -1,5 +1,6 @@
 package app.controller;
 
+import java.awt.SplashScreen;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
@@ -238,7 +239,12 @@ public class EnterController {
 	}
 
 	@FXML
-	void initialize() {
+	private void initialize() {
+		//закрыть splash картинку
+		final SplashScreen splash = SplashScreen.getSplashScreen();
+		if (splash != null) {
+			splash.close();
+		}
 		// System.out.println(System.getenv("TRANSACT_PATH")/*
 		// System.getProperty("user.dir") */ + "connect.properties");
 		try (InputStream input = new FileInputStream(System.getenv("TRANSACT_PATH") + "connect.properties")) {
