@@ -666,7 +666,7 @@ public class Main extends Application {
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("Загрузка транзакции");
 			stage.setResizable(false);
-			stage.initModality(Modality.WINDOW_MODAL);
+			//root.initModality(Modality.WINDOW_MODAL);
 			stage.initOwner(primaryStage);
 			stage.show();
 		} catch (Exception e) {
