@@ -342,6 +342,61 @@ public class SWC {
 	@FXML
 	private TableView<SWIFT_FILES> Achive;
 
+	
+    @FXML
+    private TableColumn<VAVAL, String> CATTR_NAME;
+
+    @FXML
+    private TableColumn<VAVAL, String> CVALUE;
+    
+    @FXML
+    private TableView<VAVAL> AVAL;
+
+    @FXML
+    private RadioButton SWIFT_VTB;
+
+    @FXML
+    private RadioButton BK_VTB;
+    
+    
+	@FXML
+	void BK_VTB(ActionEvent event) {
+		try {
+//			// Specify this setting to fetch server output explicitly
+//		    DSLContext ctx = DSL.using(conn, 
+//		        new Settings().withFetchServerOutputSize(10000));
+//		    ctx.execute("begin SBRA_VTB_SWIF.GO_BK end;");
+//		    ctx.close();
+			CallableStatement clbstmt = conn.prepareCall("{ call SBRA_VTB_SWIF.GO_BK }");
+			clbstmt.executeUpdate();
+			clbstmt.close();
+			
+			REFRESH_AVAL();
+			System.out.println("BK_VTB");
+		} catch (Exception e) {
+			e.printStackTrace();
+			ErrorMessage(ExceptionUtils.getStackTrace(e));
+			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+		}
+	}
+
+    @FXML
+    void SWIFT_VTB(ActionEvent event) {
+    	try {
+    		CallableStatement clbstmt = conn.prepareCall("{ call SBRA_VTB_SWIF.GO_SW }");
+			clbstmt.executeUpdate();
+			clbstmt.close();
+			REFRESH_AVAL();
+			System.out.println("SWIFT_VTB");
+		} catch (Exception e) {
+			e.printStackTrace();
+			ErrorMessage(ExceptionUtils.getStackTrace(e));
+			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+		}
+    }
+    
+    
+    
 	/**
 	 * Возврат суммы документа , если MT103...пока
 	 * 
@@ -1205,6 +1260,40 @@ public class SWC {
 
 	Properties swift_mt;
 
+	void REFRESH_AVAL() {
+		try {
+		PreparedStatement prp = conn.prepareStatement(
+				"select CATTR_NAME, CVALUE\r\n"
+				+ "    from AVAL, BATTR\r\n"
+				+ "   where nbnk = 1683\r\n"
+				+ "     AND AVAL.nattr = BATTR.NATTR_ID\r\n"
+				+ "   ORDER BY NPP ASC");
+		ResultSet rs = prp.executeQuery();
+		ObservableList<VAVAL> list = FXCollections.observableArrayList();
+		while(rs.next()) {
+			VAVAL val = new VAVAL();
+			val.setCATTR_NAME(rs.getString("CATTR_NAME"));
+			val.setCVALUE(rs.getString("CVALUE"));
+			list.add(val);
+		}
+		
+		AVAL.setItems(list);
+		rs.close();
+		prp.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			ErrorMessage(ExceptionUtils.getStackTrace(e));
+			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+		}
+	}
+	
+	
+    @FXML
+    void RESF_BIK_TO_SW_VTB(ActionEvent event) {
+    	
+    }
+    
 	/**
 	 * Инициализация
 	 */
@@ -1212,7 +1301,51 @@ public class SWC {
 	@FXML
 	private void initialize() {
 		try {
+			dbConnect();
+			
+			CATTR_NAME.setCellValueFactory(cellData -> cellData.getValue().CATTR_NAMEProperty());
+			
+			CVALUE.setCellValueFactory(cellData -> cellData.getValue().CVALUEProperty());
 
+			CATTR_NAME.setOnEditCommit(new EventHandler<CellEditEvent<VAVAL, String>>() {
+				@Override
+				public void handle(CellEditEvent<VAVAL, String> t) {
+					((VAVAL) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+							.setCATTR_NAME(t.getNewValue());
+				}
+			});
+
+			CVALUE.setOnEditCommit(new EventHandler<CellEditEvent<VAVAL, String>>() {
+				@Override
+				public void handle(CellEditEvent<VAVAL, String> t) {
+					((VAVAL) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCVALUE(t.getNewValue());
+				}
+			});
+			
+			{
+				// Group
+				ToggleGroup group = new ToggleGroup();
+				SWIFT_VTB.setToggleGroup(group);
+				BK_VTB.setToggleGroup(group);
+			}
+			
+			REFRESH_AVAL();
+			
+			{
+				CallableStatement clbstmt = conn.prepareCall("{  ? = call SBRA_VTB_SWIF.SW_BK }");
+				clbstmt.registerOutParameter(1, Types.VARCHAR);
+				clbstmt.executeUpdate();
+				if (clbstmt.getString(1).equals("BK")) {
+					BK_VTB.setSelected(true);
+				} else if (clbstmt.getString(1).equals("SW")) {
+					SWIFT_VTB.setSelected(true);
+				}
+				clbstmt.close();
+			}
+			
+			
+			//_______________________________________________________________________________
+			
 			STMT.getColumns().addListener(new ListChangeListener() {
 				@Override
 				public void onChanged(Change change) {
@@ -1381,7 +1514,7 @@ public class SWC {
 			STMT.setEditable(true);
 			Achive.setEditable(true);
 
-			dbConnect();
+			
 
 			// При выборе строки, что бы не исчезало после
 			// обновления_________________________________________________________________________-
@@ -1441,6 +1574,8 @@ public class SWC {
 					}
 				}
 			});
+			
+			
 			// Тип архива
 			ArchType.getItems().addAll("IN", "OUT", "ВСЕ");
 			// *****************************Архив IN-OUT********************

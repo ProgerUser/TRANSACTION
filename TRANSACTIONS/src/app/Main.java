@@ -69,15 +69,15 @@ public class Main extends Application {
 
 //			Connect.connectionURL_ = "10.111.64.21:1521/ODB";
 //			Connect.userID_ = "SAIDP";
-//			Connect.userPassword_ = "÷÷÷";
+//			Connect.userPassword_ = "";
 //			DBUtil.dbConnect();
+//			swift2();
 //			ConvVal();
 
 			primaryStage.setOnCloseRequest(e -> {
 				DBUtil.dbDisconnect();
 				Platform.exit();
 				System.exit(0);
-
 			});
 
 			// this.primaryStage.setMaximized(true);
