@@ -127,16 +127,10 @@ public class Amra_Transact {
 	}
 
 	@FXML
-	private Button open_new;
-
-	@FXML
 	private ResourceBundle resources;
 
 	@FXML
 	private URL location;
-
-	@FXML
-	private Button browse;
 
 	@FXML
 	private BorderPane ap1;
@@ -144,8 +138,6 @@ public class Amra_Transact {
 	@FXML
 	private AnchorPane ap;
 	
-	@FXML
-	private Button import_;
 
 	@FXML
 	private TableColumn<Add_File, String> DateFile;

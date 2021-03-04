@@ -44,6 +44,11 @@ import org.controlsfx.control.table.TableFilter;
 import org.mozilla.universalchardet.UniversalDetector;
 
 import com.google.common.io.Files;
+import com.jyloo.syntheticafx.DateColumnFilter;
+import com.jyloo.syntheticafx.PatternColumnFilter;
+import com.jyloo.syntheticafx.SyntheticaFX;
+import com.jyloo.syntheticafx.XTableColumn;
+import com.jyloo.syntheticafx.XTableView;
 import com.prowidesoftware.swift.model.field.Field32A;
 import com.prowidesoftware.swift.model.field.Field50K;
 import com.prowidesoftware.swift.model.field.Field52D;
@@ -56,7 +61,6 @@ import com.prowidesoftware.swift.model.mt.mt1xx.MT103;
 import com.prowidesoftware.swift.model.mt.mt2xx.MT202;
 import com.prowidesoftware.swift.model.mt.mt9xx.MT950;
 
-import app.Main;
 import app.model.Connect;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -65,12 +69,13 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -96,6 +101,8 @@ import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.scene.web.WebEngine;
@@ -116,6 +123,32 @@ import javafx.util.converter.LocalDateTimeStringConverter;
  *
  */
 public class SWC {
+	@FXML
+	private TableView<BIK_TO_SW_VTB> BIK_TO_SW_VTB;
+
+	@FXML
+	private TableColumn<BIK_TO_SW_VTB, String> BIK_TRN;
+
+	@FXML
+	private TableColumn<BIK_TO_SW_VTB, String> SW_TRN;
+
+	@FXML
+	private TableColumn<BIK_TO_SW_VTB, LocalDate> DTRNCREATE;
+
+	@FXML
+	private TableColumn<BIK_TO_SW_VTB, LocalDate> DTRNTRAN;
+
+	@FXML
+	private TableColumn<BIK_TO_SW_VTB, String> CTRNACCD;
+
+	@FXML
+	private TableColumn<BIK_TO_SW_VTB, String> CTRNACCC;
+
+	@FXML
+	private TableColumn<BIK_TO_SW_VTB, Integer> MTRNSUM;
+
+	@FXML
+	private TableColumn<BIK_TO_SW_VTB, String> CTRNCORACCO;
 	/* __________Кнопки_для_быстрого_перемещения__________ */
 
 	@FXML
@@ -286,50 +319,55 @@ public class SWC {
 	 * Валюта
 	 */
 	@FXML
-	private TableColumn<SWIFT_FILES, String> CURdb;
+	private XTableColumn<SWIFT_FILES, String> CURdb;
 
 	/**
 	 * Сумма документа, если MT103...
 	 */
 	@FXML
-	private TableColumn<SWIFT_FILES, String> SUMMdb;
+	private XTableColumn<SWIFT_FILES, String> SUMMdb;
 
 	/**
 	 * Название операции
 	 */
 	@FXML
-	private TableColumn<SWIFT_FILES, String> MTNAMEdb;
+	private XTableColumn<SWIFT_FILES, String> MTNAMEdb;
 
 	/**
 	 * MT.., из базы
 	 */
 	@FXML
-	private TableColumn<SWIFT_FILES, String> MTTYPEdb;
+	private XTableColumn<SWIFT_FILES, String> MTTYPEdb;
 
 	/**
 	 * Дата создания файла
 	 */
 	@FXML
-	private TableColumn<SWIFT_FILES, LocalDateTime> DT_CHdb;
+	private XTableColumn<SWIFT_FILES, LocalDateTime> DT_CHdb;
 
 	/**
 	 * Дата документа
 	 */
 	@FXML
-	private TableColumn<SWIFT_FILES, LocalDate> DOCDATEdb;
+	private XTableColumn<SWIFT_FILES, LocalDate> DOCDATEdb;
 
 	/**
 	 * Название файла
 	 */
 	@FXML
-	private TableColumn<SWIFT_FILES, String> FILE_NAMEdb;
+	private XTableColumn<SWIFT_FILES, String> FILE_NAMEdb;
 
 	/**
 	 * IN-OUT база
 	 */
 	@FXML
-	private TableColumn<SWIFT_FILES, String> Typedb;
+	private XTableColumn<SWIFT_FILES, String> Typedb;
 
+	@FXML
+	private XTableColumn<SWIFT_FILES, String> OPERdb;
+	
+	@FXML
+	private XTableColumn<SWIFT_FILES, String> REFdb;
 	/**
 	 * Таблица Вх-Исх каталогов
 	 */
@@ -340,7 +378,7 @@ public class SWC {
 	 * Таблица Архива
 	 */
 	@FXML
-	private TableView<SWIFT_FILES> Achive;
+	private XTableView<SWIFT_FILES> Achive;
 
 	
     @FXML
@@ -691,14 +729,14 @@ public class SWC {
 			clstmt.execute();
 			if (!clstmt.getString(1).equals("ok")) {
 				ret = clstmt.getString(11);
-				// conn.rollback();
+				//conn.rollback();
 			} else {
 				ret = "ok";
-				// conn.commit();
-			}
+				//conn.commit();
+			}	
 			clstmt.close();
 			is.close();
-		} catch (SQLException | IOException e) {
+		} catch (Exception e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
 			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
@@ -831,11 +869,11 @@ public class SWC {
 	@FXML
 	void LoadFile(ActionEvent event) {
 		try {
-			RootTab.setDisable(true);
-			PrgInd.setVisible(true);
-			Task<Object> task = new Task<Object>() {
-				@Override
-				public Object call() throws Exception {
+//			RootTab.setDisable(true);
+//			PrgInd.setVisible(true);
+//			Task<Object> task = new Task<Object>() {
+//				@Override
+//				public Object call() throws Exception {
 					LocalDate docdt = null;
 					LocalDateTime crdate = null;
 					String amount = null;
@@ -935,24 +973,23 @@ public class SWC {
 							}
 						}
 					}
-					return null;
-				}
-			};
-			task.setOnFailed(e -> {
-				ErrorMessage(task.getException().getMessage());
-				SWLogger.error(task.getException().getMessage() + "~" + Thread.currentThread().getName());
-			});
-			task.setOnSucceeded(e -> {
-				try {
-					RootTab.setDisable(false);
-					PrgInd.setVisible(false);
-				} catch (Exception e1) {
-					ErrorMessage(e1.getMessage());
-					SWLogger.error(e1.getMessage() + "~" + Thread.currentThread().getName());
-				}
-			});
-			exec.execute(task);
-
+//					return null;
+//				}
+//			};
+//			task.setOnFailed(e -> {
+//				ErrorMessage(task.getException().getMessage());
+//				SWLogger.error(task.getException().getMessage() + "~" + Thread.currentThread().getName());
+//			});
+//			task.setOnSucceeded(e -> {
+//				try {
+//					RootTab.setDisable(false);
+//					PrgInd.setVisible(false);
+//				} catch (Exception e1) {
+//					ErrorMessage(e1.getMessage());
+//					SWLogger.error(e1.getMessage() + "~" + Thread.currentThread().getName());
+//				}
+//			});
+//			exec.execute(task);
 		} catch (Exception e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
 			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
@@ -1218,7 +1255,7 @@ public class SWC {
 		Timer time = new Timer(); // Instantiate Timer Object
 		st = new ScheduledTask(); // Instantiate SheduledTask class
 		st.setSWC(this, type);
-		time.schedule(st, 0, 1000); // Create task repeating every 1 sec
+		time.schedule(st, 0, 3000); // Create task repeating every 1 sec
 	}
 
 	void ErrorMessage(String mes) {
@@ -1226,13 +1263,42 @@ public class SWC {
 			if (mes != null && !mes.equals("")) {
 				Platform.runLater(() -> {
 					try {
-//						Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//						Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-//						stage.getIcons().add(new Image("terminal.png"));
-//						alert.setTitle("Внимание");
-//						alert.setHeaderText(null);
-//						alert.setContentText(mes);
-//						alert.showAndWait();
+						AlertType AlertTp = null;
+						String error = null;
+						if (mes.length() >= 200) {
+							AlertTp = AlertType.ERROR;
+							error = mes.substring(0, 150);
+						} else {
+							AlertTp = AlertType.INFORMATION;
+							error = mes;
+						}
+						Alert alert = new Alert(AlertTp);
+						Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+						stage.getIcons().add(new Image("/icon.png"));
+						alert.setTitle("Внимание");
+						alert.setHeaderText(error);
+						// alert.setContentText(mess.substring(0, mess.indexOf("\r\n")));
+						Label label = new Label("Трассировка стека исключения:");
+
+						TextArea textArea = new TextArea(mes);
+						textArea.setEditable(false);
+						textArea.setWrapText(true);
+
+						textArea.setMaxWidth(Double.MAX_VALUE);
+						textArea.setMaxHeight(Double.MAX_VALUE);
+
+						GridPane.setVgrow(textArea, Priority.ALWAYS);
+						GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+						GridPane expContent = new GridPane();
+						expContent.setMaxWidth(Double.MAX_VALUE);
+						expContent.add(label, 0, 0);
+						expContent.add(textArea, 0, 1);
+
+						// Set expandable Exception into the dialog pane.
+						alert.getDialogPane().setExpandableContent(expContent);
+
+						alert.showAndWait();
 					} catch (Exception e) {
 						SWLogger.error(ExceptionUtils.getStackTrace(e));
 					}
@@ -1291,7 +1357,44 @@ public class SWC {
 	
     @FXML
     void RESF_BIK_TO_SW_VTB(ActionEvent event) {
-    	
+		try {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+			String selectStmt = "select * from BIK_TO_SW_VTB t";
+			PreparedStatement prepStmt = conn.prepareStatement(selectStmt);
+			ResultSet rs = prepStmt.executeQuery();
+			ObservableList<BIK_TO_SW_VTB> dlist = FXCollections.observableArrayList();
+			while (rs.next()) {
+				BIK_TO_SW_VTB list = new BIK_TO_SW_VTB();
+				list.setBIK_TRN(rs.getString("BIK_TRN"));
+				list.setSW_TRN(rs.getString("SW_TRN"));
+				list.setDTRNCREATE((rs.getDate("DTRNCREATE") != null)
+						? LocalDate.parse(new SimpleDateFormat("dd.MM.yyyy").format(rs.getDate("DTRNCREATE")), formatter)
+						: null);
+				list.setDTRNTRAN((rs.getDate("DTRNTRAN") != null)
+						? LocalDate.parse(new SimpleDateFormat("dd.MM.yyyy").format(rs.getDate("DTRNTRAN")), formatter)
+						: null);
+				list.setCTRNACCD(rs.getString("CTRNACCD"));
+				list.setCTRNACCC(rs.getString("CTRNACCC"));
+				list.setMTRNSUM(rs.getInt("MTRNSUM"));
+				list.setCTRNCORACCO(rs.getString("CTRNCORACCO"));
+				list.setCTRNCORACCA(rs.getString("CTRNCORACCA"));
+				dlist.add(list);
+			}
+			prepStmt.close();
+			rs.close();
+			BIK_TO_SW_VTB.setItems(dlist);
+			TableFilter<BIK_TO_SW_VTB> tableFilter = TableFilter.forTableView(BIK_TO_SW_VTB).apply();
+			tableFilter.setSearchStrategy((input, target) -> {
+				try {
+					return target.toLowerCase().contains(input.toLowerCase());
+				} catch (Exception e) {
+					return false;
+				}
+			});
+		} catch (Exception e) {
+			SWLogger.error(ExceptionUtils.getStackTrace(e));
+			ErrorMessage(ExceptionUtils.getStackTrace(e));
+		}
     }
     
 	/**
@@ -1303,8 +1406,21 @@ public class SWC {
 		try {
 			dbConnect();
 			
-			CATTR_NAME.setCellValueFactory(cellData -> cellData.getValue().CATTR_NAMEProperty());
 			
+			SyntheticaFX.init("com.jyloo.syntheticafx.SyntheticaFXModena");
+			
+			BIK_TRN.setCellValueFactory(cellData -> cellData.getValue().BIK_TRNProperty());
+			SW_TRN.setCellValueFactory(cellData -> cellData.getValue().SW_TRNProperty());
+			DTRNCREATE.setCellValueFactory(cellData -> cellData.getValue().DTRNCREATEProperty());
+			DTRNTRAN.setCellValueFactory(cellData -> cellData.getValue().DTRNTRANProperty());
+			CTRNACCD.setCellValueFactory(cellData -> cellData.getValue().CTRNACCDProperty());
+			CTRNACCC.setCellValueFactory(cellData -> cellData.getValue().CTRNACCCProperty());
+			MTRNSUM.setCellValueFactory(cellData -> cellData.getValue().MTRNSUMProperty().asObject());
+			CTRNCORACCO.setCellValueFactory(cellData -> cellData.getValue().CTRNCORACCOProperty());
+			
+			
+			
+			CATTR_NAME.setCellValueFactory(cellData -> cellData.getValue().CATTR_NAMEProperty());
 			CVALUE.setCellValueFactory(cellData -> cellData.getValue().CVALUEProperty());
 
 			CATTR_NAME.setOnEditCommit(new EventHandler<CellEditEvent<VAVAL, String>>() {
@@ -1533,12 +1649,12 @@ public class SWC {
 						// System.out.println("TF=" + TF);
 						// System.out.println("GE=" + GE);
 						if (!TF.equals(GE)) {
-							CDETAIL.setText(GE);
-							PAY_NAME.setText(get50FNAME(sw.getPATH()));
-							PAY_ACC.setText(get50F(sw.getPATH()));
-							REC_NAME.setText(get59NAME(sw.getPATH()));
-							REC_ACC.setText(get59ACC(sw.getPATH()));
-							PLAT_KORR.setText(get52CORR(sw.getPATH()));
+							CDETAIL.setText(GE != null ? GE : "");
+							PAY_NAME.setText(get50FNAME(sw.getPATH()) != null ? get50FNAME(sw.getPATH()) : "");
+							PAY_ACC.setText(get50F(sw.getPATH()) != null ? get50F(sw.getPATH()) : "");
+							REC_NAME.setText(get59NAME(sw.getPATH()) != null ? get59NAME(sw.getPATH()) : "");
+							REC_ACC.setText(get59ACC(sw.getPATH()) != null ? get59ACC(sw.getPATH()) : "");
+							PLAT_KORR.setText(get52CORR(sw.getPATH()) != null ? get52CORR(sw.getPATH()) : "");
 							// System.out.println("~~~~~~~~~~~~");
 						}
 					} else {
@@ -1587,6 +1703,18 @@ public class SWC {
 			CURdb.setCellValueFactory(cellData -> cellData.getValue().CURProperty());
 			SUMMdb.setCellValueFactory(cellData -> cellData.getValue().SUMMProperty());
 			Typedb.setCellValueFactory(cellData -> cellData.getValue().VECTORProperty());
+			OPERdb.setCellValueFactory(cellData -> cellData.getValue().OPERProperty());
+			REFdb.setCellValueFactory(cellData -> cellData.getValue().REFProperty());
+
+			DOCDATEdb.setColumnFilter(new DateColumnFilter<>()); 
+			FILE_NAMEdb.setColumnFilter(new PatternColumnFilter<>());
+			OPERdb.setColumnFilter(new PatternColumnFilter<>());
+			Typedb.setColumnFilter(new PatternColumnFilter<>());
+			SUMMdb.setColumnFilter(new PatternColumnFilter<>());
+			CURdb.setColumnFilter(new PatternColumnFilter<>());
+			MTNAMEdb.setColumnFilter(new PatternColumnFilter<>());
+			MTTYPEdb.setColumnFilter(new PatternColumnFilter<>());
+			REFdb.setColumnFilter(new PatternColumnFilter<>());
 			// Редактирование
 			DOCDATEdb.setCellFactory(
 					TextFieldTableCell.<SWIFT_FILES, LocalDate>forTableColumn(new LocalDateStringConverter()));
@@ -1817,12 +1945,11 @@ public class SWC {
 	@FXML
 	void RefreshDB(ActionEvent event) {
 		try {
-
-			RootTab.setDisable(true);
-			PrgInd.setVisible(true);
-			Task<Object> task = new Task<Object>() {
-				@Override
-				public Object call() throws Exception {
+//			RootTab.setDisable(true);
+//			PrgInd.setVisible(true);
+//			Task<Object> task = new Task<Object>() {
+//				@Override
+//				public Object call() throws Exception {
 
 					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
@@ -1844,10 +1971,22 @@ public class SWC {
 						in_out = "and upper(VECTOR) = '" + ArchType.getValue() + "' \r\n";
 					}
 
-					String selectStmt = "select id,\r\n" + "       filename,\r\n" + "       dt_ch,\r\n"
-							+ "       swfile,\r\n" + "       oper,\r\n" + "       cr_dt,\r\n" + "       mttype,\r\n"
-							+ "       mtname,\r\n" + "       cur,\r\n" + "       vector,\r\n"
-							+ "       nvl(summ,'') summ,\r\n" + "       docdate from SWIFT_FILES where 1=1\r\n" + dt1_
+					String selectStmt = "select id,\r\n"
+							+ "       filename,\r\n"
+							+ "       dt_ch,\r\n"
+							+ "       swfile,\r\n"
+							+ "       oper,\r\n"
+							+ "       cr_dt,\r\n"
+							+ "       mttype,\r\n"
+							+ "       mtname,\r\n"
+							+ "       cur,\r\n"
+							+ "       vector,\r\n"
+							+ "       nvl(summ, '') summ,\r\n"
+							+ "       docdate,\r\n"
+							+ "       REF\r\n"
+							+ "  from SWIFT_FILES\r\n"
+							+ " where 1 = 1\r\n"
+							+ dt1_
 							+ dt2_ + in_out + "order by CR_DT desc";
 					PreparedStatement prepStmt = conn.prepareStatement(selectStmt);
 					ResultSet rs = prepStmt.executeQuery();
@@ -1872,6 +2011,7 @@ public class SWC {
 								: null);
 						list.setFILENAME(rs.getString("FILENAME"));
 						list.setID(rs.getInt("ID"));
+						list.setREF(rs.getString("REF"));
 						cus_list.add(list);
 					}
 					prepStmt.close();
@@ -1892,23 +2032,23 @@ public class SWC {
 						}
 					});
 
-					return null;
-				}
-			};
-			task.setOnFailed(e -> {
-				ErrorMessage(task.getException().getMessage());
-				SWLogger.error(task.getException().getMessage() + "~" + Thread.currentThread().getName());
-			});
-			task.setOnSucceeded(e -> {
-				try {
-					RootTab.setDisable(false);
-					PrgInd.setVisible(false);
-				} catch (Exception e1) {
-					ErrorMessage(e1.getMessage());
-					SWLogger.error(e1.getMessage() + "~" + Thread.currentThread().getName());
-				}
-			});
-			exec.execute(task);
+//					return null;
+//				}
+//			};
+//			task.setOnFailed(e -> {
+//				ErrorMessage(task.getException().getMessage());
+//				SWLogger.error(task.getException().getMessage() + "~" + Thread.currentThread().getName());
+//			});
+//			task.setOnSucceeded(e -> {
+//				try {
+//					RootTab.setDisable(false);
+//					PrgInd.setVisible(false);
+//				} catch (Exception e1) {
+//					ErrorMessage(e1.getMessage());
+//					SWLogger.error(e1.getMessage() + "~" + Thread.currentThread().getName());
+//				}
+//			});
+//			exec.execute(task);
 
 		} catch (Exception e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
@@ -2187,6 +2327,7 @@ public class SWC {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private Executor exec;
 
 	/**
@@ -2198,41 +2339,39 @@ public class SWC {
 	private void Open(ActionEvent event) {
 		try {
 			if (STMT.getSelectionModel().getSelectedItem() != null /* & !FolderName.equals("SWIFT_OUT") */) {
-				RootTab.setDisable(true);
-				PrgInd.setVisible(true);
-				Task<Object> task = new Task<Object>() {
-					@Override
-					public Object call() throws Exception {
+//				RootTab.setDisable(true);
+//				PrgInd.setVisible(true);
+//				Task<Object> task = new Task<Object>() {
+//					@Override
+//					public Object call() throws Exception {
 						SWIFT_FILES selrow = STMT.getSelectionModel().getSelectedItem();
 						InputStream inputstream = new FileInputStream(
 								System.getenv(FolderName) + "/" + selrow.getFILENAME());
 
 						new SwiftPrintFile().showReport(inputstream);
-
-						return null;
-					}
-				};
-				task.setOnFailed(e -> {
-					ErrorMessage(task.getException().getMessage());
-					SWLogger.error(task.getException().getMessage() + "~" + Thread.currentThread().getName());
-				});
-				task.setOnSucceeded(e -> {
-					try {
-						RootTab.setDisable(false);
-						PrgInd.setVisible(false);
-					} catch (Exception e1) {
-						ErrorMessage(e1.getMessage());
-						SWLogger.error(e1.getMessage() + "~" + Thread.currentThread().getName());
-					}
-				});
-				exec.execute(task);
+//
+//						return null;
+//					}
+//				};
+//				task.setOnFailed(e -> {
+//					ErrorMessage(task.getException().getMessage());
+//					SWLogger.error(task.getException().getMessage() + "~" + Thread.currentThread().getName());
+//				});
+//				task.setOnSucceeded(e -> {
+//					try {
+//						RootTab.setDisable(false);
+//						PrgInd.setVisible(false);
+//					} catch (Exception e1) {
+//						ErrorMessage(e1.getMessage());
+//						SWLogger.error(e1.getMessage() + "~" + Thread.currentThread().getName());
+//					}
+//				});
+//				exec.execute(task);
 			}
 		} catch (Exception e) {
-
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
 			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
-
 	}
 
 	/**
@@ -2244,11 +2383,11 @@ public class SWC {
 	private void OpenDB(ActionEvent event) {
 		try {
 			if (Achive.getSelectionModel().getSelectedItem() != null) {
-				RootTab.setDisable(true);
-				PrgInd.setVisible(true);
-				Task<Object> task = new Task<Object>() {
-					@Override
-					public Object call() throws Exception {
+//				RootTab.setDisable(true);
+//				PrgInd.setVisible(true);
+//				Task<Object> task = new Task<Object>() {
+//					@Override
+//					public Object call() throws Exception {
 
 						SWIFT_FILES selrow = Achive.getSelectionModel().getSelectedItem();
 
@@ -2270,25 +2409,25 @@ public class SWC {
 						rs.close();
 						prepStmt.close();
 
-						return null;
-					}
-				};
-				task.setOnFailed(e -> {
-					ErrorMessage(task.getException().getMessage());
-					SWLogger.error(task.getException().getMessage() + "~" + Thread.currentThread().getName());
-				});
-				task.setOnSucceeded(e -> {
-					try {
-						RootTab.setDisable(false);
-						PrgInd.setVisible(false);
-
-					} catch (Exception e1) {
-						e1.printStackTrace();
-						ErrorMessage(e1.getMessage());
-						Main.logger.error(e1.getMessage() + "~" + Thread.currentThread().getName());
-					}
-				});
-				exec.execute(task);
+//						return null;
+//					}
+//				};
+//				task.setOnFailed(e -> {
+//					ErrorMessage(task.getException().getMessage());
+//					SWLogger.error(task.getException().getMessage() + "~" + Thread.currentThread().getName());
+//				});
+//				task.setOnSucceeded(e -> {
+//					try {
+//						RootTab.setDisable(false);
+//						PrgInd.setVisible(false);
+//
+//					} catch (Exception e1) {
+//						e1.printStackTrace();
+//						ErrorMessage(e1.getMessage());
+//						Main.logger.error(e1.getMessage() + "~" + Thread.currentThread().getName());
+//					}
+//				});
+//				exec.execute(task);
 			}
 		} catch (Exception e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));

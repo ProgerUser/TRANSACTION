@@ -25,9 +25,10 @@ public class SWIFT_FILES {
 	private StringProperty FILENAME;/* Õ¿«¬¿Õ»≈ ‘¿…À¿ */
 	private StringProperty PATH;/* œÛÚ¸ */
 	private IntegerProperty ID;/* ID */
-	
+	private StringProperty REF;/* –ÂÙÂÂÌÒ */
+
 	public SWIFT_FILES() {
-		
+		this.REF = new SimpleStringProperty();
 		this.PATH = new SimpleStringProperty();
 		this.CHK = new SimpleBooleanProperty();
 		this.SUMM = new SimpleStringProperty();
@@ -43,14 +44,26 @@ public class SWIFT_FILES {
 		this.DOCDATE = new SimpleObjectProperty<>();
 	}
 
+	public void setREF(String REF) {
+		this.REF.set(REF);
+	}
+
+	public String getREF() {
+		return REF.get();
+	}
+
+	public StringProperty REFProperty() {
+		return REF;
+	}
+
 	public void setPATH(String PATH) {
 		this.PATH.set(PATH);
 	}
-	
+
 	public String getPATH() {
 		return PATH.get();
 	}
-	
+
 	public void setDOCDATE(LocalDate DOCDATE) {
 		this.DOCDATE.set(DOCDATE);
 	}

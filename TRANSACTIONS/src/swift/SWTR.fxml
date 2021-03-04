@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jyloo.syntheticafx.XTableColumn?>
+<?import com.jyloo.syntheticafx.XTableView?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -29,7 +31,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane fx:id="StPn" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.261" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane fx:id="StPn" prefWidth="1010.0" xmlns="http://javafx.com/javafx/8.0.261" xmlns:fx="http://javafx.com/fxml/1">
 <children>
       <TabPane fx:id="RootTab" styleClass="floating" tabClosingPolicy="UNAVAILABLE">
         <tabs>
@@ -76,13 +78,7 @@
                            <top>
                         		<ToolBar stylesheets="/borderpane.css" BorderPane.alignment="CENTER">
                         			<items>
-                        				<Button fx:id="ModeINbox" mnemonicParsing="false" onAction="#LoadFile" textFill="WHITE">
-                                       <graphic>
-                                          <FontAwesomeIconView glyphName="PLUS" size="15" />
-                                       </graphic>
-                                       <font>
-                                          <Font size="10.0" />
-                                       </font></Button>
+                        				<Button fx:id="ModeINbox" mnemonicParsing="false" onAction="#LoadFile" text="Обработать" textFill="#070707" />
                                     <DatePicker fx:id="FileDate" maxWidth="120.0" prefHeight="25.0" promptText="С">
                                        <tooltip>
                                           <Tooltip text="Дата создания файлов">
@@ -270,16 +266,18 @@
                <content>
                   <BorderPane>
                      <center>
-                        <TableView fx:id="Achive" editable="true" styleClass="mylistview" stylesheets="/TableView.css" tableMenuButtonVisible="true" BorderPane.alignment="CENTER">
+                        <XTableView fx:id="Achive" editable="true" styleClass="mylistview" stylesheets="/TableView.css" tableMenuButtonVisible="true" BorderPane.alignment="CENTER">
                            <columns>
-                              <TableColumn fx:id="MTTYPEdb" prefWidth="100.0" text="Тип SWIFT" />
-                              <TableColumn fx:id="MTNAMEdb" prefWidth="250.0" text="Название документа" />
-                              <TableColumn fx:id="Typedb" prefWidth="75.0" text="Вх/Исх" />
-                              <TableColumn fx:id="DOCDATEdb" prefWidth="150.0" text="Дата документа" />
-                              <TableColumn fx:id="CURdb" prefWidth="100.0" text="Валюта" />
-                              <TableColumn fx:id="SUMMdb" prefWidth="100.0" text="Сумма" />
-                              <TableColumn fx:id="FILE_NAMEdb" prefWidth="250.0" text="Название файла" />
-                              <TableColumn fx:id="DT_CHdb" prefWidth="150.0" text="Дата изменения" />
+                              <XTableColumn fx:id="MTTYPEdb" prefWidth="100.0" text="Тип SWIFT" />
+                              <XTableColumn fx:id="MTNAMEdb" prefWidth="250.0" text="Название документа" />
+                              <XTableColumn fx:id="Typedb" prefWidth="75.0" text="Вх/Исх" />
+                              <XTableColumn fx:id="DOCDATEdb" prefWidth="150.0" text="Дата документа" />
+                              <XTableColumn fx:id="CURdb" prefWidth="100.0" text="Валюта" />
+                              <XTableColumn fx:id="SUMMdb" prefWidth="100.0" text="Сумма" />
+                              <XTableColumn fx:id="FILE_NAMEdb" prefWidth="250.0" text="Название файла" />
+                              <XTableColumn fx:id="DT_CHdb" prefWidth="150.0" text="Дата изменения" />
+                              <XTableColumn fx:id="OPERdb" prefWidth="75.0" text="Пользователь" />
+                              <XTableColumn fx:id="REFdb" prefWidth="120.0" text="Референс" />
                            </columns>
                            <contextMenu>
                               <ContextMenu>
@@ -289,7 +287,7 @@
                                  </items>
                               </ContextMenu>
                            </contextMenu>
-                        </TableView>
+                        </XTableView>
                      </center>
                      <top>
                         <ToolBar stylesheets="/borderpane.css" BorderPane.alignment="CENTER">
@@ -340,7 +338,7 @@
                <content>
                   <VBox spacing="5.0">
                      <children>
-                        <TitledPane animated="false" collapsible="false" text="ВТБ SWIFT настройка">
+                        <TitledPane alignment="CENTER" animated="false" collapsible="false" text="ВТБ SWIFT настройка">
                            <content>
                               <VBox spacing="5.0">
                                  <children>
@@ -363,11 +361,11 @@
                               </VBox>
                            </content>
                         </TitledPane>
-                        <TitledPane animated="false" collapsible="false" text="Документы у которых БИК был изменен на SWIFT">
+                        <TitledPane alignment="CENTER" animated="false" collapsible="false" text="Документы у которых БИК был изменен на SWIFT">
                            <content>
                               <VBox spacing="5.0">
                                  <children>
-                                    <ToolBar>
+                                    <ToolBar style="-fx-border-color: silver;">
                                       <items>
                                         <Button fx:id="RESF_BIK_TO_SW_VTB" mnemonicParsing="false" onAction="#RESF_BIK_TO_SW_VTB">
                                              <graphic>
@@ -390,11 +388,11 @@
                                       <columns>
                                         <TableColumn fx:id="BIK_TRN" prefWidth="90.0" text="БИК" />
                                         <TableColumn fx:id="SW_TRN" prefWidth="111.0" text="SWIFT" />
-                                          <TableColumn fx:id="DTRNCREATE" prefWidth="112.0" text="Дата документа" />
-                                          <TableColumn fx:id="DTRNTRAN" prefWidth="150.0" text="Дата проведения" />
-                                          <TableColumn fx:id="CTRNACCD" prefWidth="200.0" text="Дебет" />
-                                          <TableColumn fx:id="CTRNACCC" minWidth="0.0" prefWidth="200.0" text="Кредит" />
-                                          <TableColumn fx:id="MTRNSUM" prefWidth="100.0" text="Сумма" />
+                                          <TableColumn fx:id="DTRNCREATE" prefWidth="103.0" text="Дата документа" />
+                                          <TableColumn fx:id="DTRNTRAN" prefWidth="109.0" text="Дата проведения" />
+                                          <TableColumn fx:id="CTRNACCD" prefWidth="190.0" text="Дебет" />
+                                          <TableColumn fx:id="CTRNACCC" minWidth="0.0" prefWidth="184.0" text="Кредит" />
+                                          <TableColumn fx:id="MTRNSUM" prefWidth="121.0" text="Сумма" />
                                           <TableColumn fx:id="CTRNCORACCO" prefWidth="200.0" text="Корсчет" />
                                       </columns>
                                     </TableView>
@@ -406,7 +404,10 @@
                   </VBox>
                </content>
             </Tab>
-            <Tab fx:id="CONV_VAL" text="Конверсия валюты" />
+            <Tab fx:id="CONV_VAL" text="Конверсия валюты">
+               <content>
+                  <TitledPane alignment="CENTER" animated="false" collapsible="false" text="Сформированные" />
+               </content></Tab>
         </tabs>
          <StackPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

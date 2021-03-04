@@ -1,6 +1,6 @@
 package swift;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -13,8 +13,8 @@ public class BIK_TO_SW_VTB {
 	private IntegerProperty MTRNSUM;/* Нет данных */
 	private StringProperty CTRNACCC;/* Нет данных */
 	private StringProperty CTRNACCD;/* Нет данных */
-	private SimpleObjectProperty<LocalDateTime> DTRNTRAN;/* Нет данных */
-	private SimpleObjectProperty<LocalDateTime> DTRNCREATE;/* Нет данных */
+	private SimpleObjectProperty<LocalDate> DTRNTRAN;/* Нет данных */
+	private SimpleObjectProperty<LocalDate> DTRNCREATE;/* Нет данных */
 	private StringProperty SW_TRN;/* Нет данных */
 	private StringProperty BIK_TRN;/* Нет данных */
 
@@ -50,11 +50,11 @@ public class BIK_TO_SW_VTB {
 		this.CTRNACCD.set(CTRNACCD);
 	}
 
-	public void setDTRNTRAN(LocalDateTime DTRNTRAN) {
+	public void setDTRNTRAN(LocalDate DTRNTRAN) {
 		this.DTRNTRAN.set(DTRNTRAN);
 	}
 
-	public void setDTRNCREATE(LocalDateTime DTRNCREATE) {
+	public void setDTRNCREATE(LocalDate DTRNCREATE) {
 		this.DTRNCREATE.set(DTRNCREATE);
 	}
 
@@ -122,11 +122,11 @@ public class BIK_TO_SW_VTB {
 		return CTRNACCD;
 	}
 
-	public SimpleObjectProperty<LocalDateTime> DTRNTRANProperty() {
+	public SimpleObjectProperty<LocalDate> DTRNTRANProperty() {
 		return DTRNTRAN;
 	}
 
-	public SimpleObjectProperty<LocalDateTime> DTRNCREATEProperty() {
+	public SimpleObjectProperty<LocalDate> DTRNCREATEProperty() {
 		return DTRNCREATE;
 	}
 

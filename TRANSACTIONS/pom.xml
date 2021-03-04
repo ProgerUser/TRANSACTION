@@ -103,7 +103,29 @@
 		</plugins>
 	</build>
 	<dependencies>
+		<dependency>
+			<groupId>syntheticaFX</groupId>
+			<artifactId>syntheticaFX</artifactId>
+			<version>1.0</version>
+		</dependency>
 
+		<dependency>
+			<groupId>xTableView</groupId>
+			<artifactId>xTableView</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>syntheticaFXStandard</groupId>
+			<artifactId>syntheticaFXStandard</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>syntheticaFXModena</groupId>
+			<artifactId>syntheticaFXModena</artifactId>
+			<version>1.0</version>
+		</dependency>
 		<dependency>
 			<groupId>com.oracle</groupId>
 			<artifactId>ojdbc8</artifactId>

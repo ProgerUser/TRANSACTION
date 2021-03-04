@@ -29,7 +29,7 @@
 			<children>
 				<ToolBar style="-fx-border-color: SILVER;">
 					<items>
-						<Button fx:id="browse" disable="false" mnemonicParsing="false" onAction="#Choose">
+						<Button disable="false" mnemonicParsing="false" onAction="#Choose">
 							<tooltip>
 								<Tooltip text="Добавить файл" />
 							</tooltip>
@@ -41,7 +41,7 @@
 							</graphic>
 						</Button>
 
-						<Button fx:id="import_" disable="false" mnemonicParsing="false" onAction="#Load_Transact">
+						<Button  disable="false" mnemonicParsing="false" onAction="#Load_Transact">
 							<tooltip>
 								<Tooltip text="Разобрать файл" />
 							</tooltip>
@@ -52,7 +52,7 @@
 								<FontAwesomeIconView fill="#1a9e23" glyphName="FILE_TEXT_ALT" size="18" />
 							</graphic>
 						</Button>
-						<Button fx:id="calc" mnemonicParsing="false" onAction="#Calc_Transact">
+						<Button  mnemonicParsing="false" onAction="#Calc_Transact">
 							<tooltip>
 								<Tooltip text="Сформировать проводки" />
 							</tooltip>
@@ -63,7 +63,7 @@
 								<FontAwesomeIconView fill="#0400f5" glyphName="FILE_TEXT_ALT" size="18" />
 							</graphic>
 						</Button>
-						<Button fx:id="delete_log" mnemonicParsing="false" onAction="#del_log">
+						<Button  mnemonicParsing="false" onAction="#del_log">
 							<tooltip>
 								<Tooltip text="Удалить лог" />
 							</tooltip>
