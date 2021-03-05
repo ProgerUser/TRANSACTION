@@ -31,7 +31,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane fx:id="StPn" prefWidth="1010.0" xmlns="http://javafx.com/javafx/8.0.261" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane fx:id="StPn" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.271" xmlns:fx="http://javafx.com/fxml/1">
 <children>
       <TabPane fx:id="RootTab" styleClass="floating" tabClosingPolicy="UNAVAILABLE">
         <tabs>
@@ -265,32 +265,8 @@
                </tooltip>
                <content>
                   <BorderPane>
-                     <center>
-                        <XTableView fx:id="Achive" editable="true" styleClass="mylistview" stylesheets="/TableView.css" tableMenuButtonVisible="true" BorderPane.alignment="CENTER">
-                           <columns>
-                              <XTableColumn fx:id="MTTYPEdb" prefWidth="100.0" text="Тип SWIFT" />
-                              <XTableColumn fx:id="MTNAMEdb" prefWidth="250.0" text="Название документа" />
-                              <XTableColumn fx:id="Typedb" prefWidth="75.0" text="Вх/Исх" />
-                              <XTableColumn fx:id="DOCDATEdb" prefWidth="150.0" text="Дата документа" />
-                              <XTableColumn fx:id="CURdb" prefWidth="100.0" text="Валюта" />
-                              <XTableColumn fx:id="SUMMdb" prefWidth="100.0" text="Сумма" />
-                              <XTableColumn fx:id="FILE_NAMEdb" prefWidth="250.0" text="Название файла" />
-                              <XTableColumn fx:id="DT_CHdb" prefWidth="150.0" text="Дата изменения" />
-                              <XTableColumn fx:id="OPERdb" prefWidth="75.0" text="Пользователь" />
-                              <XTableColumn fx:id="REFdb" prefWidth="120.0" text="Референс" />
-                           </columns>
-                           <contextMenu>
-                              <ContextMenu>
-                                 <items>
-                                    <MenuItem mnemonicParsing="false" onAction="#OpenDB" text="Печать" />
-                                    <MenuItem mnemonicParsing="false" onAction="#LoadFileDB" text="Повторно обработать" />
-                                 </items>
-                              </ContextMenu>
-                           </contextMenu>
-                        </XTableView>
-                     </center>
                      <top>
-                        <ToolBar stylesheets="/borderpane.css" BorderPane.alignment="CENTER">
+                        <ToolBar style="-fx-border-color: silver;" stylesheets="/borderpane.css" BorderPane.alignment="CENTER">
                            <items>
                               <Button fx:id="RefreshDB" mnemonicParsing="false" onAction="#RefreshDB" styleClass="Reload">
                                  <graphic>
@@ -331,6 +307,42 @@
                            </items>
                         </ToolBar>
                      </top>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                     <center>
+                        <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
+                           <items>
+                              <XTableView fx:id="Achive" editable="true" styleClass="mylistview" stylesheets="/TableView.css" tableMenuButtonVisible="true">
+                                 <columns>
+                                    <XTableColumn fx:id="MTTYPEdb" prefWidth="100.0" text="Тип SWIFT" />
+                                    <XTableColumn fx:id="MTNAMEdb" prefWidth="250.0" text="Название документа" />
+                                    <XTableColumn fx:id="Typedb" prefWidth="75.0" text="Вх/Исх" />
+                                    <XTableColumn fx:id="DOCDATEdb" prefWidth="150.0" text="Дата документа" />
+                                    <XTableColumn fx:id="CURdb" prefWidth="100.0" text="Валюта" />
+                                    <XTableColumn fx:id="SUMMdb" prefWidth="100.0" text="Сумма" />
+                                    <XTableColumn fx:id="FILE_NAMEdb" prefWidth="250.0" text="Название файла" />
+                                    <XTableColumn fx:id="DT_CHdb" prefWidth="150.0" text="Дата изменения" />
+                                    <XTableColumn fx:id="OPERdb" prefWidth="75.0" text="Пользователь" />
+                                    <XTableColumn fx:id="REFdb" prefWidth="120.0" text="Референс" />
+                                 </columns>
+                                 <contextMenu>
+                                    <ContextMenu>
+                                       <items>
+                                          <MenuItem mnemonicParsing="false" onAction="#OpenDB" text="Печать" />
+                                          <MenuItem mnemonicParsing="false" onAction="#LoadFileDB" text="Повторно обработать" />
+                                       </items>
+                                    </ContextMenu>
+                                 </contextMenu>
+                              </XTableView>
+                              <TextArea fx:id="FileTextAreaDB" editable="false" styleClass="mylistview" stylesheets="/TableView.css">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextArea>
+                           </items>
+                        </SplitPane>
+                     </center>
                   </BorderPane>
                </content>
             </Tab>
@@ -369,7 +381,7 @@
                                       <items>
                                         <Button fx:id="RESF_BIK_TO_SW_VTB" mnemonicParsing="false" onAction="#RESF_BIK_TO_SW_VTB">
                                              <graphic>
-                                                <FontAwesomeIconView glyphName="REFRESH" size="20" />
+                                                <FontAwesomeIconView glyphName="REFRESH" size="15" />
                                              </graphic>
                                              <font>
                                                 <Font size="10.0" />
@@ -406,7 +418,55 @@
             </Tab>
             <Tab fx:id="CONV_VAL" text="Конверсия валюты">
                <content>
-                  <TitledPane alignment="CENTER" animated="false" collapsible="false" text="Сформированные" />
+                  <TitledPane alignment="CENTER" animated="false" collapsible="false" text="Сформированные">
+                     <content>
+                        <VBox spacing="5.0">
+                           <children>
+                              <ToolBar style="-fx-border-color: silver;">
+                                <items>
+                                  <Button mnemonicParsing="false" onAction="#REFR_CONV">
+                                       <graphic>
+                                          <FontAwesomeIconView glyphName="REFRESH" size="15" />
+                                       </graphic>
+                                       <tooltip>
+                                          <Tooltip text="Обновить" />
+                                       </tooltip>
+                                    </Button>
+                                    <Button mnemonicParsing="false">
+                                       <graphic>
+                                          <FontAwesomeIconView glyphName="EDIT" size="15" />
+                                       </graphic>
+                                       <tooltip>
+                                          <Tooltip text="Редактировать" />
+                                       </tooltip>
+                                    </Button>
+                                    <Button layoutX="43.0" layoutY="10.0" mnemonicParsing="false" onAction="#AUDIT_CONV">
+                                       <graphic>
+                                          <FontAwesomeIconView glyphName="EXTERNAL_LINK" size="15" />
+                                       </graphic>
+                                       <tooltip>
+                                          <Tooltip text="Аудит" />
+                                       </tooltip>
+                                    </Button>
+                                </items>
+                              </ToolBar>
+                              <XTableView fx:id="CONV_TBL" styleClass="mylistview" stylesheets="/TableView.css">
+                                 <columns>
+                                    <XTableColumn fx:id="CONV_ID" prefWidth="75.0" text="ИД" />
+                                    <XTableColumn fx:id="CONV_REF" prefWidth="120.0" text="Референс" />
+                                    <XTableColumn fx:id="CONV_FL32A_DATE" prefWidth="97.0" text="Дата вал." />
+                                    <XTableColumn fx:id="CONV_FL32A_CUR" prefWidth="45.0" text="Вал." />
+                                    <XTableColumn fx:id="CONV_FL32A_SUM" prefWidth="99.0" text="Сумма" />
+                                    <XTableColumn fx:id="CONV_F53B" prefWidth="160.0" text="Поле 53" />
+                                    <XTableColumn fx:id="CONV_F58A" prefWidth="150.0" text="Поле 58" />
+                                    <XTableColumn fx:id="CONV_F72" prefWidth="250.0" text="Поле 72" />
+                                    <XTableColumn fx:id="CONV_DATETIME" prefWidth="120.0" text="Дата создания" />
+                                    <XTableColumn fx:id="CONV_OPER" prefWidth="77.0" text="Опер." />
+                                 </columns>
+                              </XTableView>
+                           </children>
+                        </VBox>
+                     </content></TitledPane>
                </content></Tab>
         </tabs>
          <StackPane.margin>

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -44,11 +45,15 @@ import org.controlsfx.control.table.TableFilter;
 import org.mozilla.universalchardet.UniversalDetector;
 
 import com.google.common.io.Files;
+import com.jyloo.syntheticafx.ComparableColumnFilter;
 import com.jyloo.syntheticafx.DateColumnFilter;
 import com.jyloo.syntheticafx.PatternColumnFilter;
 import com.jyloo.syntheticafx.SyntheticaFX;
+import com.jyloo.syntheticafx.TextFormatterFactory;
 import com.jyloo.syntheticafx.XTableColumn;
 import com.jyloo.syntheticafx.XTableView;
+import com.jyloo.syntheticafx.filter.ComparableFilterModel;
+import com.jyloo.syntheticafx.filter.ComparisonType;
 import com.prowidesoftware.swift.model.field.Field32A;
 import com.prowidesoftware.swift.model.field.Field50K;
 import com.prowidesoftware.swift.model.field.Field52D;
@@ -1397,6 +1402,72 @@ public class SWC {
 		}
     }
     
+    @FXML
+    private XTableView<VTB_MT202_CONV> CONV_TBL;
+
+    @FXML
+    private XTableColumn<VTB_MT202_CONV, Integer> CONV_ID;
+						 
+    @FXML                
+    private XTableColumn<VTB_MT202_CONV, String> CONV_REF;
+						 
+    @FXML                
+    private XTableColumn<VTB_MT202_CONV, String> CONV_FL32A_DATE;
+						 
+    @FXML                
+    private XTableColumn<VTB_MT202_CONV, String> CONV_FL32A_CUR;
+						 
+    @FXML                
+    private XTableColumn<VTB_MT202_CONV, String> CONV_FL32A_SUM;
+						 
+    @FXML                
+    private XTableColumn<VTB_MT202_CONV, String> CONV_F53B;
+						 
+    @FXML                
+    private XTableColumn<VTB_MT202_CONV, String> CONV_F58A;
+						 
+    @FXML                
+    private XTableColumn<VTB_MT202_CONV, String> CONV_F72;
+						 
+    @FXML                
+    private XTableColumn<VTB_MT202_CONV, LocalDateTime> CONV_DATETIME;
+						 
+    @FXML                
+    private XTableColumn<VTB_MT202_CONV, String> CONV_OPER;
+    @FXML
+    private TextArea FileTextAreaDB;
+    
+    @FXML
+    void AUDIT_CONV(ActionEvent event) {
+		try {
+			SbEncode encode = new SbEncode();
+			String mdi_totleString = encode.ascii2base64("Oracle Forms Runtime");
+			//String userid = encode.ascii2base64(Connect.userID_.toUpperCase() + "/" + Connect.userPassword_.toUpperCase() + "@odb");
+			String userid = encode.ascii2base64("XXI/CJKTYYSQ_098@odb");
+			String xml = "java -jar I:/japp/FXPdoc.jar \"--ru.inversion.mdi_title=" + mdi_totleString
+					+ "\" \"--ru.inversion.userid=" + userid
+					+ "\" \"--ru.inversion.start_class=ru.inversion.fxpdoc.auview.PAuActionMain\" \"--ru.inversion.start_method=showViewAuAction\" \"--ru.inversion.start_file_params=D:/Users/saidp/AppData/Local/Temp/param245927882160.xml\"";
+			
+			System.out.println(xml);
+			
+			ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c",xml);
+			builder.redirectErrorStream(true);
+			Process p;
+			p = builder.start();
+			BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			String line;
+			while (true) {
+				line = r.readLine();
+				if (line == null) {
+					break;
+				}
+			}
+		} catch (Exception e) {
+			ErrorMessage(ExceptionUtils.getStackTrace(e));
+			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+		}
+    }
+    
 	/**
 	 * Инициализация
 	 */
@@ -1409,6 +1480,32 @@ public class SWC {
 			
 			SyntheticaFX.init("com.jyloo.syntheticafx.SyntheticaFXModena");
 			
+			CONV_ID.setCellValueFactory(cellData -> cellData.getValue().IDProperty().asObject());
+			CONV_REF.setCellValueFactory(cellData -> cellData.getValue().REFProperty());
+			CONV_FL32A_DATE.setCellValueFactory(cellData -> cellData.getValue().FL32A_DATEProperty());
+			CONV_FL32A_CUR.setCellValueFactory(cellData -> cellData.getValue().FL32A_CURProperty());
+			CONV_FL32A_SUM.setCellValueFactory(cellData -> cellData.getValue().FL32A_SUMProperty());
+			CONV_F53B.setCellValueFactory(cellData -> cellData.getValue().F53BProperty());
+			CONV_F58A.setCellValueFactory(cellData -> cellData.getValue().F58AProperty());
+			CONV_F72.setCellValueFactory(cellData -> cellData.getValue().F72Property());
+			CONV_DATETIME.setCellValueFactory(cellData -> cellData.getValue().DATETIMEProperty());
+			CONV_OPER.setCellValueFactory(cellData -> cellData.getValue().OPERProperty());
+			
+			CellDateFormatD(CONV_DATETIME);
+			
+			ObservableList rules = FXCollections.observableArrayList(ComparisonType.values());
+			
+			CONV_ID.setColumnFilter(new ComparableColumnFilter(new ComparableFilterModel(rules),
+					TextFormatterFactory.INTEGER_TEXTFORMATTER_FACTORY));
+			CONV_REF.setColumnFilter(new PatternColumnFilter<>());
+			CONV_FL32A_DATE.setColumnFilter(new PatternColumnFilter<>());
+			CONV_FL32A_CUR.setColumnFilter(new PatternColumnFilter<>());
+			CONV_FL32A_SUM.setColumnFilter(new PatternColumnFilter<>());
+			CONV_F53B.setColumnFilter(new PatternColumnFilter<>());
+			CONV_F58A.setColumnFilter(new PatternColumnFilter<>());
+			CONV_F72.setColumnFilter(new PatternColumnFilter<>());
+			CONV_OPER.setColumnFilter(new PatternColumnFilter<>());
+
 			BIK_TRN.setCellValueFactory(cellData -> cellData.getValue().BIK_TRNProperty());
 			SW_TRN.setCellValueFactory(cellData -> cellData.getValue().SW_TRNProperty());
 			DTRNCREATE.setCellValueFactory(cellData -> cellData.getValue().DTRNCREATEProperty());
@@ -1493,6 +1590,7 @@ public class SWC {
 //			addIfNotPresent(Achive.getStyleClass(), JMetroStyleClass.ALTERNATING_ROW_COLORS);
 
 			FileTextArea.setEditable(false);
+			FileTextAreaDB.setEditable(false);
 
 			FileInputStream input = new FileInputStream(new File(System.getenv("TRANSACT_PATH") + "sw_mt.properties"));
 			swift_mt = new Properties();
@@ -1630,7 +1728,32 @@ public class SWC {
 			STMT.setEditable(true);
 			Achive.setEditable(true);
 
-			
+			Achive.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+				if (newSelection != null) {
+					SWIFT_FILES sw = Achive.getSelectionModel().getSelectedItem();
+					if (sw != null) {
+						try {
+							PreparedStatement prp = conn.prepareStatement("select SWFILE from SWIFT_FILES t where t.ID = ?");
+							prp.setInt(1, sw.getID());
+							ResultSet rs = prp.executeQuery();
+							if(rs.next()) {
+								Blob blob = rs.getBlob("SWFILE");
+								int blobLength = (int) blob.length();
+								byte[] blobAsBytes = blob.getBytes(1, blobLength);
+								// release the blob and free up memory. (since JDBC 4.0)
+								blob.free();
+								FileTextAreaDB.setText(new String(blobAsBytes, StandardCharsets.UTF_8));
+							}
+							rs.close();
+							prp.close();
+							
+						} catch (Exception e) {
+							SWLogger.error(ExceptionUtils.getStackTrace(e));
+							ErrorMessage(ExceptionUtils.getStackTrace(e));
+						}
+					}
+				}
+			});
 
 			// При выборе строки, что бы не исчезало после
 			// обновления_________________________________________________________________________-
@@ -2056,6 +2179,102 @@ public class SWC {
 		}
 	}
 
+	void CellDateFormatD(XTableColumn<VTB_MT202_CONV, LocalDateTime> tc) {
+		tc.setCellFactory(column -> {
+			TableCell<VTB_MT202_CONV, LocalDateTime> cell = new TableCell<VTB_MT202_CONV, LocalDateTime>() {
+				private DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+
+				@Override
+				protected void updateItem(LocalDateTime item, boolean empty) {
+					super.updateItem(item, empty);
+					if (empty) {
+						setText(null);
+					} else {
+						if (item != null) {
+							setText(format.format(item));
+						}
+					}
+				}
+			};
+			return cell;
+		});
+	}
+	@FXML
+	void REFR_CONV(ActionEvent event) {
+		try {
+//			RootTab.setDisable(true);
+//			PrgInd.setVisible(true);
+//			Task<Object> task = new Task<Object>() {
+//				@Override
+//				public Object call() throws Exception {
+
+					PreparedStatement prepStmt = conn.prepareStatement("select * from VTB_MT202_CONV t order by ID desc");
+					ResultSet rs = prepStmt.executeQuery();
+					ObservableList<VTB_MT202_CONV> cus_list = FXCollections.observableArrayList();
+					DateTimeFormatter dtformatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+					while (rs.next()) {
+						VTB_MT202_CONV list = new VTB_MT202_CONV();
+						list.setTRN_ANUM(rs.getInt("TRN_ANUM"));
+						list.setTRN_NUM(rs.getInt("TRN_NUM"));
+						list.setREF(rs.getString("REF"));
+						list.setF21(rs.getString("F21"));
+						list.setFL32A_SUM(rs.getString("FL32A_SUM"));
+						list.setFL32A_CUR(rs.getString("FL32A_CUR"));
+						list.setFL32A_DATE(rs.getString("FL32A_DATE"));
+						list.setF53B(rs.getString("F53B"));
+						list.setF58A(rs.getString("F58A"));
+						list.setF72(rs.getString("F72"));
+						list.setID(rs.getInt("ID"));
+						list.setDATETIME((rs.getDate("DATETIME") != null) ? LocalDateTime.parse(
+								new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("DATETIME")), dtformatter)
+								: null);
+						list.setOPER(rs.getString("OPER"));
+						list.setFL58A_DETAIL(rs.getString("FL58A_DETAIL"));
+
+						cus_list.add(list);
+					}
+					prepStmt.close();
+					rs.close();
+					CONV_TBL.setItems(cus_list);
+
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							TableFilter<VTB_MT202_CONV> tableFilter = TableFilter.forTableView(CONV_TBL).apply();
+							tableFilter.setSearchStrategy((input, target) -> {
+								try {
+									return target.toLowerCase().contains(input.toLowerCase());
+								} catch (Exception e) {
+									return false;
+								}
+							});
+						}
+					});
+
+//					return null;
+//				}
+//			};
+//			task.setOnFailed(e -> {
+//				ErrorMessage(task.getException().getMessage());
+//				SWLogger.error(task.getException().getMessage() + "~" + Thread.currentThread().getName());
+//			});
+//			task.setOnSucceeded(e -> {
+//				try {
+//					RootTab.setDisable(false);
+//					PrgInd.setVisible(false);
+//				} catch (Exception e1) {
+//					ErrorMessage(e1.getMessage());
+//					SWLogger.error(e1.getMessage() + "~" + Thread.currentThread().getName());
+//				}
+//			});
+//			exec.execute(task);
+
+		} catch (Exception e) {
+			ErrorMessage(ExceptionUtils.getStackTrace(e));
+			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+		}
+	}
+	
 	/**
 	 * Получить расширение файла
 	 * 
