@@ -1091,6 +1091,7 @@ public class Plsqlutils {
 	}
 
 	public static Period toYMInterval(String interval) {
+		@SuppressWarnings("unused")
 		String sign = "";
 		Integer years = 0;
 		Integer months = 0;
@@ -1112,6 +1113,7 @@ public class Plsqlutils {
 	}
 
 	public static Duration toDSInterval(String interval) {
+		@SuppressWarnings("unused")
 		String sign = "";
 		Integer days = 0;
 		Integer hours = 0;

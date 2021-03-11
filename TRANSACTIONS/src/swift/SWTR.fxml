@@ -31,7 +31,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane fx:id="StPn" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.271" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane fx:id="StPn" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.261" xmlns:fx="http://javafx.com/fxml/1">
 <children>
       <TabPane fx:id="RootTab" styleClass="floating" tabClosingPolicy="UNAVAILABLE">
         <tabs>
@@ -440,7 +440,7 @@
                                           <Tooltip text="Редактировать" />
                                        </tooltip>
                                     </Button>
-                                    <Button layoutX="43.0" layoutY="10.0" mnemonicParsing="false" onAction="#AUDIT_CONV">
+                                    <Button layoutX="43.0" layoutY="10.0" mnemonicParsing="false" onAction="#AUDIT_CONV" visible="false">
                                        <graphic>
                                           <FontAwesomeIconView glyphName="EXTERNAL_LINK" size="15" />
                                        </graphic>

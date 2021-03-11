@@ -2,6 +2,7 @@ package swift;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,6 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -653,22 +655,34 @@ public class SWC {
 				if (msg != null && msg.isType(103)) {
 					MT103 mt = (MT103) msg;
 					Field32A f = mt.getField32A();
-					ret = sdf.format(f.getDateAsCalendar().getTime());
+					if (f.getDateAsCalendar().getTime() != null) {
+						ret = sdf.format(f.getDateAsCalendar().getTime());
+					} else {
+						ret = "";
+					}
 				}
 				if (msg != null && msg.isType(202)) {
 					MT202 mt = (MT202) msg;
 					Field32A f = mt.getField32A();
-					ret = sdf.format(f.getDateAsCalendar().getTime());
+					if (f.getDateAsCalendar().getTime() != null) {
+						ret = sdf.format(f.getDateAsCalendar().getTime());
+					} else {
+						ret = "";
+					}
 				}
 				if (msg != null && msg.isType(950)) {
 					MT950 mt = (MT950) msg;
 					Field60F f = mt.getField60F();
-					ret = sdf.format(f.getDateAsCalendar().getTime());
+					if (f.getDateAsCalendar().getTime() != null) {
+						ret = sdf.format(f.getDateAsCalendar().getTime());
+					} else {
+						ret = "";
+					}
 				}
 				inputstream.close();
 			}
 		} catch (Exception e) {
-			ErrorMessage(ExceptionUtils.getStackTrace(e));
+			//ErrorMessage(ExceptionUtils.getStackTrace(e));
 			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 		return ret;
@@ -1440,17 +1454,37 @@ public class SWC {
     @FXML
     void AUDIT_CONV(ActionEvent event) {
 		try {
+			
+			Path customBaseDir = FileSystems.getDefault().getPath(System.getenv("TRANSACT_PATH")+"PARAM");
+			String customFilePrefix = "invparam_";
+			String customFileSuffix = ".xml";
+			Path tmpFile =  java.nio.file.Files.createTempFile(customBaseDir, customFilePrefix, customFileSuffix);
+			BufferedWriter bw = java.nio.file.Files.newBufferedWriter(tmpFile, StandardCharsets.UTF_8);
+			bw.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+					+ "<Paramlist>\r\n"
+					+ "	<Parameter Name=\"TableOwner\"/>\r\n"
+					+ "	<Parameter Name=\"TableName\">USR</Parameter>\r\n"
+					+ "	<Parameter Name=\"PrimaryKey1\">1105</Parameter>\r\n"
+					+ "	<Parameter Name=\"PrimaryKey2\"/>\r\n"
+					+ "	<Parameter Name=\"RowId\"/>\r\n"
+					+ "</Paramlist>");
+			bw.close();
+			tmpFile.toFile().deleteOnExit();
+			
+			String tmp_path = tmpFile.toFile().getAbsolutePath();
+			
 			SbEncode encode = new SbEncode();
 			String mdi_totleString = encode.ascii2base64("Oracle Forms Runtime");
-			//String userid = encode.ascii2base64(Connect.userID_.toUpperCase() + "/" + Connect.userPassword_.toUpperCase() + "@odb");
-			String userid = encode.ascii2base64("XXI/CJKTYYSQ_098@odb");
-			String xml = "java -jar I:/japp/FXPdoc.jar \"--ru.inversion.mdi_title=" + mdi_totleString
-					+ "\" \"--ru.inversion.userid=" + userid
-					+ "\" \"--ru.inversion.start_class=ru.inversion.fxpdoc.auview.PAuActionMain\" \"--ru.inversion.start_method=showViewAuAction\" \"--ru.inversion.start_file_params=D:/Users/saidp/AppData/Local/Temp/param245927882160.xml\"";
+			String userid = "";//encode.ascii2base64(Connect.userID_.toUpperCase() + "/" + Connect.userPassword_.toUpperCase() + "@odb");
+			String xml = "java -jar I:/japp/FXPdoc.jar "
+			        + " \"--ru.inversion.mdi_title=" + mdi_totleString
+					+ "\" \"--ru.inversion.userid=F" + userid
+					+ "\" \"--ru.inversion.start_class=ru.inversion.fxpdoc.auview.PAuActionMain\""
+					+  " \"--ru.inversion.start_method=showViewAuAction\""
+					+  " \"--ru.inversion.start_file_params="+tmp_path+"\"";
 			
 			System.out.println(xml);
-			
-			ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c",xml);
+			ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c","java -jar I:/japp/FXPdoc.jar");
 			builder.redirectErrorStream(true);
 			Process p;
 			p = builder.start();
@@ -1458,6 +1492,7 @@ public class SWC {
 			String line;
 			while (true) {
 				line = r.readLine();
+				System.out.println(line);
 				if (line == null) {
 					break;
 				}
