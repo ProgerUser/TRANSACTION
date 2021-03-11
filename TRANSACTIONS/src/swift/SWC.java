@@ -458,12 +458,20 @@ public class SWC {
 				if (msg != null && msg.isType(103)) {
 					MT103 mt = (MT103) msg;
 					Field32A f = mt.getField32A();
-					ret = f.getAmount();
+					if (f != null) {
+						ret = f.getAmount();
+					} else {
+						ret = null;
+					}
 				}
 				if (msg != null && msg.isType(202)) {
 					MT202 mt = (MT202) msg;
 					Field32A f = mt.getField32A();
-					ret = f.getAmount();
+					if (f != null) {
+						ret = f.getAmount();
+					} else {
+						ret = null;
+					}
 				}
 				inputstream.close();
 			}
@@ -490,12 +498,20 @@ public class SWC {
 				if (msg != null && msg.isType(103)) {
 					MT103 mt = (MT103) msg;
 					Field70 f70 = mt.getField70();
-					ret = f70.getValue();
+					if (f70 != null) {
+						ret = f70.getValue();
+					} else {
+						ret = null;
+					}
 				}
 				if (msg != null && msg.isType(202)) {
 					MT202 mt = (MT202) msg;
 					Field72 f72 = mt.getField72();
-					ret = f72.getValue();
+					if (f72 != null) {
+						ret = f72.getValue();
+					} else {
+						ret = null;
+					}
 				}
 				inputstream.close();
 			}
@@ -515,7 +531,11 @@ public class SWC {
 				if (msg != null && msg.isType(103)) {
 					MT103 mt = (MT103) msg;
 					Field50K f50 = mt.getField50K();
-					ret = f50.getComponent1();
+					if (f50 != null) {
+						ret = f50.getComponent1();
+					} else {
+						ret = null;
+					}
 				}
 				inputstream.close();
 			}
@@ -535,7 +555,11 @@ public class SWC {
 				if (msg != null && msg.isType(103)) {
 					MT103 mt = (MT103) msg;
 					Field59 f59 = mt.getField59();
-					ret = f59.getAccount();
+					if (f59 != null) {
+						ret = f59.getAccount();
+					} else {
+						ret = null;
+					}
 				}
 				inputstream.close();
 			}
@@ -555,7 +579,11 @@ public class SWC {
 				if (msg != null && msg.isType(103)) {
 					MT103 mt = (MT103) msg;
 					Field52D f52 = mt.getField52D();
-					ret = f52.getAccount();
+					if (f52 != null) {
+						ret = f52.getAccount();
+					} else {
+						ret = null;
+					}
 				}
 				inputstream.close();
 			}
@@ -575,7 +603,11 @@ public class SWC {
 				if (msg != null && msg.isType(103)) {
 					MT103 mt = (MT103) msg;
 					Field59 f59 = mt.getField59();
-					ret = f59.getComponent2();
+					if (f59 != null) {
+						ret = f59.getComponent2();
+					} else {
+						ret = null;
+					}
 				}
 				inputstream.close();
 			}
@@ -595,8 +627,12 @@ public class SWC {
 				if (msg != null && msg.isType(103)) {
 					MT103 mt = (MT103) msg;
 					Field50K f50 = mt.getField50K();
-					ret = f50.getComponent2() + " " + f50.getComponent3() + " " + f50.getComponent4() + " "
-							+ f50.getComponent5();
+					if (f50 != null) {
+						ret = f50.getComponent2() + " " + f50.getComponent3() + " " + f50.getComponent4() + " "
+								+ f50.getComponent5();
+					} else {
+						ret = null;
+					}
 				}
 				inputstream.close();
 			}
@@ -622,12 +658,22 @@ public class SWC {
 				if (msg != null && msg.isType(103)) {
 					MT103 mt = (MT103) msg;
 					Field32A f = mt.getField32A();
-					ret = f.getCurrency();
+					
+					if (f != null) {
+						ret = f.getCurrency();
+					} else {
+						ret = null;
+					}
+					
 				}
 				if (msg != null && msg.isType(202)) {
 					MT202 mt = (MT202) msg;
 					Field32A f = mt.getField32A();
-					ret = f.getCurrency();
+					if (f != null) {
+						ret = f.getCurrency();
+					} else {
+						ret = null;
+					}
 				}
 				inputstream.close();
 			}
@@ -655,28 +701,28 @@ public class SWC {
 				if (msg != null && msg.isType(103)) {
 					MT103 mt = (MT103) msg;
 					Field32A f = mt.getField32A();
-					if (f.getDateAsCalendar().getTime() != null) {
+					if (f!= null) {
 						ret = sdf.format(f.getDateAsCalendar().getTime());
 					} else {
-						ret = "";
+						ret = null;
 					}
 				}
 				if (msg != null && msg.isType(202)) {
 					MT202 mt = (MT202) msg;
 					Field32A f = mt.getField32A();
-					if (f.getDateAsCalendar().getTime() != null) {
+					if (f != null) {
 						ret = sdf.format(f.getDateAsCalendar().getTime());
 					} else {
-						ret = "";
+						ret = null;
 					}
 				}
 				if (msg != null && msg.isType(950)) {
 					MT950 mt = (MT950) msg;
 					Field60F f = mt.getField60F();
-					if (f.getDateAsCalendar().getTime() != null) {
+					if (f != null) {
 						ret = sdf.format(f.getDateAsCalendar().getTime());
 					} else {
-						ret = "";
+						ret = null;
 					}
 				}
 				inputstream.close();
@@ -1482,7 +1528,6 @@ public class SWC {
 					+ "\" \"--ru.inversion.start_class=ru.inversion.fxpdoc.auview.PAuActionMain\""
 					+  " \"--ru.inversion.start_method=showViewAuAction\""
 					+  " \"--ru.inversion.start_file_params="+tmp_path+"\"";
-			
 			System.out.println(xml);
 			ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c","java -jar I:/japp/FXPdoc.jar");
 			builder.redirectErrorStream(true);
@@ -2068,13 +2113,18 @@ public class SWC {
 			/**
 			 * Auto Refresh Запуск задачи через одну секунду
 			 */
-			RunProcess("INOUT");
+//			RunProcess("INOUT");
 		} catch (Exception e) {
 			SWLogger.error(ExceptionUtils.getStackTrace(e));
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
+    @FXML
+    void RefreshTable(ActionEvent event) {
+    	InitTable();
+    }
+    
 	/**
 	 * Выражение CRON, не используется
 	 */
@@ -2323,7 +2373,7 @@ public class SWC {
 	/**
 	 * Закрытие задачи при закрытии формы
 	 */
-	public void EndTask() {
+	public void EndTask_() {
 		this.st.cancel();
 	}
 
@@ -2453,9 +2503,11 @@ public class SWC {
 							list.setSUMM(getMtAmount(child.getAbsolutePath()));
 							list.setMTTYPE(getMT(getMtType(child.getAbsolutePath()), "TYPE"));
 							list.setMTNAME(getMT(getMtType(child.getAbsolutePath()), "NAME"));
+							
 							list.setDOCDATE((getMtDate(child.getAbsolutePath()) != null)
 									? LocalDate.parse(getMtDate(child.getAbsolutePath()), formatter)
 									: null);
+							
 							list.setPATH(child.getAbsolutePath());
 							// Перебор отмеченных
 							for (int i = 0; i < STMT.getItems().size(); i++) {

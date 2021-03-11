@@ -11,6 +11,7 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -75,49 +76,6 @@
                            </children>
                         </VBox>
                         <BorderPane>
-                           <top>
-                        		<ToolBar stylesheets="/borderpane.css" BorderPane.alignment="CENTER">
-                        			<items>
-                        				<Button fx:id="ModeINbox" mnemonicParsing="false" onAction="#LoadFile" text="Обработать" textFill="#070707" />
-                                    <DatePicker fx:id="FileDate" maxWidth="120.0" prefHeight="25.0" promptText="С">
-                                       <tooltip>
-                                          <Tooltip text="Дата создания файлов">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Tooltip>
-                                       </tooltip>
-                                    </DatePicker>
-                                    <DatePicker fx:id="DT2" layoutX="44.0" layoutY="13.0" maxWidth="120.0" prefHeight="25.0" promptText="ПО">
-                                       <tooltip>
-                                          <Tooltip text="Дата создания файлов">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Tooltip>
-                                       </tooltip>
-                                    </DatePicker>
-                                    <ComboBox fx:id="FileExtens" prefHeight="25.0" prefWidth="100.0" />
-                                    <ComboBox fx:id="DIRNAME" onAction="#ChTabName" prefHeight="25.0" prefWidth="108.0">
-                                       <tooltip>
-                                          <Tooltip text="Тип прослушиваемой папки">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Tooltip>
-                                       </tooltip>
-                                    </ComboBox>
-                                    <Button fx:id="ClearFilter" mnemonicParsing="false" onAction="#ClearFilter" textFill="WHITE">
-                                       <graphic>
-                                          <FontAwesomeIconView glyphName="TIMES" size="15" />
-                                       </graphic>
-                                       <font>
-                                          <Font size="10.0" />
-                                       </font></Button>
-                                    <Text fx:id="FolderN" strokeType="OUTSIDE" strokeWidth="0.0" />
-                        			</items>
-                        		</ToolBar>
-                           </top>
                            <bottom>
                               <VBox BorderPane.alignment="CENTER">
                                  <children>
@@ -250,6 +208,69 @@
                                  </items>
                               </SplitPane>
                            </center>
+                           <top>
+                              <VBox BorderPane.alignment="CENTER">
+                                 <children>
+                              		<ToolBar stylesheets="/borderpane.css">
+                              			<items>
+                              				<Button fx:id="ModeINbox" mnemonicParsing="false" onAction="#LoadFile" text="Обработать" textFill="#070707" />
+                                          <Separator orientation="VERTICAL" />
+                                          <ComboBox fx:id="FileExtens" prefHeight="25.0" prefWidth="100.0" />
+                                          <ComboBox fx:id="DIRNAME" onAction="#ChTabName" prefHeight="25.0" prefWidth="108.0">
+                                             <tooltip>
+                                                <Tooltip text="Тип прослушиваемой папки">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Tooltip>
+                                             </tooltip>
+                                          </ComboBox>
+                                          <Separator orientation="VERTICAL" />
+                                          <Button fx:id="ClearFilter" mnemonicParsing="false" onAction="#ClearFilter" textFill="WHITE">
+                                             <graphic>
+                                                <FontAwesomeIconView glyphName="TIMES" size="15" />
+                                             </graphic>
+                                             <font>
+                                                <Font size="10.0" />
+                                             </font>
+                                          </Button>
+                                          <Text fx:id="FolderN" strokeType="OUTSIDE" strokeWidth="0.0" />
+                              			</items>
+                              		</ToolBar>
+                                    <ToolBar>
+                                      <items>
+                                        <Button mnemonicParsing="false" onAction="#RefreshTable">
+                                             <font>
+                                                <Font size="10.0" />
+                                             </font>
+                                             <graphic>
+                                                <FontAwesomeIconView glyphName="REFRESH" size="15" />
+                                             </graphic>
+                                          </Button>
+                                          <Separator orientation="VERTICAL" />
+                                          <DatePicker fx:id="FileDate" maxWidth="120.0" prefHeight="25.0" promptText="С">
+                                             <tooltip>
+                                                <Tooltip text="Дата создания файлов">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Tooltip>
+                                             </tooltip>
+                                          </DatePicker>
+                                          <DatePicker fx:id="DT2" maxWidth="120.0" prefHeight="25.0" promptText="ПО">
+                                             <tooltip>
+                                                <Tooltip text="Дата создания файлов">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Tooltip>
+                                             </tooltip>
+                                          </DatePicker>
+                                      </items>
+                                    </ToolBar>
+                                 </children>
+                              </VBox>
+                           </top>
                         </BorderPane>
                      </items>
                   </SplitPane>

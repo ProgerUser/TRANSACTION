@@ -267,7 +267,7 @@ public class Main extends Application {
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				@Override
 				public void handle(WindowEvent paramT) {
-					controller.EndTask();
+					//controller.EndTask();
 					controller.dbDisconnect();
 				}
 			});
@@ -303,7 +303,7 @@ public class Main extends Application {
 			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				@Override
 				public void handle(WindowEvent paramT) {
-					controller.EndTask();
+					//controller.EndTask();
 					controller.dbDisconnect();
 				}
 			});
