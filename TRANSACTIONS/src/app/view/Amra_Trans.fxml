@@ -25,53 +25,65 @@
 
 	</center>
 	<center>
-		<VBox BorderPane.alignment="CENTER">
+		<VBox spacing="5.0" BorderPane.alignment="CENTER">
 			<children>
-				<ToolBar style="-fx-border-color: SILVER;">
+				<ToolBar>
 					<items>
 						<Button disable="false" mnemonicParsing="false" onAction="#Choose">
 							<tooltip>
-								<Tooltip text="Добавить файл" />
+								<Tooltip text="Добавить файл">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Tooltip>
 							</tooltip>
 							<font>
 								<Font size="10.0" />
 							</font>
 							<graphic>
-								<FontAwesomeIconView glyphName="FILE_TEXT_ALT" size="18" />
+								<FontAwesomeIconView fontSmoothingType="LCD" glyphName="FOLDER_OPEN_ALT" size="15" />
 							</graphic>
 						</Button>
 
-						<Button  disable="false" mnemonicParsing="false" onAction="#Load_Transact">
+						<Button disable="false" mnemonicParsing="false" onAction="#Load_Transact">
 							<tooltip>
-								<Tooltip text="Разобрать файл" />
+								<Tooltip text="Разобрать файл">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Tooltip>
 							</tooltip>
 							<font>
 								<Font size="10.0" />
 							</font>
 							<graphic>
-								<FontAwesomeIconView fill="#1a9e23" glyphName="FILE_TEXT_ALT" size="18" />
+								<FontAwesomeIconView fontSmoothingType="LCD" glyphName="COGS" size="15" />
 							</graphic>
 						</Button>
-						<Button  mnemonicParsing="false" onAction="#Calc_Transact">
+						<Button mnemonicParsing="false" onAction="#Calc_Transact">
 							<tooltip>
-								<Tooltip text="Сформировать проводки" />
+								<Tooltip text="Сформировать проводки">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Tooltip>
 							</tooltip>
 							<font>
 								<Font size="10.0" />
 							</font>
 							<graphic>
-								<FontAwesomeIconView fill="#0400f5" glyphName="FILE_TEXT_ALT" size="18" />
+								<FontAwesomeIconView fontSmoothingType="LCD" glyphName="EXCHANGE" size="15" />
 							</graphic>
 						</Button>
-						<Button  mnemonicParsing="false" onAction="#del_log">
+						<Button mnemonicParsing="false" onAction="#del_log">
 							<tooltip>
-								<Tooltip text="Удалить лог" />
+								<Tooltip text="Удалить лог">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Tooltip>
 							</tooltip>
 							<font>
 								<Font size="10.0" />
 							</font>
 							<graphic>
-								<FontAwesomeIconView fill="#941919" glyphName="TRASH_ALT" size="18" />
+								<FontAwesomeIconView fontSmoothingType="LCD" glyphName="TRASH_ALT" size="15" />
 							</graphic>
 						</Button>
 						<DatePicker fx:id="date_load" onAction="#view_fn" prefWidth="100.0">
@@ -80,6 +92,9 @@
 							</tooltip>
 						</DatePicker>
 					</items>
+               <VBox.margin>
+                  <Insets left="-5.0" right="-5.0" top="-5.0" />
+               </VBox.margin>
 				</ToolBar>
 				<GridPane>
 					<children>
@@ -99,6 +114,9 @@
 									</items>
 								</ContextMenu>
 							</contextMenu>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
 						</TableView>
 					</children>
 					<columnConstraints>

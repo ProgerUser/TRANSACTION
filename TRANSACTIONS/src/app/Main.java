@@ -38,7 +38,7 @@ public class Main extends Application {
 	public static Stage primaryStage;
 	public static BorderPane rootLayout;
 	public static String MODULE = null;
-
+    
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -71,6 +71,8 @@ public class Main extends Application {
 //			Connect.userID_ = "SAIDP";
 //			Connect.userPassword_ = "";
 //			DBUtil.dbConnect();
+//			initRootLayout();
+//			showFirst();
 //			swift2();
 //			ConvVal();
 

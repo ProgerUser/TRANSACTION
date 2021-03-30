@@ -1,16 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="trlist.Tr_Am_View_con">
+<BorderPane prefHeight="600.0" xmlns="http://javafx.com/javafx/8.0.261" xmlns:fx="http://javafx.com/fxml/1" fx:controller="trlist.Tr_Am_View_con">
 	<center>
 		<StackPane BorderPane.alignment="CENTER">
 			<children>
-				<TableView fx:id="trans_table" onKeyPressed="#show_" prefWidth="994.0" styleClass="mylistview" stylesheets="/TableView.css" tableMenuButtonVisible="true">
+				<TableView fx:id="trans_table" onKeyPressed="#show_" prefWidth="900.0" styleClass="mylistview" stylesheets="/TableView.css" tableMenuButtonVisible="true">
 					<columns>
 						<TableColumn fx:id="chk_row" prefWidth="60.0" text="Выбор" />
 						<TableColumn fx:id="checkparent" prefWidth="135.0" text="ЧекРодитель" />
@@ -53,17 +66,17 @@
 						</ContextMenu>
 					</contextMenu>
 				</TableView>
-				<ProgressIndicator fx:id="pb" maxHeight="80.0" maxWidth="80.0" visible="false" />
+				<ProgressIndicator fx:id="pb" maxHeight="50.0" maxWidth="50.0" visible="false" />
 			</children>
 			<BorderPane.margin>
-				<Insets bottom="10.0" left="10.0" right="10.0" />
+				<Insets bottom="5.0" left="5.0" right="5.0" />
 			</BorderPane.margin>
 		</StackPane>
 	</center>
 	<top>
 		<VBox fx:id="CONTROL" BorderPane.alignment="CENTER">
 			<children>
-				<ToolBar stylesheets="/borderpane.css">
+				<ToolBar>
 					<items>
 						<DatePicker fx:id="dt1" prefWidth="100.0" promptText="Дата с:">
 							<tooltip>
@@ -85,47 +98,113 @@
 								<Tooltip text="ФИО, тел., и т.д." />
 							</tooltip>
 						</TextField>
-						<Button fx:id="search" mnemonicParsing="false" onAction="#filter" prefHeight="25.0" prefWidth="25.0">
+						<Button fx:id="search" mnemonicParsing="false" onAction="#filter">
 							<tooltip>
-								<Tooltip text="Поиск" />
+								<Tooltip text="Поиск">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Tooltip>
 							</tooltip>
+                     <graphic>
+                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="SEARCH" size="18" />
+                     </graphic>
+                     <font>
+                        <Font size="10.0" />
+                     </font>
 						</Button>
-						<Button fx:id="view" mnemonicParsing="false" onAction="#view_unpivot" prefHeight="25.0" prefWidth="25.0">
+						<Button fx:id="view" mnemonicParsing="false" onAction="#view_unpivot">
 							<tooltip>
-								<Tooltip text="Показать транзакцию" />
+								<Tooltip text="Показать транзакцию">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Tooltip>
 							</tooltip>
+                     <graphic>
+                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="LIST_ALT" size="18" />
+                     </graphic>
+                     <font>
+                        <Font size="10.0" />
+                     </font>
 						</Button>
-						<Button fx:id="attributes" mnemonicParsing="false" onAction="#view_attr" prefHeight="25.0" prefWidth="25.0">
+						<Button fx:id="attributes" mnemonicParsing="false" onAction="#view_attr">
 							<tooltip>
-								<Tooltip text="Показать дополнительные атрибуты" />
+								<Tooltip text="Показать дополнительные атрибуты">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Tooltip>
 							</tooltip>
+                     <graphic>
+                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="LIST_UL" size="18" />
+                     </graphic>
+                     <font>
+                        <Font size="10.0" />
+                     </font>
 						</Button>
-						<Button mnemonicParsing="false" onAction="#excel_export" prefHeight="25.0" prefWidth="25.0" fx:id="xlsx">
+						<Button mnemonicParsing="false" onAction="#excel_export" fx:id="xlsx">
 							<tooltip>
-								<Tooltip text="Выгрузка в Excel" />
+								<Tooltip text="Выгрузка в Excel">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Tooltip>
 							</tooltip>
+                     <graphic>
+                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILE_EXCEL_ALT" size="18" />
+                     </graphic>
+                     <font>
+                        <Font size="10.0" />
+                     </font>
 						</Button>
-						<Button fx:id="post" mnemonicParsing="false" onAction="#view_post" prefHeight="25.0" prefWidth="25.0">
+						<Button fx:id="post" mnemonicParsing="false" onAction="#view_post">
 							<tooltip>
-								<Tooltip text="Показать проводки" />
+								<Tooltip text="Показать проводки">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Tooltip>
 							</tooltip>
+                     <graphic>
+                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TABLE" size="18" />
+                     </graphic>
+                     <font>
+                        <Font size="10.0" />
+                     </font>
 						</Button>
-						<Button fx:id="print_check" mnemonicParsing="false" onAction="#print_" prefHeight="25.0" prefWidth="25.0">
+						<Button fx:id="print_check" mnemonicParsing="false" onAction="#print_">
 							<tooltip>
-								<Tooltip text="Печать чека JasperReport" />
+								<Tooltip text="Печать чека JasperReport">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Tooltip>
 							</tooltip>
+                     <graphic>
+                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="PRINT" size="18" />
+                     </graphic>
 						</Button>
-						<Button fx:id="chk_nmbers" ellipsisString="" minHeight="25.0" mnemonicParsing="false" onAction="#showdeal" prefWidth="25.0">
+						<Button fx:id="chk_nmbers" ellipsisString="" mnemonicParsing="false" onAction="#showdeal">
 							<tooltip>
-								<Tooltip text="Показать сдачи" />
+								<Tooltip text="Показать сдачи">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Tooltip>
 							</tooltip>
+                     <graphic>
+                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="LIST" size="18" />
+                     </graphic>
 						</Button>
-						<Button fx:id="trn_" minHeight="25.0" mnemonicParsing="false" onAction="#view_trn" prefWidth="25.0">
+						<Button fx:id="trn_" mnemonicParsing="false" onAction="#view_trn">
 							<tooltip>
-								<Tooltip text="Реестр документов" />
+								<Tooltip text="Реестр документов">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Tooltip>
 							</tooltip>
+                     <graphic>
+                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="LIST_OL" size="18" />
+                     </graphic>
 						</Button>
 					</items>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
 				</ToolBar>
 				<ToolBar>
 					<items>
@@ -193,12 +272,12 @@
                   </CheckBox>
 					</items>
 					<VBox.margin>
-						<Insets bottom="10.0" />
+						<Insets />
 					</VBox.margin>
 				</ToolBar>
 			</children>
 			<BorderPane.margin>
-				<Insets left="10.0" right="10.0" top="10.0" />
+				<Insets bottom="5.0" />
 			</BorderPane.margin>
 		</VBox>
 	</top>

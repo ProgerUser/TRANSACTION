@@ -134,10 +134,9 @@ public class Amra_Transact {
 
 	@FXML
 	private BorderPane ap1;
-	
+
 	@FXML
 	private AnchorPane ap;
-	
 
 	@FXML
 	private TableColumn<Add_File, String> DateFile;
@@ -364,14 +363,11 @@ public class Amra_Transact {
 				} else {
 					setText(item.toString());
 					if (item.equals("Рассчитан")) {
-						setStyle("-fx-background-color: #7ede80;" + "-fx-border-color:black;"
-								+ " -fx-border-width :  1 1 1 1 ");
+						setStyle("-fx-text-fill: #7ede80;-fx-font-weight: bold;");
 					} else if (item.equals("Разобран")) {
-						setStyle("-fx-background-color: #ebaf2f;" + "-fx-border-color:black;"
-								+ " -fx-border-width :  1 1 1 1 ");
+						setStyle("-fx-text-fill: #ebaf2f;-fx-font-weight: bold;");
 					} else {
-						setStyle("-fx-background-color: #e65591;" + "-fx-border-color:black;"
-								+ " -fx-border-width :  1 1 1 1 ");
+						setStyle("-fx-text-fill: #e65591;-fx-font-weight: bold;");
 					}
 				}
 			}
@@ -466,6 +462,25 @@ public class Amra_Transact {
 		// Populate Employees on TableView
 		populate_fn_sess(empData);
 		autoResizeColumns(load_file);
+		StatusFile.setCellFactory(col -> new TextFieldTableCell<Add_File, String>() {
+			@Override
+			public void updateItem(String item, boolean empty) {
+				super.updateItem(item, empty);
+				if (empty || item == null) {
+					setText(null);
+					setGraphic(null);
+				} else {
+					setText(item.toString());
+					if (item.equals("Рассчитан")) {
+						setStyle("-fx-text-fill: #7ede80;-fx-font-weight: bold;");
+					} else if (item.equals("Разобран")) {
+						setStyle("-fx-text-fill: #ebaf2f;-fx-font-weight: bold;");
+					} else {
+						setStyle("-fx-text-fill: #e65591;-fx-font-weight: bold;");
+					}
+				}
+			}
+		});
 	}
 
 	/*
