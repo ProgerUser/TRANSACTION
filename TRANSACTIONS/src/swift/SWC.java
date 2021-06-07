@@ -1576,7 +1576,7 @@ public class SWC {
 			ObservableList rules = FXCollections.observableArrayList(ComparisonType.values());
 			
 			CONV_ID.setColumnFilter(new ComparableColumnFilter(new ComparableFilterModel(rules),
-					TextFormatterFactory.INTEGER_TEXTFORMATTER_FACTORY));
+					TextFormatterFactory.LONG_TEXTFORMATTER_FACTORY));
 			CONV_REF.setColumnFilter(new PatternColumnFilter<>());
 			CONV_FL32A_DATE.setColumnFilter(new PatternColumnFilter<>());
 			CONV_FL32A_CUR.setColumnFilter(new PatternColumnFilter<>());
