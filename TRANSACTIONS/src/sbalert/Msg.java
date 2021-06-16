@@ -5,6 +5,9 @@ import org.apache.log4j.Logger;
 import app.Main;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -21,6 +24,12 @@ public class Msg {
 		Main.logger = Logger.getLogger(getClass());
 	}
 
+	public static Alert setDefaultButton(Alert alert, ButtonType defBtn) {
+		DialogPane pane = alert.getDialogPane();
+		for (ButtonType t : alert.getButtonTypes())
+			((Button) pane.lookupButton(t)).setDefaultButton(t == defBtn);
+		return alert;
+	}
 	public static void MessageBox(String Mess, Stage stage) {
 		TextArea alert = new TextArea();
 		alert.setPrefSize(600, 400);

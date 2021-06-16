@@ -28,6 +28,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import sbalert.Msg;
+import swift.SWC;
+import tr.pl.Pl;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -404,6 +407,34 @@ public class KashController {
 		alert.showAndWait();
 	}
 
+	@FXML
+	void Rash(ActionEvent event) {
+		try {
+			Stage stage = new Stage();
+			Stage stage_ = (Stage) employeeTable.getScene().getWindow();
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(getClass().getResource("/tr/pl/Pl.fxml"));
+
+			Pl controller = new Pl();
+			loader.setController(controller);
+			Parent root = loader.load();
+			stage.setScene(new Scene(root));
+			stage.getIcons().add(new Image("/icon.png"));
+			stage.setTitle("Расход с пластика");
+			stage.initOwner(stage_);
+			stage.setResizable(true);
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent paramT) {
+					
+				}
+			});
+			stage.show();
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+    
 	private void populateKash(ObservableList<KashClass> trData) {
 		employeeTable.setItems(trData);
 	}
