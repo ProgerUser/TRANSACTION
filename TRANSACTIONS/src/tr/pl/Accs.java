@@ -57,22 +57,18 @@ public class Accs {
 	void Search(ActionEvent event) {
 		try {
 			if (Search.getText().length() > 5) {
-				String selectStmt = "select acc.CACCACC,\n"
-						+ "					       acc.CACCNAME,\n"
-						+ "					       (select plc.cplcnum\n"
-						+ "					          from plc\n"
-						+ "					         where plc.iplaagrid = pl_ca.iplaagrid\n"
-						+ "					           and dplcend > sysdate\n"
-						+ "					           and plc.iplcprimary =\n"
-						+ "					               (select max(iplcprimary)\n"
-						+ "					                  from plc\n"
-						+ "					                 where plc.iplaagrid = pl_ca.iplaagrid\n"
-						+ "					                   and dplcend > sysdate)) cardnum\n"
-						+ "					  from acc, pl_ca\n"
-						+ "					 where lower(acc.CACCNAME) like lower('%'||?||'%')\n"
-						+ "					   and acc.CACCACC = pl_ca.caccacc\n"
-						+ "					   and pl_ca.iplscatype = 14\n"
-						+ "					 order by CACCNAME";
+				String selectStmt = "select acc.CACCACC,\r\n"
+						+ "       acc.CACCNAME,\r\n"
+						+ "       (SELECT CPLCNUM\r\n"
+						+ "          FROM v_PLA\r\n"
+						+ "         WHERE V_PLA.IPLATYPE in (1, 2)\r\n"
+						+ "           and iplastatus != 6\r\n"
+						+ "           and v_PLA.caccacc = pl_ca.caccacc) cardnum\r\n"
+						+ "  from acc, pl_ca\r\n"
+						+ " where lower(acc.CACCNAME) like lower('%' || ? || '%')\r\n"
+						+ "   and acc.CACCACC = pl_ca.caccacc\r\n"
+						+ "   and pl_ca.iplscatype = 14\r\n"
+						+ " order by CACCNAME";
 				PreparedStatement prepStmt = DBUtil.conn.prepareStatement(selectStmt);
 				prepStmt.setString(1, Search.getText());
 				ResultSet rs = prepStmt.executeQuery();
