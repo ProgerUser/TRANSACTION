@@ -25,7 +25,7 @@
                           <columns>
                             <TableColumn fx:id="Login" prefWidth="75.0" text="Логин" />
                             <TableColumn fx:id="Fio" prefWidth="170.0" text="ФИО" />
-                              <TableColumn fx:id="Stat" prefWidth="55.0" text="Стат." />
+                            <TableColumn fx:id="Stat" prefWidth="55.0" text="Стат." />
                           </columns>
                         </TableView>
                      </children>
@@ -55,6 +55,7 @@
                         </ToolBar>
                         <TableView fx:id="ExAcc" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                            <columns>
+                              <TableColumn fx:id="cardnum" prefWidth="120.0" text="Карта" />
                               <TableColumn fx:id="ExAccount" prefWidth="150.0" text="Счет" />
                               <TableColumn fx:id="ExFio" prefWidth="160.0" text="ФИО" />
                               <TableColumn prefWidth="75.0" text="Доступность">

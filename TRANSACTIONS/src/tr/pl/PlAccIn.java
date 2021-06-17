@@ -14,14 +14,29 @@ public class PlAccIn {
 	private SimpleObjectProperty<LocalDateTime> D_END;
 	/** Нет данных */
 	private SimpleObjectProperty<LocalDateTime> D_START;
+	private StringProperty cardnum;
 
 	public PlAccIn() {
 		this.CACCNAME = new SimpleStringProperty();
 		this.CACCACC = new SimpleStringProperty();
+		this.cardnum = new SimpleStringProperty();
 		this.D_END = new SimpleObjectProperty<>();
 		this.D_START = new SimpleObjectProperty<>();
 	}
 
+	public void setcardnum(String cardnum) {
+		this.cardnum.set(cardnum);
+	}
+	
+	public StringProperty cardnumProperty() {
+		return cardnum;
+	}
+
+	
+	public String getcardnum() {
+		return cardnum.get();
+	}
+	
 	public void setD_END(LocalDateTime D_END) {
 		this.D_END.set(D_END);
 	}

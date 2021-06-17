@@ -58,6 +58,8 @@ public class Pl {
 
 	@FXML
 	private TableColumn<PlAccIn, String> ExFio;
+	@FXML
+	private TableColumn<PlAccIn, String> cardnum;
 
 	@FXML
 	private TableColumn<Object, LocalDateTime> D_START;
@@ -203,15 +205,31 @@ public class Pl {
 
 	void InitEx(PlModel val) {
 		try {
-			String selectStmt = "select acc.CACCACC, acc.CACCNAME, gr.d_start, gr.d_end\r\n"
-					+ "  from acc, SBRA_PL_RASH_USR gr\r\n" + " where acc.CACCACC = gr.acc\r\n"
-					+ "   and gr.usr = ?\r\n" + "";
+			String selectStmt = "select acc.CACCACC,\n"
+					+ "       acc.CACCNAME,\n"
+					+ "       gr.d_start,\n"
+					+ "       gr.d_end,\n"
+					+ "       (select plc.cplcnum\n"
+					+ "          from plc\n"
+					+ "         where plc.iplaagrid = pl_ca.iplaagrid\n"
+					+ "           and dplcend > sysdate\n"
+					+ "           and plc.iplcprimary =\n"
+					+ "               (select max(iplcprimary)\n"
+					+ "                  from plc\n"
+					+ "                 where plc.iplaagrid = pl_ca.iplaagrid\n"
+					+ "                   and dplcend > sysdate)) cardnum\n"
+					+ "  from acc, pl_ca, SBRA_PL_RASH_USR gr\n"
+					+ " where acc.CACCACC = gr.acc\n"
+					+ "   and pl_ca.caccacc = acc.caccacc\n"
+					+ "   and pl_ca.iplscatype = 14\n"
+					+ "   and gr.usr = ?";
 			PreparedStatement prepStmt = DBUtil.conn.prepareStatement(selectStmt);
 			prepStmt.setString(1, val.getLOGIN());
 			ResultSet rs = prepStmt.executeQuery();
 			ObservableList<PlAccIn> dlist = FXCollections.observableArrayList();
 			while (rs.next()) {
 				PlAccIn list = new PlAccIn();
+				list.setcardnum(rs.getString("cardnum"));
 				list.setCACCACC(rs.getString("CACCACC"));
 				list.setCACCNAME(rs.getString("CACCNAME"));
 				list.setD_END((rs.getDate("D_END") != null) ? LocalDateTime.parse(
@@ -249,6 +267,7 @@ public class Pl {
 			D_START.setCellValueFactory(cellData -> ((PlAccIn) cellData.getValue()).D_STARTProperty());
 			D_END.setCellValueFactory(cellData -> ((PlAccIn) cellData.getValue()).D_ENDProperty());
 			// --
+			cardnum.setCellValueFactory(cellData -> cellData.getValue().cardnumProperty());
 			ExAccount.setCellValueFactory(cellData -> cellData.getValue().CACCACCProperty());
 			ExFio.setCellValueFactory(cellData -> cellData.getValue().CACCNAMEProperty());
 			// --

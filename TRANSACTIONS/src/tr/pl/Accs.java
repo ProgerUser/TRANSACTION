@@ -38,6 +38,9 @@ public class Accs {
 	private TableColumn<PlAccIn, String> Acc;
 
 	@FXML
+	private TableColumn<PlAccIn, String> cardnum;
+	
+	@FXML
 	private TableColumn<PlAccIn, String> Fio;
 
 	@FXML
@@ -54,7 +57,22 @@ public class Accs {
 	void Search(ActionEvent event) {
 		try {
 			if (Search.getText().length() > 5) {
-				String selectStmt = "select acc.CACCACC, acc.CACCNAME from acc where lower(acc.CACCNAME) like lower('%'||?||'%') order by CACCNAME";
+				String selectStmt = "select acc.CACCACC,\n"
+						+ "					       acc.CACCNAME,\n"
+						+ "					       (select plc.cplcnum\n"
+						+ "					          from plc\n"
+						+ "					         where plc.iplaagrid = pl_ca.iplaagrid\n"
+						+ "					           and dplcend > sysdate\n"
+						+ "					           and plc.iplcprimary =\n"
+						+ "					               (select max(iplcprimary)\n"
+						+ "					                  from plc\n"
+						+ "					                 where plc.iplaagrid = pl_ca.iplaagrid\n"
+						+ "					                   and dplcend > sysdate)) cardnum\n"
+						+ "					  from acc, pl_ca\n"
+						+ "					 where lower(acc.CACCNAME) like lower('%'||?||'%')\n"
+						+ "					   and acc.CACCACC = pl_ca.caccacc\n"
+						+ "					   and pl_ca.iplscatype = 14\n"
+						+ "					 order by CACCNAME";
 				PreparedStatement prepStmt = DBUtil.conn.prepareStatement(selectStmt);
 				prepStmt.setString(1, Search.getText());
 				ResultSet rs = prepStmt.executeQuery();
@@ -63,6 +81,7 @@ public class Accs {
 					PlAccIn list = new PlAccIn();
 					list.setCACCACC(rs.getString("CACCACC"));
 					list.setCACCNAME(rs.getString("CACCNAME"));
+					list.setcardnum(rs.getString("cardnum"));
 					dlist.add(list);
 				}
 				prepStmt.close();
@@ -100,6 +119,7 @@ public class Accs {
 	@FXML
 	private void initialize() {
 		try {
+			cardnum.setCellValueFactory(cellData -> cellData.getValue().cardnumProperty());
 			Acc.setCellValueFactory(cellData -> cellData.getValue().CACCACCProperty());
 			Fio.setCellValueFactory(cellData -> cellData.getValue().CACCNAMEProperty());
 
