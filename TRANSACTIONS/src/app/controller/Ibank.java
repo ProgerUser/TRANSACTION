@@ -32,7 +32,7 @@ import sbalert.Msg;
 /**
  * Пачулия Саид 04.06.2020.
  */
-@SuppressWarnings({ })
+@SuppressWarnings({"restriction" })
 public class Ibank {
 
 	@FXML
