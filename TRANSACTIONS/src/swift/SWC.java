@@ -403,7 +403,24 @@ public class SWC {
     @FXML
     private RadioButton BK_VTB;
     
-    
+    /**
+     * Печать статуса
+     * @param event
+     */
+	@FXML
+	void AckNak(ActionEvent event) {
+		try {
+			if (Achive.getSelectionModel().getSelectedItem() != null) {
+				SWIFT_FILES selrow = Achive.getSelectionModel().getSelectedItem();
+				new PrintReportAckNak().showReport(selrow.getREF());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			ErrorMessage(ExceptionUtils.getStackTrace(e));
+			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+		}
+	}
+	
 	@FXML
 	void BK_VTB(ActionEvent event) {
 		try {

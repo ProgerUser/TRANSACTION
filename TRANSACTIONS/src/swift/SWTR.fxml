@@ -351,7 +351,8 @@
                                     <ContextMenu>
                                        <items>
                                           <MenuItem mnemonicParsing="false" onAction="#OpenDB" text="Печать" />
-                                          <MenuItem mnemonicParsing="false" onAction="#LoadFileDB" text="Повторно обработать" />
+                                          <MenuItem mnemonicParsing="false" onAction="#AckNak" text="Статус" />
+                                          <MenuItem disable="true" mnemonicParsing="false" onAction="#LoadFileDB" text="Повторно обработать" />
                                        </items>
                                     </ContextMenu>
                                  </contextMenu>
