@@ -67,11 +67,11 @@ public class Main extends Application {
 				ConvVal();
 			}
 
-//			Connect.connectionURL_ = "10.111.64.21:1521/ODB";
-//			Connect.userID_ = "SAIDP";
-//			Connect.userPassword_ = "";
-//			DBUtil.dbConnect();
-//			initRootLayout();
+			Connect.connectionURL_ = "10.111.64.21:1521/ODB";
+			Connect.userID_ = "SAIDP";
+			Connect.userPassword_ = "Vector165";
+			DBUtil.dbConnect();
+			initRootLayout();
 //			showFirst();
 //			swift2();
 //			ConvVal();

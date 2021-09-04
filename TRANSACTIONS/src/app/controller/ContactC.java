@@ -2,13 +2,11 @@ package app.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -111,8 +109,14 @@ public class ContactC {
 							} else if (cell.getColumnIndex() == 12) {// cardnumber
 								sql_statement.setString(5, dataFormatter.formatCellValue(cell));
 							} else if (cell.getColumnIndex() == 1) {// NUMBEP
+//								if (!dataFormatter.formatCellValue(cell).matches("[0-9]+")
+//										&& dataFormatter.formatCellValue(cell).length() > 2) {
+//									break;
+//								}
+//								System.out.println("NUMBEP="+dataFormatter.formatCellValue(cell));
 								sql_statement.setString(6, dataFormatter.formatCellValue(cell));
-							} 
+
+							}
 						}
 						sql_statement.executeUpdate();
 					}
@@ -150,7 +154,7 @@ public class ContactC {
 				input_document.close();
 				sql_statement.close();
 			}
-		} catch (SQLException | IOException e) {
+		} catch (Exception e) {
 			Msg.MessageBox(ExceptionUtils.getStackTrace(e), (Stage) path.getScene().getWindow());
 		}
 	}

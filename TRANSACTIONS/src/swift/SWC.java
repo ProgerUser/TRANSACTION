@@ -2531,15 +2531,15 @@ public class SWC {
 								STMT.getFocusModel().focus(selrow);
 							}
 
-//							autoResizeColumns(STMT);
-//							TableFilter<SWIFT_FILES> tableFilter = TableFilter.forTableView(STMT).apply();
-//							tableFilter.setSearchStrategy((input, target) -> {
-//								try {
-//									return target.toLowerCase().contains(input.toLowerCase());
-//								} catch (Exception e) {
-//									return false;
-//								}
-//							});
+							autoResizeColumns(STMT);
+							TableFilter<SWIFT_FILES> tableFilter = TableFilter.forTableView(STMT).apply();
+							tableFilter.setSearchStrategy((input, target) -> {
+								try {
+									return target.toLowerCase().contains(input.toLowerCase());
+								} catch (Exception e) {
+									return false;
+								}
+							});
 
 							// clear
 							// dlist.clear();
