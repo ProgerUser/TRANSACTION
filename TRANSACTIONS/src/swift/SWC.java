@@ -408,8 +408,39 @@ public class SWC {
 		try {
 			if (Achive.getSelectionModel().getSelectedItem() != null) {
 				SWIFT_FILES selrow = Achive.getSelectionModel().getSelectedItem();
-				if(selrow.getVECTOR().equals("")) {
-					
+				if(selrow.getVECTOR().equals("IN")) {
+					PrgInd.setVisible(true);
+					Task<Object> task = new Task<Object>() {
+						@Override
+						public Object call() throws Exception {
+							try {
+								String call = "ifrun60.exe I:/SWIFT/IM_MSG.fmx " + Connect.userID_ + "/" + Connect.userPassword_
+										+ "@ODB WHERE_CLAUSE=\"" + "CREF = '"+selrow.getREF() + "'\"";
+								ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", call);
+								System.out.println(call);
+								// System.out.println(call);
+								builder.redirectErrorStream(true);
+								Process p;
+								p = builder.start();
+								BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+								String line;
+								while (true) {
+									line = r.readLine();
+									if (line == null) {
+										break;
+									}
+									System.out.println(line);
+								}
+							} catch (Exception e) {
+								ErrorMessage(ExceptionUtils.getStackTrace(e));
+							}
+							return null;
+						}
+					};
+					task.setOnFailed(e -> ErrorMessage(task.getException().getMessage()));
+					task.setOnSucceeded(e -> PrgInd.setVisible(false));
+
+					exec.execute(task);
 				}else if(selrow.getVECTOR().equals("OUT")) {
 					PrgInd.setVisible(true);
 					Task<Object> task = new Task<Object>() {
@@ -417,7 +448,7 @@ public class SWC {
 						public Object call() throws Exception {
 							try {
 								String call = "ifrun60.exe I:/SWIFT/INT_C_S.fmx " + Connect.userID_ + "/" + Connect.userPassword_
-										+ "@ODB where=\"" + "CSWB_F20 = "+selrow.getREF() + "\"";
+										+ "@ODB ARCHIVE=\"ARCHIVE\" WHERE_STR=\"" + "CSWB_F20 = '"+selrow.getREF() + "'\"";
 								ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", call);
 								System.out.println(call);
 								// System.out.println(call);
