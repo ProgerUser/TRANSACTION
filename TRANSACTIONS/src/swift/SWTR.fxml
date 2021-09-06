@@ -392,6 +392,22 @@
                                     </Tooltip>
                                  </tooltip>
                               </Button>
+                              <Separator orientation="VERTICAL" />
+                                <Button layoutX="462.0" layoutY="10.0" mnemonicParsing="false" onAction="#OpenRelation">
+                                 <font>
+                                    <Font size="10.0" />
+                                 </font>
+                                 <graphic>
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="SEARCH" size="18" />
+                                 </graphic>
+                                 <tooltip>
+                                    <Tooltip text="Связанные">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Tooltip>
+                                 </tooltip>
+                              </Button>
                            </items>
                         </ToolBar>
                      </top>

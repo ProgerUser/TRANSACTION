@@ -103,15 +103,15 @@
 		</plugins>
 	</build>
 	<dependencies>
-	
-	<!-- https://mvnrepository.com/artifact/joda-time/joda-time -->
-<dependency>
-    <groupId>joda-time</groupId>
-    <artifactId>joda-time</artifactId>
-    <version>2.10.10</version>
-</dependency>
-	
-	
+
+		<!-- https://mvnrepository.com/artifact/joda-time/joda-time -->
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.10.10</version>
+		</dependency>
+
+
 		<dependency>
 			<groupId>syntheticaFX</groupId>
 			<artifactId>syntheticaFX</artifactId>
@@ -141,11 +141,11 @@
 			<version>8</version>
 		</dependency>
 
-<!-- 		<dependency> -->
-<!-- 			<groupId>SVG</groupId> -->
-<!-- 			<artifactId>SVG</artifactId> -->
-<!-- 			<version>1.0</version> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>SVG</groupId> -->
+		<!-- <artifactId>SVG</artifactId> -->
+		<!-- <version>1.0</version> -->
+		<!-- </dependency> -->
 
 		<dependency>
 			<groupId>com.googlecode.juniversalchardet</groupId>
@@ -207,11 +207,13 @@
 			<version>1.6.0</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports -->
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
-			<version>6.14.0</version>
+			<version>6.17.0</version>
 		</dependency>
+
 
 		<dependency>
 			<groupId>org.apache.poi</groupId>
@@ -291,11 +293,11 @@
 			<version>1.7.25</version>
 		</dependency>
 
-<!-- 		<dependency> -->
-<!-- 			<groupId>jmetro</groupId> -->
-<!-- 			<artifactId>jmetro</artifactId> -->
-<!-- 			<version>8.6.14</version> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>jmetro</groupId> -->
+		<!-- <artifactId>jmetro</artifactId> -->
+		<!-- <version>8.6.14</version> -->
+		<!-- </dependency> -->
 
 		<!-- https://mvnrepository.com/artifact/org.jooq/jooq -->
 		<dependency>

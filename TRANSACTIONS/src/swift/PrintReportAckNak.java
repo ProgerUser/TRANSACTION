@@ -27,7 +27,6 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
-import net.sf.jasperreports.swing.JRViewer;
 
 public class PrintReportAckNak extends JFrame {
 
@@ -75,12 +74,20 @@ public class PrintReportAckNak extends JFrame {
 
 			JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
 
-			JRViewer viewer = new JRViewer(print);
+//			JRViewer viewer = new JRViewer(print);
+//			viewer.setOpaque(true);
+//			viewer.setVisible(true);
+//			this.add(viewer);
+//			this.setSize(1000, 900);
+//			this.setVisible(true);
+			
+			HyperLinkTest viewer = new HyperLinkTest(print);
 			viewer.setOpaque(true);
 			viewer.setVisible(true);
 			this.add(viewer);
 			this.setSize(1000, 900);
 			this.setVisible(true);
+            
 		} catch (JRException | SQLException e) {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();

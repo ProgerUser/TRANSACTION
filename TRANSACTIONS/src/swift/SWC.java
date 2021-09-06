@@ -482,6 +482,69 @@ public class SWC {
 			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
     }
+	
+	@FXML
+    void OpenRelation(ActionEvent event) {
+		try {
+			if (Achive.getSelectionModel().getSelectedItem() != null) {
+				
+				SWIFT_FILES selrow = Achive.getSelectionModel().getSelectedItem();
+				
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+				
+				PreparedStatement prepStmt = conn.prepareStatement("select *\r\n"
+						+ "  from swift_files t\r\n"
+						+ " where utl_raw.cast_to_varchar2(swfile) like '%' || ? || '%'");
+				prepStmt.setString(1,selrow.getREF());
+				
+				ResultSet rs = prepStmt.executeQuery();
+				ObservableList<SWIFT_FILES> cus_list = FXCollections.observableArrayList();
+				DateTimeFormatter dtformatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+				while (rs.next()) {
+					SWIFT_FILES list = new SWIFT_FILES();
+
+					list.setDOCDATE((rs.getDate("DOCDATE") != null)
+							? LocalDate.parse(new SimpleDateFormat("dd.MM.yyyy").format(rs.getDate("DOCDATE")), formatter)
+							: null);
+					list.setSUMM(String.valueOf(rs.getInt("SUMM")));
+					list.setVECTOR(rs.getString("VECTOR"));
+					list.setCUR(rs.getString("CUR"));
+					list.setMTNAME(rs.getString("MTNAME"));
+					list.setMTTYPE(rs.getString("MTTYPE"));
+					list.setCR_DT((rs.getDate("CR_DT") != null) ? LocalDateTime.parse(
+							new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("CR_DT")), dtformatter) : null);
+					list.setOPER(rs.getString("OPER"));
+					list.setDT_CH((rs.getDate("DT_CH") != null) ? LocalDateTime.parse(
+							new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("DT_CH")), dtformatter) : null);
+					list.setFILENAME(rs.getString("FILENAME"));
+					list.setID(rs.getInt("ID"));
+					list.setREF(rs.getString("REF"));
+					cus_list.add(list);
+				}
+				prepStmt.close();
+				rs.close();
+				Achive.setItems(cus_list);
+
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						TableFilter<SWIFT_FILES> tableFilter = TableFilter.forTableView(Achive).apply();
+						tableFilter.setSearchStrategy((input, target) -> {
+							try {
+								return target.toLowerCase().contains(input.toLowerCase());
+							} catch (Exception e) {
+								return false;
+							}
+						});
+					}
+				});
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			ErrorMessage(ExceptionUtils.getStackTrace(e));
+			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+		}
+    }
 
 	/**
 	 * Печать статуса
