@@ -32,7 +32,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane fx:id="StPn" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.261" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane fx:id="StPn" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1">
 <children>
       <TabPane fx:id="RootTab" styleClass="floating" tabClosingPolicy="UNAVAILABLE">
         <tabs>
@@ -194,11 +194,7 @@
                               								<TableColumn fx:id="DT_CH" prefWidth="121.0" text="Дата изменения" />
                                        </columns>
                                        <contextMenu>
-                                          <ContextMenu>
-                                            <items>
-                                              <MenuItem mnemonicParsing="false" onAction="#Open" text="Печать" />
-                                            </items>
-                                          </ContextMenu>
+                                          <ContextMenu />
                                        </contextMenu>
                                     </TableView>
                                     <TextArea fx:id="FileTextArea" editable="false" styleClass="mylistview" stylesheets="/TableView.css">
@@ -228,7 +224,7 @@
                                           <Separator orientation="VERTICAL" />
                                           <Button fx:id="ClearFilter" mnemonicParsing="false" onAction="#ClearFilter" textFill="WHITE">
                                              <graphic>
-                                                <FontAwesomeIconView glyphName="TIMES" size="15" />
+                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TIMES" size="15" />
                                              </graphic>
                                              <font>
                                                 <Font size="10.0" />
@@ -244,8 +240,24 @@
                                                 <Font size="10.0" />
                                              </font>
                                              <graphic>
-                                                <FontAwesomeIconView glyphName="REFRESH" size="15" />
+                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="18" />
                                              </graphic>
+                                          </Button>
+                                          <Separator orientation="VERTICAL" />
+                                          <Button mnemonicParsing="false" onAction="#Open">
+                                             <font>
+                                                <Font size="10.0" />
+                                             </font>
+                                             <graphic>
+                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="PRINT" size="18" />
+                                             </graphic>
+                                             <tooltip>
+                                                <Tooltip text="Печать">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Tooltip>
+                                             </tooltip>
                                           </Button>
                                           <Separator orientation="VERTICAL" />
                                           <DatePicker fx:id="FileDate" maxWidth="120.0" prefHeight="25.0" promptText="С">
@@ -291,11 +303,18 @@
                            <items>
                               <Button fx:id="RefreshDB" mnemonicParsing="false" onAction="#RefreshDB" styleClass="Reload">
                                  <graphic>
-                                    <FontAwesomeIconView glyphName="SEARCH" size="15" />
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="SEARCH" size="18" />
                                  </graphic>
                                  <font>
                                     <Font size="10.0" />
-                                 </font></Button>
+                                 </font>
+                                 <tooltip>
+                                    <Tooltip text="Поиск">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Tooltip>
+                                 </tooltip></Button>
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="C:" />
                               <DatePicker fx:id="dt1" prefWidth="120.0">
                                  <tooltip>
@@ -325,6 +344,54 @@
                                     </Tooltip>
                                  </tooltip>
                               </ComboBox>
+                              <Separator orientation="VERTICAL" />
+                              <Button mnemonicParsing="false" onAction="#OpenDB">
+                                 <font>
+                                    <Font size="10.0" />
+                                 </font>
+                                 <graphic>
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="PRINT" size="18" />
+                                 </graphic>
+                                 <tooltip>
+                                    <Tooltip text="Печать">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Tooltip>
+                                 </tooltip>
+                              </Button>
+                              <Separator orientation="VERTICAL" />
+                              <Button layoutX="407.0" layoutY="10.0" mnemonicParsing="false" onAction="#AckNak">
+                                 <font>
+                                    <Font size="10.0" />
+                                 </font>
+                                 <graphic>
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EXCLAMATION_TRIANGLE" size="18" />
+                                 </graphic>
+                                 <tooltip>
+                                    <Tooltip text="Статус">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Tooltip>
+                                 </tooltip>
+                              </Button>
+                              <Separator orientation="VERTICAL" />
+                              <Button layoutX="462.0" layoutY="10.0" mnemonicParsing="false" onAction="#OpenAbsForm">
+                                 <font>
+                                    <Font size="10.0" />
+                                 </font>
+                                 <graphic>
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EXTERNAL_LINK" size="18" />
+                                 </graphic>
+                                 <tooltip>
+                                    <Tooltip text="Показать в АБС">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Tooltip>
+                                 </tooltip>
+                              </Button>
                            </items>
                         </ToolBar>
                      </top>
@@ -350,8 +417,8 @@
                                  <contextMenu>
                                     <ContextMenu>
                                        <items>
-                                          <MenuItem mnemonicParsing="false" onAction="#OpenDB" text="Печать" />
-                                          <MenuItem mnemonicParsing="false" onAction="#AckNak" text="Статус" />
+                                          <MenuItem disable="true" mnemonicParsing="false" onAction="#OpenDB" text="Печать" />
+                                          <MenuItem disable="true" mnemonicParsing="false" onAction="#AckNak" text="Статус" />
                                           <MenuItem disable="true" mnemonicParsing="false" onAction="#LoadFileDB" text="Повторно обработать" />
                                        </items>
                                     </ContextMenu>
@@ -370,13 +437,13 @@
             </Tab>
             <Tab fx:id="SETTINGS" text="Настройки">
                <content>
-                  <VBox spacing="5.0">
+                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
                      <children>
-                        <TitledPane alignment="CENTER" animated="false" collapsible="false" text="ВТБ SWIFT настройка">
+                        <TitledPane alignment="CENTER" animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="ВТБ SWIFT настройка" VBox.vgrow="ALWAYS">
                            <content>
-                              <VBox spacing="5.0">
+                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
                                  <children>
-                                    <HBox spacing="5.0">
+                                    <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" VBox.vgrow="ALWAYS">
                                        <children>
                                           <TableView fx:id="AVAL" prefHeight="250.0" prefWidth="350.0">
                                             <columns>
@@ -395,15 +462,15 @@
                               </VBox>
                            </content>
                         </TitledPane>
-                        <TitledPane alignment="CENTER" animated="false" collapsible="false" text="Документы у которых БИК был изменен на SWIFT">
+                        <TitledPane alignment="CENTER" animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Документы у которых БИК был изменен на SWIFT" VBox.vgrow="ALWAYS">
                            <content>
-                              <VBox spacing="5.0">
+                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
                                  <children>
                                     <ToolBar style="-fx-border-color: silver;">
                                       <items>
                                         <Button fx:id="RESF_BIK_TO_SW_VTB" mnemonicParsing="false" onAction="#RESF_BIK_TO_SW_VTB">
                                              <graphic>
-                                                <FontAwesomeIconView glyphName="REFRESH" size="15" />
+                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="18" />
                                              </graphic>
                                              <font>
                                                 <Font size="10.0" />
@@ -418,7 +485,7 @@
                                           </Button>
                                       </items>
                                     </ToolBar>
-                                    <TableView fx:id="BIK_TO_SW_VTB" prefHeight="300.0">
+                                    <TableView fx:id="BIK_TO_SW_VTB" prefHeight="300.0" VBox.vgrow="ALWAYS">
                                       <columns>
                                         <TableColumn fx:id="BIK_TRN" prefWidth="90.0" text="БИК" />
                                         <TableColumn fx:id="SW_TRN" prefWidth="111.0" text="SWIFT" />
@@ -440,15 +507,15 @@
             </Tab>
             <Tab fx:id="CONV_VAL" text="Конверсия валюты">
                <content>
-                  <TitledPane alignment="CENTER" animated="false" collapsible="false" text="Сформированные">
+                  <TitledPane alignment="CENTER" animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Сформированные">
                      <content>
-                        <VBox spacing="5.0">
+                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
                            <children>
                               <ToolBar style="-fx-border-color: silver;">
                                 <items>
                                   <Button mnemonicParsing="false" onAction="#REFR_CONV">
                                        <graphic>
-                                          <FontAwesomeIconView glyphName="REFRESH" size="15" />
+                                          <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="18" />
                                        </graphic>
                                        <tooltip>
                                           <Tooltip text="Обновить" />
@@ -456,7 +523,7 @@
                                     </Button>
                                     <Button mnemonicParsing="false">
                                        <graphic>
-                                          <FontAwesomeIconView glyphName="EDIT" size="15" />
+                                          <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EDIT" size="18" />
                                        </graphic>
                                        <tooltip>
                                           <Tooltip text="Редактировать" />
@@ -472,7 +539,7 @@
                                     </Button>
                                 </items>
                               </ToolBar>
-                              <XTableView fx:id="CONV_TBL" styleClass="mylistview" stylesheets="/TableView.css">
+                              <XTableView fx:id="CONV_TBL" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="mylistview" stylesheets="/TableView.css" VBox.vgrow="ALWAYS">
                                  <columns>
                                     <XTableColumn fx:id="CONV_ID" prefWidth="75.0" text="ИД" />
                                     <XTableColumn fx:id="CONV_REF" prefWidth="120.0" text="Референс" />

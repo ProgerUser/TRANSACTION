@@ -76,6 +76,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -372,7 +373,7 @@ public class SWC {
 
 	@FXML
 	private XTableColumn<SWIFT_FILES, String> OPERdb;
-	
+
 	@FXML
 	private XTableColumn<SWIFT_FILES, String> REFdb;
 	/**
@@ -387,26 +388,75 @@ public class SWC {
 	@FXML
 	private XTableView<SWIFT_FILES> Achive;
 
-	
-    @FXML
-    private TableColumn<VAVAL, String> CATTR_NAME;
+	@FXML
+	private TableColumn<VAVAL, String> CATTR_NAME;
 
-    @FXML
-    private TableColumn<VAVAL, String> CVALUE;
-    
-    @FXML
-    private TableView<VAVAL> AVAL;
+	@FXML
+	private TableColumn<VAVAL, String> CVALUE;
 
-    @FXML
-    private RadioButton SWIFT_VTB;
+	@FXML
+	private TableView<VAVAL> AVAL;
 
-    @FXML
-    private RadioButton BK_VTB;
-    
-    /**
-     * Печать статуса
-     * @param event
-     */
+	@FXML
+	private RadioButton SWIFT_VTB;
+
+	@FXML
+	private RadioButton BK_VTB;
+
+	@FXML
+    void OpenAbsForm(ActionEvent event) {
+		try {
+			if (Achive.getSelectionModel().getSelectedItem() != null) {
+				SWIFT_FILES selrow = Achive.getSelectionModel().getSelectedItem();
+				if(selrow.getVECTOR().equals("")) {
+					
+				}else if(selrow.getVECTOR().equals("OUT")) {
+					PrgInd.setVisible(true);
+					Task<Object> task = new Task<Object>() {
+						@Override
+						public Object call() throws Exception {
+							try {
+								String call = "ifrun60.exe I:/SWIFT/INT_C_S.fmx " + Connect.userID_ + "/" + Connect.userPassword_
+										+ "@ODB where=\"" + "CSWB_F20 = "+selrow.getREF() + "\"";
+								ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", call);
+								System.out.println(call);
+								// System.out.println(call);
+								builder.redirectErrorStream(true);
+								Process p;
+								p = builder.start();
+								BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+								String line;
+								while (true) {
+									line = r.readLine();
+									if (line == null) {
+										break;
+									}
+									System.out.println(line);
+								}
+							} catch (Exception e) {
+								ErrorMessage(ExceptionUtils.getStackTrace(e));
+							}
+							return null;
+						}
+					};
+					task.setOnFailed(e -> ErrorMessage(task.getException().getMessage()));
+					task.setOnSucceeded(e -> PrgInd.setVisible(false));
+
+					exec.execute(task);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			ErrorMessage(ExceptionUtils.getStackTrace(e));
+			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+		}
+    }
+
+	/**
+	 * Печать статуса
+	 * 
+	 * @param event
+	 */
 	@FXML
 	void AckNak(ActionEvent event) {
 		try {
@@ -420,7 +470,7 @@ public class SWC {
 			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
-	
+
 	@FXML
 	void BK_VTB(ActionEvent event) {
 		try {
@@ -432,7 +482,7 @@ public class SWC {
 			CallableStatement clbstmt = conn.prepareCall("{ call SBRA_VTB_SWIF.GO_BK }");
 			clbstmt.executeUpdate();
 			clbstmt.close();
-			
+
 			REFRESH_AVAL();
 			System.out.println("BK_VTB");
 		} catch (Exception e) {
@@ -442,10 +492,10 @@ public class SWC {
 		}
 	}
 
-    @FXML
-    void SWIFT_VTB(ActionEvent event) {
-    	try {
-    		CallableStatement clbstmt = conn.prepareCall("{ call SBRA_VTB_SWIF.GO_SW }");
+	@FXML
+	void SWIFT_VTB(ActionEvent event) {
+		try {
+			CallableStatement clbstmt = conn.prepareCall("{ call SBRA_VTB_SWIF.GO_SW }");
 			clbstmt.executeUpdate();
 			clbstmt.close();
 			REFRESH_AVAL();
@@ -455,10 +505,8 @@ public class SWC {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
 			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
-    }
-    
-    
-    
+	}
+
 	/**
 	 * Возврат суммы документа , если MT103...пока
 	 * 
@@ -675,13 +723,13 @@ public class SWC {
 				if (msg != null && msg.isType(103)) {
 					MT103 mt = (MT103) msg;
 					Field32A f = mt.getField32A();
-					
+
 					if (f != null) {
 						ret = f.getCurrency();
 					} else {
 						ret = null;
 					}
-					
+
 				}
 				if (msg != null && msg.isType(202)) {
 					MT202 mt = (MT202) msg;
@@ -718,7 +766,7 @@ public class SWC {
 				if (msg != null && msg.isType(103)) {
 					MT103 mt = (MT103) msg;
 					Field32A f = mt.getField32A();
-					if (f!= null) {
+					if (f != null) {
 						ret = sdf.format(f.getDateAsCalendar().getTime());
 					} else {
 						ret = null;
@@ -745,7 +793,7 @@ public class SWC {
 				inputstream.close();
 			}
 		} catch (Exception e) {
-			//ErrorMessage(ExceptionUtils.getStackTrace(e));
+			// ErrorMessage(ExceptionUtils.getStackTrace(e));
 			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 		return ret;
@@ -811,11 +859,11 @@ public class SWC {
 			clstmt.execute();
 			if (!clstmt.getString(1).equals("ok")) {
 				ret = clstmt.getString(11);
-				//conn.rollback();
+				// conn.rollback();
 			} else {
 				ret = "ok";
-				//conn.commit();
-			}	
+				// conn.commit();
+			}
 			clstmt.close();
 			is.close();
 		} catch (Exception e) {
@@ -956,105 +1004,103 @@ public class SWC {
 //			Task<Object> task = new Task<Object>() {
 //				@Override
 //				public Object call() throws Exception {
-					LocalDate docdt = null;
-					LocalDateTime crdate = null;
-					String amount = null;
-					String cur = null;
-					String docname = null;
-					String doctype = null;
-					String filename = null;
-					String ret = null;
-					// Цикл по ячейкам
-					for (int i = 0; i < STMT.getItems().size(); i++) {
-						// Цикл по столбцам
-						for (int j = 0; j < STMT.getColumns().size(); j++) {
-							// Если Не пусто
-							if (STMT.getColumns().get(j).getCellData(i) != null) {
-								// Если выделена строка
-								if (j == 0) {
-									if ((Boolean) STMT.getColumns().get(j).getCellData(i) == true) {
-										// инициализация переменных
-										docdt = null;
-										crdate = null;
-										amount = null;
-										cur = null;
-										docname = null;
-										doctype = null;
-										filename = null;
-										ret = null;
-										// проверка на наличие данных
-										if (STMT.getColumns().get(3).getCellData(i) != null) {
-											docdt = (LocalDate) STMT.getColumns().get(3).getCellData(i);
+			LocalDate docdt = null;
+			LocalDateTime crdate = null;
+			String amount = null;
+			String cur = null;
+			String docname = null;
+			String doctype = null;
+			String filename = null;
+			String ret = null;
+			// Цикл по ячейкам
+			for (int i = 0; i < STMT.getItems().size(); i++) {
+				// Цикл по столбцам
+				for (int j = 0; j < STMT.getColumns().size(); j++) {
+					// Если Не пусто
+					if (STMT.getColumns().get(j).getCellData(i) != null) {
+						// Если выделена строка
+						if (j == 0) {
+							if ((Boolean) STMT.getColumns().get(j).getCellData(i) == true) {
+								// инициализация переменных
+								docdt = null;
+								crdate = null;
+								amount = null;
+								cur = null;
+								docname = null;
+								doctype = null;
+								filename = null;
+								ret = null;
+								// проверка на наличие данных
+								if (STMT.getColumns().get(3).getCellData(i) != null) {
+									docdt = (LocalDate) STMT.getColumns().get(3).getCellData(i);
+								}
+								if (STMT.getColumns().get(5).getCellData(i) != null) {
+									amount = (String) STMT.getColumns().get(5).getCellData(i);
+								}
+								if (STMT.getColumns().get(7).getCellData(i) != null) {
+									crdate = (LocalDateTime) STMT.getColumns().get(7).getCellData(i);
+								}
+								if (STMT.getColumns().get(4).getCellData(i) != null) {
+									cur = (String) STMT.getColumns().get(4).getCellData(i);
+								}
+								if (STMT.getColumns().get(2).getCellData(i) != null) {
+									docname = (String) STMT.getColumns().get(2).getCellData(i);
+								}
+								if (STMT.getColumns().get(1).getCellData(i) != null) {
+									doctype = (String) STMT.getColumns().get(1).getCellData(i);
+								}
+								if (STMT.getColumns().get(6).getCellData(i) != null) {
+									filename = (String) STMT.getColumns().get(6).getCellData(i);
+								}
+								// если папки входящие
+								if (FolderName.equals("SWIFT_MSG") | FolderName.equals("SWIFT_ACK")
+										| FolderName.equals("SWIFT_KVT") || FolderName.equals("SWIFT_OTHER")) {
+									ret = InsertDB(docdt, amount, cur, docname, doctype, crdate, filename, "IN");
+									if (ret.equals("ok")) {
+										File destinationFolder = new File(System.getenv("SWIFT_INLOCAL") + "/"
+												+ STMT.getColumns().get(6).getCellData(i));
+										File sourceFolder = new File(System.getenv(FolderName) + "/"
+												+ STMT.getColumns().get(6).getCellData(i));
+										try {
+											moveFileWithOverwrite(sourceFolder, destinationFolder);
+											InitTable();
+											conn.commit();
+										} catch (IOException e) {
+											conn.rollback();
+											SWLogger.error(ExceptionUtils.getStackTrace(e) + "~"
+													+ Thread.currentThread().getName());
+											ErrorMessage(ExceptionUtils.getStackTrace(e));
 										}
-										if (STMT.getColumns().get(5).getCellData(i) != null) {
-											amount = (String) STMT.getColumns().get(5).getCellData(i);
+									} else {
+										ErrorMessage(ret);
+									}
+									// если папка исходящая
+								} else if (FolderName.equals("SWIFT_OUTLOCAL")) {
+									ret = InsertDB(docdt, amount, cur, docname, doctype, crdate, filename, "OUT");
+									if (ret.equals("ok")) {
+										File destinationFolder = new File(System.getenv("SWIFT_OUT") + "/"
+												+ STMT.getColumns().get(6).getCellData(i));
+										File sourceFolder = new File(System.getenv(FolderName) + "/"
+												+ STMT.getColumns().get(6).getCellData(i));
+										try {
+											moveFileWithOverwrite(sourceFolder, destinationFolder);
+											InitTable();
+											conn.commit();
+										} catch (IOException e) {
+											conn.rollback();
+											SWLogger.error(ExceptionUtils.getStackTrace(e) + "~"
+													+ Thread.currentThread().getName());
+											ErrorMessage(ExceptionUtils.getStackTrace(e));
 										}
-										if (STMT.getColumns().get(7).getCellData(i) != null) {
-											crdate = (LocalDateTime) STMT.getColumns().get(7).getCellData(i);
-										}
-										if (STMT.getColumns().get(4).getCellData(i) != null) {
-											cur = (String) STMT.getColumns().get(4).getCellData(i);
-										}
-										if (STMT.getColumns().get(2).getCellData(i) != null) {
-											docname = (String) STMT.getColumns().get(2).getCellData(i);
-										}
-										if (STMT.getColumns().get(1).getCellData(i) != null) {
-											doctype = (String) STMT.getColumns().get(1).getCellData(i);
-										}
-										if (STMT.getColumns().get(6).getCellData(i) != null) {
-											filename = (String) STMT.getColumns().get(6).getCellData(i);
-										}
-										// если папки входящие
-										if (FolderName.equals("SWIFT_MSG") | FolderName.equals("SWIFT_ACK")
-												| FolderName.equals("SWIFT_KVT") || FolderName.equals("SWIFT_OTHER")) {
-											ret = InsertDB(docdt, amount, cur, docname, doctype, crdate, filename,
-													"IN");
-											if (ret.equals("ok")) {
-												File destinationFolder = new File(System.getenv("SWIFT_INLOCAL") + "/"
-														+ STMT.getColumns().get(6).getCellData(i));
-												File sourceFolder = new File(System.getenv(FolderName) + "/"
-														+ STMT.getColumns().get(6).getCellData(i));
-												try {
-													moveFileWithOverwrite(sourceFolder, destinationFolder);
-													InitTable();
-													conn.commit();
-												} catch (IOException e) {
-													conn.rollback();
-													SWLogger.error(ExceptionUtils.getStackTrace(e) + "~"
-															+ Thread.currentThread().getName());
-													ErrorMessage(ExceptionUtils.getStackTrace(e));
-												}
-											} else {
-												ErrorMessage(ret);
-											}
-											// если папка исходящая
-										} else if (FolderName.equals("SWIFT_OUTLOCAL")) {
-											ret = InsertDB(docdt, amount, cur, docname, doctype, crdate, filename,
-													"OUT");
-											if (ret.equals("ok")) {
-												File destinationFolder = new File(System.getenv("SWIFT_OUT") + "/"
-														+ STMT.getColumns().get(6).getCellData(i));
-												File sourceFolder = new File(System.getenv(FolderName) + "/"
-														+ STMT.getColumns().get(6).getCellData(i));
-												try {
-													moveFileWithOverwrite(sourceFolder, destinationFolder);
-													InitTable();
-													conn.commit();
-												} catch (IOException e) {
-													conn.rollback();
-													SWLogger.error(ExceptionUtils.getStackTrace(e) + "~"
-															+ Thread.currentThread().getName());
-													ErrorMessage(ExceptionUtils.getStackTrace(e));
-												}
-											} else {
-												ErrorMessage(ret);
-											}
-										}
+									} else {
+										ErrorMessage(ret);
 									}
 								}
 							}
 						}
 					}
+				}
+			}
 //					return null;
 //				}
 //			};
@@ -1217,7 +1263,7 @@ public class SWC {
 				ModeINbox.setDisable(false);
 
 				FolderN.setText("Входящие документы ВТБ " + System.getenv("SWIFT_MSG"));
-
+				InitTable();
 			} else if (DIRNAME.getValue().toUpperCase().equals("ACK")) {
 
 				MTTYPE.setVisible(true);
@@ -1273,6 +1319,7 @@ public class SWC {
 				ModeINbox.setDisable(true);
 
 				FolderN.setText("Исходящие документы ВТБ " + System.getenv("SWIFT_OUT"));
+				InitTable();
 			} else if (DIRNAME.getValue().toUpperCase().equals("INLOCAL")) {
 
 				MTTYPE.setVisible(true);
@@ -1286,6 +1333,7 @@ public class SWC {
 				ModeINbox.setDisable(false);
 
 				FolderN.setText("Входящие,локальный каталог " + System.getenv("SWIFT_INLOCAL"));
+				InitTable();
 			}
 
 			else if (DIRNAME.getValue().toUpperCase().equals("OUTLOCAL")) {
@@ -1301,6 +1349,7 @@ public class SWC {
 				ModeINbox.setDisable(false);
 
 				FolderN.setText("Исходящие, локальный каталог " + System.getenv("SWIFT_OUTLOCAL"));
+				InitTable();
 			}
 
 		} catch (Exception e) {
@@ -1410,35 +1459,29 @@ public class SWC {
 
 	void REFRESH_AVAL() {
 		try {
-		PreparedStatement prp = conn.prepareStatement(
-				"select CATTR_NAME, CVALUE\r\n"
-				+ "    from AVAL, BATTR\r\n"
-				+ "   where nbnk = 1683\r\n"
-				+ "     AND AVAL.nattr = BATTR.NATTR_ID\r\n"
-				+ "   ORDER BY NPP ASC");
-		ResultSet rs = prp.executeQuery();
-		ObservableList<VAVAL> list = FXCollections.observableArrayList();
-		while(rs.next()) {
-			VAVAL val = new VAVAL();
-			val.setCATTR_NAME(rs.getString("CATTR_NAME"));
-			val.setCVALUE(rs.getString("CVALUE"));
-			list.add(val);
-		}
-		
-		AVAL.setItems(list);
-		rs.close();
-		prp.close();
-		}
-		catch (Exception e) {
+			PreparedStatement prp = conn.prepareStatement("select CATTR_NAME, CVALUE\r\n" + "    from AVAL, BATTR\r\n"
+					+ "   where nbnk = 1683\r\n" + "     AND AVAL.nattr = BATTR.NATTR_ID\r\n" + "   ORDER BY NPP ASC");
+			ResultSet rs = prp.executeQuery();
+			ObservableList<VAVAL> list = FXCollections.observableArrayList();
+			while (rs.next()) {
+				VAVAL val = new VAVAL();
+				val.setCATTR_NAME(rs.getString("CATTR_NAME"));
+				val.setCVALUE(rs.getString("CVALUE"));
+				list.add(val);
+			}
+
+			AVAL.setItems(list);
+			rs.close();
+			prp.close();
+		} catch (Exception e) {
 			e.printStackTrace();
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
 			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
-	
-	
-    @FXML
-    void RESF_BIK_TO_SW_VTB(ActionEvent event) {
+
+	@FXML
+	void RESF_BIK_TO_SW_VTB(ActionEvent event) {
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 			String selectStmt = "select * from BIK_TO_SW_VTB t";
@@ -1449,9 +1492,8 @@ public class SWC {
 				BIK_TO_SW_VTB list = new BIK_TO_SW_VTB();
 				list.setBIK_TRN(rs.getString("BIK_TRN"));
 				list.setSW_TRN(rs.getString("SW_TRN"));
-				list.setDTRNCREATE((rs.getDate("DTRNCREATE") != null)
-						? LocalDate.parse(new SimpleDateFormat("dd.MM.yyyy").format(rs.getDate("DTRNCREATE")), formatter)
-						: null);
+				list.setDTRNCREATE((rs.getDate("DTRNCREATE") != null) ? LocalDate
+						.parse(new SimpleDateFormat("dd.MM.yyyy").format(rs.getDate("DTRNCREATE")), formatter) : null);
 				list.setDTRNTRAN((rs.getDate("DTRNTRAN") != null)
 						? LocalDate.parse(new SimpleDateFormat("dd.MM.yyyy").format(rs.getDate("DTRNTRAN")), formatter)
 						: null);
@@ -1477,76 +1519,72 @@ public class SWC {
 			SWLogger.error(ExceptionUtils.getStackTrace(e));
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
 		}
-    }
-    
-    @FXML
-    private XTableView<VTB_MT202_CONV> CONV_TBL;
+	}
 
-    @FXML
-    private XTableColumn<VTB_MT202_CONV, Integer> CONV_ID;
-						 
-    @FXML                
-    private XTableColumn<VTB_MT202_CONV, String> CONV_REF;
-						 
-    @FXML                
-    private XTableColumn<VTB_MT202_CONV, String> CONV_FL32A_DATE;
-						 
-    @FXML                
-    private XTableColumn<VTB_MT202_CONV, String> CONV_FL32A_CUR;
-						 
-    @FXML                
-    private XTableColumn<VTB_MT202_CONV, String> CONV_FL32A_SUM;
-						 
-    @FXML                
-    private XTableColumn<VTB_MT202_CONV, String> CONV_F53B;
-						 
-    @FXML                
-    private XTableColumn<VTB_MT202_CONV, String> CONV_F58A;
-						 
-    @FXML                
-    private XTableColumn<VTB_MT202_CONV, String> CONV_F72;
-						 
-    @FXML                
-    private XTableColumn<VTB_MT202_CONV, LocalDateTime> CONV_DATETIME;
-						 
-    @FXML                
-    private XTableColumn<VTB_MT202_CONV, String> CONV_OPER;
-    @FXML
-    private TextArea FileTextAreaDB;
-    
-    @FXML
-    void AUDIT_CONV(ActionEvent event) {
+	@FXML
+	private XTableView<VTB_MT202_CONV> CONV_TBL;
+
+	@FXML
+	private XTableColumn<VTB_MT202_CONV, Integer> CONV_ID;
+
+	@FXML
+	private XTableColumn<VTB_MT202_CONV, String> CONV_REF;
+
+	@FXML
+	private XTableColumn<VTB_MT202_CONV, String> CONV_FL32A_DATE;
+
+	@FXML
+	private XTableColumn<VTB_MT202_CONV, String> CONV_FL32A_CUR;
+
+	@FXML
+	private XTableColumn<VTB_MT202_CONV, String> CONV_FL32A_SUM;
+
+	@FXML
+	private XTableColumn<VTB_MT202_CONV, String> CONV_F53B;
+
+	@FXML
+	private XTableColumn<VTB_MT202_CONV, String> CONV_F58A;
+
+	@FXML
+	private XTableColumn<VTB_MT202_CONV, String> CONV_F72;
+
+	@FXML
+	private XTableColumn<VTB_MT202_CONV, LocalDateTime> CONV_DATETIME;
+
+	@FXML
+	private XTableColumn<VTB_MT202_CONV, String> CONV_OPER;
+	@FXML
+	private TextArea FileTextAreaDB;
+
+	@FXML
+	void AUDIT_CONV(ActionEvent event) {
 		try {
-			
-			Path customBaseDir = FileSystems.getDefault().getPath(System.getenv("TRANSACT_PATH")+"PARAM");
+
+			Path customBaseDir = FileSystems.getDefault().getPath(System.getenv("TRANSACT_PATH") + "PARAM");
 			String customFilePrefix = "invparam_";
 			String customFileSuffix = ".xml";
-			Path tmpFile =  java.nio.file.Files.createTempFile(customBaseDir, customFilePrefix, customFileSuffix);
+			Path tmpFile = java.nio.file.Files.createTempFile(customBaseDir, customFilePrefix, customFileSuffix);
 			BufferedWriter bw = java.nio.file.Files.newBufferedWriter(tmpFile, StandardCharsets.UTF_8);
-			bw.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
-					+ "<Paramlist>\r\n"
-					+ "	<Parameter Name=\"TableOwner\"/>\r\n"
-					+ "	<Parameter Name=\"TableName\">USR</Parameter>\r\n"
+			bw.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" + "<Paramlist>\r\n"
+					+ "	<Parameter Name=\"TableOwner\"/>\r\n" + "	<Parameter Name=\"TableName\">USR</Parameter>\r\n"
 					+ "	<Parameter Name=\"PrimaryKey1\">1105</Parameter>\r\n"
-					+ "	<Parameter Name=\"PrimaryKey2\"/>\r\n"
-					+ "	<Parameter Name=\"RowId\"/>\r\n"
-					+ "</Paramlist>");
+					+ "	<Parameter Name=\"PrimaryKey2\"/>\r\n" + "	<Parameter Name=\"RowId\"/>\r\n" + "</Paramlist>");
 			bw.close();
 			tmpFile.toFile().deleteOnExit();
-			
+
 			String tmp_path = tmpFile.toFile().getAbsolutePath();
-			
+
 			SbEncode encode = new SbEncode();
 			String mdi_totleString = encode.ascii2base64("Oracle Forms Runtime");
-			String userid = "";//encode.ascii2base64(Connect.userID_.toUpperCase() + "/" + Connect.userPassword_.toUpperCase() + "@odb");
-			String xml = "java -jar I:/japp/FXPdoc.jar "
-			        + " \"--ru.inversion.mdi_title=" + mdi_totleString
+			String userid = "";// encode.ascii2base64(Connect.userID_.toUpperCase() + "/" +
+								// Connect.userPassword_.toUpperCase() + "@odb");
+			String xml = "java -jar I:/japp/FXPdoc.jar " + " \"--ru.inversion.mdi_title=" + mdi_totleString
 					+ "\" \"--ru.inversion.userid=F" + userid
 					+ "\" \"--ru.inversion.start_class=ru.inversion.fxpdoc.auview.PAuActionMain\""
-					+  " \"--ru.inversion.start_method=showViewAuAction\""
-					+  " \"--ru.inversion.start_file_params="+tmp_path+"\"";
+					+ " \"--ru.inversion.start_method=showViewAuAction\"" + " \"--ru.inversion.start_file_params="
+					+ tmp_path + "\"";
 			System.out.println(xml);
-			ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c","java -jar I:/japp/FXPdoc.jar");
+			ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", "java -jar I:/japp/FXPdoc.jar");
 			builder.redirectErrorStream(true);
 			Process p;
 			p = builder.start();
@@ -1563,8 +1601,8 @@ public class SWC {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
 			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
-    }
-    
+	}
+
 	/**
 	 * Инициализация
 	 */
@@ -1573,10 +1611,9 @@ public class SWC {
 	private void initialize() {
 		try {
 			dbConnect();
-			
-			
+
 			SyntheticaFX.init("com.jyloo.syntheticafx.SyntheticaFXModena");
-			
+
 			CONV_ID.setCellValueFactory(cellData -> cellData.getValue().IDProperty().asObject());
 			CONV_REF.setCellValueFactory(cellData -> cellData.getValue().REFProperty());
 			CONV_FL32A_DATE.setCellValueFactory(cellData -> cellData.getValue().FL32A_DATEProperty());
@@ -1587,11 +1624,11 @@ public class SWC {
 			CONV_F72.setCellValueFactory(cellData -> cellData.getValue().F72Property());
 			CONV_DATETIME.setCellValueFactory(cellData -> cellData.getValue().DATETIMEProperty());
 			CONV_OPER.setCellValueFactory(cellData -> cellData.getValue().OPERProperty());
-			
+
 			CellDateFormatD(CONV_DATETIME);
-			
+
 			ObservableList rules = FXCollections.observableArrayList(ComparisonType.values());
-			
+
 			CONV_ID.setColumnFilter(new ComparableColumnFilter(new ComparableFilterModel(rules),
 					TextFormatterFactory.LONG_TEXTFORMATTER_FACTORY));
 			CONV_REF.setColumnFilter(new PatternColumnFilter<>());
@@ -1611,9 +1648,7 @@ public class SWC {
 			CTRNACCC.setCellValueFactory(cellData -> cellData.getValue().CTRNACCCProperty());
 			MTRNSUM.setCellValueFactory(cellData -> cellData.getValue().MTRNSUMProperty().asObject());
 			CTRNCORACCO.setCellValueFactory(cellData -> cellData.getValue().CTRNCORACCOProperty());
-			
-			
-			
+
 			CATTR_NAME.setCellValueFactory(cellData -> cellData.getValue().CATTR_NAMEProperty());
 			CVALUE.setCellValueFactory(cellData -> cellData.getValue().CVALUEProperty());
 
@@ -1631,16 +1666,16 @@ public class SWC {
 					((VAVAL) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCVALUE(t.getNewValue());
 				}
 			});
-			
+
 			{
 				// Group
 				ToggleGroup group = new ToggleGroup();
 				SWIFT_VTB.setToggleGroup(group);
 				BK_VTB.setToggleGroup(group);
 			}
-			
+
 			REFRESH_AVAL();
-			
+
 			{
 				CallableStatement clbstmt = conn.prepareCall("{  ? = call SBRA_VTB_SWIF.SW_BK }");
 				clbstmt.registerOutParameter(1, Types.VARCHAR);
@@ -1652,10 +1687,9 @@ public class SWC {
 				}
 				clbstmt.close();
 			}
-			
-			
-			//_______________________________________________________________________________
-			
+
+			// _______________________________________________________________________________
+
 			STMT.getColumns().addListener(new ListChangeListener() {
 				@Override
 				public void onChanged(Change change) {
@@ -1666,7 +1700,7 @@ public class SWC {
 					}
 				}
 			});
- 
+
 //			addIfNotPresent(StPn.getStyleClass(), JMetroStyleClass.UNDERLINE_TAB_PANE);
 
 			CheckBox selecteAllCheckBox = new CheckBox();
@@ -1830,10 +1864,11 @@ public class SWC {
 					SWIFT_FILES sw = Achive.getSelectionModel().getSelectedItem();
 					if (sw != null) {
 						try {
-							PreparedStatement prp = conn.prepareStatement("select SWFILE from SWIFT_FILES t where t.ID = ?");
+							PreparedStatement prp = conn
+									.prepareStatement("select SWFILE from SWIFT_FILES t where t.ID = ?");
 							prp.setInt(1, sw.getID());
 							ResultSet rs = prp.executeQuery();
-							if(rs.next()) {
+							if (rs.next()) {
 								Blob blob = rs.getBlob("SWFILE");
 								int blobLength = (int) blob.length();
 								byte[] blobAsBytes = blob.getBytes(1, blobLength);
@@ -1843,7 +1878,7 @@ public class SWC {
 							}
 							rs.close();
 							prp.close();
-							
+
 						} catch (Exception e) {
 							SWLogger.error(ExceptionUtils.getStackTrace(e));
 							ErrorMessage(ExceptionUtils.getStackTrace(e));
@@ -1910,8 +1945,7 @@ public class SWC {
 					}
 				}
 			});
-			
-			
+
 			// Тип архива
 			ArchType.getItems().addAll("IN", "OUT", "ВСЕ");
 			// *****************************Архив IN-OUT********************
@@ -1926,7 +1960,7 @@ public class SWC {
 			OPERdb.setCellValueFactory(cellData -> cellData.getValue().OPERProperty());
 			REFdb.setCellValueFactory(cellData -> cellData.getValue().REFProperty());
 
-			DOCDATEdb.setColumnFilter(new DateColumnFilter<>()); 
+			DOCDATEdb.setColumnFilter(new DateColumnFilter<>());
 			FILE_NAMEdb.setColumnFilter(new PatternColumnFilter<>());
 			OPERdb.setColumnFilter(new PatternColumnFilter<>());
 			Typedb.setColumnFilter(new PatternColumnFilter<>());
@@ -2131,17 +2165,19 @@ public class SWC {
 			 * Auto Refresh Запуск задачи через одну секунду
 			 */
 //			RunProcess("INOUT");
+			SWIFT_VTB.setDisable(true);
+			BK_VTB.setDisable(true);
 		} catch (Exception e) {
 			SWLogger.error(ExceptionUtils.getStackTrace(e));
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
-    @FXML
-    void RefreshTable(ActionEvent event) {
-    	InitTable();
-    }
-    
+	@FXML
+	void RefreshTable(ActionEvent event) {
+		InitTable();
+	}
+
 	/**
 	 * Выражение CRON, не используется
 	 */
@@ -2176,86 +2212,71 @@ public class SWC {
 //				@Override
 //				public Object call() throws Exception {
 
-					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
-					String dt1_ = "";
-					String dt2_ = "";
-					String in_out = "";
+			String dt1_ = "";
+			String dt2_ = "";
+			String in_out = "";
 
-					if (dt1.getValue() != null) {
-						dt1_ = "and trunc(CR_DT) >= to_date('" + dt1.getValue().format(formatter)
-								+ "','dd.mm.yyyy') \r\n";
-					}
+			if (dt1.getValue() != null) {
+				dt1_ = "and trunc(CR_DT) >= to_date('" + dt1.getValue().format(formatter) + "','dd.mm.yyyy') \r\n";
+			}
 
-					if (dt2.getValue() != null) {
-						dt2_ = "and trunc(CR_DT) <= to_date('" + dt2.getValue().format(formatter)
-								+ "','dd.mm.yyyy') \r\n";
-					}
+			if (dt2.getValue() != null) {
+				dt2_ = "and trunc(CR_DT) <= to_date('" + dt2.getValue().format(formatter) + "','dd.mm.yyyy') \r\n";
+			}
 
-					if (ArchType.getValue() != null && !ArchType.getValue().equals("ВСЕ")) {
-						in_out = "and upper(VECTOR) = '" + ArchType.getValue() + "' \r\n";
-					}
+			if (ArchType.getValue() != null && !ArchType.getValue().equals("ВСЕ")) {
+				in_out = "and upper(VECTOR) = '" + ArchType.getValue() + "' \r\n";
+			}
 
-					String selectStmt = "select id,\r\n"
-							+ "       filename,\r\n"
-							+ "       dt_ch,\r\n"
-							+ "       swfile,\r\n"
-							+ "       oper,\r\n"
-							+ "       cr_dt,\r\n"
-							+ "       mttype,\r\n"
-							+ "       mtname,\r\n"
-							+ "       cur,\r\n"
-							+ "       vector,\r\n"
-							+ "       nvl(summ, '') summ,\r\n"
-							+ "       docdate,\r\n"
-							+ "       REF\r\n"
-							+ "  from SWIFT_FILES\r\n"
-							+ " where 1 = 1\r\n"
-							+ dt1_
-							+ dt2_ + in_out + "order by CR_DT desc";
-					PreparedStatement prepStmt = conn.prepareStatement(selectStmt);
-					ResultSet rs = prepStmt.executeQuery();
-					ObservableList<SWIFT_FILES> cus_list = FXCollections.observableArrayList();
-					DateTimeFormatter dtformatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
-					while (rs.next()) {
-						SWIFT_FILES list = new SWIFT_FILES();
+			String selectStmt = "select id,\r\n" + "       filename,\r\n" + "       dt_ch,\r\n" + "       swfile,\r\n"
+					+ "       oper,\r\n" + "       cr_dt,\r\n" + "       mttype,\r\n" + "       mtname,\r\n"
+					+ "       cur,\r\n" + "       vector,\r\n" + "       nvl(summ, '') summ,\r\n"
+					+ "       docdate,\r\n" + "       REF\r\n" + "  from SWIFT_FILES\r\n" + " where 1 = 1\r\n" + dt1_
+					+ dt2_ + in_out + "order by CR_DT desc";
+			PreparedStatement prepStmt = conn.prepareStatement(selectStmt);
+			ResultSet rs = prepStmt.executeQuery();
+			ObservableList<SWIFT_FILES> cus_list = FXCollections.observableArrayList();
+			DateTimeFormatter dtformatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+			while (rs.next()) {
+				SWIFT_FILES list = new SWIFT_FILES();
 
-						list.setDOCDATE((rs.getDate("DOCDATE") != null) ? LocalDate.parse(
-								new SimpleDateFormat("dd.MM.yyyy").format(rs.getDate("DOCDATE")), formatter) : null);
-						list.setSUMM(String.valueOf(rs.getInt("SUMM")));
-						list.setVECTOR(rs.getString("VECTOR"));
-						list.setCUR(rs.getString("CUR"));
-						list.setMTNAME(rs.getString("MTNAME"));
-						list.setMTTYPE(rs.getString("MTTYPE"));
-						list.setCR_DT((rs.getDate("CR_DT") != null) ? LocalDateTime.parse(
-								new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("CR_DT")), dtformatter)
-								: null);
-						list.setOPER(rs.getString("OPER"));
-						list.setDT_CH((rs.getDate("DT_CH") != null) ? LocalDateTime.parse(
-								new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("DT_CH")), dtformatter)
-								: null);
-						list.setFILENAME(rs.getString("FILENAME"));
-						list.setID(rs.getInt("ID"));
-						list.setREF(rs.getString("REF"));
-						cus_list.add(list);
-					}
-					prepStmt.close();
-					rs.close();
-					Achive.setItems(cus_list);
+				list.setDOCDATE((rs.getDate("DOCDATE") != null)
+						? LocalDate.parse(new SimpleDateFormat("dd.MM.yyyy").format(rs.getDate("DOCDATE")), formatter)
+						: null);
+				list.setSUMM(String.valueOf(rs.getInt("SUMM")));
+				list.setVECTOR(rs.getString("VECTOR"));
+				list.setCUR(rs.getString("CUR"));
+				list.setMTNAME(rs.getString("MTNAME"));
+				list.setMTTYPE(rs.getString("MTTYPE"));
+				list.setCR_DT((rs.getDate("CR_DT") != null) ? LocalDateTime.parse(
+						new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("CR_DT")), dtformatter) : null);
+				list.setOPER(rs.getString("OPER"));
+				list.setDT_CH((rs.getDate("DT_CH") != null) ? LocalDateTime.parse(
+						new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("DT_CH")), dtformatter) : null);
+				list.setFILENAME(rs.getString("FILENAME"));
+				list.setID(rs.getInt("ID"));
+				list.setREF(rs.getString("REF"));
+				cus_list.add(list);
+			}
+			prepStmt.close();
+			rs.close();
+			Achive.setItems(cus_list);
 
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							TableFilter<SWIFT_FILES> tableFilter = TableFilter.forTableView(Achive).apply();
-							tableFilter.setSearchStrategy((input, target) -> {
-								try {
-									return target.toLowerCase().contains(input.toLowerCase());
-								} catch (Exception e) {
-									return false;
-								}
-							});
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					TableFilter<SWIFT_FILES> tableFilter = TableFilter.forTableView(Achive).apply();
+					tableFilter.setSearchStrategy((input, target) -> {
+						try {
+							return target.toLowerCase().contains(input.toLowerCase());
+						} catch (Exception e) {
+							return false;
 						}
 					});
+				}
+			});
 
 //					return null;
 //				}
@@ -2301,6 +2322,7 @@ public class SWC {
 			return cell;
 		});
 	}
+
 	@FXML
 	void REFR_CONV(ActionEvent event) {
 		try {
@@ -2310,48 +2332,49 @@ public class SWC {
 //				@Override
 //				public Object call() throws Exception {
 
-					PreparedStatement prepStmt = conn.prepareStatement("select * from VTB_MT202_CONV t order by ID desc");
-					ResultSet rs = prepStmt.executeQuery();
-					ObservableList<VTB_MT202_CONV> cus_list = FXCollections.observableArrayList();
-					DateTimeFormatter dtformatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
-					while (rs.next()) {
-						VTB_MT202_CONV list = new VTB_MT202_CONV();
-						list.setTRN_ANUM(rs.getInt("TRN_ANUM"));
-						list.setTRN_NUM(rs.getInt("TRN_NUM"));
-						list.setREF(rs.getString("REF"));
-						list.setF21(rs.getString("F21"));
-						list.setFL32A_SUM(rs.getString("FL32A_SUM"));
-						list.setFL32A_CUR(rs.getString("FL32A_CUR"));
-						list.setFL32A_DATE(rs.getString("FL32A_DATE"));
-						list.setF53B(rs.getString("F53B"));
-						list.setF58A(rs.getString("F58A"));
-						list.setF72(rs.getString("F72"));
-						list.setID(rs.getInt("ID"));
-						list.setDATETIME((rs.getDate("DATETIME") != null) ? LocalDateTime.parse(
+			PreparedStatement prepStmt = conn.prepareStatement("select * from VTB_MT202_CONV t order by ID desc");
+			ResultSet rs = prepStmt.executeQuery();
+			ObservableList<VTB_MT202_CONV> cus_list = FXCollections.observableArrayList();
+			DateTimeFormatter dtformatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+			while (rs.next()) {
+				VTB_MT202_CONV list = new VTB_MT202_CONV();
+				list.setTRN_ANUM(rs.getInt("TRN_ANUM"));
+				list.setTRN_NUM(rs.getInt("TRN_NUM"));
+				list.setREF(rs.getString("REF"));
+				list.setF21(rs.getString("F21"));
+				list.setFL32A_SUM(rs.getString("FL32A_SUM"));
+				list.setFL32A_CUR(rs.getString("FL32A_CUR"));
+				list.setFL32A_DATE(rs.getString("FL32A_DATE"));
+				list.setF53B(rs.getString("F53B"));
+				list.setF58A(rs.getString("F58A"));
+				list.setF72(rs.getString("F72"));
+				list.setID(rs.getInt("ID"));
+				list.setDATETIME((rs.getDate("DATETIME") != null)
+						? LocalDateTime.parse(
 								new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("DATETIME")), dtformatter)
-								: null);
-						list.setOPER(rs.getString("OPER"));
-						list.setFL58A_DETAIL(rs.getString("FL58A_DETAIL"));
+						: null);
+				list.setOPER(rs.getString("OPER"));
+				list.setFL58A_DETAIL(rs.getString("FL58A_DETAIL"));
 
-						cus_list.add(list);
-					}
-					prepStmt.close();
-					rs.close();
-					CONV_TBL.setItems(cus_list);
+				cus_list.add(list);
+			}
+			prepStmt.close();
+			rs.close();
+			CONV_TBL.setItems(cus_list);
 
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							TableFilter<VTB_MT202_CONV> tableFilter = TableFilter.forTableView(CONV_TBL).apply();
-							tableFilter.setSearchStrategy((input, target) -> {
-								try {
-									return target.toLowerCase().contains(input.toLowerCase());
-								} catch (Exception e) {
-									return false;
-								}
-							});
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					TableFilter<VTB_MT202_CONV> tableFilter = TableFilter.forTableView(CONV_TBL).apply();
+					tableFilter.setSearchStrategy((input, target) -> {
+						try {
+							return target.toLowerCase().contains(input.toLowerCase());
+						} catch (Exception e) {
+							return false;
 						}
 					});
+				}
+			});
 
 //					return null;
 //				}
@@ -2376,7 +2399,7 @@ public class SWC {
 			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
-	
+
 	/**
 	 * Получить расширение файла
 	 * 
@@ -2520,11 +2543,11 @@ public class SWC {
 							list.setSUMM(getMtAmount(child.getAbsolutePath()));
 							list.setMTTYPE(getMT(getMtType(child.getAbsolutePath()), "TYPE"));
 							list.setMTNAME(getMT(getMtType(child.getAbsolutePath()), "NAME"));
-							
+
 							list.setDOCDATE((getMtDate(child.getAbsolutePath()) != null)
 									? LocalDate.parse(getMtDate(child.getAbsolutePath()), formatter)
 									: null);
-							
+
 							list.setPATH(child.getAbsolutePath());
 							// Перебор отмеченных
 							for (int i = 0; i < STMT.getItems().size(); i++) {
@@ -2667,11 +2690,10 @@ public class SWC {
 //				Task<Object> task = new Task<Object>() {
 //					@Override
 //					public Object call() throws Exception {
-						SWIFT_FILES selrow = STMT.getSelectionModel().getSelectedItem();
-						InputStream inputstream = new FileInputStream(
-								System.getenv(FolderName) + "/" + selrow.getFILENAME());
+				SWIFT_FILES selrow = STMT.getSelectionModel().getSelectedItem();
+				InputStream inputstream = new FileInputStream(System.getenv(FolderName) + "/" + selrow.getFILENAME());
 
-						new SwiftPrintFile().showReport(inputstream);
+				new SwiftPrintFile().showReport(inputstream);
 //
 //						return null;
 //					}
@@ -2712,25 +2734,25 @@ public class SWC {
 //					@Override
 //					public Object call() throws Exception {
 
-						SWIFT_FILES selrow = Achive.getSelectionModel().getSelectedItem();
+				SWIFT_FILES selrow = Achive.getSelectionModel().getSelectedItem();
 
-						String sel = "select SWFILE from SWIFT_FILES where ID = ?";
-						PreparedStatement prepStmt = conn.prepareStatement(sel);
-						prepStmt.setInt(1, selrow.getID());
-						ResultSet rs = prepStmt.executeQuery();
+				String sel = "select SWFILE from SWIFT_FILES where ID = ?";
+				PreparedStatement prepStmt = conn.prepareStatement(sel);
+				prepStmt.setInt(1, selrow.getID());
+				ResultSet rs = prepStmt.executeQuery();
 
-						if (rs.next()) {
-							Blob blob = rs.getBlob("SWFILE");
-							int blobLength = (int) blob.length();
-							byte[] blobAsBytes = blob.getBytes(1, blobLength);
-							// release the blob and free up memory. (since JDBC 4.0)
-							blob.free();
-							InputStream targetStream = new ByteArrayInputStream(blobAsBytes);
-							new SwiftPrintFile().showReport(targetStream);
-							targetStream.close();
-						}
-						rs.close();
-						prepStmt.close();
+				if (rs.next()) {
+					Blob blob = rs.getBlob("SWFILE");
+					int blobLength = (int) blob.length();
+					byte[] blobAsBytes = blob.getBytes(1, blobLength);
+					// release the blob and free up memory. (since JDBC 4.0)
+					blob.free();
+					InputStream targetStream = new ByteArrayInputStream(blobAsBytes);
+					new SwiftPrintFile().showReport(targetStream);
+					targetStream.close();
+				}
+				rs.close();
+				prepStmt.close();
 
 //						return null;
 //					}

@@ -67,11 +67,11 @@ public class Main extends Application {
 				ConvVal();
 			}
 
-//			Connect.connectionURL_ = "10.111.64.21:1521/ODB";
-//			Connect.userID_ = "SAIDP";
-//			Connect.userPassword_ = "";
-//			DBUtil.dbConnect();
-//			initRootLayout();
+			Connect.connectionURL_ = "10.111.64.21:1521/ODB";
+			Connect.userID_ = "SAIDP";
+			Connect.userPassword_ = "vector165";
+			DBUtil.dbConnect();
+			initRootLayout();
 //			showFirst();
 //			swift2();
 //			ConvVal();
@@ -264,7 +264,7 @@ public class Main extends Application {
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("SWIFT");
 			stage.initOwner(stage_);
-			stage.setResizable(false);
+			stage.setResizable(true);
 
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				@Override
