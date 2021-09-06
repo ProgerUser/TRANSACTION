@@ -4,8 +4,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -13,7 +15,7 @@ import javafx.beans.property.StringProperty;
 
 public class SWIFT_FILES {
 	private BooleanProperty CHK;/* Сумма */
-	private StringProperty SUMM;/* Сумма */
+	private DoubleProperty SUMM;/* Сумма */
 	private StringProperty VECTOR;/* Направление */
 	private StringProperty CUR;/* Валюта */
 	private StringProperty MTNAME;/* Название MT */
@@ -31,7 +33,7 @@ public class SWIFT_FILES {
 		this.REF = new SimpleStringProperty();
 		this.PATH = new SimpleStringProperty();
 		this.CHK = new SimpleBooleanProperty();
-		this.SUMM = new SimpleStringProperty();
+		this.SUMM = new SimpleDoubleProperty();
 		this.VECTOR = new SimpleStringProperty();
 		this.CUR = new SimpleStringProperty();
 		this.MTNAME = new SimpleStringProperty();
@@ -80,7 +82,7 @@ public class SWIFT_FILES {
 		this.CHK.set(CHK);
 	}
 
-	public void setSUMM(String SUMM) {
+	public void setSUMM(Double SUMM) {
 		this.SUMM.set(SUMM);
 	}
 
@@ -120,7 +122,7 @@ public class SWIFT_FILES {
 		this.ID.set(ID);
 	}
 
-	public String getSUMM() {
+	public Double getSUMM() {
 		return SUMM.get();
 	}
 
@@ -164,7 +166,7 @@ public class SWIFT_FILES {
 		return ID.get();
 	}
 
-	public StringProperty SUMMProperty() {
+	public DoubleProperty SUMMProperty() {
 		return SUMM;
 	}
 

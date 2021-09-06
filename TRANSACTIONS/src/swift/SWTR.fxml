@@ -417,18 +417,18 @@
                      <center>
                         <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
                            <items>
-                              <XTableView fx:id="Achive" editable="true" styleClass="mylistview" stylesheets="/TableView.css" tableMenuButtonVisible="true">
+                              <TableView fx:id="Achive" editable="true" styleClass="mylistview" stylesheets="/TableView.css" tableMenuButtonVisible="true">
                                  <columns>
-                                    <XTableColumn fx:id="MTTYPEdb" prefWidth="100.0" text="Тип SWIFT" />
-                                    <XTableColumn fx:id="MTNAMEdb" prefWidth="250.0" text="Название документа" />
-                                    <XTableColumn fx:id="Typedb" prefWidth="75.0" text="Вх/Исх" />
-                                    <XTableColumn fx:id="DOCDATEdb" prefWidth="150.0" text="Дата документа" />
-                                    <XTableColumn fx:id="CURdb" prefWidth="100.0" text="Валюта" />
-                                    <XTableColumn fx:id="SUMMdb" prefWidth="100.0" text="Сумма" />
-                                    <XTableColumn fx:id="FILE_NAMEdb" prefWidth="250.0" text="Название файла" />
-                                    <XTableColumn fx:id="DT_CHdb" prefWidth="150.0" text="Дата изменения" />
-                                    <XTableColumn fx:id="OPERdb" prefWidth="75.0" text="Пользователь" />
-                                    <XTableColumn fx:id="REFdb" prefWidth="120.0" text="Референс" />
+                                    <TableColumn fx:id="MTTYPEdb" prefWidth="100.0" text="Тип SWIFT" />
+                                    <TableColumn fx:id="MTNAMEdb" prefWidth="250.0" text="Название документа" />
+                                    <TableColumn fx:id="Typedb" prefWidth="75.0" text="Вх/Исх" />
+                                    <TableColumn fx:id="DOCDATEdb" prefWidth="150.0" text="Дата документа" />
+                                    <TableColumn fx:id="CURdb" prefWidth="100.0" text="Валюта" />
+                                    <TableColumn fx:id="SUMMdb" prefWidth="100.0" text="Сумма" />
+                                    <TableColumn fx:id="FILE_NAMEdb" prefWidth="250.0" text="Название файла" />
+                                    <TableColumn fx:id="DT_CHdb" prefWidth="150.0" text="Дата изменения" />
+                                    <TableColumn fx:id="OPERdb" prefWidth="75.0" text="Пользователь" />
+                                    <TableColumn fx:id="REFdb" prefWidth="120.0" text="Референс" />
                                  </columns>
                                  <contextMenu>
                                     <ContextMenu>
@@ -439,7 +439,7 @@
                                        </items>
                                     </ContextMenu>
                                  </contextMenu>
-                              </XTableView>
+                              </TableView>
                               <TextArea fx:id="FileTextAreaDB" editable="false" styleClass="mylistview" stylesheets="/TableView.css">
                                  <font>
                                     <Font size="14.0" />

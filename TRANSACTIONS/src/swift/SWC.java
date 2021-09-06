@@ -23,6 +23,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -47,15 +50,6 @@ import org.controlsfx.control.table.TableFilter;
 import org.mozilla.universalchardet.UniversalDetector;
 
 import com.google.common.io.Files;
-import com.jyloo.syntheticafx.ComparableColumnFilter;
-import com.jyloo.syntheticafx.DateColumnFilter;
-import com.jyloo.syntheticafx.PatternColumnFilter;
-import com.jyloo.syntheticafx.SyntheticaFX;
-import com.jyloo.syntheticafx.TextFormatterFactory;
-import com.jyloo.syntheticafx.XTableColumn;
-import com.jyloo.syntheticafx.XTableView;
-import com.jyloo.syntheticafx.filter.ComparableFilterModel;
-import com.jyloo.syntheticafx.filter.ComparisonType;
 import com.prowidesoftware.swift.model.field.Field32A;
 import com.prowidesoftware.swift.model.field.Field50K;
 import com.prowidesoftware.swift.model.field.Field52D;
@@ -119,6 +113,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
+import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.LocalDateStringConverter;
 import javafx.util.converter.LocalDateTimeStringConverter;
 
@@ -290,7 +285,7 @@ public class SWC {
 	 * Сумма документа, если MT103...
 	 */
 	@FXML
-	private TableColumn<SWIFT_FILES, String> SUMM;
+	private TableColumn<SWIFT_FILES, Double> SUMM;
 
 	/**
 	 * Название операции
@@ -327,55 +322,55 @@ public class SWC {
 	 * Валюта
 	 */
 	@FXML
-	private XTableColumn<SWIFT_FILES, String> CURdb;
+	private TableColumn<SWIFT_FILES, String> CURdb;
 
 	/**
 	 * Сумма документа, если MT103...
 	 */
 	@FXML
-	private XTableColumn<SWIFT_FILES, String> SUMMdb;
+	private TableColumn<SWIFT_FILES, Double> SUMMdb;
 
 	/**
 	 * Название операции
 	 */
 	@FXML
-	private XTableColumn<SWIFT_FILES, String> MTNAMEdb;
+	private TableColumn<SWIFT_FILES, String> MTNAMEdb;
 
 	/**
 	 * MT.., из базы
 	 */
 	@FXML
-	private XTableColumn<SWIFT_FILES, String> MTTYPEdb;
+	private TableColumn<SWIFT_FILES, String> MTTYPEdb;
 
 	/**
 	 * Дата создания файла
 	 */
 	@FXML
-	private XTableColumn<SWIFT_FILES, LocalDateTime> DT_CHdb;
+	private TableColumn<SWIFT_FILES, LocalDateTime> DT_CHdb;
 
 	/**
 	 * Дата документа
 	 */
 	@FXML
-	private XTableColumn<SWIFT_FILES, LocalDate> DOCDATEdb;
+	private TableColumn<SWIFT_FILES, LocalDate> DOCDATEdb;
 
 	/**
 	 * Название файла
 	 */
 	@FXML
-	private XTableColumn<SWIFT_FILES, String> FILE_NAMEdb;
+	private TableColumn<SWIFT_FILES, String> FILE_NAMEdb;
 
 	/**
 	 * IN-OUT база
 	 */
 	@FXML
-	private XTableColumn<SWIFT_FILES, String> Typedb;
+	private TableColumn<SWIFT_FILES, String> Typedb;
 
 	@FXML
-	private XTableColumn<SWIFT_FILES, String> OPERdb;
+	private TableColumn<SWIFT_FILES, String> OPERdb;
 
 	@FXML
-	private XTableColumn<SWIFT_FILES, String> REFdb;
+	private TableColumn<SWIFT_FILES, String> REFdb;
 	/**
 	 * Таблица Вх-Исх каталогов
 	 */
@@ -386,7 +381,7 @@ public class SWC {
 	 * Таблица Архива
 	 */
 	@FXML
-	private XTableView<SWIFT_FILES> Achive;
+	private TableView<SWIFT_FILES> Achive;
 
 	@FXML
 	private TableColumn<VAVAL, String> CATTR_NAME;
@@ -404,18 +399,19 @@ public class SWC {
 	private RadioButton BK_VTB;
 
 	@FXML
-    void OpenAbsForm(ActionEvent event) {
+	void OpenAbsForm(ActionEvent event) {
 		try {
 			if (Achive.getSelectionModel().getSelectedItem() != null) {
 				SWIFT_FILES selrow = Achive.getSelectionModel().getSelectedItem();
-				if(selrow.getVECTOR().equals("IN")) {
+				if (selrow.getVECTOR().equals("IN")) {
 					PrgInd.setVisible(true);
 					Task<Object> task = new Task<Object>() {
 						@Override
 						public Object call() throws Exception {
 							try {
-								String call = "ifrun60.exe I:/SWIFT/IM_MSG.fmx " + Connect.userID_ + "/" + Connect.userPassword_
-										+ "@ODB WHERE_CLAUSE=\"" + "CREF = '"+selrow.getREF() + "'\"";
+								String call = "ifrun60.exe I:/SWIFT/IM_MSG.fmx " + Connect.userID_ + "/"
+										+ Connect.userPassword_ + "@ODB WHERE_CLAUSE=\"" + "CREF = '" + selrow.getREF()
+										+ "'\"";
 								ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", call);
 								System.out.println(call);
 								// System.out.println(call);
@@ -441,14 +437,15 @@ public class SWC {
 					task.setOnSucceeded(e -> PrgInd.setVisible(false));
 
 					exec.execute(task);
-				}else if(selrow.getVECTOR().equals("OUT")) {
+				} else if (selrow.getVECTOR().equals("OUT")) {
 					PrgInd.setVisible(true);
 					Task<Object> task = new Task<Object>() {
 						@Override
 						public Object call() throws Exception {
 							try {
-								String call = "ifrun60.exe I:/SWIFT/INT_C_S.fmx " + Connect.userID_ + "/" + Connect.userPassword_
-										+ "@ODB ARCHIVE=\"ARCHIVE\" WHERE_STR=\"" + "CSWB_F20 = '"+selrow.getREF() + "'\"";
+								String call = "ifrun60.exe I:/SWIFT/INT_C_S.fmx " + Connect.userID_ + "/"
+										+ Connect.userPassword_ + "@ODB ARCHIVE=\"ARCHIVE\" WHERE_STR=\""
+										+ "CSWB_F20 = '" + selrow.getREF() + "'\"";
 								ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", call);
 								System.out.println(call);
 								// System.out.println(call);
@@ -481,41 +478,41 @@ public class SWC {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
 			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
-    }
-	
+	}
+
 	@FXML
-    void OpenRelation(ActionEvent event) {
+	void OpenRelation(ActionEvent event) {
 		try {
 			if (Achive.getSelectionModel().getSelectedItem() != null) {
-				
+
 				SWIFT_FILES selrow = Achive.getSelectionModel().getSelectedItem();
-				
+
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-				
-				PreparedStatement prepStmt = conn.prepareStatement("select *\r\n"
-						+ "  from swift_files t\r\n"
+
+				PreparedStatement prepStmt = conn.prepareStatement("select *\r\n" + "  from swift_files t\r\n"
 						+ " where utl_raw.cast_to_varchar2(swfile) like '%' || ? || '%'");
-				prepStmt.setString(1,selrow.getREF());
-				
+				prepStmt.setString(1, selrow.getREF());
+
 				ResultSet rs = prepStmt.executeQuery();
 				ObservableList<SWIFT_FILES> cus_list = FXCollections.observableArrayList();
 				DateTimeFormatter dtformatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 				while (rs.next()) {
 					SWIFT_FILES list = new SWIFT_FILES();
 
-					list.setDOCDATE((rs.getDate("DOCDATE") != null)
-							? LocalDate.parse(new SimpleDateFormat("dd.MM.yyyy").format(rs.getDate("DOCDATE")), formatter)
-							: null);
-					list.setSUMM(String.valueOf(rs.getInt("SUMM")));
+					list.setDOCDATE((rs.getDate("DOCDATE") != null) ? LocalDate
+							.parse(new SimpleDateFormat("dd.MM.yyyy").format(rs.getDate("DOCDATE")), formatter) : null);
+					list.setSUMM(rs.getDouble("SUMM"));
 					list.setVECTOR(rs.getString("VECTOR"));
 					list.setCUR(rs.getString("CUR"));
 					list.setMTNAME(rs.getString("MTNAME"));
 					list.setMTTYPE(rs.getString("MTTYPE"));
-					list.setCR_DT((rs.getDate("CR_DT") != null) ? LocalDateTime.parse(
-							new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("CR_DT")), dtformatter) : null);
+					list.setCR_DT((rs.getDate("CR_DT") != null) ? LocalDateTime
+							.parse(new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("CR_DT")), dtformatter)
+							: null);
 					list.setOPER(rs.getString("OPER"));
-					list.setDT_CH((rs.getDate("DT_CH") != null) ? LocalDateTime.parse(
-							new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("DT_CH")), dtformatter) : null);
+					list.setDT_CH((rs.getDate("DT_CH") != null) ? LocalDateTime
+							.parse(new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("DT_CH")), dtformatter)
+							: null);
 					list.setFILENAME(rs.getString("FILENAME"));
 					list.setID(rs.getInt("ID"));
 					list.setREF(rs.getString("REF"));
@@ -538,13 +535,31 @@ public class SWC {
 						});
 					}
 				});
+				
+				NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
+				DecimalFormatSymbols decimalFormatSymbols = ((DecimalFormat) currencyFormat).getDecimalFormatSymbols();
+				decimalFormatSymbols.setCurrencySymbol("");
+				((DecimalFormat) currencyFormat).setDecimalFormatSymbols(decimalFormatSymbols);
+				
+				SUMMdb.setCellFactory(tc -> new TableCell<SWIFT_FILES, Double>() {
+
+					@Override
+					protected void updateItem(Double price, boolean empty) {
+						super.updateItem(price, empty);
+						if (empty) {
+							setText(null);
+						} else {
+							setText(currencyFormat.format(price));
+						}
+					}
+				});
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
 			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
-    }
+	}
 
 	/**
 	 * Печать статуса
@@ -1616,37 +1631,37 @@ public class SWC {
 	}
 
 	@FXML
-	private XTableView<VTB_MT202_CONV> CONV_TBL;
+	private TableView<VTB_MT202_CONV> CONV_TBL;
 
 	@FXML
-	private XTableColumn<VTB_MT202_CONV, Integer> CONV_ID;
+	private TableColumn<VTB_MT202_CONV, Integer> CONV_ID;
 
 	@FXML
-	private XTableColumn<VTB_MT202_CONV, String> CONV_REF;
+	private TableColumn<VTB_MT202_CONV, String> CONV_REF;
 
 	@FXML
-	private XTableColumn<VTB_MT202_CONV, String> CONV_FL32A_DATE;
+	private TableColumn<VTB_MT202_CONV, String> CONV_FL32A_DATE;
 
 	@FXML
-	private XTableColumn<VTB_MT202_CONV, String> CONV_FL32A_CUR;
+	private TableColumn<VTB_MT202_CONV, String> CONV_FL32A_CUR;
 
 	@FXML
-	private XTableColumn<VTB_MT202_CONV, String> CONV_FL32A_SUM;
+	private TableColumn<VTB_MT202_CONV, String> CONV_FL32A_SUM;
 
 	@FXML
-	private XTableColumn<VTB_MT202_CONV, String> CONV_F53B;
+	private TableColumn<VTB_MT202_CONV, String> CONV_F53B;
 
 	@FXML
-	private XTableColumn<VTB_MT202_CONV, String> CONV_F58A;
+	private TableColumn<VTB_MT202_CONV, String> CONV_F58A;
 
 	@FXML
-	private XTableColumn<VTB_MT202_CONV, String> CONV_F72;
+	private TableColumn<VTB_MT202_CONV, String> CONV_F72;
 
 	@FXML
-	private XTableColumn<VTB_MT202_CONV, LocalDateTime> CONV_DATETIME;
+	private TableColumn<VTB_MT202_CONV, LocalDateTime> CONV_DATETIME;
 
 	@FXML
-	private XTableColumn<VTB_MT202_CONV, String> CONV_OPER;
+	private TableColumn<VTB_MT202_CONV, String> CONV_OPER;
 	@FXML
 	private TextArea FileTextAreaDB;
 
@@ -1706,7 +1721,7 @@ public class SWC {
 		try {
 			dbConnect();
 
-			SyntheticaFX.init("com.jyloo.syntheticafx.SyntheticaFXModena");
+			//SyntheticaFX.init("com.jyloo.syntheticafx.SyntheticaFXModena");
 
 			CONV_ID.setCellValueFactory(cellData -> cellData.getValue().IDProperty().asObject());
 			CONV_REF.setCellValueFactory(cellData -> cellData.getValue().REFProperty());
@@ -1721,18 +1736,18 @@ public class SWC {
 
 			CellDateFormatD(CONV_DATETIME);
 
-			ObservableList rules = FXCollections.observableArrayList(ComparisonType.values());
+//			ObservableList rules = FXCollections.observableArrayList(ComparisonType.values());
 
-			CONV_ID.setColumnFilter(new ComparableColumnFilter(new ComparableFilterModel(rules),
-					TextFormatterFactory.LONG_TEXTFORMATTER_FACTORY));
-			CONV_REF.setColumnFilter(new PatternColumnFilter<>());
-			CONV_FL32A_DATE.setColumnFilter(new PatternColumnFilter<>());
-			CONV_FL32A_CUR.setColumnFilter(new PatternColumnFilter<>());
-			CONV_FL32A_SUM.setColumnFilter(new PatternColumnFilter<>());
-			CONV_F53B.setColumnFilter(new PatternColumnFilter<>());
-			CONV_F58A.setColumnFilter(new PatternColumnFilter<>());
-			CONV_F72.setColumnFilter(new PatternColumnFilter<>());
-			CONV_OPER.setColumnFilter(new PatternColumnFilter<>());
+//			CONV_ID.setColumnFilter(new ComparableColumnFilter(new ComparableFilterModel(rules),
+//					TextFormatterFactory.LONG_TEXTFORMATTER_FACTORY));
+//			CONV_REF.setColumnFilter(new PatternColumnFilter<>());
+//			CONV_FL32A_DATE.setColumnFilter(new PatternColumnFilter<>());
+//			CONV_FL32A_CUR.setColumnFilter(new PatternColumnFilter<>());
+//			CONV_FL32A_SUM.setColumnFilter(new PatternColumnFilter<>());
+//			CONV_F53B.setColumnFilter(new PatternColumnFilter<>());
+//			CONV_F58A.setColumnFilter(new PatternColumnFilter<>());
+//			CONV_F72.setColumnFilter(new PatternColumnFilter<>());
+//			CONV_OPER.setColumnFilter(new PatternColumnFilter<>());
 
 			BIK_TRN.setCellValueFactory(cellData -> cellData.getValue().BIK_TRNProperty());
 			SW_TRN.setCellValueFactory(cellData -> cellData.getValue().SW_TRNProperty());
@@ -1912,11 +1927,11 @@ public class SWC {
 
 						if (t1.getId().equals("INOUT")) {
 							// System.out.println("Start task!!!!! " + t1.getId());
-							st.cancel();
-							RunProcess("INOUT");
+							// st.cancel();
+							// RunProcess("INOUT");
 						} else {
 							// System.out.println("Closed task!!!!! " + t1.getId());
-							st.cancel();
+							// st.cancel();
 						}
 					}
 				});
@@ -2042,6 +2057,28 @@ public class SWC {
 
 			// Тип архива
 			ArchType.getItems().addAll("IN", "OUT", "ВСЕ");
+
+//			SUMMdb.setColumnFilter(new ComparableColumnFilter(new ComparableFilterModel(rules),
+//					TextFormatterFactory.LONG_TEXTFORMATTER_FACTORY));
+
+			NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
+			DecimalFormatSymbols decimalFormatSymbols = ((DecimalFormat) currencyFormat).getDecimalFormatSymbols();
+			decimalFormatSymbols.setCurrencySymbol("");
+			((DecimalFormat) currencyFormat).setDecimalFormatSymbols(decimalFormatSymbols);
+			SUMMdb.setCellFactory(tc -> new TableCell<SWIFT_FILES, Double>() {
+
+				@Override
+				protected void updateItem(Double price, boolean empty) {
+					super.updateItem(price, empty);
+					if (empty) {
+						setText(null);
+					} else {
+						setText(currencyFormat.format(price));
+					}
+				}
+			});
+			SUMMdb.setCellValueFactory(cellData -> cellData.getValue().SUMMProperty().asObject());
+
 			// *****************************Архив IN-OUT********************
 			DT_CHdb.setCellValueFactory(cellData -> cellData.getValue().DT_CHProperty());
 			DOCDATEdb.setCellValueFactory(cellData -> cellData.getValue().DOCDATEProperty());
@@ -2049,27 +2086,29 @@ public class SWC {
 			MTTYPEdb.setCellValueFactory(cellData -> cellData.getValue().MTTYPEProperty());
 			MTNAMEdb.setCellValueFactory(cellData -> cellData.getValue().MTNAMEProperty());
 			CURdb.setCellValueFactory(cellData -> cellData.getValue().CURProperty());
-			SUMMdb.setCellValueFactory(cellData -> cellData.getValue().SUMMProperty());
+
 			Typedb.setCellValueFactory(cellData -> cellData.getValue().VECTORProperty());
 			OPERdb.setCellValueFactory(cellData -> cellData.getValue().OPERProperty());
 			REFdb.setCellValueFactory(cellData -> cellData.getValue().REFProperty());
 
-			DOCDATEdb.setColumnFilter(new DateColumnFilter<>());
-			FILE_NAMEdb.setColumnFilter(new PatternColumnFilter<>());
-			OPERdb.setColumnFilter(new PatternColumnFilter<>());
-			Typedb.setColumnFilter(new PatternColumnFilter<>());
-			SUMMdb.setColumnFilter(new PatternColumnFilter<>());
-			CURdb.setColumnFilter(new PatternColumnFilter<>());
-			MTNAMEdb.setColumnFilter(new PatternColumnFilter<>());
-			MTTYPEdb.setColumnFilter(new PatternColumnFilter<>());
-			REFdb.setColumnFilter(new PatternColumnFilter<>());
+//			DOCDATEdb.setColumnFilter(new DateColumnFilter<>());
+//			FILE_NAMEdb.setColumnFilter(new PatternColumnFilter<>());
+//			OPERdb.setColumnFilter(new PatternColumnFilter<>());
+//			Typedb.setColumnFilter(new PatternColumnFilter<>());
+//
+//			CURdb.setColumnFilter(new PatternColumnFilter<>());
+//			MTNAMEdb.setColumnFilter(new PatternColumnFilter<>());
+//			MTTYPEdb.setColumnFilter(new PatternColumnFilter<>());
+//			REFdb.setColumnFilter(new PatternColumnFilter<>());
 			// Редактирование
 			DOCDATEdb.setCellFactory(
 					TextFieldTableCell.<SWIFT_FILES, LocalDate>forTableColumn(new LocalDateStringConverter()));
 			MTTYPEdb.setCellFactory(TextFieldTableCell.forTableColumn());
 			MTNAMEdb.setCellFactory(TextFieldTableCell.forTableColumn());
 			CURdb.setCellFactory(TextFieldTableCell.forTableColumn());
-			SUMMdb.setCellFactory(TextFieldTableCell.forTableColumn());
+
+			SUMMdb.setCellFactory(TextFieldTableCell.<SWIFT_FILES, Double>forTableColumn(new DoubleStringConverter()));
+
 			FILE_NAMEdb.setCellFactory(TextFieldTableCell.forTableColumn());
 			DT_CHdb.setCellFactory(
 					TextFieldTableCell.<SWIFT_FILES, LocalDateTime>forTableColumn(new LocalDateTimeStringConverter()));
@@ -2091,9 +2130,9 @@ public class SWC {
 				}
 			});
 
-			SUMMdb.setOnEditCommit(new EventHandler<CellEditEvent<SWIFT_FILES, String>>() {
+			SUMMdb.setOnEditCommit(new EventHandler<CellEditEvent<SWIFT_FILES, Double>>() {
 				@Override
-				public void handle(CellEditEvent<SWIFT_FILES, String> t) {
+				public void handle(CellEditEvent<SWIFT_FILES, Double> t) {
 					((SWIFT_FILES) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 							.setSUMM(t.getNewValue());
 				}
@@ -2147,14 +2186,20 @@ public class SWC {
 			MTTYPE.setCellValueFactory(cellData -> cellData.getValue().MTTYPEProperty());
 			MTNAME.setCellValueFactory(cellData -> cellData.getValue().MTNAMEProperty());
 			CUR.setCellValueFactory(cellData -> cellData.getValue().CURProperty());
-			SUMM.setCellValueFactory(cellData -> cellData.getValue().SUMMProperty());
+
+			SUMM.setCellValueFactory(cellData -> cellData.getValue().SUMMProperty().asObject());
+
 			// Редактирование
 			DOCDATE.setCellFactory(
 					TextFieldTableCell.<SWIFT_FILES, LocalDate>forTableColumn(new LocalDateStringConverter()));
 			MTTYPE.setCellFactory(TextFieldTableCell.forTableColumn());
 			MTNAME.setCellFactory(TextFieldTableCell.forTableColumn());
 			CUR.setCellFactory(TextFieldTableCell.forTableColumn());
-			SUMM.setCellFactory(TextFieldTableCell.forTableColumn());
+
+			// SUMM.setCellFactory(TextFieldTableCell.forTableColumn());
+
+			SUMM.setCellFactory(TextFieldTableCell.<SWIFT_FILES, Double>forTableColumn(new DoubleStringConverter()));
+
 			FILE_NAME.setCellFactory(TextFieldTableCell.forTableColumn());
 			DT_CH.setCellFactory(
 					TextFieldTableCell.<SWIFT_FILES, LocalDateTime>forTableColumn(new LocalDateTimeStringConverter()));
@@ -2167,9 +2212,9 @@ public class SWC {
 				}
 			});
 
-			SUMM.setOnEditCommit(new EventHandler<CellEditEvent<SWIFT_FILES, String>>() {
+			SUMM.setOnEditCommit(new EventHandler<CellEditEvent<SWIFT_FILES, Double>>() {
 				@Override
-				public void handle(CellEditEvent<SWIFT_FILES, String> t) {
+				public void handle(CellEditEvent<SWIFT_FILES, Double> t) {
 					((SWIFT_FILES) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 							.setSUMM(t.getNewValue());
 				}
@@ -2339,7 +2384,7 @@ public class SWC {
 				list.setDOCDATE((rs.getDate("DOCDATE") != null)
 						? LocalDate.parse(new SimpleDateFormat("dd.MM.yyyy").format(rs.getDate("DOCDATE")), formatter)
 						: null);
-				list.setSUMM(String.valueOf(rs.getInt("SUMM")));
+				list.setSUMM(rs.getDouble("SUMM"));
 				list.setVECTOR(rs.getString("VECTOR"));
 				list.setCUR(rs.getString("CUR"));
 				list.setMTNAME(rs.getString("MTNAME"));
@@ -2372,6 +2417,24 @@ public class SWC {
 				}
 			});
 
+
+			NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
+			DecimalFormatSymbols decimalFormatSymbols = ((DecimalFormat) currencyFormat).getDecimalFormatSymbols();
+			decimalFormatSymbols.setCurrencySymbol("");
+			((DecimalFormat) currencyFormat).setDecimalFormatSymbols(decimalFormatSymbols);
+			
+			SUMMdb.setCellFactory(tc -> new TableCell<SWIFT_FILES, Double>() {
+
+				@Override
+				protected void updateItem(Double price, boolean empty) {
+					super.updateItem(price, empty);
+					if (empty) {
+						setText(null);
+					} else {
+						setText(currencyFormat.format(price));
+					}
+				}
+			});
 //					return null;
 //				}
 //			};
@@ -2396,7 +2459,7 @@ public class SWC {
 		}
 	}
 
-	void CellDateFormatD(XTableColumn<VTB_MT202_CONV, LocalDateTime> tc) {
+	void CellDateFormatD(TableColumn<VTB_MT202_CONV, LocalDateTime> tc) {
 		tc.setCellFactory(column -> {
 			TableCell<VTB_MT202_CONV, LocalDateTime> cell = new TableCell<VTB_MT202_CONV, LocalDateTime>() {
 				private DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
@@ -2634,7 +2697,15 @@ public class SWC {
 							list.setDT_CH(LocalDateTime.parse(format.format(new Date(attr.creationTime().toMillis())),
 									formatterwt));
 							list.setCUR(getMtCur(child.getAbsolutePath()));
-							list.setSUMM(getMtAmount(child.getAbsolutePath()));
+
+							String summs = getMtAmount(child.getAbsolutePath());
+							if (summs != null) {
+								Double summ = Double.parseDouble(summs.replace(",", ".").trim());
+								if (summ != null) {
+									list.setSUMM(summ);
+								}
+							}
+
 							list.setMTTYPE(getMT(getMtType(child.getAbsolutePath()), "TYPE"));
 							list.setMTNAME(getMT(getMtType(child.getAbsolutePath()), "NAME"));
 
@@ -2675,6 +2746,19 @@ public class SWC {
 								}
 							});
 
+							NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
+							SUMM.setCellFactory(tc -> new TableCell<SWIFT_FILES, Double>() {
+
+								@Override
+								protected void updateItem(Double price, boolean empty) {
+									super.updateItem(price, empty);
+									if (empty) {
+										setText(null);
+									} else {
+										setText(currencyFormat.format(price));
+									}
+								}
+							});
 							// clear
 							// dlist.clear();
 						} catch (Exception e) {
