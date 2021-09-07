@@ -23,7 +23,6 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import sb.utils.DbUtil;
@@ -42,88 +41,8 @@ public class RootLayoutController {
 	private URL location;
 
 	@FXML
-	private MenuItem chekreport;
-
-	@FXML
-	private Menu statusbar;
-
-	@FXML
-	private MenuItem adminright;
-
-	@FXML
-	private MenuItem executeamratrans;
-
-	@FXML
-	private MenuItem createpsevdo;
-
-	@FXML
-	private MenuItem seporatepensrf;
-
-	@FXML
-	private MenuItem services;
-
-	@FXML
-	private MenuItem seporatepensra;
-
-	@FXML
-	private MenuItem terminals;
-
-	@FXML
 	private MenuBar menubar;
 
-	@FXML
-	private MenuItem transactlist;
-
-	@FXML
-	private MenuItem print;
-
-	@FXML
-	private Menu administrator;
-
-	@FXML
-	private Menu pensiara;
-
-	@FXML
-	private Menu file;
-
-	@FXML
-	private Menu pensiarf;
-
-	@FXML
-	private MenuItem deals;
-
-	@FXML
-	private MenuItem bankklients;
-
-	@FXML
-	private Menu kash;
-
-	@FXML
-	private MenuItem contactload;
-
-	@FXML
-	private MenuItem exitapp;
-
-	@FXML
-	private MenuItem historyload;
-
-	@FXML
-	private Menu amraterminal;
-
-	@FXML
-	private MenuItem printapmain;
-
-	@FXML
-	private Menu bankklient;
-
-	@FXML
-	private Menu budcode;
-
-	@FXML
-	private Menu swift;
-	
-	@FXML
-	private MenuItem swtr;
 
 	/**
 	 * Для сверки
@@ -393,8 +312,8 @@ public class RootLayoutController {
 		}
 	}
 
-	public void inis() {
-		statusbar.setText(Connect.userID_ + "/" + Connect.connectionURL_);
+	public void inis_() {
+		//statusbar.setText(Connect.userID_ + "/" + Connect.connectionURL_);
 	}
 
 	/**

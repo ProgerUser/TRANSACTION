@@ -34,6 +34,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import sb.utils.DbUtil;
 
 public class EnterController {
 
@@ -115,6 +116,8 @@ public class EnterController {
 			 * "/" + Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
 			 */
 			DBUtil.dbConnect();
+			DbUtil.Db_Connect();
+			
 			Connection conn = DBUtil.conn;
 			sqlStatement = conn.createStatement();
 			String readRecordSQL = "SELECT user FROM dual";
