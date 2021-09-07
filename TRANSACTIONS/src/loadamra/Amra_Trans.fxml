@@ -6,6 +6,7 @@
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.ToolBar?>
@@ -17,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="ap1" stylesheets="@../../borderpane.css" xmlns="http://javafx.com/javafx/8.0.261" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controller.Amra_Transact">
+<BorderPane fx:id="ap1" stylesheets="@../../borderpane.css" xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1" fx:controller="loadamra.Amra_Transact">
 	<center>
 
 	</center>
@@ -40,7 +41,7 @@
 								<Font size="10.0" />
 							</font>
 							<graphic>
-								<FontAwesomeIconView fontSmoothingType="LCD" glyphName="FOLDER_OPEN_ALT" size="15" />
+								<FontAwesomeIconView fontSmoothingType="LCD" glyphName="FOLDER_OPEN_ALT" size="18" />
 							</graphic>
 						</Button>
 
@@ -55,7 +56,7 @@
 								<Font size="10.0" />
 							</font>
 							<graphic>
-								<FontAwesomeIconView fontSmoothingType="LCD" glyphName="COGS" size="15" />
+								<FontAwesomeIconView fontSmoothingType="LCD" glyphName="COGS" size="18" />
 							</graphic>
 						</Button>
 						<Button mnemonicParsing="false" onAction="#Calc_Transact">
@@ -69,9 +70,10 @@
 								<Font size="10.0" />
 							</font>
 							<graphic>
-								<FontAwesomeIconView fontSmoothingType="LCD" glyphName="EXCHANGE" size="15" />
+								<FontAwesomeIconView fontSmoothingType="LCD" glyphName="EXCHANGE" size="18" />
 							</graphic>
 						</Button>
+                  <Separator orientation="VERTICAL" />
 						<Button mnemonicParsing="false" onAction="#del_log">
 							<tooltip>
 								<Tooltip text="Удалить лог">
@@ -83,17 +85,34 @@
 								<Font size="10.0" />
 							</font>
 							<graphic>
-								<FontAwesomeIconView fontSmoothingType="LCD" glyphName="TRASH_ALT" size="15" />
+								<FontAwesomeIconView fontSmoothingType="LCD" glyphName="TRASH_ALT" size="18" />
 							</graphic>
 						</Button>
-						<DatePicker fx:id="date_load" onAction="#view_fn" prefWidth="100.0">
+                  <Separator layoutX="279.0" layoutY="10.0" orientation="VERTICAL" />
+						<DatePicker fx:id="date_load" onAction="#view_fn" prefWidth="120.0">
 							<tooltip>
 								<Tooltip text="Дата загрузки" />
 							</tooltip>
 						</DatePicker>
+                  <Separator layoutX="165.0" layoutY="10.0" orientation="VERTICAL" />
+                  <Button layoutX="132.0" layoutY="10.0" mnemonicParsing="false" onAction="#DelDate">
+                     <tooltip>
+                        <Tooltip text="Удалить дату">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Tooltip>
+                     </tooltip>
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TIMES" size="18" />
+                     </graphic>
+                  </Button>
 					</items>
                <VBox.margin>
-                  <Insets left="-5.0" right="-5.0" top="-5.0" />
+                  <Insets left="-5.0" right="-5.0" />
                </VBox.margin>
 				</ToolBar>
 				<GridPane>

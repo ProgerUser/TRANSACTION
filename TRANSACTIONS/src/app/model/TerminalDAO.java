@@ -183,10 +183,19 @@ public class TerminalDAO {
 		if (dt != null) {
 			ldt = " and trunc(date_time) = to_date('" + ldt_ + "','dd.mm.yyyy')\n";
 		}
-		String selectStmt = "select sess_id,\n" + "       file_name,\n" + "       date_time,\n" + "       fileclob,\n"
-				+ "       case\n" + "         when status = 0 then\n" + "          'Загружен'\n"
-				+ "         when status = 1 then\n" + "          'Разобран'\n" + "         when status = 2 then\n"
-				+ "          'Рассчитан'\n" + "       end status,\n" + "       path,\n"
+		String selectStmt = "select sess_id,\n" + 
+		"       file_name,\n" + 
+				"       date_time,\n" 
+		+"       fileclob,\n"
+				+ "       case\n" + 
+		"         when status = 0 then\n" + 
+				"          'Загружен'\n"
+				+ "         when status = 1 then\n" +
+				"          'Разобран'\n" +
+				"         when status = 2 then\n"
+				+ "          'Рассчитан'\n" + 
+				"       end status,\n" + 
+				"       path,\n"
 				+ "       user_ from Z_SB_FN_SESS_AMRA \n" + "where 1=1" + p_n + ldt + "order by date_time desc";
 
 		// Get ResultSet from dbExecuteQuery method

@@ -1,4 +1,4 @@
-package app.controller;
+package loadamra;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -36,6 +36,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.controlsfx.control.table.TableFilter;
 import org.mozilla.universalchardet.UniversalDetector;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -50,6 +51,7 @@ import app.model.Connect;
 import app.model.FN_SESS_AMRA;
 import app.model.TerminalDAO;
 import app.util.DBUtil;
+import contact.SBRA_LOADF_CONTACT;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -88,6 +90,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import sbalert.Msg;
+import swift.ConvConst;
 import trlist.Tr_Am_View_con;
 import javafx.stage.Stage;
 
@@ -102,6 +106,29 @@ public class Amra_Transact {
 	static int rcff = 0;
 	static int rcft = 0;
 
+	@FXML
+	private void DelDate() {
+		try {
+			date_load.setValue(null);
+			
+			ObservableList<Add_File> empData = TerminalDAO.add_file("", date_load.getValue());
+			// Populate Employees on TableView
+			populate_fn_sess(empData);
+			
+			// add filter
+			TableFilter<Add_File> tableFilter = TableFilter.forTableView(load_file).apply();
+			tableFilter.setSearchStrategy((input, target) -> {
+				try {
+					return target.toLowerCase().contains(input.toLowerCase());
+				} catch (Exception e) {
+					return false;
+				}
+			});
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+	
 	@SuppressWarnings("resource")
 	private static String readFile(String fileName) {
 		try {
@@ -287,7 +314,9 @@ public class Amra_Transact {
 
 	@FXML
 	private void initialize() {
-
+		// fast date
+		new ConvConst().FormatDatePiker(date_load);
+		
 		load_file.setEditable(true);
 		exec = Executors.newCachedThreadPool((runnable) -> {
 			Thread t = new Thread(runnable);

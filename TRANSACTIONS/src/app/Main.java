@@ -68,12 +68,12 @@ public class Main extends Application {
 				ConvVal();
 			}
 
-			Connect.connectionURL_ = "10.111.64.21:1521/ODB";
-			Connect.userID_ = "SAIDP";
-			Connect.userPassword_ = "VECTOR165";
-			DBUtil.dbConnect();
-			initRootLayout();	
-			showFirst();
+//			Connect.connectionURL_ = "10.111.64.21:1521/ODB";
+//			Connect.userID_ = "SAIDP";
+//			Connect.userPassword_ = "";
+//			DBUtil.dbConnect();
+//			initRootLayout();	
+//			showFirst();
 			
 //			swift2();
 //			ConvVal();
@@ -666,16 +666,9 @@ public class Main extends Application {
 	 */
 	public static void Transact_Amra() {
 		try {
-			/*
-			 * FXMLLoader loader = new FXMLLoader();
-			 * loader.setLocation(Main.class.getResource("view/Amra_Trans.fxml"));
-			 * BorderPane employeeOperationsView = (BorderPane) loader.load();
-			 * rootLayout.setCenter(employeeOperationsView);
-			 * 
-			 */
 			Stage stage = new Stage();
 			Parent root;
-			root = FXMLLoader.load(Main.class.getResource("view/Amra_Trans.fxml"));
+			root = FXMLLoader.load(Main.class.getResource("/loadamra/Amra_Trans.fxml"));
 			stage.setScene(new Scene(root));
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("Загрузка транзакции");
