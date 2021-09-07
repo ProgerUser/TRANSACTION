@@ -315,6 +315,7 @@ public class OdbActions {
 	@FXML
 	void Add(ActionEvent event) {
 		try {
+			
 			if (DbUtil.Odb_Action(2l) == 0) {
 				Msg.Message("Нет доступа!");
 				return;
