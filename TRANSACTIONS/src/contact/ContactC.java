@@ -165,8 +165,8 @@ public class ContactC {
 
 	void OpenAbsForm(String load_id) {
 		try {
-			String call = "ifrun60.exe I:/KERNEL/dp_doc.fmx " + Connect.userID_ + "/" + Connect.userPassword_
-					+ "@ODB WHERE=\"" + "ID IN (SELECT TRNNUM_DP FROM SBRA_LOADROW_CONTACT WHERE LOAD_ID = "
+			String call = "ifrun60.exe I:/KERNEL/OPERLIST.fmx " + Connect.userID_ + "/" + Connect.userPassword_
+					+ "@ODB WHERE=\"" + "ITRNNUM IN (SELECT TRNNUM_DP FROM SBRA_LOADROW_CONTACT WHERE LOAD_ID = "
 					+ load_id + ") \"";
 			ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", call);
 			System.out.println(call);
