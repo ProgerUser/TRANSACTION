@@ -45,10 +45,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -108,48 +111,54 @@ public class ContactC {
 			File file = fileChooser.showOpenDialog(null);
 
 			if (file != null) {
-				XSSFWorkbook xlsx = XlsToXlsx(file.getAbsolutePath());
 
-				CallableStatement callStmt = conn.prepareCall("{ call Z_SB_CALC_CONTACT.LOAD(?,?,?,?)}");
-				callStmt.registerOutParameter(1, Types.VARCHAR);
-				callStmt.registerOutParameter(4, Types.VARCHAR);
+				final Alert alert = new Alert(AlertType.CONFIRMATION, "Загрузить файл \"" + file.getName() + "\" ?",
+						ButtonType.YES, ButtonType.NO);
 
-				// xlsx to blob
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				xlsx.write(baos);
-				byte[] byteArray = baos.toByteArray();
-				// add parameters
-				callStmt.setBlob(2, new ByteArrayInputStream(byteArray), byteArray.length);
-				callStmt.setString(3, file.getName());
-				// catch
-				try {
-					callStmt.execute();
-				} catch (Exception e) {
-					Msg.Message(ExceptionUtils.getStackTrace(e));
-					conn.rollback();
+				if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
+					XSSFWorkbook xlsx = XlsToXlsx(file.getAbsolutePath());
+
+					CallableStatement callStmt = conn.prepareCall("{ call Z_SB_CALC_CONTACT.LOAD(?,?,?,?)}");
+					callStmt.registerOutParameter(1, Types.VARCHAR);
+					callStmt.registerOutParameter(4, Types.VARCHAR);
+
+					// xlsx to blob
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					xlsx.write(baos);
+					byte[] byteArray = baos.toByteArray();
+					// add parameters
+					callStmt.setBlob(2, new ByteArrayInputStream(byteArray), byteArray.length);
+					callStmt.setString(3, file.getName());
+					// catch
+					try {
+						callStmt.execute();
+					} catch (Exception e) {
+						Msg.Message(ExceptionUtils.getStackTrace(e));
+						conn.rollback();
+						callStmt.close();
+					}
+					// return
+					String ret = callStmt.getString(1);
+					String load_id = callStmt.getString(4);
+					// check
+					if (ret != null) {
+						// view error
+						ViewError();
+						// roll back
+						conn.rollback();
+						Msg.Message(ret);
+
+					} else {
+						conn.commit();
+						Msg.Message("Файл " + file.getName() + " загружен");
+						// reload
+						LoadTableContact();
+						// view in abs
+						OpenAbsForm(load_id);
+					}
+					// close
 					callStmt.close();
 				}
-				// return
-				String ret = callStmt.getString(1);
-				String load_id = callStmt.getString(4);
-				// check
-				if (ret != null) {
-					// view error
-					ViewError();
-					// roll back
-					conn.rollback();
-					Msg.Message(ret);
-
-				} else {
-					conn.commit();
-					Msg.Message("Файл " + file.getName() + " загружен");
-					// reload
-					LoadTableContact();
-					// view in abs
-					OpenAbsForm(load_id);
-				}
-				// close
-				callStmt.close();
 			}
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
@@ -161,6 +170,82 @@ public class ContactC {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 		LocalDate localDate = LocalDate.parse(date, formatter);
 		return localDate;
+	}
+
+	@FXML
+	void OpenAbsForm2(ActionEvent event) {
+		try {
+			if (SBRA_LOADF_CONTACT.getSelectionModel().getSelectedItem() != null) {
+				SBRA_LOADF_CONTACT selrow = SBRA_LOADF_CONTACT.getSelectionModel().getSelectedItem();
+				String call = "ifrun60.exe I:/KERNEL/OPERLIST.fmx " + Connect.userID_ + "/" + Connect.userPassword_
+						+ "@ODB WHERE=\"" + "ITRNNUM IN (SELECT TRNNUM_DP FROM SBRA_LOADROW_CONTACT WHERE LOAD_ID = "
+						+ selrow.getLOAD_ID() + ") \"";
+				ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", call);
+				System.out.println(call);
+				builder.redirectErrorStream(true);
+				Process p;
+				p = builder.start();
+				BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+				String line;
+				while (true) {
+					line = r.readLine();
+					if (line == null) {
+						break;
+					}
+					System.out.println(line);
+				}
+			}
+
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+	@FXML
+	void DelLoad(ActionEvent event) {
+		try {
+			if (SBRA_LOADF_CONTACT.getSelectionModel().getSelectedItem() != null) {
+				SBRA_LOADF_CONTACT selrow = SBRA_LOADF_CONTACT.getSelectionModel().getSelectedItem();
+				
+				final Alert alert = new Alert(AlertType.CONFIRMATION, "Загрузить файл \"" + selrow.getLD_FILENAME() + "\" ?",
+						ButtonType.YES, ButtonType.NO);
+
+				if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
+					
+					CallableStatement callStmt = conn.prepareCall("{ call Z_SB_CALC_CONTACT.DEL_LOAD(?,?)}");
+					callStmt.registerOutParameter(1, Types.VARCHAR);
+					callStmt.setLong(2, selrow.getLOAD_ID());
+					// catch
+					try {
+						callStmt.execute();
+					} catch (Exception e) {
+						Msg.Message(ExceptionUtils.getStackTrace(e));
+						conn.rollback();
+						callStmt.close();
+					}
+
+					// return
+					String ret = callStmt.getString(1);
+					// check
+					if (ret != null) {
+						// roll back
+						conn.rollback();
+						Msg.Message(ret);
+
+					} else {
+						conn.commit();
+						Msg.Message("Файл " + selrow.getLD_FILENAME() + " удален");
+						// reload
+						LoadTableContact();
+					}
+					// close
+					callStmt.close();
+				}
+			}
+
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
 	}
 
 	void OpenAbsForm(String load_id) {

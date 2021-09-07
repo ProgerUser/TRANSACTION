@@ -48,7 +48,33 @@
                                     <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TIMES" size="18" />
                                  </graphic>
                                  <tooltip>
-                                    <Tooltip text="Выбрать файл">
+                                    <Tooltip text="Удалить дату">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Tooltip>
+                                 </tooltip>
+                              </Button>
+                              <Separator layoutX="184.0" layoutY="10.0" orientation="VERTICAL" />
+                              <Button id="find" layoutX="194.0" layoutY="10.0" mnemonicParsing="false" onAction="#OpenAbsForm2">
+                                 <graphic>
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EXTERNAL_LINK" size="18" />
+                                 </graphic>
+                                 <tooltip>
+                                    <Tooltip text="Показать в главной книге">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Tooltip>
+                                 </tooltip>
+                              </Button>
+                              <Separator layoutX="229.0" layoutY="10.0" orientation="VERTICAL" />
+                              <Button id="find" layoutX="239.0" layoutY="10.0" mnemonicParsing="false" onAction="#DelLoad">
+                                 <graphic>
+                                    <FontAwesomeIconView glyphName="TRASH_ALT" size="18" />
+                                 </graphic>
+                                 <tooltip>
+                                    <Tooltip text="Удалить загрузку">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
