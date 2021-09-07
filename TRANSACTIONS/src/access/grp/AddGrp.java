@@ -33,7 +33,7 @@ public class AddGrp {
 	@FXML
 	void AddUpdate(ActionEvent event) {
 		try {
-			PreparedStatement prp = conn.prepareStatement("insert into ODB_GROUP_USR (GRP_NAME,NAME) values (?,?) ");
+			PreparedStatement prp = conn.prepareStatement("insert into ODB_GROUP_USR (grp_id,GRP_NAME,NAME) values ((SELECT NVL(MAX(grp_id), 0) + 1 FROM ODB_GROUP_USR),?,?) ");
 			prp.setString(1, GRP_NAME.getText());
 			prp.setString(2, NAME.getText());
 			prp.executeUpdate();

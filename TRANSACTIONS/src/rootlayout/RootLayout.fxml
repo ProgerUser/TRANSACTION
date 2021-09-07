@@ -9,12 +9,6 @@
 	<top>
 		<MenuBar fx:id="menubar" prefHeight="29.0" prefWidth="688.0" BorderPane.alignment="CENTER">
 			<menus>
-				<Menu fx:id="2" mnemonicParsing="false" text="Администратор">
-					<items>
-						 <MenuItem fx:id="4" mnemonicParsing="false" onAction="#Access" text="Права доступа" /> 
-						<MenuItem fx:id="3" mnemonicParsing="false" onAction="#access_menuitems" text="Доступность пунктов меню" />
-					</items>
-				</Menu>
 				<!--<Menu mnemonicParsing="false" text="Терминалы Квант-Капитал"> <items> 
 					<MenuItem mnemonicParsing="false" onAction="#loadtransact" text="Загрузка 
 					транзакции" /> <MenuItem mnemonicParsing="false" onAction="#chektransact" 
@@ -55,6 +49,13 @@
 				<Menu fx:id="22" mnemonicParsing="false" text="SWIFT">
 					<items>
 						<MenuItem fx:id="23" mnemonicParsing="false" onAction="#swift" text="Перенести SWIFT" />
+					</items>
+				</Menu>
+				<Menu fx:id="2" mnemonicParsing="false" text="Администратор">
+					<items>
+						<MenuItem fx:id="4" mnemonicParsing="false" onAction="#Access" text="Права доступа по функционалу" /> 
+						<MenuItem fx:id="3" mnemonicParsing="false" onAction="#access_menuitems" text="Доступность пунктов меню" />
+						<MenuItem fx:id="24" mnemonicParsing="false" onAction="#AccessGroup" text="Группы доступа" />
 					</items>
 				</Menu>
 				<!-- <Menu fx:id="pensiara" mnemonicParsing="false" text="Пенсия РА"> 

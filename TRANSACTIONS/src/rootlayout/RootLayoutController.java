@@ -374,6 +374,15 @@ public class RootLayoutController {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
+	
+	@FXML
+	void AccessGroup(ActionEvent event) {
+		try {
+			Main.AccessGroup();
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
 
 	@FXML
 	void service(ActionEvent event) {

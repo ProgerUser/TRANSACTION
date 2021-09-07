@@ -91,10 +91,14 @@ public class GrpController {
     @FXML private TableColumn<AP_REPORT_TYPE, String> REPORT_TYPE_NAME_IN;
 	//________________________________________________________
 	
+    /**
+     * разрешить действие
+     * @param event
+     */
 	@FXML
 	void AddAct(ActionEvent event) {
 		try {
-			if (DbUtil.Odb_Action(162l) == 0) {
+			if (DbUtil.Odb_Action(22l) == 0) {
 				Msg.Message("Нет доступа!");
 				return;
 			}
@@ -135,10 +139,14 @@ public class GrpController {
 		}
 	}
 
+	/**
+	 * отменить действие
+	 * @param event
+	 */
 	@FXML
 	void DeleteAct(ActionEvent event) {
 		try {
-			if (DbUtil.Odb_Action(163l) == 0) {
+			if (DbUtil.Odb_Action(23l) == 0) {
 				Msg.Message("Нет доступа!");
 				return;
 			}
@@ -209,7 +217,7 @@ public class GrpController {
 	void AddMnu(ActionEvent event) {
 		try {
 			
-			if (DbUtil.Odb_Action(156l) == 0) {
+			if (DbUtil.Odb_Action(20l) == 0) {
 				Msg.Message("Нет доступа!");
 				return;
 			}
@@ -253,10 +261,12 @@ public class GrpController {
 	@FXML
 	void DeleteMnu(ActionEvent event) {
 		try {
-			if (DbUtil.Odb_Action(157l) == 0) {
+			
+			if (DbUtil.Odb_Action(21l) == 0) {
 				Msg.Message("Нет доступа!");
 				return;
 			}
+			
 			if (grp.getSelectionModel().getSelectedItem() == null) {
 				Msg.Message("Выберите пользователя");
 			} else {
@@ -294,11 +304,21 @@ public class GrpController {
 		}
 	}
 
+	/**
+	 * добавить пользователя
+	 * @param event
+	 */
 	@FXML
 	void addusr(ActionEvent event) {
 		try {
 			if (grp.getSelectionModel().getSelectedItem() != null
 					& usrout.getSelectionModel().getSelectedItem() != null) {
+				
+				if (DbUtil.Odb_Action(24l) == 0) {
+					Msg.Message("Нет доступа!");
+					return;
+				}
+				
 				ODB_GROUP_USR grp_act = grp.getSelectionModel().getSelectedItem();
 				USR_IN_OUT usr = usrout.getSelectionModel().getSelectedItem();
 				PreparedStatement prp = conn
@@ -325,11 +345,21 @@ public class GrpController {
 		}
 	}
 
+	/**
+	 * удалить пользователя
+	 * @param event
+	 */
 	@FXML
 	void deleteusr(ActionEvent event) {
 		try {
 			if (grp.getSelectionModel().getSelectedItem() != null
 					& usrin.getSelectionModel().getSelectedItem() != null) {
+				
+				if (DbUtil.Odb_Action(25l) == 0) {
+					Msg.Message("Нет доступа!");
+					return;
+				}
+				
 				ODB_GROUP_USR grp_act = grp.getSelectionModel().getSelectedItem();
 				USR_IN_OUT usr = usrin.getSelectionModel().getSelectedItem();
 				PreparedStatement prp = conn
@@ -350,12 +380,22 @@ public class GrpController {
 		}
 	}
 
+	/**
+	 * добавить группу
+	 * @param event
+	 */
 	@FXML
 	void add(ActionEvent event) {
 		try {
+			
+			if (DbUtil.Odb_Action(28l) == 0) {
+				Msg.Message("Нет доступа!");
+				return;
+			}
+			
 			Stage stage = new Stage();
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("/mj/access/grp/IUGrp.fxml"));
+			loader.setLocation(getClass().getResource("/access/grp/IUGrp.fxml"));
 			AddGrp controller = new AddGrp();
 			loader.setController(controller);
 			Parent root = loader.load();
@@ -383,15 +423,25 @@ public class GrpController {
 		}
 	}
 
+	/**
+	 * редактировать группу
+	 * @param event
+	 */
 	@FXML
 	void adit(ActionEvent event) {
 		try {
 			if (grp.getSelectionModel().getSelectedItem() != null) {
+				
+				if (DbUtil.Odb_Action(30l) == 0) {
+					Msg.Message("Нет доступа!");
+					return;
+				}
+				
 				ODB_GROUP_USR group = InitGrp2(grp.getSelectionModel().getSelectedItem().getGRP_ID());
 				Stage stage = new Stage();
 				FXMLLoader loader = new FXMLLoader();
 				
-				loader.setLocation(getClass().getResource("/mj/access/grp/IUGrp.fxml"));
+				loader.setLocation(getClass().getResource("/access/grp/IUGrp.fxml"));
 				EditGrp controller = new EditGrp();
 				controller.setConn(conn, group);
 				
@@ -421,12 +471,22 @@ public class GrpController {
 		}
 	}
 
+	/**
+	 * удалить группу
+	 * @param event
+	 */
 	@FXML
 	void delete(ActionEvent event) {
 		try {
 			if (grp.getSelectionModel().getSelectedItem() == null) {
 				Msg.Message("Выберите документ!");
 			} else {
+				
+				if (DbUtil.Odb_Action(29l) == 0) {
+					Msg.Message("Нет доступа!");
+					return;
+				}
+				
 				Stage stage = (Stage) grp.getScene().getWindow();
 				Label alert = new Label("Удалить запись?");
 				alert.setLayoutX(75.0);
@@ -644,6 +704,12 @@ public class GrpController {
 	@FXML
     void AddRep(ActionEvent event) {
 		try {
+			
+			if (DbUtil.Odb_Action(26l) == 0) {
+				Msg.Message("Нет доступа!");
+				return;
+			}
+			
 			AP_REPORT_TYPE rep_tp = ap_report_type_in.getSelectionModel().getSelectedItem();
 			ODB_GROUP_USR grp_act = grp.getSelectionModel().getSelectedItem();
 			AP_REPORT_CAT rep_out = ap_report_cat_out.getSelectionModel().getSelectedItem();
@@ -674,6 +740,12 @@ public class GrpController {
     @FXML
     void DeleteRepTp(ActionEvent event) {
 		try {
+			
+			if (DbUtil.Odb_Action(27l) == 0) {
+				Msg.Message("Нет доступа!");
+				return;
+			}
+			
 			AP_REPORT_TYPE rep_tp = ap_report_type_in.getSelectionModel().getSelectedItem();
 			ODB_GROUP_USR grp_act = grp.getSelectionModel().getSelectedItem();
 			if (rep_tp != null & grp_act != null) {
@@ -701,6 +773,11 @@ public class GrpController {
 	@FXML
     void AddRepTp(ActionEvent event) {
 		try {
+			if (DbUtil.Odb_Action(26l) == 0) {
+				Msg.Message("Нет доступа!");
+				return;
+			}
+			
 			AP_REPORT_TYPE rep_tp = ap_report_type_out.getSelectionModel().getSelectedItem();
 			ODB_GROUP_USR grp_act = grp.getSelectionModel().getSelectedItem();
 			if (rep_tp != null & grp_act != null) {
@@ -729,6 +806,12 @@ public class GrpController {
     @FXML
     void DeleteRep(ActionEvent event) {
 		try {
+			
+			if (DbUtil.Odb_Action(27l) == 0) {
+				Msg.Message("Нет доступа!");
+				return;
+			}
+			
 			AP_REPORT_TYPE rep_tp = ap_report_type_in.getSelectionModel().getSelectedItem();
 			ODB_GROUP_USR grp_act = grp.getSelectionModel().getSelectedItem();
 			AP_REPORT_CAT rep_out = ap_report_cat_in.getSelectionModel().getSelectedItem();
@@ -850,7 +933,8 @@ public class GrpController {
 		try {
 			PreparedStatement prepStmt = conn.prepareStatement("select usr.cusrlogname, usr.cusrname\n"
 					+ "  from usr\n" + " where not exists (select null\n" + "          from ODB_GRP_MEMBER mem\n"
-					+ "         where mem.iusrid = usr.iusrid\n" + "           and mem.grp_id = ?)\n");
+					+ "         where mem.iusrid = usr.iusrid\n" + "           and mem.grp_id = ?)"
+							+ " and usr.dusrfire is null\n");
 			prepStmt.setLong(1, grp_id);
 			ResultSet rs = prepStmt.executeQuery();
 			ObservableList<USR_IN_OUT> dlist = FXCollections.observableArrayList();
@@ -915,7 +999,7 @@ public class GrpController {
 	void InitGrp() {
 		try {
 			PreparedStatement prepStmt = conn
-					.prepareStatement("select grp_id, grp_name, NAME from ODB_GROUP_USR t\n" + "");
+					.prepareStatement("select grp_id, grp_name, NAME from ODB_GROUP_USR t order by grp_id desc\n" + "");
 			ResultSet rs = prepStmt.executeQuery();
 			ObservableList<ODB_GROUP_USR> dlist = FXCollections.observableArrayList();
 			while (rs.next()) {

@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 
 import access.action.OdbActions;
+import access.grp.GrpController;
 import access.menu.OdbMNU;
 import app.model.Connect;
 import app.util.DBUtil;
@@ -54,32 +55,32 @@ public class Main extends Application {
 			logger.setLevel(Level.INFO);
 			// System.out.println(MODULE);
 
-//			if (MODULE == null) {
-//				Enter();
-//			} else if (MODULE.equals("DEBTINFO")) {
-//				DBUtil.dbConnect();
-//				Debtinfo();
-//			} else if (MODULE.equals("BUH")) {
-//				DBUtil.dbConnect();
-//				initRootLayout();
-//				showFirst();
-//			} else if (MODULE.equals("SWIFT")) {
-//				DBUtil.dbConnect();
-//				swift2();
-//			} else if (MODULE.equals("VTB_CONV")) {
-//				DBUtil.dbConnect();
-//				ConvVal();
-//			}
+			if (MODULE == null) {
+				Enter();
+			} else if (MODULE.equals("DEBTINFO")) {
+				DBUtil.dbConnect();
+				Debtinfo();
+			} else if (MODULE.equals("BUH")) {
+				DBUtil.dbConnect();
+				initRootLayout();
+				showFirst();
+			} else if (MODULE.equals("SWIFT")) {
+				DBUtil.dbConnect();
+				swift2();
+			} else if (MODULE.equals("VTB_CONV")) {
+				DBUtil.dbConnect();
+				ConvVal();
+			}
 
-			Connect.connectionURL_ = "10.111.64.21:1521/ODB";
-			Connect.userID_ = "SAIDP";
-			Connect.userPassword_ = "vector165";
-			
-			DbUtil.Db_Connect();
-			DBUtil.dbConnect();
-			
-			initRootLayout();	
-			showFirst();
+//			Connect.connectionURL_ = "10.111.64.21:1521/ODB";
+//			Connect.userID_ = "SAIDP";
+//			Connect.userPassword_ = "";
+//			
+//			DbUtil.Db_Connect();
+//			DBUtil.dbConnect();
+//			
+//			initRootLayout();	
+//			showFirst();
 			
 //			swift2();
 //			ConvVal();
@@ -586,6 +587,40 @@ public class Main extends Application {
 			}
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+	
+	public static boolean GrpAccessWin = true;
+	
+	/* Доступ не используется */
+	public static void AccessGroup() {
+		try {
+			if (GrpAccessWin) {
+				GrpAccessWin = false;
+				Stage stage = new Stage();
+				FXMLLoader loader = new FXMLLoader(Main.class.getResource("/access/grp/GrpMember.fxml"));
+
+				GrpController controller = new GrpController();
+				loader.setController(controller);
+
+				Parent root = loader.load();
+				stage.setScene(new Scene(root));
+				stage.setResizable(false);
+				stage.getIcons().add(new Image("/icon.png"));
+				stage.setTitle("Группы доступа по функционалу");
+				stage.initOwner(primaryStage);
+
+				stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+					@Override
+					public void handle(WindowEvent paramT) {
+						controller.dbDisconnect();
+						GrpAccessWin = true;
+					}
+				});
+				stage.show();
+			}
+		} catch (Exception e) {
+			DbUtil.Log_Error(e);
 		}
 	}
 
