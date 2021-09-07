@@ -5,6 +5,8 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 
+import access.action.OdbActions;
+import access.menu.OdbMNU;
 import app.model.Connect;
 import app.util.DBUtil;
 import contact.ContactC;
@@ -22,6 +24,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import sb.utils.DbUtil;
 import sbalert.Msg;
 import sverka.SverkaC;
 import swift.SWC;
@@ -51,29 +54,32 @@ public class Main extends Application {
 			logger.setLevel(Level.INFO);
 			// System.out.println(MODULE);
 
-			if (MODULE == null) {
-				Enter();
-			} else if (MODULE.equals("DEBTINFO")) {
-				DBUtil.dbConnect();
-				Debtinfo();
-			} else if (MODULE.equals("BUH")) {
-				DBUtil.dbConnect();
-				initRootLayout();
-				showFirst();
-			} else if (MODULE.equals("SWIFT")) {
-				DBUtil.dbConnect();
-				swift2();
-			} else if (MODULE.equals("VTB_CONV")) {
-				DBUtil.dbConnect();
-				ConvVal();
-			}
+//			if (MODULE == null) {
+//				Enter();
+//			} else if (MODULE.equals("DEBTINFO")) {
+//				DBUtil.dbConnect();
+//				Debtinfo();
+//			} else if (MODULE.equals("BUH")) {
+//				DBUtil.dbConnect();
+//				initRootLayout();
+//				showFirst();
+//			} else if (MODULE.equals("SWIFT")) {
+//				DBUtil.dbConnect();
+//				swift2();
+//			} else if (MODULE.equals("VTB_CONV")) {
+//				DBUtil.dbConnect();
+//				ConvVal();
+//			}
 
-//			Connect.connectionURL_ = "10.111.64.21:1521/ODB";
-//			Connect.userID_ = "SAIDP";
-//			Connect.userPassword_ = "";
-//			DBUtil.dbConnect();
-//			initRootLayout();	
-//			showFirst();
+			Connect.connectionURL_ = "10.111.64.21:1521/ODB";
+			Connect.userID_ = "SAIDP";
+			Connect.userPassword_ = "vector165";
+			
+			DbUtil.Db_Connect();
+			DBUtil.dbConnect();
+			
+			initRootLayout();	
+			showFirst();
 			
 //			swift2();
 //			ConvVal();
@@ -124,6 +130,38 @@ public class Main extends Application {
 		}
 	}
 
+	
+	public static boolean MenuWin = true;
+	
+	/**
+	 * Доступ по действиям
+	 */
+	public static void Admin_Menu() {
+		try {
+			if (MenuWin) {
+				MenuWin = false;
+				Stage stage = new Stage();
+				FXMLLoader loader = new FXMLLoader(Main.class.getResource("/access/menu/ODB_MNU.fxml"));
+				Parent root = loader.load();
+				stage.setScene(new Scene(root));
+				stage.getIcons().add(new Image("/icon.png"));
+				stage.setTitle("Права доступа к пунктам меню");
+				stage.initOwner(primaryStage);
+				// stage.initModality(Modality.WINDOW_MODAL);
+				OdbMNU controller = loader.getController();
+				stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+					@Override
+					public void handle(WindowEvent paramT) {
+						controller.dbDisconnect();
+						MenuWin = true;
+					}
+				});
+				stage.show();
+			}
+		} catch (Exception e) {
+			DbUtil.Log_Error(e);
+		}
+	}
 	/**
 	 * Формирование псевдонимов
 	 */
@@ -517,50 +555,62 @@ public class Main extends Application {
 		}
 	}
 
+	public static boolean ActWin = true;
+	
 	/* Доступ не используется */
 	public static void Admin() {
 		try {
-			/*
-			 * FXMLLoader loader = new FXMLLoader();
-			 * loader.setLocation(Main.class.getResource("view/Admin.fxml")); AnchorPane
-			 * employeeOperationsView = (AnchorPane) loader.load();
-			 * rootLayout.setCenter(employeeOperationsView);
-			 */
-			Stage stage = new Stage();
-			Parent root;
-			root = FXMLLoader.load(Main.class.getResource("view/Admin.fxml"));
-			stage.setScene(new Scene(root));
-			stage.getIcons().add(new Image("icon.png"));
-			stage.setTitle("");
-			stage.initOwner(primaryStage);
-			stage.show();
+			try {
+				if (ActWin) {
+					ActWin = false;
+					Stage stage = new Stage();
+					FXMLLoader loader = new FXMLLoader(Main.class.getResource("/access/action/ODB_ACTION.fxml"));
+					Parent root = loader.load();
+					stage.setScene(new Scene(root));
+					stage.getIcons().add(new Image("/icon.png"));
+					stage.setTitle("Доступ по действиям");
+					stage.initOwner(primaryStage);
+					// stage.initModality(Modality.WINDOW_MODAL);
+					OdbActions controller = loader.getController();
+					stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+						@Override
+						public void handle(WindowEvent paramT) {
+							controller.dbDisconnect();
+							ActWin = true;
+						}
+					});
+					stage.show();
+				}
+			} catch (Exception e) {
+				DbUtil.Log_Error(e);
+			}
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
-	/* Доступ Меню */
-	public static void Admin_Menu() {
-		try {
-			/*
-			 * FXMLLoader loader = new FXMLLoader();
-			 * loader.setLocation(Main.class.getResource("view/Admin_Menu.fxml"));
-			 * AnchorPane employeeOperationsView = (AnchorPane) loader.load();
-			 * rootLayout.setCenter(employeeOperationsView);
-			 */
-
-			Stage stage = new Stage();
-			Parent root;
-			root = FXMLLoader.load(Main.class.getResource("view/Admin_Menu.fxml"));
-			stage.setScene(new Scene(root));
-			stage.getIcons().add(new Image("icon.png"));
-			stage.setTitle("Доступ по пунктам меню");
-			stage.initOwner(primaryStage);
-			stage.show();
-		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
-		}
-	}
+//	/* Доступ Меню */
+//	public static void Admin_Menu_() {
+//		try {
+//			/*
+//			 * FXMLLoader loader = new FXMLLoader();
+//			 * loader.setLocation(Main.class.getResource("view/Admin_Menu.fxml"));
+//			 * AnchorPane employeeOperationsView = (AnchorPane) loader.load();
+//			 * rootLayout.setCenter(employeeOperationsView);
+//			 */
+//
+//			Stage stage = new Stage();
+//			Parent root;
+//			root = FXMLLoader.load(Main.class.getResource("view/Admin_Menu.fxml"));
+//			stage.setScene(new Scene(root));
+//			stage.getIcons().add(new Image("icon.png"));
+//			stage.setTitle("Доступ по пунктам меню");
+//			stage.initOwner(primaryStage);
+//			stage.show();
+//		} catch (Exception e) {
+//			Msg.Message(ExceptionUtils.getStackTrace(e));
+//		}
+//	}
 
 	/**
 	 * Доступ Ведомственная информация

@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox spacing="5.0" stylesheets="/borderpane.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox spacing="5.0">
+         <children>
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+               <children>
+                  <ToolBar style="-fx-border-color: silver;">
+                     <items>
+                      <Button mnemonicParsing="false" onAction="#add">
+                           <graphic>
+                              <FontAwesomeIconView glyphName="PLUS" size="18" />
+                           </graphic>
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </Button>
+                        <Button mnemonicParsing="false" onAction="#adit">
+                           <graphic>
+                              <FontAwesomeIconView glyphName="EDIT" size="18" />
+                           </graphic>
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </Button>
+                        <Button mnemonicParsing="false" onAction="#delete">
+                           <graphic>
+                              <FontAwesomeIconView glyphName="TIMES" size="18" />
+                           </graphic>
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </Button>
+                     </items>
+                  </ToolBar>
+                  <TableView fx:id="grp" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                    <columns>
+                      <TableColumn fx:id="id" maxWidth="100.0" prefWidth="78.0" text="ИД" />
+                      <TableColumn fx:id="name" prefWidth="170.0" text="Название группы" />
+                    </columns>
+                  </TableView>
+               </children>
+            </VBox>
+            <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="500.0" styleClass="floating" tabClosingPolicy="UNAVAILABLE" HBox.hgrow="ALWAYS">
+              <tabs>
+                <Tab text="Пользователи">
+                     <content>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <HBox spacing="5.0">
+                                 <children>
+                                    <TitledPane animated="false" collapsible="false" text="Пользователи в группе">
+                                       <content>
+                                          <VBox>
+                                             <children>
+                                                <TableView fx:id="usrin" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                                                  <columns>
+                                                    <TableColumn fx:id="in_login" prefWidth="77.0" text="Логин" />
+                                                    <TableColumn fx:id="in_fio" prefWidth="171.0" text="ФИО" />
+                                                  </columns>
+                                                   <columnResizePolicy>
+                                                      <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                   </columnResizePolicy>
+                                                </TableView>
+                                             </children>
+                                          </VBox>
+                                       </content>
+                                    </TitledPane>
+                                    <ToolBar orientation="VERTICAL" style="-fx-border-color: silver;">
+                                       <items>
+                                          <Button mnemonicParsing="false" onAction="#addusr" text="&lt;" />
+                                          <Button mnemonicParsing="false" onAction="#deleteusr" text="&gt;" />
+                                       </items>
+                                    </ToolBar>
+                                    <TitledPane animated="false" collapsible="false" layoutX="10.0" layoutY="10.0" text="Пользователи вне группы">
+                                       <content>
+                                          <VBox>
+                                             <children>
+                                                <TableView fx:id="usrout" prefWidth="250.0">
+                                                   <columnResizePolicy>
+                                                      <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                   </columnResizePolicy>
+                                                   <columns>
+                                                      <TableColumn fx:id="out_login" prefWidth="77.0" text="Логин" />
+                                                      <TableColumn fx:id="out_fio" prefWidth="171.0" text="ФИО" />
+                                                   </columns>
+                                                </TableView>
+                                             </children>
+                                          </VBox>
+                                       </content>
+                                    </TitledPane>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </VBox.margin>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </content>
+                </Tab>
+                  <Tab text="Функции">
+                     <content>
+                        <VBox>
+                           <children>
+                              <ToolBar>
+                                 <items>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ID действия" />
+                                    <TextField fx:id="ActionID_ACT" />
+                                 </items>
+                              </ToolBar>
+                              <TreeView fx:id="Actions" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="mylistview" stylesheets="/ScrPane.css" VBox.vgrow="ALWAYS">
+                                 <contextMenu>
+                                    <ContextMenu fx:id="ContMenu1">
+                                       <items>
+                                          <MenuItem mnemonicParsing="false" onAction="#AddAct" text="Разрешить" />
+                                          <MenuItem mnemonicParsing="false" onAction="#DeleteAct" text="Запретить" />
+                                       </items>
+                                    </ContextMenu>
+                                 </contextMenu>
+                              </TreeView>
+                           </children>
+                        </VBox>
+                     </content></Tab>
+                  <Tab text="Меню">
+                     <content>
+                        <VBox>
+                           <children>
+                              <ToolBar>
+                                 <items>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ID действия" />
+                                    <TextField fx:id="ActionID" />
+                                 </items>
+                              </ToolBar>
+                              <TreeView fx:id="MNU" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="mylistview" stylesheets="/ScrPane.css" VBox.vgrow="ALWAYS">
+                                 <contextMenu>
+                                    <ContextMenu fx:id="ContMenu">
+                                       <items>
+                                          <MenuItem mnemonicParsing="false" onAction="#AddMnu" text="Разрешить" />
+                                          <MenuItem mnemonicParsing="false" onAction="#DeleteMnu" text="Запретить" />
+                                       </items>
+                                    </ContextMenu>
+                                 </contextMenu>
+                              </TreeView>
+                           </children>
+                        </VBox>
+                     </content>
+                  </Tab>
+                  <Tab text="Печать">
+                     <content>
+                        <VBox spacing="5.0">
+                           <children>
+                              <HBox spacing="5.0">
+                                 <children>
+                                    <TitledPane alignment="CENTER" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="304.0" style="-fx-border-color: black;" text="Недоступные типы отчетов" HBox.hgrow="ALWAYS">
+                                       <content>
+                                          <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+                                             <children>
+                                                <TableView fx:id="ap_report_type_out" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                                                  <columns>
+                                                    <TableColumn fx:id="REPORT_TYPE_ID_OUT" prefWidth="99.75" text="ИД типа отчета" />
+                                                    <TableColumn fx:id="REPORT_TYPE_NAME_OUT" prefWidth="180.5" text="Наименование типа отчета" />
+                                                  </columns>
+                                                   <columnResizePolicy>
+                                                      <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                   </columnResizePolicy>
+                                                </TableView>
+                                             </children>
+                                          </VBox>
+                                       </content>
+                                    </TitledPane>
+                                    <ToolBar orientation="VERTICAL" style="-fx-border-color: silver;">
+                                       <items>
+                                          <Button mnemonicParsing="false" onAction="#AddRepTp" text="&gt;" />
+                                          <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#DeleteRepTp" text="&lt;" />
+                                       </items>
+                                    </ToolBar>
+                                    <TitledPane alignment="CENTER" collapsible="false" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="304.0" style="-fx-border-color: black;" text="Доступные типы отчетов" HBox.hgrow="ALWAYS">
+                                       <content>
+                                          <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+                                             <children>
+                                                <TableView fx:id="ap_report_type_in" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                                                   <columns>
+                                                      <TableColumn fx:id="REPORT_TYPE_ID_IN" prefWidth="96.5" text="ИД типа отчета" />
+                                                      <TableColumn fx:id="REPORT_TYPE_NAME_IN" prefWidth="177.0" text="Наименование типа отчета" />
+                                                   </columns>
+                                                   <columnResizePolicy>
+                                                      <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                   </columnResizePolicy>
+                                                </TableView>
+                                             </children>
+                                          </VBox>
+                                       </content>
+                                    </TitledPane>
+                                 </children>
+                              </HBox>
+                              <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <TitledPane alignment="CENTER" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="304.0" style="-fx-border-color: black;" text="Недоступне отчеты" HBox.hgrow="ALWAYS">
+                                       <content>
+                                          <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                                             <children>
+                                                <TableView fx:id="ap_report_cat_out" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                                                  <columns>
+                                                    <TableColumn fx:id="REPORT_ID_OUT" prefWidth="75.0" text="ИД отчета" />
+                                                    <TableColumn fx:id="REPORT_NAME_OUT" prefWidth="203.0" text="Наименование отчета" />
+                                                  </columns>
+                                                   <columnResizePolicy>
+                                                      <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                   </columnResizePolicy>
+                                                </TableView>
+                                             </children>
+                                          </VBox>
+                                       </content>
+                                    </TitledPane>
+                                    <ToolBar orientation="VERTICAL" style="-fx-border-color: silver;" HBox.hgrow="ALWAYS">
+                                       <items>
+                                          <Button mnemonicParsing="false" onAction="#AddRep" text="&gt;" />
+                                          <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#DeleteRep" text="&lt;" />
+                                       </items>
+                                    </ToolBar>
+                                    <TitledPane alignment="CENTER" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="304.0" style="-fx-border-color: black;" text="Доступные отчеты" HBox.hgrow="ALWAYS">
+                                       <content>
+                                          <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                                             <children>
+                                                <TableView fx:id="ap_report_cat_in" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                                                   <columns>
+                                                      <TableColumn fx:id="REPORT_ID_IN" prefWidth="75.0" text="ИД отчета" />
+                                                      <TableColumn fx:id="REPORT_NAME_IN" prefWidth="208.0" text="Наименование отчета" />
+                                                   </columns>
+                                                   <columnResizePolicy>
+                                                      <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                   </columnResizePolicy>
+                                                </TableView>
+                                             </children>
+                                          </VBox>
+                                       </content>
+                                    </TitledPane>
+                                 </children>
+                              </HBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding></VBox>
+                     </content>
+                  </Tab>
+                  <Tab text="Типы отчетов">
+                     <content>
+                        <VBox>
+                           <children>
+                              <TitledPane alignment="CENTER" collapsible="false" style="-fx-border-color: black;" text="Типы отчетов">
+                                 <content>
+                                    <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+                                       <children>
+                                          <ToolBar>
+                                             <items>
+                                                <Button mnemonicParsing="false">
+                                                   <graphic>
+                                                      <FontAwesomeIconView glyphName="PLUS" size="15" />
+                                                   </graphic>
+                                                   <font>
+                                                      <Font size="10.0" />
+                                                   </font>
+                                                </Button>
+                                                <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false">
+                                                   <graphic>
+                                                      <FontAwesomeIconView glyphName="EDIT" size="15" />
+                                                   </graphic>
+                                                   <font>
+                                                      <Font size="10.0" />
+                                                   </font>
+                                                </Button>
+                                                <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false">
+                                                   <graphic>
+                                                      <FontAwesomeIconView glyphName="REFRESH" size="15" />
+                                                   </graphic>
+                                                   <font>
+                                                      <Font size="10.0" />
+                                                   </font>
+                                                </Button>
+                                                <Separator layoutX="73.0" layoutY="10.0" orientation="VERTICAL" />
+                                                <Button layoutX="40.0" layoutY="10.0" mnemonicParsing="false">
+                                                   <graphic>
+                                                      <FontAwesomeIconView glyphName="TRASH_ALT" size="15" />
+                                                   </graphic>
+                                                   <font>
+                                                      <Font size="10.0" />
+                                                   </font>
+                                                </Button>
+                                             </items>
+                                             <VBox.margin>
+                                                <Insets left="-10.0" right="-10.0" top="-10.0" />
+                                             </VBox.margin>
+                                          </ToolBar>
+                                          <TableView fx:id="ap_report_type" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                                             <columns>
+                                                <TableColumn fx:id="REPORT_TYPE_ID" maxWidth="150.0" prefWidth="104.0" text="ИД типа отчета" />
+                                                <TableColumn fx:id="REPORT_TYPE_NAME" prefWidth="540.0" text="Наименование типа отчета" />
+                                             </columns>
+                                             <columnResizePolicy>
+                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                             </columnResizePolicy>
+                                          </TableView>
+                                       </children>
+                                    </VBox>
+                                 </content>
+                              </TitledPane>
+                           </children>
+                        </VBox>
+                     </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+         </children>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="5.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</VBox>

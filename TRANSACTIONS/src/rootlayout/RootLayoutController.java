@@ -26,6 +26,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import sb.utils.DbUtil;
 import sbalert.Msg;
 
 public class RootLayoutController {
@@ -414,6 +415,33 @@ public class RootLayoutController {
 		return ret;
 	}
 
+	
+	/**
+	 * Проверка прав доступа к меню
+	 * 
+	 * @param FORM_NAME
+	 * @param CUSRLOGNAME
+	 * @return
+	 */
+	public Long chk_menu(Long FORM_NAME, String CUSRLOGNAME) {
+		Long ret = 0l;
+		Connection conn = DbUtil.conn;
+		try {
+			PreparedStatement prepStmt = conn.prepareStatement("SELECT MJUsers.MNU_ACCESS(MNU_ID => ?, USR_LOGIN => ?) CNT FROM DUAL");
+			prepStmt.setLong(1, FORM_NAME);
+			prepStmt.setString(2, CUSRLOGNAME);
+			ResultSet rs = prepStmt.executeQuery();
+			if (rs.next()) {
+				ret = rs.getLong("CNT");
+			}
+			prepStmt.close();
+			rs.close();
+		} catch (Exception e) {
+			DbUtil.Log_Error(e);
+		}
+		return ret;
+	}
+	
 	/**
 	 * Проверка прав доступа к меню
 	 * 
@@ -460,7 +488,7 @@ public class RootLayoutController {
 	}
 
 	@FXML
-	void initialize() {
+	private void initialize() {
 		final SplashScreen splash = SplashScreen.getSplashScreen();
 		if (splash != null) {
 			splash.close();
@@ -470,19 +498,35 @@ public class RootLayoutController {
 			t.setDaemon(true);
 			return t;
 		});
+//		menubar.getMenus().forEach(menu -> {
+//			if (chk_menu(menu.getId(), Connect.userID_) == 1) {
+//				menu.setVisible(true);
+//			} else {
+//				menu.setVisible(false);
+//			}
+//			menu.getItems().forEach(menuItem -> {
+//				if (chk_menu(menuItem.getId(), Connect.userID_) == 1) {
+//					menuItem.setVisible(true);
+//				} else {
+//					menuItem.setVisible(false);
+//				}
+//			});
+//		});
+		
 		menubar.getMenus().forEach(menu -> {
-			if (chk_menu(menu.getId(), Connect.userID_) == 1) {
+			if (chk_menu(Long.valueOf(menu.getId()), Connect.userID_) == 1) {
 				menu.setVisible(true);
 			} else {
 				menu.setVisible(false);
 			}
 			menu.getItems().forEach(menuItem -> {
-				if (chk_menu(menuItem.getId(), Connect.userID_) == 1) {
+				if (chk_menu(Long.valueOf(menuItem.getId()), Connect.userID_) == 1) {
 					menuItem.setVisible(true);
 				} else {
 					menuItem.setVisible(false);
 				}
 			});
 		});
+		
 	}
 }

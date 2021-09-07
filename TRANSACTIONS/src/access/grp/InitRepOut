@@ -1,0 +1,18 @@
+SELECT GROUP_ID, REPORT_TYPE_ID, REPORT_ID, REPORT_NAME
+  FROM (select AP_Group_Report_Role.*,
+               AP_Report_Cat.report_id,
+               AP_Report_Cat.report_name
+          from AP_Group_Report_Role, AP_Report_Cat
+         where AP_Report_Cat.report_type_id =
+               AP_Group_Report_Role.report_type_id
+           and not exists (select null
+                  from AP_Group_Report_Cat_Role
+                 where AP_Group_Report_Cat_Role.group_id =
+                       AP_Group_Report_Role.group_id
+                   and AP_Group_Report_Cat_Role.report_type_id =
+                       AP_Report_Cat.report_type_id
+                   and AP_Group_Report_Cat_Role.report_id =
+                       AP_Report_Cat.report_id))
+ WHERE (GROUP_ID = ?)
+   and (REPORT_TYPE_ID = ?)
+ order by report_id
