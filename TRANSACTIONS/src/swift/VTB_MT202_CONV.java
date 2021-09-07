@@ -1,18 +1,23 @@
 package swift;
 
 import java.time.LocalDateTime;
+
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.LongProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class VTB_MT202_CONV {
 	private IntegerProperty TRN_ANUM;/* —сылка на трн */
-	private IntegerProperty TRN_NUM;/* —сылка на трн */
+	private LongProperty TRN_NUM;/* —сылка на трн */
 	private StringProperty REF;/* –еференс */
 	private StringProperty F21;/* ... */
-	private StringProperty FL32A_SUM;/* ... */
+	private DoubleProperty FL32A_SUM;/* ... */
 	private StringProperty FL32A_CUR;/* ... */
 	private StringProperty FL32A_DATE;/* ... */
 	private StringProperty F53B;/* ... */
@@ -25,10 +30,10 @@ public class VTB_MT202_CONV {
 
 	public VTB_MT202_CONV() {
 		this.TRN_ANUM = new SimpleIntegerProperty();
-		this.TRN_NUM = new SimpleIntegerProperty();
+		this.TRN_NUM = new SimpleLongProperty();
 		this.REF = new SimpleStringProperty();
 		this.F21 = new SimpleStringProperty();
-		this.FL32A_SUM = new SimpleStringProperty();
+		this.FL32A_SUM = new SimpleDoubleProperty();
 		this.FL32A_CUR = new SimpleStringProperty();
 		this.FL32A_DATE = new SimpleStringProperty();
 		this.F53B = new SimpleStringProperty();
@@ -44,7 +49,7 @@ public class VTB_MT202_CONV {
 		this.TRN_ANUM.set(TRN_ANUM);
 	}
 
-	public void setTRN_NUM(Integer TRN_NUM) {
+	public void setTRN_NUM(Long TRN_NUM) {
 		this.TRN_NUM.set(TRN_NUM);
 	}
 
@@ -56,7 +61,7 @@ public class VTB_MT202_CONV {
 		this.F21.set(F21);
 	}
 
-	public void setFL32A_SUM(String FL32A_SUM) {
+	public void setFL32A_SUM(Double FL32A_SUM) {
 		this.FL32A_SUM.set(FL32A_SUM);
 	}
 
@@ -100,7 +105,7 @@ public class VTB_MT202_CONV {
 		return TRN_ANUM.get();
 	}
 
-	public Integer getTRN_NUM() {
+	public Long getTRN_NUM() {
 		return TRN_NUM.get();
 	}
 
@@ -112,7 +117,7 @@ public class VTB_MT202_CONV {
 		return F21.get();
 	}
 
-	public String getFL32A_SUM() {
+	public Double getFL32A_SUM() {
 		return FL32A_SUM.get();
 	}
 
@@ -156,7 +161,7 @@ public class VTB_MT202_CONV {
 		return TRN_ANUM;
 	}
 
-	public IntegerProperty TRN_NUMProperty() {
+	public LongProperty TRN_NUMProperty() {
 		return TRN_NUM;
 	}
 
@@ -168,7 +173,7 @@ public class VTB_MT202_CONV {
 		return F21;
 	}
 
-	public StringProperty FL32A_SUMProperty() {
+	public DoubleProperty FL32A_SUMProperty() {
 		return FL32A_SUM;
 	}
 

@@ -399,6 +399,12 @@ public class SWC {
 	private RadioButton BK_VTB;
 
 	@FXML
+	private DatePicker ConvTo;
+
+	@FXML
+	private DatePicker ConvFrom;
+
+	@FXML
 	void OpenAbsForm(ActionEvent event) {
 		try {
 			if (Achive.getSelectionModel().getSelectedItem() != null) {
@@ -535,12 +541,12 @@ public class SWC {
 						});
 					}
 				});
-				
+
 				NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
 				DecimalFormatSymbols decimalFormatSymbols = ((DecimalFormat) currencyFormat).getDecimalFormatSymbols();
 				decimalFormatSymbols.setCurrencySymbol("");
 				((DecimalFormat) currencyFormat).setDecimalFormatSymbols(decimalFormatSymbols);
-				
+
 				SUMMdb.setCellFactory(tc -> new TableCell<SWIFT_FILES, Double>() {
 
 					@Override
@@ -1144,7 +1150,7 @@ public class SWC {
 									docdt = (LocalDate) STMT.getColumns().get(3).getCellData(i);
 								}
 								if (STMT.getColumns().get(5).getCellData(i) != null) {
-									amount = (String) STMT.getColumns().get(5).getCellData(i);
+									amount = String.valueOf((Double) STMT.getColumns().get(5).getCellData(i));
 								}
 								if (STMT.getColumns().get(7).getCellData(i) != null) {
 									crdate = (LocalDateTime) STMT.getColumns().get(7).getCellData(i);
@@ -1549,6 +1555,21 @@ public class SWC {
 		}
 	}
 
+	
+	
+	@FXML
+	private void ClearFilterArchive(ActionEvent event) {
+		dt1.setValue(null);
+		dt2.setValue(null);
+		ArchType.setValue(null);
+	}
+	
+	@FXML
+	private void ClearFilterConv(ActionEvent event) {
+		ConvFrom.setValue(null);
+		ConvTo.setValue(null);
+	}
+	
 	@FXML
 	private void ClearFilter(ActionEvent event) {
 		FileDate.setValue(null);
@@ -1646,7 +1667,7 @@ public class SWC {
 	private TableColumn<VTB_MT202_CONV, String> CONV_FL32A_CUR;
 
 	@FXML
-	private TableColumn<VTB_MT202_CONV, String> CONV_FL32A_SUM;
+	private TableColumn<VTB_MT202_CONV, Double> CONV_FL32A_SUM;
 
 	@FXML
 	private TableColumn<VTB_MT202_CONV, String> CONV_F53B;
@@ -1666,7 +1687,7 @@ public class SWC {
 	private TextArea FileTextAreaDB;
 
 	@FXML
-	void AUDIT_CONV(ActionEvent event) {
+	void AUDIT_CONV_OLD(ActionEvent event) {
 		try {
 
 			Path customBaseDir = FileSystems.getDefault().getPath(System.getenv("TRANSACT_PATH") + "PARAM");
@@ -1712,6 +1733,48 @@ public class SWC {
 		}
 	}
 
+	@FXML
+	void AUDIT_CONV(ActionEvent event) {
+		try {
+			VTB_MT202_CONV selrow = CONV_TBL.getSelectionModel().getSelectedItem();
+			PrgInd.setVisible(true);
+			Task<Object> task = new Task<Object>() {
+				@Override
+				public Object call() throws Exception {
+					try {
+						String call = "ifrun60.exe I:/KERNEL/OPERLIST.fmx " + Connect.userID_ + "/" + Connect.userPassword_
+								+ "@ODB WHERE=\"" + "ITRNNUM = " + selrow.getTRN_NUM() + "\"";
+						ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", call);
+						System.out.println(call);
+						// System.out.println(call);
+						builder.redirectErrorStream(true);
+						Process p;
+						p = builder.start();
+						BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+						String line;
+						while (true) {
+							line = r.readLine();
+							if (line == null) {
+								break;
+							}
+							System.out.println(line);
+						}
+					} catch (Exception e) {
+						ErrorMessage(ExceptionUtils.getStackTrace(e));
+					}
+					return null;
+				}
+			};
+			task.setOnFailed(e -> ErrorMessage(task.getException().getMessage()));
+			task.setOnSucceeded(e -> PrgInd.setVisible(false));
+
+			exec.execute(task);
+		} catch (Exception e) {
+			ErrorMessage(ExceptionUtils.getStackTrace(e));
+			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+		}
+	}
+
 	/**
 	 * Инициализация
 	 */
@@ -1719,15 +1782,23 @@ public class SWC {
 	@FXML
 	private void initialize() {
 		try {
+			
+			new ConvConst().FormatDatePiker(dt1);
+			new ConvConst().FormatDatePiker(dt2);
+			new ConvConst().FormatDatePiker(ConvFrom);
+			new ConvConst().FormatDatePiker(ConvTo);
+			new ConvConst().FormatDatePiker(FileDate);
+			new ConvConst().FormatDatePiker(DT2);
+			
 			dbConnect();
 
-			//SyntheticaFX.init("com.jyloo.syntheticafx.SyntheticaFXModena");
+			// SyntheticaFX.init("com.jyloo.syntheticafx.SyntheticaFXModena");
 
 			CONV_ID.setCellValueFactory(cellData -> cellData.getValue().IDProperty().asObject());
 			CONV_REF.setCellValueFactory(cellData -> cellData.getValue().REFProperty());
 			CONV_FL32A_DATE.setCellValueFactory(cellData -> cellData.getValue().FL32A_DATEProperty());
 			CONV_FL32A_CUR.setCellValueFactory(cellData -> cellData.getValue().FL32A_CURProperty());
-			CONV_FL32A_SUM.setCellValueFactory(cellData -> cellData.getValue().FL32A_SUMProperty());
+			CONV_FL32A_SUM.setCellValueFactory(cellData -> cellData.getValue().FL32A_SUMProperty().asObject());
 			CONV_F53B.setCellValueFactory(cellData -> cellData.getValue().F53BProperty());
 			CONV_F58A.setCellValueFactory(cellData -> cellData.getValue().F58AProperty());
 			CONV_F72.setCellValueFactory(cellData -> cellData.getValue().F72Property());
@@ -2417,12 +2488,11 @@ public class SWC {
 				}
 			});
 
-
 			NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
 			DecimalFormatSymbols decimalFormatSymbols = ((DecimalFormat) currencyFormat).getDecimalFormatSymbols();
 			decimalFormatSymbols.setCurrencySymbol("");
 			((DecimalFormat) currencyFormat).setDecimalFormatSymbols(decimalFormatSymbols);
-			
+
 			SUMMdb.setCellFactory(tc -> new TableCell<SWIFT_FILES, Double>() {
 
 				@Override
@@ -2489,17 +2559,35 @@ public class SWC {
 //				@Override
 //				public Object call() throws Exception {
 
-			PreparedStatement prepStmt = conn.prepareStatement("select * from VTB_MT202_CONV t order by ID desc");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+			String dt1_ = "";
+			String dt2_ = "";
+
+			if (ConvFrom.getValue() != null) {
+				dt1_ = "and trunc(DATETIME) >= to_date('" + ConvFrom.getValue().format(formatter) + "','dd.mm.yyyy') \r\n";
+			}
+
+			if (ConvTo.getValue() != null) {
+				dt2_ = "and trunc(DATETIME) <= to_date('" + ConvTo.getValue().format(formatter) + "','dd.mm.yyyy') \r\n";
+			}
+			
+			PreparedStatement prepStmt = conn.prepareStatement("select REF,\r\n" + "       TRN_NUM,\r\n"
+					+ "       TRN_ANUM,\r\n" + "       F72,\r\n" + "       F58A,\r\n" + "       F53B,\r\n"
+					+ "       FL32A_DATE,\r\n" + "       FL32A_CUR,\r\n" + "       to_number(FL32A_SUM) FL32A_SUM,\r\n"
+					+ "       F21,\r\n" + "       FL58A_DETAIL,\r\n" + "       OPER,\r\n" + "       DATETIME,\r\n"
+					+ "       ID\r\n" + "  from VTB_MT202_CONV\r\n where 1=1 "+dt1_+" "+dt2_
+					+ " order by ID desc");
 			ResultSet rs = prepStmt.executeQuery();
 			ObservableList<VTB_MT202_CONV> cus_list = FXCollections.observableArrayList();
 			DateTimeFormatter dtformatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 			while (rs.next()) {
 				VTB_MT202_CONV list = new VTB_MT202_CONV();
 				list.setTRN_ANUM(rs.getInt("TRN_ANUM"));
-				list.setTRN_NUM(rs.getInt("TRN_NUM"));
+				list.setTRN_NUM(rs.getLong("TRN_NUM"));
 				list.setREF(rs.getString("REF"));
 				list.setF21(rs.getString("F21"));
-				list.setFL32A_SUM(rs.getString("FL32A_SUM"));
+				list.setFL32A_SUM(rs.getDouble("FL32A_SUM"));
 				list.setFL32A_CUR(rs.getString("FL32A_CUR"));
 				list.setFL32A_DATE(rs.getString("FL32A_DATE"));
 				list.setF53B(rs.getString("F53B"));
@@ -2530,6 +2618,24 @@ public class SWC {
 							return false;
 						}
 					});
+				}
+			});
+
+			NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
+			DecimalFormatSymbols decimalFormatSymbols = ((DecimalFormat) currencyFormat).getDecimalFormatSymbols();
+			decimalFormatSymbols.setCurrencySymbol("");
+			((DecimalFormat) currencyFormat).setDecimalFormatSymbols(decimalFormatSymbols);
+
+			CONV_FL32A_SUM.setCellFactory(tc -> new TableCell<VTB_MT202_CONV, Double>() {
+
+				@Override
+				protected void updateItem(Double price, boolean empty) {
+					super.updateItem(price, empty);
+					if (empty) {
+						setText(null);
+					} else {
+						setText(currencyFormat.format(price));
+					}
 				}
 			});
 
@@ -2747,6 +2853,11 @@ public class SWC {
 							});
 
 							NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
+							DecimalFormatSymbols decimalFormatSymbols = ((DecimalFormat) currencyFormat)
+									.getDecimalFormatSymbols();
+							decimalFormatSymbols.setCurrencySymbol("");
+							((DecimalFormat) currencyFormat).setDecimalFormatSymbols(decimalFormatSymbols);
+
 							SUMM.setCellFactory(tc -> new TableCell<SWIFT_FILES, Double>() {
 
 								@Override

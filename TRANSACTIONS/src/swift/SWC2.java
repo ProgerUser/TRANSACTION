@@ -1729,7 +1729,7 @@ public class SWC2 {
 			CONV_REF.setCellValueFactory(cellData -> cellData.getValue().REFProperty());
 			CONV_FL32A_DATE.setCellValueFactory(cellData -> cellData.getValue().FL32A_DATEProperty());
 			CONV_FL32A_CUR.setCellValueFactory(cellData -> cellData.getValue().FL32A_CURProperty());
-			CONV_FL32A_SUM.setCellValueFactory(cellData -> cellData.getValue().FL32A_SUMProperty());
+			//CONV_FL32A_SUM.setCellValueFactory(cellData -> cellData.getValue().FL32A_SUMProperty());
 			CONV_F53B.setCellValueFactory(cellData -> cellData.getValue().F53BProperty());
 			CONV_F58A.setCellValueFactory(cellData -> cellData.getValue().F58AProperty());
 			CONV_F72.setCellValueFactory(cellData -> cellData.getValue().F72Property());
@@ -2489,10 +2489,10 @@ public class SWC2 {
 			while (rs.next()) {
 				VTB_MT202_CONV list = new VTB_MT202_CONV();
 				list.setTRN_ANUM(rs.getInt("TRN_ANUM"));
-				list.setTRN_NUM(rs.getInt("TRN_NUM"));
+				//list.setTRN_NUM(rs.getInt("TRN_NUM"));
 				list.setREF(rs.getString("REF"));
 				list.setF21(rs.getString("F21"));
-				list.setFL32A_SUM(rs.getString("FL32A_SUM"));
+				//list.setFL32A_SUM(rs.getString("FL32A_SUM"));
 				list.setFL32A_CUR(rs.getString("FL32A_CUR"));
 				list.setFL32A_DATE(rs.getString("FL32A_DATE"));
 				list.setF53B(rs.getString("F53B"));

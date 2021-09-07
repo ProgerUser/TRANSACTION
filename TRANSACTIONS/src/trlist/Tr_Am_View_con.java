@@ -86,6 +86,7 @@ import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LocalDateTimeStringConverter;
 import sbalert.Msg;
+import swift.ConvConst;
 
 /**
  * Саид 04.04.2019.
@@ -473,6 +474,10 @@ public class Tr_Am_View_con {
 	@FXML
 	private void initialize() throws Exception {
 		try {
+			
+			new ConvConst().FormatDatePiker(dt1);
+			new ConvConst().FormatDatePiker(dt2);
+			
 			trans_table.setEditable(true);
 			exec = Executors.newCachedThreadPool((runnable) -> {
 				Thread t = new Thread(runnable);

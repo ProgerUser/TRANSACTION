@@ -30,6 +30,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import javax.swing.filechooser.FileSystemView;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -172,8 +173,8 @@ public class Amra_Transact {
 					"*.xml")/*
 							 * , new ExtensionFilter("Text Files", "*.txt")
 							 */);
-			fileChooser.setInitialDirectory(
-					new File(System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
+			fileChooser
+			.setInitialDirectory(new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath()));
 			File file = fileChooser.showOpenDialog(null);
 			if (file != null) {
 				// textbox.setText(file.getParent() + "::_" + file.getName());

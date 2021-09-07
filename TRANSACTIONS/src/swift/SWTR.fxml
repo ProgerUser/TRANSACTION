@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jyloo.syntheticafx.XTableColumn?>
-<?import com.jyloo.syntheticafx.XTableView?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -224,7 +222,7 @@
                                           <Separator orientation="VERTICAL" />
                                           <Button fx:id="ClearFilter" mnemonicParsing="false" onAction="#ClearFilter" textFill="WHITE">
                                              <graphic>
-                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TIMES" size="15" />
+                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TIMES" size="18" />
                                              </graphic>
                                              <font>
                                                 <Font size="10.0" />
@@ -344,6 +342,15 @@
                                     </Tooltip>
                                  </tooltip>
                               </ComboBox>
+                              <Separator layoutX="440.0" layoutY="10.0" orientation="VERTICAL" />
+                              <Button mnemonicParsing="false" onAction="#ClearFilterArchive" textFill="WHITE">
+                                 <graphic>
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TIMES" size="18" />
+                                 </graphic>
+                                 <font>
+                                    <Font size="10.0" />
+                                 </font>
+                              </Button>
                               <Separator orientation="VERTICAL" />
                               <Button mnemonicParsing="false" onAction="#OpenDB">
                                  <font>
@@ -360,7 +367,6 @@
                                     </Tooltip>
                                  </tooltip>
                               </Button>
-                              <Separator orientation="VERTICAL" />
                               <Button layoutX="407.0" layoutY="10.0" mnemonicParsing="false" onAction="#AckNak">
                                  <font>
                                     <Font size="10.0" />
@@ -376,7 +382,6 @@
                                     </Tooltip>
                                  </tooltip>
                               </Button>
-                              <Separator orientation="VERTICAL" />
                               <Button layoutX="462.0" layoutY="10.0" mnemonicParsing="false" onAction="#OpenAbsForm">
                                  <font>
                                     <Font size="10.0" />
@@ -392,7 +397,6 @@
                                     </Tooltip>
                                  </tooltip>
                               </Button>
-                              <Separator orientation="VERTICAL" />
                                 <Button layoutX="462.0" layoutY="10.0" mnemonicParsing="false" onAction="#OpenRelation">
                                  <font>
                                     <Font size="10.0" />
@@ -451,6 +455,64 @@
                   </BorderPane>
                </content>
             </Tab>
+            <Tab fx:id="CONV_VAL" text="Конверсия валюты">
+               <content>
+                  <TitledPane alignment="CENTER" animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Сформированные">
+                     <content>
+                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+                           <children>
+                              <ToolBar style="-fx-border-color: silver;">
+                                <items>
+                                  <Button mnemonicParsing="false" onAction="#REFR_CONV">
+                                       <graphic>
+                                          <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="18" />
+                                       </graphic>
+                                       <tooltip>
+                                          <Tooltip text="Обновить" />
+                                       </tooltip>
+                                    </Button>
+                                    <Button mnemonicParsing="false" onAction="#AUDIT_CONV">
+                                       <graphic>
+                                          <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EDIT" size="18" />
+                                       </graphic>
+                                       <tooltip>
+                                          <Tooltip text="Редактировать" />
+                                       </tooltip>
+                                    </Button>
+                                    <Separator orientation="VERTICAL" />
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="С:" />
+                                    <DatePicker fx:id="ConvFrom" prefWidth="120.0" />
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="По:" />
+                                    <DatePicker fx:id="ConvTo" layoutX="147.0" layoutY="11.0" prefWidth="120.0" />
+                                    <Separator orientation="VERTICAL" />
+                                    <Button mnemonicParsing="false" onAction="#ClearFilterConv" textFill="WHITE">
+                                       <graphic>
+                                          <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TIMES" size="18" />
+                                       </graphic>
+                                       <font>
+                                          <Font size="10.0" />
+                                       </font>
+                                    </Button>
+                                </items>
+                              </ToolBar>
+                              <TableView fx:id="CONV_TBL" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="mylistview" stylesheets="/TableView.css" VBox.vgrow="ALWAYS">
+                                 <columns>
+                                    <TableColumn fx:id="CONV_ID" prefWidth="75.0" text="ИД" />
+                                    <TableColumn fx:id="CONV_REF" prefWidth="120.0" text="Референс" />
+                                    <TableColumn fx:id="CONV_FL32A_DATE" prefWidth="97.0" text="Дата вал." />
+                                    <TableColumn fx:id="CONV_FL32A_CUR" prefWidth="45.0" text="Вал." />
+                                    <TableColumn fx:id="CONV_FL32A_SUM" prefWidth="99.0" text="Сумма" />
+                                    <TableColumn fx:id="CONV_F53B" prefWidth="160.0" text="Поле 53" />
+                                    <TableColumn fx:id="CONV_F58A" prefWidth="150.0" text="Поле 58" />
+                                    <TableColumn fx:id="CONV_F72" prefWidth="250.0" text="Поле 72" />
+                                    <TableColumn fx:id="CONV_DATETIME" prefWidth="120.0" text="Дата создания" />
+                                    <TableColumn fx:id="CONV_OPER" prefWidth="77.0" text="Опер." />
+                                 </columns>
+                              </TableView>
+                           </children>
+                        </VBox>
+                     </content></TitledPane>
+               </content></Tab>
             <Tab fx:id="SETTINGS" text="Настройки">
                <content>
                   <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
@@ -521,58 +583,6 @@
                   </VBox>
                </content>
             </Tab>
-            <Tab fx:id="CONV_VAL" text="Конверсия валюты">
-               <content>
-                  <TitledPane alignment="CENTER" animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Сформированные">
-                     <content>
-                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
-                           <children>
-                              <ToolBar style="-fx-border-color: silver;">
-                                <items>
-                                  <Button mnemonicParsing="false" onAction="#REFR_CONV">
-                                       <graphic>
-                                          <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="18" />
-                                       </graphic>
-                                       <tooltip>
-                                          <Tooltip text="Обновить" />
-                                       </tooltip>
-                                    </Button>
-                                    <Button mnemonicParsing="false">
-                                       <graphic>
-                                          <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EDIT" size="18" />
-                                       </graphic>
-                                       <tooltip>
-                                          <Tooltip text="Редактировать" />
-                                       </tooltip>
-                                    </Button>
-                                    <Button layoutX="43.0" layoutY="10.0" mnemonicParsing="false" onAction="#AUDIT_CONV" visible="false">
-                                       <graphic>
-                                          <FontAwesomeIconView glyphName="EXTERNAL_LINK" size="15" />
-                                       </graphic>
-                                       <tooltip>
-                                          <Tooltip text="Аудит" />
-                                       </tooltip>
-                                    </Button>
-                                </items>
-                              </ToolBar>
-                              <XTableView fx:id="CONV_TBL" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="mylistview" stylesheets="/TableView.css" VBox.vgrow="ALWAYS">
-                                 <columns>
-                                    <XTableColumn fx:id="CONV_ID" prefWidth="75.0" text="ИД" />
-                                    <XTableColumn fx:id="CONV_REF" prefWidth="120.0" text="Референс" />
-                                    <XTableColumn fx:id="CONV_FL32A_DATE" prefWidth="97.0" text="Дата вал." />
-                                    <XTableColumn fx:id="CONV_FL32A_CUR" prefWidth="45.0" text="Вал." />
-                                    <XTableColumn fx:id="CONV_FL32A_SUM" prefWidth="99.0" text="Сумма" />
-                                    <XTableColumn fx:id="CONV_F53B" prefWidth="160.0" text="Поле 53" />
-                                    <XTableColumn fx:id="CONV_F58A" prefWidth="150.0" text="Поле 58" />
-                                    <XTableColumn fx:id="CONV_F72" prefWidth="250.0" text="Поле 72" />
-                                    <XTableColumn fx:id="CONV_DATETIME" prefWidth="120.0" text="Дата создания" />
-                                    <XTableColumn fx:id="CONV_OPER" prefWidth="77.0" text="Опер." />
-                                 </columns>
-                              </XTableView>
-                           </children>
-                        </VBox>
-                     </content></TitledPane>
-               </content></Tab>
         </tabs>
          <StackPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

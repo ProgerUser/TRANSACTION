@@ -7,6 +7,7 @@ import org.apache.log4j.xml.DOMConfigurator;
 
 import app.model.Connect;
 import app.util.DBUtil;
+import contact.ContactC;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -69,7 +70,7 @@ public class Main extends Application {
 
 //			Connect.connectionURL_ = "10.111.64.21:1521/ODB";
 //			Connect.userID_ = "SAIDP";
-//			Connect.userPassword_ = "";
+//			Connect.userPassword_ = "xxx";
 //			DBUtil.dbConnect();
 //			initRootLayout();
 			
@@ -152,19 +153,29 @@ public class Main extends Application {
 	 */
 	public static void Contact() {
 		try {
-			/*
-			 * FXMLLoader loader = new FXMLLoader();
-			 * loader.setLocation(Main.class.getResource("view/Contact.fxml")); AnchorPane
-			 * employeeOperationsView = (AnchorPane) loader.load();
-			 * rootLayout.setCenter(employeeOperationsView);
-			 */
 			Stage stage = new Stage();
-			Parent root;
-			root = FXMLLoader.load(Main.class.getResource("view/Contact.fxml"));
+			
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Main.class.getResource("/contact/Contact.fxml"));
+
+			ContactC controller = new ContactC();
+			
+			loader.setController(controller);
+			
+			Parent root = loader.load();
+			
 			stage.setScene(new Scene(root));
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("Комиссии Контакт");
 			stage.initOwner(primaryStage);
+			
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent paramT) {
+					controller.dbDisconnect();
+				}
+			});
+			
 			stage.show();
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
