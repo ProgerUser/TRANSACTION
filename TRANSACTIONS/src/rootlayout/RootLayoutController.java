@@ -353,7 +353,7 @@ public class RootLayoutController {
 	 */
 	public Long chk_menu(Long FORM_NAME, String CUSRLOGNAME) {
 		Long ret = 0l;
-		Connection conn = DbUtil.conn;
+		Connection conn = DBUtil.conn;
 		try {
 			PreparedStatement prepStmt = conn.prepareStatement("SELECT MJUsers.MNU_ACCESS(MNU_ID => ?, USR_LOGIN => ?) CNT FROM DUAL");
 			prepStmt.setLong(1, FORM_NAME);
