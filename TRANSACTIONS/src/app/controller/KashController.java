@@ -28,6 +28,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import sb.utils.DbUtil;
 import sbalert.Msg;
 import swift.SWC;
 import tr.pl.Pl;
@@ -410,6 +411,12 @@ public class KashController {
 	@FXML
 	void Rash(ActionEvent event) {
 		try {
+			
+			if (DbUtil.Odb_Action(14l) == 0) {
+				Msg.Message("Нет доступа!");
+				return;
+			}
+			
 			Stage stage = new Stage();
 			Stage stage_ = (Stage) employeeTable.getScene().getWindow();
 			FXMLLoader loader = new FXMLLoader();
