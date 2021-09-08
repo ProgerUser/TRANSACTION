@@ -103,6 +103,11 @@ public class PensController {
 			}
 			conn.commit();
 		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				Msg.Message(ExceptionUtils.getStackTrace(e1));
+			}
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
@@ -629,7 +634,7 @@ public class PensController {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
-	
+
 	public void dbDisconnect() {
 		try {
 			if (conn != null && !conn.isClosed()) {

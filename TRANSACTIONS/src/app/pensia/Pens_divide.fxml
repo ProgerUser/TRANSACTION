@@ -4,6 +4,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -71,7 +72,32 @@
                      <children>
                         <ToolBar VBox.vgrow="ALWAYS">
                           <items>
-                            <Button mnemonicParsing="false" />
+                              <Button fx:id="separate1" disable="false" mnemonicParsing="false" onAction="#separate">
+                                 <tooltip>
+                                    <Tooltip text="Загрузить файл" />
+                                 </tooltip>
+                                 <graphic>
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FOLDER_OPEN_ALT" size="18" />
+                                 </graphic>
+                              </Button>
+                              <Separator orientation="VERTICAL" />
+                              <Button fx:id="separate12" disable="false" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#separate">
+                                 <tooltip>
+                                    <Tooltip text="Зачислить на счета" />
+                                 </tooltip>
+                                 <graphic>
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="LIST_OL" size="18" />
+                                 </graphic>
+                              </Button>
+                              <Separator layoutX="50.0" layoutY="10.0" orientation="VERTICAL" />
+                              <Button fx:id="separate11" disable="false" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#separate">
+                                 <tooltip>
+                                    <Tooltip text="Загрузить файл" />
+                                 </tooltip>
+                                 <graphic>
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EXTERNAL_LINK" size="18" />
+                                 </graphic>
+                              </Button>
                           </items>
                            <VBox.margin>
                               <Insets left="-5.0" right="-5.0" top="-5.0" />
