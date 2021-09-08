@@ -1,4 +1,4 @@
-package app.controller;
+package app.pensia;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -11,12 +11,14 @@ import java.io.PrintWriter;
 import java.sql.CallableStatement;
 import java.sql.Clob;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.time.LocalDateTime;
+import java.util.Properties;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.ss.usermodel.Row;
@@ -25,67 +27,54 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.controlsfx.control.table.TableFilter;
 import org.mozilla.universalchardet.UniversalDetector;
 
+import app.model.Connect;
 import app.model.SqlMap;
 import app.model.TerminalDAO;
-import app.model.pensmodel;
-import app.util.DBUtil;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.image.Image;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LocalDateTimeStringConverter;
+import sbalert.Msg;
 
 /**
- * Пачулия Саид 13.07.2020.
+ * Said 13.07.2020.
  */
-public class penscontroller {
+public class PensController {
 
 	@FXML
 	private TableView<pensmodel> sep_pens;
-
 	@FXML
 	private Button separate;
 	@FXML
 	private Button save_sep;
-
 	@FXML
 	private TableColumn<pensmodel, LocalDateTime> DateLoad;
-
 	@FXML
 	private TableColumn<pensmodel, String> Filename;
-
 	@FXML
 	private TableColumn<pensmodel, Integer> ID;
-
 	@FXML
 	private TableColumn<pensmodel, String> ONE_PART;
-
 	@FXML
 	private TableColumn<pensmodel, String> TWO_PART;
-
 	@FXML
 	private TableColumn<pensmodel, String> THREE_PART;
-
 	@FXML
 	private TableColumn<pensmodel, String> FOUR_PART;
-
 	@FXML
 	private CheckBox pensrachk;
-	
-	Connection conn = DBUtil.conn;
+
 	@FXML
 	void pensrachk(ActionEvent event) {
 		try {
@@ -97,7 +86,7 @@ public class penscontroller {
 				callStmt.execute();
 				String ret = callStmt.getString(1);
 				if (!ret.equals("OK")) {
-					Alerts(ret);
+					Msg.Message(ret);
 				}
 				pensrachk.setSelected(true);
 			} else {
@@ -108,103 +97,95 @@ public class penscontroller {
 				callStmt.execute();
 				String ret = callStmt.getString(1);
 				if (!ret.equals("OK")) {
-					Alerts(ret);
+					Msg.Message(ret);
 				}
 				pensrachk.setSelected(false);
 			}
 			conn.commit();
 		} catch (Exception e) {
-			Alerts(ExceptionUtils.getStackTrace(e));
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
-	/* Инициализация */
+	/**
+	 * Инициализация
+	 */
 	@FXML
 	private void initialize() {
 		try {
-			String sql = "select t.BOOLEAN from Z_SB_PENSRACHK t";
-			Connection conn = DBUtil.conn;
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
-			if (rs.next()) {
-				{
-					if (rs.getString("BOOLEAN").equals("Y"))
-						pensrachk.setSelected(true);
-					else
-						pensrachk.setSelected(false);
+			dbConnect();
+			try {
+				String sql = "select t.BOOLEAN from Z_SB_PENSRACHK t";
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(sql);
+				if (rs.next()) {
+					{
+						if (rs.getString("BOOLEAN").equals("Y"))
+							pensrachk.setSelected(true);
+						else
+							pensrachk.setSelected(false);
+					}
 				}
+			} catch (Exception e) {
+				Msg.Message(ExceptionUtils.getStackTrace(e));
 			}
+			sep_pens.setEditable(true);
+
+			ID.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
+			Filename.setCellValueFactory(cellData -> cellData.getValue().filenameProperty());
+			DateLoad.setCellValueFactory(cellData -> cellData.getValue().dateloadProperty());
+			Filename.setCellFactory(TextFieldTableCell.forTableColumn());
+			ID.setCellFactory(TextFieldTableCell.<pensmodel, Integer>forTableColumn(new IntegerStringConverter()));
+			DateLoad.setCellFactory(
+					TextFieldTableCell.<pensmodel, LocalDateTime>forTableColumn(new LocalDateTimeStringConverter()));
+
+			ID.setOnEditCommit(new EventHandler<CellEditEvent<pensmodel, Integer>>() {
+				@Override
+				public void handle(CellEditEvent<pensmodel, Integer> t) {
+					((pensmodel) t.getTableView().getItems().get(t.getTablePosition().getRow())).setid(t.getNewValue());
+				}
+			});
+			Filename.setOnEditCommit(new EventHandler<CellEditEvent<pensmodel, String>>() {
+				@Override
+				public void handle(CellEditEvent<pensmodel, String> t) {
+					((pensmodel) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+							.setfilename(t.getNewValue());
+				}
+			});
+			DateLoad.setOnEditCommit(new EventHandler<CellEditEvent<pensmodel, LocalDateTime>>() {
+				@Override
+				public void handle(CellEditEvent<pensmodel, LocalDateTime> t) {
+					((pensmodel) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+							.setdateload(t.getNewValue());
+				}
+			});
+			ObservableList<pensmodel> empData = TerminalDAO.Z_SB_PENS_4FILE();
+			populate(empData);
+			autoResizeColumns(sep_pens);
+			TableFilter.forTableView(sep_pens).apply();
 		} catch (Exception e) {
-			Alerts(ExceptionUtils.getStackTrace(e));
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
-		sep_pens.setEditable(true);
-
-		ID.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
-		Filename.setCellValueFactory(cellData -> cellData.getValue().filenameProperty());
-		DateLoad.setCellValueFactory(cellData -> cellData.getValue().dateloadProperty());
-
-		Filename.setCellFactory(TextFieldTableCell.forTableColumn());
-		ID.setCellFactory(TextFieldTableCell.<pensmodel, Integer>forTableColumn(new IntegerStringConverter()));
-		DateLoad.setCellFactory(
-				TextFieldTableCell.<pensmodel, LocalDateTime>forTableColumn(new LocalDateTimeStringConverter()));
-
-		/*
-		 * DateLoad.setCellFactory(column -> { TableCell<pensmodel, LocalDateTime> cell
-		 * = new TableCell<pensmodel, LocalDateTime>() { private SimpleDateFormat format
-		 * = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-		 * 
-		 * @Override protected void updateItem(LocalDateTime item, boolean empty) {
-		 * super.updateItem(item, empty); if (empty) { setText(null); } else {
-		 * setText(format.format(item)); } } }; return cell; });
-		 */
-
-		ID.setOnEditCommit(new EventHandler<CellEditEvent<pensmodel, Integer>>() {
-			@Override
-			public void handle(CellEditEvent<pensmodel, Integer> t) {
-				((pensmodel) t.getTableView().getItems().get(t.getTablePosition().getRow())).setid(t.getNewValue());
-			}
-		});
-
-		Filename.setOnEditCommit(new EventHandler<CellEditEvent<pensmodel, String>>() {
-			@Override
-			public void handle(CellEditEvent<pensmodel, String> t) {
-				((pensmodel) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-						.setfilename(t.getNewValue());
-			}
-		});
-
-		DateLoad.setOnEditCommit(new EventHandler<CellEditEvent<pensmodel, LocalDateTime>>() {
-			@Override
-			public void handle(CellEditEvent<pensmodel, LocalDateTime> t) {
-				((pensmodel) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-						.setdateload(t.getNewValue());
-			}
-		});
-
-		ObservableList<pensmodel> empData = TerminalDAO.Z_SB_PENS_4FILE();
-		populate(empData);
-		autoResizeColumns(sep_pens);
-		TableFilter.forTableView(sep_pens).apply();
 	}
 
+	/**
+	 * Заполнить
+	 * 
+	 * @param pensmodel
+	 */
 	private void populate(ObservableList<pensmodel> pensmodel) {
 		sep_pens.setItems(pensmodel);
 	}
 
-	private void Alerts(String mess) {
-		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-		stage.getIcons().add(new Image("terminal.png"));
-		alert.setTitle("Внимание");
-		alert.setHeaderText(null);
-		alert.setContentText(mess);
-		alert.showAndWait();
-	}
-
+	/**
+	 * Сохранить
+	 * 
+	 * @param event
+	 */
 	@FXML
 	void save_seps(ActionEvent event) {
 		if (sep_pens.getSelectionModel().getSelectedItem() == null) {
-			Alerts("Выберите сначала данные из таблицы!");
+			Msg.Message("Выберите сначала данные из таблицы!");
 		} else {
 			pensmodel pens = sep_pens.getSelectionModel().getSelectedItem();
 			System.out.println(pens.getid());
@@ -222,9 +203,9 @@ public class penscontroller {
 
 			if (file != null) {
 				for (int i = 1; i <= 4; i++) {
-					retclob_(i, pens.getid(), DBUtil.conn, file);
+					retclob_(i, pens.getid(), conn, file);
 				}
-				showalert("Файлы сформированы в папку=" + file.getParent());
+				Msg.Message("Файлы сформированы в папку=" + file.getParent());
 			}
 
 		}
@@ -258,7 +239,12 @@ public class penscontroller {
 		});
 	}
 
-	/* Получить кодировку файла */
+	/**
+	 * Получить кодировку файла
+	 * 
+	 * @param file
+	 * @return
+	 */
 	public String getFileCharset(String file) {
 		try {
 			byte[] buf = new byte[500000000];
@@ -274,12 +260,17 @@ public class penscontroller {
 			bufferedInputStream.close();
 			return encoding;
 		} catch (IOException e) {
-			showalert(ExceptionUtils.getStackTrace(e));
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
 
-	/* Чтение файла */
+	/**
+	 * Чтение файла
+	 * 
+	 * @param fileName
+	 * @return
+	 */
 	private String readFile(String fileName) {
 		try {
 			BufferedReader br = new BufferedReader(
@@ -295,12 +286,16 @@ public class penscontroller {
 			br.close();
 			return clobData;
 		} catch (IOException e) {
-			showalert(ExceptionUtils.getStackTrace(e));
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 		return "Error";
 	}
 
-	/* Старт */
+	/**
+	 * Старт
+	 * 
+	 * @param event
+	 */
 	@FXML
 	private void separate(ActionEvent event) {
 		try {
@@ -313,24 +308,20 @@ public class penscontroller {
 			File file = fileChooser.showOpenDialog(null);
 			if (file != null) {
 
-				DBUtil.dbDisconnect();
-				DBUtil.dbConnect();
-
-				Connection conn = DBUtil.conn;
 				CallableStatement callStmt = null;
 				String reviewContent = null;
 				callStmt = conn.prepareCall("{ ? = call z_sb_pens_sepfile.z_sb_pens_sepfile(?,?)}");
-				
+
 				String reviewStr = readFile(file.getParent() + "\\" + file.getName());
 				Clob clob = conn.createClob();
 				clob.setString(1, reviewStr);
 				callStmt.registerOutParameter(1, Types.VARCHAR);
-				
+
 //				File blob = new File(file.getParent() + "\\" + file.getName());
 //				FileInputStream in = new FileInputStream(blob);
 //				callStmt.setBinaryStream(2, in, (int)blob.length());
 				callStmt.setClob(2, clob);
-				
+
 				callStmt.setString(3, file.getName());
 				callStmt.execute();
 				reviewContent = callStmt.getString(1);
@@ -411,20 +402,32 @@ public class penscontroller {
 							prepStmt.executeUpdate();
 						}
 					}
+					conn.commit();
 					/* Вывод сообщения */
-					showalert("Файлы сформированы в папку=" + file.getParent());
+					Msg.Message("Файлы сформированы в папку=" + file.getParent());
 					ObservableList<pensmodel> empData = TerminalDAO.Z_SB_PENS_4FILE();
 					populate(empData);
 					autoResizeColumns(sep_pens);
 					TableFilter.forTableView(sep_pens).apply();
 				}
 			}
-		} catch (SQLException e) {
-			showalert(ExceptionUtils.getStackTrace(e));
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				Msg.Message(ExceptionUtils.getStackTrace(e1));
+			}
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
-	/* Вывод ошибок */
+	/**
+	 * Вывод ошибок
+	 * 
+	 * @param conn
+	 * @param file
+	 * @param sess_id
+	 */
 	public void write_error(Connection conn, File file, int sess_id) {
 		try {
 			Statement sqlStatement = conn.createStatement();
@@ -445,11 +448,19 @@ public class penscontroller {
 			pb.start();
 
 		} catch (Exception e) {
-			showalert(ExceptionUtils.getStackTrace(e));
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
-	/* Возврат самого файла */
+	/**
+	 * Возврат самого файла
+	 * 
+	 * @param id
+	 * @param sess_id
+	 * @param conn
+	 * @param file
+	 * @return
+	 */
 	public String retclob(int id, int sess_id, Connection conn, File file) {
 		String str = "";
 		try {
@@ -474,12 +485,19 @@ public class penscontroller {
 			prepStmt.close();
 
 		} catch (Exception e) {
-			showalert(ExceptionUtils.getStackTrace(e));
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 		return str;
 	}
 
-	/* Возврат самого файла */
+	/**
+	 * Возврат самого файла
+	 * 
+	 * @param id
+	 * @param sess_id
+	 * @param conn
+	 * @param file
+	 */
 	public void retclob_(int id, int sess_id, Connection conn, File file) {
 		try {
 			Statement sqlStatement = conn.createStatement();
@@ -508,11 +526,18 @@ public class penscontroller {
 			rs.close();
 			sqlStatement.close();
 		} catch (Exception e) {
-			showalert(ExceptionUtils.getStackTrace(e));
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
-	/* Возврат самого файла */
+	/**
+	 * Возврат самого файла
+	 * 
+	 * @param id
+	 * @param sess_id
+	 * @param conn
+	 * @param file
+	 */
 	public void retxlsx(int id, int sess_id, Connection conn, File file) {
 		try {
 			String part = "";
@@ -579,18 +604,41 @@ public class penscontroller {
 			workbook.close();
 
 		} catch (Exception e) {
-			showalert(ExceptionUtils.getStackTrace(e));
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
-	/* Вывод сообщения */
-	public void showalert(String mes) {
-		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-		stage.getIcons().add(new Image("terminal.png"));
-		alert.setTitle("Внимание");
-		alert.setHeaderText(null);
-		alert.setContentText(mes);
-		alert.showAndWait();
+	/**
+	 * Сессия
+	 */
+	private Connection conn;
+
+	/**
+	 * Открыть сессию
+	 */
+	private void dbConnect() {
+		try {
+			Class.forName("oracle.jdbc.OracleDriver");
+			Properties props = new Properties();
+			props.put("v$session.program", getClass().getName());
+			conn = DriverManager.getConnection(
+					"jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_ + "@" + Connect.connectionURL_,
+					props);
+			conn.setAutoCommit(false);
+		} catch (SQLException | ClassNotFoundException e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
 	}
+	
+	public void dbDisconnect() {
+		try {
+			if (conn != null && !conn.isClosed()) {
+				conn.rollback();
+				conn.close();
+			}
+		} catch (SQLException e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
 }

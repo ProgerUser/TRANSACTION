@@ -27,7 +27,7 @@ import org.mozilla.universalchardet.UniversalDetector;
 
 import app.model.SqlMap;
 import app.model.TerminalDAO;
-import app.model.pensmodel;
+import app.pensia.pensmodel;
 import app.util.DBUtil;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

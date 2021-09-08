@@ -9,6 +9,7 @@ import access.action.OdbActions;
 import access.grp.GrpController;
 import access.menu.OdbMNU;
 import app.model.Connect;
+import app.pensia.PensController;
 import app.util.DBUtil;
 import contact.ContactC;
 import javafx.application.Application;
@@ -22,7 +23,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import sb.utils.DbUtil;
@@ -43,7 +43,7 @@ public class Main extends Application {
 	public static Stage primaryStage;
 	public static BorderPane rootLayout;
 	public static String MODULE = null;
-    
+
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -75,13 +75,13 @@ public class Main extends Application {
 			Connect.connectionURL_ = "10.111.64.21:1521/ODB";
 			Connect.userID_ = "saidp";
 			Connect.userPassword_ = "vector165";
-			
+
 			DbUtil.Db_Connect();
 			DBUtil.dbConnect();
-			
-			initRootLayout();	
+
+			initRootLayout();
 			showFirst();
-			
+
 //			swift2();
 //			ConvVal();
 
@@ -131,9 +131,8 @@ public class Main extends Application {
 		}
 	}
 
-	
 	public static boolean MenuWin = true;
-	
+
 	/**
 	 * Доступ по действиям
 	 */
@@ -163,6 +162,7 @@ public class Main extends Application {
 			DbUtil.Log_Error(e);
 		}
 	}
+
 	/**
 	 * Формирование псевдонимов
 	 */
@@ -193,28 +193,28 @@ public class Main extends Application {
 	public static void Contact() {
 		try {
 			Stage stage = new Stage();
-			
+
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("/contact/Contact.fxml"));
 
 			ContactC controller = new ContactC();
-			
+
 			loader.setController(controller);
-			
+
 			Parent root = loader.load();
-			
+
 			stage.setScene(new Scene(root));
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("Комиссии Контакт");
 			stage.initOwner(primaryStage);
-			
+
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				@Override
 				public void handle(WindowEvent paramT) {
 					controller.dbDisconnect();
 				}
 			});
-			
+
 			stage.show();
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
@@ -320,7 +320,7 @@ public class Main extends Application {
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				@Override
 				public void handle(WindowEvent paramT) {
-					//controller.EndTask();
+					// controller.EndTask();
 					controller.dbDisconnect();
 				}
 			});
@@ -356,7 +356,7 @@ public class Main extends Application {
 			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				@Override
 				public void handle(WindowEvent paramT) {
-					//controller.EndTask();
+					// controller.EndTask();
 					controller.dbDisconnect();
 				}
 			});
@@ -366,6 +366,7 @@ public class Main extends Application {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
+
 	public static void ConvVal() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
@@ -557,41 +558,37 @@ public class Main extends Application {
 	}
 
 	public static boolean ActWin = true;
-	
+
 	/* Доступ не используется */
 	public static void Admin() {
 		try {
-			try {
-				if (ActWin) {
-					ActWin = false;
-					Stage stage = new Stage();
-					FXMLLoader loader = new FXMLLoader(Main.class.getResource("/access/action/ODB_ACTION.fxml"));
-					Parent root = loader.load();
-					stage.setScene(new Scene(root));
-					stage.getIcons().add(new Image("/icon.png"));
-					stage.setTitle("Доступ по действиям");
-					stage.initOwner(primaryStage);
-					// stage.initModality(Modality.WINDOW_MODAL);
-					OdbActions controller = loader.getController();
-					stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-						@Override
-						public void handle(WindowEvent paramT) {
-							controller.dbDisconnect();
-							ActWin = true;
-						}
-					});
-					stage.show();
-				}
-			} catch (Exception e) {
-				DbUtil.Log_Error(e);
+			if (ActWin) {
+				ActWin = false;
+				Stage stage = new Stage();
+				FXMLLoader loader = new FXMLLoader(Main.class.getResource("/access/action/ODB_ACTION.fxml"));
+				Parent root = loader.load();
+				stage.setScene(new Scene(root));
+				stage.getIcons().add(new Image("/icon.png"));
+				stage.setTitle("Доступ по действиям");
+				stage.initOwner(primaryStage);
+				// stage.initModality(Modality.WINDOW_MODAL);
+				OdbActions controller = loader.getController();
+				stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+					@Override
+					public void handle(WindowEvent paramT) {
+						controller.dbDisconnect();
+						ActWin = true;
+					}
+				});
+				stage.show();
 			}
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
-	
+
 	public static boolean GrpAccessWin = true;
-	
+
 	/* Доступ не используется */
 	public static void AccessGroup() {
 		try {
@@ -679,31 +676,33 @@ public class Main extends Application {
 		}
 	}
 
+	public static boolean PensWin = true;
+
 	/**
 	 * Пенсия
 	 */
 	public static void sep() {
 		try {
-			/*
-			 * FXMLLoader loader = new FXMLLoader();
-			 * loader.setLocation(Main.class.getResource("view/Pens_divide.fxml"));
-			 * AnchorPane employeeOperationsView = (AnchorPane) loader.load();
-			 * rootLayout.setCenter(employeeOperationsView);
-			 */
-
-			Stage stage = new Stage();
-			Parent root;
-			root = FXMLLoader.load(Main.class.getResource("view/Pens_divide.fxml"));
-			stage.setScene(new Scene(root));
-			stage.getIcons().add(new Image("icon.png"));
-			stage.setTitle("Пенсия РФ");
-			stage.setResizable(false);
-			stage.initModality(Modality.WINDOW_MODAL);
-			stage.initOwner(primaryStage);
-			stage.show();
-
+			if (PensWin) {
+				PensWin = false;
+				Stage stage = new Stage();
+				FXMLLoader loader = new FXMLLoader(Main.class.getResource("/app/pensia/Pens_divide.fxml"));
+				Parent root = loader.load();
+				stage.setScene(new Scene(root));
+				stage.getIcons().add(new Image("/icon.png"));
+				stage.setTitle("Пенсия РФ");
+				stage.initOwner(primaryStage);
+				PensController controller = loader.getController();
+				stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+					@Override
+					public void handle(WindowEvent paramT) {
+						controller.dbDisconnect();
+						PensWin = true;
+					}
+				});
+				stage.show();
+			}
 		} catch (Exception e) {
-			e.printStackTrace();
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
@@ -758,7 +757,7 @@ public class Main extends Application {
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("Загрузка транзакции");
 			stage.setResizable(false);
-			//root.initModality(Modality.WINDOW_MODAL);
+			// root.initModality(Modality.WINDOW_MODAL);
 			stage.initOwner(primaryStage);
 			stage.show();
 		} catch (Exception e) {

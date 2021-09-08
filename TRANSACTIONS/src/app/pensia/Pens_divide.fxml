@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controller.penscontroller">
+	<children>
+      <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="floating" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+        <tabs>
+          <Tab text="Разделить файл">
+               <content>
+                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+                     <children>
+                        <ToolBar VBox.vgrow="ALWAYS">
+                           <items>
+                        		<Button fx:id="separate" disable="false" mnemonicParsing="false" onAction="#separate">
+                        			<tooltip>
+                        				<Tooltip text="Разделить файл" />
+                        			</tooltip>
+                                 <graphic>
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FOLDER_OPEN_ALT" size="18" />
+                                 </graphic>
+                        		</Button>
+                        		<Button fx:id="save_sep" disable="false" mnemonicParsing="false" onAction="#save_seps">
+                        			<tooltip>
+                        				<Tooltip text="Сохранить файлы" />
+                        			</tooltip>
+                                 <graphic>
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILE_EXCEL_ALT" size="18" />
+                                 </graphic>
+                        		</Button>
+                              <CheckBox fx:id="pensrachk" mnemonicParsing="false" onAction="#pensrachk" text="Разрешить загрузку РА пенсии в пл. модуле" />
+                           </items>
+                           <VBox.margin>
+                              <Insets left="-5.0" right="-5.0" top="-5.0" />
+                           </VBox.margin>
+                        </ToolBar>
+                  		<TableView fx:id="sep_pens" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                  			<columns>
+                  				<TableColumn fx:id="ID" prefWidth="75.0" text="ИД" />
+                  				<TableColumn fx:id="DateLoad" prefWidth="109.0" text="Дата загрузки" />
+                  				<TableColumn fx:id="Filename" prefWidth="144.0" text="Название файла" />
+                  				<!-- <TableColumn fx:id="ONE_PART" prefWidth="144.0" text="Часть I" />
+                  				<TableColumn fx:id="TWO_PART" prefWidth="144.0" text="Часть II" />
+                  				<TableColumn fx:id="THREE_PART" prefWidth="144.0" text="Часть III" />
+                  				<TableColumn fx:id="FOUR_PART" prefWidth="144.0" text="Часть IV" /> -->
+                  			</columns>
+                  		</TableView>
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </VBox>
+               </content>
+            </Tab>
+          <Tab text="Загрузить">
+               <content>
+                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                     <children>
+                        <ToolBar VBox.vgrow="ALWAYS">
+                          <items>
+                            <Button mnemonicParsing="false" />
+                          </items>
+                           <VBox.margin>
+                              <Insets left="-5.0" right="-5.0" top="-5.0" />
+                           </VBox.margin>
+                        </ToolBar>
+                        <TableView maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                          <columns>
+                            <TableColumn prefWidth="75.0" text="ИД" />
+                            <TableColumn prefWidth="138.0" text="Название файла" />
+                              <TableColumn prefWidth="138.0" text="Дата загрузки" />
+                              <TableColumn prefWidth="138.0" text="Количество строк" />
+                              <TableColumn prefWidth="96.0" text="Сумма" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+	</children>
+</VBox>
