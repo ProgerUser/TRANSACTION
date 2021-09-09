@@ -17,7 +17,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -30,12 +32,14 @@ import org.mozilla.universalchardet.UniversalDetector;
 import app.model.Connect;
 import app.model.SqlMap;
 import app.model.TerminalDAO;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
@@ -74,6 +78,17 @@ public class PensController {
 	private TableColumn<pensmodel, String> FOUR_PART;
 	@FXML
 	private CheckBox pensrachk;
+
+	@FXML
+	private TableView<PENS_LOAD_ROWSUM> PENS_LOAD_ROWSUM;
+	@FXML
+	private TableColumn<PENS_LOAD_ROWSUM, Long> LOAD_ID;
+	@FXML
+	private TableColumn<PENS_LOAD_ROWSUM, String> FILE_NAME;
+	@FXML
+	private TableColumn<PENS_LOAD_ROWSUM, LocalDateTime> DATE_LOAD;
+	@FXML
+	private TableColumn<PENS_LOAD_ROWSUM, Long> ROW_COUNT;
 
 	@FXML
 	void pensrachk(ActionEvent event) {
@@ -134,6 +149,7 @@ public class PensController {
 			} catch (Exception e) {
 				Msg.Message(ExceptionUtils.getStackTrace(e));
 			}
+
 			sep_pens.setEditable(true);
 
 			ID.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
@@ -168,6 +184,83 @@ public class PensController {
 			populate(empData);
 			autoResizeColumns(sep_pens);
 			TableFilter.forTableView(sep_pens).apply();
+
+			/**/
+			PENS_LOAD_ROWSUM.setEditable(true);
+
+			LOAD_ID.setCellValueFactory(cellData -> cellData.getValue().LOAD_IDProperty().asObject());
+			FILE_NAME.setCellValueFactory(cellData -> cellData.getValue().FILE_NAMEProperty());
+			DATE_LOAD.setCellValueFactory(cellData -> cellData.getValue().DATE_LOADProperty());
+			ROW_COUNT.setCellValueFactory(cellData -> cellData.getValue().ROW_COUNTProperty().asObject());
+
+			LoadTableContactAcc();
+			//
+			DATE_LOAD.setCellFactory(column -> {
+				TableCell<PENS_LOAD_ROWSUM, LocalDateTime> cell = new TableCell<PENS_LOAD_ROWSUM, LocalDateTime>() {
+					@Override
+					protected void updateItem(LocalDateTime item, boolean empty) {
+						super.updateItem(item, empty);
+						if (empty) {
+							setText(null);
+						} else {
+							if (item != null) {
+								setText(DateTimeFormat.format(item));
+							}
+						}
+					}
+				};
+				return cell;
+			});
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+	/**
+	 * Формат <br>
+	 * dd.MM.yyyy <br>
+	 * HH:mm:ss
+	 */
+	public static final DateTimeFormatter DateTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+	
+	/**
+	 * Initialize table
+	 */
+	void LoadTableContactAcc() {
+		try {
+			//date time formatter
+			DateTimeFormatter formatterwt = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+			//Prepared Statement
+			PreparedStatement prepStmt = conn.prepareStatement("SELECT * FROM SBRA_PENS_LOAD_ROWSUM");
+			ResultSet rs = prepStmt.executeQuery();
+			ObservableList<PENS_LOAD_ROWSUM> cus_list = FXCollections.observableArrayList();
+			// looping
+			while (rs.next()) {
+				PENS_LOAD_ROWSUM list = new PENS_LOAD_ROWSUM();
+				list.setLOAD_ID(rs.getLong("LOAD_ID"));
+				list.setDATE_LOAD((rs.getDate("DATE_LOAD") != null) ? LocalDateTime.parse(
+						new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("DATE_LOAD")), formatterwt)
+						: null);
+				list.setROW_COUNT(rs.getLong("ROW_COUNT"));
+				list.setFILE_NAME(rs.getString("FILE_NAME"));
+				cus_list.add(list);
+			}
+			// add data
+			PENS_LOAD_ROWSUM.setItems(cus_list);
+			// close
+			prepStmt.close();
+			rs.close();
+			// add filter
+			TableFilter<PENS_LOAD_ROWSUM> tableFilter = TableFilter.forTableView(PENS_LOAD_ROWSUM).apply();
+			tableFilter.setSearchStrategy((input, target) -> {
+				try {
+					return target.toLowerCase().contains(input.toLowerCase());
+				} catch (Exception e) {
+					return false;
+				}
+			});
+			// resize
+			autoResizeColumns(PENS_LOAD_ROWSUM);
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
@@ -221,7 +314,7 @@ public class PensController {
 		table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
 		table.getColumns().stream().forEach((column) -> {
 			// System.out.println(column.getText());
-			if (column.getText().equals("sess_id")) {
+			if (column.getText().equals("Количество строк")) {
 
 			} else {
 				// Minimal width = columnheader
