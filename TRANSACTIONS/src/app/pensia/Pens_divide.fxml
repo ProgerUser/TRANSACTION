@@ -4,6 +4,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -45,7 +46,7 @@
                               <Insets left="-5.0" right="-5.0" top="-5.0" />
                            </VBox.margin>
                         </ToolBar>
-                  		<TableView fx:id="sep_pens" editable="true" styleClass="mylistview" stylesheets="/ScrPane.css" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                  		<TableView fx:id="sep_pens" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="mylistview" stylesheets="/ScrPane.css" VBox.vgrow="ALWAYS">
                   			<columns>
                   				<TableColumn fx:id="ID" prefWidth="75.0" text="ИД" />
                   				<TableColumn fx:id="DateLoad" prefWidth="109.0" text="Дата загрузки" />
@@ -56,6 +57,7 @@
                   				<TableColumn fx:id="FOUR_PART" prefWidth="144.0" text="Часть IV" /> -->
                   			</columns>
                   		</TableView>
+                        <ProgressBar fx:id="Progress" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" progress="0.0" VBox.vgrow="ALWAYS" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -103,7 +105,7 @@
                               <Insets left="-5.0" right="-5.0" top="-5.0" />
                            </VBox.margin>
                         </ToolBar>
-                        <TableView fx:id="PENS_LOAD_ROWSUM" styleClass="mylistview" stylesheets="/ScrPane.css" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="PENS_LOAD_ROWSUM" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="mylistview" stylesheets="/ScrPane.css" VBox.vgrow="ALWAYS">
                           <columns>
                             <TableColumn fx:id="LOAD_ID" prefWidth="75.0" text="ИД" />
                             <TableColumn fx:id="FILE_NAME" prefWidth="138.0" text="Название файла" />

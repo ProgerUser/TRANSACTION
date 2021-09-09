@@ -21,6 +21,10 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Properties;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
+import javax.swing.filechooser.FileSystemView;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.ss.usermodel.Row;
@@ -34,11 +38,14 @@ import app.model.SqlMap;
 import app.model.TerminalDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
@@ -55,6 +62,9 @@ import sbalert.Msg;
  * Said 13.07.2020.
  */
 public class PensController {
+
+	@FXML
+	private ProgressBar Progress;
 
 	@FXML
 	private TableView<pensmodel> sep_pens;
@@ -127,12 +137,21 @@ public class PensController {
 		}
 	}
 
+	@SuppressWarnings("unused")
+	private Executor exec;
+
 	/**
 	 * Инициализация
 	 */
 	@FXML
 	private void initialize() {
 		try {
+			exec = Executors.newCachedThreadPool((runnable) -> {
+				Thread t = new Thread(runnable);
+				t.setDaemon(true);
+				return t;
+			});
+
 			dbConnect();
 			try {
 				String sql = "select t.BOOLEAN from Z_SB_PENSRACHK t";
@@ -222,15 +241,15 @@ public class PensController {
 	 * HH:mm:ss
 	 */
 	public static final DateTimeFormatter DateTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
-	
+
 	/**
 	 * Initialize table
 	 */
 	void LoadTableContactAcc() {
 		try {
-			//date time formatter
+			// date time formatter
 			DateTimeFormatter formatterwt = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
-			//Prepared Statement
+			// Prepared Statement
 			PreparedStatement prepStmt = conn.prepareStatement("SELECT * FROM SBRA_PENS_LOAD_ROWSUM");
 			ResultSet rs = prepStmt.executeQuery();
 			ObservableList<PENS_LOAD_ROWSUM> cus_list = FXCollections.observableArrayList();
@@ -238,8 +257,8 @@ public class PensController {
 			while (rs.next()) {
 				PENS_LOAD_ROWSUM list = new PENS_LOAD_ROWSUM();
 				list.setLOAD_ID(rs.getLong("LOAD_ID"));
-				list.setDATE_LOAD((rs.getDate("DATE_LOAD") != null) ? LocalDateTime.parse(
-						new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("DATE_LOAD")), formatterwt)
+				list.setDATE_LOAD((rs.getDate("DATE_LOAD") != null) ? LocalDateTime
+						.parse(new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("DATE_LOAD")), formatterwt)
 						: null);
 				list.setROW_COUNT(rs.getLong("ROW_COUNT"));
 				list.setFILE_NAME(rs.getString("FILE_NAME"));
@@ -291,7 +310,8 @@ public class PensController {
 
 			System.setProperty("javax.xml.transform.TransformerFactory",
 					"com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl");
-
+			fileChooser
+					.setInitialDirectory(new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath()));
 			// Set extension filter for text files
 			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel Fole", "*.xlsx");
 			fileChooser.getExtensionFilters().add(extFilter);
@@ -300,10 +320,10 @@ public class PensController {
 			File file = fileChooser.showSaveDialog(null);
 
 			if (file != null) {
-				for (int i = 1; i <= 4; i++) {
-					retclob_(i, pens.getid(), conn, file);
+				for (int i = 1; i <= 1; i++) {
+					// retclob_(i, pens.getid(), conn, file);
+					retxlsx(i, pens.getid(), conn, file);
 				}
-				Msg.Message("Файлы сформированы в папку=" + file.getParent());
 			}
 
 		}
@@ -636,70 +656,195 @@ public class PensController {
 	 * @param conn
 	 * @param file
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void retxlsx(int id, int sess_id, Connection conn, File file) {
 		try {
-			String part = "";
-			if (id == 1) {
-				part = "ONE_PART";
-			} else if (id == 2) {
-				part = "TWO_PART";
-			} else if (id == 3) {
-				part = "THREE_PART";
-			} else if (id == 4) {
-				part = "FOUR_PART";
-			}
-			Statement sqlStatement = conn.createStatement();
-			String readRecordSQL = "select to_number(COLUMN1) row_num,\n" + "       COLUMN2 last_name,\n"
-					+ "       COLUMN3 first_name,\n" + "       COLUMN4 middle_name,\n" + "       COLUMN5,\n"
-					+ "       COLUMN6 acc,\n" + "       to_number(replace(COLUMN7, '.', ',')) summ,\n"
-					+ "       to_date(COLUMN8,'dd.mm.yyyy') bdate,\n" + "       COLUMN9,\n" + "       COLUMN10,\n"
-					+ "       COLUMN11 acc_vtb,\n" + "       COLUMN12,\n" + "       COLUMN13 snils\n"
-					+ "  from (select " + part + " from Z_SB_PENS_4FILE t where id = " + sess_id + ") g,\n"
-					+ "       table(lob2table.separatedcolumns(g.one_part,\n"
-					+ "                                        chr(13) || chr(10), \n"
-					+ "                                        '|', \n"
-					+ "                                        '')) h\n";
-			ResultSet rs = sqlStatement.executeQuery(readRecordSQL);
 
-			XSSFWorkbook workbook = new XSSFWorkbook();
-			XSSFSheet spreadsheet = workbook.createSheet("Таблица");
-			Row row = spreadsheet.createRow(0);
+			Service service = new Service() {
+				@Override
+				protected Task createTask() {
+					return new Task() {
+						@Override
+						protected Object call() throws Exception {
 
-			int i = 0;
+							// ----------------------------------------------------------------
+							try {
+								String part = "";
+								if (id == 1) {
+									part = "ONE_PART";
+								} else if (id == 2) {
+									part = "TWO_PART";
+								} else if (id == 3) {
+									part = "THREE_PART";
+								} else if (id == 4) {
+									part = "FOUR_PART";
+								} else if (id == 5) {
+									part = "FIVE_PART";
+								} else if (id == 6) {
+									part = "SIX_PART";
+								}
+								Long cnt_row = 0l;
+								Statement cnt_prgrs = conn.createStatement();
+								ResultSet cnt_rs = cnt_prgrs.executeQuery("select count(*) cnt  from (select " + part
+										+ " from Z_SB_PENS_4FILE t where id = " + sess_id + ") g,\n"
+										+ "       table(lob2table.separatedcolumns(g.one_part,\n"
+										+ "                                        chr(13) || chr(10), \n"
+										+ "                                        '|', \n"
+										+ "                                        '')) h\n");
 
-			while (rs.next()) {
-				row = spreadsheet.createRow(i + 1);
-				row.createCell(0).setCellValue(rs.getInt("ROW_NUM"));
-				spreadsheet.autoSizeColumn(0);
-				row.createCell(1).setCellValue(rs.getString("LAST_NAME"));
-				spreadsheet.autoSizeColumn(1);
-				row.createCell(2).setCellValue(rs.getString("FIRST_NAME"));
-				spreadsheet.autoSizeColumn(2);
-				row.createCell(3).setCellValue(rs.getString("MIDDLE_NAME"));
-				spreadsheet.autoSizeColumn(3);
-				row.createCell(4).setCellValue(rs.getString("COLUMN5"));
-				spreadsheet.autoSizeColumn(4);
-				row.createCell(5).setCellValue(rs.getString("ACC"));
-				spreadsheet.autoSizeColumn(5);
-				row.createCell(6).setCellValue(rs.getDate("BDATE"));
-				spreadsheet.autoSizeColumn(6);
-				row.createCell(7).setCellValue(rs.getString("COLUMN9"));
-				spreadsheet.autoSizeColumn(7);
-				row.createCell(8).setCellValue(rs.getString("COLUMN10"));
-				spreadsheet.autoSizeColumn(8);
-				row.createCell(9).setCellValue(rs.getString("ACC_VTB"));
-				spreadsheet.autoSizeColumn(9);
-				row.createCell(10).setCellValue(rs.getString("COLUMN12"));
-				spreadsheet.autoSizeColumn(10);
-				row.createCell(11).setCellValue(rs.getString("SNILS"));
-				spreadsheet.autoSizeColumn(11);
-				i++;
-			}
-			rs.close();
-			sqlStatement.close();
+								if (cnt_rs.next()) {
+									cnt_row = cnt_rs.getLong("cnt");
+								}
 
-			workbook.write(new FileOutputStream(file.getPath()));
-			workbook.close();
+								Statement sqlStatement = conn.createStatement();
+								String readRecordSQL = "select to_number(COLUMN1) row_num,\n"
+										+ "       COLUMN2 last_name,\n" + "       COLUMN3 first_name,\n"
+										+ "       COLUMN4 middle_name,\n" + "       COLUMN5,\n"
+										+ "       COLUMN6 acc,\n"
+										+ "       to_number(replace(COLUMN7, '.', ',')) summ,\n"
+										+ "       to_date(COLUMN8,'dd.mm.yyyy') bdate,\n" + "       COLUMN9,\n"
+										+ "       COLUMN10,\n" + "       COLUMN11 acc_vtb,\n" + "       COLUMN12,\n"
+										+ "       COLUMN13 snils\n" + "  from (select " + part
+										+ " from Z_SB_PENS_4FILE t where id = " + sess_id + ") g,\n"
+										+ "       table(lob2table.separatedcolumns(g.one_part,\n"
+										+ "                                        chr(13) || chr(10), \n"
+										+ "                                        '|', \n"
+										+ "                                        '')) h\n";
+								ResultSet rs = sqlStatement.executeQuery(readRecordSQL);
+
+								System.out.println(readRecordSQL);
+
+								XSSFWorkbook workbook = new XSSFWorkbook();
+								XSSFSheet spreadsheet = workbook.createSheet("Таблица");
+								Row row = spreadsheet.createRow(0);
+
+								int i = 0;
+
+								while (rs.next()) {
+
+									updateProgress(i, cnt_row);
+
+									System.out.println(i);
+//									if (i == 100) {
+//										break;
+//									}
+
+									row = spreadsheet.createRow(i + 1);
+									row.createCell(0).setCellValue(rs.getInt("ROW_NUM"));
+									spreadsheet.autoSizeColumn(0);
+									row.createCell(1).setCellValue(rs.getString("LAST_NAME"));
+									spreadsheet.autoSizeColumn(1);
+									row.createCell(2).setCellValue(rs.getString("FIRST_NAME"));
+									spreadsheet.autoSizeColumn(2);
+									row.createCell(3).setCellValue(rs.getString("MIDDLE_NAME"));
+									spreadsheet.autoSizeColumn(3);
+									row.createCell(4).setCellValue(rs.getString("COLUMN5"));
+									spreadsheet.autoSizeColumn(4);
+									row.createCell(5).setCellValue(rs.getString("ACC"));
+									spreadsheet.autoSizeColumn(5);
+									row.createCell(6).setCellValue(rs.getDate("BDATE"));
+									spreadsheet.autoSizeColumn(6);
+									row.createCell(7).setCellValue(rs.getString("COLUMN9"));
+									spreadsheet.autoSizeColumn(7);
+									row.createCell(8).setCellValue(rs.getString("COLUMN10"));
+									spreadsheet.autoSizeColumn(8);
+									row.createCell(9).setCellValue(rs.getString("ACC_VTB"));
+									spreadsheet.autoSizeColumn(9);
+									row.createCell(10).setCellValue(rs.getString("COLUMN12"));
+									spreadsheet.autoSizeColumn(10);
+									row.createCell(11).setCellValue(rs.getString("SNILS"));
+									spreadsheet.autoSizeColumn(11);
+									i++;
+								}
+								rs.close();
+								sqlStatement.close();
+
+								workbook.write(new FileOutputStream(file.getPath()));
+								workbook.close();
+
+								Thread.sleep(100);
+							} catch (Exception e) {
+								Msg.Message(ExceptionUtils.getStackTrace(e));
+							}
+							// ----------------------------------------------------------------
+							return null;
+						}
+					};
+				}
+			};
+			Progress.progressProperty().bind(service.progressProperty());
+			service.setOnSucceeded(e -> Msg.Message("Файлы сформированы в папку=" + file.getParent()));
+			service.start();
+
+//			Task<Object> task = new Task<Object>() {
+//				@Override
+//				public Object call() throws Exception {
+//					
+//					} catch (Exception e) {
+//						Msg.Message(ExceptionUtils.getStackTrace(e));
+//					}
+//					return null;
+//				}
+//			};
+//			task.setOnFailed(e -> Msg.Message(task.getException().getMessage()));
+//			task.setOnSucceeded(e -> PrgInd.setVisible(false));
+//			exec.execute(task);
+
+//			DateTimeFormatter formatterwt = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+//			
+//			ObservableList<SBRA_XLSX_MODEL> cus_list = FXCollections.observableArrayList();
+//			SBRA_XLSX_MODEL list = null;
+//			// looping
+//			while (rs.next()) {
+//				list = new SBRA_XLSX_MODEL();
+//				list.setROW_NUM(rs.getLong("ROW_NUM"));
+//				list.setLAST_NAME(rs.getString("LAST_NAME"));
+//				list.setFIRST_NAME(rs.getString("FIRST_NAME"));
+//				list.setMIDDLE_NAME(rs.getString("MIDDLE_NAME"));
+//				list.setCOLUMN5(rs.getString("COLUMN5"));
+//				list.setACC(rs.getString("ACC"));
+//				list.setSUMM(rs.getLong("SUMM"));
+//				list.setBDATE((rs.getDate("BDATE") != null)
+//						? LocalDate.parse(new SimpleDateFormat("dd.MM.yyyy").format(rs.getDate("BDATE")), formatterwt)
+//						: null);
+//				list.setCOLUMN9(rs.getString("COLUMN9"));
+//				list.setCOLUMN10(rs.getString("COLUMN10"));
+//				list.setACC_VTB(rs.getString("ACC_VTB"));
+//				list.setCOLUMN12(rs.getString("COLUMN12"));
+//				list.setSNILS(rs.getString("SNILS"));
+//
+//				cus_list.add(list);
+//			}
+//			
+//			for (SBRA_XLSX_MODEL rows : cus_list) {
+//				System.out.println(i);
+//				row = spreadsheet.createRow(i + 1);
+//				row.createCell(0).setCellValue(rows.getROW_NUM());
+//				spreadsheet.autoSizeColumn(0);
+//				row.createCell(1).setCellValue(rows.getLAST_NAME());
+//				spreadsheet.autoSizeColumn(1);
+//				row.createCell(2).setCellValue(rows.getFIRST_NAME());
+//				spreadsheet.autoSizeColumn(2);
+//				row.createCell(3).setCellValue(rows.getMIDDLE_NAME());
+//				spreadsheet.autoSizeColumn(3);
+//				row.createCell(4).setCellValue(rows.getCOLUMN5());
+//				spreadsheet.autoSizeColumn(4);
+//				row.createCell(5).setCellValue(rows.getACC());
+//				spreadsheet.autoSizeColumn(5);
+//				row.createCell(6).setCellValue(rows.getBDATE());
+//				spreadsheet.autoSizeColumn(6);
+//				row.createCell(7).setCellValue(rows.getCOLUMN9());
+//				spreadsheet.autoSizeColumn(7);
+//				row.createCell(8).setCellValue(rows.getCOLUMN10());
+//				spreadsheet.autoSizeColumn(8);
+//				row.createCell(9).setCellValue(rows.getACC_VTB());
+//				spreadsheet.autoSizeColumn(9);
+//				row.createCell(10).setCellValue(rows.getCOLUMN12());
+//				spreadsheet.autoSizeColumn(10);
+//				row.createCell(11).setCellValue(rows.getSNILS());
+//				spreadsheet.autoSizeColumn(11);
+//				i++;
+//			}
 
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
