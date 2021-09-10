@@ -1,4 +1,4 @@
-package app.model;
+package app.ibank;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;

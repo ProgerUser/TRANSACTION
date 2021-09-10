@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="ap1" stylesheets="@../../borderpane.css" xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1" fx:controller="loadamra.Amra_Transact">
+<BorderPane fx:id="ap1" stylesheets="@../../borderpane.css" xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.loadamra.Amra_Transact">
 	<center>
 
 	</center>

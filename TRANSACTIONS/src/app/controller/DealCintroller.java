@@ -57,12 +57,12 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.controlsfx.control.table.TableFilter;
 
 import app.Main;
+import app.ibank.Ibank2;
 import app.model.Amra_Trans;
 import app.model.Attributes;
 import app.model.Connect;
 import app.model.Deal;
 import app.model.FN_SESS_AMRA;
-import app.model.Ibank2;
 import app.model.TerminalDAO;
 import app.model.Transact;
 import app.model.TransactClass;

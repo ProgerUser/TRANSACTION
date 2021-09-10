@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
+import app.ibank.Ibank2;
 import app.pensia.pensmodel;
 import app.util.DBUtil;
 import javafx.collections.FXCollections;
@@ -168,7 +169,7 @@ public class TerminalDAO {
 	// *******************************
 	// SELECT FN_SESS
 	// *******************************
-	public static ObservableList<Add_File> add_file(String SESS_ID, LocalDate dt) {
+	public static ObservableList<Add_File> add_file_(String SESS_ID, LocalDate dt) {
 
 		String ldt = "\n";
 		String ldt_ = "\n";
@@ -203,7 +204,7 @@ public class TerminalDAO {
 		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
 
 		// Send ResultSet to the getEmployeeList method and get employee object
-		ObservableList<Add_File> empList = get_file(rsEmps);
+		ObservableList<Add_File> empList = get_file_(rsEmps);
 
 		// Return employee object
 		return empList;
@@ -212,7 +213,7 @@ public class TerminalDAO {
 	// *******************************
 	// SELECT FN_SESS
 	// *******************************
-	public static ObservableList<Add_File> add_file_d(LocalDate Date) {
+	public static ObservableList<Add_File> add_file_d_(LocalDate Date) {
 		String p_n = "\n";
 		String dd = "\n";
 		if (Date != null)
@@ -232,7 +233,7 @@ public class TerminalDAO {
 		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
 
 		// Send ResultSet to the getEmployeeList method and get employee object
-		ObservableList<Add_File> empList = get_file(rsEmps);
+		ObservableList<Add_File> empList = get_file_(rsEmps);
 
 		// Return employee object
 		return empList;
@@ -742,7 +743,7 @@ public class TerminalDAO {
 	}
 
 	// Select * from fn_sess operation
-	private static ObservableList<Add_File> get_file(ResultSet rs) {
+	private static ObservableList<Add_File> get_file_(ResultSet rs) {
 		try {
 			ObservableList<Add_File> fn_list = FXCollections.observableArrayList();
 			while (rs.next()) {

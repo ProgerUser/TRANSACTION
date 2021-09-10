@@ -55,32 +55,32 @@ public class Main extends Application {
 			logger.setLevel(Level.INFO);
 			// System.out.println(MODULE);
 
-			if (MODULE == null) {
-				Enter();
-			} else if (MODULE.equals("DEBTINFO")) {
-				DBUtil.dbConnect();
-				Debtinfo();
-			} else if (MODULE.equals("BUH")) {
-				DBUtil.dbConnect();
-				initRootLayout();
-				showFirst();
-			} else if (MODULE.equals("SWIFT")) {
-				DBUtil.dbConnect();
-				swift2();
-			} else if (MODULE.equals("VTB_CONV")) {
-				DBUtil.dbConnect();
-				ConvVal();
-			}
+//			if (MODULE == null) {
+//				Enter();
+//			} else if (MODULE.equals("DEBTINFO")) {
+//				DBUtil.dbConnect();
+//				Debtinfo();
+//			} else if (MODULE.equals("BUH")) {
+//				DBUtil.dbConnect();
+//				initRootLayout();
+//				showFirst();
+//			} else if (MODULE.equals("SWIFT")) {
+//				DBUtil.dbConnect();
+//				swift2();
+//			} else if (MODULE.equals("VTB_CONV")) {
+//				DBUtil.dbConnect();
+//				ConvVal();
+//			}
 
-//			Connect.connectionURL_ = "10.111.64.21:1521/ODB";
-//			Connect.userID_ = "saidp";
-//			Connect.userPassword_ = "xxx";
-//
-//			DbUtil.Db_Connect();
-//			DBUtil.dbConnect();
-//
-//			initRootLayout();
-//			showFirst();
+			Connect.connectionURL_ = "10.111.64.21:1521/ODB";
+			Connect.userID_ = "saidp";
+			Connect.userPassword_ = "vector165";
+
+			DbUtil.Db_Connect();
+			DBUtil.dbConnect();
+
+			initRootLayout();
+			showFirst();
 
 //			swift2();
 //			ConvVal();
@@ -251,16 +251,8 @@ public class Main extends Application {
 	 */
 	public static void showAmTr() {
 		try {
-			/*
-			 * FXMLLoader loader = new FXMLLoader();
-			 * loader.setLocation(Main.class.getResource("view/Transact_Amra_viewer.fxml"));
-			 * BorderPane employeeOperationsView = (BorderPane) loader.load();
-			 * rootLayout.setCenter(employeeOperationsView);
-			 */
-
 			Stage stage = new Stage();
-			Parent root;
-			root = FXMLLoader.load(Main.class.getResource("/trlist/Transact_Amra_viewer.fxml"));
+			Parent root = FXMLLoader.load(Main.class.getResource("/trlist/Transact_Amra_viewer.fxml"));
 			stage.setScene(new Scene(root));
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("Загруженные транзакции");
@@ -277,15 +269,8 @@ public class Main extends Application {
 	 */
 	public static void Ibankk() {
 		try {
-			/*
-			 * FXMLLoader loader = new FXMLLoader();
-			 * loader.setLocation(Main.class.getResource("view/Ibank.fxml")); VBox
-			 * employeeOperationsView = (VBox) loader.load();
-			 * rootLayout.setCenter(employeeOperationsView);
-			 */
 			Stage stage = new Stage();
-			Parent root;
-			root = FXMLLoader.load(Main.class.getResource("view/Ibank.fxml"));
+			Parent root = FXMLLoader.load(Main.class.getResource("/app/ibank/Ibank.fxml"));
 			stage.setScene(new Scene(root));
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("Клиенты");
@@ -734,10 +719,11 @@ public class Main extends Application {
 	/**
 	 * Загрузка транз. Квант-Капитал
 	 */
+	@Deprecated
 	public static void Transact() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("view/TransactLoad.fxml"));
+			loader.setLocation(Main.class.getResource("/app/trload/TransactLoad.fxml"));
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (Exception e) {
@@ -752,12 +738,11 @@ public class Main extends Application {
 		try {
 			Stage stage = new Stage();
 			Parent root;
-			root = FXMLLoader.load(Main.class.getResource("/loadamra/Amra_Trans.fxml"));
+			root = FXMLLoader.load(Main.class.getResource("/app/loadamra/Amra_Trans.fxml"));
 			stage.setScene(new Scene(root));
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("Загрузка транзакции");
-			stage.setResizable(false);
-			// root.initModality(Modality.WINDOW_MODAL);
+			stage.setResizable(true);
 			stage.initOwner(primaryStage);
 			stage.show();
 		} catch (Exception e) {

@@ -10,7 +10,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringWriter;
-import java.net.URL;
 import java.sql.CallableStatement;
 import java.sql.Clob;
 import java.sql.Connection;
@@ -22,7 +21,6 @@ import java.sql.Types;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.ResourceBundle;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.mozilla.universalchardet.UniversalDetector;
@@ -36,37 +34,22 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import sbalert.Msg;
 
 public class TransactLoad {
-	/*
-	 * final static String driverClass = "oracle.jdbc.OracleDriver"; final static
-	 * String connectionURL = "jdbc:oracle:thin:@oradb-prm:1521/odb"; final static
-	 * String userID = "xxi"; final static String userPassword = "xxx";
-	 */
+
 	static String sql = "{ ? = call Z_SB_CREATE_TR.load_pack(?,?)}";
-
 	static String sql_calc = "{ ? = call z_sb_transact_calc.make(?)}";
-
 	static String sessid_ = null;
 
 	@SuppressWarnings("resource")
-
 	private static String readFile(String fileName) {
 		try {
-			/*
-			 * FileInputStream fis = null; InputStreamReader isr = null; String encoding;
-			 * fis = new FileInputStream(fileName); isr = new InputStreamReader(fis); // the
-			 * name of the character encoding returned encoding = isr.getEncoding();
-			 */
-
-			// System.out.print("Character Encoding: "+s);
 			BufferedReader br = new BufferedReader(
 					new InputStreamReader(new FileInputStream(fileName), getFileCharset(fileName)));
 			String nextLine = "";
@@ -77,42 +60,21 @@ public class TransactLoad {
 			}
 			String clobData = sb.toString();
 			return clobData;
-		} catch (IOException e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText(ExceptionUtils.getStackTrace(e));
-			alert.showAndWait();
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
 
 	private Integer sess_id = null;
-
 	private String full_pach = null;
 
 	@FXML
 	private Button open_new;
-
-	@FXML
-	private ResourceBundle resources;
-
 	@FXML
 	private Button calc;
-
-	@FXML
-	private URL location;
-
 	@FXML
 	private Button browse;
-
-	@FXML
-	private AnchorPane anchorpane;
-
-	@FXML
-	private TextArea result;
 
 	@FXML
 	private Button import_;
@@ -205,13 +167,9 @@ public class TransactLoad {
 					String readRecordSQL = "SELECT * FROM Z_SB_LOG_DBT WHERE sess_id = " + part2 + "";
 					ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
 
-					// String[] path =
-					// textbox.getText().toString().split("::_");
-					// String path1 = path[0].trim();
-
 					DateFormat dateFormat_ = new SimpleDateFormat("dd.MM.yyyy HH");
 					String strDate_ = dateFormat_.format(date);
-					String createfolder = System.getenv("TRANSACT_PATH")+ "Files/" /* System.getProperty("user.dir") */ + strDate_
+					String createfolder = System.getenv("TRANSACT_PATH")+ "Files/" + strDate_
 							+ "_SESSID_" + sessid_;
 
 					File file = new File(createfolder);
@@ -248,29 +206,14 @@ public class TransactLoad {
 
 					textbox.setText("");
 					sess_id = Integer.parseInt(part2);
-					Alert alert = new Alert(Alert.AlertType.INFORMATION);
-					Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-					stage.getIcons().add(new Image("terminal.png"));
-					alert.setTitle("Внимание");
-					alert.setHeaderText(null);
-					alert.setContentText("Загрузка прошла успешна. Можете перейти к расчету");
-					alert.showAndWait();
+					Msg.Message("Загрузка прошла успешна. Можете перейти к расчету");
 				}
 				callStmt.close();
 			} else {
-				Alert alert = new Alert(Alert.AlertType.INFORMATION);
-				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-				stage.getIcons().add(new Image("terminal.png"));
-				alert.setTitle("Внимание");
-				alert.setHeaderText(null);
-				alert.setContentText("Выберите сначала файл для загрузки");
-				alert.showAndWait();
+				Msg.Message("Выберите сначала файл для загрузки");
 			}
-		} catch (SQLException |
-
-				IOException e) {
-			// TODO Auto-generated catch block
-			result.setText(ExceptionUtils.getStackTrace(e));
+		} catch (SQLException |IOException e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -289,13 +232,7 @@ public class TransactLoad {
 			bufferedInputStream.close();
 			return encoding;
 		} catch (IOException e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText(ExceptionUtils.getStackTrace(e));
-			alert.showAndWait();
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -309,13 +246,8 @@ public class TransactLoad {
 			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
 					+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
 
-			// String[] path = textbox.getText().toString().split("::_");
-			// String path1 = path[0].trim();
-
 			Statement sqlStatement = conn.createStatement();
-			// String count = "SELECT count(*) FROM Z_SB_TRANSACT_DBT WHERE
-			// sess_id
-			// = " + sessid + "";
+
 			String readRecordSQL = "SELECT * FROM Z_SB_TRANSACT_DBT WHERE sess_id = " + sessid + "";
 			ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
 
@@ -344,14 +276,11 @@ public class TransactLoad {
 					BufferedReader bufferedReader = new BufferedReader(
 							new InputStreamReader(new FileInputStream(textbox.getText().replace("::_", "\\")),
 									getFileCharset(textbox.getText().replace("::_", "\\"))));
-					// System.out.println(getFileCharset(textbox.getText().replace("::_",
-					// "\\")));
 					String line = null;
 					int rowcount = 0;
 					writer.write("Протокол загрузки файла.\r\n");
 					while ((line = bufferedReader.readLine()) != null) {
 						rowcount = rowcount + 1;
-						// System.out.println(line);
 						writer.write("Номер строки: " + rowcount + ";" + line + "\r\n");
 					}
 					bufferedReader.close();
@@ -382,9 +311,8 @@ public class TransactLoad {
 			ProcessBuilder pb = new ProcessBuilder("Notepad.exe", createfolder + "\\" + strDate + "_PROTOCOL.txt");
 			pb.start();
 			myResultSet.close();
-		} catch (SQLException | IOException e) {
-			// TODO Auto-generated catch block
-			result.setText(ExceptionUtils.getStackTrace(e));
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -457,17 +385,10 @@ public class TransactLoad {
 				alert.showAndWait();
 
 			} else {
-				Alert alert = new Alert(Alert.AlertType.INFORMATION);
-				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-				stage.getIcons().add(new Image("terminal.png"));
-				alert.setTitle("Внимание");
-				alert.setHeaderText(null);
-				alert.setContentText("Все плохо");
-				alert.showAndWait();
+				Msg.Message("Все плохо");
 			}
 		} catch (SQLException | IOException e) {
-			// TODO Auto-generated catch block
-			result.setText(ExceptionUtils.getStackTrace(e));
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -483,27 +404,14 @@ public class TransactLoad {
 		try {
 			FXMLLoader fxmlLoader = new FXMLLoader();
 			fxmlLoader.setLocation(getClass().getResource("View.fxml"));
-			/*
-			 * if "fx:controller" is not set in fxml
-			 * fxmlLoader.setController(NewWindowController);
-			 */
 			Scene scene = new Scene(fxmlLoader.load());
 			Stage stage = new Stage();
 			stage.setTitle("New Window");
 			stage.setScene(scene);
 			stage.show();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			result.setText(ExceptionUtils.getStackTrace(e));
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
-	@FXML
-	void initialize() {
-		assert browse != null : "fx:id=\"browse\" was not injected: check your FXML file 'TransactLoad.fxml'.";
-		assert import_ != null : "fx:id=\"import_\" was not injected: check your FXML file 'TransactLoad.fxml'.";
-		assert textbox != null : "fx:id=\"textbox\" was not injected: check your FXML file 'TransactLoad.fxml'.";
-		assert calc != null : "fx:id=\"calc\" was not injected: check your FXML file 'TransactLoad.fxml'.";
-		assert open_new != null : "fx:id=\"open_new\" was not injected: check your FXML file 'TransactLoad.fxml'.";
-	}
 }

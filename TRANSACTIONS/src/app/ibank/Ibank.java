@@ -1,32 +1,27 @@
-package app.controller;
+package app.ibank;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 import org.controlsfx.control.table.TableFilter;
 import com.sun.rowset.CachedRowSetImpl;
 import app.Main;
-import app.model.Connect;
-import app.model.Ibank2;
 import app.util.DBUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import sbalert.Msg;
 
 /**
@@ -41,53 +36,24 @@ public class Ibank {
 	private TableColumn<Ibank2, Integer> CLIENT_ID;
 	@FXML
 	private TableColumn<Ibank2, String> NAME_CLN;
-
 	@FXML
 	private PasswordField password;
-
 	@FXML
 	private TextArea acc;
-
 	@FXML
 	private TextField login;
-
 	@FXML
 	private TextField db;
-
 	public Connection conn = null;
 
-	public void altert(String mess) {
-		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-		stage.getIcons().add(new Image("terminal.png"));
-		alert.setTitle("Внимание");
-		alert.setHeaderText(null);
-		alert.setContentText(mess);
-		alert.showAndWait();
-	}
 
 	public void dbConnect() {
 		try {
-			@SuppressWarnings("unused")
-			Connect con = new Connect();
-
-			// Setting Oracle JDBC Driver
 			Class.forName("oracle.jdbc.OracleDriver");
-
-			System.out.println("Драйвер Oracle JDBC зарегистрирован!");
-
-			// Establish the Oracle Connection using Connection String
 			conn = DriverManager.getConnection(
 					"jdbc:oracle:thin:" + login.getText() + "/" + password.getText() + "@" + db.getText() + "");
-
-		} catch (SQLException | ClassNotFoundException e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText(ExceptionUtils.getStackTrace(e));
-			alert.showAndWait();
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -102,15 +68,23 @@ public class Ibank {
 				try {
 					String acc_ = "";
 					Ibank2 IbMod = CLI.getSelectionModel().getSelectedItem();
-					Statement sqlStatement = conn.createStatement();
-					String readRecordSQL = "select filtering\n" + "  from (select '[224100017]' filtering\n"
-							+ "          from dual\n" + "        union all\n" + "        select ACCOUNT filtering\n"
-							+ "          from ibank2.ACCOUNTS t\n" + "         where ID in\n"
-							+ "               (select ACCOUNT_ID from ibank2.C2ACCOUNTS t where client_id = "
-							+ IbMod.get_CLIENT_ID() + "))\n" + " order by case\n"
-							+ "            when substr(filtering, 1, 1) = '[' then\n" + "             1\n"
-							+ "            else\n" + "             2\n" + "          end";
-					ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
+					String readRecordSQL = "select filtering\n"
+							+ "  from (select '[224100017]' filtering\n"
+							+ "          from dual\n"
+							+ "        union all\n"
+							+ "        select ACCOUNT filtering\n"
+							+ "          from ibank2.ACCOUNTS t\n"
+							+ "         where ID in\n"
+							+ "               (select ACCOUNT_ID from ibank2.C2ACCOUNTS t where client_id = ?))\n"
+							+ " order by case\n"
+							+ "            when substr(filtering, 1, 1) = '[' then\n"
+							+ "             1\n"
+							+ "            else\n"
+							+ "             2\n"
+							+ "          end";
+					PreparedStatement sqlStatement = conn.prepareStatement(readRecordSQL);
+					sqlStatement.setInt(1, IbMod.get_CLIENT_ID());
+					ResultSet myResultSet = sqlStatement.executeQuery();
 					while (myResultSet.next()) {
 						if (acc_.equals("")) {
 							acc_ = myResultSet.getString("FILTERING");
@@ -120,7 +94,7 @@ public class Ibank {
 					}
 					acc.setText(acc_);
 				} catch (Exception e) {
-					altert(ExceptionUtils.getStackTrace(e));
+					Msg.Message(ExceptionUtils.getStackTrace(e));
 				}
 			}
 		});
@@ -157,12 +131,32 @@ public class Ibank {
 	@FXML
 	void search(ActionEvent event) {
 		if (login.getText().length() == 0 | password.getText().length() == 0 | db.getText().length() == 0) {
-			altert("Заполните поля!");
+			Msg.Message("Заполните поля!");
 		} else {
 			this.dbConnect();
-			ObservableList<Ibank2> empData = CLIENTS();
-			populate_cli(empData);
-			autoResizeColumns(CLI);
+			//load
+			LoadTable();
+		}
+
+	}
+
+	/**
+	 * Load table
+	 */
+	void LoadTable() {
+		try {
+			String selectStmt = "select CLIENT_ID, NAME_CLN from ibank2.CLIENTS t order by NAME_CLN asc";
+			PreparedStatement sqlStatement = conn.prepareStatement(selectStmt);
+			ResultSet rs = sqlStatement.executeQuery();
+			ObservableList<Ibank2> trData = FXCollections.observableArrayList();
+			while (rs.next()) {
+				Ibank2 user_in = new Ibank2();
+				user_in.set_CLIENT_ID(rs.getInt("CLIENT_ID"));
+				user_in.set_NAME_CLN(rs.getString("NAME_CLN"));
+				trData.add(user_in);
+			}
+			CLI.setItems(trData);
+			
 			TableFilter<Ibank2> tableFilter = TableFilter.forTableView(CLI).apply();
 			tableFilter.setSearchStrategy((input, target) -> {
 				try {
@@ -171,44 +165,12 @@ public class Ibank {
 					return false;
 				}
 			});
-		}
-
-	}
-
-	private void populate_cli(ObservableList<Ibank2> trData) {
-		CLI.setItems(trData);
-	}
-
-	public ObservableList<Ibank2> CLIENTS() {
-		String selectStmt = "select CLIENT_ID, NAME_CLN\n" + "  from ibank2.CLIENTS t";
-
-		// Execute SELECT statement
-
-		// Get ResultSet from dbExecuteQuery method
-		ResultSet rsEmps = dbExecuteQuery(selectStmt);
-
-		// Send ResultSet to the getEmployeeList method and get employee object
-		ObservableList<Ibank2> Cli_lst = get_cli(rsEmps);
-
-		// Return Cli_lst object
-		return Cli_lst;
-	}
-
-	private static ObservableList<Ibank2> get_cli(ResultSet rs) {
-		try {
-			ObservableList<Ibank2> user_in_list = FXCollections.observableArrayList();
-			while (rs.next()) {
-				Ibank2 user_in = new Ibank2();
-				user_in.set_CLIENT_ID(rs.getInt("CLIENT_ID"));
-				user_in.set_NAME_CLN(rs.getString("NAME_CLN"));
-				user_in_list.add(user_in);
-			}
-			return user_in_list;
-		} catch (SQLException e) {
+			
+		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
-		return null;
 	}
+	
 
 	// DB Execute Query Operation
 	@SuppressWarnings({})
@@ -244,7 +206,6 @@ public class Ibank {
 					stmt.close();
 				} catch (SQLException e) {
 					Msg.Message(ExceptionUtils.getStackTrace(e));
-					Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 				}
 			}
 		}
