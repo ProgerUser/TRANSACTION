@@ -14,7 +14,7 @@
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pensia.PensController">
+<VBox prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.291" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pensia.PensController">
 	<children>
       <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="floating" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
         <tabs>
@@ -29,18 +29,30 @@
                         				<Tooltip text="Разделить файл" />
                         			</tooltip>
                                  <graphic>
-                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FOLDER_OPEN_ALT" size="18" />
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FOLDER_OPEN_ALT" size="16" />
                                  </graphic>
                         		</Button>
+                              <Separator layoutX="275.0" layoutY="10.0" orientation="VERTICAL" />
                         		<Button fx:id="save_sep" disable="false" mnemonicParsing="false" onAction="#save_seps">
                         			<tooltip>
                         				<Tooltip text="Сохранить файлы" />
                         			</tooltip>
                                  <graphic>
-                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILE_EXCEL_ALT" size="18" />
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILE_EXCEL_ALT" size="16" />
                                  </graphic>
                         		</Button>
-                              <CheckBox fx:id="pensrachk" mnemonicParsing="false" onAction="#pensrachk" text="Разрешить загрузку РА пенсии в пл. модуле" />
+                              <Separator orientation="VERTICAL" />
+                              <Button disable="false" mnemonicParsing="false" onAction="#DeleteLoadSep">
+                                 <tooltip>
+                                    <Tooltip text="Удалить часть" />
+                                 </tooltip>
+                                 <graphic>
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TRASH_ALT" size="16" />
+                                 </graphic>
+                              </Button>
+                              <Separator layoutX="86.0" layoutY="10.0" orientation="VERTICAL" />
+                              <CheckBox fx:id="pensrachk" mnemonicParsing="false" onAction="#pensrachk" text="Загрузка РА пенсии" />
+                              <Separator layoutX="131.0" layoutY="10.0" orientation="VERTICAL" />
                            </items>
                            <VBox.margin>
                               <Insets left="-5.0" right="-5.0" top="-5.0" />
@@ -79,7 +91,7 @@
                                     <Tooltip text="Загрузить файл" />
                                  </tooltip>
                                  <graphic>
-                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FOLDER_OPEN_ALT" size="18" />
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FOLDER_OPEN_ALT" size="16" />
                                  </graphic>
                               </Button>
                               <Separator orientation="VERTICAL" />
@@ -88,7 +100,7 @@
                                     <Tooltip text="Зачислить на счета" />
                                  </tooltip>
                                  <graphic>
-                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="LIST_OL" size="18" />
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="LIST_OL" size="16" />
                                  </graphic>
                               </Button>
                               <Separator layoutX="50.0" layoutY="10.0" orientation="VERTICAL" />
@@ -97,7 +109,7 @@
                                     <Tooltip text="Загрузить файл" />
                                  </tooltip>
                                  <graphic>
-                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EXTERNAL_LINK" size="18" />
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EXTERNAL_LINK" size="16" />
                                  </graphic>
                               </Button>
                           </items>
@@ -131,7 +143,7 @@
                                     <Tooltip text="Новая часть" />
                                  </tooltip>
                                  <graphic>
-                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILE_ALT" size="18" />
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILE_ALT" size="16" />
                                  </graphic>
                               </Button>
                               <Separator orientation="VERTICAL" />
@@ -140,16 +152,16 @@
                                     <Tooltip text="Редактировать часть" />
                                  </tooltip>
                                  <graphic>
-                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EDIT" size="18" />
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EDIT" size="16" />
                                  </graphic>
                               </Button>
                               <Separator layoutX="50.0" layoutY="10.0" orientation="VERTICAL" />
-                              <Button disable="false" layoutX="10.0" layoutY="10.0" mnemonicParsing="false">
+                              <Button disable="false" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#DelDtBtnPart">
                                  <tooltip>
                                     <Tooltip text="Удалить часть" />
                                  </tooltip>
                                  <graphic>
-                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TRASH_ALT" size="18" />
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TRASH_ALT" size="16" />
                                  </graphic>
                               </Button>
                            </items>

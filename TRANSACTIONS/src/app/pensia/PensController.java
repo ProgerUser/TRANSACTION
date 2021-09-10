@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Properties;
@@ -43,7 +44,9 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableCell;
@@ -51,12 +54,14 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToolBar;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LocalDateTimeStringConverter;
+import sb.utils.DbUtil;
 import sbalert.Msg;
 
 /**
@@ -105,11 +110,13 @@ public class PensController {
 	private TableColumn<PENS_LOAD_ROWSUM, Long> ROW_COUNT;
 
 	@FXML
-	private TableView<?> SBRA_YEAR_BET;
+	private TableView<SBRA_YEAR_BET> SBRA_YEAR_BET;
 	@FXML
-	private TableColumn<?, ?> PART;
+	private TableColumn<SBRA_YEAR_BET, Long> PART;
 	@FXML
-	private TableColumn<?, ?> START_Y;
+	private TableColumn<SBRA_YEAR_BET, LocalDate> START_Y;
+	@FXML
+	private TableColumn<SBRA_YEAR_BET, LocalDate> END_Y;
 
 	@FXML
 	void pensrachk(ActionEvent event) {
@@ -210,6 +217,7 @@ public class PensController {
 							.setdateload(t.getNewValue());
 				}
 			});
+
 			ObservableList<pensmodel> empData = TerminalDAO.Z_SB_PENS_4FILE();
 			populate(empData);
 			autoResizeColumns(sep_pens);
@@ -223,7 +231,14 @@ public class PensController {
 			DATE_LOAD.setCellValueFactory(cellData -> cellData.getValue().DATE_LOADProperty());
 			ROW_COUNT.setCellValueFactory(cellData -> cellData.getValue().ROW_COUNTProperty().asObject());
 
-			LoadTableContactAcc();
+			END_Y.setCellValueFactory(cellData -> cellData.getValue().END_YProperty());
+			START_Y.setCellValueFactory(cellData -> cellData.getValue().START_YProperty());
+			PART.setCellValueFactory(cellData -> cellData.getValue().PARTProperty().asObject());
+
+			//
+			LoadTablePensExec();
+			//
+			LoadTableSet();
 			//
 			DATE_LOAD.setCellFactory(column -> {
 				TableCell<PENS_LOAD_ROWSUM, LocalDateTime> cell = new TableCell<PENS_LOAD_ROWSUM, LocalDateTime>() {
@@ -235,6 +250,40 @@ public class PensController {
 						} else {
 							if (item != null) {
 								setText(DateTimeFormat.format(item));
+							}
+						}
+					}
+				};
+				return cell;
+			});
+
+			START_Y.setCellFactory(column -> {
+				TableCell<app.pensia.SBRA_YEAR_BET, LocalDate> cell = new TableCell<SBRA_YEAR_BET, LocalDate>() {
+					@Override
+					protected void updateItem(LocalDate item, boolean empty) {
+						super.updateItem(item, empty);
+						if (empty) {
+							setText(null);
+						} else {
+							if (item != null) {
+								setText(DateFormat.format(item));
+							}
+						}
+					}
+				};
+				return cell;
+			});
+
+			END_Y.setCellFactory(column -> {
+				TableCell<SBRA_YEAR_BET, LocalDate> cell = new TableCell<SBRA_YEAR_BET, LocalDate>() {
+					@Override
+					protected void updateItem(LocalDate item, boolean empty) {
+						super.updateItem(item, empty);
+						if (empty) {
+							setText(null);
+						} else {
+							if (item != null) {
+								setText(DateFormat.format(item));
 							}
 						}
 					}
@@ -254,9 +303,61 @@ public class PensController {
 	public static final DateTimeFormatter DateTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
 	/**
+	 * Формат <br>
+	 * dd.MM.yyyy <br>
+	 */
+	public static final DateTimeFormatter DateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+	/**
 	 * Initialize table
 	 */
-	void LoadTableContactAcc() {
+	void LoadTableSet() {
+		try {
+			// date time formatter
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+			// Prepared Statement
+			PreparedStatement prepStmt = conn.prepareStatement("SELECT * FROM SBRA_YEAR_BET order by part asc");
+			ResultSet rs = prepStmt.executeQuery();
+			ObservableList<SBRA_YEAR_BET> cus_list = FXCollections.observableArrayList();
+			// looping
+			while (rs.next()) {
+				SBRA_YEAR_BET list = new SBRA_YEAR_BET();
+
+				list.setEND_Y((rs.getDate("END_Y") != null)
+						? LocalDate.parse(new SimpleDateFormat("dd.MM.yyyy").format(rs.getDate("END_Y")), formatter)
+						: null);
+				list.setSTART_Y((rs.getDate("START_Y") != null)
+						? LocalDate.parse(new SimpleDateFormat("dd.MM.yyyy").format(rs.getDate("START_Y")), formatter)
+						: null);
+				list.setPART(rs.getLong("PART"));
+
+				cus_list.add(list);
+			}
+			// add data
+			SBRA_YEAR_BET.setItems(cus_list);
+			// close
+			prepStmt.close();
+			rs.close();
+			// add filter
+			TableFilter<SBRA_YEAR_BET> tableFilter = TableFilter.forTableView(SBRA_YEAR_BET).apply();
+			tableFilter.setSearchStrategy((input, target) -> {
+				try {
+					return target.toLowerCase().contains(input.toLowerCase());
+				} catch (Exception e) {
+					return false;
+				}
+			});
+			// resize
+			autoResizeColumns(SBRA_YEAR_BET);
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+	/**
+	 * Initialize table
+	 */
+	void LoadTablePensExec() {
 		try {
 			// date time formatter
 			DateTimeFormatter formatterwt = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
@@ -543,6 +644,84 @@ public class PensController {
 	}
 
 	/**
+	 * Удалить загрузку для разбивки
+	 */
+	public void DeleteLoadSep() {
+		try {
+			if (DbUtil.Odb_Action(47l) == 0) {
+				Msg.Message("Нет доступа!");
+				return;
+			}
+			
+			pensmodel sel = sep_pens.getSelectionModel().getSelectedItem();
+			if (sel == null) {
+				Msg.Message("Выберите строку");
+			} else {
+				final Alert alert = new Alert(AlertType.CONFIRMATION, "Удалить файл \"" + sel.getfilename() + "\" ?",
+						ButtonType.YES, ButtonType.NO);
+				if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
+					PreparedStatement prp = conn.prepareStatement("delete from Z_SB_PENS_4FILE where ID = ?");
+					prp.setInt(1, sel.getid());
+					prp.executeUpdate();
+					conn.commit();
+					prp.close();
+					// populate
+					ObservableList<pensmodel> empData = TerminalDAO.Z_SB_PENS_4FILE();
+					populate(empData);
+					autoResizeColumns(sep_pens);
+					TableFilter.forTableView(sep_pens).apply();
+				}
+			}
+
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				Msg.Message(ExceptionUtils.getStackTrace(e1));
+			}
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+	/**
+	 * Удалить загрузку для разбивки
+	 */
+	public void DelDtBtnPart() {
+		try {
+			
+			if (DbUtil.Odb_Action(44l) == 0) {
+				Msg.Message("Нет доступа!");
+				return;
+			}
+			
+			SBRA_YEAR_BET sel = SBRA_YEAR_BET.getSelectionModel().getSelectedItem();
+			if (sel == null) {
+				Msg.Message("Выберите строку");
+			} else {
+				final Alert alert = new Alert(AlertType.CONFIRMATION, "Удалить часть \"" + sel.getPART() + "\" ?",
+						ButtonType.YES, ButtonType.NO);
+				if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
+					PreparedStatement prp = conn.prepareStatement("delete from SBRA_YEAR_BET where PART = ?");
+					prp.setLong(1, sel.getPART());
+					prp.executeUpdate();
+					conn.commit();
+					prp.close();
+					// populate
+					LoadTableSet();
+				}
+			}
+
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				Msg.Message(ExceptionUtils.getStackTrace(e1));
+			}
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+	/**
 	 * Возврат самого файла
 	 * 
 	 * @param id
@@ -625,10 +804,6 @@ public class PensController {
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
-	}
-
-	void XLSX() {
-
 	}
 
 	/**

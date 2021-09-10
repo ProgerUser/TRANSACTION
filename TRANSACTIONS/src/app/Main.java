@@ -55,32 +55,32 @@ public class Main extends Application {
 			logger.setLevel(Level.INFO);
 			// System.out.println(MODULE);
 
-//			if (MODULE == null) {
-//				Enter();
-//			} else if (MODULE.equals("DEBTINFO")) {
-//				DBUtil.dbConnect();
-//				Debtinfo();
-//			} else if (MODULE.equals("BUH")) {
-//				DBUtil.dbConnect();
-//				initRootLayout();
-//				showFirst();
-//			} else if (MODULE.equals("SWIFT")) {
-//				DBUtil.dbConnect();
-//				swift2();
-//			} else if (MODULE.equals("VTB_CONV")) {
-//				DBUtil.dbConnect();
-//				ConvVal();
-//			}
+			if (MODULE == null) {
+				Enter();
+			} else if (MODULE.equals("DEBTINFO")) {
+				DBUtil.dbConnect();
+				Debtinfo();
+			} else if (MODULE.equals("BUH")) {
+				DBUtil.dbConnect();
+				initRootLayout();
+				showFirst();
+			} else if (MODULE.equals("SWIFT")) {
+				DBUtil.dbConnect();
+				swift2();
+			} else if (MODULE.equals("VTB_CONV")) {
+				DBUtil.dbConnect();
+				ConvVal();
+			}
 
-			Connect.connectionURL_ = "10.111.64.21:1521/ODB";
-			Connect.userID_ = "saidp";
-			Connect.userPassword_ = "vector165";
-
-			DbUtil.Db_Connect();
-			DBUtil.dbConnect();
-
-			initRootLayout();
-			showFirst();
+//			Connect.connectionURL_ = "10.111.64.21:1521/ODB";
+//			Connect.userID_ = "saidp";
+//			Connect.userPassword_ = "xxx";
+//
+//			DbUtil.Db_Connect();
+//			DBUtil.dbConnect();
+//
+//			initRootLayout();
+//			showFirst();
 
 //			swift2();
 //			ConvVal();
