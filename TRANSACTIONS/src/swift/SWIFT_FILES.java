@@ -28,8 +28,11 @@ public class SWIFT_FILES {
 	private StringProperty PATH;/* Путь */
 	private IntegerProperty ID;/* ID */
 	private StringProperty REF;/* Референс */
+	private StringProperty STATUS;/* STATUS */
 
 	public SWIFT_FILES() {
+		this.STATUS = new SimpleStringProperty();
+		
 		this.REF = new SimpleStringProperty();
 		this.PATH = new SimpleStringProperty();
 		this.CHK = new SimpleBooleanProperty();
@@ -46,8 +49,20 @@ public class SWIFT_FILES {
 		this.DOCDATE = new SimpleObjectProperty<>();
 	}
 
-	public void setREF(String REF) {
-		this.REF.set(REF);
+	public void setSTATUS(String STATUS) {
+		this.STATUS.set(STATUS);
+	}
+
+	public String getSTATUS() {
+		return STATUS.get();
+	}
+
+	public StringProperty STATUSProperty() {
+		return STATUS;
+	}
+	
+	public void setREF(String STATUS) {
+		this.STATUS.set(STATUS);
 	}
 
 	public String getREF() {

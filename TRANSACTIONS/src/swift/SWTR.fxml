@@ -425,6 +425,7 @@
                                  <columns>
                                     <TableColumn fx:id="MTTYPEdb" prefWidth="100.0" text="Тип SWIFT" />
                                     <TableColumn fx:id="MTNAMEdb" prefWidth="250.0" text="Название документа" />
+                                    <TableColumn fx:id="STATUSdb" prefWidth="75.0" text="Статус" />
                                     <TableColumn fx:id="Typedb" prefWidth="75.0" text="Вх/Исх" />
                                     <TableColumn fx:id="DOCDATEdb" prefWidth="150.0" text="Дата документа" />
                                     <TableColumn fx:id="CURdb" prefWidth="100.0" text="Валюта" />

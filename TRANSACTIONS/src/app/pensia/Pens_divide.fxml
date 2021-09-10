@@ -14,7 +14,7 @@
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.291" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pensia.PensController">
+<VBox prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pensia.PensController">
 	<children>
       <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="floating" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
         <tabs>
@@ -22,7 +22,7 @@
                <content>
                   <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
                      <children>
-                        <ToolBar VBox.vgrow="ALWAYS">
+                        <ToolBar fx:id="TLB" VBox.vgrow="ALWAYS">
                            <items>
                         		<Button fx:id="separate" disable="false" mnemonicParsing="false" onAction="#separate">
                         			<tooltip>
@@ -112,6 +112,57 @@
                               <TableColumn fx:id="DATE_LOAD" prefWidth="138.0" text="Дата загрузки" />
                               <TableColumn fx:id="ROW_COUNT" prefWidth="138.0" text="Количество строк" />
                           </columns>
+                        </TableView>
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
+            <Tab text="Настройка">
+               <content>
+                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                     <children>
+                        <ToolBar VBox.vgrow="ALWAYS">
+                           <items>
+                              <Button disable="false" mnemonicParsing="false">
+                                 <tooltip>
+                                    <Tooltip text="Новая часть" />
+                                 </tooltip>
+                                 <graphic>
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILE_ALT" size="18" />
+                                 </graphic>
+                              </Button>
+                              <Separator orientation="VERTICAL" />
+                              <Button disable="false" layoutX="10.0" layoutY="10.0" mnemonicParsing="false">
+                                 <tooltip>
+                                    <Tooltip text="Редактировать часть" />
+                                 </tooltip>
+                                 <graphic>
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EDIT" size="18" />
+                                 </graphic>
+                              </Button>
+                              <Separator layoutX="50.0" layoutY="10.0" orientation="VERTICAL" />
+                              <Button disable="false" layoutX="10.0" layoutY="10.0" mnemonicParsing="false">
+                                 <tooltip>
+                                    <Tooltip text="Удалить часть" />
+                                 </tooltip>
+                                 <graphic>
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TRASH_ALT" size="18" />
+                                 </graphic>
+                              </Button>
+                           </items>
+                           <VBox.margin>
+                              <Insets left="-5.0" right="-5.0" top="-5.0" />
+                           </VBox.margin>
+                        </ToolBar>
+                        <TableView fx:id="SBRA_YEAR_BET" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="mylistview" stylesheets="/ScrPane.css" VBox.vgrow="ALWAYS">
+                           <columns>
+                              <TableColumn fx:id="PART" prefWidth="75.0" text="Часть" />
+                              <TableColumn fx:id="START_Y" prefWidth="138.0" text="Дата с" />
+                              <TableColumn fx:id="END_Y" prefWidth="138.0" text="Дата по" />
+                           </columns>
                         </TableView>
                      </children>
                   </VBox>

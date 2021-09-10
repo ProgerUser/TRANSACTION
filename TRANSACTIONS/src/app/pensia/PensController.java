@@ -28,14 +28,14 @@ import javax.swing.filechooser.FileSystemView;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.controlsfx.control.table.TableFilter;
 import org.mozilla.universalchardet.UniversalDetector;
 
 import app.model.Connect;
-import app.model.SqlMap;
 import app.model.TerminalDAO;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
@@ -50,6 +50,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
+import javafx.scene.control.ToolBar;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -62,6 +63,9 @@ import sbalert.Msg;
  * Said 13.07.2020.
  */
 public class PensController {
+
+	@FXML
+	private ToolBar TLB;
 
 	@FXML
 	private ProgressBar Progress;
@@ -99,6 +103,13 @@ public class PensController {
 	private TableColumn<PENS_LOAD_ROWSUM, LocalDateTime> DATE_LOAD;
 	@FXML
 	private TableColumn<PENS_LOAD_ROWSUM, Long> ROW_COUNT;
+
+	@FXML
+	private TableView<?> SBRA_YEAR_BET;
+	@FXML
+	private TableColumn<?, ?> PART;
+	@FXML
+	private TableColumn<?, ?> START_Y;
 
 	@FXML
 	void pensrachk(ActionEvent event) {
@@ -301,31 +312,40 @@ public class PensController {
 	 */
 	@FXML
 	void save_seps(ActionEvent event) {
-		if (sep_pens.getSelectionModel().getSelectedItem() == null) {
-			Msg.Message("Выберите сначала данные из таблицы!");
-		} else {
-			pensmodel pens = sep_pens.getSelectionModel().getSelectedItem();
-			System.out.println(pens.getid());
-			FileChooser fileChooser = new FileChooser();
+		try {
+			if (sep_pens.getSelectionModel().getSelectedItem() == null) {
+				Msg.Message("Выберите сначала данные из таблицы!");
+			} else {
+				pensmodel pens = sep_pens.getSelectionModel().getSelectedItem();
+				System.out.println(pens.getid());
+				FileChooser fileChooser = new FileChooser();
 
-			System.setProperty("javax.xml.transform.TransformerFactory",
-					"com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl");
-			fileChooser
-					.setInitialDirectory(new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath()));
-			// Set extension filter for text files
-			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel Fole", "*.xlsx");
-			fileChooser.getExtensionFilters().add(extFilter);
+				System.setProperty("javax.xml.transform.TransformerFactory",
+						"com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl");
+				fileChooser.setInitialDirectory(
+						new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath()));
+				// Set extension filter for text files
+				FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel Fole", "*.xlsx");
 
-			// Show save file dialog
-			File file = fileChooser.showSaveDialog(null);
+				fileChooser.setInitialFileName("File");
 
-			if (file != null) {
-				for (int i = 1; i <= 1; i++) {
-					// retclob_(i, pens.getid(), conn, file);
-					retxlsx(i, pens.getid(), conn, file);
+				fileChooser.getExtensionFilters().add(extFilter);
+
+				// Show save file dialog
+				File file = fileChooser.showSaveDialog(null);
+
+				if (file != null) {
+					PreparedStatement prp_part = conn.prepareStatement("SELECT * FROM SBRA_YEAR_BET ORDER BY PART ASC");
+					ResultSet rs = prp_part.executeQuery();
+					while (rs.next()) {
+						retxlsx(rs.getInt("PART"), pens.getid(), conn, file,
+								sep_pens.getSelectionModel().getSelectedItem().getfilename());
+					}
 				}
-			}
 
+			}
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -455,71 +475,23 @@ public class PensController {
 					write_error(conn, file, Integer.valueOf(part1));
 				} else if (part2.equals("ok")) {
 					System.out.println("OK--");
-					for (int i = 1; i <= 6; i++) {
-						System.out.println(i);
+
+					PreparedStatement prp_part = conn.prepareStatement("SELECT * FROM SBRA_YEAR_BET ORDER BY PART ASC");
+					ResultSet rs = prp_part.executeQuery();
+					while (rs.next()) {
 						String str = "";
-						if (i == 1) {
-							Clob clobb = conn.createClob();
-							str = retclob(i, Integer.valueOf(part1), conn, file);
-							clobb.setString(1, str);
-							String upd = "update z_sb_pens_4file\r\n" + "set ONE_PART = ?\r\n" + "where ID = ?\r\n";
-							System.out.println(upd);
-							PreparedStatement prepStmt = conn.prepareStatement(upd);
-							prepStmt.setClob(1, clobb);
-							prepStmt.setInt(2, Integer.valueOf(part1));
-							prepStmt.executeUpdate();
-						} else if (i == 2) {
-							Clob clobb = conn.createClob();
-							str = retclob(i, Integer.valueOf(part1), conn, file);
-							clobb.setString(1, str);
-							String upd = "update z_sb_pens_4file\r\n" + "set TWO_PART = ?\r\n" + "where ID = ?\r\n";
-							System.out.println(upd);
-							PreparedStatement prepStmt = conn.prepareStatement(upd);
-							prepStmt.setClob(1, clobb);
-							prepStmt.setInt(2, Integer.valueOf(part1));
-							prepStmt.executeUpdate();
-						} else if (i == 3) {
-							Clob clobb = conn.createClob();
-							str = retclob(i, Integer.valueOf(part1), conn, file);
-							clobb.setString(1, str);
-							String upd = "update z_sb_pens_4file\r\n" + "set THREE_PART = ?\r\n" + "where ID = ?\r\n";
-							System.out.println(upd);
-							PreparedStatement prepStmt = conn.prepareStatement(upd);
-							prepStmt.setClob(1, clobb);
-							prepStmt.setInt(2, Integer.valueOf(part1));
-							prepStmt.executeUpdate();
-						} else if (i == 4) {
-							Clob clobb = conn.createClob();
-							str = retclob(i, Integer.valueOf(part1), conn, file);
-							clobb.setString(1, str);
-							String upd = "update z_sb_pens_4file\r\n" + "set FOUR_PART = ?\r\n" + "where ID = ?\r\n";
-							System.out.println(upd);
-							PreparedStatement prepStmt = conn.prepareStatement(upd);
-							prepStmt.setClob(1, clobb);
-							prepStmt.setInt(2, Integer.valueOf(part1));
-							prepStmt.executeUpdate();
-						} else if (i == 5) {
-							Clob clobb = conn.createClob();
-							str = retclob(i, Integer.valueOf(part1), conn, file);
-							clobb.setString(1, str);
-							String upd = "update z_sb_pens_4file\r\n" + "set FIVE_PART = ?\r\n" + "where ID = ?\r\n";
-							System.out.println(upd);
-							PreparedStatement prepStmt = conn.prepareStatement(upd);
-							prepStmt.setClob(1, clobb);
-							prepStmt.setInt(2, Integer.valueOf(part1));
-							prepStmt.executeUpdate();
-						} else if (i == 6) {
-							Clob clobb = conn.createClob();
-							str = retclob(i, Integer.valueOf(part1), conn, file);
-							clobb.setString(1, str);
-							String upd = "update z_sb_pens_4file\r\n" + "set SIX_PART = ?\r\n" + "where ID = ?\r\n";
-							System.out.println(upd);
-							PreparedStatement prepStmt = conn.prepareStatement(upd);
-							prepStmt.setClob(1, clobb);
-							prepStmt.setInt(2, Integer.valueOf(part1));
-							prepStmt.executeUpdate();
-						}
+						Clob clobb = conn.createClob();
+						str = retclob(rs.getInt("PART"), Integer.valueOf(part1), conn, file);
+						clobb.setString(1, str);
+						String upd = "insert into Z_SB_PENS_4FILE_FILES (PART_FILE,FILE_CL,LOAD_ID) values  (?,?,?) ";
+						System.out.println(upd);
+						PreparedStatement prepStmt = conn.prepareStatement(upd);
+						prepStmt.setInt(1, rs.getInt("PART"));
+						prepStmt.setClob(2, clobb);
+						prepStmt.setInt(3, Integer.valueOf(part1));
+						prepStmt.executeUpdate();
 					}
+
 					conn.commit();
 					/* Вывод сообщения */
 					Msg.Message("Файлы сформированы в папку=" + file.getParent());
@@ -582,14 +554,20 @@ public class PensController {
 	public String retclob(int id, int sess_id, Connection conn, File file) {
 		String str = "";
 		try {
-			SqlMap s = new SqlMap().load("/SQL.xml");
-			String readRecordSQL = s.getSql("getPens");
-			PreparedStatement prepStmt = conn.prepareStatement(readRecordSQL);
+//			SqlMap s = new SqlMap().load("/SQL.xml");
+//			String readRecordSQL = s.getSql("getPens");
+			PreparedStatement prepStmt = conn.prepareStatement("" + "select RN||'|'||\n" + "       LAST_NAME||'|'||\n"
+					+ "       FIRST_NAME||'|'||\n" + "       MIDDLE_NAME||'|'||\n" + "       COLUMN5||'|'||\n"
+					+ "       ACC||'|'||\n" + "       replace(to_char(SUMM),',','.')||'|'||\n"
+					+ "       to_char(ABS_BDATE,'dd.mm.rrrr')||'|'||\n" + "       COLUMN9||'|'||\n"
+					+ "       COLUMN10||'|'||\n" + "       ACC_VTB||'|'||\n" + "       COLUMN12||'|'||\n"
+					+ "       SNILS  str\n" + "  from Z_SB_PENS_WDP t\n" + " where part = ?\n"
+					+ "order by ABS_BDATE asc, rn");
 			prepStmt.setInt(1, id);
 			ResultSet rs = prepStmt.executeQuery();
 
 			String createfolder = file.getParent() + "\\" + file.getName() + "_0" + id + ".txt";
-			System.out.println(readRecordSQL);
+//			System.out.println(readRecordSQL);
 
 			PrintWriter writer = new PrintWriter(createfolder);
 
@@ -616,7 +594,8 @@ public class PensController {
 	 * @param conn
 	 * @param file
 	 */
-	public void retclob_(int id, int sess_id, Connection conn, File file) {
+	@Deprecated
+	public void retclob_1(int id, int sess_id, Connection conn, File file) {
 		try {
 			Statement sqlStatement = conn.createStatement();
 			String readRecordSQL = "select * from Z_SB_PENS_4FILE t where t.ID = " + sess_id;
@@ -648,6 +627,10 @@ public class PensController {
 		}
 	}
 
+	void XLSX() {
+
+	}
+
 	/**
 	 * Возврат самого файла
 	 * 
@@ -657,115 +640,116 @@ public class PensController {
 	 * @param file
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void retxlsx(int id, int sess_id, Connection conn, File file) {
+	public void retxlsx(int id, int sess_id, Connection conn, File file, String filename) {
 		try {
-
+			// TLB.setDisable(true);
 			Service service = new Service() {
 				@Override
 				protected Task createTask() {
 					return new Task() {
 						@Override
 						protected Object call() throws Exception {
-
 							// ----------------------------------------------------------------
 							try {
-								String part = "";
-								if (id == 1) {
-									part = "ONE_PART";
-								} else if (id == 2) {
-									part = "TWO_PART";
-								} else if (id == 3) {
-									part = "THREE_PART";
-								} else if (id == 4) {
-									part = "FOUR_PART";
-								} else if (id == 5) {
-									part = "FIVE_PART";
-								} else if (id == 6) {
-									part = "SIX_PART";
-								}
+								// file name
+								String createfolder = file.getParent() + "\\" + filename + "_0" + id + ".xlsx";
+								// _____________________________
 								Long cnt_row = 0l;
-								Statement cnt_prgrs = conn.createStatement();
-								ResultSet cnt_rs = cnt_prgrs.executeQuery("select count(*) cnt  from (select " + part
-										+ " from Z_SB_PENS_4FILE t where id = " + sess_id + ") g,\n"
-										+ "       table(lob2table.separatedcolumns(g.one_part,\n"
-										+ "                                        chr(13) || chr(10), \n"
-										+ "                                        '|', \n"
-										+ "                                        '')) h\n");
+								{
+									PreparedStatement cnt_prgrs = conn.prepareStatement("select count(*) cnt\n"
+											+ "  from table(lob2table.separatedcolumns((SELECT FILE_CL\n"
+											+ "                                          FROM Z_SB_PENS_4FILE_FILES\n"
+											+ "                                         WHERE LOAD_ID = ?\n"
+											+ "                                           AND PART_FILE = ?),\n"
+											+ "                                        chr(13) || chr(10),\n"
+											+ "                                        '|',\n"
+											+ "                                        '')) h\n" + "");
+									cnt_prgrs.setInt(1, sess_id);
+									cnt_prgrs.setInt(2, id);
 
-								if (cnt_rs.next()) {
-									cnt_row = cnt_rs.getLong("cnt");
+									ResultSet cnt_rs = cnt_prgrs.executeQuery();
+
+									if (cnt_rs.next()) {
+										cnt_row = cnt_rs.getLong("cnt");
+									}
+									cnt_prgrs.close();
+									cnt_rs.close();
 								}
 
-								Statement sqlStatement = conn.createStatement();
 								String readRecordSQL = "select to_number(COLUMN1) row_num,\n"
 										+ "       COLUMN2 last_name,\n" + "       COLUMN3 first_name,\n"
 										+ "       COLUMN4 middle_name,\n" + "       COLUMN5,\n"
 										+ "       COLUMN6 acc,\n"
-										+ "       to_number(replace(COLUMN7, '.', ',')) summ,\n"
-										+ "       to_date(COLUMN8,'dd.mm.yyyy') bdate,\n" + "       COLUMN9,\n"
-										+ "       COLUMN10,\n" + "       COLUMN11 acc_vtb,\n" + "       COLUMN12,\n"
-										+ "       COLUMN13 snils\n" + "  from (select " + part
-										+ " from Z_SB_PENS_4FILE t where id = " + sess_id + ") g,\n"
-										+ "       table(lob2table.separatedcolumns(g.one_part,\n"
-										+ "                                        chr(13) || chr(10), \n"
-										+ "                                        '|', \n"
-										+ "                                        '')) h\n";
-								ResultSet rs = sqlStatement.executeQuery(readRecordSQL);
+										+ "       TO_NUMBER(REPLACE(COLUMN7, '.', ',')) summ,\n"
+										+ "       TO_CHAR(TO_DATE(COLUMN8, 'DD.MM.YYYY'), 'DD.MM.YYYY') BDATE,\n"
+										+ "       COLUMN9,\n" + "       COLUMN10,\n" + "       COLUMN11 acc_vtb,\n"
+										+ "       COLUMN12,\n" + "       COLUMN13 snils\n"
+										+ "  from table(lob2table.separatedcolumns((SELECT FILE_CL\n"
+										+ "                                          FROM Z_SB_PENS_4FILE_FILES\n"
+										+ "                                         WHERE LOAD_ID = ?\n"
+										+ "                                           AND PART_FILE = ?),\n"
+										+ "                                        chr(13) || chr(10),\n"
+										+ "                                        '|',\n"
+										+ "                                        '')) h\n" + "";
+								PreparedStatement sqlStatement = conn.prepareStatement(readRecordSQL);
 
+								sqlStatement.setInt(1, sess_id);
+								sqlStatement.setInt(2, id);
+
+								ResultSet rs = sqlStatement.executeQuery();
 								System.out.println(readRecordSQL);
-
-								XSSFWorkbook workbook = new XSSFWorkbook();
-								XSSFSheet spreadsheet = workbook.createSheet("Таблица");
-								Row row = spreadsheet.createRow(0);
-
+								SXSSFWorkbook wb = new SXSSFWorkbook(100);
+								Sheet sh = wb.createSheet("Таблица");
+								Row row = sh.createRow(0);
+								// header
+								row.createCell(0).setCellValue("ROW_NUM");
+								row.createCell(1).setCellValue("LAST_NAME");
+								row.createCell(2).setCellValue("FIRST_NAME");
+								row.createCell(3).setCellValue("MIDDLE_NAME");
+								row.createCell(4).setCellValue("COLUMN5");
+								row.createCell(5).setCellValue("ACC");
+								row.createCell(6).setCellValue("SUMM");
+								row.createCell(7).setCellValue("BDATE");
+								row.createCell(8).setCellValue("COLUMN9");
+								row.createCell(9).setCellValue("COLUMN10");
+								row.createCell(10).setCellValue("ACC_VTB");
+								row.createCell(11).setCellValue("COLUMN12");
+								row.createCell(12).setCellValue("SNILS");
+								// __________________________
 								int i = 0;
-
 								while (rs.next()) {
+									row = sh.createRow(i + 1);
+									row.createCell(0).setCellValue(rs.getInt("ROW_NUM"));
+									row.createCell(1).setCellValue(rs.getString("LAST_NAME"));
+									row.createCell(2).setCellValue(rs.getString("FIRST_NAME"));
+									row.createCell(3).setCellValue(rs.getString("MIDDLE_NAME"));
+									row.createCell(4).setCellValue(rs.getString("COLUMN5"));
+									row.createCell(5).setCellValue(rs.getString("ACC"));
+									row.createCell(6).setCellValue(rs.getDouble("SUMM"));
+									row.createCell(7).setCellValue(rs.getString("BDATE"));
+									row.createCell(8).setCellValue(rs.getString("COLUMN9"));
+									row.createCell(9).setCellValue(rs.getString("COLUMN10"));
+									row.createCell(10).setCellValue(rs.getString("ACC_VTB"));
+									row.createCell(11).setCellValue(rs.getString("COLUMN12"));
+									row.createCell(12).setCellValue(rs.getString("SNILS"));
 
 									updateProgress(i, cnt_row);
 
-									System.out.println(i);
-//									if (i == 100) {
-//										break;
-//									}
-
-									row = spreadsheet.createRow(i + 1);
-									row.createCell(0).setCellValue(rs.getInt("ROW_NUM"));
-									spreadsheet.autoSizeColumn(0);
-									row.createCell(1).setCellValue(rs.getString("LAST_NAME"));
-									spreadsheet.autoSizeColumn(1);
-									row.createCell(2).setCellValue(rs.getString("FIRST_NAME"));
-									spreadsheet.autoSizeColumn(2);
-									row.createCell(3).setCellValue(rs.getString("MIDDLE_NAME"));
-									spreadsheet.autoSizeColumn(3);
-									row.createCell(4).setCellValue(rs.getString("COLUMN5"));
-									spreadsheet.autoSizeColumn(4);
-									row.createCell(5).setCellValue(rs.getString("ACC"));
-									spreadsheet.autoSizeColumn(5);
-									row.createCell(6).setCellValue(rs.getDate("BDATE"));
-									spreadsheet.autoSizeColumn(6);
-									row.createCell(7).setCellValue(rs.getString("COLUMN9"));
-									spreadsheet.autoSizeColumn(7);
-									row.createCell(8).setCellValue(rs.getString("COLUMN10"));
-									spreadsheet.autoSizeColumn(8);
-									row.createCell(9).setCellValue(rs.getString("ACC_VTB"));
-									spreadsheet.autoSizeColumn(9);
-									row.createCell(10).setCellValue(rs.getString("COLUMN12"));
-									spreadsheet.autoSizeColumn(10);
-									row.createCell(11).setCellValue(rs.getString("SNILS"));
-									spreadsheet.autoSizeColumn(11);
+									// System.out.println(i);
 									i++;
 								}
 								rs.close();
 								sqlStatement.close();
 
-								workbook.write(new FileOutputStream(file.getPath()));
-								workbook.close();
+								wb.write(new FileOutputStream(createfolder));
+								wb.close();
 
 								Thread.sleep(100);
+
 							} catch (Exception e) {
-								Msg.Message(ExceptionUtils.getStackTrace(e));
+								ShowMes(ExceptionUtils.getStackTrace(e));
 							}
+							// TLB.setDisable(true);
 							// ----------------------------------------------------------------
 							return null;
 						}
@@ -773,82 +757,28 @@ public class PensController {
 				}
 			};
 			Progress.progressProperty().bind(service.progressProperty());
-			service.setOnSucceeded(e -> Msg.Message("Файлы сформированы в папку=" + file.getParent()));
+			service.setOnFailed(e -> ShowMes(service.getException().getMessage()));
+			service.setOnSucceeded(e -> TLB.setDisable(true));
 			service.start();
-
-//			Task<Object> task = new Task<Object>() {
-//				@Override
-//				public Object call() throws Exception {
-//					
-//					} catch (Exception e) {
-//						Msg.Message(ExceptionUtils.getStackTrace(e));
-//					}
-//					return null;
-//				}
-//			};
-//			task.setOnFailed(e -> Msg.Message(task.getException().getMessage()));
-//			task.setOnSucceeded(e -> PrgInd.setVisible(false));
-//			exec.execute(task);
-
-//			DateTimeFormatter formatterwt = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-//			
-//			ObservableList<SBRA_XLSX_MODEL> cus_list = FXCollections.observableArrayList();
-//			SBRA_XLSX_MODEL list = null;
-//			// looping
-//			while (rs.next()) {
-//				list = new SBRA_XLSX_MODEL();
-//				list.setROW_NUM(rs.getLong("ROW_NUM"));
-//				list.setLAST_NAME(rs.getString("LAST_NAME"));
-//				list.setFIRST_NAME(rs.getString("FIRST_NAME"));
-//				list.setMIDDLE_NAME(rs.getString("MIDDLE_NAME"));
-//				list.setCOLUMN5(rs.getString("COLUMN5"));
-//				list.setACC(rs.getString("ACC"));
-//				list.setSUMM(rs.getLong("SUMM"));
-//				list.setBDATE((rs.getDate("BDATE") != null)
-//						? LocalDate.parse(new SimpleDateFormat("dd.MM.yyyy").format(rs.getDate("BDATE")), formatterwt)
-//						: null);
-//				list.setCOLUMN9(rs.getString("COLUMN9"));
-//				list.setCOLUMN10(rs.getString("COLUMN10"));
-//				list.setACC_VTB(rs.getString("ACC_VTB"));
-//				list.setCOLUMN12(rs.getString("COLUMN12"));
-//				list.setSNILS(rs.getString("SNILS"));
-//
-//				cus_list.add(list);
-//			}
-//			
-//			for (SBRA_XLSX_MODEL rows : cus_list) {
-//				System.out.println(i);
-//				row = spreadsheet.createRow(i + 1);
-//				row.createCell(0).setCellValue(rows.getROW_NUM());
-//				spreadsheet.autoSizeColumn(0);
-//				row.createCell(1).setCellValue(rows.getLAST_NAME());
-//				spreadsheet.autoSizeColumn(1);
-//				row.createCell(2).setCellValue(rows.getFIRST_NAME());
-//				spreadsheet.autoSizeColumn(2);
-//				row.createCell(3).setCellValue(rows.getMIDDLE_NAME());
-//				spreadsheet.autoSizeColumn(3);
-//				row.createCell(4).setCellValue(rows.getCOLUMN5());
-//				spreadsheet.autoSizeColumn(4);
-//				row.createCell(5).setCellValue(rows.getACC());
-//				spreadsheet.autoSizeColumn(5);
-//				row.createCell(6).setCellValue(rows.getBDATE());
-//				spreadsheet.autoSizeColumn(6);
-//				row.createCell(7).setCellValue(rows.getCOLUMN9());
-//				spreadsheet.autoSizeColumn(7);
-//				row.createCell(8).setCellValue(rows.getCOLUMN10());
-//				spreadsheet.autoSizeColumn(8);
-//				row.createCell(9).setCellValue(rows.getACC_VTB());
-//				spreadsheet.autoSizeColumn(9);
-//				row.createCell(10).setCellValue(rows.getCOLUMN12());
-//				spreadsheet.autoSizeColumn(10);
-//				row.createCell(11).setCellValue(rows.getSNILS());
-//				spreadsheet.autoSizeColumn(11);
-//				i++;
-//			}
 
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
+	}
+
+	/**
+	 * Error message in new thread
+	 * 
+	 * @param error
+	 */
+	void ShowMes(String error) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				Msg.Message(error);
+			}
+		});
+
 	}
 
 	/**

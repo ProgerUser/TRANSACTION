@@ -359,6 +359,12 @@ public class SWC {
 	 */
 	@FXML
 	private TableColumn<SWIFT_FILES, String> FILE_NAMEdb;
+	
+	/**
+	 * Статус
+	 */
+	@FXML
+	private TableColumn<SWIFT_FILES, String> STATUSdb;
 
 	/**
 	 * IN-OUT база
@@ -1887,6 +1893,7 @@ public class SWC {
 			selecteAllCheckBox.setOnAction(event -> {
 				event.consume();
 				STMT.getItems().forEach(item -> item.setCHK(selecteAllCheckBox.isSelected()));
+				RefreshTable(null);
 			});
 
 			CHK.setGraphic(selecteAllCheckBox);
@@ -2154,6 +2161,7 @@ public class SWC {
 			DT_CHdb.setCellValueFactory(cellData -> cellData.getValue().DT_CHProperty());
 			DOCDATEdb.setCellValueFactory(cellData -> cellData.getValue().DOCDATEProperty());
 			FILE_NAMEdb.setCellValueFactory(cellData -> cellData.getValue().FILENAMEProperty());
+			STATUSdb.setCellValueFactory(cellData -> cellData.getValue().STATUSProperty());
 			MTTYPEdb.setCellValueFactory(cellData -> cellData.getValue().MTTYPEProperty());
 			MTNAMEdb.setCellValueFactory(cellData -> cellData.getValue().MTNAMEProperty());
 			CURdb.setCellValueFactory(cellData -> cellData.getValue().CURProperty());
@@ -2440,10 +2448,29 @@ public class SWC {
 				in_out = "and upper(VECTOR) = '" + ArchType.getValue() + "' \r\n";
 			}
 
-			String selectStmt = "select id,\r\n" + "       filename,\r\n" + "       dt_ch,\r\n" + "       swfile,\r\n"
-					+ "       oper,\r\n" + "       cr_dt,\r\n" + "       mttype,\r\n" + "       mtname,\r\n"
-					+ "       cur,\r\n" + "       vector,\r\n" + "       nvl(summ, '') summ,\r\n"
-					+ "       docdate,\r\n" + "       REF\r\n" + "  from SWIFT_FILES\r\n" + " where 1 = 1\r\n" + dt1_
+			String selectStmt = "SELECT ID,\r\n"
+					+ "       FILENAME,\r\n"
+					+ "       DT_CH,\r\n"
+					+ "       SWFILE,\r\n"
+					+ "       OPER,\r\n"
+					+ "       CR_DT,\r\n"
+					+ "       MTTYPE,\r\n"
+					+ "       MTNAME,\r\n"
+					+ "       CUR,\r\n"
+					+ "       VECTOR,\r\n"
+					+ "       NVL(SUMM, '') SUMM,\r\n"
+					+ "       DOCDATE,\r\n"
+					+ "       REF,\r\n"
+					+ "       CASE\r\n"
+					+ "         WHEN VECTOR = 'OUT' THEN\r\n"
+					+ "          (SELECT CAST(LISTAGG_CLOB(J.IS_ACK_NAK) AS VARCHAR2(4000))\r\n"
+					+ "             FROM SWIFT_FILES_OTHERS J\r\n"
+					+ "            WHERE J.SW_REF = G.REF)\r\n"
+					+ "         ELSE\r\n"
+					+ "          NULL\r\n"
+					+ "       END STATUS\r\n"
+					+ "  FROM SWIFT_FILES G\r\n"
+					+ " where 1 = 1\r\n" + dt1_
 					+ dt2_ + in_out + "order by CR_DT desc";
 			PreparedStatement prepStmt = conn.prepareStatement(selectStmt);
 			ResultSet rs = prepStmt.executeQuery();
@@ -2468,6 +2495,7 @@ public class SWC {
 				list.setFILENAME(rs.getString("FILENAME"));
 				list.setID(rs.getInt("ID"));
 				list.setREF(rs.getString("REF"));
+				list.setSTATUS(rs.getString("STATUS"));
 				cus_list.add(list);
 			}
 			prepStmt.close();
@@ -2898,7 +2926,7 @@ public class SWC {
 		table.getColumns().stream().forEach((column_) -> {
 			// column1.getColumns().stream().forEach((column_) -> {
 			// System.out.println(column_.getText());
-			if (column_.getText().equals("Дата изменения")) {
+			if (column_.getText().equals("Выб.")) {
 
 			} else {
 				// Minimal width = columnheader
