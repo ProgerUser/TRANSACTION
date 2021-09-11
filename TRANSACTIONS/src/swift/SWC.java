@@ -2472,6 +2472,7 @@ public class SWC {
 					+ "  FROM SWIFT_FILES G\r\n"
 					+ " where 1 = 1\r\n" + dt1_
 					+ dt2_ + in_out + "order by CR_DT desc";
+			System.out.println(selectStmt);
 			PreparedStatement prepStmt = conn.prepareStatement(selectStmt);
 			ResultSet rs = prepStmt.executeQuery();
 			ObservableList<SWIFT_FILES> cus_list = FXCollections.observableArrayList();
@@ -2502,9 +2503,9 @@ public class SWC {
 			rs.close();
 			Achive.setItems(cus_list);
 
-			Platform.runLater(new Runnable() {
-				@Override
-				public void run() {
+//			Platform.runLater(new Runnable() {
+//				@Override
+//				public void run() {
 					TableFilter<SWIFT_FILES> tableFilter = TableFilter.forTableView(Achive).apply();
 					tableFilter.setSearchStrategy((input, target) -> {
 						try {
@@ -2513,8 +2514,8 @@ public class SWC {
 							return false;
 						}
 					});
-				}
-			});
+//				}
+//			});
 
 			NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
 			DecimalFormatSymbols decimalFormatSymbols = ((DecimalFormat) currencyFormat).getDecimalFormatSymbols();

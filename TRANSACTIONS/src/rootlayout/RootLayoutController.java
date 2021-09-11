@@ -146,14 +146,14 @@ public class RootLayoutController {
 		}
 	}
 
-	@FXML
-	void loadtransact(ActionEvent event) {
-		try {
-			Main.Transact();
-		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
-		}
-	}
+//	@FXML
+//	void loadtransact(ActionEvent event) {
+//		try {
+//			Main.Transact();
+//		} catch (Exception e) {
+//			Msg.Message(ExceptionUtils.getStackTrace(e));
+//		}
+//	}
 
 	@FXML
 	void loadhistory(ActionEvent event) {

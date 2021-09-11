@@ -62,7 +62,7 @@ public class SWIFT_FILES {
 	}
 	
 	public void setREF(String STATUS) {
-		this.STATUS.set(STATUS);
+		this.REF.set(STATUS);
 	}
 
 	public String getREF() {
