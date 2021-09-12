@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.sql.CallableStatement;
@@ -17,6 +18,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -45,6 +47,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
@@ -53,8 +56,8 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -106,8 +109,6 @@ public class PensController {
 	private TableColumn<PENS_LOAD_ROWSUM, String> FILE_NAME;
 	@FXML
 	private TableColumn<PENS_LOAD_ROWSUM, LocalDateTime> DATE_LOAD;
-	@FXML
-	private TableColumn<PENS_LOAD_ROWSUM, Long> ROW_COUNT;
 
 	@FXML
 	private TableView<SBRA_YEAR_BET> SBRA_YEAR_BET;
@@ -117,6 +118,14 @@ public class PensController {
 	private TableColumn<SBRA_YEAR_BET, LocalDate> START_Y;
 	@FXML
 	private TableColumn<SBRA_YEAR_BET, LocalDate> END_Y;
+
+	@FXML
+	private TextField PensSum;
+	@FXML
+	private TextField PensCount;
+
+	@FXML
+	private Button Pens60322_408;
 
 	@FXML
 	void pensrachk(ActionEvent event) {
@@ -171,6 +180,7 @@ public class PensController {
 			});
 
 			dbConnect();
+
 			try {
 				String sql = "select t.BOOLEAN from Z_SB_PENSRACHK t";
 				Statement stmt = conn.createStatement();
@@ -229,7 +239,6 @@ public class PensController {
 			LOAD_ID.setCellValueFactory(cellData -> cellData.getValue().LOAD_IDProperty().asObject());
 			FILE_NAME.setCellValueFactory(cellData -> cellData.getValue().FILE_NAMEProperty());
 			DATE_LOAD.setCellValueFactory(cellData -> cellData.getValue().DATE_LOADProperty());
-			ROW_COUNT.setCellValueFactory(cellData -> cellData.getValue().ROW_COUNTProperty().asObject());
 
 			END_Y.setCellValueFactory(cellData -> cellData.getValue().END_YProperty());
 			START_Y.setCellValueFactory(cellData -> cellData.getValue().START_YProperty());
@@ -289,6 +298,35 @@ public class PensController {
 					}
 				};
 				return cell;
+			});
+			// --
+			DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
+			PENS_LOAD_ROWSUM.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> {
+				PENS_LOAD_ROWSUM sel = PENS_LOAD_ROWSUM.getSelectionModel().getSelectedItem();
+				if (sel != null) {
+					try {
+						PreparedStatement prp = conn
+								.prepareCall("SELECT COUNT(*),SUM(TO_NUMBER(REPLACE(COLUMN7, '.', ',')))\n"
+										+ "  FROM TABLE(LOB2TABLE.SEPARATEDCOLUMNS((SELECT CL_\n"
+										+ "                                          FROM Z_PENS_CL T\n"
+										+ "                                         WHERE T.TYPE_ = 'FILE'\n"
+										+ "                                           AND ID_ = ?), /* THE DATA LOB */\n"
+										+ "                                        CHR(13) || CHR(10), /* ROW SEPARATOR */\n"
+										+ "                                        '|', /* COLUMN SEPARATOR */\n"
+										+ "                                        '' /* DELIMITER (OPTIONAL) */))");
+						prp.setLong(1, sel.getLOAD_ID());
+						ResultSet rs = prp.executeQuery();
+						if (rs.next()) {
+							PensCount.setText(decimalFormat.format(rs.getLong(1)));
+							PensSum.setText(decimalFormat.format(rs.getDouble(2)));
+						}
+						rs.close();
+						prp.close();
+
+					} catch (Exception e) {
+						Msg.Message(ExceptionUtils.getStackTrace(e));
+					}
+				}
 			});
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
@@ -426,7 +464,7 @@ public class PensController {
 				fileChooser.setInitialDirectory(
 						new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath()));
 				// Set extension filter for text files
-				FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel Fole", "*.xlsx");
+				FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel File", "*.xlsx");
 
 				fileChooser.setInitialFileName("File");
 
@@ -442,6 +480,8 @@ public class PensController {
 						retxlsx(rs.getInt("PART"), pens.getid(), conn, file,
 								sep_pens.getSelectionModel().getSelectedItem().getfilename());
 					}
+					rs.close();
+					prp_part.close();
 				}
 
 			}
@@ -542,8 +582,8 @@ public class PensController {
 			fileChooser.setTitle("Выбрать файл");
 			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Text file", "*.txt"),
 					new ExtensionFilter("Comma separated", "*.csv"));
-			fileChooser.setInitialDirectory(
-					new File(System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
+			fileChooser
+					.setInitialDirectory(new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath()));
 			File file = fileChooser.showOpenDialog(null);
 			if (file != null) {
 
@@ -652,7 +692,7 @@ public class PensController {
 				Msg.Message("Нет доступа!");
 				return;
 			}
-			
+
 			pensmodel sel = sep_pens.getSelectionModel().getSelectedItem();
 			if (sel == null) {
 				Msg.Message("Выберите строку");
@@ -684,16 +724,256 @@ public class PensController {
 	}
 
 	/**
+	 * Открыть в АБС
+	 */
+	public void RefreshPens() {
+		try {
+			LoadTablePensExec();
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+	/**
+	 * Загрузить файл
+	 */
+	public void SaveComiss() {
+		try {
+
+			if (PENS_LOAD_ROWSUM.getSelectionModel().getSelectedItem() == null) {
+				Msg.Message("Выберите сначала данные из таблицы!");
+			} else {
+				InputStream input = new FileInputStream(System.getenv("TRANSACT_PATH") + "connect.properties");
+				Properties prop = new Properties();
+				// load a properties file
+				prop.load(input);
+				
+				PENS_LOAD_ROWSUM pens = PENS_LOAD_ROWSUM.getSelectionModel().getSelectedItem();
+
+				FileChooser fileChooser = new FileChooser();
+
+				System.setProperty("javax.xml.transform.TransformerFactory",
+						"com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl");
+				fileChooser.setInitialDirectory(new File(prop.getProperty("PensiaLoadFolderDef")));
+				input.close();
+				
+				// Set extension filter for text files
+				FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel File", "*.xlsx");
+
+				fileChooser.setInitialFileName("File");
+
+				fileChooser.getExtensionFilters().add(extFilter);
+
+				// Show save file dialog
+				File file = fileChooser.showSaveDialog(null);
+
+				if (file != null) {
+					
+					String createfolder = file.getParent() + "\\Комиссия_" + pens.getFILE_NAME()+".xlsx";
+					
+					PreparedStatement prp_part = conn.prepareStatement("with data_v as\n"
+							+ " (select regexp_substr(CTRNPURP, 'otd={\\d+}') otd, a.*\n"
+							+ "    from trn a\n"
+							+ "   where (trunc(a.DTRNTRAN),\n"
+							+ "          replace(substr(regexp_substr(CTRNPURP, 'id={\\d+}'), 5), '}', '')) in\n"
+							+ "         (select trunc(time_), id_\n"
+							+ "            from z_pens_cl\n"
+							+ "           where type_ = 'FIN'\n"
+							+ "             and ID_ = ?)\n"
+							+ "     and ITRNBATNUM = 997)\n"
+							+ "select otd,\n"
+							+ "       sum(MTRNRSUM) comm,\n"
+							+ "       count(MTRNRSUM) * 5 comm_mt,\n"
+							+ "       count(MTRNRSUM) * 1 comm_ba,\n"
+							+ "       sum(MTRNRSUM) - count(MTRNRSUM) * 5 - count(MTRNRSUM) * 1 comm_sb\n"
+							+ "  from data_v\n"
+							+ " group by otd\n"
+							+ " order by otd\n"
+							+ "");
+					prp_part.setLong(1, pens.getLOAD_ID());
+					ResultSet rs = prp_part.executeQuery();
+					
+					SXSSFWorkbook wb = new SXSSFWorkbook(100);
+					Sheet sh = wb.createSheet("Таблица");
+					Row row = sh.createRow(0);
+					// header
+					row.createCell(0).setCellValue("OTD");
+					row.createCell(1).setCellValue("COMM");
+					row.createCell(2).setCellValue("COMM_MT");
+					row.createCell(3).setCellValue("COMM_BA");
+					row.createCell(4).setCellValue("COMM_SB");
+
+					int i = 0;
+					while (rs.next()) {
+						row = sh.createRow(i + 1);
+						row.createCell(0).setCellValue(rs.getString("OTD"));
+						row.createCell(1).setCellValue(rs.getDouble("COMM"));
+						row.createCell(2).setCellValue(rs.getDouble("COMM_MT"));
+						row.createCell(3).setCellValue(rs.getDouble("COMM_BA"));
+						row.createCell(4).setCellValue(rs.getDouble("COMM_SB"));
+						i++;
+					}
+					
+					wb.write(new FileOutputStream(createfolder));
+					wb.close();
+					
+					rs.close();
+					prp_part.close();
+				}
+
+			}
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+	/**
+	 * Загрузить файл
+	 */
+	public void LoadPens() {
+		try {
+			InputStream input = new FileInputStream(System.getenv("TRANSACT_PATH") + "connect.properties");
+			Properties prop = new Properties();
+			// load a properties file
+			prop.load(input);
+
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("Выбрать файл");
+			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Text file", "*.txt"));
+			fileChooser.setInitialDirectory(new File(prop.getProperty("PensiaLoadFolderDef")));
+
+			input.close();
+
+			File file = fileChooser.showOpenDialog(null);
+			if (file != null) {
+
+				final Alert alert = new Alert(AlertType.CONFIRMATION, "Загрузить файл \"" + file.getName() + "\" ?",
+						ButtonType.YES, ButtonType.NO);
+				if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
+
+					CallableStatement callStmt = conn.prepareCall("{ call Z_PENS_KERNEL.LOADFROMJAVA(?,?,?,?)}");
+					callStmt.registerOutParameter(1, Types.VARCHAR);
+					callStmt.registerOutParameter(4, Types.BIGINT);
+					// txt to clob
+					String reviewStr = readFile(file.getAbsolutePath());
+					Clob clob = conn.createClob();
+					clob.setString(1, reviewStr);
+					// add parameters
+					callStmt.setString(2, file.getName());
+					callStmt.setClob(3, clob);
+					// catch
+					try {
+						callStmt.execute();
+					} catch (Exception e) {
+						conn.rollback();
+						callStmt.close();
+						Msg.Message(ExceptionUtils.getStackTrace(e));
+					}
+					// return
+					String ret = callStmt.getString(1);
+					Integer ret_id = callStmt.getInt(1);
+					// check
+					if (ret != null) {
+						// roll back
+						conn.rollback();
+						Msg.Message(ret);
+					} else {
+						conn.commit();
+						// ___________
+						{
+							CallableStatement callStmt_j = conn.prepareCall("{ call Z_PENS_KERNEL.jobLoad(?,?,?)}");
+							callStmt_j.setInt(1, ret_id);
+							callStmt_j.setInt(2, 1000);
+							callStmt_j.setInt(4, 7);
+							// catch
+							try {
+								callStmt_j.execute();
+							} catch (Exception e) {
+								conn.rollback();
+								callStmt_j.close();
+								Msg.Message(ExceptionUtils.getStackTrace(e));
+							}
+							callStmt_j.close();
+							// Go stat______________
+
+							// _____________________
+						}
+						// ___________
+						// Msg.Message("Файл " + file.getName() + " загружен");
+						// reload
+						LoadTablePensExec();
+					}
+					// close
+					callStmt.close();
+				}
+			}
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+	/**
+	 * Открыть в АБС
+	 */
+	public void OpenAbs() {
+		try {
+//			if (DbUtil.Odb_Action(44l) == 0) {
+//				Msg.Message("Нет доступа!");
+//				return;
+//			}
+			PENS_LOAD_ROWSUM sel = PENS_LOAD_ROWSUM.getSelectionModel().getSelectedItem();
+			if (sel == null) {
+				Msg.Message("Выберите строку");
+			} else {
+				String call = "";
+
+				final Alert alert = new Alert(AlertType.CONFIRMATION,
+						" Yes = 60322% -> 4083% \r\n No = 4083% -> 40831%", ButtonType.YES, ButtonType.NO);
+
+				if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
+					call = "ifrun60.exe I:/KERNEL/OPERLIST.fmx " + Connect.userID_ + "/" + Connect.userPassword_
+							+ "@ODB WHERE=\" DTRNCREATE = trunc((select f.DATE_LOAD from SBRA_PENS_LOAD_ROWSUM f where f.LOAD_ID = "
+							+ sel.getLOAD_ID() + ")) and ITRNBATNUM = 999 and CTRNPURP like '%{" + sel.getLOAD_ID()
+							+ "}%'\"";
+				} else {
+					call = "ifrun60.exe I:/KERNEL/OPERLIST.fmx " + Connect.userID_ + "/" + Connect.userPassword_
+							+ "@ODB WHERE=\" DTRNCREATE = trunc((select f.DATE_LOAD from SBRA_PENS_LOAD_ROWSUM f where f.LOAD_ID = "
+							+ sel.getLOAD_ID() + ")) and ITRNBATNUM = 996 and CTRNPURP like '%{"
+							+ (sel.getLOAD_ID() + 1) + "}%'\"";
+				}
+
+				ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", call);
+				System.out.println(call);
+				builder.redirectErrorStream(true);
+				Process p;
+				p = builder.start();
+				BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+				String line;
+				while (true) {
+					line = r.readLine();
+					if (line == null) {
+						break;
+					}
+					System.out.println(line);
+				}
+			}
+
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+	/**
 	 * Удалить загрузку для разбивки
 	 */
 	public void DelDtBtnPart() {
 		try {
-			
+
 			if (DbUtil.Odb_Action(44l) == 0) {
 				Msg.Message("Нет доступа!");
 				return;
 			}
-			
+
 			SBRA_YEAR_BET sel = SBRA_YEAR_BET.getSelectionModel().getSelectedItem();
 			if (sel == null) {
 				Msg.Message("Выберите строку");
@@ -814,10 +1094,10 @@ public class PensController {
 	 * @param conn
 	 * @param file
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void retxlsx(int id, int sess_id, Connection conn, File file, String filename) {
 		try {
-			// TLB.setDisable(true);
+			TLB.setDisable(true);
 			Service service = new Service() {
 				@Override
 				protected Task createTask() {
@@ -830,26 +1110,27 @@ public class PensController {
 								String createfolder = file.getParent() + "\\" + filename + "_0" + id + ".xlsx";
 								// _____________________________
 								Long cnt_row = 0l;
-								{
-									PreparedStatement cnt_prgrs = conn.prepareStatement("select count(*) cnt\n"
-											+ "  from table(lob2table.separatedcolumns((SELECT FILE_CL\n"
-											+ "                                          FROM Z_SB_PENS_4FILE_FILES\n"
-											+ "                                         WHERE LOAD_ID = ?\n"
-											+ "                                           AND PART_FILE = ?),\n"
-											+ "                                        chr(13) || chr(10),\n"
-											+ "                                        '|',\n"
-											+ "                                        '')) h\n" + "");
-									cnt_prgrs.setInt(1, sess_id);
-									cnt_prgrs.setInt(2, id);
 
-									ResultSet cnt_rs = cnt_prgrs.executeQuery();
+								PreparedStatement cnt_prgrs = conn.prepareStatement("select count(*) cnt\n"
+										+ "  from table(lob2table.separatedcolumns((SELECT FILE_CL\n"
+										+ "                                          FROM Z_SB_PENS_4FILE_FILES\n"
+										+ "                                         WHERE LOAD_ID = ?\n"
+										+ "                                           AND PART_FILE = ?),\n"
+										+ "                                        chr(13) || chr(10),\n"
+										+ "                                        '|',\n"
+										+ "                                        '')) h\n" + "");
+								cnt_prgrs.setInt(1, sess_id);
+								cnt_prgrs.setInt(2, id);
 
-									if (cnt_rs.next()) {
-										cnt_row = cnt_rs.getLong("cnt");
-									}
-									cnt_prgrs.close();
-									cnt_rs.close();
+								ResultSet cnt_rs = cnt_prgrs.executeQuery();
+
+								if (cnt_rs.next()) {
+									cnt_row = cnt_rs.getLong("cnt");
 								}
+								cnt_prgrs.close();
+								cnt_rs.close();
+
+								System.out.println(cnt_row);
 
 								String readRecordSQL = "select to_number(COLUMN1) row_num,\n"
 										+ "       COLUMN2 last_name,\n" + "       COLUMN3 first_name,\n"
@@ -872,7 +1153,7 @@ public class PensController {
 								sqlStatement.setInt(2, id);
 
 								ResultSet rs = sqlStatement.executeQuery();
-								System.out.println(readRecordSQL);
+								// System.out.println(readRecordSQL);
 								SXSSFWorkbook wb = new SXSSFWorkbook(100);
 								Sheet sh = wb.createSheet("Таблица");
 								Row row = sh.createRow(0);
@@ -890,9 +1171,13 @@ public class PensController {
 								row.createCell(10).setCellValue("ACC_VTB");
 								row.createCell(11).setCellValue("COLUMN12");
 								row.createCell(12).setCellValue("SNILS");
+
+								System.out.println(readRecordSQL);
+
 								// __________________________
 								int i = 0;
 								while (rs.next()) {
+									System.out.println(i);
 									row = sh.createRow(i + 1);
 									row.createCell(0).setCellValue(rs.getInt("ROW_NUM"));
 									row.createCell(1).setCellValue(rs.getString("LAST_NAME"));
@@ -918,7 +1203,6 @@ public class PensController {
 
 								wb.write(new FileOutputStream(createfolder));
 								wb.close();
-
 								Thread.sleep(100);
 
 							} catch (Exception e) {
@@ -933,7 +1217,7 @@ public class PensController {
 			};
 			Progress.progressProperty().bind(service.progressProperty());
 			service.setOnFailed(e -> ShowMes(service.getException().getMessage()));
-			service.setOnSucceeded(e -> TLB.setDisable(true));
+			service.setOnSucceeded(e -> TLB.setDisable(false));
 			service.start();
 
 		} catch (Exception e) {

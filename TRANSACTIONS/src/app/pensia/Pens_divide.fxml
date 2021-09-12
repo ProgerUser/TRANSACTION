@@ -10,11 +10,15 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<VBox prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.291" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pensia.PensController">
+<VBox prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pensia.PensController">
 	<children>
       <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="floating" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
         <tabs>
@@ -31,6 +35,9 @@
                                  <graphic>
                                     <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FOLDER_OPEN_ALT" size="16" />
                                  </graphic>
+                                 <font>
+                                    <Font size="10.0" />
+                                 </font>
                         		</Button>
                               <Separator layoutX="275.0" layoutY="10.0" orientation="VERTICAL" />
                         		<Button fx:id="save_sep" disable="false" mnemonicParsing="false" onAction="#save_seps">
@@ -63,13 +70,9 @@
                   				<TableColumn fx:id="ID" prefWidth="75.0" text="ИД" />
                   				<TableColumn fx:id="DateLoad" prefWidth="109.0" text="Дата загрузки" />
                   				<TableColumn fx:id="Filename" prefWidth="144.0" text="Название файла" />
-                  				<!-- <TableColumn fx:id="ONE_PART" prefWidth="144.0" text="Часть I" />
-                  				<TableColumn fx:id="TWO_PART" prefWidth="144.0" text="Часть II" />
-                  				<TableColumn fx:id="THREE_PART" prefWidth="144.0" text="Часть III" />
-                  				<TableColumn fx:id="FOUR_PART" prefWidth="144.0" text="Часть IV" /> -->
                   			</columns>
                   		</TableView>
-                        <ProgressBar fx:id="Progress" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" progress="0.0" VBox.vgrow="ALWAYS" />
+                        <ProgressBar fx:id="Progress" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" progress="0.0" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -84,47 +87,141 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                      <children>
-                        <ToolBar VBox.vgrow="ALWAYS">
-                          <items>
-                              <Button disable="false" mnemonicParsing="false">
-                                 <tooltip>
-                                    <Tooltip text="Загрузить файл" />
-                                 </tooltip>
-                                 <graphic>
-                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FOLDER_OPEN_ALT" size="16" />
-                                 </graphic>
-                              </Button>
-                              <Separator orientation="VERTICAL" />
-                              <Button disable="false" layoutX="10.0" layoutY="10.0" mnemonicParsing="false">
-                                 <tooltip>
-                                    <Tooltip text="Зачислить на счета" />
-                                 </tooltip>
-                                 <graphic>
-                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="LIST_OL" size="16" />
-                                 </graphic>
-                              </Button>
-                              <Separator layoutX="50.0" layoutY="10.0" orientation="VERTICAL" />
-                              <Button disable="false" layoutX="10.0" layoutY="10.0" mnemonicParsing="false">
-                                 <tooltip>
-                                    <Tooltip text="Загрузить файл" />
-                                 </tooltip>
-                                 <graphic>
-                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EXTERNAL_LINK" size="16" />
-                                 </graphic>
-                              </Button>
-                          </items>
-                           <VBox.margin>
-                              <Insets left="-5.0" right="-5.0" top="-5.0" />
-                           </VBox.margin>
-                        </ToolBar>
-                        <TableView fx:id="PENS_LOAD_ROWSUM" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="mylistview" stylesheets="/ScrPane.css" VBox.vgrow="ALWAYS">
-                          <columns>
-                            <TableColumn fx:id="LOAD_ID" prefWidth="75.0" text="ИД" />
-                            <TableColumn fx:id="FILE_NAME" prefWidth="138.0" text="Название файла" />
-                              <TableColumn fx:id="DATE_LOAD" prefWidth="138.0" text="Дата загрузки" />
-                              <TableColumn fx:id="ROW_COUNT" prefWidth="138.0" text="Количество строк" />
-                          </columns>
-                        </TableView>
+                        <TitledPane alignment="CENTER" animated="false" collapsible="false" text="Загрузка" VBox.vgrow="ALWAYS">
+                           <content>
+                              <VBox spacing="5.0">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                                 <children>
+                                    <ToolBar VBox.vgrow="ALWAYS">
+                                      <items>
+                                          <Button disable="false" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#RefreshPens">
+                                             <tooltip>
+                                                <Tooltip text="Обновить">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Tooltip>
+                                             </tooltip>
+                                             <graphic>
+                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="16" />
+                                             </graphic>
+                                          </Button>
+                                          <Separator layoutX="82.0" layoutY="10.0" orientation="VERTICAL" />
+                                          <Button mnemonicParsing="false" onAction="#LoadPens">
+                                             <tooltip>
+                                                <Tooltip text="Загрузить файл">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Tooltip>
+                                             </tooltip>
+                                             <graphic>
+                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FOLDER_OPEN_ALT" size="16" />
+                                             </graphic>
+                                             <font>
+                                                <Font size="10.0" />
+                                             </font>
+                                          </Button>
+                                          <Separator orientation="VERTICAL" />
+                                          <Button fx:id="Pens60322_408" layoutX="10.0" layoutY="10.0" mnemonicParsing="false">
+                                             <tooltip>
+                                                <Tooltip text="40831% -&gt; 4083%">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Tooltip>
+                                             </tooltip>
+                                             <graphic>
+                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="LIST_OL" size="16" />
+                                             </graphic>
+                                          </Button>
+                                          <Separator layoutX="50.0" layoutY="10.0" orientation="VERTICAL" />
+                                          <Button layoutX="100.0" layoutY="10.0" mnemonicParsing="false" onAction="#SaveComiss">
+                                             <tooltip>
+                                                <Tooltip text="Комиссия">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Tooltip>
+                                             </tooltip>
+                                             <graphic>
+                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILE_EXCEL_ALT" size="16" />
+                                             </graphic>
+                                          </Button>
+                                          <Separator layoutX="136.0" layoutY="10.0" orientation="VERTICAL" />
+                                          <Button disable="false" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#OpenAbs">
+                                             <tooltip>
+                                                <Tooltip text="Загрузить файл">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Tooltip>
+                                             </tooltip>
+                                             <graphic>
+                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EXTERNAL_LINK" size="16" />
+                                             </graphic>
+                                             <font>
+                                                <Font size="10.0" />
+                                             </font>
+                                          </Button>
+                                          <Separator layoutX="94.0" layoutY="10.0" orientation="VERTICAL" />
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Сумма:" />
+                                          <TextField fx:id="PensSum" editable="false" prefWidth="150.0" />
+                                          <Text layoutX="150.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Количество:" />
+                                          <TextField fx:id="PensCount" editable="false" layoutX="193.0" layoutY="10.0" prefWidth="100.0" />
+                                      </items>
+                                       <VBox.margin>
+                                          <Insets left="-5.0" right="-5.0" top="-5.0" />
+                                       </VBox.margin>
+                                    </ToolBar>
+                                    <TableView fx:id="PENS_LOAD_ROWSUM" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" styleClass="mylistview" stylesheets="/ScrPane.css" VBox.vgrow="ALWAYS">
+                                      <columns>
+                                        <TableColumn fx:id="LOAD_ID" prefWidth="75.0" text="ИД" />
+                                        <TableColumn fx:id="FILE_NAME" prefWidth="138.0" text="Название файла" />
+                                          <TableColumn fx:id="DATE_LOAD" prefWidth="138.0" text="Дата загрузки" />
+                                      </columns>
+                                    </TableView>
+                                 </children>
+                              </VBox>
+                           </content>
+                        </TitledPane>
+                        <TitledPane alignment="CENTER" collapsible="false" text="Ошибки" VBox.vgrow="ALWAYS">
+                           <content>
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <ToolBar VBox.vgrow="ALWAYS">
+                                       <VBox.margin>
+                                          <Insets left="-5.0" right="-5.0" top="-5.0" />
+                                       </VBox.margin>
+                                       <items>
+                                          <Button disable="false" mnemonicParsing="false">
+                                             <tooltip>
+                                                <Tooltip text="Сохранить" />
+                                             </tooltip>
+                                             <graphic>
+                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="SAVE" size="16" />
+                                             </graphic>
+                                          </Button>
+                                       </items>
+                                    </ToolBar>
+                                    <TableView prefHeight="200.0" prefWidth="200.0">
+                                      <columns>
+                                        <TableColumn prefWidth="100.0" text="Номер строки" />
+                                        <TableColumn prefWidth="75.0" text="Время" />
+                                          <TableColumn prefWidth="75.0" text="Сообщение" />
+                                          <TableColumn prefWidth="300.0" text="Строка файла" />
+                                      </columns>
+                                    </TableView>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </VBox>
+                           </content>
+                        </TitledPane>
+                        <ProgressBar fx:id="ProgressPens" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" progress="0.0" />
                      </children>
                   </VBox>
                </content>

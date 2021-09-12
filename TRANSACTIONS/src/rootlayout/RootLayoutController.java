@@ -4,16 +4,12 @@ import java.awt.SplashScreen;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ResourceBundle;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
 import org.apache.commons.lang3.exception.ExceptionUtils;
-
 import app.Main;
 import app.model.Connect;
 import app.model.SqlMap;
@@ -32,14 +28,7 @@ public class RootLayoutController {
 
 	private Executor exec;
 	@FXML
-	private ResourceBundle resources;
-
-	@FXML
 	private MenuItem adminmenuitems;
-
-	@FXML
-	private URL location;
-
 	@FXML
 	private MenuBar menubar;
 
@@ -110,12 +99,8 @@ public class RootLayoutController {
 						"Схема: " + Connect.connectionURL_ + "\r\n" + "Пользователь: " + Connect.userID_ + "\r\n");
 				alert.show();
 			}
-
 		} catch (NullPointerException e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			alert.setHeaderText("Error");
-			alert.setContentText("Введите учетные данные");
-			alert.show();
+			Msg.Message("Введите учетные данные");
 		}
 	}
 
@@ -145,15 +130,6 @@ public class RootLayoutController {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
-
-//	@FXML
-//	void loadtransact(ActionEvent event) {
-//		try {
-//			Main.Transact();
-//		} catch (Exception e) {
-//			Msg.Message(ExceptionUtils.getStackTrace(e));
-//		}
-//	}
 
 	@FXML
 	void loadhistory(ActionEvent event) {
@@ -192,7 +168,7 @@ public class RootLayoutController {
 	}
 
 	@FXML
-	void Kash(ActionEvent event) {
+	void KashPsevdo(ActionEvent event) {
 		try {
 			Main.showKash();
 		} catch (Exception e) {
@@ -312,10 +288,6 @@ public class RootLayoutController {
 		}
 	}
 
-	public void inis_() {
-		//statusbar.setText(Connect.userID_ + "/" + Connect.connectionURL_);
-	}
-
 	/**
 	 * Проверка прав на доступ к формам
 	 * 
@@ -426,21 +398,7 @@ public class RootLayoutController {
 			t.setDaemon(true);
 			return t;
 		});
-//		menubar.getMenus().forEach(menu -> {
-//			if (chk_menu(menu.getId(), Connect.userID_) == 1) {
-//				menu.setVisible(true);
-//			} else {
-//				menu.setVisible(false);
-//			}
-//			menu.getItems().forEach(menuItem -> {
-//				if (chk_menu(menuItem.getId(), Connect.userID_) == 1) {
-//					menuItem.setVisible(true);
-//				} else {
-//					menuItem.setVisible(false);
-//				}
-//			});
-//		});
-		
+
 		menubar.getMenus().forEach(menu -> {
 			if (chk_menu(Long.valueOf(menu.getId()), Connect.userID_) == 1) {
 				menu.setVisible(true);

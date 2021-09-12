@@ -9,13 +9,9 @@
 	<top>
 		<MenuBar fx:id="menubar" prefHeight="29.0" prefWidth="688.0" BorderPane.alignment="CENTER">
 			<menus>
-				<!--<Menu mnemonicParsing="false" text="Терминалы Квант-Капитал"> <items> 
-					<MenuItem mnemonicParsing="false" onAction="#loadtransact" text="Загрузка 
-					транзакции" /> <MenuItem mnemonicParsing="false" onAction="#chektransact" 
-					text="Печать чеков" /> </items> </Menu> -->
 				<Menu fx:id="5" mnemonicParsing="false" text="Кассовый офис">
 					<items>
-						<MenuItem fx:id="6" mnemonicParsing="false" onAction="#Kash" text="Сформировать псевдоним" />
+						<MenuItem fx:id="6" mnemonicParsing="false" onAction="#KashPsevdo" text="Сформировать псевдоним" />
 						<MenuItem fx:id="7" mnemonicParsing="false" onAction="#ContactLoad" text="Комиссии Контакт" />
 					</items>
 				</Menu>
@@ -38,9 +34,6 @@
 						<MenuItem fx:id="19" mnemonicParsing="false" onAction="#Ibank" text="Клиенты" />
 					</items>
 				</Menu>
-				<!-- <Menu mnemonicParsing="false" text="Помощь"> <items> <MenuItem mnemonicParsing="false" 
-					onAction="#handleHelp" text="About" /> <MenuItem mnemonicParsing="false" 
-					onAction="#DBCONNECT" text="DBCONNECT" /> </items> </Menu> -->
 				<Menu fx:id="20" mnemonicParsing="false" text="Пенсия РФ">
 					<items>
 						<MenuItem fx:id="21" mnemonicParsing="false" onAction="#divide" text="Разбить файл" />
@@ -58,18 +51,6 @@
 						<MenuItem fx:id="24" mnemonicParsing="false" onAction="#AccessGroup" text="Группы доступа" />
 					</items>
 				</Menu>
-				<!-- <Menu fx:id="pensiara" mnemonicParsing="false" text="Пенсия РА"> 
-					<items> <MenuItem fx:id="seporatepensra" mnemonicParsing="false" onAction="#divide_RA" 
-					text="Разбить файл" /> </items> </Menu> -->
-				<!--
-				<Menu fx:id="budcode" mnemonicParsing="false"
-					text="Бюджетная информация">
-					<items>
-						<MenuItem fx:id="savebudcode" mnemonicParsing="false"
-							onAction="#save_budcode" text="Сохранить данные" />
-					</items>
-				</Menu>
-				-->
 			</menus>
 		</MenuBar>
 	</top>
