@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
@@ -18,7 +19,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.291" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pensia.PensController">
+<VBox prefWidth="850.0" xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.pensia.PensController">
 	<children>
       <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="floating" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
         <tabs>
@@ -167,10 +168,25 @@
                                              </font>
                                           </Button>
                                           <Separator layoutX="94.0" layoutY="10.0" orientation="VERTICAL" />
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Сумма:" />
-                                          <TextField fx:id="PensSum" editable="false" prefWidth="150.0" />
-                                          <Text layoutX="150.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Количество:" />
-                                          <TextField fx:id="PensCount" editable="false" layoutX="193.0" layoutY="10.0" prefWidth="100.0" />
+                                          <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="FILE">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Text>
+                                          <MaterialDesignIconView fontSmoothingType="LCD" glyphName="SIGMA" size="20" />
+                                          <TextField fx:id="PensSum" editable="false" prefWidth="120.0" />
+                                          <MaterialDesignIconView fontSmoothingType="LCD" glyphName="CALCULATOR" layoutX="234.0" layoutY="31.0" size="20" />
+                                          <TextField fx:id="PensCount" editable="false" layoutX="193.0" layoutY="10.0" prefWidth="80.0" />
+                                          <Separator layoutX="224.0" layoutY="10.0" orientation="VERTICAL" />
+                                          <Text fontSmoothingType="LCD" layoutX="234.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TRN">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Text>
+                                          <MaterialDesignIconView fontSmoothingType="LCD" glyphName="SIGMA" layoutX="261.0" layoutY="31.0" size="20" />
+                                          <TextField fx:id="PensSumTrn" editable="false" layoutX="285.0" layoutY="10.0" prefWidth="120.0" />
+                                          <MaterialDesignIconView fontSmoothingType="LCD" glyphName="CALCULATOR" layoutX="409.0" layoutY="31.0" size="20" />
+                                          <TextField fx:id="PensCountTrn" editable="false" layoutX="433.0" layoutY="10.0" prefWidth="80.0" />
                                       </items>
                                        <VBox.margin>
                                           <Insets left="-5.0" right="-5.0" top="-5.0" />

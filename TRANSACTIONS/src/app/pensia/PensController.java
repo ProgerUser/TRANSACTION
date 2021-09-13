@@ -124,6 +124,10 @@ public class PensController {
 	private TextField PensSum;
 	@FXML
 	private TextField PensCount;
+	@FXML
+	private TextField PensSumTrn;
+	@FXML
+	private TextField PensCountTrn;
 
 	@FXML
 	private TableView<SBRA_PENS_LOG> SBRA_PENS_LOG;
