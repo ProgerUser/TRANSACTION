@@ -139,6 +139,11 @@ public class PensController {
 	private TableColumn<SBRA_PENS_LOG, String> ERR;
 
 	@FXML
+	private Button SaveError;
+	@FXML
+	private Button Pens4083_40831;
+
+	@FXML
 	void pensrachk(ActionEvent event) {
 		try {
 			if (pensrachk.isSelected()) {
@@ -316,7 +321,7 @@ public class PensController {
 				};
 				return cell;
 			});
-			
+
 			TM$TIME_.setCellFactory(column -> {
 				TableCell<SBRA_PENS_LOG, LocalDateTime> cell = new TableCell<SBRA_PENS_LOG, LocalDateTime>() {
 					@Override
@@ -333,24 +338,49 @@ public class PensController {
 				};
 				return cell;
 			});
-			
+
 			// --
 			DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
 			PENS_LOAD_ROWSUM.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> {
 				PENS_LOAD_ROWSUM sel = PENS_LOAD_ROWSUM.getSelectionModel().getSelectedItem();
 				if (sel != null) {
 					try {
-						PreparedStatement prp = conn
-								.prepareCall("SELECT COUNT(*), SUM(SUMM) FROM SBRA_PENS_ROW_CL T WHERE ID_ = ?");
-						prp.setLong(1, sel.getLOAD_ID());
-						ResultSet rs = prp.executeQuery();
-						if (rs.next()) {
-							PensCount.setText(decimalFormat.format(rs.getLong(1)));
-							PensSum.setText(decimalFormat.format(rs.getDouble(2)));
+						{
+							PreparedStatement prp = conn
+									.prepareCall("SELECT COUNT(*), SUM(SUMM) FROM SBRA_PENS_ROW_CL T WHERE ID_ = ?");
+							prp.setLong(1, sel.getLOAD_ID());
+							ResultSet rs = prp.executeQuery();
+							if (rs.next()) {
+								PensCount.setText(decimalFormat.format(rs.getLong(1)));
+								PensSum.setText(decimalFormat.format(rs.getDouble(2)));
+							}
+							rs.close();
+							prp.close();
 						}
-						rs.close();
-						prp.close();
-
+						
+						{
+							PreparedStatement prp = conn
+									.prepareCall("SELECT COUNT(*)\r\n"
+											+ "  FROM TRN\r\n"
+											+ " WHERE DTRNCREATE = TRUNC((SELECT F.DATE_LOAD\r\n"
+											+ "                            FROM SBRA_PENS_LOAD_ROWSUM F\r\n"
+											+ "                           WHERE F.LOAD_ID = ?))\r\n"
+											+ "   AND ITRNBATNUM = 996\r\n"
+											+ "   AND CTRNPURP LIKE '%{'||?||'}%'");
+							prp.setLong(1, sel.getLOAD_ID());
+							prp.setLong(2, sel.getLOAD_ID());
+							ResultSet rs = prp.executeQuery();
+							if (rs.next()) {
+								if(rs.getLong(1) > 0 ) {
+									Pens4083_40831.setDisable(false);
+								}else {
+									Pens4083_40831.setDisable(true);
+								}
+							}
+							rs.close();
+							prp.close();
+						}
+						
 						PensError(sel.getLOAD_ID());
 
 					} catch (Exception e) {
@@ -480,9 +510,11 @@ public class PensController {
 			ResultSet rs = prepStmt.executeQuery();
 			ObservableList<SBRA_PENS_LOG> cus_list = FXCollections.observableArrayList();
 			// looping
-			SBRA_PENS_LOG list= null;
+			SBRA_PENS_LOG list = null;
+			int i = 0;
 			while (rs.next()) {
-			    list = new SBRA_PENS_LOG();
+				i++;
+				list = new SBRA_PENS_LOG();
 
 				list.setF_STR(rs.getString("F_STR"));
 				list.setTIME_(rs.getString("TIME_"));
@@ -498,6 +530,11 @@ public class PensController {
 						: null);
 
 				cus_list.add(list);
+			}
+			if (i == 0) {
+				SaveError.setDisable(true);
+			} else {
+				SaveError.setDisable(false);
 			}
 			// add data
 			SBRA_PENS_LOG.setItems(cus_list);
@@ -860,6 +897,22 @@ public class PensController {
 	/**
 	 * Загрузить файл
 	 */
+	public void ExecPlast() {
+		try {
+
+			if (PENS_LOAD_ROWSUM.getSelectionModel().getSelectedItem() == null) {
+				Msg.Message("Выберите строку!");
+			} else {
+
+			}
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+	/**
+	 * Загрузить файл
+	 */
 	public void SaveComiss() {
 		try {
 
@@ -1030,8 +1083,9 @@ public class PensController {
 								Msg.Message(ExceptionUtils.getStackTrace(e));
 							}
 							callStmt_j.close();
+							conn.commit();
 							// Go stat______________
-							//RunProcess("");
+							// RunProcess("");
 							// _____________________
 						}
 						// ___________
