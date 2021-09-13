@@ -77,8 +77,9 @@ public class DbUtil {
 			Properties props = new Properties();
 			props.load(is);
 			ret = props.getProperty(prpname);
+			is.close();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e);
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 		return ret;
 	}

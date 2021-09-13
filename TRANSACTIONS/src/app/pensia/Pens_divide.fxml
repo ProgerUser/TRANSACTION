@@ -87,9 +87,9 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                      <children>
-                        <TitledPane alignment="CENTER" animated="false" collapsible="false" text="Загрузка" VBox.vgrow="ALWAYS">
+                        <TitledPane alignment="CENTER" animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Загрузка" VBox.vgrow="ALWAYS">
                            <content>
-                              <VBox spacing="5.0">
+                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
@@ -187,9 +187,9 @@
                               </VBox>
                            </content>
                         </TitledPane>
-                        <TitledPane alignment="CENTER" collapsible="false" text="Ошибки" VBox.vgrow="ALWAYS">
+                        <TitledPane alignment="CENTER" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Ошибки" VBox.vgrow="ALWAYS">
                            <content>
-                              <VBox spacing="5.0">
+                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
                                  <children>
                                     <ToolBar VBox.vgrow="ALWAYS">
                                        <VBox.margin>
@@ -206,12 +206,13 @@
                                           </Button>
                                        </items>
                                     </ToolBar>
-                                    <TableView prefHeight="200.0" prefWidth="200.0">
+                                    <TableView fx:id="SBRA_PENS_LOG" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" styleClass="mylistview" stylesheets="/ScrPane.css" VBox.vgrow="ALWAYS">
                                       <columns>
-                                        <TableColumn prefWidth="100.0" text="Номер строки" />
-                                        <TableColumn prefWidth="75.0" text="Время" />
-                                          <TableColumn prefWidth="75.0" text="Сообщение" />
-                                          <TableColumn prefWidth="300.0" text="Строка файла" />
+                                        <TableColumn fx:id="NSTR" prefWidth="100.0" text="Номер строки" />
+                                        <TableColumn fx:id="TM$TIME_" prefWidth="75.0" text="Время" />
+                                          <TableColumn fx:id="CSTR" prefWidth="75.0" text="Сообщение" />
+                                          <TableColumn fx:id="ERR" prefWidth="75.0" text="ERR" />
+                                          <TableColumn fx:id="F_STR" prefWidth="300.0" text="Строка файла" />
                                       </columns>
                                     </TableView>
                                  </children>

@@ -126,7 +126,17 @@ public class PensController {
 	private TextField PensCount;
 
 	@FXML
-	private Button Pens60322_408;
+	private TableView<SBRA_PENS_LOG> SBRA_PENS_LOG;
+	@FXML
+	private TableColumn<SBRA_PENS_LOG, Long> NSTR;
+	@FXML
+	private TableColumn<SBRA_PENS_LOG, LocalDateTime> TM$TIME_;
+	@FXML
+	private TableColumn<SBRA_PENS_LOG, String> CSTR;
+	@FXML
+	private TableColumn<SBRA_PENS_LOG, String> F_STR;
+	@FXML
+	private TableColumn<SBRA_PENS_LOG, String> ERR;
 
 	@FXML
 	void pensrachk(ActionEvent event) {
@@ -245,6 +255,12 @@ public class PensController {
 			START_Y.setCellValueFactory(cellData -> cellData.getValue().START_YProperty());
 			PART.setCellValueFactory(cellData -> cellData.getValue().PARTProperty().asObject());
 
+			// TM$TIME_, NSTR, CSTR, ERR, F_STR
+			TM$TIME_.setCellValueFactory(cellData -> cellData.getValue().TM$TIME_Property());
+			NSTR.setCellValueFactory(cellData -> cellData.getValue().NSTRProperty().asObject());
+			CSTR.setCellValueFactory(cellData -> cellData.getValue().CSTRProperty());
+			ERR.setCellValueFactory(cellData -> cellData.getValue().ERRProperty());
+			F_STR.setCellValueFactory(cellData -> cellData.getValue().F_STRProperty());
 			//
 			LoadTablePensExec();
 			//
@@ -300,31 +316,42 @@ public class PensController {
 				};
 				return cell;
 			});
+			
+			TM$TIME_.setCellFactory(column -> {
+				TableCell<SBRA_PENS_LOG, LocalDateTime> cell = new TableCell<SBRA_PENS_LOG, LocalDateTime>() {
+					@Override
+					protected void updateItem(LocalDateTime item, boolean empty) {
+						super.updateItem(item, empty);
+						if (empty) {
+							setText(null);
+						} else {
+							if (item != null) {
+								setText(DateTimeFormat.format(item));
+							}
+						}
+					}
+				};
+				return cell;
+			});
+			
 			// --
 			DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
 			PENS_LOAD_ROWSUM.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> {
 				PENS_LOAD_ROWSUM sel = PENS_LOAD_ROWSUM.getSelectionModel().getSelectedItem();
 				if (sel != null) {
 					try {
-						{
-							PreparedStatement prp = conn
-									.prepareCall("SELECT COUNT(*),SUM(TO_NUMBER(REPLACE(COLUMN7, '.', ',')))\n"
-											+ "  FROM TABLE(LOB2TABLE.SEPARATEDCOLUMNS((SELECT CL_\n"
-											+ "                                          FROM Z_PENS_CL T\n"
-											+ "                                         WHERE T.TYPE_ = 'FILE'\n"
-											+ "                                           AND ID_ = ?), /* THE DATA LOB */\n"
-											+ "                                        CHR(13) || CHR(10), /* ROW SEPARATOR */\n"
-											+ "                                        '|', /* COLUMN SEPARATOR */\n"
-											+ "                                        '' /* DELIMITER (OPTIONAL) */))");
-							prp.setLong(1, sel.getLOAD_ID());
-							ResultSet rs = prp.executeQuery();
-							if (rs.next()) {
-								PensCount.setText(decimalFormat.format(rs.getLong(1)));
-								PensSum.setText(decimalFormat.format(rs.getDouble(2)));
-							}
-							rs.close();
-							prp.close();
+						PreparedStatement prp = conn
+								.prepareCall("SELECT COUNT(*), SUM(SUMM) FROM SBRA_PENS_ROW_CL T WHERE ID_ = ?");
+						prp.setLong(1, sel.getLOAD_ID());
+						ResultSet rs = prp.executeQuery();
+						if (rs.next()) {
+							PensCount.setText(decimalFormat.format(rs.getLong(1)));
+							PensSum.setText(decimalFormat.format(rs.getDouble(2)));
 						}
+						rs.close();
+						prp.close();
+
+						PensError(sel.getLOAD_ID());
 
 					} catch (Exception e) {
 						Msg.Message(ExceptionUtils.getStackTrace(e));
@@ -437,36 +464,50 @@ public class PensController {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
-	
+
 	/**
 	 * Initialize table
 	 */
-	void PensError() {
+	void PensError(Long ids) {
 		try {
 			// date time formatter
 			DateTimeFormatter formatterwt = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 			// Prepared Statement
-			PreparedStatement prepStmt = conn.prepareStatement("SELECT * FROM SBRA_PENS_LOAD_ROWSUM");
+			PreparedStatement prepStmt = conn
+					.prepareStatement(DbUtil.Sql_From_Prop("/app/pensia/SQL.properties", "RefreshError"));
+			prepStmt.setLong(1, ids);
+			prepStmt.setLong(2, ids);
 			ResultSet rs = prepStmt.executeQuery();
-			ObservableList<PENS_LOAD_ROWSUM> cus_list = FXCollections.observableArrayList();
+			ObservableList<SBRA_PENS_LOG> cus_list = FXCollections.observableArrayList();
 			// looping
+			SBRA_PENS_LOG list= null;
 			while (rs.next()) {
-				PENS_LOAD_ROWSUM list = new PENS_LOAD_ROWSUM();
-				list.setLOAD_ID(rs.getLong("LOAD_ID"));
-				list.setDATE_LOAD((rs.getDate("DATE_LOAD") != null) ? LocalDateTime
-						.parse(new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("DATE_LOAD")), formatterwt)
+			    list = new SBRA_PENS_LOG();
+
+				list.setF_STR(rs.getString("F_STR"));
+				list.setTIME_(rs.getString("TIME_"));
+				list.setNSTR(rs.getLong("NSTR"));
+				list.setCSTR(rs.getString("CSTR"));
+				list.setERR(rs.getString("ERR"));
+				list.setID_(rs.getLong("ID_"));
+				list.setDP_DOC_ID(rs.getLong("DP_DOC_ID"));
+				list.setROW_NO(rs.getLong("ROW_NO"));
+				list.setTM$TIME_((rs.getDate("TM$TIME_") != null)
+						? LocalDateTime.parse(
+								new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("TM$TIME_")), formatterwt)
 						: null);
-				list.setROW_COUNT(rs.getLong("ROW_COUNT"));
-				list.setFILE_NAME(rs.getString("FILE_NAME"));
+
 				cus_list.add(list);
 			}
 			// add data
-			PENS_LOAD_ROWSUM.setItems(cus_list);
+			SBRA_PENS_LOG.setItems(cus_list);
+			list = null;
+			cus_list = null;
 			// close
 			prepStmt.close();
 			rs.close();
 			// add filter
-			TableFilter<PENS_LOAD_ROWSUM> tableFilter = TableFilter.forTableView(PENS_LOAD_ROWSUM).apply();
+			TableFilter<SBRA_PENS_LOG> tableFilter = TableFilter.forTableView(SBRA_PENS_LOG).apply();
 			tableFilter.setSearchStrategy((input, target) -> {
 				try {
 					return target.toLowerCase().contains(input.toLowerCase());
@@ -475,7 +516,7 @@ public class PensController {
 				}
 			});
 			// resize
-			autoResizeColumns(PENS_LOAD_ROWSUM);
+			autoResizeColumns(SBRA_PENS_LOG);
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
@@ -915,7 +956,7 @@ public class PensController {
 	/**
 	 * Запуск процесса
 	 */
-	void RunProcess(String type) {
+	void RunProcess_(String type) {
 		Timer time = new Timer(); // Instantiate Timer Object
 		st = new ScheduledTask(); // Instantiate SheduledTask class
 		st.setSWC(this, type);
@@ -990,7 +1031,7 @@ public class PensController {
 							}
 							callStmt_j.close();
 							// Go stat______________
-							RunProcess("");
+							//RunProcess("");
 							// _____________________
 						}
 						// ___________
@@ -1299,7 +1340,7 @@ public class PensController {
 								wb.write(new FileOutputStream(createfolder));
 								wb.close();
 								Thread.sleep(100);
-
+								updateProgress(cnt_row, cnt_row);
 							} catch (Exception e) {
 								ShowMes(ExceptionUtils.getStackTrace(e));
 							}
