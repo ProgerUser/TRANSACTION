@@ -24,6 +24,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Properties;
+import java.util.Timer;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -305,23 +306,25 @@ public class PensController {
 				PENS_LOAD_ROWSUM sel = PENS_LOAD_ROWSUM.getSelectionModel().getSelectedItem();
 				if (sel != null) {
 					try {
-						PreparedStatement prp = conn
-								.prepareCall("SELECT COUNT(*),SUM(TO_NUMBER(REPLACE(COLUMN7, '.', ',')))\n"
-										+ "  FROM TABLE(LOB2TABLE.SEPARATEDCOLUMNS((SELECT CL_\n"
-										+ "                                          FROM Z_PENS_CL T\n"
-										+ "                                         WHERE T.TYPE_ = 'FILE'\n"
-										+ "                                           AND ID_ = ?), /* THE DATA LOB */\n"
-										+ "                                        CHR(13) || CHR(10), /* ROW SEPARATOR */\n"
-										+ "                                        '|', /* COLUMN SEPARATOR */\n"
-										+ "                                        '' /* DELIMITER (OPTIONAL) */))");
-						prp.setLong(1, sel.getLOAD_ID());
-						ResultSet rs = prp.executeQuery();
-						if (rs.next()) {
-							PensCount.setText(decimalFormat.format(rs.getLong(1)));
-							PensSum.setText(decimalFormat.format(rs.getDouble(2)));
+						{
+							PreparedStatement prp = conn
+									.prepareCall("SELECT COUNT(*),SUM(TO_NUMBER(REPLACE(COLUMN7, '.', ',')))\n"
+											+ "  FROM TABLE(LOB2TABLE.SEPARATEDCOLUMNS((SELECT CL_\n"
+											+ "                                          FROM Z_PENS_CL T\n"
+											+ "                                         WHERE T.TYPE_ = 'FILE'\n"
+											+ "                                           AND ID_ = ?), /* THE DATA LOB */\n"
+											+ "                                        CHR(13) || CHR(10), /* ROW SEPARATOR */\n"
+											+ "                                        '|', /* COLUMN SEPARATOR */\n"
+											+ "                                        '' /* DELIMITER (OPTIONAL) */))");
+							prp.setLong(1, sel.getLOAD_ID());
+							ResultSet rs = prp.executeQuery();
+							if (rs.next()) {
+								PensCount.setText(decimalFormat.format(rs.getLong(1)));
+								PensSum.setText(decimalFormat.format(rs.getDouble(2)));
+							}
+							rs.close();
+							prp.close();
 						}
-						rs.close();
-						prp.close();
 
 					} catch (Exception e) {
 						Msg.Message(ExceptionUtils.getStackTrace(e));
@@ -396,6 +399,49 @@ public class PensController {
 	 * Initialize table
 	 */
 	void LoadTablePensExec() {
+		try {
+			// date time formatter
+			DateTimeFormatter formatterwt = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+			// Prepared Statement
+			PreparedStatement prepStmt = conn.prepareStatement("SELECT * FROM SBRA_PENS_LOAD_ROWSUM");
+			ResultSet rs = prepStmt.executeQuery();
+			ObservableList<PENS_LOAD_ROWSUM> cus_list = FXCollections.observableArrayList();
+			// looping
+			while (rs.next()) {
+				PENS_LOAD_ROWSUM list = new PENS_LOAD_ROWSUM();
+				list.setLOAD_ID(rs.getLong("LOAD_ID"));
+				list.setDATE_LOAD((rs.getDate("DATE_LOAD") != null) ? LocalDateTime
+						.parse(new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("DATE_LOAD")), formatterwt)
+						: null);
+				list.setROW_COUNT(rs.getLong("ROW_COUNT"));
+				list.setFILE_NAME(rs.getString("FILE_NAME"));
+				cus_list.add(list);
+			}
+			// add data
+			PENS_LOAD_ROWSUM.setItems(cus_list);
+			// close
+			prepStmt.close();
+			rs.close();
+			// add filter
+			TableFilter<PENS_LOAD_ROWSUM> tableFilter = TableFilter.forTableView(PENS_LOAD_ROWSUM).apply();
+			tableFilter.setSearchStrategy((input, target) -> {
+				try {
+					return target.toLowerCase().contains(input.toLowerCase());
+				} catch (Exception e) {
+					return false;
+				}
+			});
+			// resize
+			autoResizeColumns(PENS_LOAD_ROWSUM);
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+	
+	/**
+	 * Initialize table
+	 */
+	void PensError() {
 		try {
 			// date time formatter
 			DateTimeFormatter formatterwt = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
@@ -735,6 +781,42 @@ public class PensController {
 	}
 
 	/**
+	 * Прогресс бар
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void UpdateProress() {
+		try {
+			Service service = new Service() {
+				@Override
+				protected Task createTask() {
+					return new Task() {
+						@Override
+						protected Object call() throws Exception {
+
+							try {
+								updateProgress(0, 0);
+							} catch (Exception e) {
+								ShowMes(ExceptionUtils.getStackTrace(e));
+							}
+
+							return null;
+						}
+					};
+				}
+			};
+			ProgressPens.progressProperty().bind(service.progressProperty());
+			service.setOnFailed(e -> ShowMes(service.getException().getMessage()));
+			// service.setOnSucceeded(e -> TLB.setDisable(false));
+			service.start();
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+	@FXML
+	private ProgressBar ProgressPens;
+
+	/**
 	 * Загрузить файл
 	 */
 	public void SaveComiss() {
@@ -747,7 +829,7 @@ public class PensController {
 				Properties prop = new Properties();
 				// load a properties file
 				prop.load(input);
-				
+
 				PENS_LOAD_ROWSUM pens = PENS_LOAD_ROWSUM.getSelectionModel().getSelectedItem();
 
 				FileChooser fileChooser = new FileChooser();
@@ -756,7 +838,7 @@ public class PensController {
 						"com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl");
 				fileChooser.setInitialDirectory(new File(prop.getProperty("PensiaLoadFolderDef")));
 				input.close();
-				
+
 				// Set extension filter for text files
 				FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel File", "*.xlsx");
 
@@ -768,31 +850,22 @@ public class PensController {
 				File file = fileChooser.showSaveDialog(null);
 
 				if (file != null) {
-					
-					String createfolder = file.getParent() + "\\Комиссия_" + pens.getFILE_NAME()+".xlsx";
-					
+
+					String createfolder = file.getParent() + "\\Комиссия_" + pens.getFILE_NAME() + ".xlsx";
+
 					PreparedStatement prp_part = conn.prepareStatement("with data_v as\n"
-							+ " (select regexp_substr(CTRNPURP, 'otd={\\d+}') otd, a.*\n"
-							+ "    from trn a\n"
+							+ " (select regexp_substr(CTRNPURP, 'otd={\\d+}') otd, a.*\n" + "    from trn a\n"
 							+ "   where (trunc(a.DTRNTRAN),\n"
 							+ "          replace(substr(regexp_substr(CTRNPURP, 'id={\\d+}'), 5), '}', '')) in\n"
-							+ "         (select trunc(time_), id_\n"
-							+ "            from z_pens_cl\n"
-							+ "           where type_ = 'FIN'\n"
-							+ "             and ID_ = ?)\n"
-							+ "     and ITRNBATNUM = 997)\n"
-							+ "select otd,\n"
-							+ "       sum(MTRNRSUM) comm,\n"
-							+ "       count(MTRNRSUM) * 5 comm_mt,\n"
-							+ "       count(MTRNRSUM) * 1 comm_ba,\n"
+							+ "         (select trunc(time_), id_\n" + "            from z_pens_cl\n"
+							+ "           where type_ = 'FIN'\n" + "             and ID_ = ?)\n"
+							+ "     and ITRNBATNUM = 997)\n" + "select otd,\n" + "       sum(MTRNRSUM) comm,\n"
+							+ "       count(MTRNRSUM) * 5 comm_mt,\n" + "       count(MTRNRSUM) * 1 comm_ba,\n"
 							+ "       sum(MTRNRSUM) - count(MTRNRSUM) * 5 - count(MTRNRSUM) * 1 comm_sb\n"
-							+ "  from data_v\n"
-							+ " group by otd\n"
-							+ " order by otd\n"
-							+ "");
+							+ "  from data_v\n" + " group by otd\n" + " order by otd\n" + "");
 					prp_part.setLong(1, pens.getLOAD_ID());
 					ResultSet rs = prp_part.executeQuery();
-					
+
 					SXSSFWorkbook wb = new SXSSFWorkbook(100);
 					Sheet sh = wb.createSheet("Таблица");
 					Row row = sh.createRow(0);
@@ -813,10 +886,10 @@ public class PensController {
 						row.createCell(4).setCellValue(rs.getDouble("COMM_SB"));
 						i++;
 					}
-					
+
 					wb.write(new FileOutputStream(createfolder));
 					wb.close();
-					
+
 					rs.close();
 					prp_part.close();
 				}
@@ -825,6 +898,28 @@ public class PensController {
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
+	}
+
+	/**
+	 * Закрытие задачи при закрытии формы
+	 */
+	public void EndTask() {
+		this.st.cancel();
+	}
+
+	/**
+	 * Задача
+	 */
+	private ScheduledTask st;
+
+	/**
+	 * Запуск процесса
+	 */
+	void RunProcess(String type) {
+		Timer time = new Timer(); // Instantiate Timer Object
+		st = new ScheduledTask(); // Instantiate SheduledTask class
+		st.setSWC(this, type);
+		time.schedule(st, 0, 3000); // Create task repeating every 1 sec
 	}
 
 	/**
@@ -871,7 +966,7 @@ public class PensController {
 					}
 					// return
 					String ret = callStmt.getString(1);
-					Integer ret_id = callStmt.getInt(1);
+					Long ret_id = callStmt.getLong(4);
 					// check
 					if (ret != null) {
 						// roll back
@@ -882,7 +977,7 @@ public class PensController {
 						// ___________
 						{
 							CallableStatement callStmt_j = conn.prepareCall("{ call Z_PENS_KERNEL.jobLoad(?,?,?)}");
-							callStmt_j.setInt(1, ret_id);
+							callStmt_j.setLong(1, ret_id);
 							callStmt_j.setInt(2, 1000);
 							callStmt_j.setInt(4, 7);
 							// catch
@@ -895,7 +990,7 @@ public class PensController {
 							}
 							callStmt_j.close();
 							// Go stat______________
-
+							RunProcess("");
 							// _____________________
 						}
 						// ___________
