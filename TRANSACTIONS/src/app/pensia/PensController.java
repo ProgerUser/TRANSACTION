@@ -28,8 +28,6 @@ import java.util.Timer;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import javax.swing.filechooser.FileSystemView;
-
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -364,27 +362,45 @@ public class PensController {
 						
 						{
 							PreparedStatement prp = conn
-									.prepareCall("SELECT COUNT(*)\r\n"
-											+ "  FROM TRN\r\n"
-											+ " WHERE DTRNCREATE = TRUNC((SELECT F.DATE_LOAD\r\n"
-											+ "                            FROM SBRA_PENS_LOAD_ROWSUM F\r\n"
-											+ "                           WHERE F.LOAD_ID = ?))\r\n"
-											+ "   AND ITRNBATNUM = 996\r\n"
-											+ "   AND CTRNPURP LIKE '%{'||?||'}%'");
+									.prepareCall("select count(*) cnt, sum(trn.MTRNRSUM) summ\r\n"
+											+ "  from trn\r\n"
+											+ " where DTRNCREATE = trunc((select f.DATE_LOAD\r\n"
+											+ "                            from SBRA_PENS_LOAD_ROWSUM f\r\n"
+											+ "                           where f.LOAD_ID = ?))\r\n"
+											+ "   and ITRNBATNUM = 999\r\n"
+											+ "   and CTRNPURP like '%{' || ? || '}%'\r\n"
+											+ "");
 							prp.setLong(1, sel.getLOAD_ID());
 							prp.setLong(2, sel.getLOAD_ID());
 							ResultSet rs = prp.executeQuery();
 							if (rs.next()) {
-								if(rs.getLong(1) > 0 ) {
+								PensCountTrn.setText(decimalFormat.format(rs.getLong(1)));
+								PensSumTrn.setText(decimalFormat.format(rs.getDouble(2)));
+							}
+							rs.close();
+							prp.close();
+						}
+
+						{
+							PreparedStatement prp = conn.prepareCall("SELECT COUNT(*)\r\n" + "  FROM TRN\r\n"
+									+ " WHERE DTRNCREATE = TRUNC((SELECT F.DATE_LOAD\r\n"
+									+ "                            FROM SBRA_PENS_LOAD_ROWSUM F\r\n"
+									+ "                           WHERE F.LOAD_ID = ?))\r\n"
+									+ "   AND ITRNBATNUM = 996\r\n" + "   AND CTRNPURP LIKE '%{'||?||'}%'");
+							prp.setLong(1, sel.getLOAD_ID());
+							prp.setLong(2, sel.getLOAD_ID());
+							ResultSet rs = prp.executeQuery();
+							if (rs.next()) {
+								if (rs.getLong(1) > 0) {
 									Pens4083_40831.setDisable(false);
-								}else {
+								} else {
 									Pens4083_40831.setDisable(true);
 								}
 							}
 							rs.close();
 							prp.close();
 						}
-						
+
 						PensError(sel.getLOAD_ID());
 
 					} catch (Exception e) {
@@ -589,8 +605,14 @@ public class PensController {
 
 				System.setProperty("javax.xml.transform.TransformerFactory",
 						"com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl");
-				fileChooser.setInitialDirectory(
-						new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath()));
+
+				InputStream input = new FileInputStream(System.getenv("TRANSACT_PATH") + "connect.properties");
+				Properties prop = new Properties();
+				// load a properties file
+				prop.load(input);
+				fileChooser.setInitialDirectory(new File(prop.getProperty("PensiaLoadFolderDef")));
+				input.close();
+
 				// Set extension filter for text files
 				FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel File", "*.xlsx");
 
@@ -602,14 +624,25 @@ public class PensController {
 				File file = fileChooser.showSaveDialog(null);
 
 				if (file != null) {
-					PreparedStatement prp_part = conn.prepareStatement("SELECT * FROM SBRA_YEAR_BET ORDER BY PART ASC");
-					ResultSet rs = prp_part.executeQuery();
-					while (rs.next()) {
-						retxlsx(rs.getInt("PART"), pens.getid(), conn, file,
-								sep_pens.getSelectionModel().getSelectedItem().getfilename());
+
+					final Alert alert = new Alert(AlertType.CONFIRMATION, "Сформировать один файл?", ButtonType.YES,
+							ButtonType.NO);
+					if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait()
+							.orElse(ButtonType.NO) == ButtonType.YES) {
+						retxlsx(0, pens.getid(), conn, file,
+								sep_pens.getSelectionModel().getSelectedItem().getfilename(), "ALL");
+					} else {
+						PreparedStatement prp_part = conn
+								.prepareStatement("SELECT * FROM SBRA_YEAR_BET ORDER BY PART ASC");
+						ResultSet rs = prp_part.executeQuery();
+						while (rs.next()) {
+							retxlsx(rs.getInt("PART"), pens.getid(), conn, file,
+									sep_pens.getSelectionModel().getSelectedItem().getfilename(), "NOT_ALL");
+						}
+						rs.close();
+						prp_part.close();
 					}
-					rs.close();
-					prp_part.close();
+
 				}
 
 			}
@@ -710,8 +743,14 @@ public class PensController {
 			fileChooser.setTitle("Выбрать файл");
 			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Text file", "*.txt"),
 					new ExtensionFilter("Comma separated", "*.csv"));
-			fileChooser
-					.setInitialDirectory(new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath()));
+
+			InputStream input = new FileInputStream(System.getenv("TRANSACT_PATH") + "connect.properties");
+			Properties prop = new Properties();
+			// load a properties file
+			prop.load(input);
+			fileChooser.setInitialDirectory(new File(prop.getProperty("PensiaLoadFolderDef")));
+			input.close();
+
 			File file = fileChooser.showOpenDialog(null);
 			if (file != null) {
 
@@ -1025,16 +1064,16 @@ public class PensController {
 	 */
 	public void LoadPens() {
 		try {
-			InputStream input = new FileInputStream(System.getenv("TRANSACT_PATH") + "connect.properties");
-			Properties prop = new Properties();
-			// load a properties file
-			prop.load(input);
 
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Выбрать файл");
 			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Text file", "*.txt"));
-			fileChooser.setInitialDirectory(new File(prop.getProperty("PensiaLoadFolderDef")));
 
+			InputStream input = new FileInputStream(System.getenv("TRANSACT_PATH") + "connect.properties");
+			Properties prop = new Properties();
+			// load a properties file
+			prop.load(input);
+			fileChooser.setInitialDirectory(new File(prop.getProperty("PensiaLoadFolderDef")));
 			input.close();
 
 			File file = fileChooser.showOpenDialog(null);
@@ -1289,7 +1328,7 @@ public class PensController {
 	 * @param file
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void retxlsx(int id, int sess_id, Connection conn, File file, String filename) {
+	public void retxlsx(int id, int sess_id, Connection conn, File file, String filename, String All) {
 		try {
 			TLB.setDisable(true);
 			Service service = new Service() {
@@ -1305,47 +1344,90 @@ public class PensController {
 								// _____________________________
 								Long cnt_row = 0l;
 
-								PreparedStatement cnt_prgrs = conn.prepareStatement("select count(*) cnt\n"
-										+ "  from table(lob2table.separatedcolumns((SELECT FILE_CL\n"
-										+ "                                          FROM Z_SB_PENS_4FILE_FILES\n"
-										+ "                                         WHERE LOAD_ID = ?\n"
-										+ "                                           AND PART_FILE = ?),\n"
-										+ "                                        chr(13) || chr(10),\n"
-										+ "                                        '|',\n"
-										+ "                                        '')) h\n" + "");
-								cnt_prgrs.setInt(1, sess_id);
-								cnt_prgrs.setInt(2, id);
+								PreparedStatement sqlStatement = null;
+								String readRecordSQL = "";
+								if (!All.equals("ALL")) {
+									PreparedStatement cnt_prgrs = conn.prepareStatement("select count(*) cnt\n"
+											+ "  from table(lob2table.separatedcolumns((SELECT FILE_CL\n"
+											+ "                                          FROM Z_SB_PENS_4FILE_FILES\n"
+											+ "                                         WHERE LOAD_ID = ?\n"
+											+ "                                           AND PART_FILE = ?),\n"
+											+ "                                        chr(13) || chr(10),\n"
+											+ "                                        '|',\n"
+											+ "                                        '')) h\n" + "");
+									cnt_prgrs.setInt(1, sess_id);
+									cnt_prgrs.setInt(2, id);
 
-								ResultSet cnt_rs = cnt_prgrs.executeQuery();
+									ResultSet cnt_rs = cnt_prgrs.executeQuery();
 
-								if (cnt_rs.next()) {
-									cnt_row = cnt_rs.getLong("cnt");
+									if (cnt_rs.next()) {
+										cnt_row = cnt_rs.getLong("cnt");
+									}
+									cnt_prgrs.close();
+									cnt_rs.close();
+
+									System.out.println(cnt_row);
+
+									readRecordSQL = "select to_number(COLUMN1) row_num,\n"
+											+ "       COLUMN2 last_name,\n" + "       COLUMN3 first_name,\n"
+											+ "       COLUMN4 middle_name,\n" + "       COLUMN5,\n"
+											+ "       COLUMN6 acc,\n"
+											+ "       TO_NUMBER(REPLACE(COLUMN7, '.', ',')) summ,\n"
+											+ "       TO_CHAR(TO_DATE(COLUMN8, 'DD.MM.YYYY'), 'DD.MM.YYYY') BDATE,\n"
+											+ "       COLUMN9,\n" + "       COLUMN10,\n" + "       COLUMN11 acc_vtb,\n"
+											+ "       COLUMN12,\n" + "       COLUMN13 snils\n"
+											+ "  from table(lob2table.separatedcolumns((SELECT FILE_CL\n"
+											+ "                                          FROM Z_SB_PENS_4FILE_FILES\n"
+											+ "                                         WHERE LOAD_ID = ?\n"
+											+ "                                           AND PART_FILE = ?),\n"
+											+ "                                        chr(13) || chr(10),\n"
+											+ "                                        '|',\n"
+											+ "                                        '')) h\n" + "";
+									sqlStatement = conn.prepareStatement(readRecordSQL);
+
+									sqlStatement.setInt(1, sess_id);
+									sqlStatement.setInt(2, id);
+									//_________________________________________
+								} else {
+									PreparedStatement cnt_prgrs = conn.prepareStatement("select count(*) cnt\r\n"
+											+ "  from table(lob2table.separatedcolumns((select ALL_\r\n"
+											+ "                                          from Z_SB_PENS_4FILE f\r\n"
+											+ "                                         where f.id = ?),\r\n"
+											+ "                                        chr(13) || chr(10),\r\n"
+											+ "                                        '|',\r\n"
+											+ "                                        '')) h\r\n"
+											+ "");
+									cnt_prgrs.setInt(1, sess_id);
+
+									ResultSet cnt_rs = cnt_prgrs.executeQuery();
+
+									if (cnt_rs.next()) {
+										cnt_row = cnt_rs.getLong("cnt");
+									}
+									cnt_prgrs.close();
+									cnt_rs.close();
+
+									System.out.println(cnt_row);
+
+									readRecordSQL = "select to_number(COLUMN1) row_num,\r\n"
+											+ "       COLUMN2 last_name,\r\n" + "       COLUMN3 first_name,\r\n"
+											+ "       COLUMN4 middle_name,\r\n" + "       COLUMN5,\r\n"
+											+ "       COLUMN6 acc,\r\n"
+											+ "       TO_NUMBER(REPLACE(COLUMN7, '.', ',')) summ,\r\n"
+											+ "       TO_CHAR(TO_DATE(COLUMN8, 'DD.MM.YYYY'), 'DD.MM.YYYY') BDATE,\r\n"
+											+ "       COLUMN9,\r\n" + "       COLUMN10,\r\n"
+											+ "       COLUMN11 acc_vtb,\r\n" + "       COLUMN12,\r\n"
+											+ "       COLUMN13 snils\r\n"
+											+ "  from table(lob2table.separatedcolumns((select ALL_\r\n"
+											+ "                                          from Z_SB_PENS_4FILE f\r\n"
+											+ "                                         where f.id = ?),\r\n"
+											+ "                                        chr(13) || chr(10),\r\n"
+											+ "                                        '|',\r\n"
+											+ "                                        '')) h\r\n" + "";
+									sqlStatement = conn.prepareStatement(readRecordSQL);
+
+									sqlStatement.setInt(1, sess_id);
 								}
-								cnt_prgrs.close();
-								cnt_rs.close();
-
-								System.out.println(cnt_row);
-
-								String readRecordSQL = "select to_number(COLUMN1) row_num,\n"
-										+ "       COLUMN2 last_name,\n" + "       COLUMN3 first_name,\n"
-										+ "       COLUMN4 middle_name,\n" + "       COLUMN5,\n"
-										+ "       COLUMN6 acc,\n"
-										+ "       TO_NUMBER(REPLACE(COLUMN7, '.', ',')) summ,\n"
-										+ "       TO_CHAR(TO_DATE(COLUMN8, 'DD.MM.YYYY'), 'DD.MM.YYYY') BDATE,\n"
-										+ "       COLUMN9,\n" + "       COLUMN10,\n" + "       COLUMN11 acc_vtb,\n"
-										+ "       COLUMN12,\n" + "       COLUMN13 snils\n"
-										+ "  from table(lob2table.separatedcolumns((SELECT FILE_CL\n"
-										+ "                                          FROM Z_SB_PENS_4FILE_FILES\n"
-										+ "                                         WHERE LOAD_ID = ?\n"
-										+ "                                           AND PART_FILE = ?),\n"
-										+ "                                        chr(13) || chr(10),\n"
-										+ "                                        '|',\n"
-										+ "                                        '')) h\n" + "";
-								PreparedStatement sqlStatement = conn.prepareStatement(readRecordSQL);
-
-								sqlStatement.setInt(1, sess_id);
-								sqlStatement.setInt(2, id);
-
 								ResultSet rs = sqlStatement.executeQuery();
 								// System.out.println(readRecordSQL);
 								SXSSFWorkbook wb = new SXSSFWorkbook(100);

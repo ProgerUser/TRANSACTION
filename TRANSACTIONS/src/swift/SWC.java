@@ -1781,6 +1781,11 @@ public class SWC {
 		}
 	}
 
+    @FXML
+    private Tab SETTINGS;
+    @FXML
+    private Tab CONV_VAL;
+    
 	/**
 	 * Инициализация
 	 */
@@ -1796,7 +1801,48 @@ public class SWC {
 			new ConvConst().FormatDatePiker(FileDate);
 			new ConvConst().FormatDatePiker(DT2);
 			
+			//_________________________________________
 			dbConnect();
+			//_________________________________________
+			
+			//Check Grant
+			{
+				CallableStatement cl = conn.prepareCall("{ ? = call SBRA_VTB_SWIF.GetOdbAction(?)}");
+				cl.registerOutParameter(1, Types.BIGINT);
+				cl.setInt(2, 3687);//Доступ к входящим сообщениям SWIFT
+				cl.execute();
+				if(cl.getInt(1) == 0 ) {
+					Msg.setSelected(true);
+					
+					DIRNAME.getItems().addAll("Msg", "Out", "Ack", "Kvt", "Other", "InLocal", "OutLocal");
+					DIRNAME.getSelectionModel().select(0);
+					FolderName = "SWIFT_MSG";
+					INOUT.setText("Входящие");
+					FolderN.setText("Входящие документы ВТБ " + System.getenv("SWIFT_MSG"));
+					
+				}else if(cl.getInt(1) == 1) {
+					DIRNAME.getItems().addAll("Msg", "Out", "Ack", "Kvt", "Other", "InLocal", "OutLocal");
+					
+					DIRNAME.getSelectionModel().select("OutLocal");
+					
+					SETTINGS.setDisable(true);
+					CONV_VAL.setDisable(true);
+					DIRNAME.setDisable(true);
+					Other.setDisable(true);
+					Out.setDisable(true);
+					InLocal.setDisable(true);
+					Msg.setDisable(true);
+					ArchiveInOut.setDisable(true);
+					//--
+					OutLocal.setSelected(true);
+					
+					FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
+
+					FolderN.setText("Исходящие, локальный каталог " + System.getenv("SWIFT_OUTLOCAL"));
+				}
+				cl.close();
+			}
+			//__________________
 
 			// SyntheticaFX.init("com.jyloo.syntheticafx.SyntheticaFXModena");
 
@@ -1898,7 +1944,7 @@ public class SWC {
 
 			CHK.setGraphic(selecteAllCheckBox);
 
-			Msg.setSelected(true);
+			
 
 //			addIfNotPresent(StPn.getStyleClass(), JMetroStyleClass.BACKGROUND);
 //			addIfNotPresent(STMT.getStyleClass(), JMetroStyleClass.TABLE_GRID_LINES);
@@ -2014,11 +2060,7 @@ public class SWC {
 					}
 				});
 			}
-			DIRNAME.getItems().addAll("Msg", "Out", "Ack", "Kvt", "Other", "InLocal", "OutLocal");
-			DIRNAME.getSelectionModel().select(0);
-			FolderName = "SWIFT_MSG";
-			INOUT.setText("Входящие");
-			FolderN.setText("Входящие документы ВТБ " + System.getenv("SWIFT_MSG"));
+
 //			{
 //				InputStream svgFile = getClass().getResourceAsStream("/search_swift.svg");
 //				SvgLoader loader = new SvgLoader();
