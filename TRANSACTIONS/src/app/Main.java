@@ -422,8 +422,8 @@ public class Main extends Application {
 	public static void showFirst() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("view/First.fxml"));
-			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
+			loader.setLocation(Main.class.getResource("/app/view/First.fxml"));
+			BorderPane employeeOperationsView = (BorderPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
@@ -447,12 +447,6 @@ public class Main extends Application {
 	/* ¬ход */
 	public void Enter() {
 		try {
-			/*
-			 * FXMLLoader loader = new FXMLLoader();
-			 * loader.setLocation(Main.class.getResource("view/Enter.fxml")); BorderPane
-			 * employeeOperationsView = (BorderPane) loader.load();
-			 * rootLayout.setCenter(employeeOperationsView);
-			 */
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Enter.fxml"));
 			rootLayout = (BorderPane) loader.load();
