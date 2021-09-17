@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Properties;
 import java.util.Timer;
 import java.util.concurrent.Executor;
@@ -69,10 +70,12 @@ import sbalert.Msg;
 /**
  * Said 13.07.2020.
  */
-public class PensController {
+public class PensC {
 
 	@FXML
 	private ToolBar TLB;
+	@FXML
+	private ToolBar PTLB;
 
 	@FXML
 	private ProgressBar Progress;
@@ -184,6 +187,8 @@ public class PensController {
 
 	@SuppressWarnings("unused")
 	private Executor exec;
+
+	DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
 
 	/**
 	 * Инициализация
@@ -342,7 +347,7 @@ public class PensController {
 			});
 
 			// --
-			DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
+
 			PENS_LOAD_ROWSUM.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> {
 				PENS_LOAD_ROWSUM sel = PENS_LOAD_ROWSUM.getSelectionModel().getSelectedItem();
 				if (sel != null) {
@@ -359,17 +364,14 @@ public class PensController {
 							rs.close();
 							prp.close();
 						}
-						
+
 						{
-							PreparedStatement prp = conn
-									.prepareCall("select count(*) cnt, sum(trn.MTRNRSUM) summ\r\n"
-											+ "  from trn\r\n"
-											+ " where DTRNCREATE = trunc((select f.DATE_LOAD\r\n"
-											+ "                            from SBRA_PENS_LOAD_ROWSUM f\r\n"
-											+ "                           where f.LOAD_ID = ?))\r\n"
-											+ "   and ITRNBATNUM = 999\r\n"
-											+ "   and CTRNPURP like '%{' || ? || '}%'\r\n"
-											+ "");
+							PreparedStatement prp = conn.prepareCall("select count(*) cnt, sum(trn.MTRNRSUM) summ\r\n"
+									+ "  from trn\r\n" + " where DTRNCREATE = trunc((select f.DATE_LOAD\r\n"
+									+ "                            from SBRA_PENS_LOAD_ROWSUM f\r\n"
+									+ "                           where f.LOAD_ID = ?))\r\n"
+									+ "   and ITRNBATNUM = 999\r\n" + "   and CTRNPURP like '%{' || ? || '}%'\r\n"
+									+ "");
 							prp.setLong(1, sel.getLOAD_ID());
 							prp.setLong(2, sel.getLOAD_ID());
 							ResultSet rs = prp.executeQuery();
@@ -512,6 +514,186 @@ public class PensController {
 			autoResizeColumns(PENS_LOAD_ROWSUM);
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+	String PensCountS = "";
+	String PensSumS = "";
+	
+	String PensTrnCountS = "";
+	String PensTrnSumS = "";
+	
+	/**
+	 * Запустить процесс и обновлять прогресс бар пока не закончится процесс
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	void RunPB(String taskname, Long id) {
+		try {
+			Service service = new Service() {
+				@Override
+				protected Task createTask() {
+					return new Task() {
+						@Override
+						protected Object call() throws Exception {
+							// ----------------------------------------------------------------
+							try {
+								Long count = 0l;
+								Long count2 = 0l;
+								
+								{
+									PreparedStatement prp = conn.prepareCall(
+											"SELECT COUNT(*), SUM(SUMM) FROM SBRA_PENS_ROW_CL T WHERE ID_ = ?");
+									prp.setLong(1, id);
+									ResultSet rs = prp.executeQuery();
+									if (rs.next()) {
+										PensCountS = decimalFormat.format(rs.getLong(1));
+										PensSumS = decimalFormat.format(rs.getDouble(2));
+										
+										System.out.println("bef PensCountS=" + PensCountS);
+										System.out.println("bef PensSumS=" + PensSumS);
+									}
+									rs.close();
+									prp.close();
+								}
+								
+								Platform.runLater(new Runnable() {
+									@Override
+									public void run() {
+										try {
+											System.out.println("aft PensCountS=" + PensCountS);
+											System.out.println("aft PensSumS=" + PensSumS);
+											
+											PensCount.setText(PensCountS);
+											PensSum.setText(PensSumS);
+										} catch (Exception e) {
+											ShowMes(ExceptionUtils.getStackTrace(e));
+										}
+									}
+								});
+
+								{
+									PreparedStatement prp = conn.prepareCall(
+											"select count(*) cnt, sum(trn.MTRNRSUM) summ\r\n" + "  from trn\r\n"
+													+ " where DTRNCREATE = trunc((select f.DATE_LOAD\r\n"
+													+ "                            from SBRA_PENS_LOAD_ROWSUM f\r\n"
+													+ "                           where f.LOAD_ID = ?))\r\n"
+													+ "   and ITRNBATNUM = 999\r\n"
+													+ "   and CTRNPURP like '%{' || ? || '}%'\r\n" + "");
+									prp.setLong(1, id);
+									prp.setLong(2, id);
+									ResultSet rs = prp.executeQuery();
+									if (rs.next()) {
+										count2 = rs.getLong(1);
+										PensTrnCountS = decimalFormat.format(rs.getLong(1));
+										PensTrnSumS = decimalFormat.format(rs.getDouble(2));
+										
+										System.out.println("bef PensTrnCountS=" + PensTrnCountS);
+										System.out.println("bef PensTrnSumS=" + PensTrnSumS);
+									}
+									rs.close();
+									prp.close();
+								}
+								
+								Platform.runLater(new Runnable() {
+									@Override
+									public void run() {
+										try {
+											System.out.println("aft PensTrnCountS=" + PensTrnCountS);
+											System.out.println("aft PensTrnSumS=" + PensTrnSumS);
+											System.out.println("____________________");
+											
+											PensCountTrn.setText(PensTrnCountS);
+											PensSumTrn.setText(PensTrnSumS);
+										} catch (Exception e) {
+											ShowMes(ExceptionUtils.getStackTrace(e));
+										}
+									}
+								});
+								
+								{
+									PreparedStatement prp = conn.prepareStatement(
+											"select (select count(*)\n"
+											+ "          from user_parallel_execute_tasks t\n"
+											+ "         where task_name = ?) t_pens_ex,\n"
+											+ "       (select count(*)\n"
+											+ "          from user_parallel_execute_tasks t\n"
+											+ "         where task_name = ?\n"
+											+ "           and STATUS = 'FINISHED') t_pens_ex_st\n"
+											+ "  from dual\n"
+											+ "");
+									prp.setString(1, taskname);
+									prp.setString(2, taskname);
+									ResultSet rs = prp.executeQuery();
+									if (rs.next()) {
+										
+										System.out.println("t_pens_ex=" + rs.getInt("t_pens_ex"));
+										System.out.println("t_pens_ex_st=" + rs.getInt("t_pens_ex_st"));
+										System.out.println("taskname=" + taskname);
+
+										Date Curdate = new Date();
+
+										long diff = (Curdate.getTime() - DateBeforeStartPens.getTime()) / 1000;
+										
+										if (rs.getInt("t_pens_ex") == 0 | rs.getInt("t_pens_ex_st") == 1) {
+											updateProgress(count, count);
+
+											Platform.runLater(new Runnable() {
+												@Override
+												public void run() {
+													PensError(id);
+												}
+											});
+											System.out.println("EndTask");
+											Disable();
+											if (diff >= 20) {
+												EndTask();
+											}
+										} else if (rs.getInt("t_pens_ex") > 0 & rs.getInt("t_pens_ex_st") == 0) {
+											Platform.runLater(new Runnable() {
+												@Override
+												public void run() {
+													PensError(id);
+												}
+											});
+
+											updateProgress(count2, count);
+										}
+									}
+									prp.close();
+									rs.close();
+								}
+
+							} catch (Exception e) {
+								ShowMes(ExceptionUtils.getStackTrace(e));
+							}
+							// ----------------------------------------------------------------
+							return null;
+						}
+					};
+				}
+			};
+			ProgressPens.progressProperty().bind(service.progressProperty());
+			service.setOnFailed(e -> ShowMes(service.getException().getMessage()));
+			//service.setOnSucceeded(e -> Disable());
+			service.start();
+
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+	void Disable() {
+		try {
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					PENS_LOAD_ROWSUM.setDisable(false);
+					PTLB.setDisable(false);
+				}
+			});
+
+		} catch (Exception e) {
+			ShowMes(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -725,7 +907,7 @@ public class PensController {
 			String clobData = sb.toString();
 			br.close();
 			return clobData;
-		} catch (IOException e) {
+		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 		return "Error";
@@ -1052,13 +1234,15 @@ public class PensController {
 	/**
 	 * Запуск процесса
 	 */
-	void RunProcess_(String type) {
+	void RunProcess(String taskname, Long id) {
 		Timer time = new Timer(); // Instantiate Timer Object
 		st = new ScheduledTask(); // Instantiate SheduledTask class
-		st.setSWC(this, type);
-		time.schedule(st, 0, 3000); // Create task repeating every 1 sec
+		st.setPens(this, taskname, id);
+		time.schedule(st, 0, 10000); // Create task repeating every 1 sec
 	}
 
+	Date DateBeforeStartPens = null;
+	
 	/**
 	 * Загрузить файл
 	 */
@@ -1113,10 +1297,11 @@ public class PensController {
 						conn.commit();
 						// ___________
 						{
+							System.out.println("ret_id="+ret_id);
 							CallableStatement callStmt_j = conn.prepareCall("{ call Z_PENS_KERNEL.jobLoad(?,?,?)}");
 							callStmt_j.setLong(1, ret_id);
 							callStmt_j.setInt(2, 1000);
-							callStmt_j.setInt(4, 7);
+							callStmt_j.setInt(3, 7);
 							// catch
 							try {
 								callStmt_j.execute();
@@ -1128,7 +1313,17 @@ public class PensController {
 							callStmt_j.close();
 							conn.commit();
 							// Go stat______________
-							// RunProcess("");
+							
+							Platform.runLater(new Runnable() {
+								@Override
+								public void run() {
+									PENS_LOAD_ROWSUM.setDisable(true);
+									PTLB.setDisable(true);
+								}
+							});
+							
+							DateBeforeStartPens = new Date();
+							RunProcess("T_PENS", ret_id);
 							// _____________________
 						}
 						// ___________
@@ -1387,7 +1582,7 @@ public class PensController {
 
 									sqlStatement.setInt(1, sess_id);
 									sqlStatement.setInt(2, id);
-									//_________________________________________
+									// _________________________________________
 								} else {
 									PreparedStatement cnt_prgrs = conn.prepareStatement("select count(*) cnt\r\n"
 											+ "  from table(lob2table.separatedcolumns((select ALL_\r\n"
@@ -1395,8 +1590,7 @@ public class PensController {
 											+ "                                         where f.id = ?),\r\n"
 											+ "                                        chr(13) || chr(10),\r\n"
 											+ "                                        '|',\r\n"
-											+ "                                        '')) h\r\n"
-											+ "");
+											+ "                                        '')) h\r\n" + "");
 									cnt_prgrs.setInt(1, sess_id);
 
 									ResultSet cnt_rs = cnt_prgrs.executeQuery();
@@ -1492,7 +1686,7 @@ public class PensController {
 				}
 			};
 			Progress.progressProperty().bind(service.progressProperty());
-			service.setOnFailed(e -> ShowMes(service.getException().getMessage()));
+			service.setOnFailed(e -> ShowMes(ExceptionUtils.getStackTrace(service.getException())));
 			service.setOnSucceeded(e -> TLB.setDisable(false));
 			service.start();
 
@@ -1548,5 +1742,4 @@ public class PensController {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
-
 }

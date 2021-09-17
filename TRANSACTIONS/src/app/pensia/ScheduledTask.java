@@ -3,17 +3,18 @@ package app.pensia;
 import java.util.TimerTask;
 
 public class ScheduledTask extends TimerTask {
-	PensController sw = null;
-	String typeop = null;
+	PensC pens = null;
+	String taskname = "";
+	Long id = 0l;
+
 	public void run() {
-		if(typeop.equals("INOUT")) {
-			//sw.InitTable();
-		}
-		//System.out.println("!!!!!!!!!!!!!!!!!!");
+		pens.RunPB(taskname, id);
+		System.out.println("<PensLodrefresh>");
 	}
 
-	void setSWC(PensController sc,String type) {
-		this.sw = sc;
-		this.typeop = type;
+	void setPens(PensC pens, String taskname, Long id) {
+		this.pens = pens;
+		this.taskname = taskname;
+		this.id = id;
 	}
 }

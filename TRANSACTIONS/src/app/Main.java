@@ -9,7 +9,7 @@ import access.action.OdbActions;
 import access.grp.GrpController;
 import access.menu.OdbMNU;
 import app.model.Connect;
-import app.pensia.PensController;
+import app.pensia.PensC;
 import app.util.DBUtil;
 import contact.ContactC;
 import javafx.application.Application;
@@ -72,7 +72,7 @@ public class Main extends Application {
 //				ConvVal();
 //			}
 
-			Connect.connectionURL_ = "10.111.64.21:1521/ODB";
+			Connect.connectionURL_ = "10.111.64.24:1521/ODB";
 			Connect.userID_ = "saidp";
 			Connect.userPassword_ = "vector165";
 
@@ -665,7 +665,7 @@ public class Main extends Application {
 				stage.getIcons().add(new Image("/icon.png"));
 				stage.setTitle("Пенсия РФ");
 				stage.initOwner(primaryStage);
-				PensController controller = loader.getController();
+				PensC controller = loader.getController();
 				stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 					@Override
 					public void handle(WindowEvent paramT) {
