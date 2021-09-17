@@ -424,9 +424,7 @@ public class PensC {
 							rs.close();
 							prp.close();
 						}
-
 						PensError(sel.getLOAD_ID());
-
 					} catch (Exception e) {
 						Msg.Message(ExceptionUtils.getStackTrace(e));
 					}
