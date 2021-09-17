@@ -410,9 +410,10 @@ public class PensC {
 									+ " WHERE trunc(DTRNTRAN) = TRUNC((SELECT F.DATE_LOAD\r\n"
 									+ "                            FROM SBRA_PENS_LOAD_ROWSUM F\r\n"
 									+ "                           WHERE F.LOAD_ID = ?))\r\n"
-									+ "   AND ITRNBATNUM = 996\r\n" + "   AND CTRNPURP LIKE '%{'||?||'}%'");
+									+ "   AND ITRNBATNUM = 996 AND (CTRNPURP LIKE '%{'||?||'}%' or CTRNPURP LIKE '%{'||?||'}%')");
 							prp.setLong(1, sel.getLOAD_ID());
 							prp.setLong(2, sel.getLOAD_ID());
+							prp.setLong(3, sel.getLOAD_ID()+1);
 							ResultSet rs = prp.executeQuery();
 							if (rs.next()) {
 								if (rs.getLong(1) > 0) {
@@ -594,9 +595,10 @@ public class PensC {
 							+ " WHERE DTRNCREATE = TRUNC((SELECT F.DATE_LOAD\r\n"
 							+ "                            FROM SBRA_PENS_LOAD_ROWSUM F\r\n"
 							+ "                           WHERE F.LOAD_ID = ?))\r\n" + "   AND ITRNBATNUM = 996\r\n"
-							+ "   AND CTRNPURP LIKE '%{'||?||'}%'");
+							+ "   AND (CTRNPURP LIKE '%{'||?||'}%' or CTRNPURP LIKE '%{'||?||'}%')");
 					prp.setLong(1, id);
 					prp.setLong(2, id);
+					prp.setLong(3, id+1);
 				}
 
 				ResultSet rs = prp.executeQuery();
@@ -1430,14 +1432,14 @@ public class PensC {
 
 				if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
 					call = "ifrun60.exe I:/KERNEL/OPERLIST.fmx " + Connect.userID_ + "/" + Connect.userPassword_
-							+ "@TEST WHERE=\" trunc(DTRNTRAN) = trunc((select f.DATE_LOAD from SBRA_PENS_LOAD_ROWSUM f where f.LOAD_ID = "
+							+ "@ODB WHERE=\" trunc(DTRNTRAN) = trunc((select f.DATE_LOAD from SBRA_PENS_LOAD_ROWSUM f where f.LOAD_ID = "
 							+ sel.getLOAD_ID() + ")) and ITRNBATNUM = 999 and CTRNPURP like '%{" + sel.getLOAD_ID()
 							+ "}%'\"";
 				} else {
 					call = "ifrun60.exe I:/KERNEL/OPERLIST.fmx " + Connect.userID_ + "/" + Connect.userPassword_
-							+ "@TEST WHERE=\" trunc(DTRNTRAN) = trunc((select f.DATE_LOAD from SBRA_PENS_LOAD_ROWSUM f where f.LOAD_ID = "
-							+ sel.getLOAD_ID() + ")) and ITRNBATNUM = 996 and CTRNPURP like '%{"
-							+ (sel.getLOAD_ID()) + "}%'\"";
+							+ "@ODB WHERE=\" trunc(DTRNTRAN) = trunc((select f.DATE_LOAD from SBRA_PENS_LOAD_ROWSUM f where f.LOAD_ID = "
+							+ sel.getLOAD_ID() + ")) and ITRNBATNUM = 996 and (CTRNPURP like '%{"
+							+ (sel.getLOAD_ID()) + "}%' or CTRNPURP like '%{"+ (sel.getLOAD_ID()+1) +"}%')\"";
 				}
 
 				ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", call);
