@@ -50,8 +50,8 @@ public class First {
 			// Setting the image view parameters
 			imageView.setX(500);
 			imageView.setY(50);
-			imageView.setFitWidth(500);
-			imageView.setFitHeight(500);
+			imageView.setFitWidth(300);
+			imageView.setFitHeight(300);
 			imageView.setPreserveRatio(true);
 			imageView.setPickOnBounds(true);
 		} catch (Exception e) {

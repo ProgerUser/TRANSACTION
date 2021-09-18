@@ -19,6 +19,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -56,7 +58,6 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.text.Text;
@@ -69,6 +70,7 @@ import sbalert.Msg;
 
 /**
  * Said 13.07.2020.
+ * 18.09.2021 Загрузка пенсии
  */
 public class PensC {
 
@@ -122,15 +124,6 @@ public class PensC {
 	private TableColumn<SBRA_YEAR_BET, LocalDate> END_Y;
 
 	@FXML
-	private TextField PensSum;
-	@FXML
-	private TextField PensCount;
-	@FXML
-	private TextField PensSumTrn;
-	@FXML
-	private TextField PensCountTrn;
-
-	@FXML
 	private TableView<SBRA_PENS_LOG> SBRA_PENS_LOG;
 	@FXML
 	private TableColumn<SBRA_PENS_LOG, Long> NSTR;
@@ -143,10 +136,23 @@ public class PensC {
 	@FXML
 	private TableColumn<SBRA_PENS_LOG, String> ERR;
 
+	
+	@FXML
+    private TableView<PENS_STAT> PENS_STAT;
+    @FXML
+    private TableColumn<PENS_STAT, String> NAMES;
+    @FXML
+    private TableColumn<PENS_STAT, Long> CNT;
+    @FXML
+    private TableColumn<PENS_STAT, Double> SUMM;
+    
 	@FXML
 	private Button SaveError;
 	@FXML
 	private Button Pens4083_40831;
+	@FXML
+	private Button DelFilePens;
+	
 
 	@FXML
 	void pensrachk(ActionEvent event) {
@@ -204,27 +210,6 @@ public class PensC {
 
 			dbConnect();
 
-			// _____________________________________________________________
-//			{
-//				PreparedStatement prp = conn.prepareStatement("SELECT (SELECT COUNT(*)\r\n"
-//						+ "          FROM sys.dba_parallel_execute_tasks T\r\n"
-//						+ "         WHERE T.TASK_NAME = ?) T_PENS_EX,\r\n" + "       (SELECT COUNT(*)\r\n"
-//						+ "          FROM sys.dba_parallel_execute_tasks T\r\n" + "         WHERE T.TASK_NAME = ?\r\n"
-//						+ "           AND STATUS = 'FINISHED') T_PENS_EX\r\n" + "  FROM DUAL");
-//				prp.setString(1, "T_PENS");
-//				prp.setString(2, "T_PENS");
-//				ResultSet rs = prp.executeQuery();
-//				if (rs.next()) {
-//
-//					System.out.println("____________________");
-//					System.out.println("t_pens_ex=" + rs.getInt("t_pens_ex"));
-//					System.out.println("t_pens_ex_st=" + rs.getInt("t_pens_ex_st"));
-//					System.out.println("____________________");
-//				}
-//				prp.close();
-//				rs.close();
-//			}
-			// _____________________________________________________________
 			try {
 				String sql = "select t.BOOLEAN from Z_SB_PENSRACHK t";
 				Statement stmt = conn.createStatement();
@@ -243,6 +228,12 @@ public class PensC {
 
 			sep_pens.setEditable(true);
 
+			
+			NAMES.setCellValueFactory(cellData -> cellData.getValue().NAMESProperty());
+			CNT.setCellValueFactory(cellData -> cellData.getValue().CNTProperty().asObject());
+			SUMM.setCellValueFactory(cellData -> cellData.getValue().SUMMProperty().asObject());
+			
+			
 			ID.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
 			Filename.setCellValueFactory(cellData -> cellData.getValue().filenameProperty());
 			DateLoad.setCellValueFactory(cellData -> cellData.getValue().dateloadProperty());
@@ -367,45 +358,33 @@ public class PensC {
 				return cell;
 			});
 
+			NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
+			DecimalFormatSymbols decimalFormatSymbols = ((DecimalFormat) currencyFormat).getDecimalFormatSymbols();
+			decimalFormatSymbols.setCurrencySymbol("");
+			((DecimalFormat) currencyFormat).setDecimalFormatSymbols(decimalFormatSymbols);
+			
+			SUMM.setCellFactory(tc -> new TableCell<PENS_STAT, Double>() {
+
+				@Override
+				protected void updateItem(Double price, boolean empty) {
+					super.updateItem(price, empty);
+					if (empty) {
+						setText(null);
+					} else {
+						setText(currencyFormat.format(price));
+					}
+				}
+			});
+			
 			// --
 
 			PENS_LOAD_ROWSUM.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> {
 				PENS_LOAD_ROWSUM sel = PENS_LOAD_ROWSUM.getSelectionModel().getSelectedItem();
 				if (sel != null) {
 					try {
+						//trn pl
 						{
-							PreparedStatement prp = conn
-									.prepareCall("SELECT COUNT(*), SUM(SUMM) FROM SBRA_PENS_ROW_CL T WHERE ID_ = ?");
-							prp.setLong(1, sel.getLOAD_ID());
-							ResultSet rs = prp.executeQuery();
-							if (rs.next()) {
-								PensCount.setText(decimalFormat.format(rs.getLong(1)));
-								PensSum.setText(decimalFormat.format(rs.getDouble(2)));
-							}
-							rs.close();
-							prp.close();
-						}
-
-						{
-							PreparedStatement prp = conn.prepareCall("select count(*) cnt, sum(trn.MTRNRSUM) summ\r\n"
-									+ "  from trn\r\n" + " where trunc(DTRNTRAN) = trunc((select f.DATE_LOAD\r\n"
-									+ "                            from SBRA_PENS_LOAD_ROWSUM f\r\n"
-									+ "                           where f.LOAD_ID = ?))\r\n"
-									+ "   and ITRNBATNUM = 999\r\n" + "   and CTRNPURP like '%{' || ? || '}%'\r\n"
-									+ "");
-							prp.setLong(1, sel.getLOAD_ID());
-							prp.setLong(2, sel.getLOAD_ID());
-							ResultSet rs = prp.executeQuery();
-							if (rs.next()) {
-								PensCountTrn.setText(decimalFormat.format(rs.getLong(1)));
-								PensSumTrn.setText(decimalFormat.format(rs.getDouble(2)));
-							}
-							rs.close();
-							prp.close();
-						}
-
-						{
-							PreparedStatement prp = conn.prepareCall("SELECT COUNT(*)\r\n" + "  FROM TRN\r\n"
+							PreparedStatement prp = conn.prepareCall("SELECT COUNT(*),sum(trn.MTRNRSUM)\r\n" + "  FROM TRN\r\n"
 									+ " WHERE trunc(DTRNTRAN) = TRUNC((SELECT F.DATE_LOAD\r\n"
 									+ "                            FROM SBRA_PENS_LOAD_ROWSUM F\r\n"
 									+ "                           WHERE F.LOAD_ID = ?))\r\n"
@@ -424,6 +403,9 @@ public class PensC {
 							rs.close();
 							prp.close();
 						}
+						//Stat
+						InitStat(sel.getLOAD_ID());
+						//init error
 						PensError(sel.getLOAD_ID());
 					} catch (Exception e) {
 						Msg.Message(ExceptionUtils.getStackTrace(e));
@@ -560,23 +542,11 @@ public class PensC {
 				prp.setLong(1, id);
 				ResultSet rs = prp.executeQuery();
 				if (rs.next()) {
-
 					all_cnt = rs.getLong(1);
-
-					PensCountS = decimalFormat.format(rs.getLong(1));
-					PensSumS = decimalFormat.format(rs.getDouble(2));
-
-					System.out.println("bef PensCountS=" + PensCountS);
-					System.out.println("bef PensSumS=" + PensSumS);
 				}
 				rs.close();
 				prp.close();
 			}
-
-			Platform.runLater(() -> {
-				PensCount.setText(PensCountS);
-				PensSum.setText(PensSumS);
-			});
 
 			{
 				PreparedStatement prp = null;
@@ -604,19 +574,11 @@ public class PensC {
 				if (rs.next()) {
 
 					rec_cnt = rs.getLong(1);
-
-					PensTrnCountS = decimalFormat.format(rs.getLong(1));
-					PensTrnSumS = decimalFormat.format(rs.getDouble(2));
 				}
 				rs.close();
 				prp.close();
 			}
-
-			Platform.runLater(() -> {
-				PensCountTrn.setText(PensTrnCountS);
-				PensSumTrn.setText(PensTrnSumS);
-			});
-
+			
 			{
 				PreparedStatement prp = conn.prepareStatement("SELECT (SELECT COUNT(*)\r\n"
 						+ "          FROM sys.dba_parallel_execute_tasks T\r\n"
@@ -646,6 +608,8 @@ public class PensC {
 							PENS_LOAD_ROWSUM.requestFocus();
 							PENS_LOAD_ROWSUM.getSelectionModel().select(0);
 							PENS_LOAD_ROWSUM.scrollTo(0);
+							//Init
+							InitStat(id);
 						});
 
 						if (diff >= 30) {
@@ -658,6 +622,8 @@ public class PensC {
 						Platform.runLater(() -> {
 							double prc = ((double) rec_cnt / all_cnt);
 							ProgressPens.setProgress(prc);
+							//Init
+						    InitStat(id);
 						});
 
 						double prc = ((double) rec_cnt / all_cnt);
@@ -669,7 +635,6 @@ public class PensC {
 
 						Platform.runLater(() -> {
 							PensError(id);
-
 							PENS_LOAD_ROWSUM.requestFocus();
 							PENS_LOAD_ROWSUM.getSelectionModel().select(0);
 							PENS_LOAD_ROWSUM.scrollTo(0);
@@ -702,6 +667,7 @@ public class PensC {
 				// Pens4083_40831.setDisable(false);
 				LoadComisss.setDisable(false);
 				OpenAbss.setDisable(false);
+				DelFilePens.setDisable(false);
 			});
 		} catch (Exception e) {
 			ShowMes(ExceptionUtils.getStackTrace(e));
@@ -717,6 +683,7 @@ public class PensC {
 				// Pens4083_40831.setDisable(true);
 				LoadComisss.setDisable(true);
 				OpenAbss.setDisable(true);
+				DelFilePens.setDisable(true);
 			});
 		} catch (Exception e) {
 			ShowMes(ExceptionUtils.getStackTrace(e));
@@ -782,6 +749,44 @@ public class PensC {
 			});
 			// resize
 			autoResizeColumns(SBRA_PENS_LOG);
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+	
+	/**
+	 * Initialize table
+	 */
+	void InitStat(Long ids) {
+		try {
+			PreparedStatement prepStmt = conn
+					.prepareStatement(DbUtil.Sql_From_Prop("/app/pensia/SQL.properties", "PensStat"));
+			prepStmt.setLong(1, ids);
+			ResultSet rs = prepStmt.executeQuery();
+			ObservableList<PENS_STAT> cus_list = FXCollections.observableArrayList();
+			while (rs.next()) {
+				PENS_STAT list = new PENS_STAT();
+				list.setNAMES(rs.getString("NAMES"));
+				list.setCNT(rs.getLong("CNT"));
+				list.setSUMM(rs.getDouble("SUMM"));
+				cus_list.add(list);
+			}
+			// add data
+			PENS_STAT.setItems(cus_list);
+			// close
+			prepStmt.close();
+			rs.close();
+			// add filter
+			TableFilter<PENS_STAT> tableFilter = TableFilter.forTableView(PENS_STAT).apply();
+			tableFilter.setSearchStrategy((input, target) -> {
+				try {
+					return target.toLowerCase().contains(input.toLowerCase());
+				} catch (Exception e) {
+					return false;
+				}
+			});
+			// resize
+			autoResizeColumns(PENS_STAT);
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
@@ -882,7 +887,7 @@ public class PensC {
 					}
 				}
 				// set the new max-widht with some extra space
-				column.setPrefWidth(max + 10.0d);
+				column.setPrefWidth(max + 20.0d);
 			}
 		});
 	}
@@ -1408,7 +1413,6 @@ public class PensC {
 		}
 	}
 
-	
 	/**
 	 * Удалить файл
 	 */
@@ -1417,21 +1421,23 @@ public class PensC {
 			if (PENS_LOAD_ROWSUM.getSelectionModel().getSelectedItem() == null) {
 				Msg.Message("Выберите сначала данные из таблицы!");
 			} else {
-				{
-					PENS_LOAD_ROWSUM sel = PENS_LOAD_ROWSUM.getSelectionModel().getSelectedItem();
 
+				PENS_LOAD_ROWSUM sel = PENS_LOAD_ROWSUM.getSelectionModel().getSelectedItem();
+
+				final Alert alert = new Alert(AlertType.CONFIRMATION, "Удалить файл \"" + sel.getFILE_NAME() + "\" ?",
+						ButtonType.YES, ButtonType.NO);
+				if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
 					{
 						PreparedStatement prp = conn.prepareCall("select count(*) cnt, sum(trn.MTRNRSUM) summ\r\n"
 								+ "  from trn\r\n" + " where trunc(DTRNTRAN) = trunc((select f.DATE_LOAD\r\n"
 								+ "                            from SBRA_PENS_LOAD_ROWSUM f\r\n"
-								+ "                           where f.LOAD_ID = ?))\r\n"
-								+ "   and ITRNBATNUM = 999\r\n" + "   and CTRNPURP like '%{' || ? || '}%'\r\n"
-								+ "");
+								+ "                           where f.LOAD_ID = ?))\r\n" + "   and ITRNBATNUM = 999\r\n"
+								+ "   and CTRNPURP like '%{' || ? || '}%'\r\n" + "");
 						prp.setLong(1, sel.getLOAD_ID());
 						prp.setLong(2, sel.getLOAD_ID());
 						ResultSet rs = prp.executeQuery();
 						if (rs.next()) {
-							if(rs.getLong(1) > 0) {
+							if (rs.getLong(1) > 0) {
 								Msg.Message("Есть связи в TRN 60322% -> 4083%, удаление запрещено!");
 								return;
 							}
@@ -1451,7 +1457,7 @@ public class PensC {
 						prp.setLong(3, sel.getLOAD_ID() + 1);
 						ResultSet rs = prp.executeQuery();
 						if (rs.next()) {
-							if(rs.getLong(1) > 0) {
+							if (rs.getLong(1) > 0) {
 								Msg.Message("Есть связи в TRN 4083% -> 40831%, удаление запрещено!");
 								return;
 							}
@@ -1461,21 +1467,16 @@ public class PensC {
 					}
 					// если нет ошибок
 					{
-						PreparedStatement prp = conn.prepareCall(""
-								+ "begin "
-								+ "delete from sbra_pens_row_cl t where ID_ = ?;\r\n"
-								+ "delete from SBRA_PENS_TRN_ROW t where LOAD_ID = ?;"
-								+ "DELETE FROM Z_PENS_CL WHERE id_ = ?;"
-								+ "commit;"
-								+ "end;");
+						PreparedStatement prp = conn.prepareCall("" + "declare\r\n" + "loadid number := ?;\r\n"
+								+ "begin \r\n" + "delete from sbra_pens_row_cl t where ID_ = loadid;\r\n"
+								+ "delete from SBRA_PENS_TRN_ROW t where LOAD_ID in (loadid,loadid+1);\r\n"
+								+ "DELETE FROM Z_PENS_CL WHERE id_ = loadid;\r\n" + "end;\r\n");
 						prp.setLong(1, sel.getLOAD_ID());
-						prp.setLong(2, sel.getLOAD_ID());
-						prp.setLong(3, sel.getLOAD_ID());
 						prp.executeUpdate();
 						prp.close();
-						
+
 						conn.commit();
-						
+
 						PensError(sel.getLOAD_ID());
 						LoadTablePensExec();
 					}
@@ -1485,7 +1486,7 @@ public class PensC {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
-	
+
 	/**
 	 * Сохранить ошибки
 	 */
@@ -1500,7 +1501,7 @@ public class PensC {
 				// load a properties file
 				prop.load(input);
 
-				//SBRA_PENS_LOG errorsel = SBRA_PENS_LOG.getSelectionModel().getSelectedItem();
+				// SBRA_PENS_LOG errorsel = SBRA_PENS_LOG.getSelectionModel().getSelectedItem();
 				PENS_LOAD_ROWSUM penssel = PENS_LOAD_ROWSUM.getSelectionModel().getSelectedItem();
 
 				FileChooser fileChooser = new FileChooser();
@@ -1551,10 +1552,12 @@ public class PensC {
 	 */
 	public void OpenAbs() {
 		try {
-//			if (DbUtil.Odb_Action(44l) == 0) {
-//				Msg.Message("Нет доступа!");
-//				return;
-//			}
+			
+			if (DbUtil.Odb_Action(81l) == 0) {
+				Msg.Message("Нет доступа!");
+				return;
+			}
+			
 			PENS_LOAD_ROWSUM sel = PENS_LOAD_ROWSUM.getSelectionModel().getSelectedItem();
 			if (sel == null) {
 				Msg.Message("Выберите строку");
@@ -1566,12 +1569,12 @@ public class PensC {
 
 				if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
 					call = "ifrun60.exe I:/KERNEL/OPERLIST.fmx " + Connect.userID_ + "/" + Connect.userPassword_
-							+ "@ODB WHERE=\" trunc(DTRNTRAN) = trunc((select f.DATE_LOAD from SBRA_PENS_LOAD_ROWSUM f where f.LOAD_ID = "
+							+ "@odb-test2 WHERE=\" trunc(DTRNTRAN) = trunc((select f.DATE_LOAD from SBRA_PENS_LOAD_ROWSUM f where f.LOAD_ID = "
 							+ sel.getLOAD_ID() + ")) and ITRNBATNUM = 999 and CTRNPURP like '%{" + sel.getLOAD_ID()
 							+ "}%'\"";
 				} else {
 					call = "ifrun60.exe I:/KERNEL/OPERLIST.fmx " + Connect.userID_ + "/" + Connect.userPassword_
-							+ "@ODB WHERE=\" trunc(DTRNTRAN) = trunc((select f.DATE_LOAD from SBRA_PENS_LOAD_ROWSUM f where f.LOAD_ID = "
+							+ "@odb-test2 WHERE=\" trunc(DTRNTRAN) = trunc((select f.DATE_LOAD from SBRA_PENS_LOAD_ROWSUM f where f.LOAD_ID = "
 							+ sel.getLOAD_ID() + ")) and ITRNBATNUM = 996 and (CTRNPURP like '%{" + (sel.getLOAD_ID())
 							+ "}%' or CTRNPURP like '%{" + (sel.getLOAD_ID() + 1) + "}%')\"";
 				}

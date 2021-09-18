@@ -207,7 +207,7 @@ public class ContactC {
 			if (SBRA_LOADF_CONTACT.getSelectionModel().getSelectedItem() != null) {
 				SBRA_LOADF_CONTACT selrow = SBRA_LOADF_CONTACT.getSelectionModel().getSelectedItem();
 				
-				final Alert alert = new Alert(AlertType.CONFIRMATION, "Загрузить файл \"" + selrow.getLD_FILENAME() + "\" ?",
+				final Alert alert = new Alert(AlertType.CONFIRMATION, "Удалить файл \"" + selrow.getLD_FILENAME() + "\" ?",
 						ButtonType.YES, ButtonType.NO);
 
 				if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
