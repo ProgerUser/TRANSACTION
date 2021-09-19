@@ -1156,8 +1156,13 @@ public class PensC {
 	public void ExecPlast() {
 		try {
 
-			if (DbUtil.Odb_Action(63l) == 0) {
+			if (DbUtil.Odb_Action(64l) == 0) {
 				Msg.Message("Нет доступа!");
+				return;
+			}
+			
+			if(!Connect.userID_.equals("PENSIA")) {
+				Msg.Message("Пользователь не PENSIA!");
 				return;
 			}
 
@@ -1322,8 +1327,13 @@ public class PensC {
 	public void LoadPens() {
 		try {
 
-			if (DbUtil.Odb_Action(62l) == 0) {
+			if (DbUtil.Odb_Action(63l) == 0) {
 				Msg.Message("Нет доступа!");
+				return;
+			}
+			
+			if(!Connect.userID_.equals("PENSIA")) {
+				Msg.Message("Пользователь не PENSIA!");
 				return;
 			}
 
@@ -1553,7 +1563,7 @@ public class PensC {
 	public void OpenAbs() {
 		try {
 			
-			if (DbUtil.Odb_Action(81l) == 0) {
+			if (DbUtil.Odb_Action(62l) == 0) {
 				Msg.Message("Нет доступа!");
 				return;
 			}

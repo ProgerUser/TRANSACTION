@@ -16,7 +16,7 @@
 <BorderPane fx:id="ap"
 	xmlns="http://javafx.com/javafx/8.0.261"
 	xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="app.controller.EnterController">
+	fx:controller="app.controller.EnterC">
 	<center>
 		<VBox spacing="5.0">
 			<GridPane BorderPane.alignment="CENTER">

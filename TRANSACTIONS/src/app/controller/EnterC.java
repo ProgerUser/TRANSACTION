@@ -29,7 +29,7 @@ import javafx.scene.input.KeyEvent;
 import sb.utils.DbUtil;
 import sbalert.Msg;
 
-public class EnterController {
+public class EnterC {
 
 
 	@FXML
@@ -138,6 +138,7 @@ public class EnterController {
 			@SuppressWarnings("unchecked")
 			Enumeration<String> enums = (Enumeration<String>) prop.propertyNames();
 			while (enums.hasMoreElements()) {
+				//System.out.println();
 				String key = enums.nextElement();
 				String value = prop.getProperty(key);
 				if (key.contains("user")) {
