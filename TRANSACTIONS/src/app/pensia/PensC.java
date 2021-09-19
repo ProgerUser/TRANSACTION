@@ -26,6 +26,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Timer;
 import java.util.concurrent.Executor;
@@ -48,29 +49,39 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
+import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Stage;
+import javafx.util.Pair;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LocalDateTimeStringConverter;
 import sb.utils.DbUtil;
 import sbalert.Msg;
+import tr.pl.ConvConst;
 
 /**
- * Said 13.07.2020.
- * 18.09.2021 Загрузка пенсии
+ * Said 13.07.2020. 18.09.2021 Загрузка пенсии
  */
 public class PensC {
 
@@ -136,23 +147,21 @@ public class PensC {
 	@FXML
 	private TableColumn<SBRA_PENS_LOG, String> ERR;
 
-	
 	@FXML
-    private TableView<PENS_STAT> PENS_STAT;
-    @FXML
-    private TableColumn<PENS_STAT, String> NAMES;
-    @FXML
-    private TableColumn<PENS_STAT, Long> CNT;
-    @FXML
-    private TableColumn<PENS_STAT, Double> SUMM;
-    
+	private TableView<PENS_STAT> PENS_STAT;
+	@FXML
+	private TableColumn<PENS_STAT, String> NAMES;
+	@FXML
+	private TableColumn<PENS_STAT, Long> CNT;
+	@FXML
+	private TableColumn<PENS_STAT, Double> SUMM;
+
 	@FXML
 	private Button SaveError;
 	@FXML
 	private Button Pens4083_40831;
 	@FXML
 	private Button DelFilePens;
-	
 
 	@FXML
 	void pensrachk(ActionEvent event) {
@@ -228,12 +237,10 @@ public class PensC {
 
 			sep_pens.setEditable(true);
 
-			
 			NAMES.setCellValueFactory(cellData -> cellData.getValue().NAMESProperty());
 			CNT.setCellValueFactory(cellData -> cellData.getValue().CNTProperty().asObject());
 			SUMM.setCellValueFactory(cellData -> cellData.getValue().SUMMProperty().asObject());
-			
-			
+
 			ID.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
 			Filename.setCellValueFactory(cellData -> cellData.getValue().filenameProperty());
 			DateLoad.setCellValueFactory(cellData -> cellData.getValue().dateloadProperty());
@@ -362,7 +369,7 @@ public class PensC {
 			DecimalFormatSymbols decimalFormatSymbols = ((DecimalFormat) currencyFormat).getDecimalFormatSymbols();
 			decimalFormatSymbols.setCurrencySymbol("");
 			((DecimalFormat) currencyFormat).setDecimalFormatSymbols(decimalFormatSymbols);
-			
+
 			SUMM.setCellFactory(tc -> new TableCell<PENS_STAT, Double>() {
 
 				@Override
@@ -375,17 +382,17 @@ public class PensC {
 					}
 				}
 			});
-			
+
 			// --
 
 			PENS_LOAD_ROWSUM.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> {
 				PENS_LOAD_ROWSUM sel = PENS_LOAD_ROWSUM.getSelectionModel().getSelectedItem();
 				if (sel != null) {
 					try {
-						//trn pl
+						// trn pl
 						{
-							PreparedStatement prp = conn.prepareCall("SELECT COUNT(*),sum(trn.MTRNRSUM)\r\n" + "  FROM TRN\r\n"
-									+ " WHERE trunc(DTRNTRAN) = TRUNC((SELECT F.DATE_LOAD\r\n"
+							PreparedStatement prp = conn.prepareCall("SELECT COUNT(*),sum(trn.MTRNRSUM)\r\n"
+									+ "  FROM TRN\r\n" + " WHERE trunc(DTRNTRAN) = TRUNC((SELECT F.DATE_LOAD\r\n"
 									+ "                            FROM SBRA_PENS_LOAD_ROWSUM F\r\n"
 									+ "                           WHERE F.LOAD_ID = ?))\r\n"
 									+ "   AND ITRNBATNUM = 996 AND (CTRNPURP LIKE '%{'||?||'}%' or CTRNPURP LIKE '%{'||?||'}%')");
@@ -403,9 +410,9 @@ public class PensC {
 							rs.close();
 							prp.close();
 						}
-						//Stat
+						// Stat
 						InitStat(sel.getLOAD_ID());
-						//init error
+						// init error
 						PensError(sel.getLOAD_ID());
 					} catch (Exception e) {
 						Msg.Message(ExceptionUtils.getStackTrace(e));
@@ -578,7 +585,7 @@ public class PensC {
 				rs.close();
 				prp.close();
 			}
-			
+
 			{
 				PreparedStatement prp = conn.prepareStatement("SELECT (SELECT COUNT(*)\r\n"
 						+ "          FROM sys.dba_parallel_execute_tasks T\r\n"
@@ -608,7 +615,7 @@ public class PensC {
 							PENS_LOAD_ROWSUM.requestFocus();
 							PENS_LOAD_ROWSUM.getSelectionModel().select(0);
 							PENS_LOAD_ROWSUM.scrollTo(0);
-							//Init
+							// Init
 							InitStat(id);
 						});
 
@@ -622,8 +629,8 @@ public class PensC {
 						Platform.runLater(() -> {
 							double prc = ((double) rec_cnt / all_cnt);
 							ProgressPens.setProgress(prc);
-							//Init
-						    InitStat(id);
+							// Init
+							InitStat(id);
 						});
 
 						double prc = ((double) rec_cnt / all_cnt);
@@ -753,7 +760,7 @@ public class PensC {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
-	
+
 	/**
 	 * Initialize table
 	 */
@@ -1151,6 +1158,172 @@ public class PensC {
 	private ProgressBar ProgressPens;
 
 	/**
+	 * Обновить часть
+	 */
+	public void RefreshDatePart() {
+		LoadTableSet();
+	}
+	/**
+	 * Редактировать часть
+	 */
+	public void EditDatePart() {
+		try {
+			if (DbUtil.Odb_Action(46l) == 0) {
+				Msg.Message("Нет доступа!");
+				return;
+			}
+			if (SBRA_YEAR_BET.getSelectionModel().getSelectedItem() == null) {
+				Msg.Message("Выберите строку!");
+			} else {
+				SBRA_YEAR_BET sel = SBRA_YEAR_BET.getSelectionModel().getSelectedItem();
+				// Create the custom dialog.
+				Dialog<Pair<LocalDate, LocalDate>> dialog = new Dialog<>();
+				dialog.setTitle("Редактировать часть \"" + sel.getPART() + "\"");
+
+				Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image(this.getClass().getResource("/icon.png").toString()));
+
+				// Set the button types.
+				ButtonType loginButtonType = new ButtonType("OK", ButtonData.OK_DONE);
+				dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+
+				GridPane gridPane = new GridPane();
+				gridPane.setHgap(10);
+				gridPane.setVgap(10);
+				gridPane.setPadding(new Insets(20, 150, 10, 10));
+
+				DatePicker from = new DatePicker();
+				from.setPrefWidth(120);
+				from.setValue(sel.getSTART_Y());
+				// from.setPromptText("From");
+				DatePicker to = new DatePicker();
+				to.setPrefWidth(120);
+				to.setValue(sel.getEND_Y());
+				// to.setPromptText("To");
+
+				new ConvConst().FormatDatePiker(to);
+				new ConvConst().FormatDatePiker(from);
+
+				gridPane.add(new Label("С:"), 0, 0);
+				gridPane.add(from, 1, 0);
+				gridPane.add(new Label("По:"), 2, 0);
+				gridPane.add(to, 3, 0);
+
+				dialog.getDialogPane().setContent(gridPane);
+
+				// Request focus on the username field by default.
+				Platform.runLater(() -> from.requestFocus());
+
+				// Convert the result to a username-password-pair when the login button is
+				// clicked.
+				dialog.setResultConverter(dialogButton -> {
+					if (dialogButton == loginButtonType) {
+						return new Pair<>(from.getValue(), to.getValue());
+					}
+					return null;
+				});
+
+				Optional<Pair<LocalDate, LocalDate>> result = dialog.showAndWait();
+
+				result.ifPresent(pair -> {
+					final Alert alert = new Alert(AlertType.CONFIRMATION,
+							"Редактировать часть \"" + sel.getPART() + "\" ?", ButtonType.YES, ButtonType.NO);
+					if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait()
+							.orElse(ButtonType.NO) == ButtonType.YES) {
+						try {
+							PreparedStatement prp = conn
+									.prepareStatement("update SBRA_YEAR_BET set START_Y = ?,END_Y =? where PART = ?");
+							prp.setDate(1, (from.getValue() != null) ? java.sql.Date.valueOf(from.getValue()) : null);
+							prp.setDate(2, (to.getValue() != null) ? java.sql.Date.valueOf(to.getValue()) : null);
+							prp.setLong(3, sel.getPART());
+							prp.executeUpdate();
+							conn.commit();
+							prp.close();
+							// populate
+							LoadTableSet();
+						} catch (Exception e) {
+							Msg.Message(ExceptionUtils.getStackTrace(e));
+						}
+					}
+					System.out.println("From=" + pair.getKey() + ", To=" + pair.getValue());
+				});
+			}
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+	/**
+	 * Добавить часть
+	 */
+	public void AddDatePart() {
+		try {
+			if (DbUtil.Odb_Action(45l) == 0) {
+				Msg.Message("Нет доступа!");
+				return;
+			}
+			// Create the custom dialog.
+			Dialog<Pair<LocalDate, LocalDate>> dialog = new Dialog<>();
+			dialog.setTitle("Добавить часть");
+
+			Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image(this.getClass().getResource("/icon.png").toString()));
+
+			// Set the button types.
+			ButtonType loginButtonType = new ButtonType("OK", ButtonData.OK_DONE);
+			dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+
+			GridPane gridPane = new GridPane();
+			gridPane.setHgap(10);
+			gridPane.setVgap(10);
+			gridPane.setPadding(new Insets(20, 150, 10, 10));
+
+			DatePicker from = new DatePicker();
+			from.setPrefWidth(120);
+			// from.setPromptText("From");
+			DatePicker to = new DatePicker();
+			to.setPrefWidth(120);
+			// to.setPromptText("To");
+
+			TextField part = new TextField();
+			part.setPrefWidth(50);
+
+			new ConvConst().FormatDatePiker(to);
+			new ConvConst().FormatDatePiker(from);
+			from.setPrefWidth(120);
+			gridPane.add(new Label("С:"), 0, 0);
+			gridPane.add(from, 1, 0);
+			gridPane.add(new Label("По:"), 2, 0);
+			gridPane.add(to, 3, 0);
+			gridPane.add(new Label("Часть:"), 4, 0);
+			gridPane.add(part, 5, 0);
+
+			dialog.getDialogPane().setContent(gridPane);
+
+			// Request focus on the username field by default.
+			Platform.runLater(() -> from.requestFocus());
+
+			// Convert the result to a username-password-pair when the login button is
+			// clicked.
+			dialog.setResultConverter(dialogButton -> {
+				if (dialogButton == loginButtonType) {
+					return new Pair<>(from.getValue(), to.getValue());
+				}
+				return null;
+			});
+
+			Optional<Pair<LocalDate, LocalDate>> result = dialog.showAndWait();
+
+			result.ifPresent(pair -> {
+				Msg.Message("From=" + pair.getKey() + ", To=" + pair.getValue());
+			});
+
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+	/**
 	 * Загрузить файл
 	 */
 	public void ExecPlast() {
@@ -1160,8 +1333,8 @@ public class PensC {
 				Msg.Message("Нет доступа!");
 				return;
 			}
-			
-			if(!Connect.userID_.equals("PENSIA")) {
+
+			if (!Connect.userID_.equals("PENSIA")) {
 				Msg.Message("Пользователь не PENSIA!");
 				return;
 			}
@@ -1331,8 +1504,8 @@ public class PensC {
 				Msg.Message("Нет доступа!");
 				return;
 			}
-			
-			if(!Connect.userID_.equals("PENSIA")) {
+
+			if (!Connect.userID_.equals("PENSIA")) {
 				Msg.Message("Пользователь не PENSIA!");
 				return;
 			}
@@ -1562,12 +1735,12 @@ public class PensC {
 	 */
 	public void OpenAbs() {
 		try {
-			
+
 			if (DbUtil.Odb_Action(62l) == 0) {
 				Msg.Message("Нет доступа!");
 				return;
 			}
-			
+
 			PENS_LOAD_ROWSUM sel = PENS_LOAD_ROWSUM.getSelectionModel().getSelectedItem();
 			if (sel == null) {
 				Msg.Message("Выберите строку");
@@ -1628,11 +1801,11 @@ public class PensC {
 				final Alert alert = new Alert(AlertType.CONFIRMATION, "Удалить часть \"" + sel.getPART() + "\" ?",
 						ButtonType.YES, ButtonType.NO);
 				if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
-					PreparedStatement prp = conn.prepareStatement("delete from SBRA_YEAR_BET where PART = ?");
-					prp.setLong(1, sel.getPART());
-					prp.executeUpdate();
-					conn.commit();
-					prp.close();
+//					PreparedStatement prp = conn.prepareStatement("delete from SBRA_YEAR_BET where PART = ?");
+//					prp.setLong(1, sel.getPART());
+//					prp.executeUpdate();
+//					conn.commit();
+//					prp.close();
 					// populate
 					LoadTableSet();
 				}

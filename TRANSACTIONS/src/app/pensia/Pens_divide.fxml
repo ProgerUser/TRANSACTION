@@ -269,7 +269,16 @@
                      <children>
                         <ToolBar VBox.vgrow="ALWAYS">
                            <items>
-                              <Button disable="false" mnemonicParsing="false">
+                              <Button disable="false" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#RefreshDatePart">
+                                 <tooltip>
+                                    <Tooltip text="Новая часть" />
+                                 </tooltip>
+                                 <graphic>
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="16" />
+                                 </graphic>
+                              </Button>
+                              <Separator layoutX="90.0" layoutY="10.0" orientation="VERTICAL" />
+                              <Button disable="false" mnemonicParsing="false" onAction="#AddDatePart">
                                  <tooltip>
                                     <Tooltip text="Новая часть" />
                                  </tooltip>
@@ -278,7 +287,7 @@
                                  </graphic>
                               </Button>
                               <Separator orientation="VERTICAL" />
-                              <Button disable="false" layoutX="10.0" layoutY="10.0" mnemonicParsing="false">
+                              <Button disable="false" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#EditDatePart">
                                  <tooltip>
                                     <Tooltip text="Редактировать часть" />
                                  </tooltip>
