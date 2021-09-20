@@ -211,6 +211,7 @@ public class PensC {
 	@FXML
 	private void initialize() {
 		try {
+			PENS_LOAD_ROWSUM.setSelectionModel(null);
 			exec = Executors.newCachedThreadPool((runnable) -> {
 				Thread t = new Thread(runnable);
 				t.setDaemon(true);
@@ -1759,12 +1760,12 @@ public class PensC {
 
 				if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
 					call = "ifrun60.exe I:/KERNEL/OPERLIST.fmx " + Connect.userID_ + "/" + Connect.userPassword_
-							+ "@odb-test2 WHERE=\" trunc(DTRNTRAN) = trunc((select f.DATE_LOAD from SBRA_PENS_LOAD_ROWSUM f where f.LOAD_ID = "
+							+ "@ODB WHERE=\" trunc(DTRNTRAN) = trunc((select f.DATE_LOAD from SBRA_PENS_LOAD_ROWSUM f where f.LOAD_ID = "
 							+ sel.getLOAD_ID() + ")) and ITRNBATNUM = 999 and CTRNPURP like '%{" + sel.getLOAD_ID()
 							+ "}%'\"";
 				} else {
 					call = "ifrun60.exe I:/KERNEL/OPERLIST.fmx " + Connect.userID_ + "/" + Connect.userPassword_
-							+ "@odb-test2 WHERE=\" trunc(DTRNTRAN) = trunc((select f.DATE_LOAD from SBRA_PENS_LOAD_ROWSUM f where f.LOAD_ID = "
+							+ "@ODB WHERE=\" trunc(DTRNTRAN) = trunc((select f.DATE_LOAD from SBRA_PENS_LOAD_ROWSUM f where f.LOAD_ID = "
 							+ sel.getLOAD_ID() + ")) and ITRNBATNUM = 996 and (CTRNPURP like '%{" + (sel.getLOAD_ID())
 							+ "}%' or CTRNPURP like '%{" + (sel.getLOAD_ID() + 1) + "}%')\"";
 				}
