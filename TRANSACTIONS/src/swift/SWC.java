@@ -34,6 +34,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Timer;
 import java.util.concurrent.Executor;
@@ -74,15 +75,19 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.RadioButton;
@@ -113,9 +118,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
+import javafx.util.Pair;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.LocalDateStringConverter;
 import javafx.util.converter.LocalDateTimeStringConverter;
+import sb.utils.DbUtil;
+import tr.pl.ConvConst;
 
 /**
  * SWIFT
@@ -359,7 +367,7 @@ public class SWC {
 	 */
 	@FXML
 	private TableColumn<SWIFT_FILES, String> FILE_NAMEdb;
-	
+
 	/**
 	 * Статус
 	 */
@@ -371,10 +379,8 @@ public class SWC {
 	 */
 	@FXML
 	private TableColumn<SWIFT_FILES, String> Typedb;
-
 	@FXML
 	private TableColumn<SWIFT_FILES, String> OPERdb;
-
 	@FXML
 	private TableColumn<SWIFT_FILES, String> REFdb;
 	/**
@@ -388,27 +394,32 @@ public class SWC {
 	 */
 	@FXML
 	private TableView<SWIFT_FILES> Achive;
-
 	@FXML
 	private TableColumn<VAVAL, String> CATTR_NAME;
-
 	@FXML
 	private TableColumn<VAVAL, String> CVALUE;
-
 	@FXML
 	private TableView<VAVAL> AVAL;
-
 	@FXML
 	private RadioButton SWIFT_VTB;
-
 	@FXML
 	private RadioButton BK_VTB;
-
 	@FXML
 	private DatePicker ConvTo;
-
 	@FXML
 	private DatePicker ConvFrom;
+
+	/**
+	 * MT202 20.09.2021
+	 */
+	@FXML
+	private TableView<VTB_202_ACC> VTB_202_ACC;
+	@FXML
+	private TableColumn<VTB_202_ACC, String> ACCOUNT_202;
+	@FXML
+	private TableColumn<VTB_202_ACC, String> CACCNAME;
+	@FXML
+	private TableColumn<VTB_202_ACC, String> KBNK;
 
 	@FXML
 	void OpenAbsForm(ActionEvent event) {
@@ -941,6 +952,264 @@ public class SWC {
 			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 		return ret;
+	}
+
+	/**
+	 * Initialize table MT202 20.09.2021 15:18
+	 */
+	@FXML
+	void LoadTableMT202Fx() {
+		try {
+			LoadTableMT202();
+		} catch (Exception e) {
+			sbalert.Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+	/**
+	 * Добавить счет MT202 20.09.2021 15:18
+	 */
+	@FXML
+	void AddAccMT202() {
+		try {
+
+			if (DbUtil.Odb_Action(83l) == 0) {
+				sbalert.Msg.Message("Нет доступа!");
+				return;
+			}
+
+			// Create the custom dialog.
+			Dialog<Pair<String, String>> dialog = new Dialog<>();
+			dialog.setTitle("Добавить счет");
+
+			Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+			stage.getIcons().add(new Image(this.getClass().getResource("/icon.png").toString()));
+
+			// Set the button types.
+			ButtonType loginButtonType = new ButtonType("OK", ButtonData.OK_DONE);
+			dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+
+			GridPane gridPane = new GridPane();
+			gridPane.setHgap(10);
+			gridPane.setVgap(10);
+			gridPane.setPadding(new Insets(20, 150, 10, 10));
+
+			TextField acc = new TextField();
+			acc.setPrefWidth(200);
+
+			gridPane.add(new Label("Счет:"), 0, 0);
+			gridPane.add(acc, 1, 0);
+
+			dialog.getDialogPane().setContent(gridPane);
+
+			Platform.runLater(() -> acc.requestFocus());
+			// Convert the result to
+			// clicked.
+			dialog.setResultConverter(dialogButton -> {
+				if (dialogButton == loginButtonType) {
+					return new Pair<>(acc.getText(), acc.getText());
+				}
+				return null;
+			});
+
+			Optional<Pair<String, String>> result = dialog.showAndWait();
+
+			result.ifPresent(pair -> {
+				final Alert alert = new Alert(AlertType.CONFIRMATION, "Сохранить ?", ButtonType.YES, ButtonType.NO);
+				if (sbalert.Msg.setDefaultButton(alert, ButtonType.NO).showAndWait()
+						.orElse(ButtonType.NO) == ButtonType.YES) {
+					try {
+						if (!acc.getText().equals("") |acc.getText().length() >=20 ) {
+							PreparedStatement prp = conn
+									.prepareCall("insert into sbra_vtb_mt202_acc (ACCOUNT_202) values (?)");
+							prp.setString(1, acc.getText());
+							prp.executeUpdate();
+							conn.commit();
+							prp.close();
+							// refresh
+							LoadTableMT202();
+						}else {
+							sbalert.Msg.Message("Длина счета < 20 или пусто!");
+						}
+						
+					} catch (Exception e) {
+						sbalert.Msg.Message(ExceptionUtils.getStackTrace(e));
+					}
+				}
+
+			});
+
+		} catch (Exception e) {
+			sbalert.Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+	/**
+	 * Редактировать счет MT202 20.09.2021 15:18
+	 */
+	@FXML
+	void EditAccMT202() {
+		try {
+
+			if (DbUtil.Odb_Action(84l) == 0) {
+				sbalert.Msg.Message("Нет доступа!");
+				return;
+			}
+
+			if (VTB_202_ACC.getSelectionModel().getSelectedItem() == null) {
+				sbalert.Msg.Message("Выберите строку!");
+			} else {
+				VTB_202_ACC sel = VTB_202_ACC.getSelectionModel().getSelectedItem();
+
+				// Create the custom dialog.
+				Dialog<Pair<String, String>> dialog = new Dialog<>();
+				dialog.setTitle("Редактировать счет \"" + sel.getACCOUNT_202() + "\"");
+
+				Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image(this.getClass().getResource("/icon.png").toString()));
+
+				// Set the button types.
+				ButtonType loginButtonType = new ButtonType("OK", ButtonData.OK_DONE);
+				dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+
+				GridPane gridPane = new GridPane();
+				gridPane.setHgap(10);
+				gridPane.setVgap(10);
+				gridPane.setPadding(new Insets(20, 150, 10, 10));
+
+				TextField acc = new TextField();
+				acc.setPrefWidth(200);
+				acc.setText(sel.getACCOUNT_202());
+
+				gridPane.add(new Label("Счет:"), 0, 0);
+				gridPane.add(acc, 1, 0);
+
+				dialog.getDialogPane().setContent(gridPane);
+
+				Platform.runLater(() -> acc.requestFocus());
+				// Convert the result to
+				// clicked.
+				dialog.setResultConverter(dialogButton -> {
+					if (dialogButton == loginButtonType) {
+						return new Pair<>(acc.getText(), acc.getText());
+					}
+					return null;
+				});
+
+				Optional<Pair<String, String>> result = dialog.showAndWait();
+
+				result.ifPresent(pair -> {
+					final Alert alert = new Alert(AlertType.CONFIRMATION, "Сохранить ?", ButtonType.YES, ButtonType.NO);
+					if (sbalert.Msg.setDefaultButton(alert, ButtonType.NO).showAndWait()
+							.orElse(ButtonType.NO) == ButtonType.YES) {
+						try {
+							
+							if (!acc.getText().equals("") |acc.getText().length() >=20 ) {
+								PreparedStatement prp = conn
+										.prepareCall("update sbra_vtb_mt202_acc set ACCOUNT_202 = ? where ACCOUNT_202 = ?");
+								prp.setString(1, acc.getText());
+								prp.setString(2, sel.getACCOUNT_202());
+								prp.executeUpdate();
+								conn.commit();
+								prp.close();
+								// refresh
+								LoadTableMT202();
+							}else {
+								sbalert.Msg.Message("Длина счета < 20 или пусто!");
+							}
+						} catch (Exception e) {
+							sbalert.Msg.Message(ExceptionUtils.getStackTrace(e));
+						}
+					}
+
+				});
+			}
+
+		} catch (Exception e) {
+			sbalert.Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+	/**
+	 * Удалить счет MT202 20.09.2021 15:18
+	 */
+	@FXML
+	void DelAccMT202() {
+		try {
+
+			if (DbUtil.Odb_Action(85l) == 0) {
+				sbalert.Msg.Message("Нет доступа!");
+				return;
+			}
+
+			if (VTB_202_ACC.getSelectionModel().getSelectedItem() == null) {
+				sbalert.Msg.Message("Выберите строку!");
+			} else {
+				VTB_202_ACC sel = VTB_202_ACC.getSelectionModel().getSelectedItem();
+				final Alert alert = new Alert(AlertType.CONFIRMATION, "Удалить счет \"" + sel.getACCOUNT_202() + "\" ?",
+						ButtonType.YES, ButtonType.NO);
+				if (sbalert.Msg.setDefaultButton(alert, ButtonType.NO).showAndWait()
+						.orElse(ButtonType.NO) == ButtonType.YES) {
+
+					PreparedStatement prp = conn.prepareCall("delete from sbra_vtb_mt202_acc where ACCOUNT_202 = ?");
+					prp.setString(1, sel.getACCOUNT_202());
+					prp.executeUpdate();
+
+					conn.commit();
+					prp.close();
+
+					// refresh
+					LoadTableMT202();
+				}
+			}
+		} catch (Exception e) {
+			sbalert.Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+	/**
+	 * Initialize table MT202 20.09.2021 15:18
+	 */
+	void LoadTableMT202() {
+		try {
+
+			// Prepared Statement
+			PreparedStatement prepStmt = conn.prepareStatement("select mt202.account_202,\r\n"
+					+ "       acc.caccname,\r\n"
+					+ "       (select '<' || nbnk_id || '>-' || '<' || cbnk_rbic || '>' || '<' ||\r\n"
+					+ "               cbnk_bic || '>' || '<' || cbnk_name || '>'\r\n" + "          from kbnk\r\n"
+					+ "         where nbnk_id = (select imcabank_id\r\n" + "                            from mca\r\n"
+					+ "                           where cmcaacc = account_202)) kbnk\r\n"
+					+ "  from sbra_vtb_mt202_acc mt202, acc\r\n" + " where acc.caccacc(+) = mt202.account_202\r\n" + "");
+			ResultSet rs = prepStmt.executeQuery();
+			ObservableList<VTB_202_ACC> cus_list = FXCollections.observableArrayList();
+			// looping
+			while (rs.next()) {
+				VTB_202_ACC list = new VTB_202_ACC();
+				list.setACCOUNT_202(rs.getString("ACCOUNT_202"));
+				list.setCACCNAME(rs.getString("CACCNAME"));
+				list.setKBNK(rs.getString("KBNK"));
+				cus_list.add(list);
+			}
+			// add data
+			VTB_202_ACC.setItems(cus_list);
+			// close
+			prepStmt.close();
+			rs.close();
+			// add filter
+			TableFilter<VTB_202_ACC> tableFilter = TableFilter.forTableView(VTB_202_ACC).apply();
+			tableFilter.setSearchStrategy((input, target) -> {
+				try {
+					return target.toLowerCase().contains(input.toLowerCase());
+				} catch (Exception e) {
+					return false;
+				}
+			});
+			// resize
+			autoResizeColumns(VTB_202_ACC);
+		} catch (Exception e) {
+			sbalert.Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
 	}
 
 	String InsertDB(LocalDate DOCDATE_, String SUMM_, String CUR_, String MTNAME_, String MTTYPE_, LocalDateTime DT_CH_,
@@ -1561,21 +1830,19 @@ public class SWC {
 		}
 	}
 
-	
-	
 	@FXML
 	private void ClearFilterArchive(ActionEvent event) {
 		dt1.setValue(null);
 		dt2.setValue(null);
 		ArchType.setValue(null);
 	}
-	
+
 	@FXML
 	private void ClearFilterConv(ActionEvent event) {
 		ConvFrom.setValue(null);
 		ConvTo.setValue(null);
 	}
-	
+
 	@FXML
 	private void ClearFilter(ActionEvent event) {
 		FileDate.setValue(null);
@@ -1748,8 +2015,8 @@ public class SWC {
 				@Override
 				public Object call() throws Exception {
 					try {
-						String call = "ifrun60.exe I:/KERNEL/OPERLIST.fmx " + Connect.userID_ + "/" + Connect.userPassword_
-								+ "@ODB WHERE=\"" + "ITRNNUM = " + selrow.getTRN_NUM() + "\"";
+						String call = "ifrun60.exe I:/KERNEL/OPERLIST.fmx " + Connect.userID_ + "/"
+								+ Connect.userPassword_ + "@ODB WHERE=\"" + "ITRNNUM = " + selrow.getTRN_NUM() + "\"";
 						ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", call);
 						System.out.println(call);
 						// System.out.println(call);
@@ -1781,11 +2048,11 @@ public class SWC {
 		}
 	}
 
-    @FXML
-    private Tab SETTINGS;
-    @FXML
-    private Tab CONV_VAL;
-    
+	@FXML
+	private Tab SETTINGS;
+	@FXML
+	private Tab CONV_VAL;
+
 	/**
 	 * Инициализация
 	 */
@@ -1793,38 +2060,38 @@ public class SWC {
 	@FXML
 	private void initialize() {
 		try {
-			
+
 			new ConvConst().FormatDatePiker(dt1);
 			new ConvConst().FormatDatePiker(dt2);
 			new ConvConst().FormatDatePiker(ConvFrom);
 			new ConvConst().FormatDatePiker(ConvTo);
 			new ConvConst().FormatDatePiker(FileDate);
 			new ConvConst().FormatDatePiker(DT2);
-			
-			//_________________________________________
+
+			// _________________________________________
 			dbConnect();
-			//_________________________________________
-			
-			//Check Grant
+			// _________________________________________
+
+			// Check Grant
 			{
 				CallableStatement cl = conn.prepareCall("{ ? = call SBRA_VTB_SWIF.GetOdbAction(?)}");
 				cl.registerOutParameter(1, Types.BIGINT);
-				cl.setInt(2, 3687);//Доступ к входящим сообщениям SWIFT
+				cl.setInt(2, 3687);// Доступ к входящим сообщениям SWIFT
 				cl.execute();
-				if(cl.getInt(1) == 0 ) {
+				if (cl.getInt(1) == 0) {
 					Msg.setSelected(true);
-					
+
 					DIRNAME.getItems().addAll("Msg", "Out", "Ack", "Kvt", "Other", "InLocal", "OutLocal");
 					DIRNAME.getSelectionModel().select(0);
 					FolderName = "SWIFT_MSG";
 					INOUT.setText("Входящие");
 					FolderN.setText("Входящие документы ВТБ " + System.getenv("SWIFT_MSG"));
-					
-				}else if(cl.getInt(1) == 1) {
+
+				} else if (cl.getInt(1) == 1) {
 					DIRNAME.getItems().addAll("Msg", "Out", "Ack", "Kvt", "Other", "InLocal", "OutLocal");
-					
+
 					DIRNAME.getSelectionModel().select("OutLocal");
-					
+
 					SETTINGS.setDisable(true);
 					CONV_VAL.setDisable(true);
 					DIRNAME.setDisable(true);
@@ -1833,16 +2100,16 @@ public class SWC {
 					InLocal.setDisable(true);
 					Msg.setDisable(true);
 					ArchiveInOut.setDisable(true);
-					//--
+					// --
 					OutLocal.setSelected(true);
-					
+
 					FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
 
 					FolderN.setText("Исходящие, локальный каталог " + System.getenv("SWIFT_OUTLOCAL"));
 				}
 				cl.close();
 			}
-			//__________________
+			// __________________
 
 			// SyntheticaFX.init("com.jyloo.syntheticafx.SyntheticaFXModena");
 
@@ -1880,6 +2147,12 @@ public class SWC {
 			CTRNACCC.setCellValueFactory(cellData -> cellData.getValue().CTRNACCCProperty());
 			MTRNSUM.setCellValueFactory(cellData -> cellData.getValue().MTRNSUMProperty().asObject());
 			CTRNCORACCO.setCellValueFactory(cellData -> cellData.getValue().CTRNCORACCOProperty());
+
+			// ________________________________________________
+			ACCOUNT_202.setCellValueFactory(cellData -> cellData.getValue().ACCOUNT_202Property());
+			KBNK.setCellValueFactory(cellData -> cellData.getValue().KBNKProperty());
+			CACCNAME.setCellValueFactory(cellData -> cellData.getValue().CACCNAMEProperty());
+			// _________________________________________________
 
 			CATTR_NAME.setCellValueFactory(cellData -> cellData.getValue().CATTR_NAMEProperty());
 			CVALUE.setCellValueFactory(cellData -> cellData.getValue().CVALUEProperty());
@@ -1943,8 +2216,6 @@ public class SWC {
 			});
 
 			CHK.setGraphic(selecteAllCheckBox);
-
-			
 
 //			addIfNotPresent(StPn.getStyleClass(), JMetroStyleClass.BACKGROUND);
 //			addIfNotPresent(STMT.getStyleClass(), JMetroStyleClass.TABLE_GRID_LINES);
@@ -2420,6 +2691,8 @@ public class SWC {
 			 * Load Date
 			 */
 			InitTable();
+			// 20.09.2021
+			LoadTableMT202();
 
 			/**
 			 * Auto Refresh Запуск задачи через одну секунду
@@ -2490,30 +2763,15 @@ public class SWC {
 				in_out = "and upper(VECTOR) = '" + ArchType.getValue() + "' \r\n";
 			}
 
-			String selectStmt = "SELECT ID,\r\n"
-					+ "       FILENAME,\r\n"
-					+ "       DT_CH,\r\n"
-					+ "       SWFILE,\r\n"
-					+ "       OPER,\r\n"
-					+ "       CR_DT,\r\n"
-					+ "       MTTYPE,\r\n"
-					+ "       MTNAME,\r\n"
-					+ "       CUR,\r\n"
-					+ "       VECTOR,\r\n"
-					+ "       NVL(SUMM, '') SUMM,\r\n"
-					+ "       DOCDATE,\r\n"
-					+ "       REF,\r\n"
-					+ "       CASE\r\n"
+			String selectStmt = "SELECT ID,\r\n" + "       FILENAME,\r\n" + "       DT_CH,\r\n" + "       SWFILE,\r\n"
+					+ "       OPER,\r\n" + "       CR_DT,\r\n" + "       MTTYPE,\r\n" + "       MTNAME,\r\n"
+					+ "       CUR,\r\n" + "       VECTOR,\r\n" + "       NVL(SUMM, '') SUMM,\r\n"
+					+ "       DOCDATE,\r\n" + "       REF,\r\n" + "       CASE\r\n"
 					+ "         WHEN VECTOR = 'OUT' THEN\r\n"
 					+ "          (SELECT CAST(LISTAGG_CLOB(J.IS_ACK_NAK) AS VARCHAR2(4000))\r\n"
-					+ "             FROM SWIFT_FILES_OTHERS J\r\n"
-					+ "            WHERE J.SW_REF = G.REF)\r\n"
-					+ "         ELSE\r\n"
-					+ "          NULL\r\n"
-					+ "       END STATUS\r\n"
-					+ "  FROM SWIFT_FILES G\r\n"
-					+ " where 1 = 1\r\n" + dt1_
-					+ dt2_ + in_out + "order by CR_DT desc";
+					+ "             FROM SWIFT_FILES_OTHERS J\r\n" + "            WHERE J.SW_REF = G.REF)\r\n"
+					+ "         ELSE\r\n" + "          NULL\r\n" + "       END STATUS\r\n" + "  FROM SWIFT_FILES G\r\n"
+					+ " where 1 = 1\r\n" + dt1_ + dt2_ + in_out + "order by CR_DT desc";
 			System.out.println(selectStmt);
 			PreparedStatement prepStmt = conn.prepareStatement(selectStmt);
 			ResultSet rs = prepStmt.executeQuery();
@@ -2548,14 +2806,14 @@ public class SWC {
 //			Platform.runLater(new Runnable() {
 //				@Override
 //				public void run() {
-					TableFilter<SWIFT_FILES> tableFilter = TableFilter.forTableView(Achive).apply();
-					tableFilter.setSearchStrategy((input, target) -> {
-						try {
-							return target.toLowerCase().contains(input.toLowerCase());
-						} catch (Exception e) {
-							return false;
-						}
-					});
+			TableFilter<SWIFT_FILES> tableFilter = TableFilter.forTableView(Achive).apply();
+			tableFilter.setSearchStrategy((input, target) -> {
+				try {
+					return target.toLowerCase().contains(input.toLowerCase());
+				} catch (Exception e) {
+					return false;
+				}
+			});
 //				}
 //			});
 
@@ -2636,19 +2894,21 @@ public class SWC {
 			String dt2_ = "";
 
 			if (ConvFrom.getValue() != null) {
-				dt1_ = "and trunc(DATETIME) >= to_date('" + ConvFrom.getValue().format(formatter) + "','dd.mm.yyyy') \r\n";
+				dt1_ = "and trunc(DATETIME) >= to_date('" + ConvFrom.getValue().format(formatter)
+						+ "','dd.mm.yyyy') \r\n";
 			}
 
 			if (ConvTo.getValue() != null) {
-				dt2_ = "and trunc(DATETIME) <= to_date('" + ConvTo.getValue().format(formatter) + "','dd.mm.yyyy') \r\n";
+				dt2_ = "and trunc(DATETIME) <= to_date('" + ConvTo.getValue().format(formatter)
+						+ "','dd.mm.yyyy') \r\n";
 			}
-			
-			PreparedStatement prepStmt = conn.prepareStatement("select REF,\r\n" + "       TRN_NUM,\r\n"
-					+ "       TRN_ANUM,\r\n" + "       F72,\r\n" + "       F58A,\r\n" + "       F53B,\r\n"
-					+ "       FL32A_DATE,\r\n" + "       FL32A_CUR,\r\n" + "       to_number(FL32A_SUM) FL32A_SUM,\r\n"
-					+ "       F21,\r\n" + "       FL58A_DETAIL,\r\n" + "       OPER,\r\n" + "       DATETIME,\r\n"
-					+ "       ID\r\n" + "  from VTB_MT202_CONV\r\n where 1=1 "+dt1_+" "+dt2_
-					+ " order by ID desc");
+
+			PreparedStatement prepStmt = conn
+					.prepareStatement("select REF,\r\n" + "       TRN_NUM,\r\n" + "       TRN_ANUM,\r\n"
+							+ "       F72,\r\n" + "       F58A,\r\n" + "       F53B,\r\n" + "       FL32A_DATE,\r\n"
+							+ "       FL32A_CUR,\r\n" + "       to_number(FL32A_SUM) FL32A_SUM,\r\n" + "       F21,\r\n"
+							+ "       FL58A_DETAIL,\r\n" + "       OPER,\r\n" + "       DATETIME,\r\n" + "       ID\r\n"
+							+ "  from VTB_MT202_CONV\r\n where 1=1 " + dt1_ + " " + dt2_ + " order by ID desc");
 			ResultSet rs = prepStmt.executeQuery();
 			ObservableList<VTB_MT202_CONV> cus_list = FXCollections.observableArrayList();
 			DateTimeFormatter dtformatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");

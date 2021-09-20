@@ -1607,6 +1607,11 @@ public class PensC {
 				Msg.Message("Выберите сначала данные из таблицы!");
 			} else {
 
+				if (DbUtil.Odb_Action(47l) == 0) {
+					Msg.Message("Нет доступа!");
+					return;
+				}
+				
 				PENS_LOAD_ROWSUM sel = PENS_LOAD_ROWSUM.getSelectionModel().getSelectedItem();
 
 				final Alert alert = new Alert(AlertType.CONFIRMATION, "Удалить файл \"" + sel.getFILE_NAME() + "\" ?",

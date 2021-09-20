@@ -30,7 +30,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane fx:id="StPn" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane fx:id="StPn" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.291" xmlns:fx="http://javafx.com/fxml/1">
 <children>
       <TabPane fx:id="RootTab" styleClass="floating" tabClosingPolicy="UNAVAILABLE">
         <tabs>
@@ -277,6 +277,9 @@
                                              </tooltip>
                                           </DatePicker>
                                       </items>
+                                       <VBox.margin>
+                                          <Insets bottom="5.0" />
+                                       </VBox.margin>
                                     </ToolBar>
                                  </children>
                               </VBox>
@@ -413,6 +416,9 @@
                                  </tooltip>
                               </Button>
                            </items>
+                           <BorderPane.margin>
+                              <Insets bottom="5.0" />
+                           </BorderPane.margin>
                         </ToolBar>
                      </top>
                      <padding>
@@ -462,7 +468,7 @@
                      <content>
                         <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
                            <children>
-                              <ToolBar style="-fx-border-color: silver;">
+                              <ToolBar style="-fx-border-color: silver;" VBox.vgrow="ALWAYS">
                                 <items>
                                   <Button mnemonicParsing="false" onAction="#REFR_CONV">
                                        <graphic>
@@ -495,6 +501,9 @@
                                        </font>
                                     </Button>
                                 </items>
+                                 <VBox.margin>
+                                    <Insets left="-10.0" right="-10.0" top="-10.0" />
+                                 </VBox.margin>
                               </ToolBar>
                               <TableView fx:id="CONV_TBL" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="mylistview" stylesheets="/TableView.css" VBox.vgrow="ALWAYS">
                                  <columns>
@@ -518,34 +527,108 @@
                <content>
                   <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
                      <children>
-                        <TitledPane alignment="CENTER" animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="ВТБ SWIFT настройка" VBox.vgrow="ALWAYS">
-                           <content>
-                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
-                                 <children>
-                                    <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" VBox.vgrow="ALWAYS">
+                        <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <TitledPane alignment="CENTER" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-border-color: black;" text="Счета для MT202 RUR" HBox.hgrow="ALWAYS">
+                                 <content>
+                                    <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
                                        <children>
-                                          <TableView fx:id="AVAL" prefHeight="250.0" prefWidth="350.0">
+                                          <ToolBar VBox.vgrow="ALWAYS">
+                                            <items>
+                                                <Button mnemonicParsing="false" onAction="#LoadTableMT202Fx">
+                                                   <graphic>
+                                                      <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="16" />
+                                                   </graphic>
+                                                   <tooltip>
+                                                      <Tooltip text="Редактировать" />
+                                                   </tooltip>
+                                                </Button>
+                                                <Separator orientation="VERTICAL" />
+                                                <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#AddAccMT202">
+                                                   <graphic>
+                                                      <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILE_ALT" size="16" />
+                                                   </graphic>
+                                                   <tooltip>
+                                                      <Tooltip text="Обновить" />
+                                                   </tooltip>
+                                                </Button>
+                                                <Separator layoutX="46.0" layoutY="10.0" orientation="VERTICAL" />
+                                                <Button layoutX="46.0" layoutY="10.0" mnemonicParsing="false" onAction="#EditAccMT202">
+                                                   <graphic>
+                                                      <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EDIT" size="16" />
+                                                   </graphic>
+                                                   <tooltip>
+                                                      <Tooltip text="Добавить" />
+                                                   </tooltip>
+                                                   <font>
+                                                      <Font size="10.0" />
+                                                   </font>
+                                                </Button>
+                                                <Separator layoutX="46.0" layoutY="10.0" orientation="VERTICAL" />
+                                                <Button layoutX="82.0" layoutY="10.0" mnemonicParsing="false" onAction="#DelAccMT202">
+                                                   <graphic>
+                                                      <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TRASH_ALT" size="16" />
+                                                   </graphic>
+                                                   <tooltip>
+                                                      <Tooltip text="Удалить" />
+                                                   </tooltip>
+                                                   <font>
+                                                      <Font size="10.0" />
+                                                   </font>
+                                                </Button>
+                                            </items>
+                                             <VBox.margin>
+                                                <Insets left="-10.0" right="-10.0" top="-10.0" />
+                                             </VBox.margin>
+                                          </ToolBar>
+                                          <TableView fx:id="VTB_202_ACC" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="250.0" VBox.vgrow="ALWAYS">
                                             <columns>
-                                              <TableColumn fx:id="CATTR_NAME" prefWidth="207.0" text="Параметр" />
-                                              <TableColumn fx:id="CVALUE" prefWidth="141.0" text="Значение" />
+                                              <TableColumn fx:id="ACCOUNT_202" prefWidth="75.0" text="Счет" />
+                                              <TableColumn fx:id="CACCNAME" prefWidth="100.0" text="Наименование" />
+                                                <TableColumn fx:id="KBNK" prefWidth="100.0" text="KBNK" />
                                             </columns>
-                                             <columnResizePolicy>
-                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                             </columnResizePolicy>
                                           </TableView>
-                                          <RadioButton fx:id="SWIFT_VTB" mnemonicParsing="false" onAction="#SWIFT_VTB" text="SWIFT" />
-                                          <RadioButton fx:id="BK_VTB" mnemonicParsing="false" onAction="#BK_VTB" text="Банк-Клиент" />
                                        </children>
-                                    </HBox>
-                                 </children>
-                              </VBox>
-                           </content>
-                        </TitledPane>
-                        <TitledPane alignment="CENTER" animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Документы у которых БИК был изменен на SWIFT" VBox.vgrow="ALWAYS">
+                                    </VBox>
+                                 </content>
+                              </TitledPane>
+                              <TitledPane alignment="CENTER" animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-border-color: black;" text="ВТБ SWIFT настройка" HBox.hgrow="ALWAYS">
+                                 <content>
+                                    <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+                                       <children>
+                                          <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" VBox.vgrow="ALWAYS">
+                                             <children>
+                                                <TableView fx:id="AVAL" prefHeight="250.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                                  <columns>
+                                                    <TableColumn fx:id="CATTR_NAME" prefWidth="207.0" text="Параметр" />
+                                                    <TableColumn fx:id="CVALUE" prefWidth="141.0" text="Значение" />
+                                                  </columns>
+                                                   <columnResizePolicy>
+                                                      <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                   </columnResizePolicy>
+                                                </TableView>
+                                                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+                                                   <HBox.margin>
+                                                      <Insets />
+                                                   </HBox.margin>
+                                                   <children>
+                                                      <RadioButton fx:id="SWIFT_VTB" mnemonicParsing="false" onAction="#SWIFT_VTB" text="SWIFT" />
+                                                      <RadioButton fx:id="BK_VTB" mnemonicParsing="false" onAction="#BK_VTB" text="Банк-Клиент" />
+                                                   </children>
+                                                </VBox>
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </VBox>
+                                 </content>
+                              </TitledPane>
+                           </children>
+                        </HBox>
+                        <TitledPane alignment="CENTER" animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-border-color: black;" text="Документы у которых БИК был изменен на SWIFT" VBox.vgrow="ALWAYS">
                            <content>
                               <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
                                  <children>
-                                    <ToolBar style="-fx-border-color: silver;">
+                                    <ToolBar VBox.vgrow="ALWAYS">
                                       <items>
                                         <Button fx:id="RESF_BIK_TO_SW_VTB" mnemonicParsing="false" onAction="#RESF_BIK_TO_SW_VTB">
                                              <graphic>
@@ -563,8 +646,11 @@
                                              </tooltip>
                                           </Button>
                                       </items>
+                                       <VBox.margin>
+                                          <Insets left="-10.0" right="-10.0" top="-10.0" />
+                                       </VBox.margin>
                                     </ToolBar>
-                                    <TableView fx:id="BIK_TO_SW_VTB" prefHeight="300.0" VBox.vgrow="ALWAYS">
+                                    <TableView fx:id="BIK_TO_SW_VTB" prefHeight="250.0" VBox.vgrow="ALWAYS">
                                       <columns>
                                         <TableColumn fx:id="BIK_TRN" prefWidth="90.0" text="БИК" />
                                         <TableColumn fx:id="SW_TRN" prefWidth="111.0" text="SWIFT" />
@@ -581,6 +667,9 @@
                            </content>
                         </TitledPane>
                      </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
                   </VBox>
                </content>
             </Tab>
