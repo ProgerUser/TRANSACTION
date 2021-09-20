@@ -675,6 +675,7 @@ public class PensC {
 				LoadComisss.setDisable(false);
 				OpenAbss.setDisable(false);
 				DelFilePens.setDisable(false);
+				TLB.setDisable(false);
 			});
 		} catch (Exception e) {
 			ShowMes(ExceptionUtils.getStackTrace(e));
@@ -691,6 +692,7 @@ public class PensC {
 				LoadComisss.setDisable(true);
 				OpenAbss.setDisable(true);
 				DelFilePens.setDisable(true);
+				TLB.setDisable(true);
 			});
 		} catch (Exception e) {
 			ShowMes(ExceptionUtils.getStackTrace(e));
