@@ -1455,11 +1455,11 @@ public class SWC {
 											moveFileWithOverwrite(sourceFolder, destinationFolder);
 											InitTable();
 											conn.commit();
-										} catch (IOException e) {
+										} catch (Exception e) {
 											conn.rollback();
 											SWLogger.error(ExceptionUtils.getStackTrace(e) + "~"
 													+ Thread.currentThread().getName());
-											ErrorMessage(ExceptionUtils.getStackTrace(e));
+											//ErrorMessage(ExceptionUtils.getStackTrace(e));
 										}
 									} else {
 										ErrorMessage(ret);
@@ -1480,7 +1480,7 @@ public class SWC {
 											conn.rollback();
 											SWLogger.error(ExceptionUtils.getStackTrace(e) + "~"
 													+ Thread.currentThread().getName());
-											ErrorMessage(ExceptionUtils.getStackTrace(e));
+											//ErrorMessage(ExceptionUtils.getStackTrace(e));
 										}
 									} else {
 										ErrorMessage(ret);

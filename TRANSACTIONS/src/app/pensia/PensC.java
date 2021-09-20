@@ -42,6 +42,9 @@ import org.mozilla.universalchardet.UniversalDetector;
 import app.model.Connect;
 import app.model.TerminalDAO;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
@@ -50,6 +53,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -60,12 +64,15 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
@@ -73,6 +80,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import javafx.util.Pair;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LocalDateTimeStringConverter;
@@ -124,6 +132,8 @@ public class PensC {
 	private TableColumn<PENS_LOAD_ROWSUM, String> FILE_NAME;
 	@FXML
 	private TableColumn<PENS_LOAD_ROWSUM, LocalDateTime> DATE_LOAD;
+	@FXML
+	private TableColumn<PENS_LOAD_ROWSUM, Boolean> CHK;
 
 	@FXML
 	private TableView<SBRA_YEAR_BET> SBRA_YEAR_BET;
@@ -162,6 +172,8 @@ public class PensC {
 	private Button Pens4083_40831;
 	@FXML
 	private Button DelFilePens;
+	@FXML
+	private ProgressIndicator PrgInd;
 
 	@FXML
 	void pensrachk(ActionEvent event) {
@@ -200,7 +212,6 @@ public class PensC {
 		}
 	}
 
-	@SuppressWarnings("unused")
 	private Executor exec;
 
 	DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
@@ -211,7 +222,6 @@ public class PensC {
 	@FXML
 	private void initialize() {
 		try {
-			PENS_LOAD_ROWSUM.setSelectionModel(null);
 			exec = Executors.newCachedThreadPool((runnable) -> {
 				Thread t = new Thread(runnable);
 				t.setDaemon(true);
@@ -389,37 +399,102 @@ public class PensC {
 			PENS_LOAD_ROWSUM.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> {
 				PENS_LOAD_ROWSUM sel = PENS_LOAD_ROWSUM.getSelectionModel().getSelectedItem();
 				if (sel != null) {
-					try {
-						// trn pl
-						{
-							PreparedStatement prp = conn.prepareCall("SELECT COUNT(*),sum(trn.MTRNRSUM)\r\n"
-									+ "  FROM TRN\r\n" + " WHERE trunc(DTRNTRAN) = TRUNC((SELECT F.DATE_LOAD\r\n"
-									+ "                            FROM SBRA_PENS_LOAD_ROWSUM F\r\n"
-									+ "                           WHERE F.LOAD_ID = ?))\r\n"
-									+ "   AND ITRNBATNUM = 996 AND (CTRNPURP LIKE '%{'||?||'}%' or CTRNPURP LIKE '%{'||?||'}%')");
-							prp.setLong(1, sel.getLOAD_ID());
-							prp.setLong(2, sel.getLOAD_ID());
-							prp.setLong(3, sel.getLOAD_ID() + 1);
-							ResultSet rs = prp.executeQuery();
-							if (rs.next()) {
-								if (rs.getLong(1) > 0) {
-									Pens4083_40831.setDisable(true);
-								} else {
-									Pens4083_40831.setDisable(false);
+					PrgInd.setVisible(true);
+					PENS_LOAD_ROWSUM.setDisable(true);
+					Task<Object> task = new Task<Object>() {
+						@Override
+						public Object call() throws Exception {
+							try {
+								// trn pl
+								{
+									PreparedStatement prp = conn.prepareCall("SELECT COUNT(*),sum(trn.MTRNRSUM)\r\n"
+											+ "  FROM TRN\r\n"
+											+ " WHERE trunc(DTRNTRAN) = TRUNC((SELECT F.DATE_LOAD\r\n"
+											+ "                            FROM SBRA_PENS_LOAD_ROWSUM F\r\n"
+											+ "                           WHERE F.LOAD_ID = ?))\r\n"
+											+ "   AND ITRNBATNUM = 996 AND (CTRNPURP LIKE '%{'||?||'}%' or CTRNPURP LIKE '%{'||?||'}%')");
+									prp.setLong(1, sel.getLOAD_ID());
+									prp.setLong(2, sel.getLOAD_ID());
+									prp.setLong(3, sel.getLOAD_ID() + 1);
+									ResultSet rs = prp.executeQuery();
+									if (rs.next()) {
+										if (rs.getLong(1) > 0) {
+											Pens4083_40831.setDisable(true);
+										} else {
+											Pens4083_40831.setDisable(false);
+										}
+									}
+									rs.close();
+									prp.close();
 								}
+								// Stat
+								Platform.runLater(() -> InitStat(sel.getLOAD_ID(), "null", "null"));
+								// init error
+								Platform.runLater(() -> PensError(sel.getLOAD_ID()));
+
+							} catch (Exception e) {
+								ShowMes(ExceptionUtils.getStackTrace(e));
 							}
-							rs.close();
-							prp.close();
+							return null;
 						}
-						// Stat
-						InitStat(sel.getLOAD_ID());
-						// init error
-						PensError(sel.getLOAD_ID());
-					} catch (Exception e) {
-						Msg.Message(ExceptionUtils.getStackTrace(e));
-					}
+					};
+					task.setOnFailed(e -> ShowMes(task.getException().getMessage()));
+					task.setOnSucceeded(e -> {
+						PrgInd.setVisible(false);
+						PENS_LOAD_ROWSUM.setDisable(false);
+					});
+					exec.execute(task);
 				}
 			});
+
+			// __________________
+//			CheckBox selecteAllCheckBox = new CheckBox();
+//			selecteAllCheckBox.setOnAction(event -> {
+//				event.consume();
+//				PENS_LOAD_ROWSUM.getItems().forEach(item -> item.setCHK(selecteAllCheckBox.isSelected()));
+//				LoadTablePensExec();
+//			});
+//
+//			CHK.setGraphic(selecteAllCheckBox);
+
+			CHK.setCellValueFactory(cellData -> cellData.getValue().CHKProperty());
+
+			// ==== CHK? (CHECH BOX) ===
+			CHK.setCellValueFactory(
+					new Callback<CellDataFeatures<PENS_LOAD_ROWSUM, Boolean>, ObservableValue<Boolean>>() {
+
+						@Override
+						public ObservableValue<Boolean> call(CellDataFeatures<PENS_LOAD_ROWSUM, Boolean> param) {
+							PENS_LOAD_ROWSUM person = param.getValue();
+
+							SimpleBooleanProperty booleanProp = new SimpleBooleanProperty(person.getCHK());
+
+							// Note: singleCol.setOnEditCommit(): Not work for
+							// CheckBoxTableCell.
+
+							// When "Single?" column change.
+							booleanProp.addListener(new ChangeListener<Boolean>() {
+
+								@Override
+								public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue,
+										Boolean newValue) {
+									person.setCHK(newValue);
+								}
+							});
+							return booleanProp;
+						}
+					});
+
+			CHK.setCellFactory(new Callback<TableColumn<PENS_LOAD_ROWSUM, Boolean>, //
+					TableCell<PENS_LOAD_ROWSUM, Boolean>>() {
+				@Override
+				public TableCell<PENS_LOAD_ROWSUM, Boolean> call(TableColumn<PENS_LOAD_ROWSUM, Boolean> p) {
+					CheckBoxTableCell<PENS_LOAD_ROWSUM, Boolean> cell = new CheckBoxTableCell<PENS_LOAD_ROWSUM, Boolean>();
+					cell.setAlignment(Pos.CENTER);
+					return cell;
+				}
+			});
+
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
@@ -617,7 +692,7 @@ public class PensC {
 							PENS_LOAD_ROWSUM.getSelectionModel().select(0);
 							PENS_LOAD_ROWSUM.scrollTo(0);
 							// Init
-							InitStat(id);
+							InitStat(id, "null", "null");
 						});
 
 						if (diff >= 30) {
@@ -631,7 +706,7 @@ public class PensC {
 							double prc = ((double) rec_cnt / all_cnt);
 							ProgressPens.setProgress(prc);
 							// Init
-							InitStat(id);
+							InitStat(id, "null", "null");
 						});
 
 						double prc = ((double) rec_cnt / all_cnt);
@@ -676,7 +751,7 @@ public class PensC {
 				LoadComisss.setDisable(false);
 				OpenAbss.setDisable(false);
 				DelFilePens.setDisable(false);
-				TLB.setDisable(false);
+				PTLB.setDisable(false);
 			});
 		} catch (Exception e) {
 			ShowMes(ExceptionUtils.getStackTrace(e));
@@ -693,7 +768,7 @@ public class PensC {
 				LoadComisss.setDisable(true);
 				OpenAbss.setDisable(true);
 				DelFilePens.setDisable(true);
-				TLB.setDisable(true);
+				PTLB.setDisable(true);
 			});
 		} catch (Exception e) {
 			ShowMes(ExceptionUtils.getStackTrace(e));
@@ -767,12 +842,24 @@ public class PensC {
 	/**
 	 * Initialize table
 	 */
-	void InitStat(Long ids) {
+	void InitStat(Long ids, String idss, String idss2) {
 		try {
-			PreparedStatement prepStmt = conn
-					.prepareStatement(DbUtil.Sql_From_Prop("/app/pensia/SQL.properties", "PensStat"));
-			prepStmt.setLong(1, ids);
-			ResultSet rs = prepStmt.executeQuery();
+			PreparedStatement prepStmt = null;
+			ResultSet rs = null;
+
+			if (idss.equals("null")) {
+				prepStmt = conn.prepareStatement(DbUtil.Sql_From_Prop("/app/pensia/SQL.properties", "PensStat"));
+				prepStmt.setLong(1, ids);
+				rs = prepStmt.executeQuery();
+			} else {
+				System.out.println(DbUtil.Sql_From_Prop("/app/pensia/SQL.properties", "PensStatList")
+						.replace("$list$", idss).replace("$list2$", idss2));
+
+				prepStmt = conn.prepareStatement(DbUtil.Sql_From_Prop("/app/pensia/SQL.properties", "PensStatList")
+						.replace("$list$", idss).replace("$list2$", idss2));
+				rs = prepStmt.executeQuery();
+			}
+
 			ObservableList<PENS_STAT> cus_list = FXCollections.observableArrayList();
 			while (rs.next()) {
 				PENS_STAT list = new PENS_STAT();
@@ -786,6 +873,8 @@ public class PensC {
 			// close
 			prepStmt.close();
 			rs.close();
+			// resize
+			autoResizeColumns(PENS_STAT);
 			// add filter
 			TableFilter<PENS_STAT> tableFilter = TableFilter.forTableView(PENS_STAT).apply();
 			tableFilter.setSearchStrategy((input, target) -> {
@@ -795,8 +884,6 @@ public class PensC {
 					return false;
 				}
 			});
-			// resize
-			autoResizeColumns(PENS_STAT);
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
@@ -879,7 +966,7 @@ public class PensC {
 		table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
 		table.getColumns().stream().forEach((column) -> {
 			// System.out.println(column.getText());
-			if (column.getText().equals("Количество строк")) {
+			if (column.getText().equals("Количество строк") | column.getText().equals("")) {
 
 			} else {
 				// Minimal width = columnheader
@@ -1166,6 +1253,7 @@ public class PensC {
 	public void RefreshDatePart() {
 		LoadTableSet();
 	}
+
 	/**
 	 * Редактировать часть
 	 */
@@ -1321,6 +1409,68 @@ public class PensC {
 				Msg.Message("From=" + pair.getKey() + ", To=" + pair.getValue());
 			});
 
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+	String load_id = "(";
+	String load_id2 = "(";
+
+	/**
+	 * Статистика по выделенным
+	 */
+	@FXML
+	public void SelStat(ActionEvent Event) {
+		try {
+			load_id = "(";
+			load_id2 = "(";
+			// Цикл по ячейкам
+			for (int i = 0; i < PENS_LOAD_ROWSUM.getItems().size(); i++) {
+				// Цикл по столбцам
+				for (int j = 0; j < PENS_LOAD_ROWSUM.getColumns().size(); j++) {
+					// Если Не пусто
+					if (PENS_LOAD_ROWSUM.getColumns().get(j).getCellData(i) != null) {
+						// Если выделена строка
+						if (j == 0) {
+							if ((Boolean) PENS_LOAD_ROWSUM.getColumns().get(j).getCellData(i) == true) {
+								if (PENS_LOAD_ROWSUM.getColumns().get(1).getCellData(i) != null) {
+									load_id = load_id + ((Long) PENS_LOAD_ROWSUM.getColumns().get(1).getCellData(i))
+											+ ",";
+									load_id2 = load_id2
+											+ (((Long) PENS_LOAD_ROWSUM.getColumns().get(1).getCellData(i)) + 1) + ",";
+								}
+							}
+						}
+					}
+				}
+			}
+			load_id = (load_id.substring(0, load_id.length() - 1)) + ")";
+			load_id2 = (load_id2.substring(0, load_id2.length() - 1)) + ")";
+			System.out.println(load_id);
+			System.out.println(load_id2);
+			// -------------------------------
+			if (!load_id.equals(")")) {
+				PrgInd.setVisible(true);
+				PENS_LOAD_ROWSUM.setDisable(true);
+				Task<Object> task = new Task<Object>() {
+					@Override
+					public Object call() throws Exception {
+						try {
+							InitStat(null, load_id, load_id2);
+						} catch (Exception e) {
+							ShowMes(ExceptionUtils.getStackTrace(e));
+						}
+						return null;
+					}
+				};
+				task.setOnFailed(e -> ShowMes(task.getException().getMessage()));
+				task.setOnSucceeded(e -> {
+					PrgInd.setVisible(false);
+					PENS_LOAD_ROWSUM.setDisable(false);
+				});
+				exec.execute(task);
+			}
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
@@ -1612,7 +1762,7 @@ public class PensC {
 					Msg.Message("Нет доступа!");
 					return;
 				}
-				
+
 				PENS_LOAD_ROWSUM sel = PENS_LOAD_ROWSUM.getSelectionModel().getSelectedItem();
 
 				final Alert alert = new Alert(AlertType.CONFIRMATION, "Удалить файл \"" + sel.getFILE_NAME() + "\" ?",

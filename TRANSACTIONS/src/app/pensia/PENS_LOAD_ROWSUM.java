@@ -1,13 +1,17 @@
 package app.pensia;
 
 import java.time.LocalDateTime;
+
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.LongProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class PENS_LOAD_ROWSUM {
+	private BooleanProperty CHK;
 	/** Нет данных */
 	private StringProperty FILE_NAME;
 	/** Нет данных */
@@ -20,10 +24,23 @@ public class PENS_LOAD_ROWSUM {
 	public PENS_LOAD_ROWSUM() {
 		this.FILE_NAME = new SimpleStringProperty();
 		this.ROW_COUNT = new SimpleLongProperty();
+		this.CHK = new SimpleBooleanProperty();
 		this.DATE_LOAD = new SimpleObjectProperty<>();
 		this.LOAD_ID = new SimpleLongProperty();
 	}
 
+	public void setCHK(Boolean CHK) {
+		this.CHK.set(CHK);
+	}
+	
+	public Boolean getCHK() {
+		return CHK.get();
+	}
+	
+	public BooleanProperty CHKProperty() {
+		return CHK;
+	}
+	
 	public void setFILE_NAME(String FILE_NAME) {
 		this.FILE_NAME.set(FILE_NAME);
 	}

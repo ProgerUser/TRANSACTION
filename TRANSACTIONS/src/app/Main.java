@@ -72,13 +72,13 @@ public class Main extends Application {
 				ConvVal();
 			}
 
-//			Connect.connectionURL_ = "10.111.64.21:1521/ODB";
-//			Connect.userID_ = "saidp";
-//			Connect.userPassword_ = "xxx";
+//			Connect.connectionURL_ = "10.111.64.24:1521/ODB";
+//			Connect.userID_ = "PENSIA";
+//			Connect.userPassword_ = "";
 //
 //			DbUtil.Db_Connect();
 //			DBUtil.dbConnect();
-
+//			sep();
 //			initRootLayout();
 //			showFirst();
 
