@@ -693,6 +693,7 @@ public class PensC {
 							PENS_LOAD_ROWSUM.scrollTo(0);
 							// Init
 							InitStat(id, "null", "null");
+							
 						});
 
 						if (diff >= 30) {
@@ -700,6 +701,7 @@ public class PensC {
 							Enabled();
 							System.out.println("<EndTask>");
 							ProgressPens.setProgress(0);
+							PENS_LOAD_ROWSUM.setDisable(false);
 						}
 					} else if (rs.getInt("t_pens_ex") > 0 & rs.getInt("t_pens_ex_st") == 0) {
 						Platform.runLater(() -> {
@@ -707,6 +709,7 @@ public class PensC {
 							ProgressPens.setProgress(prc);
 							// Init
 							InitStat(id, "null", "null");
+							PENS_LOAD_ROWSUM.setDisable(true);
 						});
 
 						double prc = ((double) rec_cnt / all_cnt);
@@ -1539,15 +1542,42 @@ public class PensC {
 		}
 	}
 
+	String sql = "";
+	String createfolder = "";
 	/**
 	 * Загрузить файл
 	 */
 	public void SaveComiss() {
 		try {
-
-			if (PENS_LOAD_ROWSUM.getSelectionModel().getSelectedItem() == null) {
-				Msg.Message("Выберите сначала данные из таблицы!");
-			} else {
+			load_id = "(";
+			load_id2 = "(";
+			// Цикл по ячейкам
+			for (int i = 0; i < PENS_LOAD_ROWSUM.getItems().size(); i++) {
+				// Цикл по столбцам
+				for (int j = 0; j < PENS_LOAD_ROWSUM.getColumns().size(); j++) {
+					// Если Не пусто
+					if (PENS_LOAD_ROWSUM.getColumns().get(j).getCellData(i) != null) {
+						// Если выделена строка
+						if (j == 0) {
+							if ((Boolean) PENS_LOAD_ROWSUM.getColumns().get(j).getCellData(i) == true) {
+								if (PENS_LOAD_ROWSUM.getColumns().get(1).getCellData(i) != null) {
+									load_id = load_id + ((Long) PENS_LOAD_ROWSUM.getColumns().get(1).getCellData(i))
+											+ ",";
+									load_id2 = load_id2
+											+ (((Long) PENS_LOAD_ROWSUM.getColumns().get(1).getCellData(i)) + 1) + ",";
+								}
+							}
+						}
+					}
+				}
+			}
+			load_id = (load_id.substring(0, load_id.length() - 1)) + ")";
+			load_id2 = (load_id2.substring(0, load_id2.length() - 1)) + ")";
+			System.out.println(load_id);
+			System.out.println(load_id2);
+			// -------------------------------
+			sql = "";
+			if (PENS_LOAD_ROWSUM.getSelectionModel().getSelectedItem() != null | !load_id.equals(")")) {
 				InputStream input = new FileInputStream(System.getenv("TRANSACT_PATH") + "connect.properties");
 				Properties prop = new Properties();
 				// load a properties file
@@ -1573,50 +1603,80 @@ public class PensC {
 				File file = fileChooser.showSaveDialog(null);
 
 				if (file != null) {
-
-					String createfolder = file.getParent() + "\\Комиссия_" + pens.getFILE_NAME() + ".xlsx";
-
-					PreparedStatement prp_part = conn.prepareStatement("with data_v as\n"
-							+ " (select regexp_substr(CTRNPURP, 'otd={\\d+}') otd, a.*\n" + "    from trn a\n"
-							+ "   where (trunc(a.DTRNTRAN),\n"
-							+ "          replace(substr(regexp_substr(CTRNPURP, 'id={\\d+}'), 5), '}', '')) in\n"
-							+ "         (select trunc(time_), id_\n" + "            from z_pens_cl\n"
-							+ "           where type_ = 'FIN'\n" + "             and ID_ = ?)\n"
-							+ "     and ITRNBATNUM = 997)\n" + "select otd,\n" + "       sum(MTRNRSUM) comm,\n"
-							+ "       count(MTRNRSUM) * 5 comm_mt,\n" + "       count(MTRNRSUM) * 1 comm_ba,\n"
-							+ "       sum(MTRNRSUM) - count(MTRNRSUM) * 5 - count(MTRNRSUM) * 1 comm_sb\n"
-							+ "  from data_v\n" + " group by otd\n" + " order by otd\n" + "");
-					prp_part.setLong(1, pens.getLOAD_ID());
-					ResultSet rs = prp_part.executeQuery();
-
-					SXSSFWorkbook wb = new SXSSFWorkbook(100);
-					Sheet sh = wb.createSheet("Таблица");
-					Row row = sh.createRow(0);
-					// header
-					row.createCell(0).setCellValue("OTD");
-					row.createCell(1).setCellValue("COMM");
-					row.createCell(2).setCellValue("COMM_MT");
-					row.createCell(3).setCellValue("COMM_BA");
-					row.createCell(4).setCellValue("COMM_SB");
-
-					int i = 0;
-					while (rs.next()) {
-						row = sh.createRow(i + 1);
-						row.createCell(0).setCellValue(rs.getString("OTD"));
-						row.createCell(1).setCellValue(rs.getDouble("COMM"));
-						row.createCell(2).setCellValue(rs.getDouble("COMM_MT"));
-						row.createCell(3).setCellValue(rs.getDouble("COMM_BA"));
-						row.createCell(4).setCellValue(rs.getDouble("COMM_SB"));
-						i++;
+					if (load_id.equals(")")) {
+						createfolder = file.getParent() + "\\Комиссия_" + pens.getFILE_NAME() + ".xlsx";
+						sql = "with data_v as\n"
+								+ " (select regexp_substr(CTRNPURP, 'otd={\\d+}') otd, a.*\n" + "    from trn a\n"
+								+ "   where (trunc(a.DTRNTRAN),\n"
+								+ "          replace(substr(regexp_substr(CTRNPURP, 'id={\\d+}'), 5), '}', '')) in\n"
+								+ "         (select trunc(time_), id_\n" + "            from z_pens_cl\n"
+								+ "           where type_ = 'FIN'\n" + "             and ID_ = "+pens.getLOAD_ID()+")\n"
+								+ "     and ITRNBATNUM = 997)\n" + "select otd,\n" + "       sum(MTRNRSUM) comm,\n"
+								+ "       count(MTRNRSUM) * 5 comm_mt,\n" + "       count(MTRNRSUM) * 1 comm_ba,\n"
+								+ "       sum(MTRNRSUM) - count(MTRNRSUM) * 5 - count(MTRNRSUM) * 1 comm_sb\n"
+								+ "  from data_v\n" + " group by otd\n" + " order by otd\n";
+					}else {
+						createfolder = file.getParent() + "\\Комиссия_" + load_id + ".xlsx";
+						sql = "with data_v as\n"
+								+ " (select regexp_substr(CTRNPURP, 'otd={\\d+}') otd, a.*\n" + "    from trn a\n"
+								+ "   where (trunc(a.DTRNTRAN),\n"
+								+ "          replace(substr(regexp_substr(CTRNPURP, 'id={\\d+}'), 5), '}', '')) in\n"
+								+ "         (select trunc(time_), id_\n" + "            from z_pens_cl\n"
+								+ "           where type_ = 'FIN'\n" + "             and ID_ in "+load_id+")\n"
+								+ "     and ITRNBATNUM = 997)\n" + "select otd,\n" + "       sum(MTRNRSUM) comm,\n"
+								+ "       count(MTRNRSUM) * 5 comm_mt,\n" + "       count(MTRNRSUM) * 1 comm_ba,\n"
+								+ "       sum(MTRNRSUM) - count(MTRNRSUM) * 5 - count(MTRNRSUM) * 1 comm_sb\n"
+								+ "  from data_v\n" + " group by otd\n" + " order by otd\n";
 					}
+					PrgInd.setVisible(true);
+					PENS_LOAD_ROWSUM.setDisable(true);
+					Task<Object> task = new Task<Object>() {
+						@Override
+						public Object call() throws Exception {
+							try {
+								
+								PreparedStatement prp_part = conn.prepareStatement(sql);
+								ResultSet rs = prp_part.executeQuery();
 
-					wb.write(new FileOutputStream(createfolder));
-					wb.close();
+								SXSSFWorkbook wb = new SXSSFWorkbook(100);
+								Sheet sh = wb.createSheet("Таблица");
+								Row row = sh.createRow(0);
+								// header
+								row.createCell(0).setCellValue("OTD");
+								row.createCell(1).setCellValue("COMM");
+								row.createCell(2).setCellValue("COMM_MT");
+								row.createCell(3).setCellValue("COMM_BA");
+								row.createCell(4).setCellValue("COMM_SB");
 
-					rs.close();
-					prp_part.close();
+								int i = 0;
+								while (rs.next()) {
+									row = sh.createRow(i + 1);
+									row.createCell(0).setCellValue(rs.getString("OTD"));
+									row.createCell(1).setCellValue(rs.getDouble("COMM"));
+									row.createCell(2).setCellValue(rs.getDouble("COMM_MT"));
+									row.createCell(3).setCellValue(rs.getDouble("COMM_BA"));
+									row.createCell(4).setCellValue(rs.getDouble("COMM_SB"));
+									i++;
+								}
+
+								wb.write(new FileOutputStream(createfolder));
+								wb.close();
+
+								rs.close();
+								prp_part.close();
+							} catch (Exception e) {
+								ShowMes(ExceptionUtils.getStackTrace(e));
+							}
+							return null;
+						}
+					};
+					task.setOnFailed(e -> ShowMes(task.getException().getMessage()));
+					task.setOnSucceeded(e -> {
+						PrgInd.setVisible(false);
+						PENS_LOAD_ROWSUM.setDisable(false);
+					});
+					exec.execute(task);
 				}
-
 			}
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
