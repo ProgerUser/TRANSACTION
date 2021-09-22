@@ -23,7 +23,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
-
 import javax.swing.filechooser.FileSystemView;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -53,10 +52,9 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -64,7 +62,6 @@ import javafx.stage.Stage;
 import sbalert.Msg;
 import swift.ConvConst;
 import trlist.Tr_Am_View_con;
-
 
 public class Amra_Transact {
 
@@ -104,9 +101,8 @@ public class Amra_Transact {
 	}
 
 	@FXML
-	private BorderPane ap1;
-	@FXML
-	private AnchorPane ap;
+	private TextArea DBMS;
+
 	@FXML
 	private TableColumn<Add_File, String> DateFile;
 	@FXML
@@ -155,7 +151,15 @@ public class Amra_Transact {
 				callStmt.setClob(2, clob);
 				callStmt.setString(3, file.getParent());
 				callStmt.setString(4, file.getName());
+
+//				try (DbmsOutputCapture capture = new DbmsOutputCapture(conn)) {
+//					//List<String> lines = capture.execute(callStmt);
+//					//DBMS.setText(String.join(", ", lines));
+//				} catch (Exception e) {
+//					Msg.Message(ExceptionUtils.getStackTrace(e));
+//				}
 				callStmt.execute();
+
 				reviewContent = callStmt.getString(1);
 
 				String[] parts = reviewContent.split(";");
@@ -366,7 +370,7 @@ public class Amra_Transact {
 	@FXML
 	void view_fn(ActionEvent event) {
 		LoadTable("", date_load.getValue());
-		
+
 		StatusFile.setCellFactory(col -> new TextFieldTableCell<Add_File, String>() {
 			@Override
 			public void updateItem(String item, boolean empty) {
@@ -463,7 +467,7 @@ public class Amra_Transact {
 
 					}
 					callStmt.close();
-					LoadTable("",date_load.getValue());
+					LoadTable("", date_load.getValue());
 				} else {
 					Msg.Message("Файле уже " + af.get_Status());
 				}
@@ -496,26 +500,13 @@ public class Amra_Transact {
 			if (dt != null) {
 				ldt = " and trunc(date_time) = to_date('" + ldt_ + "','dd.mm.yyyy')\n";
 			}
-			String selectStmt = "select sess_id,\n" + 
-			"       file_name,\n" + 
-			"       date_time,\n" +
-			"       fileclob,\n" + 
-			"       case\n" + 
-			"         when status = 0 then\n" + 
-			"          'Загружен'\n"+ 
-			"         when status = 1 then\n" +
-			"          'Разобран'\n" +
-			"         when status = 2 then\n"+ 
-			"          'Рассчитан'\n" + 
-			"       end status,\n" + 
-			"       path,\n"+ 
-			"       user_ "
-			+ "from Z_SB_FN_SESS_AMRA \n" + 
-			"where 1=1" + 
-			p_n + 
-			ldt + 
-			"order by date_time desc";
-			
+			String selectStmt = "select sess_id,\n" + "       file_name,\n" + "       date_time,\n"
+					+ "       fileclob,\n" + "       case\n" + "         when status = 0 then\n"
+					+ "          'Загружен'\n" + "         when status = 1 then\n" + "          'Разобран'\n"
+					+ "         when status = 2 then\n" + "          'Рассчитан'\n" + "       end status,\n"
+					+ "       path,\n" + "       user_ " + "from Z_SB_FN_SESS_AMRA \n" + "where 1=1" + p_n + ldt
+					+ "order by date_time desc";
+
 			PreparedStatement sqlStatement = DBUtil.conn.prepareStatement(selectStmt);
 			ResultSet rs = sqlStatement.executeQuery();
 			ObservableList<Add_File> trData = FXCollections.observableArrayList();
@@ -531,7 +522,7 @@ public class Amra_Transact {
 				trData.add(adf);
 			}
 			load_file.setItems(trData);
-			
+
 			TableFilter<Add_File> tableFilter = TableFilter.forTableView(load_file).apply();
 			tableFilter.setSearchStrategy((input, target) -> {
 				try {
@@ -545,9 +536,10 @@ public class Amra_Transact {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
-		
+
 	/**
 	 * Кодировка
+	 * 
 	 * @param file
 	 * @return
 	 */
@@ -573,6 +565,7 @@ public class Amra_Transact {
 
 	/**
 	 * запись в текстовый файл протокола загрузки
+	 * 
 	 * @param sessid
 	 * @param path
 	 */
@@ -643,9 +636,17 @@ public class Amra_Transact {
 
 					callStmt.registerOutParameter(1, Types.CLOB);
 					callStmt.setInt(2, Integer.parseInt(af.get_FileId()));
-
+					
+					//_________________________________________
 					callStmt.execute();
-
+//					try (DbmsOutputCapture capture = new DbmsOutputCapture(conn)) {
+//						//List<String> lines = capture.execute(callStmt);
+//						//DBMS.setText(String.join(", ", lines));
+//					} catch (Exception e) {
+//						Msg.Message(ExceptionUtils.getStackTrace(e));
+//					}
+					//_________________________________________
+					
 					reviewContent = callStmt.getClob(1);
 
 					char clobVal[] = new char[(int) reviewContent.length()];
@@ -677,7 +678,7 @@ public class Amra_Transact {
 					pb.start();
 
 					callStmt.close();
-					
+
 					LoadTable("", date_load.getValue());
 				} else if (af.get_Status().equals("Загружен")) {
 					Msg.Message("Файл не разобран!");
