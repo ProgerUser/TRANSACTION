@@ -462,6 +462,7 @@ public class Main extends Application {
 	/* Терминалы */
 	public static void Terminal() {
 		try {
+
 			Stage stage = new Stage();
 			Parent root;
 			root = FXMLLoader.load(Main.class.getResource("/app/terminals/Terminal.fxml"));
@@ -470,6 +471,7 @@ public class Main extends Application {
 			stage.setTitle("Терминалы");
 			stage.initOwner(primaryStage);
 			stage.show();
+
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}

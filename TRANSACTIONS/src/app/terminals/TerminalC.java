@@ -31,6 +31,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import sbalert.Msg;
+import sverka.SverkaC;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -83,7 +84,7 @@ public class TerminalC {
 	@FXML
 	private TableColumn<Z_SB_TERMINAL_AMRA_DBT, String> ADDRESS;
 	@FXML
-	private TableColumn<Z_SB_TERMINAL_AMRA_DBT, Long> DEPARTMENT;
+	private TableColumn<Z_SB_TERMINAL_AMRA_DBT, Integer> DEPARTMENT;
 	@FXML
 	private TableColumn<Z_SB_TERMINAL_AMRA_DBT, String> NAME;
 	@FXML
@@ -227,7 +228,7 @@ public class TerminalC {
 				list.setGENERAL_ACC(rs.getString("GENERAL_ACC"));
 				list.setACCOUNT(rs.getString("ACCOUNT"));
 				list.setADDRESS(rs.getString("ADDRESS"));
-				list.setDEPARTMENT(rs.getLong("DEPARTMENT"));
+				list.setDEPARTMENT(rs.getInt("DEPARTMENT"));
 				list.setNAME(rs.getString("NAME"));
 				cus_list.add(list);
 			}
@@ -255,12 +256,36 @@ public class TerminalC {
 	}
 
 	@FXML
-	void Update(ActionEvent actionEvent_) {
+	void Edit(ActionEvent actionEvent_) {
 		try {
 			if (SbTerminal.getSelectionModel().getSelectedItem() == null) {
 				Msg.Message("Выберите сначала данные из таблицы!\n");
 			} else {
-				Z_SB_TERMINAL_AMRA_DBT tr = SbTerminal.getSelectionModel().getSelectedItem();
+				Z_SB_TERMINAL_AMRA_DBT sel = SbTerminal.getSelectionModel().getSelectedItem();
+				
+				Stage stage = new Stage();
+				Stage stage_ = (Stage) vbox.getScene().getWindow();
+				FXMLLoader loader = new FXMLLoader();
+				loader.setLocation(getClass().getResource("/app/terminals/IUTerminal.fxml"));
+
+				EditTerm controller = new EditTerm();
+				controller.SetClass(sel);
+				loader.setController(controller);
+
+				Parent root = loader.load();
+				stage.setScene(new Scene(root));
+				stage.getIcons().add(new Image("icon.png"));
+				stage.setTitle("Редактировать: "+sel.getNAME());
+				stage.initOwner(stage_);
+				stage.setResizable(true);
+				stage.initModality(Modality.WINDOW_MODAL);
+				stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+					@Override
+					public void handle(WindowEvent paramT) {
+						
+					}
+				});
+				stage.show();
 			}
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));

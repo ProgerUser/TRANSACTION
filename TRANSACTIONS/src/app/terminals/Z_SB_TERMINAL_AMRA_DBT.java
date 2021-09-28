@@ -1,7 +1,7 @@
 package app.terminals;
 
-import javafx.beans.property.LongProperty;
-import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -25,7 +25,7 @@ public class Z_SB_TERMINAL_AMRA_DBT {
 	/** Адрес */
 	private StringProperty ADDRESS;
 	/** Отделение */
-	private LongProperty DEPARTMENT;
+	private IntegerProperty DEPARTMENT;
 	/** Название терминала */
 	private StringProperty NAME;
 
@@ -39,7 +39,7 @@ public class Z_SB_TERMINAL_AMRA_DBT {
 		this.GENERAL_ACC = new SimpleStringProperty();
 		this.ACCOUNT = new SimpleStringProperty();
 		this.ADDRESS = new SimpleStringProperty();
-		this.DEPARTMENT = new SimpleLongProperty();
+		this.DEPARTMENT = new SimpleIntegerProperty();
 		this.NAME = new SimpleStringProperty();
 	}
 
@@ -79,7 +79,7 @@ public class Z_SB_TERMINAL_AMRA_DBT {
 		this.ADDRESS.set(ADDRESS);
 	}
 
-	public void setDEPARTMENT(Long DEPARTMENT) {
+	public void setDEPARTMENT(Integer DEPARTMENT) {
 		this.DEPARTMENT.set(DEPARTMENT);
 	}
 
@@ -123,7 +123,7 @@ public class Z_SB_TERMINAL_AMRA_DBT {
 		return ADDRESS.get();
 	}
 
-	public Long getDEPARTMENT() {
+	public Integer getDEPARTMENT() {
 		return DEPARTMENT.get();
 	}
 
@@ -167,7 +167,7 @@ public class Z_SB_TERMINAL_AMRA_DBT {
 		return ADDRESS;
 	}
 
-	public LongProperty DEPARTMENTProperty() {
+	public IntegerProperty DEPARTMENTProperty() {
 		return DEPARTMENT;
 	}
 

@@ -15,7 +15,7 @@
    <ToolBar VBox.vgrow="ALWAYS">
       <items>
 
-				<Button id="searchEmpBtn" mnemonicParsing="false" onAction="#Search" prefWidth="35.0">
+				<Button id="searchEmpBtn" mnemonicParsing="false" onAction="#Search">
             <graphic>
                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="16" />
             </graphic>
@@ -28,7 +28,7 @@
             </tooltip></Button>
          <Separator orientation="VERTICAL" />
 
-				<Button id="searchEmpBtn" mnemonicParsing="false" onAction="#Add" prefWidth="35.0">
+				<Button id="searchEmpBtn" mnemonicParsing="false" onAction="#Add">
             <graphic>
                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILE_ALT" size="16" />
             </graphic>
@@ -40,7 +40,7 @@
                </Tooltip>
             </tooltip></Button>
          <Separator layoutX="49.0" layoutY="10.0" orientation="VERTICAL" />
-				<Button id="searchEmpBtn" mnemonicParsing="false" onAction="#Update" prefWidth="35.0">
+				<Button id="searchEmpBtn" mnemonicParsing="false" onAction="#Edit">
             <graphic>
                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EDIT" size="16" />
             </graphic>
@@ -52,7 +52,7 @@
                </Tooltip>
             </tooltip></Button>
          <Separator layoutX="98.0" layoutY="10.0" orientation="VERTICAL" />
-				<Button id="searchEmpBtn" mnemonicParsing="false" onAction="#Delete" prefWidth="35.0">
+				<Button id="searchEmpBtn" mnemonicParsing="false" onAction="#Delete">
             <graphic>
                <FontAwesomeIconView glyphName="TRASH_ALT" size="16" />
             </graphic>
@@ -64,7 +64,7 @@
                </Tooltip>
             </tooltip></Button>
          <Separator layoutX="147.0" layoutY="10.0" orientation="VERTICAL" />
-         <Button id="searchEmpBtn" layoutX="59.0" layoutY="10.0" mnemonicParsing="false" onAction="#Add" prefWidth="35.0">
+         <Button id="searchEmpBtn" layoutX="59.0" layoutY="10.0" mnemonicParsing="false" onAction="#Add">
             <graphic>
                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="COPY" size="16" />
             </graphic>
@@ -87,16 +87,16 @@
 					</columnResizePolicy>
 					<columns>
 						<TableColumn fx:id="NAME" prefWidth="53.0" text="ID терминала" />
-						<TableColumn fx:id="DEPARTMENT" prefWidth="45.0" text="DEPARTMENT" />
-						<TableColumn fx:id="ADDRESS" prefWidth="133.0" text="ADDRESS" />
-						<TableColumn fx:id="ACCOUNT" text="ACCOUNT" />
-						<TableColumn fx:id="GENERAL_ACC" text="GENERAL_ACC" />
-						<TableColumn fx:id="CRASH_ACC" minWidth="0.0" prefWidth="0.0" text="CRASH_ACC" />
-						<TableColumn fx:id="DEAL_ACC" prefWidth="170.0" text="DEAL_ACC" />
-						<TableColumn fx:id="GENERAL_COMIS" text="GENERAL_COMIS" />
-						<TableColumn fx:id="CLEAR_SUM" text="CLEAR_SUM" />
-						<TableColumn fx:id="INCOME" minWidth="0.0" prefWidth="0.0" text="INCOME" />
-         <TableColumn fx:id="SDNAME" minWidth="0.0" prefWidth="60.0" text="SDNAME" />
+						<TableColumn fx:id="DEPARTMENT" prefWidth="45.0" text="Отделение" />
+						<TableColumn fx:id="ADDRESS" prefWidth="133.0" text="Адрес" />
+						<TableColumn fx:id="ACCOUNT" text="Счет терминала" />
+						<TableColumn fx:id="GENERAL_ACC" text="Общий счет" />
+						<TableColumn fx:id="CRASH_ACC" minWidth="0.0" prefWidth="0.0" text="Счет аварии" />
+						<TableColumn fx:id="DEAL_ACC" prefWidth="170.0" text="Счет дачи" />
+						<TableColumn fx:id="GENERAL_COMIS" text="Счет общей комиссии" />
+						<TableColumn fx:id="CLEAR_SUM" text="Счет чистой суммы" />
+						<TableColumn fx:id="INCOME" minWidth="0.0" prefWidth="0.0" text="Счет нашей комиссии" />
+         <TableColumn fx:id="SDNAME" minWidth="0.0" prefWidth="60.0" text="ID в каб. дилера" />
 					</columns>
 				</TableView>
    <padding>
