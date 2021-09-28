@@ -47,45 +47,41 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			/* log4j */
+			// log4j
 			DOMConfigurator.configure(getClass().getResource("/log4j.xml"));
 			Main.primaryStage = primaryStage;
 			primaryStage.getIcons().add(new Image("icon.png"));
 			Main.primaryStage.setTitle("Транзакции");
 			logger.setLevel(Level.INFO);
-			// System.out.println(MODULE);
 
-			if (MODULE == null) {
-				Enter();
-			} else if (MODULE.equals("DEBTINFO")) {
+//			if (MODULE == null) {
+//				Enter();
+//			} else if (MODULE.equals("DEBTINFO")) {
+//				DBUtil.dbConnect();
+//				Debtinfo();
+//			} else if (MODULE.equals("BUH")) {
+//				DBUtil.dbConnect();
+//				initRootLayout();
+//				showFirst();
+//			} else if (MODULE.equals("SWIFT")) {
+//				DBUtil.dbConnect();
+//				swift2();
+//			} else if (MODULE.equals("VTB_CONV")) {
+//				DBUtil.dbConnect();
+//				ConvVal();
+//			}
+			
+			{
+				Connect.connectionURL_ = "10.111.64.21:1521/ODB";
+				Connect.userID_ = "SAIDP";
+				Connect.userPassword_ = "VECTOR165";
+				DbUtil.Db_Connect();
 				DBUtil.dbConnect();
-				Debtinfo();
-			} else if (MODULE.equals("BUH")) {
-				DBUtil.dbConnect();
-				initRootLayout();
-				showFirst();
-			} else if (MODULE.equals("SWIFT")) {
-				DBUtil.dbConnect();
-				swift2();
-			} else if (MODULE.equals("VTB_CONV")) {
-				DBUtil.dbConnect();
-				ConvVal();
+//				initRootLayout();
+//				showFirst();
+				Terminal();
 			}
-
-//			Connect.connectionURL_ = "10.111.64.21:1521/ODB";
-//			Connect.userID_ = "AMRA_IMPORT";
-//			Connect.userPassword_ = "VER8I";
-
-//			DbUtil.Db_Connect();
-//			DBUtil.dbConnect();
-//			Transact_Amra();
-//			sep();
-//			initRootLayout();
-//			showFirst();
-
-//			swift2();
-//			ConvVal();
-
+			
 			primaryStage.setOnCloseRequest(e -> {
 				DBUtil.dbDisconnect();
 				DbUtil.Db_Disconnect();
@@ -466,22 +462,14 @@ public class Main extends Application {
 	/* Терминалы */
 	public static void Terminal() {
 		try {
-			/*
-			 * FXMLLoader loader = new FXMLLoader();
-			 * loader.setLocation(Main.class.getResource("view/Terminal.fxml")); BorderPane
-			 * employeeOperationsView = (BorderPane) loader.load();
-			 * rootLayout.setCenter(employeeOperationsView);
-			 */
-
 			Stage stage = new Stage();
 			Parent root;
-			root = FXMLLoader.load(Main.class.getResource("view/Terminal.fxml"));
+			root = FXMLLoader.load(Main.class.getResource("/app/terminals/Terminal.fxml"));
 			stage.setScene(new Scene(root));
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("Терминалы");
 			stage.initOwner(primaryStage);
 			stage.show();
-
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
