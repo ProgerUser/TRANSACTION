@@ -5,7 +5,6 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-//import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,11 +16,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
@@ -32,35 +33,40 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import net.sf.jasperreports.engine.JRException;
+import sb.utils.DbUtil;
 import sbalert.Msg;
+import swift.SWIFT_FILES;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.controlsfx.control.table.TableFilter;
-
 import app.Main;
 import app.model.Amra_Trans;
 import app.model.Connect;
-import app.model.ServiceClass;
 import app.model.TerminalClass;
 import app.model.TerminalForCombo;
 import app.model.TransactClass;
 import app.model.ViewerDAO;
+import app.terminals.AddTerm;
+import app.terminals.EditTerm;
+import app.terminals.Z_SB_TERMINAL_AMRA_DBT;
 import app.util.DBUtil;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -75,65 +81,75 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Саид 04.04.2019.
+ * Саид 04.04.2019. <br>
+ * 29.09.2021
  */
 @SuppressWarnings("unused")
 public class ServiceC {
 	@FXML
-	private TableView<ServiceClass> employeeTable;
+	private TableView<Z_SB_TERMSERV_AMRA_DBT> Service;
 	@FXML
-	private ComboBox<String> terms;
+	private ComboBox<String> Terminals;
 	@FXML
-	private TableColumn<ServiceClass, String> acc_name;
+	private Text TermName;
 	@FXML
-	private TableColumn<ServiceClass, String> acc_rec;
+	private Button DelFilter;
 	@FXML
-	private TableColumn<ServiceClass, String> account;
+	private TableColumn<Z_SB_TERMSERV_AMRA_DBT, Long> ID;
 	@FXML
-	private TableColumn<ServiceClass, String> idterm;
+	private TableColumn<Z_SB_TERMSERV_AMRA_DBT, String> ACC_NAME;
 	@FXML
-	private TableColumn<ServiceClass, String> inn;
+	private TableColumn<Z_SB_TERMSERV_AMRA_DBT, String> ACC_REC;
 	@FXML
-	private TableColumn<ServiceClass, String> kbk;
+	private TableColumn<Z_SB_TERMSERV_AMRA_DBT, String> ACCOUNT;
 	@FXML
-	private TableColumn<ServiceClass, String> kpp;
+	private TableColumn<Z_SB_TERMSERV_AMRA_DBT, String> IDTERM;
 	@FXML
-	private TableColumn<ServiceClass, String> name;
+	private TableColumn<Z_SB_TERMSERV_AMRA_DBT, String> INN;
 	@FXML
-	private TableColumn<ServiceClass, String> okato;
+	private TableColumn<Z_SB_TERMSERV_AMRA_DBT, String> KBK;
 	@FXML
-	private TableColumn<ServiceClass, String> bo1;
+	private TableColumn<Z_SB_TERMSERV_AMRA_DBT, String> KPP;
 	@FXML
-	private TableColumn<ServiceClass, String> bo2;
+	private TableColumn<Z_SB_TERMSERV_AMRA_DBT, String> NAME;
 	@FXML
-	private TableColumn<ServiceClass, String> comission;
-	
+	private TableColumn<Z_SB_TERMSERV_AMRA_DBT, String> OKATO;
+	@FXML
+	private TableColumn<Z_SB_TERMSERV_AMRA_DBT, Integer> BO1;
+	@FXML
+	private TableColumn<Z_SB_TERMSERV_AMRA_DBT, Integer> BO2;
+	@FXML
+	private TableColumn<Z_SB_TERMSERV_AMRA_DBT, Double> COMISSION;
 	private Executor exec;
 
+	/**
+	 * Инициализация
+	 */
 	@FXML
 	private void initialize() {
 		try {
-			employeeTable.setEditable(true);
-			
+			Service.setEditable(true);
+
 			exec = Executors.newCachedThreadPool((runnable) -> {
 				Thread t = new Thread(runnable);
 				t.setDaemon(true);
 				return t;
 			});
-			
-			acc_name.setCellValueFactory(cellData -> cellData.getValue().acc_nameProperty());
-			acc_rec.setCellValueFactory(cellData -> cellData.getValue().acc_recProperty());
-			account.setCellValueFactory(cellData -> cellData.getValue().accountProperty());
-			idterm.setCellValueFactory(cellData -> cellData.getValue().idtermProperty());
-			inn.setCellValueFactory(cellData -> cellData.getValue().innProperty());
-			kbk.setCellValueFactory(cellData -> cellData.getValue().kbkProperty());
-			kpp.setCellValueFactory(cellData -> cellData.getValue().kppProperty());
-			name.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-			okato.setCellValueFactory(cellData -> cellData.getValue().okatoProperty());
-			bo1.setCellValueFactory(cellData -> cellData.getValue().bo1Property());
-			bo2.setCellValueFactory(cellData -> cellData.getValue().bo2Property());
-			comission.setCellValueFactory(cellData -> cellData.getValue().comissionProperty());
 
+			ACC_NAME.setCellValueFactory(cellData -> cellData.getValue().ACC_NAMEProperty());
+			ACC_REC.setCellValueFactory(cellData -> cellData.getValue().ACC_RECProperty());
+			ACCOUNT.setCellValueFactory(cellData -> cellData.getValue().ACCOUNTProperty());
+			IDTERM.setCellValueFactory(cellData -> cellData.getValue().IDTERMProperty());
+			INN.setCellValueFactory(cellData -> cellData.getValue().INNProperty());
+			KBK.setCellValueFactory(cellData -> cellData.getValue().KBKProperty());
+			KPP.setCellValueFactory(cellData -> cellData.getValue().KPPProperty());
+			NAME.setCellValueFactory(cellData -> cellData.getValue().NAMEProperty());
+			OKATO.setCellValueFactory(cellData -> cellData.getValue().OKATOProperty());
+			BO1.setCellValueFactory(cellData -> cellData.getValue().BO1Property().asObject());
+			BO2.setCellValueFactory(cellData -> cellData.getValue().BO2Property().asObject());
+			COMISSION.setCellValueFactory(cellData -> cellData.getValue().COMISSIONProperty().asObject());
+			ID.setCellValueFactory(cellData -> cellData.getValue().IDProperty().asObject());
+			// ____________________________________
 			{
 				Statement sqlStatement = DBUtil.conn.createStatement();
 				String readRecordSQL = "select NAME from Z_SB_TERMINAL_AMRA_DBT t";
@@ -142,16 +158,106 @@ public class ServiceC {
 				while (rs.next()) {
 					combolist.add(rs.getString("NAME"));
 				}
-				terms.setItems(combolist);
-				terms.getSelectionModel().select(0);
+				Terminals.setItems(combolist);
+				// Terminals.getSelectionModel().select(0);
 				rs.close();
 				sqlStatement.close();
 			}
+			// ---------------
+			NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
+			DecimalFormatSymbols decimalFormatSymbols = ((DecimalFormat) currencyFormat).getDecimalFormatSymbols();
+			decimalFormatSymbols.setCurrencySymbol("");
+			((DecimalFormat) currencyFormat).setDecimalFormatSymbols(decimalFormatSymbols);
+			COMISSION.setCellFactory(tc -> new TableCell<Z_SB_TERMSERV_AMRA_DBT, Double>() {
+
+				@Override
+				protected void updateItem(Double price, boolean empty) {
+					super.updateItem(price, empty);
+					if (empty) {
+						setText(null);
+					} else {
+						setText(currencyFormat.format(price));
+					}
+				}
+			});
+			LoadTable();
+
+			Service.setRowFactory(tv -> {
+				TableRow<Z_SB_TERMSERV_AMRA_DBT> row = new TableRow<>();
+				row.setOnMouseClicked(event -> {
+					if (event.getClickCount() == 2 && (!row.isEmpty())) {
+						Z_SB_TERMSERV_AMRA_DBT rowData = row.getItem();
+						Edit(null);
+					}
+				});
+				return row;
+			});
+
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
+	/**
+	 * Initialize table
+	 */
+	void LoadTable() {
+		try {
+			// System.out.println(Terminals.getSelectionModel().getSelectedItem());
+			String term = "";
+			if (Terminals.getSelectionModel().getSelectedItem() != null) {
+				term = " and IDTERM = '" + Terminals.getSelectionModel().getSelectedItem() + "'";
+			}
+
+			String selectStmt = "select * from Z_SB_TERMSERV_AMRA_DBT t where 1=1 " + term + " order by IDTERM";
+			PreparedStatement prepStmt = DBUtil.conn.prepareStatement(selectStmt);
+			ResultSet rs = prepStmt.executeQuery();
+			ObservableList<Z_SB_TERMSERV_AMRA_DBT> cus_list = FXCollections.observableArrayList();
+			while (rs.next()) {
+				Z_SB_TERMSERV_AMRA_DBT list = new Z_SB_TERMSERV_AMRA_DBT();
+				list.setCOMISSION(rs.getDouble("COMISSION"));
+				list.setBO2(rs.getInt("BO2"));
+				list.setBO1(rs.getInt("BO1"));
+				list.setACC_NAME(rs.getString("ACC_NAME"));
+				list.setOKATO(rs.getString("OKATO"));
+				list.setKBK(rs.getString("KBK"));
+				list.setACC_REC(rs.getString("ACC_REC"));
+				list.setKPP(rs.getString("KPP"));
+				list.setINN(rs.getString("INN"));
+				list.setACCOUNT(rs.getString("ACCOUNT"));
+				list.setIDTERM(rs.getString("IDTERM"));
+				list.setNAME(rs.getString("NAME"));
+				list.setID(rs.getLong("ID"));
+				cus_list.add(list);
+			}
+			// add data
+			Service.setItems(cus_list);
+
+			// close
+			prepStmt.close();
+			rs.close();
+
+			// add filter
+			TableFilter<Z_SB_TERMSERV_AMRA_DBT> tableFilter = TableFilter.forTableView(Service).apply();
+			tableFilter.setSearchStrategy((input, target) -> {
+				try {
+					return target.toLowerCase().contains(input.toLowerCase());
+				} catch (Exception e) {
+					return false;
+				}
+			});
+			// resize
+			autoResizeColumns(Service);
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+	/**
+	 * Авто расширение
+	 * 
+	 * @param table
+	 */
 	public static void autoResizeColumns(TableView<?> table) {
 		// Set the right policy
 		table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
@@ -185,25 +291,141 @@ public class ServiceC {
 	 * @param actionEvent
 	 */
 	@FXML
-	void searchService(ActionEvent actionEvent) {
-
-	}
-
-	@FXML
-	void Delete(ActionEvent actionEvent_) {
-		if (employeeTable.getSelectionModel().getSelectedItem() != null) {
-			ServiceClass tr = employeeTable.getSelectionModel().getSelectedItem();
+	void Refresh(ActionEvent actionEvent) {
+		try {
+			LoadTable();
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
 
 	@FXML
-	void UpdateService(ActionEvent actionEvent_) {
-		if (employeeTable.getSelectionModel().getSelectedItem() != null) {
-			ServiceClass tr = employeeTable.getSelectionModel().getSelectedItem();
+	void Delete(ActionEvent actionEvent) {
+		try {
+			if (DbUtil.Odb_Action(124l) == 0) {
+				Msg.Message("Нет доступа!");
+				return;
+			}
+			if (Service.getSelectionModel().getSelectedItem() != null) {
+				Z_SB_TERMSERV_AMRA_DBT tr = Service.getSelectionModel().getSelectedItem();
+			}
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
 
 	@FXML
-	void add(ActionEvent actionEvent_) {
+	void Edit(ActionEvent actionEvent) {
+		try {
+			if (DbUtil.Odb_Action(123l) == 0) {
+				Msg.Message("Нет доступа!");
+				return;
+			}
+			if (Service.getSelectionModel().getSelectedItem() != null) {
+				Z_SB_TERMSERV_AMRA_DBT sel = Service.getSelectionModel().getSelectedItem();
+				
+				Stage stage = new Stage();
+				Stage stage_ = (Stage) Service.getScene().getWindow();
+				FXMLLoader loader = new FXMLLoader();
+				loader.setLocation(getClass().getResource("/app/termserv/IUService.fxml"));
+
+				EditServ controller = new EditServ();
+				controller.SetClass(sel);
+				loader.setController(controller);
+
+				Parent root = loader.load();
+				stage.setScene(new Scene(root));
+				stage.getIcons().add(new Image("icon.png"));
+				stage.setTitle("Редактировать: " + sel.getNAME());
+				stage.initOwner(stage_);
+				stage.setResizable(true);
+				//stage.initModality(Modality.WINDOW_MODAL);
+				stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+					@Override
+					public void handle(WindowEvent paramT) {
+						LoadTable();
+					}
+				});
+				stage.show();
+			}
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+		}
+	}
+
+	@FXML
+	void DelFilter(ActionEvent actionEvent) {
+		try {
+			TermName.setText("");
+			Terminals.getSelectionModel().select(null);
+			LoadTable();
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+		}
+	}
+
+	@FXML
+	void Terminals(ActionEvent actionEvent) {
+		try {
+			{
+				Statement sqlStatement = DBUtil.conn.createStatement();
+				String readRecordSQL = "select 'Отд. \"' || DEPARTMENT || '\", адр. \"' || ADDRESS || '\"' otdadr\r\n"
+						+ "  from Z_SB_TERMINAL_AMRA_DBT t where name = '"
+						+ Terminals.getSelectionModel().getSelectedItem() + "'";
+				// System.out.println(readRecordSQL);
+				ResultSet rs = sqlStatement.executeQuery(readRecordSQL);
+				ObservableList<String> combolist = FXCollections.observableArrayList();
+				if (rs.next()) {
+					TermName.setText(rs.getString("otdadr"));
+				}
+				rs.close();
+				sqlStatement.close();
+			}
+			LoadTable();
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+		}
+	}
+
+	@FXML
+	void Add(ActionEvent actionEvent) {
+		try {
+			if (DbUtil.Odb_Action(122l) == 0) {
+				Msg.Message("Нет доступа!");
+				return;
+			}
+
+			Stage stage = new Stage();
+			Stage stage_ = (Stage) Service.getScene().getWindow();
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(getClass().getResource("/app/termserv/IUService.fxml"));
+
+			AddServ controller = new AddServ();
+			loader.setController(controller);
+
+			Parent root = loader.load();
+			stage.setScene(new Scene(root));
+			stage.getIcons().add(new Image("icon.png"));
+			stage.setTitle("Добавить сервис");
+			stage.initOwner(stage_);
+			stage.setResizable(true);
+			//stage.initModality(Modality.WINDOW_MODAL);
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent paramT) {
+					LoadTable();
+				}
+			});
+			stage.show();
+			
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+		}
 	}
 }

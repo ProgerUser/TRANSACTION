@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import sbalert.Msg;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -61,13 +62,7 @@ public class ViewerDAO {
 				tr.setperiod(rs.getString("period"));
 			}
 		} catch (SQLException e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText(ExceptionUtils.getStackTrace(e));
-			alert.showAndWait();
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 		return tr;
 	}
@@ -152,18 +147,6 @@ public class ViewerDAO {
 		return empList;
 	}
 
-	// *******************************
-	// SELECT Service
-	// *******************************
-	public static ObservableList<ServiceClass> searchService(String idterm) {
-		String selectStmt = "select * from Z_SB_TERMSERV_AMRA_DBT t\n\r" + "where idterm = '" + idterm + "'\n\r";
-		// Get ResultSet from dbExecuteQuery method
-		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
-		// Send ResultSet to the getEmployeeList method and get employee object
-		ObservableList<ServiceClass> empList = getServiceList(rsEmps);
-		// Return employee object
-		return empList;
-	}
 
 	// Select * from transact operation
 	private static ObservableList<TransactClass> getEmployeeList(ResultSet rs) {
@@ -190,51 +173,12 @@ public class ViewerDAO {
 				empList.add(tr);
 			}
 		} catch (SQLException e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText(ExceptionUtils.getStackTrace(e));
-			alert.showAndWait();
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 		// return empList (ObservableList of Employees)
 		return empList;
 	}
 
-	// Select * from transact operation
-	private static ObservableList<ServiceClass> getServiceList(ResultSet rs) {
-		// Declare a observable List which comprises of Employee objects
-		ObservableList<ServiceClass> empList = FXCollections.observableArrayList();
-		try {
-			while (rs.next()) {
-				ServiceClass sr = new ServiceClass();
-				sr.setname(rs.getString("name"));
-				sr.setacc_name(rs.getString("acc_name"));
-				sr.setacc_rec(rs.getString("acc_rec"));
-				sr.setaccount(rs.getString("account"));
-				sr.setidterm(rs.getString("idterm"));
-				sr.setinn(rs.getString("inn"));
-				sr.setkbk(rs.getString("kbk"));
-				sr.setkpp(rs.getString("kpp"));
-				sr.setokato(rs.getString("okato"));
-				sr.setbo1(rs.getString("bo1"));
-				sr.setbo2(rs.getString("bo2"));
-				sr.setcomission(rs.getString("comission"));
-				empList.add(sr);
-			}
-		} catch (SQLException e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText(ExceptionUtils.getStackTrace(e));
-			alert.showAndWait();
-		}
-		// return empList (ObservableList of Employees)
-		return empList;
-	}
 
 	// Select * from transact operation
 	private static ObservableList<TerminalClass> getTerminallist(ResultSet rs) {
@@ -256,13 +200,7 @@ public class ViewerDAO {
 				empList.add(tr);
 			}
 		} catch (SQLException e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText(ExceptionUtils.getStackTrace(e));
-			alert.showAndWait();
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 		// return empList (ObservableList of Employees)
 		return empList;
@@ -282,13 +220,7 @@ public class ViewerDAO {
 				empList.add(tr);
 			}
 		} catch (SQLException e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText(ExceptionUtils.getStackTrace(e));
-			alert.showAndWait();
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 
 		}
 		// return empList (ObservableList of Employees)

@@ -17,6 +17,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -57,6 +58,7 @@ import org.controlsfx.control.table.TableFilter;
 import app.Main;
 import app.model.Amra_Trans;
 import app.model.ViewerDAO;
+import app.termserv.Z_SB_TERMSERV_AMRA_DBT;
 import app.util.DBUtil;
 import contact.SBRA_CONTACT_ACC_CODE;
 
@@ -136,6 +138,17 @@ public class TerminalC {
 			SDNAME.setCellValueFactory(cellData -> cellData.getValue().SDNAMEProperty());
 			//
 			LoadTable();
+			//
+			SbTerminal.setRowFactory(tv -> {
+				TableRow<Z_SB_TERMINAL_AMRA_DBT> row = new TableRow<>();
+				row.setOnMouseClicked(event -> {
+					if (event.getClickCount() == 2 && (!row.isEmpty())) {
+						Z_SB_TERMINAL_AMRA_DBT rowData = row.getItem();
+						Edit(null);
+					}
+				});
+				return row;
+			});
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
