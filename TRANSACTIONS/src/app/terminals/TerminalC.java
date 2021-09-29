@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -19,6 +20,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
@@ -30,6 +32,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import sb.utils.DbUtil;
 import sbalert.Msg;
 import sverka.SverkaC;
 
@@ -195,12 +198,21 @@ public class TerminalC {
 	@FXML
 	void Delete(ActionEvent actionEvent_) {
 		try {
-			if (SbTerminal.getSelectionModel().getSelectedItem() == null) {
-				Msg.Message("Выберите сначала данные из таблицы!\n");
-			} else {
-				Z_SB_TERMINAL_AMRA_DBT tr = SbTerminal.getSelectionModel().getSelectedItem();
 
+			if (DbUtil.Odb_Action(104l) == 0) {
+				Msg.Message("Нет доступа!");
+				return;
 			}
+
+			if (SbTerminal.getSelectionModel().getSelectedItem() != null) {
+				Z_SB_TERMINAL_AMRA_DBT sel = SbTerminal.getSelectionModel().getSelectedItem();
+				final Alert alert = new Alert(AlertType.CONFIRMATION, "Удалить \"" + sel.getNAME() + "\" ?",
+						ButtonType.YES, ButtonType.NO);
+				if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
+
+				}
+			}
+
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
@@ -258,11 +270,16 @@ public class TerminalC {
 	@FXML
 	void Edit(ActionEvent actionEvent_) {
 		try {
-			if (SbTerminal.getSelectionModel().getSelectedItem() == null) {
-				Msg.Message("Выберите сначала данные из таблицы!\n");
-			} else {
+
+			if (DbUtil.Odb_Action(103l) == 0) {
+				Msg.Message("Нет доступа!");
+				return;
+			}
+
+			if (SbTerminal.getSelectionModel().getSelectedItem() != null) {
+
 				Z_SB_TERMINAL_AMRA_DBT sel = SbTerminal.getSelectionModel().getSelectedItem();
-				
+
 				Stage stage = new Stage();
 				Stage stage_ = (Stage) vbox.getScene().getWindow();
 				FXMLLoader loader = new FXMLLoader();
@@ -275,14 +292,14 @@ public class TerminalC {
 				Parent root = loader.load();
 				stage.setScene(new Scene(root));
 				stage.getIcons().add(new Image("icon.png"));
-				stage.setTitle("Редактировать: "+sel.getNAME());
+				stage.setTitle("Редактировать: " + sel.getNAME());
 				stage.initOwner(stage_);
 				stage.setResizable(true);
-				stage.initModality(Modality.WINDOW_MODAL);
+				//stage.initModality(Modality.WINDOW_MODAL);
 				stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 					@Override
 					public void handle(WindowEvent paramT) {
-						
+						LoadTable();
 					}
 				});
 				stage.show();
@@ -296,6 +313,33 @@ public class TerminalC {
 	@FXML
 	void Add(ActionEvent actionEvent_) {
 		try {
+			if (DbUtil.Odb_Action(102l) == 0) {
+				Msg.Message("Нет доступа!");
+				return;
+			}
+
+			Stage stage = new Stage();
+			Stage stage_ = (Stage) vbox.getScene().getWindow();
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(getClass().getResource("/app/terminals/IUTerminal.fxml"));
+
+			AddTerm controller = new AddTerm();
+			loader.setController(controller);
+
+			Parent root = loader.load();
+			stage.setScene(new Scene(root));
+			stage.getIcons().add(new Image("icon.png"));
+			stage.setTitle("Добавить терминал");
+			stage.initOwner(stage_);
+			stage.setResizable(true);
+			//stage.initModality(Modality.WINDOW_MODAL);
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent paramT) {
+					LoadTable();
+				}
+			});
+			stage.show();
 
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));

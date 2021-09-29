@@ -63,19 +63,6 @@
                   </font>
                </Tooltip>
             </tooltip></Button>
-         <Separator layoutX="147.0" layoutY="10.0" orientation="VERTICAL" />
-         <Button id="searchEmpBtn" layoutX="59.0" layoutY="10.0" mnemonicParsing="false" onAction="#Add">
-            <graphic>
-               <FontAwesomeIconView fontSmoothingType="LCD" glyphName="COPY" size="16" />
-            </graphic>
-            <tooltip>
-               <Tooltip text="Клонировать">
-                  <font>
-                     <Font size="14.0" />
-                  </font>
-               </Tooltip>
-            </tooltip>
-         </Button>
       </items>
       <VBox.margin>
          <Insets left="-5.0" right="-5.0" top="-5.0" />

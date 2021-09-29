@@ -2,9 +2,14 @@ package app.terminals;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Types;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
+
 import app.Main;
 import app.util.DBUtil;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,7 +22,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import sbalert.Msg;
 
-public class EditTerm {
+public class AddTerm {
 
 	@FXML
 	private TextField NAME;
@@ -92,51 +97,49 @@ public class EditTerm {
 	void Ok(ActionEvent event) {
 		try {
 			PreparedStatement prp = DBUtil.conn.prepareStatement(""
-					+ "update Z_SB_TERMINAL_AMRA_DBT "
-					+ "DEPARTMENT = ?,\r\n"
-					+ "ADDRESS = ?,\r\n"
-					+ "ACCOUNT = ?,\r\n"
-					+ "GENERAL_ACC = ?,\r\n"
-					+ "CRASH_ACC = ?,\r\n"
-					+ "DEAL_ACC = ?,\r\n"
-					+ "GENERAL_COMIS = ?,\r\n"
-					+ "CLEAR_SUM = ?,\r\n"
-					+ "INCOME = ?,\r\n"
-					+ "SDNAME  = ? 'r'n"
-					+ "where NAME = ?");
-			prp.setInt(1, DEPARTMENT.getSelectionModel().getSelectedItem());
-			prp.setString(2, ADDRESS.getText());
-			prp.setString(3, ACCOUNT.getText());
-			prp.setString(4, GENERAL_ACC.getText());
-			prp.setString(5, CRASH_ACC.getText());
-			prp.setString(6, DEAL_ACC.getText());
-			prp.setString(7, GENERAL_COMIS.getText());
-			prp.setString(8, CLEAR_SUM.getText());
-			prp.setString(9, INCOME.getText());
-			prp.setString(10, SDNAME.getText());
-			prp.setString(11, this.term.getNAME());
+					+ "insert into z_sb_terminal_amra_dbt\r\n"
+					+ "  (name,\r\n"
+					+ "   department,\r\n"
+					+ "   address,\r\n"
+					+ "   account,\r\n"
+					+ "   general_acc,\r\n"
+					+ "   crash_acc,\r\n"
+					+ "   deal_acc,\r\n"
+					+ "   general_comis,\r\n"
+					+ "   clear_sum,\r\n"
+					+ "   income,\r\n"
+					+ "   sdname)\r\n"
+					+ "values\r\n"
+					+ "  (?,?,?,?,?,?,?,?,?,?,?)");
+			//----------------------------------
+			prp.setString(1, NAME.getText());
+			
+			if (DEPARTMENT.getSelectionModel().getSelectedItem() != null) {
+				prp.setInt(2, DEPARTMENT.getSelectionModel().getSelectedItem());
+			} else {
+				prp.setNull(2, Types.NUMERIC);
+			}
+			
+			prp.setString(3, ADDRESS.getText());
+			prp.setString(4, ACCOUNT.getText());
+			prp.setString(5, GENERAL_ACC.getText());
+			prp.setString(6, CRASH_ACC.getText());
+			prp.setString(7, DEAL_ACC.getText());
+			prp.setString(8, GENERAL_COMIS.getText());
+			prp.setString(9, CLEAR_SUM.getText());
+			prp.setString(10, INCOME.getText());
+			prp.setString(11, SDNAME.getText());
 			prp.executeUpdate();
 			//-----------------------------------
 			OnClose();
+			//-----------------------------------
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
 
-	/**
-	 * класс
-	 */
-	Z_SB_TERMINAL_AMRA_DBT term = null;
 
-	void SetClass(Z_SB_TERMINAL_AMRA_DBT term) {
-		try {
-			this.term = term;
-		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
-			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
-		}
-	}
 
 	/**
 	 * Получить название счета
@@ -168,11 +171,6 @@ public class EditTerm {
 	@FXML
 	private void initialize() {
 		try {
-			this.ACCOUNT.setText(term.getACCOUNT());
-			this.ADDRESS.setText(term.getADDRESS());
-			this.CLEAR_SUM.setText(term.getCLEAR_SUM());
-			this.CRASH_ACC.setText(term.getCRASH_ACC());
-			this.DEAL_ACC.setText(term.getDEAL_ACC());
 			// ------------------------
 			ObservableList<Integer> otd = FXCollections.observableArrayList();
 			{
@@ -186,22 +184,55 @@ public class EditTerm {
 			}
 			// -----------------------------
 			this.DEPARTMENT.setItems(otd);
-			this.DEPARTMENT.getSelectionModel().select(term.getDEPARTMENT());
-			this.GENERAL_ACC.setText(term.getGENERAL_ACC());
-			this.GENERAL_COMIS.setText(term.getGENERAL_COMIS());
-			this.INCOME.setText(term.getINCOME());
-			this.NAME.setText(term.getNAME());
-			this.Ok.setText("Сохранить");
-			this.SDNAME.setText(term.getSDNAME());
-			// ---------------------------------------
-			this.ACCOUNT_T.setText(GetAccName(term.getACCOUNT()));
-			this.GENERAL_ACC_T.setText(GetAccName(term.getGENERAL_ACC()));
-			this.CRASH_ACC_T.setText(GetAccName(term.getCRASH_ACC()));
-			this.DEAL_ACC_T.setText(GetAccName(term.getDEAL_ACC()));
-			this.GENERAL_COMIS_T.setText(GetAccName(term.getGENERAL_COMIS()));
-			this.CLEAR_SUM_T.setText(GetAccName(term.getCLEAR_SUM()));
-			this.INCOME_T.setText(GetAccName(term.getINCOME()));
-			//----------------------------------------
+			NAME.setEditable(true);
+			//----------------
+			AfterLosteFocus(ACCOUNT);
+			AfterLosteFocus(GENERAL_ACC);
+			AfterLosteFocus(CRASH_ACC);
+			AfterLosteFocus(DEAL_ACC);
+			AfterLosteFocus(GENERAL_COMIS);
+			AfterLosteFocus(CLEAR_SUM);
+			AfterLosteFocus(INCOME);
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+		}
+	}
+	
+	/**
+	 * После потери фокуса
+	 * @param txtfld
+	 */
+	void AfterLosteFocus(TextField txtfld) {
+		try {
+			txtfld.focusedProperty().addListener(new ChangeListener<Boolean>() {
+				@Override
+				public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue,
+						Boolean newPropertyValue) {
+					if (newPropertyValue == true) {
+						// Text field on focus
+					} else {
+						// Text field out focus
+						if (!txtfld.getText().equals("") & txtfld.getText().length() >= 20) {
+							if(txtfld.getId().equals("ACCOUNT")) {
+								ACCOUNT_T.setText(GetAccName(txtfld.getText()));
+							}else if(txtfld.getId().equals("GENERAL_ACC")) {
+								GENERAL_ACC_T.setText(GetAccName(txtfld.getText()));
+							}else if(txtfld.getId().equals("CRASH_ACC")) {
+								CRASH_ACC_T.setText(GetAccName(txtfld.getText()));
+							}else if(txtfld.getId().equals("DEAL_ACC")) {
+								DEAL_ACC_T.setText(GetAccName(txtfld.getText()));
+							}else if(txtfld.getId().equals("GENERAL_COMIS")) {
+								GENERAL_COMIS_T.setText(GetAccName(txtfld.getText()));
+							}else if(txtfld.getId().equals("CLEAR_SUM")) {
+								CLEAR_SUM_T.setText(GetAccName(txtfld.getText()));
+							}else if(txtfld.getId().equals("INCOME")) {
+								INCOME_T.setText(GetAccName(txtfld.getText()));
+							}
+						}
+					}
+				}
+			});
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());

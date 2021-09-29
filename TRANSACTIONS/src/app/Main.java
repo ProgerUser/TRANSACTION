@@ -79,7 +79,8 @@ public class Main extends Application {
 				DBUtil.dbConnect();
 //				initRootLayout();
 //				showFirst();
-				Terminal();
+				//Terminal();
+				Service();
 			}
 			
 			primaryStage.setOnCloseRequest(e -> {
@@ -503,14 +504,9 @@ public class Main extends Application {
 	/* Услуги */
 	public static void Service() {
 		try {
-			// FXMLLoader loader = new FXMLLoader();
-			// loader.setLocation(Main.class.getResource("view/Service.fxml"));
-			// BorderPane employeeOperationsView = (BorderPane) loader.load();
-			// rootLayout.setCenter(employeeOperationsView);
-
 			Stage stage = new Stage();
 			Parent root;
-			root = FXMLLoader.load(Main.class.getResource("view/Service.fxml"));
+			root = FXMLLoader.load(Main.class.getResource("/app/termserv/Service.fxml"));
 			stage.setScene(new Scene(root));
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("Сервисы");

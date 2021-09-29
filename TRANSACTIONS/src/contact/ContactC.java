@@ -66,35 +66,26 @@ public class ContactC {
 	// Table
 	@FXML
 	private TableView<SBRA_LOADF_CONTACT> SBRA_LOADF_CONTACT;
-
 	@FXML
 	private TableColumn<SBRA_LOADF_CONTACT, String> LD_FILENAME;
-
 	@FXML
 	private TableColumn<SBRA_LOADF_CONTACT, Long> LOAD_ID;
-
 	@FXML
 	private TableColumn<SBRA_LOADF_CONTACT, LocalDateTime> LOAD_DATE;
-
 	@FXML
 	private TableColumn<SBRA_LOADF_CONTACT, String> LD_USER;
 
 	// ---------------------
 	@FXML
 	private TableView<SBRA_CONTACT_ACC_CODE> SBRA_CONTACT_ACC_CODE;
-
 	@FXML
 	private TableColumn<SBRA_CONTACT_ACC_CODE, String> COD_;
-
 	@FXML
 	private TableColumn<SBRA_CONTACT_ACC_CODE, String> CODE_NAME;
-
 	@FXML
 	private TableColumn<SBRA_CONTACT_ACC_CODE, String> ACC_701;
-
 	@FXML
 	private TableColumn<SBRA_CONTACT_ACC_CODE, String> CACCNAME;
-
 	@FXML
 	private TableColumn<SBRA_CONTACT_ACC_CODE, Long> IACCOTD;
 	// --------------------------
