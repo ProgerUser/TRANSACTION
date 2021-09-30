@@ -2127,7 +2127,7 @@ public class Tr_Am_View_con {
 	}
 
 	@FXML
-	void show_rel(ActionEvent event) {
+	void show_rel(ActionEvent event) throws ClassNotFoundException {
 		Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
 		if (!(fn.get_checkparent() == null)) {
 			ObservableList<Amra_Trans> trData = TerminalDAO.Amra_Trans_rel(fn.get_checknumber(), fn.get_checkparent());

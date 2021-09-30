@@ -32,7 +32,6 @@ select trn.MTRNRSUM SUMM, trunc(trn.DTRNCREATE) DT, 'Сбер' N
        trn.CTRNACCC = '30110810100000000003')
    and trn.MTRNRSUM in
        (select ST_SUM from table(z_sb_create_tr_amra.STMT_CHECK(?)))
-			
 			]]></value>
 		</entry>
 	</sqls>

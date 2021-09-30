@@ -240,7 +240,7 @@ public class Debt_InfoController {
 	}
 
 	@FXML
-	void b101(ActionEvent event) {
+	void b101(ActionEvent event) throws ClassNotFoundException {
 		Button Update = new Button();
 		Update.setText("Выбрать");
 		Update.setLayoutX(29.0);
@@ -305,7 +305,7 @@ public class Debt_InfoController {
 	}
 
 	@FXML
-	void b104(ActionEvent event) {
+	void b104(ActionEvent event) throws ClassNotFoundException {
 
 		Button Update = new Button();
 		Update.setText("Выбрать");
@@ -369,7 +369,7 @@ public class Debt_InfoController {
 	}
 
 	@FXML
-	void b106(ActionEvent event) {
+	void b106(ActionEvent event) throws ClassNotFoundException {
 		Button Update = new Button();
 		Update.setText("Выбрать");
 		Update.setLayoutX(29.0);
@@ -432,7 +432,7 @@ public class Debt_InfoController {
 	}
 
 	@FXML
-	void b107(ActionEvent event) {
+	void b107(ActionEvent event) throws ClassNotFoundException {
 		Button Update = new Button();
 		Update.setText("Выбрать");
 		Update.setLayoutX(29.0);
@@ -503,7 +503,7 @@ public class Debt_InfoController {
 	}
 	
 	@FXML
-	void b110(ActionEvent event) {
+	void b110(ActionEvent event) throws ClassNotFoundException {
 		Button Update = new Button();
 		Update.setText("Выбрать");
 		Update.setLayoutX(29.0);

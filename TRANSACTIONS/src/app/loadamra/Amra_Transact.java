@@ -14,7 +14,6 @@ import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.text.DateFormat;
@@ -23,6 +22,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+
 import javax.swing.filechooser.FileSystemView;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -362,7 +362,7 @@ public class Amra_Transact {
 			} else {
 				Msg.Message("Выберите строку!");
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}

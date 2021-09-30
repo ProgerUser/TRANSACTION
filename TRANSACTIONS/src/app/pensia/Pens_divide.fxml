@@ -37,7 +37,7 @@
                                        </font></Tooltip>
                         			</tooltip>
                                  <graphic>
-                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FOLDER_OPEN_ALT" size="16" />
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FOLDER_OPEN_ALT" size="15" />
                                  </graphic>
                                  <font>
                                     <Font size="10.0" />
@@ -52,7 +52,7 @@
                                        </font></Tooltip>
                         			</tooltip>
                                  <graphic>
-                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILE_EXCEL_ALT" size="16" />
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILE_EXCEL_ALT" size="15" />
                                  </graphic>
                         		</Button>
                               <Separator orientation="VERTICAL" />
@@ -64,7 +64,7 @@
                                        </font></Tooltip>
                                  </tooltip>
                                  <graphic>
-                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TRASH_ALT" size="16" />
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TRASH_ALT" size="15" />
                                  </graphic>
                               </Button>
                               <Separator layoutX="86.0" layoutY="10.0" orientation="VERTICAL" />
@@ -115,7 +115,7 @@
                                                 </Tooltip>
                                              </tooltip>
                                              <graphic>
-                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FOLDER_OPEN_ALT" size="16" />
+                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FOLDER_OPEN_ALT" size="15" />
                                              </graphic>
                                              <font>
                                                 <Font size="10.0" />
@@ -131,7 +131,7 @@
                                                 </Tooltip>
                                              </tooltip>
                                              <graphic>
-                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="LIST_OL" size="16" />
+                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="LIST_OL" size="15" />
                                              </graphic>
                                           </Button>
                                           <Separator layoutX="50.0" layoutY="10.0" orientation="VERTICAL" />
@@ -144,7 +144,7 @@
                                                 </Tooltip>
                                              </tooltip>
                                              <graphic>
-                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILE_EXCEL_ALT" size="16" />
+                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILE_EXCEL_ALT" size="15" />
                                              </graphic>
                                           </Button>
                                           <Separator layoutX="136.0" layoutY="10.0" orientation="VERTICAL" />
@@ -157,7 +157,7 @@
                                                 </Tooltip>
                                              </tooltip>
                                              <graphic>
-                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EXTERNAL_LINK" size="16" />
+                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EXTERNAL_LINK" size="15" />
                                              </graphic>
                                              <font>
                                                 <Font size="10.0" />
@@ -173,7 +173,7 @@
                                                 </Tooltip>
                                              </tooltip>
                                              <graphic>
-                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TRASH_ALT" size="16" />
+                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TRASH_ALT" size="15" />
                                              </graphic>
                                              <font>
                                                 <Font size="10.0" />
@@ -189,7 +189,7 @@
                                                 </Tooltip>
                                              </tooltip>
                                              <graphic>
-                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="16" />
+                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="15" />
                                              </graphic>
                                           </Button>
                                           <Separator layoutX="221.0" layoutY="10.0" orientation="VERTICAL" />
@@ -202,7 +202,7 @@
                                                 </Tooltip>
                                              </tooltip>
                                              <graphic>
-                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="CHECK_SQUARE_ALT" size="16" />
+                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="CHECK_SQUARE_ALT" size="15" />
                                              </graphic>
                                           </Button>
                                       </items>
@@ -252,7 +252,7 @@
                                                 <Tooltip text="Сохранить" />
                                              </tooltip>
                                              <graphic>
-                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="SAVE" size="16" />
+                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="SAVE" size="15" />
                                              </graphic>
                                           </Button>
                                        </items>
@@ -292,7 +292,7 @@
                                     <Tooltip text="Новая часть" />
                                  </tooltip>
                                  <graphic>
-                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="16" />
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="15" />
                                  </graphic>
                               </Button>
                               <Separator layoutX="90.0" layoutY="10.0" orientation="VERTICAL" />
@@ -301,7 +301,7 @@
                                     <Tooltip text="Новая часть" />
                                  </tooltip>
                                  <graphic>
-                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILE_ALT" size="16" />
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILE_ALT" size="15" />
                                  </graphic>
                               </Button>
                               <Separator orientation="VERTICAL" />
@@ -310,7 +310,7 @@
                                     <Tooltip text="Редактировать часть" />
                                  </tooltip>
                                  <graphic>
-                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EDIT" size="16" />
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EDIT" size="15" />
                                  </graphic>
                               </Button>
                               <Separator layoutX="50.0" layoutY="10.0" orientation="VERTICAL" />
@@ -319,7 +319,7 @@
                                     <Tooltip text="Удалить часть" />
                                  </tooltip>
                                  <graphic>
-                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TRASH_ALT" size="16" />
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TRASH_ALT" size="15" />
                                  </graphic>
                               </Button>
                            </items>

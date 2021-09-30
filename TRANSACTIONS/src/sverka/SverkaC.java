@@ -72,34 +72,24 @@ public class SverkaC {
 
 	@FXML
 	private TableColumn<AMRA_STMT_CALC, String> Status;
-
 	@FXML
 	private TableColumn<AMRA_STMT_CALC, Double> DEB_OB;
-
 	@FXML
 	private TableColumn<AMRA_STMT_CALC, Double> END_REST;
-
 	@FXML
 	private TableColumn<AMRA_STMT_CALC, LocalDate> STMT_BEGIN;
-
 	@FXML
 	private TableColumn<AMRA_STMT_CALC, LocalDate> STMT_END;
-
 	@FXML
 	private TableColumn<AMRA_STMT_CALC, Integer> ID;
-
 	@FXML
 	private TableColumn<AMRA_STMT_CALC, Double> BEGIN_REST;
-
 	@FXML
 	private TableView<AMRA_STMT_CALC> STMT;
-
 	@FXML
 	private TableColumn<AMRA_STMT_CALC, Double> CRED_OB;
-
 	@FXML
 	private TableColumn<AMRA_STMT_CALC, LocalDateTime> LOAD_DATE;
-
 	@FXML
 	private TableColumn<AMRA_STMT_CALC, LocalDateTime> CREATION_DATETIME;
 
@@ -652,14 +642,11 @@ public class SverkaC {
 					} else {
 						setText(item.toString());
 						if (item.equals("OK")) {
-							setStyle("-fx-background-color: #7ede80;" + "-fx-border-color:black;"
-									+ " -fx-border-width :  1 1 1 1 ");
+							setStyle("-fx-text-fill: #7ede80;-fx-font-weight: bold;");
 						} else if (item.equals("Загружен")) {
-							setStyle("-fx-background-color: #ebaf2f;" + "-fx-border-color:black;"
-									+ " -fx-border-width :  1 1 1 1 ");
+							setStyle("-fx-text-fill: #ebaf2f;-fx-font-weight: bold;");
 						} else {
-							setStyle("-fx-background-color: #e65591;" + "-fx-border-color:black;"
-									+ " -fx-border-width :  1 1 1 1 ");
+							setStyle("-fx-text-fill: #e65591;-fx-font-weight: bold;");
 						}
 					}
 				}
@@ -734,7 +721,7 @@ public class SverkaC {
 				String error = "";
 				AMRA_STMT_CALC rec = STMT.getSelectionModel().getSelectedItem();
 				PreparedStatement prepStmt = conn.prepareStatement(
-						" select distinct DT_DATE from AMRA_STMT_CALC_ROW where FILE_ID = ? order by DT_DATE");
+						"select distinct DT_DATE from AMRA_STMT_CALC_ROW where FILE_ID = ? order by DT_DATE");
 				prepStmt.setInt(1, rec.getID());
 				ResultSet rs = prepStmt.executeQuery();
 				while (rs.next()) {

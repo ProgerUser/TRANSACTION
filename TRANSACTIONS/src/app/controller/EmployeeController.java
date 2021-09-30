@@ -139,7 +139,7 @@ public class EmployeeController {
 
 	// Search an transact
 	@FXML
-	private void searchEmployees(ActionEvent actionEvent) {
+	private void searchEmployees(ActionEvent actionEvent) throws ClassNotFoundException {
 		// Get Employee information
 		Transact emp = TerminalDAO.searchTransact(fio.getText());
 		// Populate Employee on TableView and Display on TextArea
@@ -148,7 +148,7 @@ public class EmployeeController {
 
 	// Search all transacts
 	@FXML
-	private void searchEmployee(ActionEvent actionEvent) {
+	private void searchEmployee(ActionEvent actionEvent) throws ClassNotFoundException {
 		if (fio.getText().equals("")) {
 			resultArea.setText("Поле ФИО пустое, введите значение!\n");
 			return;
@@ -166,7 +166,7 @@ public class EmployeeController {
 	private void fillEmployeeTable(ActionEvent event) {
 		Task<List<Transact>> task = new Task<List<Transact>>() {
 			@Override
-			public ObservableList<Transact> call() {
+			public ObservableList<Transact> call() throws ClassNotFoundException {
 				return TerminalDAO.searchEmployees(fio.getText(), trnumber.getText(), datestart.getText(),
 						dateend.getText());
 			}

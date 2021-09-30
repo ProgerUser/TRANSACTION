@@ -13,6 +13,7 @@
 					<items>
 						<MenuItem fx:id="6" mnemonicParsing="false" onAction="#KashPsevdo" text="Сформировать псевдоним" />
 						<MenuItem fx:id="7" mnemonicParsing="false" onAction="#ContactLoad" text="Комиссии Контакт" />
+						<MenuItem fx:id="41" mnemonicParsing="false" onAction="#PlastRash" text="Расход со счетов пластика" />
 					</items>
 				</Menu>
 				<Menu fx:id="8" mnemonicParsing="false" text="Терминалы Амра">

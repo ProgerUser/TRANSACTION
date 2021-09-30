@@ -17,7 +17,7 @@
 
 				<Button id="searchEmpBtn" mnemonicParsing="false" onAction="#Search">
             <graphic>
-               <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="16" />
+               <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="15" />
             </graphic>
             <tooltip>
                <Tooltip text="Обновить">
@@ -30,7 +30,7 @@
 
 				<Button id="searchEmpBtn" mnemonicParsing="false" onAction="#Add">
             <graphic>
-               <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILE_ALT" size="16" />
+               <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILE_ALT" size="15" />
             </graphic>
             <tooltip>
                <Tooltip text="Добавить">
@@ -42,7 +42,7 @@
          <Separator layoutX="49.0" layoutY="10.0" orientation="VERTICAL" />
 				<Button id="searchEmpBtn" mnemonicParsing="false" onAction="#Edit">
             <graphic>
-               <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EDIT" size="16" />
+               <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EDIT" size="15" />
             </graphic>
             <tooltip>
                <Tooltip text="Редактировать">
@@ -54,7 +54,7 @@
          <Separator layoutX="98.0" layoutY="10.0" orientation="VERTICAL" />
 				<Button id="searchEmpBtn" mnemonicParsing="false" onAction="#Delete">
             <graphic>
-               <FontAwesomeIconView glyphName="TRASH_ALT" size="16" />
+               <FontAwesomeIconView glyphName="TRASH_ALT" size="15" />
             </graphic>
             <tooltip>
                <Tooltip text="Удалить">

@@ -173,7 +173,7 @@ public class ViewerController {
 
 	// Search all transacts
 	@FXML
-	private void searchEmployee(ActionEvent actionEvent) {
+	private void searchEmployee(ActionEvent actionEvent) throws ClassNotFoundException {
 		if (fio.getText().equals("")) {
 			resultArea.setText("Поле ФИО пустое, введите значение!\n");
 			return;
@@ -190,7 +190,7 @@ public class ViewerController {
 	private void fillEmployeeTable(ActionEvent event) {
 		Task<List<TransactClass>> task = new Task<List<TransactClass>>() {
 			@Override
-			public ObservableList<TransactClass> call() {
+			public ObservableList<TransactClass> call() throws ClassNotFoundException {
 				return ViewerDAO.searchEmployees(fio.getText(), trnumber.getText(), datestart.getText(),
 						dateend.getText());
 			}

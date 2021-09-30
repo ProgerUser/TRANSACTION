@@ -42,8 +42,7 @@ public class DbUtil {
 	public static Connection conn = null;
 
 	// Connect to DB
-	public static void Db_Connect() {
-		try {
+	public static void Db_Connect() throws ClassNotFoundException, SQLException {
 			// Setting Oracle JDBC Driver
 			Class.forName(JDBC_DRIVER);
 			// Establish the Oracle Connection using Connection String
@@ -53,9 +52,6 @@ public class DbUtil {
 					"jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_ + "@" + Connect.connectionURL_,
 					props);
 			conn.setAutoCommit(false);
-		} catch (Exception e) {
-			DbUtil.Log_Error(e);
-		}
 	}
 
 	// Close Connection

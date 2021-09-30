@@ -293,7 +293,7 @@ public class Tr_Am_View_con_from_show {
 	private DatePicker dt2;
 
 	@FXML
-	private void initialize() {
+	private void initialize() throws ClassNotFoundException {
 		trans_table.setEditable(true);
 
 		exec = Executors.newCachedThreadPool((runnable) -> {
@@ -1459,7 +1459,7 @@ public class Tr_Am_View_con_from_show {
 	}
 
 	@FXML
-	private void term_view_(ActionEvent actionEvent) {
+	private void term_view_(ActionEvent actionEvent) throws ClassNotFoundException {
 		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(),
 				dt2.getValue(),"",false,false,"Все",false);
 		populate_fn_sess(empData);
@@ -1509,7 +1509,7 @@ public class Tr_Am_View_con_from_show {
 
 	// Найти загрузки
 	@FXML
-	private void filter(ActionEvent actionEvent) {
+	private void filter(ActionEvent actionEvent) throws ClassNotFoundException {
 		trans_table.setEditable(true);
 		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(),
 				dt2.getValue(),"",false,false,"Все",false);

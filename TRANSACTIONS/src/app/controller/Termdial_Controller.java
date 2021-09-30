@@ -56,6 +56,7 @@ import app.model.Termdial;
 import app.model.TerminalDAO;
 import app.model.Transact;
 import app.model.TransactClass;
+import app.termserv.Z_SB_TERMSERV_AMRA_DBT;
 
 /**
  * Саид 04.04.2019.
@@ -66,34 +67,24 @@ public class Termdial_Controller {
 
 	@FXML
 	private TableColumn<Termdial, String> dealstartdate;
-
 	@FXML
 	private TableColumn<Termdial, String> sum_;
-
 	@FXML
 	private TableColumn<Termdial, String> paymentnumber;
-
 	@FXML
 	private TableColumn<Termdial, String> sess_id;
-
 	@FXML
 	private TableColumn<Termdial, String> dealenddate;
-
 	@FXML
 	private TableView<Termdial> termdeal_table;
-
 	@FXML
 	private TableColumn<Termdial, String> dealpaymentnumber;
-
 	@FXML
 	private TableColumn<Termdial, String> department;
-
 	@FXML
 	private TableColumn<Termdial, String> recdate;
-
 	@FXML
 	private TableColumn<Termdial, String> vector;
-
 	@FXML
 	private TableColumn<Termdial, String> status;
 
@@ -219,7 +210,7 @@ public class Termdial_Controller {
 		table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
 		table.getColumns().stream().forEach((column) -> {
 			// System.out.println(column.getText());
-			if (column.getText().equals("sess_id")) {
+			if (column.getText().equals("ИД сессии")) {
 
 			} else {
 				// Minimal width = columnheader
@@ -237,13 +228,13 @@ public class Termdial_Controller {
 					}
 				}
 				// set the new max-widht with some extra space
-				column.setPrefWidth(max + 10.0d);
+				column.setPrefWidth(max + 20.0d);
 			}
 		});
 	}
 
 	@FXML
-	private void termdial_srch(ActionEvent actionEvent) {
+	void termdial_srch(ActionEvent actionEvent) throws ClassNotFoundException {
 
 		ObservableList<Termdial> empData = null;
 		if (feb.isSelected()) {
@@ -254,14 +245,20 @@ public class Termdial_Controller {
 					sess_id_t.getText(), true);
 		}
 		populate_termdial(empData);
+		TableFilter<Termdial> tableFilter = TableFilter.forTableView(termdeal_table).apply();
+		tableFilter.setSearchStrategy((input, target) -> {
+			try {
+				return target.toLowerCase().contains(input.toLowerCase());
+			} catch (Exception e) {
+				return false;
+			}
+		});
 		autoResizeColumns(termdeal_table);
-		@SuppressWarnings("deprecation")
-		TableFilter<Termdial> filter = new TableFilter<>(termdeal_table);
 	}
 
 	// Заполнить таблицу
 
-	private void populate_termdial(ObservableList<Termdial> trData) {
+	void populate_termdial(ObservableList<Termdial> trData) {
 		// Set items to the employeeTable
 		termdeal_table.setItems(trData);
 	}

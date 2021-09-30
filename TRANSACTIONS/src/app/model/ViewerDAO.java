@@ -22,7 +22,7 @@ public class ViewerDAO {
 	// *******************************
 	// SELECT an Employee
 	// *******************************
-	public static TransactClass searchTransact(String fio) {
+	public static TransactClass searchTransact(String fio) throws ClassNotFoundException {
 		// Declare a SELECT statement
 		String selectStmt = "SELECT * FROM Z_SB_TRANSACT_DBT WHERE lower(FIO) like '" + fio + "'";
 
@@ -71,7 +71,7 @@ public class ViewerDAO {
 	// SELECT Transact
 	// *******************************
 	public static ObservableList<TransactClass> searchEmployees(String FIO, String PAYMENTNUMBER, String DT1,
-			String DT2) {
+			String DT2) throws ClassNotFoundException {
 		// Declare a SELECT statement
 		String dt_betw = "";
 		String p_n = "";
@@ -116,7 +116,7 @@ public class ViewerDAO {
 	// *******************************
 	// SELECT Terminal
 	// *******************************
-	public static ObservableList<TerminalClass> searchTerminal() {
+	public static ObservableList<TerminalClass> searchTerminal() throws ClassNotFoundException {
 		String selectStmt = "select * from Z_SB_TERMINAL_AMRA_DBT order by name";
 		// Get ResultSet from dbExecuteQuery method
 		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
@@ -131,7 +131,7 @@ public class ViewerDAO {
 	// *******************************
 	// SELECT Kash
 	// *******************************
-	public static ObservableList<KashClass> searchKash() {
+	public static ObservableList<KashClass> searchKash() throws ClassNotFoundException {
 		String selectStmt = 
 				"select dp.cnameoper, dp.ckbk, dp.cpsevdo, a.C_CASHNAME \n" + 
 				"  from ov_plat dp, OV_VCPLAT a\n" + 

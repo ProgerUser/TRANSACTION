@@ -97,7 +97,7 @@ public class DealCintroller {
 	private Executor exec;
 
 	@FXML
-	private void initialize() {
+	private void initialize() throws ClassNotFoundException {
 		trans_table.setEditable(true);
 		exec = Executors.newCachedThreadPool((runnable) -> {
 			Thread t = new Thread(runnable);

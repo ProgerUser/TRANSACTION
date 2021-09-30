@@ -29,7 +29,7 @@
                      <items>
                       <Button mnemonicParsing="false" onAction="#add">
                            <graphic>
-                              <FontAwesomeIconView glyphName="PLUS" size="18" />
+                              <FontAwesomeIconView glyphName="PLUS" size="15" />
                            </graphic>
                            <font>
                               <Font size="10.0" />
@@ -37,7 +37,7 @@
                         </Button>
                         <Button mnemonicParsing="false" onAction="#adit">
                            <graphic>
-                              <FontAwesomeIconView glyphName="EDIT" size="18" />
+                              <FontAwesomeIconView glyphName="EDIT" size="15" />
                            </graphic>
                            <font>
                               <Font size="10.0" />
@@ -45,7 +45,7 @@
                         </Button>
                         <Button mnemonicParsing="false" onAction="#delete">
                            <graphic>
-                              <FontAwesomeIconView glyphName="TIMES" size="18" />
+                              <FontAwesomeIconView glyphName="TIMES" size="15" />
                            </graphic>
                            <font>
                               <Font size="10.0" />

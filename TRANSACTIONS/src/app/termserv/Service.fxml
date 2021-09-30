@@ -19,29 +19,29 @@
       <items>
 				<Button id="searchEmpBtn" mnemonicParsing="false" onAction="#Refresh">
             <graphic>
-               <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="16" />
+               <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="15" />
             </graphic></Button>
          <Separator layoutX="255.0" layoutY="10.0" orientation="VERTICAL" />
 				<Button id="searchEmpBtn" mnemonicParsing="false" onAction="#Add">
             <graphic>
-               <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILE_ALT" size="16" />
+               <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILE_ALT" size="15" />
             </graphic></Button>
          <Separator layoutX="124.0" layoutY="10.0" orientation="VERTICAL" />
 				<Button id="searchEmpBtn" mnemonicParsing="false" onAction="#Edit">
             <graphic>
-               <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EDIT" size="16" />
+               <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EDIT" size="15" />
             </graphic></Button>
          <Separator layoutX="157.0" layoutY="10.0" orientation="VERTICAL" />
 				<Button id="searchEmpBtn" mnemonicParsing="false" onAction="#Delete">
             <graphic>
-               <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TRASH_ALT" size="16" />
+               <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TRASH_ALT" size="15" />
             </graphic></Button>
          <Separator orientation="VERTICAL" />
 				<ComboBox fx:id="Terminals" onAction="#Terminals" prefWidth="120.0">
 				</ComboBox>
          <Button id="searchEmpBtn" fx:id="DelFilter" layoutX="144.0" layoutY="10.0" mnemonicParsing="false" onAction="#DelFilter">
             <graphic>
-               <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TIMES" size="16" />
+               <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TIMES" size="15" />
             </graphic>
          </Button>
          <Separator layoutX="177.0" layoutY="10.0" orientation="VERTICAL" />

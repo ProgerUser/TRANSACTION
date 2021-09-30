@@ -7,6 +7,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.swing.JRViewer;
+import sbalert.Msg;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -85,9 +86,9 @@ public class ShowHistoryController {
 	@FXML
 	private DatePicker datestart;
 
-    @FXML
-    private Button search;
-    
+	@FXML
+	private Button search;
+
 	@FXML
 	private TableColumn<FN_SESS_AMRA, String> DATE_;
 	@FXML
@@ -104,7 +105,7 @@ public class ShowHistoryController {
 	private TableColumn<FN_SESS_AMRA, String> DATE_TIME;
 	@FXML
 	private ProgressIndicator pb;
-	
+
 	// For MultiThreading
 	private Executor exec;
 
@@ -211,7 +212,7 @@ public class ShowHistoryController {
 	// Populate Employees for TableView with MultiThreading (This is for example
 	// usage)
 	@FXML
-	private void fn_sess_search(ActionEvent event) throws SQLException, ClassNotFoundException {
+	void Search_(ActionEvent event) throws SQLException, ClassNotFoundException {
 		search.setDisable(true);
 		pb.setVisible(true);
 		Task<List<FN_SESS_AMRA>> task = new Task<List<FN_SESS_AMRA>>() {
@@ -232,17 +233,9 @@ public class ShowHistoryController {
 
 	// Найти загрузки
 	@FXML
-	private void view_clob(ActionEvent actionEvent) {
+	void OpenLoadTr(ActionEvent actionEvent) {
 		try {
-			if (fn_sess_table.getSelectionModel().getSelectedItem() == null) {
-				Alert alert = new Alert(Alert.AlertType.INFORMATION);
-				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-				stage.getIcons().add(new Image("terminal.png"));
-				alert.setTitle("Внимание");
-				alert.setHeaderText(null);
-				alert.setContentText(("Выберите сначала данные из таблицы!\n"));
-				alert.showAndWait();
-			} else {
+			if (fn_sess_table.getSelectionModel().getSelectedItem() != null) {
 				FN_SESS_AMRA fn = fn_sess_table.getSelectionModel().getSelectedItem();
 
 				Connect.SESS_ID_ = fn.getsess_id();
@@ -260,31 +253,18 @@ public class ShowHistoryController {
 				stage.show();
 
 			}
-		} catch (IOException e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText(ExceptionUtils.getStackTrace(e));
-			alert.showAndWait();
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
 	public void Alert(String mes) {
 		Platform.runLater(new Runnable() {
-		    @Override
-		    public void run() {
-		    	Alert alert = new Alert(Alert.AlertType.INFORMATION);
-				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-				stage.getIcons().add(new Image("terminal.png"));
-				alert.setTitle("Внимание");
-				alert.setHeaderText(null);
-				alert.setContentText(mes);
-				alert.showAndWait();
-		    }
+			@Override
+			public void run() {
+				Msg.Message(mes);
+			}
 		});
-		
 	}
 
 	public static void autoResizeColumns(TableView<?> table) {
@@ -315,26 +295,25 @@ public class ShowHistoryController {
 		});
 	}
 
+	/**
+	 * 
+	 * @param actionEvent
+	 */
 	@FXML
-	private void trn_doc(ActionEvent actionEvent) {
-		if (fn_sess_table.getSelectionModel().getSelectedItem() == null) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText(("Выберите сначала данные из таблицы!\n"));
-			alert.showAndWait();
-
-		} else {
-			FN_SESS_AMRA fn = fn_sess_table.getSelectionModel().getSelectedItem();
-			new PrintReport().showReport(fn.getsess_id());
+	void ViewReport(ActionEvent actionEvent) {
+		try {
+			if (fn_sess_table.getSelectionModel().getSelectedItem() != null) {
+				FN_SESS_AMRA fn = fn_sess_table.getSelectionModel().getSelectedItem();
+				new PrintReport().showReport(fn.getsess_id());
+			}
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
 	// Найти загрузки
 	@FXML
-	private void fn_sess_search_(ActionEvent actionEvent) {
+	void Search(ActionEvent actionEvent) throws ClassNotFoundException {
 		search.setDisable(true);
 		// Get all Employees information
 		ObservableList<FN_SESS_AMRA> empData = TerminalDAO.srch_fn_sess(sess_id_t.getText(), trnumber.getText(),
@@ -365,12 +344,12 @@ public class ShowHistoryController {
 
 	// Заполнить таблицу
 
-	private void populate_fn_sess(ObservableList<FN_SESS_AMRA> trData) {
+	void populate_fn_sess(ObservableList<FN_SESS_AMRA> trData) {
 		// Set items to the employeeTable
 		fn_sess_table.setItems(trData);
 	}
 
-	private void test(ObservableList<FN_SESS_AMRA> trData) {
+	void test(ObservableList<FN_SESS_AMRA> trData) {
 		// Set items to the employeeTable
 		fn_sess_table.setItems(trData);
 

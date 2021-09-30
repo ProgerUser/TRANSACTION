@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -21,19 +20,17 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import sb.utils.DbUtil;
 import sbalert.Msg;
 
 public class EnterC {
 
-
-	@FXML
-	private Button enter_id;
 	@FXML
 	private ComboBox<String> login;
 	@FXML
@@ -41,10 +38,10 @@ public class EnterC {
 	@FXML
 	private ComboBox<String> conurl;
 
-
 	final static String driverClass = "oracle.jdbc.OracleDriver";
 
 	Connection conn = null;
+
 	/**
 	 * Разные проверки перед входом
 	 */
@@ -54,7 +51,7 @@ public class EnterC {
 			// __________________Проверки____________
 			DBUtil.dbConnect();
 			DbUtil.Db_Connect();
-			
+
 			conn = DbUtil.conn;
 			if (conn != null) {
 				String sql = "SELECT count(*) cnt FROM usr where usr.DUSRFIRE is null and CUSRLOGNAME = ?";
@@ -85,19 +82,43 @@ public class EnterC {
 				myResultSet.close();
 				sqlStatement.close();
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			DbUtil.Log_Error(e);
 		}
 	}
 
-
 	@FXML
-	void enter(ActionEvent event) {
+	void Enter(ActionEvent event) {
 		try {
-			Connect.connectionURL_ = conurl.getValue().toString();
-			Connect.userID_ = login.getValue().toString();
-			Connect.userPassword_ = pass.getText();
-			Check_Enter();
+			if (conurl.getSelectionModel().getSelectedItem() != null
+					& login.getSelectionModel().getSelectedItem() != null & !pass.getText().equals("")) {
+				Connect.connectionURL_ = conurl.getValue().toString();
+				Connect.userID_ = login.getValue().toString();
+				Connect.userPassword_ = pass.getText();
+				Check_Enter();
+			}
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+	/**
+	 * При закрытии
+	 */
+	void OnClose() {
+		Stage stage = (Stage) pass.getScene().getWindow();
+		stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+	}
+
+	/**
+	 * Отмена
+	 * 
+	 * @param event
+	 */
+	@FXML
+	void Cencel(ActionEvent event) {
+		try {
+			OnClose();
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
@@ -105,13 +126,10 @@ public class EnterC {
 	}
 
 	@FXML
-	void enter_(KeyEvent ke) {
+	void KeyEnter(KeyEvent ke) {
 		if (ke.getCode().equals(KeyCode.ENTER)) {
 			try {
-				Connect.connectionURL_ = conurl.getValue().toString();
-				Connect.userID_ = login.getValue().toString();
-				Connect.userPassword_ = pass.getText();
-				Check_Enter();
+				Enter(null);
 			} catch (Exception e) {
 				Msg.Message(ExceptionUtils.getStackTrace(e));
 			}
@@ -120,7 +138,7 @@ public class EnterC {
 
 	@FXML
 	private void initialize() {
-		//закрыть splash картинку
+		// закрыть splash картинку
 		final SplashScreen splash = SplashScreen.getSplashScreen();
 		if (splash != null) {
 			splash.close();
@@ -138,7 +156,7 @@ public class EnterC {
 			@SuppressWarnings("unchecked")
 			Enumeration<String> enums = (Enumeration<String>) prop.propertyNames();
 			while (enums.hasMoreElements()) {
-				//System.out.println();
+				// System.out.println();
 				String key = enums.nextElement();
 				String value = prop.getProperty(key);
 				if (key.contains("user")) {

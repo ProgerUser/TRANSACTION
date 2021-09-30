@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableColumn?>
@@ -7,28 +8,40 @@
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox fx:id="ap" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.291" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controller.KashController">
+<VBox  maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controller.KashController">
 	<children>
       <ToolBar VBox.vgrow="ALWAYS">
         <items>
-      		<Button fx:id="pseudo" mnemonicParsing="false" onAction="#create_psevdo" prefHeight="30.0" prefWidth="30.0" stylesheets="@../../borderpane.css">
+      		<Button  mnemonicParsing="false" onAction="#create_psevdo">
       			<tooltip>
-      				<Tooltip text="Создать псевдонимы" />
+      				<Tooltip text="Создать псевдонимы">
+                     <font>
+                        <Font size="13.0" />
+                     </font></Tooltip>
       			</tooltip>
+               <graphic>
+                  <FontAwesomeIconView fontSmoothingType="LCD" glyphName="COGS" size="15" />
+               </graphic>
       		</Button>
-            <Button fx:id="loadexcel" mnemonicParsing="false" onAction="#loadexcel" prefHeight="30.0" prefWidth="30.0" stylesheets="@../../borderpane.css">
+            <Button mnemonicParsing="false" onAction="#loadexcel">
                <tooltip>
-                  <Tooltip text="Загрузить файл" />
+                  <Tooltip text="Загрузить файл">
+                     <font>
+                        <Font size="13.0" />
+                     </font></Tooltip>
                </tooltip>
+               <graphic>
+                  <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILE_EXCEL_ALT" size="15" />
+               </graphic>
             </Button>
-            <Button mnemonicParsing="false" onAction="#Rash" text="Расход пластик" />
         </items>
          <VBox.margin>
-            <Insets left="-5.0" right="-5.0" />
+            <Insets left="-5.0" right="-5.0" top="-5.0" />
          </VBox.margin>
       </ToolBar>
-		<TableView fx:id="employeeTable" layoutX="12.0" layoutY="77.0" tableMenuButtonVisible="true">
+		<TableView fx:id="employeeTable" layoutX="12.0" layoutY="77.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
 			<columns>
 				<TableColumn fx:id="cnameoper" maxWidth="5000.0" minWidth="10.0" prefWidth="307.0" text="Наименование платежа" />
 				<TableColumn fx:id="cpsevdo" maxWidth="5000.0" minWidth="10.0" prefWidth="138.0" text="Псевдоним" />

@@ -106,7 +106,7 @@
                            </font></Tooltip>
 							</tooltip>
                      <graphic>
-                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="SEARCH" size="18" />
+                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="SEARCH" size="15" />
                      </graphic>
                      <font>
                         <Font size="10.0" />
@@ -120,7 +120,7 @@
                            </font></Tooltip>
 							</tooltip>
                      <graphic>
-                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="LIST_ALT" size="18" />
+                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="LIST_ALT" size="15" />
                      </graphic>
                      <font>
                         <Font size="10.0" />
@@ -134,7 +134,7 @@
                            </font></Tooltip>
 							</tooltip>
                      <graphic>
-                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="LIST_UL" size="18" />
+                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="LIST_UL" size="15" />
                      </graphic>
                      <font>
                         <Font size="10.0" />
@@ -148,7 +148,7 @@
                            </font></Tooltip>
 							</tooltip>
                      <graphic>
-                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILE_EXCEL_ALT" size="18" />
+                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILE_EXCEL_ALT" size="15" />
                      </graphic>
                      <font>
                         <Font size="10.0" />
@@ -162,7 +162,7 @@
                            </font></Tooltip>
 							</tooltip>
                      <graphic>
-                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TABLE" size="18" />
+                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TABLE" size="15" />
                      </graphic>
                      <font>
                         <Font size="10.0" />
@@ -176,7 +176,7 @@
                            </font></Tooltip>
 							</tooltip>
                      <graphic>
-                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="PRINT" size="18" />
+                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="PRINT" size="15" />
                      </graphic>
 						</Button>
 						<Button fx:id="chk_nmbers" ellipsisString="" mnemonicParsing="false" onAction="#showdeal">
@@ -187,7 +187,7 @@
                            </font></Tooltip>
 							</tooltip>
                      <graphic>
-                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="LIST" size="18" />
+                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="LIST" size="15" />
                      </graphic>
 						</Button>
 						<Button fx:id="trn_" mnemonicParsing="false" onAction="#view_trn">
@@ -198,7 +198,7 @@
                            </font></Tooltip>
 							</tooltip>
                      <graphic>
-                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="LIST_OL" size="18" />
+                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="LIST_OL" size="15" />
                      </graphic>
 						</Button>
 					</items>

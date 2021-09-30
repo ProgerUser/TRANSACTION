@@ -51,7 +51,7 @@ public class AccessController {
 
 	
 	@FXML
-	private void change_acc_type() {
+	private void change_acc_type() throws ClassNotFoundException {
 		if (USERS_IN.getSelectionModel().getSelectedItem() == null) {
 			this.altert("Выберите сначала данные из таблицы!");
 		}else
@@ -81,7 +81,7 @@ public class AccessController {
 		}
 	}
 	
-	public void upd_usr_in() {
+	public void upd_usr_in() throws ClassNotFoundException {
 		Forms forms = FORMS.getSelectionModel().getSelectedItem();
 		ObservableList<User_in> empData_2 = TerminalDAO.User_in(forms.get_ID_FORM());
 		populate_user_in(empData_2);
@@ -89,7 +89,7 @@ public class AccessController {
 		TableFilter.forTableView(USERS_IN).apply();
 	}
 	
-	public void upd_usr_out() {
+	public void upd_usr_out() throws ClassNotFoundException {
 		int form_id = FORMS.getSelectionModel().getSelectedItem().get_ID_FORM();
 		
 		ObservableList<User_out> empData_2 = TerminalDAO.User_out(form_id);
@@ -110,7 +110,7 @@ public class AccessController {
 	}
 	
 	@FXML
-	private void initialize() {
+	private void initialize() throws ClassNotFoundException {
 		ID_FORM.setCellValueFactory(cellData -> cellData.getValue().ID_FORM_Property().asObject());
 		FORM_NAME.setCellValueFactory(cellData -> cellData.getValue().FORM_NAME_Property());
 		FORMN_DESC.setCellValueFactory(cellData -> cellData.getValue().FORMN_DESC_Property());
@@ -130,14 +130,24 @@ public class AccessController {
 		/* Listener */
 		FORMS.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
 			if (newSelection != null) {
-				upd_usr_in();
-				upd_usr_out();
+				try {
+					upd_usr_in();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				try {
+					upd_usr_out();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 	}
 
 	@FXML
-	private void insert() {
+	private void insert() throws ClassNotFoundException {
 		if (FORMS.getSelectionModel().getSelectedItem() == null | 
 				USER_OUT.getSelectionModel().getSelectedItem() == null) {
 			this.altert("Выберите сначала данные из таблицы!");
@@ -158,7 +168,7 @@ public class AccessController {
 	}
 	
 	@FXML
-	private void delete() {
+	private void delete() throws ClassNotFoundException {
 		if (USERS_IN.getSelectionModel().getSelectedItem() == null) {
 			this.altert("Выберите сначала данные из таблицы!");
 		} else {

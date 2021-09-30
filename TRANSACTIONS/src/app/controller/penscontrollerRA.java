@@ -15,7 +15,6 @@ import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.time.LocalDateTime;
@@ -413,7 +412,7 @@ public class penscontrollerRA {
 					TableFilter.forTableView(sep_pens).apply();
 				}
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			showalert(ExceptionUtils.getStackTrace(e));
 		}
 	}

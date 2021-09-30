@@ -222,7 +222,7 @@
                                           <Separator orientation="VERTICAL" />
                                           <Button fx:id="ClearFilter" mnemonicParsing="false" onAction="#ClearFilter" textFill="WHITE">
                                              <graphic>
-                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TIMES" size="18" />
+                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TIMES" size="15" />
                                              </graphic>
                                              <font>
                                                 <Font size="10.0" />
@@ -238,7 +238,7 @@
                                                 <Font size="10.0" />
                                              </font>
                                              <graphic>
-                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="18" />
+                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="15" />
                                              </graphic>
                                           </Button>
                                           <Separator orientation="VERTICAL" />
@@ -247,7 +247,7 @@
                                                 <Font size="10.0" />
                                              </font>
                                              <graphic>
-                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="PRINT" size="18" />
+                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="PRINT" size="15" />
                                              </graphic>
                                              <tooltip>
                                                 <Tooltip text="Печать">
@@ -304,7 +304,7 @@
                            <items>
                               <Button fx:id="RefreshDB" mnemonicParsing="false" onAction="#RefreshDB" styleClass="Reload">
                                  <graphic>
-                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="SEARCH" size="18" />
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="SEARCH" size="15" />
                                  </graphic>
                                  <font>
                                     <Font size="10.0" />
@@ -348,7 +348,7 @@
                               <Separator layoutX="440.0" layoutY="10.0" orientation="VERTICAL" />
                               <Button mnemonicParsing="false" onAction="#ClearFilterArchive" textFill="WHITE">
                                  <graphic>
-                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TIMES" size="18" />
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TIMES" size="15" />
                                  </graphic>
                                  <font>
                                     <Font size="10.0" />
@@ -360,7 +360,7 @@
                                     <Font size="10.0" />
                                  </font>
                                  <graphic>
-                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="PRINT" size="18" />
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="PRINT" size="15" />
                                  </graphic>
                                  <tooltip>
                                     <Tooltip text="Печать">
@@ -375,7 +375,7 @@
                                     <Font size="10.0" />
                                  </font>
                                  <graphic>
-                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EXCLAMATION_TRIANGLE" size="18" />
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EXCLAMATION_TRIANGLE" size="15" />
                                  </graphic>
                                  <tooltip>
                                     <Tooltip text="Статус">
@@ -390,7 +390,7 @@
                                     <Font size="10.0" />
                                  </font>
                                  <graphic>
-                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EXTERNAL_LINK" size="18" />
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EXTERNAL_LINK" size="15" />
                                  </graphic>
                                  <tooltip>
                                     <Tooltip text="Показать в АБС">
@@ -405,7 +405,7 @@
                                     <Font size="10.0" />
                                  </font>
                                  <graphic>
-                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="SEARCH" size="18" />
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="SEARCH" size="15" />
                                  </graphic>
                                  <tooltip>
                                     <Tooltip text="Связанные">
@@ -472,7 +472,7 @@
                                 <items>
                                   <Button mnemonicParsing="false" onAction="#REFR_CONV">
                                        <graphic>
-                                          <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="18" />
+                                          <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="15" />
                                        </graphic>
                                        <tooltip>
                                           <Tooltip text="Обновить" />
@@ -480,7 +480,7 @@
                                     </Button>
                                     <Button mnemonicParsing="false" onAction="#AUDIT_CONV">
                                        <graphic>
-                                          <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EDIT" size="18" />
+                                          <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EDIT" size="15" />
                                        </graphic>
                                        <tooltip>
                                           <Tooltip text="Редактировать" />
@@ -494,7 +494,7 @@
                                     <Separator orientation="VERTICAL" />
                                     <Button mnemonicParsing="false" onAction="#ClearFilterConv" textFill="WHITE">
                                        <graphic>
-                                          <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TIMES" size="18" />
+                                          <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TIMES" size="15" />
                                        </graphic>
                                        <font>
                                           <Font size="10.0" />
@@ -537,7 +537,7 @@
                                             <items>
                                                 <Button mnemonicParsing="false" onAction="#LoadTableMT202Fx">
                                                    <graphic>
-                                                      <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="16" />
+                                                      <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="15" />
                                                    </graphic>
                                                    <tooltip>
                                                       <Tooltip text="Редактировать" />
@@ -546,7 +546,7 @@
                                                 <Separator orientation="VERTICAL" />
                                                 <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#AddAccMT202">
                                                    <graphic>
-                                                      <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILE_ALT" size="16" />
+                                                      <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILE_ALT" size="15" />
                                                    </graphic>
                                                    <tooltip>
                                                       <Tooltip text="Обновить" />
@@ -555,7 +555,7 @@
                                                 <Separator layoutX="46.0" layoutY="10.0" orientation="VERTICAL" />
                                                 <Button layoutX="46.0" layoutY="10.0" mnemonicParsing="false" onAction="#EditAccMT202">
                                                    <graphic>
-                                                      <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EDIT" size="16" />
+                                                      <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EDIT" size="15" />
                                                    </graphic>
                                                    <tooltip>
                                                       <Tooltip text="Добавить" />
@@ -567,7 +567,7 @@
                                                 <Separator layoutX="46.0" layoutY="10.0" orientation="VERTICAL" />
                                                 <Button layoutX="82.0" layoutY="10.0" mnemonicParsing="false" onAction="#DelAccMT202">
                                                    <graphic>
-                                                      <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TRASH_ALT" size="16" />
+                                                      <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TRASH_ALT" size="15" />
                                                    </graphic>
                                                    <tooltip>
                                                       <Tooltip text="Удалить" />
@@ -632,7 +632,7 @@
                                       <items>
                                         <Button fx:id="RESF_BIK_TO_SW_VTB" mnemonicParsing="false" onAction="#RESF_BIK_TO_SW_VTB">
                                              <graphic>
-                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="18" />
+                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="15" />
                                              </graphic>
                                              <font>
                                                 <Font size="10.0" />

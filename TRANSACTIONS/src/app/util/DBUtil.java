@@ -28,8 +28,7 @@ public class DBUtil {
 	public static Connection conn = null;
 
 	// Connect to DB
-	public static void dbConnect() {
-		try {
+	public static void dbConnect() throws ClassNotFoundException, SQLException {
 			// Setting Oracle JDBC Driver
 			Class.forName(JDBC_DRIVER);
 			Main.logger = Logger.getLogger(DBUtil.class);
@@ -40,10 +39,6 @@ public class DBUtil {
 					"jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_ + "@" + Connect.connectionURL_,
 					props);
 			conn.setAutoCommit(false);
-		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
-			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
-		}
 	}
 
 	// Close Connection
@@ -60,7 +55,7 @@ public class DBUtil {
 	}
 
 	// DB Execute Query Operation
-	public static ResultSet dbExecuteQuery(String queryStmt) {
+	public static ResultSet dbExecuteQuery(String queryStmt) throws ClassNotFoundException {
 		// Declare statement, resultSet and CachedResultSet as null
 		Statement stmt = null;
 		ResultSet resultSet = null;
@@ -201,7 +196,6 @@ public class DBUtil {
 			stmt.executeUpdate(sqlStmt);
 			conn.commit();
 		} catch (Exception e) {
-			e.printStackTrace();
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		} finally {

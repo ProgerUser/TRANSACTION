@@ -67,6 +67,16 @@ public class RootLayoutController {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
+	
+	@FXML
+	void PlastRash(ActionEvent event) {
+		try {
+			Main.PlastRash();
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+	
 	@FXML
 	void chektransact(ActionEvent event) {
 		try {

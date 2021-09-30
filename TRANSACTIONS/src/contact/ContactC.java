@@ -437,7 +437,6 @@ public class ContactC {
 					}
 				}
 			}
-
 		} finally {
 			in.close();
 		}
@@ -459,7 +458,7 @@ public class ContactC {
 				dt = "and trunc(LOAD_DATE) = to_date('" + LoadDate.getValue().format(formatter) + "','dd.mm.yyyy')";
 			}
 
-			String selectStmt = "select * from SBRA_LOADF_CONTACT where 1=1 " + dt;
+			String selectStmt = "select * from SBRA_LOADF_CONTACT where 1=1 " + dt + " order by LOAD_ID desc";
 
 			PreparedStatement prepStmt = conn.prepareStatement(selectStmt);
 			ResultSet rs = prepStmt.executeQuery();

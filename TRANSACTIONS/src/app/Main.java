@@ -29,6 +29,7 @@ import sb.utils.DbUtil;
 import sbalert.Msg;
 import sverka.SverkaC;
 import swift.SWC;
+import tr.pl.Pl;
 import valconv.ConvVal;
 
 /**
@@ -54,33 +55,34 @@ public class Main extends Application {
 			Main.primaryStage.setTitle("Транзакции");
 			logger.setLevel(Level.INFO);
 
-//			if (MODULE == null) {
-//				Enter();
-//			} else if (MODULE.equals("DEBTINFO")) {
-//				DBUtil.dbConnect();
-//				Debtinfo();
-//			} else if (MODULE.equals("BUH")) {
-//				DBUtil.dbConnect();
-//				initRootLayout();
-//				showFirst();
-//			} else if (MODULE.equals("SWIFT")) {
-//				DBUtil.dbConnect();
-//				swift2();
-//			} else if (MODULE.equals("VTB_CONV")) {
-//				DBUtil.dbConnect();
-//				ConvVal();
-//			}
+			if (MODULE == null) {
+				Enter();
+			} else if (MODULE.equals("DEBTINFO")) {
+				DBUtil.dbConnect();
+				Debtinfo();
+			} else if (MODULE.equals("BUH")) {
+				DBUtil.dbConnect();
+				initRootLayout();
+				showFirst();
+			} else if (MODULE.equals("SWIFT")) {
+				DBUtil.dbConnect();
+				swift2();
+			} else if (MODULE.equals("VTB_CONV")) {
+				DBUtil.dbConnect();
+				ConvVal();
+			}
 			
 			{
-				Connect.connectionURL_ = "10.111.64.21:1521/ODB";
-				Connect.userID_ = "SAIDP";
-				Connect.userPassword_ = "VECTOR165";
-				DbUtil.Db_Connect();
-				DBUtil.dbConnect();
+//				Connect.connectionURL_ = "10.111.64.21:1521/ODB";
+//				Connect.userID_ = "SAIDP";
+//				Connect.userPassword_ = "";
+//				DbUtil.Db_Connect();
+//				DBUtil.dbConnect();
+				//showKash();
 //				initRootLayout();
 //				showFirst();
 				//Terminal();
-				Service();
+				//Service();
 			}
 			
 			primaryStage.setOnCloseRequest(e -> {
@@ -174,6 +176,42 @@ public class Main extends Application {
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("Псевдонимы");
 			stage.initOwner(primaryStage);
+			stage.show();
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+	
+	/**
+	 * Формирование псевдонимов
+	 */
+	public static void PlastRash() {
+		try {
+			
+			if (DbUtil.Odb_Action(14l) == 0) {
+				Msg.Message("Нет доступа!");
+				return;
+			}
+			
+			Stage stage = new Stage();
+			Stage stage_ = (Stage) primaryStage.getScene().getWindow();
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Main.class.getResource("/tr/pl/Pl.fxml"));
+
+			Pl controller = new Pl();
+			loader.setController(controller);
+			Parent root = loader.load();
+			stage.setScene(new Scene(root));
+			stage.getIcons().add(new Image("/icon.png"));
+			stage.setTitle("Расход с пластика");
+			stage.initOwner(stage_);
+			stage.setResizable(true);
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent paramT) {
+					
+				}
+			});
 			stage.show();
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
@@ -448,9 +486,8 @@ public class Main extends Application {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/Enter.fxml"));
-			rootLayout = (BorderPane) loader.load();
-			Scene scene = new Scene(rootLayout); // We are sending rootLayout to the Scene.
-
+			Parent root = loader.load();
+			Scene scene = new Scene(root); // We are sending rootLayout to the Scene.
 			primaryStage.setScene(scene); // Set the scene in primary stage.
 			primaryStage.setResizable(false);
 			primaryStage.centerOnScreen();
@@ -505,8 +542,7 @@ public class Main extends Application {
 	public static void Service() {
 		try {
 			Stage stage = new Stage();
-			Parent root;
-			root = FXMLLoader.load(Main.class.getResource("/app/termserv/Service.fxml"));
+			Parent root= FXMLLoader.load(Main.class.getResource("/app/termserv/Service.fxml"));
 			stage.setScene(new Scene(root));
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("Сервисы");

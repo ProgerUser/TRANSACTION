@@ -31,7 +31,7 @@
 							<Font size="10.0" />
 						</font>
 						<graphic>
-							<FontAwesomeIconView fontSmoothingType="LCD" glyphName="FOLDER_OPEN_ALT" size="16" />
+							<FontAwesomeIconView fontSmoothingType="LCD" glyphName="FOLDER_OPEN_ALT" size="15" />
 						</graphic>
 					</Button>
          <Separator layoutX="116.0" layoutY="10.0" orientation="VERTICAL" />
@@ -48,7 +48,7 @@
 							<Font size="10.0" />
 						</font>
 						<graphic>
-							<FontAwesomeIconView fontSmoothingType="LCD" glyphName="COGS" size="16" />
+							<FontAwesomeIconView fontSmoothingType="LCD" glyphName="COGS" size="15" />
 						</graphic>
 					</Button>
          <Separator layoutX="46.0" layoutY="10.0" orientation="VERTICAL" />
@@ -64,7 +64,7 @@
 							<Font size="10.0" />
 						</font>
 						<graphic>
-							<FontAwesomeIconView fontSmoothingType="LCD" glyphName="EXCHANGE" size="16" />
+							<FontAwesomeIconView fontSmoothingType="LCD" glyphName="EXCHANGE" size="15" />
 						</graphic>
 					</Button>
 					<Separator orientation="VERTICAL" />
@@ -80,7 +80,7 @@
 							<Font size="10.0" />
 						</font>
 						<graphic>
-							<FontAwesomeIconView fontSmoothingType="LCD" glyphName="TRASH_ALT" size="16" />
+							<FontAwesomeIconView fontSmoothingType="LCD" glyphName="TRASH_ALT" size="15" />
 						</graphic>
 					</Button>
 					<Separator layoutX="279.0" layoutY="10.0" orientation="VERTICAL" />
@@ -102,7 +102,7 @@
 							<Font size="10.0" />
 						</font>
 						<graphic>
-							<FontAwesomeIconView fontSmoothingType="LCD" glyphName="TIMES" size="16" />
+							<FontAwesomeIconView fontSmoothingType="LCD" glyphName="TIMES" size="15" />
 						</graphic>
 					</Button>
 				</items>

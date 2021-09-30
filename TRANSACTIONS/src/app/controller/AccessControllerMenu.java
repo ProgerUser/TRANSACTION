@@ -63,7 +63,7 @@ public class AccessControllerMenu {
 	private TableColumn<User_in, String> TYPE_ACCESS_I;
 
 	@FXML
-	private void change_acc_type() {
+	private void change_acc_type() throws ClassNotFoundException {
 		if (USERS_IN.getSelectionModel().getSelectedItem() == null) {
 			this.altert("Выберите сначала данные из таблицы!");
 		} else {
@@ -86,7 +86,7 @@ public class AccessControllerMenu {
 		}
 	}
 
-	public void upd_usr_in() {
+	public void upd_usr_in() throws ClassNotFoundException {
 		MenuItems forms = MENU.getSelectionModel().getSelectedItem();
 		ObservableList<User_in> empData_2 = TerminalDAO.User_in_menu(forms.getID_MENU());
 		populate_user_in(empData_2);
@@ -94,7 +94,7 @@ public class AccessControllerMenu {
 		TableFilter.forTableView(USERS_IN).apply();
 	}
 
-	public void upd_usr_out() {
+	public void upd_usr_out() throws ClassNotFoundException {
 		int form_id = MENU.getSelectionModel().getSelectedItem().getID_MENU();
 
 		ObservableList<User_out> empData_2 = TerminalDAO.User_out_menu(form_id);
@@ -115,7 +115,7 @@ public class AccessControllerMenu {
 	}
 
 	@FXML
-	private void initialize() {
+	private void initialize() throws ClassNotFoundException {
 		ID_MENU.setCellValueFactory(cellData -> cellData.getValue().ID_MENUProperty().asObject());
 		MENU_NAME.setCellValueFactory(cellData -> cellData.getValue().MENU_NAMEProperty());
 		MENU_DESC.setCellValueFactory(cellData -> cellData.getValue().MENU_DESCProperty());
@@ -137,8 +137,18 @@ public class AccessControllerMenu {
 		/* Listener */
 		MENU.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
 			if (newSelection != null) {
-				upd_usr_in();
-				upd_usr_out();
+				try {
+					upd_usr_in();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				try {
+					upd_usr_out();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		
@@ -166,7 +176,7 @@ public class AccessControllerMenu {
 	}
 
 	@FXML
-	private void insert() {
+	private void insert() throws ClassNotFoundException {
 		if (MENU.getSelectionModel().getSelectedItem() == null
 				| USER_OUT.getSelectionModel().getSelectedItem() == null) {
 			this.altert("Выберите сначала данные из таблицы!");
@@ -185,7 +195,7 @@ public class AccessControllerMenu {
 	}
 
 	@FXML
-	private void delete() {
+	private void delete() throws ClassNotFoundException {
 		if (USERS_IN.getSelectionModel().getSelectedItem() == null) {
 			this.altert("Выберите сначала данные из таблицы!");
 		} else {
