@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.controlsfx.control.table.TableFilter;
 import com.sun.rowset.CachedRowSetImpl;
 import app.Main;
+import app.sbalert.Msg;
 import app.util.DBUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,7 +23,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
-import sbalert.Msg;
 
 /**
  * Пачулия Саид 04.06.2020.

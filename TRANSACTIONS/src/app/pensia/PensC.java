@@ -41,6 +41,9 @@ import org.mozilla.universalchardet.UniversalDetector;
 
 import app.model.Connect;
 import app.model.TerminalDAO;
+import app.sbalert.Msg;
+import app.tr.pl.ConvConst;
+import app.utils.DbUtil;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -84,9 +87,6 @@ import javafx.util.Callback;
 import javafx.util.Pair;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LocalDateTimeStringConverter;
-import sb.utils.DbUtil;
-import sbalert.Msg;
-import tr.pl.ConvConst;
 
 /**
  * Said 13.07.2020. 18.09.2021 Загрузка пенсии

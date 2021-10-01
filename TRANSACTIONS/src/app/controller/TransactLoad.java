@@ -26,6 +26,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.mozilla.universalchardet.UniversalDetector;
 
 import app.model.Connect;
+import app.sbalert.Msg;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -39,7 +40,6 @@ import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
-import sbalert.Msg;
 
 public class TransactLoad {
 

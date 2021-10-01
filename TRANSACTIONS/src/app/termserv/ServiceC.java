@@ -33,9 +33,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import net.sf.jasperreports.engine.JRException;
-import sb.utils.DbUtil;
-import sbalert.Msg;
-import swift.SWIFT_FILES;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -63,10 +60,14 @@ import app.model.TerminalClass;
 import app.model.TerminalForCombo;
 import app.model.TransactClass;
 import app.model.ViewerDAO;
+import app.sbalert.Msg;
+import app.swift.SWIFT_FILES;
 import app.terminals.AddTerm;
 import app.terminals.EditTerm;
 import app.terminals.Z_SB_TERMINAL_AMRA_DBT;
 import app.util.DBUtil;
+import app.utils.DbUtil;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;

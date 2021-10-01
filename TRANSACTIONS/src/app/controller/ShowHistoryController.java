@@ -7,7 +7,6 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.swing.JRViewer;
-import sbalert.Msg;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -25,6 +24,7 @@ import app.model.FN_SESS_AMRA;
 import app.model.TerminalDAO;
 import app.model.Transact;
 import app.model.TransactClass;
+import app.sbalert.Msg;
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;

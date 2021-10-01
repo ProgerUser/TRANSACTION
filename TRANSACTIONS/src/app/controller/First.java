@@ -9,11 +9,11 @@ import org.apache.log4j.Logger;
 
 import app.Main;
 import app.model.Connect;
+import app.sbalert.Msg;
 import app.util.DBUtil;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import sbalert.Msg;
 
 public class First {
 

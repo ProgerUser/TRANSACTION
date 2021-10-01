@@ -17,7 +17,7 @@ import com.sun.rowset.CachedRowSetImpl;
 import app.Main;
 import app.model.Connect;
 import app.model.SqlMap;
-import sbalert.Msg;
+import app.sbalert.Msg;
 
 @SuppressWarnings("restriction")
 public class DBUtil {

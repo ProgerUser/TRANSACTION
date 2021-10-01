@@ -14,7 +14,9 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import app.Main;
 import app.model.Connect;
 import app.model.InputFilter;
+import app.sbalert.Msg;
 import app.util.DBUtil;
+import app.utils.DbUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -26,8 +28,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import sb.utils.DbUtil;
-import sbalert.Msg;
 
 public class EnterC {
 

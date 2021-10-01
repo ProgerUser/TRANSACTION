@@ -29,7 +29,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import sverka.AMRA_STMT_CALC;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -63,6 +62,7 @@ import app.model.FN_SESS_AMRA;
 import app.model.TerminalDAO;
 import app.model.Transact;
 import app.model.TransactClass;
+import app.sverka.AMRA_STMT_CALC;
 
 import java.util.Date;
 

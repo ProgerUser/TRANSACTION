@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import app.Main;
+import app.sbalert.Msg;
 import app.util.DBUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,7 +16,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import sbalert.Msg;
 
 public class EditServ {
 

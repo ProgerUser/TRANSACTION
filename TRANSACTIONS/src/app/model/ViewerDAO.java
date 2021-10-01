@@ -7,13 +7,13 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import sbalert.Msg;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
+import app.sbalert.Msg;
 import app.util.DBUtil;
 
 @SuppressWarnings("unused")
