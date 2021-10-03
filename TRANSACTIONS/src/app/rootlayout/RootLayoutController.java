@@ -52,6 +52,17 @@ public class RootLayoutController {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
+	
+	
+	@FXML
+	void ResMon(ActionEvent event) {
+		try {
+			Main.ResMon();
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+	
 
 	@FXML
 	void handleExit(ActionEvent event) {

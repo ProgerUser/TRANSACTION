@@ -140,7 +140,7 @@ public class OdbActions {
 			Stage stage_ = (Stage) Users.getScene().getWindow();
 
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("/access/action/IUAction.fxml"));
+			loader.setLocation(getClass().getResource("/app/access/action/IUAction.fxml"));
 
 			EditAction controller = new EditAction();
 			loader.setController(controller);
@@ -275,7 +275,7 @@ public class OdbActions {
 			Stage stage_ = (Stage) Users.getScene().getWindow();
 
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("/access/action/IUAction.fxml"));
+			loader.setLocation(getClass().getResource("/app/access/action/IUAction.fxml"));
 
 			AddAction controller = new AddAction();
 			loader.setController(controller);

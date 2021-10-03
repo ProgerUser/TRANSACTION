@@ -50,6 +50,7 @@
 						<MenuItem fx:id="4" mnemonicParsing="false" onAction="#Access" text="Права доступа по функционалу" /> 
 						<MenuItem fx:id="3" mnemonicParsing="false" onAction="#access_menuitems" text="Доступность пунктов меню" />
 						<MenuItem fx:id="24" mnemonicParsing="false" onAction="#AccessGroup" text="Группы доступа" />
+						<MenuItem fx:id="61" mnemonicParsing="false" onAction="#ResMon" text="Мониторинг ресурсов" />
 					</items>
 				</Menu>
 			</menus>

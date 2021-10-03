@@ -8,6 +8,7 @@ import org.apache.log4j.xml.DOMConfigurator;
 import app.access.action.OdbActions;
 import app.access.grp.GrpController;
 import app.access.menu.OdbMNU;
+import app.admin.rescron.SBResJob;
 import app.contact.ContactC;
 import app.model.Connect;
 import app.pensia.PensC;
@@ -80,6 +81,7 @@ public class Main extends Application {
 				DBUtil.dbConnect();
 				initRootLayout();
 				showFirst();
+				ResMon();
 			}
 			
 			primaryStage.setOnCloseRequest(e -> {
@@ -421,6 +423,38 @@ public class Main extends Application {
 				@Override
 				public void handle(WindowEvent paramT) {
 					controller.dbDisconnect();
+				}
+			});
+			stage.show();
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+	
+	/**
+	 * Сверка
+	 */
+	public static void ResMon() {
+		try {
+			Stage stage = new Stage();
+			Stage stage_ = (Stage) primaryStage.getScene().getWindow();
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Main.class.getResource("/app/admin/rescron/SBResJob.fxml"));
+
+			SBResJob controller = new SBResJob();
+			loader.setController(controller);
+
+			Parent root = loader.load();
+			stage.setScene(new Scene(root));
+			stage.getIcons().add(new Image("icon.png"));
+			stage.setTitle("Ресурсы:");
+			stage.initOwner(stage_);
+			stage.setResizable(false);
+
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent paramT) {
+					//controller.dbDisconnect();
 				}
 			});
 			stage.show();

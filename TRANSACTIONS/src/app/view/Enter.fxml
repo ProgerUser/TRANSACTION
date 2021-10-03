@@ -24,6 +24,13 @@
 					<RowConstraints maxHeight="1.7976931348623157E308" prefHeight="35.0" vgrow="SOMETIMES" />
 				</rowConstraints>
 				<children>
+					<ComboBox fx:id="login" editable="true" maxWidth="1.7976931348623157E308" style="-fx-font-size: 14px;" GridPane.columnIndex="1" />
+					<PasswordField fx:id="pass" maxWidth="1.7976931348623157E308" onKeyPressed="#KeyEnter" style="-fx-font-size: 14px;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <font>
+               <Font size="14.0" />
+            </font>
+         </PasswordField>
+					<ComboBox fx:id="conurl" editable="true" maxWidth="1.7976931348623157E308" style="-fx-font-size: 14px;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 					<Label text="Пароль" GridPane.rowIndex="1">
 						<font>
 							<Font size="14.0" />
@@ -40,13 +47,6 @@
 							<Insets right="5.0" />
 						</GridPane.margin>
 					</Label>
-					<ComboBox fx:id="conurl" editable="true" maxWidth="1.7976931348623157E308" style="-fx-font-size: 14px;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-					<PasswordField fx:id="pass" maxWidth="1.7976931348623157E308" onKeyPressed="#KeyEnter" style="-fx-font-size: 14px;" GridPane.columnIndex="1" GridPane.rowIndex="1">
-            <font>
-               <Font size="14.0" />
-            </font>
-         </PasswordField>
-					<ComboBox fx:id="login" editable="true" maxWidth="1.7976931348623157E308" style="-fx-font-size: 14px;" GridPane.columnIndex="1" />
          <Label text="Логин">
             <font>
                <Font size="14.0" />
