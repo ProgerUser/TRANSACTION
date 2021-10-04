@@ -467,6 +467,7 @@ public class Amra_Transact {
 
 					}
 					callStmt.close();
+					DBUtil.conn.commit();
 					LoadTable("", date_load.getValue());
 				} else {
 					Msg.Message("Файле уже " + af.get_Status());
@@ -678,6 +679,7 @@ public class Amra_Transact {
 					pb.start();
 
 					callStmt.close();
+					DBUtil.conn.commit();
 
 					LoadTable("", date_load.getValue());
 				} else if (af.get_Status().equals("Загружен")) {

@@ -54,6 +54,8 @@ public class Add_Prm {
 			prp.setString(1, PRM_F_PRMNAME.getText());
 			prp.setString(2, PRM_F_PRMVAL.getText());
 			prp.executeUpdate();
+			prp.close();
+			DBUtil.conn.commit();
 			// -----------------------------------
 			OnClose();
 			// -----------------------------------

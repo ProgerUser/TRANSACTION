@@ -75,7 +75,7 @@ public class Main extends Application {
 			
 			{
 //				Connect.connectionURL_ = "10.111.64.21:1521/ODB";
-//				Connect.userID_ = "SAIDP";
+//				Connect.userID_ = "saidp";
 //				Connect.userPassword_ = "";
 //				DbUtil.Db_Connect();
 //				DBUtil.dbConnect();

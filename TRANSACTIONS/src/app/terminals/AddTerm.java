@@ -130,6 +130,8 @@ public class AddTerm {
 			prp.setString(10, INCOME.getText());
 			prp.setString(11, SDNAME.getText());
 			prp.executeUpdate();
+			prp.close();
+			DBUtil.conn.commit();
 			//-----------------------------------
 			OnClose();
 			//-----------------------------------

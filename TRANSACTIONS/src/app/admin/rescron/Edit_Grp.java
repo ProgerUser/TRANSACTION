@@ -83,6 +83,8 @@ public class Edit_Grp {
 			prp.setString(2, GRP_F_GRP_NAME.getText());
 			prp.setLong(3, grp.getGRP_ID());
 			prp.executeUpdate();
+			prp.close();
+			DBUtil.conn.commit();
 			// -----------------------------------
 			OnClose();
 			// -----------------------------------

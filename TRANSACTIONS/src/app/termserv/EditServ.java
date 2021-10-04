@@ -109,6 +109,8 @@ public class EditServ {
 			prp.setDouble(12, Double.valueOf(COMISSION.getText()));
 			prp.setLong(13, this.serv.getID());
 			prp.executeUpdate();
+			prp.close();
+			DBUtil.conn.commit();
 			//-----------------------------------
 			OnClose();
 		} catch (Exception e) {

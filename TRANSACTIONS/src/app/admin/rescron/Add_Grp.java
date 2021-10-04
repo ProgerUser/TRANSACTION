@@ -53,6 +53,8 @@ public class Add_Grp {
 			prp.setLong(1, Long.valueOf(GRP_F_GRP_ID.getText()));
 			prp.setString(2, GRP_F_GRP_NAME.getText());
 			prp.executeUpdate();
+			prp.close();
+			DBUtil.conn.commit();
 			// -----------------------------------
 			OnClose();
 			// -----------------------------------

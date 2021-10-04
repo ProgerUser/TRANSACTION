@@ -425,6 +425,7 @@ public class SBResJob {
 					prp.setLong(1, sel.getCRTID());
 					prp.executeUpdate();
 					prp.close();
+					DBUtil.conn.commit();
 				}
 			}
 			Res_LoadTable();
@@ -524,6 +525,7 @@ public class SBResJob {
 						"begin\r\n" + "  sys.dbms_scheduler.disable(name => 'XXI.SENDEMAILSBRES');\r\n" + "end;");
 				prp.executeUpdate();
 				prp.close();
+				DBUtil.conn.commit();
 			}
 			// _________________
 			Job_Stat_Load();

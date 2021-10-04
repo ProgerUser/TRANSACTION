@@ -132,6 +132,8 @@ public class Edit_Res {
 			prp.setString(6, ((RES_F_CERTSTAT.isSelected()) ? "Y" : "N"));
 			prp.setLong(7, res.getCRTID());
 			prp.executeUpdate();
+			prp.close();
+			DBUtil.conn.commit();
 			// -----------------------------------
 			OnClose();
 			// -----------------------------------

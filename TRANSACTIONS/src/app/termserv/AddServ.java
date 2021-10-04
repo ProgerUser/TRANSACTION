@@ -114,6 +114,8 @@ public class AddServ {
 			prp.setInt(11, Integer.valueOf(BO2.getText()));
 			prp.setDouble(12, Double.valueOf(COMISSION.getText()));
 			prp.executeUpdate();
+			prp.close();
+			DBUtil.conn.commit();
 			//-----------------------------------
 			OnClose();
 			//-----------------------------------

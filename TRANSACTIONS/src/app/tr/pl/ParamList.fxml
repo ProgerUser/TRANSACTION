@@ -30,7 +30,7 @@
                   <Insets right="5.0" />
                </GridPane.margin>
             </Text>
-            <TextField fx:id="Search" GridPane.columnIndex="1" />
+            <TextField fx:id="Search" onAction="#Search" GridPane.columnIndex="1" />
             <Button mnemonicParsing="false" onAction="#Search" GridPane.columnIndex="2">
                <GridPane.margin>
                   <Insets left="5.0" />
@@ -41,7 +41,7 @@
             </Button>
          </children>
       </GridPane>
-      <TableView fx:id="List" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+      <TableView fx:id="List" styleClass="mylistview" stylesheets="/TableView.css" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
         <columns>
           <TableColumn fx:id="Acc" prefWidth="200.0" text="Счет" />
           <TableColumn fx:id="Fio" prefWidth="250.0" text="ФИО" />

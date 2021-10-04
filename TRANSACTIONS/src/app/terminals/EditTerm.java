@@ -116,6 +116,8 @@ public class EditTerm {
 			prp.setString(10, SDNAME.getText());
 			prp.setString(11, this.term.getNAME());
 			prp.executeUpdate();
+			prp.close();
+			DBUtil.conn.commit();
 			//-----------------------------------
 			OnClose();
 		} catch (Exception e) {

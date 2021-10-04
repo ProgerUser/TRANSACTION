@@ -38,7 +38,7 @@ public class DBUtil {
 			conn = DriverManager.getConnection(
 					"jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_ + "@" + Connect.connectionURL_,
 					props);
-			conn.setAutoCommit(true);
+			conn.setAutoCommit(false);
 	}
 
 	// Close Connection

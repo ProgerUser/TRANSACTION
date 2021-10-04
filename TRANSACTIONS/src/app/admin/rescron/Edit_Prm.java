@@ -82,6 +82,8 @@ public class Edit_Prm {
 			prp.setString(2, PRM_F_PRMVAL.getText());
 			prp.setString(3, prm.getPRMNAME());
 			prp.executeUpdate();
+			prp.close();
+			DBUtil.conn.commit();
 			// -----------------------------------
 			OnClose();
 			// -----------------------------------

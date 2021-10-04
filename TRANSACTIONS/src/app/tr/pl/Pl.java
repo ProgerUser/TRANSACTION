@@ -83,15 +83,8 @@ public class Pl {
 					DBUtil.conn.commit();
 
 					InitUsr();
-
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							UsrLst.requestFocus();
-							UsrLst.getSelectionModel().select(seltemp);
-							UsrLst.scrollTo(seltemp);
-						}
-					});
+					InitEx(vals.getLOGIN());
+					SelRow();
 				}
 			}
 		} catch (Exception e) {
@@ -99,7 +92,7 @@ public class Pl {
 		}
 	}
 
-	int seltemp;
+	String seltemp;
 
 	@FXML
 	void Plus(ActionEvent event) {
@@ -109,7 +102,7 @@ public class Pl {
 				Stage stage = new Stage();
 				Stage stage_ = (Stage) ExAcc.getScene().getWindow();
 				FXMLLoader loader = new FXMLLoader();
-				loader.setLocation(getClass().getResource("/tr/pl/ParamList.fxml"));
+				loader.setLocation(getClass().getResource("/app/tr/pl/ParamList.fxml"));
 
 				Accs controller = new Accs();
 				loader.setController(controller);
@@ -132,18 +125,9 @@ public class Pl {
 								prp.executeUpdate();
 								DBUtil.conn.commit();
 
+								InitEx(val.getLOGIN());
 								InitUsr();
-
-								InitEx(val);
-
-								Platform.runLater(new Runnable() {
-									@Override
-									public void run() {
-										UsrLst.requestFocus();
-										UsrLst.getSelectionModel().select(seltemp);
-										UsrLst.scrollTo(seltemp);
-									}
-								});
+								SelRow();
 							} catch (Exception e) {
 								Msg.Message(ExceptionUtils.getStackTrace(e));
 							}
@@ -157,24 +141,60 @@ public class Pl {
 		}
 	}
 
+	/**
+	 * Выбор строки
+	 */
+	void SelRow() {
+		try {
+			for (PlModel site : UsrLst.getItems()) {
+				if (site.getLOGIN().equals(seltemp)) {
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							UsrLst.requestFocus();
+							UsrLst.getSelectionModel().select(site);
+							UsrLst.scrollTo(site);
+						}
+					});
+				}
+			}
+			
+//			// Цикл по ячейкам
+//			for (int i = 0; i < UsrLst.getItems().size(); i++) {
+//				// Цикл по столбцам
+//				for (int j = 0; j < UsrLst.getColumns().size(); j++) {
+//					// Если Не пусто
+//					if (UsrLst.getColumns().get(j).getCellData(i) != null) {
+//						if (UsrLst.getColumns().get(0).getCellData(i) != null) {
+//							if (UsrLst.getColumns().get(0).getCellData(i).equals(seltemp)) {
+//								System.out.println("________________");
+//								System.out.println("Login=" + UsrLst.getColumns().get(0).getCellData(i));
+//								System.out.println("i="+i);
+//								System.out.println("j="+j);
+//								System.out.println("________________");
+//							}
+//						}
+//					}
+//				}
+//			}
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
+	
 	void InitUsr() {
 		try {
-			String selectStmt = "select cusrlogname login,\r\n"
-					+ "       cusrname fio,\r\n"
-					+ "       case\r\n"
-					+ "         when (select count(*)\r\n"
+			String selectStmt = "with dat as (\r\n" + "select cusrlogname login,\r\n" + "       cusrname fio,\r\n"
+					+ "       case\r\n" + "         when (select count(*)\r\n"
 					+ "                 from sbra_pl_rash_usr gr\r\n"
-					+ "                where usr.cusrlogname = gr.usr) > 0 then\r\n"
-					+ "          'Y'\r\n"
-					+ "         else\r\n"
-					+ "          'N'\r\n"
-					+ "       end stat\r\n"
-					+ "  from usr\r\n"
-					+ " where usr.dusrfire is null\r\n"
-					+ " order by cusrname asc\r\n"
-					+ "";
+					+ "                where usr.cusrlogname = gr.usr) > 0 then\r\n" + "          'Y'\r\n"
+					+ "         else\r\n" + "          'N'\r\n" + "       end stat\r\n" + "  from usr\r\n"
+					+ " where usr.dusrfire is null\r\n" + ")\r\n"
+					+ "select * from dat order by case when stat = 'Y' then 1 else 2 end";
+			// System.out.println(selectStmt);
 			PreparedStatement prepStmt = DBUtil.conn.prepareStatement(selectStmt);
 			ResultSet rs = prepStmt.executeQuery();
 			ObservableList<PlModel> dlist = FXCollections.observableArrayList();
@@ -203,25 +223,17 @@ public class Pl {
 		}
 	}
 
-	void InitEx(PlModel val) {
+	void InitEx(String login) {
 		try {
-			String selectStmt = "select acc.CACCACC,\r\n"
-					+ "       acc.CACCNAME,\r\n"
-					+ "       gr.d_start,\r\n"
-					+ "       gr.d_end,\r\n"
-					+ "       (SELECT CPLCNUM\r\n"
-					+ "          FROM v_PLA\r\n"
-					+ "         WHERE V_PLA.IPLATYPE in (1, 2)\r\n"
-					+ "           and iplastatus != 6\r\n"
+			String selectStmt = "select acc.CACCACC,\r\n" + "       acc.CACCNAME,\r\n" + "       gr.d_start,\r\n"
+					+ "       gr.d_end,\r\n" + "       (SELECT CPLCNUM\r\n" + "          FROM v_PLA\r\n"
+					+ "         WHERE V_PLA.IPLATYPE in (1, 2)\r\n" + "           and iplastatus != 6\r\n"
 					+ "           and v_PLA.caccacc = pl_ca.caccacc) cardnum\r\n"
-					+ "  from acc, pl_ca, SBRA_PL_RASH_USR gr\r\n"
-					+ " where acc.CACCACC = gr.acc\r\n"
-					+ "   and pl_ca.caccacc = acc.caccacc\r\n"
-					+ "   and pl_ca.iplscatype = 14\r\n"
-					+ "   and gr.usr = ?\r\n"
-					+ "";
+					+ "  from acc, pl_ca, SBRA_PL_RASH_USR gr\r\n" + " where acc.CACCACC = gr.acc\r\n"
+					+ "   and pl_ca.caccacc = acc.caccacc\r\n" + "   and pl_ca.iplscatype = 14\r\n"
+					+ "   and gr.usr = ?\r\n" + "";
 			PreparedStatement prepStmt = DBUtil.conn.prepareStatement(selectStmt);
-			prepStmt.setString(1, val.getLOGIN());
+			prepStmt.setString(1, login);
 			ResultSet rs = prepStmt.executeQuery();
 			ObservableList<PlAccIn> dlist = FXCollections.observableArrayList();
 			while (rs.next()) {
@@ -272,9 +284,10 @@ public class Pl {
 			// --
 			UsrLst.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
 				if (newSelection != null) {
-					seltemp = UsrLst.getSelectionModel().getSelectedIndex();
+					seltemp = UsrLst.getSelectionModel().getSelectedItem().getLOGIN();
+					// System.out.println(seltemp);
 					PlModel val = UsrLst.getSelectionModel().getSelectedItem();
-					InitEx(val);
+					InitEx(val.getLOGIN());
 				}
 			});
 			new ConvConst().TableColumnDateTime(D_START);

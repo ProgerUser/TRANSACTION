@@ -94,6 +94,8 @@ public class Add_Res {
 			prp.setLong(5, RES_F_CERTGRP.getSelectionModel().getSelectedItem().getGRP_ID());
 			prp.setString(6, ((RES_F_CERTSTAT.isSelected()) ? "Y" : "N"));
 			prp.executeUpdate();
+			prp.close();
+			DBUtil.conn.commit();
 			// -----------------------------------
 			OnClose();
 			// -----------------------------------
