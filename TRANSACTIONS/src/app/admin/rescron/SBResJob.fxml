@@ -65,7 +65,7 @@
                               <Insets left="-5.0" right="-5.0" top="-5.0" />
                            </VBox.margin>
                         </ToolBar>
-                        <TableView fx:id="SB_CERT_EXP" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="700.0" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="SB_CERT_EXP" maxHeight="1.7976931348623157E308" styleClass="mylistview" stylesheets="/TableView.css" maxWidth="1.7976931348623157E308" prefWidth="700.0" VBox.vgrow="ALWAYS">
                           <columns>
                             <TableColumn fx:id="CRTID" prefWidth="75.0" text="ID" />
                             <TableColumn fx:id="CERTNAME" prefWidth="120.0" text="Название ресурса" />
@@ -173,7 +173,7 @@
                                                 <Insets left="-5.0" right="-5.0" top="-5.0" />
                                              </VBox.margin>
                                           </ToolBar>
-                                          <TableView fx:id="SB_CERT_EXP_GRP" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                                          <TableView fx:id="SB_CERT_EXP_GRP" maxHeight="1.7976931348623157E308" styleClass="mylistview" stylesheets="/TableView.css" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                                              <columns>
                                                 <TableColumn fx:id="GRP_ID" prefWidth="75.0" text="ID" />
                                                 <TableColumn fx:id="GRP_NAME" prefWidth="75.0" text="Название" />
@@ -309,7 +309,7 @@
                                           <Insets left="-5.0" right="-5.0" top="-5.0" />
                                        </VBox.margin>
                                     </ToolBar>
-                                    <TableView fx:id="SB_CERT_EXP_JOB" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="250.0" VBox.vgrow="ALWAYS">
+                                    <TableView fx:id="SB_CERT_EXP_JOB" maxHeight="1.7976931348623157E308" styleClass="mylistview" stylesheets="/TableView.css" maxWidth="1.7976931348623157E308" prefHeight="250.0" VBox.vgrow="ALWAYS">
                                       <columns>
                                         <TableColumn fx:id="LOG_ID" prefWidth="75.0" text="LOG_ID" />
                                         <TableColumn fx:id="TM$LOG_DATE" prefWidth="75.0" text="TM$LOG_DATE" />

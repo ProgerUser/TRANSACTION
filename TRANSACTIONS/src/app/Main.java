@@ -449,7 +449,7 @@ public class Main extends Application {
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("Ресурсы:");
 			stage.initOwner(stage_);
-			stage.setResizable(false);
+			stage.setResizable(true);
 
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				@Override
