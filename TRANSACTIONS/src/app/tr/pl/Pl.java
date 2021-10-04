@@ -40,30 +40,22 @@ public class Pl {
 
 	@FXML
 	private TableView<PlModel> UsrLst;
-
 	@FXML
 	private TableView<PlAccIn> ExAcc;
-
 	@FXML
 	private TableColumn<PlModel, String> Login;
-
 	@FXML
 	private TableColumn<PlModel, String> Fio;
-
 	@FXML
 	private TableColumn<PlModel, String> Stat;
-
 	@FXML
 	private TableColumn<PlAccIn, String> ExAccount;
-
 	@FXML
 	private TableColumn<PlAccIn, String> ExFio;
 	@FXML
 	private TableColumn<PlAccIn, String> cardnum;
-
 	@FXML
 	private TableColumn<Object, LocalDateTime> D_START;
-
 	@FXML
 	private TableColumn<Object, LocalDateTime> D_END;
 

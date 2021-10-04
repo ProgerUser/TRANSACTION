@@ -82,8 +82,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -113,6 +113,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -136,50 +137,36 @@ import javafx.util.converter.LocalDateTimeStringConverter;
 public class SWC {
 	@FXML
 	private TableView<BIK_TO_SW_VTB> BIK_TO_SW_VTB;
-
 	@FXML
 	private TableColumn<BIK_TO_SW_VTB, String> BIK_TRN;
-
 	@FXML
 	private TableColumn<BIK_TO_SW_VTB, String> SW_TRN;
-
 	@FXML
 	private TableColumn<BIK_TO_SW_VTB, LocalDate> DTRNCREATE;
-
 	@FXML
 	private TableColumn<BIK_TO_SW_VTB, LocalDate> DTRNTRAN;
-
 	@FXML
 	private TableColumn<BIK_TO_SW_VTB, String> CTRNACCD;
-
 	@FXML
 	private TableColumn<BIK_TO_SW_VTB, String> CTRNACCC;
-
 	@FXML
 	private TableColumn<BIK_TO_SW_VTB, Integer> MTRNSUM;
-
 	@FXML
 	private TableColumn<BIK_TO_SW_VTB, String> CTRNCORACCO;
 	/* __________Кнопки_для_быстрого_перемещения__________ */
-
 	@FXML
 	private TextField PLAT_KORR;
-
 	@FXML
 	private TextField CDETAIL;
-
 	@FXML
 	private TextField PAY_ACC;
-
 	@FXML
 	private TextField PAY_NAME;
-
 	@FXML
 	private TextField REC_NAME;
-
 	@FXML
 	private TextField REC_ACC;
-
+	//
 	@FXML
 	private RadioButton Out;
 	@FXML
@@ -194,16 +181,12 @@ public class SWC {
 	private RadioButton Ack;
 	@FXML
 	private RadioButton Other;
-
 	@FXML
 	private DatePicker FileDate;
-
 	@FXML
 	private DatePicker DT2;
-
 	@FXML
 	private ComboBox<String> FileExtens;
-
 	@FXML
 	private TextArea FileTextArea;
 
@@ -1386,111 +1369,180 @@ public class SWC {
 	 * 
 	 * @param event
 	 */
+	LocalDate docdt = null;
+	LocalDateTime crdate = null;
+	String amount = null;
+	String cur = null;
+	String docname = null;
+	String doctype = null;
+	String filename = null;
+	String ret = null;
 	@FXML
 	void LoadFile(ActionEvent event) {
 		try {
+
+			//04/10/2021
+			STMT.getItems().forEach(item -> {
+				
+				docdt = (LocalDate) item.getDOCDATE();
+				crdate = (LocalDateTime) item.getDT_CH();
+				amount = String.valueOf(item.getSUMM());
+				cur = item.getCUR();
+				docname = item.getMTNAME();
+				doctype = item.getMTTYPE();
+				filename = item.getFILENAME();
+						
+				if (item.getCHK() == true) {
+					// если папки входящие
+					if (FolderName.equals("SWIFT_MSG") | FolderName.equals("SWIFT_ACK")
+							| FolderName.equals("SWIFT_KVT") || FolderName.equals("SWIFT_OTHER")) {
+						ret = InsertDB(docdt, amount, cur, docname, doctype, crdate, filename, "IN");
+						if (ret.equals("ok")) {
+							File destinationFolder = new File(System.getenv("SWIFT_INLOCAL") + "/" + filename);
+							File sourceFolder = new File(System.getenv(FolderName) + "/" + filename);
+							try {
+								moveFileWithOverwrite(sourceFolder, destinationFolder);
+								InitTable();
+								conn.commit();
+							} catch (Exception e) {
+								try {
+									conn.rollback();
+								} catch (Exception e1) {
+									ErrorMessage(ExceptionUtils.getStackTrace(e1));
+									e1.printStackTrace();
+								}
+								SWLogger.error(ExceptionUtils.getStackTrace(e) + "~"
+										+ Thread.currentThread().getName());
+								ErrorMessage(ExceptionUtils.getStackTrace(e));
+							}
+						} else {
+							ErrorMessage(ret);
+						}
+						// если папка исходящая
+					} else if (FolderName.equals("SWIFT_OUTLOCAL")) {
+						ret = InsertDB(docdt, amount, cur, docname, doctype, crdate, filename, "OUT");
+						if (ret.equals("ok")) {
+							File destinationFolder = new File(System.getenv("SWIFT_OUT") + "/" + filename);
+							File sourceFolder = new File(System.getenv(FolderName) + "/" + filename);
+							try {
+								moveFileWithOverwrite(sourceFolder, destinationFolder);
+								InitTable();
+								conn.commit();
+							} catch (Exception e) {
+								try {
+									conn.rollback();
+								} catch (Exception e1) {
+									ErrorMessage(ExceptionUtils.getStackTrace(e1));
+									e1.printStackTrace();
+								}
+								SWLogger.error(ExceptionUtils.getStackTrace(e) + "~"
+										+ Thread.currentThread().getName());
+								ErrorMessage(ExceptionUtils.getStackTrace(e));
+							}
+						} else {
+							ErrorMessage(ret);
+						}
+					}
+				}
+			});
+			
 //			RootTab.setDisable(true);
 //			PrgInd.setVisible(true);
 //			Task<Object> task = new Task<Object>() {
 //				@Override
 //				public Object call() throws Exception {
-			LocalDate docdt = null;
-			LocalDateTime crdate = null;
-			String amount = null;
-			String cur = null;
-			String docname = null;
-			String doctype = null;
-			String filename = null;
-			String ret = null;
+
+			//----------------------------------
 			// Цикл по ячейкам
-			for (int i = 0; i < STMT.getItems().size(); i++) {
-				// Цикл по столбцам
-				for (int j = 0; j < STMT.getColumns().size(); j++) {
-					// Если Не пусто
-					if (STMT.getColumns().get(j).getCellData(i) != null) {
-						// Если выделена строка
-						if (j == 0) {
-							if ((Boolean) STMT.getColumns().get(j).getCellData(i) == true) {
-								// инициализация переменных
-								docdt = null;
-								crdate = null;
-								amount = null;
-								cur = null;
-								docname = null;
-								doctype = null;
-								filename = null;
-								ret = null;
-								// проверка на наличие данных
-								if (STMT.getColumns().get(3).getCellData(i) != null) {
-									docdt = (LocalDate) STMT.getColumns().get(3).getCellData(i);
-								}
-								if (STMT.getColumns().get(5).getCellData(i) != null) {
-									amount = String.valueOf((Double) STMT.getColumns().get(5).getCellData(i));
-								}
-								if (STMT.getColumns().get(7).getCellData(i) != null) {
-									crdate = (LocalDateTime) STMT.getColumns().get(7).getCellData(i);
-								}
-								if (STMT.getColumns().get(4).getCellData(i) != null) {
-									cur = (String) STMT.getColumns().get(4).getCellData(i);
-								}
-								if (STMT.getColumns().get(2).getCellData(i) != null) {
-									docname = (String) STMT.getColumns().get(2).getCellData(i);
-								}
-								if (STMT.getColumns().get(1).getCellData(i) != null) {
-									doctype = (String) STMT.getColumns().get(1).getCellData(i);
-								}
-								if (STMT.getColumns().get(6).getCellData(i) != null) {
-									filename = (String) STMT.getColumns().get(6).getCellData(i);
-								}
-								// если папки входящие
-								if (FolderName.equals("SWIFT_MSG") | FolderName.equals("SWIFT_ACK")
-										| FolderName.equals("SWIFT_KVT") || FolderName.equals("SWIFT_OTHER")) {
-									ret = InsertDB(docdt, amount, cur, docname, doctype, crdate, filename, "IN");
-									if (ret.equals("ok")) {
-										File destinationFolder = new File(System.getenv("SWIFT_INLOCAL") + "/"
-												+ STMT.getColumns().get(6).getCellData(i));
-										File sourceFolder = new File(System.getenv(FolderName) + "/"
-												+ STMT.getColumns().get(6).getCellData(i));
-										try {
-											moveFileWithOverwrite(sourceFolder, destinationFolder);
-											InitTable();
-											conn.commit();
-										} catch (Exception e) {
-											conn.rollback();
-											SWLogger.error(ExceptionUtils.getStackTrace(e) + "~"
-													+ Thread.currentThread().getName());
-											//ErrorMessage(ExceptionUtils.getStackTrace(e));
-										}
-									} else {
-										ErrorMessage(ret);
-									}
-									// если папка исходящая
-								} else if (FolderName.equals("SWIFT_OUTLOCAL")) {
-									ret = InsertDB(docdt, amount, cur, docname, doctype, crdate, filename, "OUT");
-									if (ret.equals("ok")) {
-										File destinationFolder = new File(System.getenv("SWIFT_OUT") + "/"
-												+ STMT.getColumns().get(6).getCellData(i));
-										File sourceFolder = new File(System.getenv(FolderName) + "/"
-												+ STMT.getColumns().get(6).getCellData(i));
-										try {
-											moveFileWithOverwrite(sourceFolder, destinationFolder);
-											InitTable();
-											conn.commit();
-										} catch (IOException e) {
-											conn.rollback();
-											SWLogger.error(ExceptionUtils.getStackTrace(e) + "~"
-													+ Thread.currentThread().getName());
-											//ErrorMessage(ExceptionUtils.getStackTrace(e));
-										}
-									} else {
-										ErrorMessage(ret);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
+//			for (int i = 0; i < STMT.getItems().size(); i++) {
+//				// Цикл по столбцам
+//				for (int j = 0; j < STMT.getColumns().size(); j++) {
+//					// Если Не пусто
+//					if (STMT.getColumns().get(j).getCellData(i) != null) {
+//						// Если выделена строка
+//						if (j == 0) {
+//							if ((Boolean) STMT.getColumns().get(j).getCellData(i) == true) {
+//								// инициализация переменных
+//								docdt = null;
+//								crdate = null;
+//								amount = null;
+//								cur = null;
+//								docname = null;
+//								doctype = null;
+//								filename = null;
+//								ret = null;
+//								// проверка на наличие данных
+//								if (STMT.getColumns().get(3).getCellData(i) != null) {
+//									docdt = (LocalDate) STMT.getColumns().get(3).getCellData(i);
+//								}
+//								if (STMT.getColumns().get(5).getCellData(i) != null) {
+//									amount = String.valueOf((Double) STMT.getColumns().get(5).getCellData(i));
+//								}
+//								if (STMT.getColumns().get(7).getCellData(i) != null) {
+//									crdate = (LocalDateTime) STMT.getColumns().get(7).getCellData(i);
+//								}
+//								if (STMT.getColumns().get(4).getCellData(i) != null) {
+//									cur = (String) STMT.getColumns().get(4).getCellData(i);
+//								}
+//								if (STMT.getColumns().get(2).getCellData(i) != null) {
+//									docname = (String) STMT.getColumns().get(2).getCellData(i);
+//								}
+//								if (STMT.getColumns().get(1).getCellData(i) != null) {
+//									doctype = (String) STMT.getColumns().get(1).getCellData(i);
+//								}
+//								if (STMT.getColumns().get(6).getCellData(i) != null) {
+//									filename = (String) STMT.getColumns().get(6).getCellData(i);
+//								}
+//								// если папки входящие
+//								if (FolderName.equals("SWIFT_MSG") | FolderName.equals("SWIFT_ACK")
+//										| FolderName.equals("SWIFT_KVT") || FolderName.equals("SWIFT_OTHER")) {
+//									ret = InsertDB(docdt, amount, cur, docname, doctype, crdate, filename, "IN");
+//									if (ret.equals("ok")) {
+//										File destinationFolder = new File(System.getenv("SWIFT_INLOCAL") + "/"
+//												+ STMT.getColumns().get(6).getCellData(i));
+//										File sourceFolder = new File(System.getenv(FolderName) + "/"
+//												+ STMT.getColumns().get(6).getCellData(i));
+//										try {
+//											moveFileWithOverwrite(sourceFolder, destinationFolder);
+//											InitTable();
+//											conn.commit();
+//										} catch (Exception e) {
+//											conn.rollback();
+//											SWLogger.error(ExceptionUtils.getStackTrace(e) + "~"
+//													+ Thread.currentThread().getName());
+//											//ErrorMessage(ExceptionUtils.getStackTrace(e));
+//										}
+//									} else {
+//										ErrorMessage(ret);
+//									}
+//									// если папка исходящая
+//								} else if (FolderName.equals("SWIFT_OUTLOCAL")) {
+//									ret = InsertDB(docdt, amount, cur, docname, doctype, crdate, filename, "OUT");
+//									if (ret.equals("ok")) {
+//										File destinationFolder = new File(System.getenv("SWIFT_OUT") + "/"
+//												+ STMT.getColumns().get(6).getCellData(i));
+//										File sourceFolder = new File(System.getenv(FolderName) + "/"
+//												+ STMT.getColumns().get(6).getCellData(i));
+//										try {
+//											moveFileWithOverwrite(sourceFolder, destinationFolder);
+//											InitTable();
+//											conn.commit();
+//										} catch (IOException e) {
+//											conn.rollback();
+//											SWLogger.error(ExceptionUtils.getStackTrace(e) + "~"
+//													+ Thread.currentThread().getName());
+//											//ErrorMessage(ExceptionUtils.getStackTrace(e));
+//										}
+//									} else {
+//										ErrorMessage(ret);
+//									}
+//								}
+//							}
+//						}
+//					}
+//				}
+//			}
+			//---------------------------
 //					return null;
 //				}
 //			};
@@ -1521,7 +1573,7 @@ public class SWC {
 	 * @param srcFile
 	 * @param destFile
 	 */
-	public void moveFileWithOverwrite(File srcFile, File destFile) throws IOException {
+	public void moveFileWithOverwrite(File srcFile, File destFile) throws Exception {
 		if (destFile.exists()) {
 			org.apache.commons.io.FileUtils.deleteQuietly(destFile);
 		}
@@ -1667,7 +1719,7 @@ public class SWC {
 				ModeINbox.setDisable(true);
 
 				FolderN.setText("Входящие документы ВТБ " + System.getenv("SWIFT_ACK"));
-
+				InitTable();
 			} else if (DIRNAME.getValue().toUpperCase().equals("KVT")) {
 
 				MTTYPE.setVisible(true);
@@ -1681,7 +1733,7 @@ public class SWC {
 				ModeINbox.setDisable(true);
 
 				FolderN.setText("Входящие документы ВТБ для квитанции " + System.getenv("SWIFT_KVT"));
-
+				InitTable();
 			} else if (DIRNAME.getValue().toUpperCase().equals("OTHER")) {
 
 				MTTYPE.setVisible(false);
@@ -1720,7 +1772,7 @@ public class SWC {
 
 				INOUT.setText("Входящие,локальный каталог");
 				FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
-				ModeINbox.setDisable(false);
+				ModeINbox.setDisable(true);
 
 				FolderN.setText("Входящие,локальный каталог " + System.getenv("SWIFT_INLOCAL"));
 				InitTable();
@@ -2209,10 +2261,13 @@ public class SWC {
 //			addIfNotPresent(StPn.getStyleClass(), JMetroStyleClass.UNDERLINE_TAB_PANE);
 
 			CheckBox selecteAllCheckBox = new CheckBox();
+			selecteAllCheckBox.setFont(Font.font(13));
 			selecteAllCheckBox.setOnAction(event -> {
 				event.consume();
-				STMT.getItems().forEach(item -> item.setCHK(selecteAllCheckBox.isSelected()));
-				RefreshTable(null);
+				STMT.getItems().forEach(item -> {
+					item.setCHK(selecteAllCheckBox.isSelected());
+				});
+				InitTable();
 			});
 
 			CHK.setGraphic(selecteAllCheckBox);
@@ -3229,7 +3284,7 @@ public class SWC {
 		table.getColumns().stream().forEach((column_) -> {
 			// column1.getColumns().stream().forEach((column_) -> {
 			// System.out.println(column_.getText());
-			if (column_.getText().equals("Выб.")) {
+			if (column_.getText().equals("")) {
 
 			} else {
 				// Minimal width = columnheader
@@ -3249,7 +3304,7 @@ public class SWC {
 					}
 				}
 				// set the new max-widht with some extra space
-				column_.setPrefWidth(max + 20.0d);
+				column_.setPrefWidth(max + 30.0d);
 			}
 			// });
 
