@@ -97,7 +97,8 @@ public class OdbActions {
 				// Get the selected item
 				// TreeItem<ODB_ACTION> selectedItem =
 				// Actions.getSelectionModel().getSelectedItem();
-				fillTree();
+				//fillTree();
+				findNode(root, Integer.valueOf(ID_FIND.getText()));
 			}
 
 		} catch (Exception e) {
@@ -500,39 +501,39 @@ public class OdbActions {
 		}
 	}
 
-	/*
-	 * void fillTree2() { Map<Integer, TreeItem<String>> itemById = new HashMap<>();
-	 * Map<Integer, Long> parents = new HashMap<>(); String query =
-	 * "select * from ODB_ACTION"; try { PreparedStatement pstmt =
-	 * conn.prepareStatement(query); ResultSet rs = pstmt.executeQuery(); while
-	 * (rs.next()) { adb_act = new ODB_ACTION();
-	 * adb_act.setACT_ID(rs.getLong("ACT_ID"));
-	 * adb_act.setACT_NPP(rs.getLong("ACT_NPP"));
-	 * adb_act.setACT_PARENT(rs.getLong("ACT_PARENT"));
-	 * adb_act.setACT_NAME(rs.getString("ACT_NAME"));
-	 * itemById.put(rs.getLong("ACT_ID"), new
-	 * TreeItem<>(String.valueOf(rs.getLong("ACT_ID")) + ":" +
-	 * rs.getString("ACT_NAME"))); parents.put(rs.getLong("ACT_ID"),
-	 * rs.getLong("ACT_PARENT")); } pstmt.close(); rs.close(); } catch (SQLException
-	 * e) { e.printStackTrace(); }
-	 * 
-	 * for (Map.Entry<Integer, TreeItem<String>> entry : itemById.entrySet()) {
-	 * Integer key = entry.getKey(); Integer parent = parents.get(key); if
-	 * (parent.equals(key)) { // in case the root item points to itself, this is it
-	 * root = entry.getValue(); } else { TreeItem<String> parentItem =
-	 * itemById.get(parent); if (parentItem == null) { // in case the root item has
-	 * no parent in the result set, this is it root = entry.getValue(); } else { //
-	 * add to parent tree item parentItem.getChildren().add(entry.getValue()); }
-	 * parentItem.setExpanded(true); } } root.setExpanded(true);
-	 * Actions.setRoot(root);
-	 * 
-	 * }
-	 */
+	private void findNode(TreeItem<ODB_ACTION> treeNode, int id) {
+	       if (treeNode.getChildren().isEmpty()) {
+	           // Do nothing node is empty.
+	       } else {
+	           // Loop through each child node.
+	           for (TreeItem<ODB_ACTION> node : treeNode.getChildren()) {
+	               if (node.getValue().getACT_ID() == id) {
+	                   node.setExpanded(true);
+						Platform.runLater(new Runnable() {
+							@Override
+							public void run() {
+								Actions.requestFocus();
+								Actions.getSelectionModel().select(node);
+								Actions.scrollTo(Actions.getSelectionModel().getSelectedIndex());
+							}
+						});
+						
+	               } else {
+	                   node.setExpanded(true);
+	               }
+	               // If the current node has children then check them.
+	               if (!treeNode.getChildren().isEmpty()) {
+	                   findNode(node, id);
+	               }
+	           }
+	       }
+	   }
+	
 	void fillTree() {
 		Map<Long, TreeItem<ODB_ACTION>> itemById = new HashMap<>();
 		Map<Long, Long> parents = new HashMap<>();
-		String query = "select * from odb_action_sb "
-				+ ((!ID_FIND.getText().equals("") ? "where ACT_ID = " + ID_FIND.getText() + "" : ""));
+		String query = "select * from odb_action_sb ";
+				//+ ((!ID_FIND.getText().equals("") ? "where ACT_ID = " + ID_FIND.getText() + "" : ""));
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(query);
 			ResultSet rs = pstmt.executeQuery();
@@ -567,7 +568,9 @@ public class OdbActions {
 					// add to parent tree item
 					parentItem.getChildren().add(entry.getValue());
 				}
-				parentItem.setExpanded(true);
+				if (parentItem != null && parentItem.getValue().getACT_ID() == 0) {
+					parentItem.setExpanded(true);
+				}
 			}
 		}
 		// root.setExpanded(true);

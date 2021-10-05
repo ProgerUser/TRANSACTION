@@ -13,16 +13,24 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import app.Main;
 import app.model.Connect;
 import app.model.SqlMap;
+import app.report.Report;
 import app.sbalert.Msg;
 import app.util.DBUtil;
 import app.utils.DbUtil;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class RootLayoutController {
 
@@ -31,7 +39,6 @@ public class RootLayoutController {
 	private MenuItem adminmenuitems;
 	@FXML
 	private MenuBar menubar;
-
 
 	/**
 	 * Для сверки
@@ -52,8 +59,7 @@ public class RootLayoutController {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
-	
-	
+
 	@FXML
 	void ResMon(ActionEvent event) {
 		try {
@@ -62,14 +68,13 @@ public class RootLayoutController {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
-	
 
 	@FXML
 	void handleExit(ActionEvent event) {
 		Platform.exit();
 		System.exit(0);
 	}
-	
+
 	@FXML
 	void swift(ActionEvent event) {
 		try {
@@ -78,7 +83,7 @@ public class RootLayoutController {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
-	
+
 	@FXML
 	void PlastRash(ActionEvent event) {
 		try {
@@ -87,7 +92,7 @@ public class RootLayoutController {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
-	
+
 	@FXML
 	void chektransact(ActionEvent event) {
 		try {
@@ -196,6 +201,15 @@ public class RootLayoutController {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
+	
+	@FXML
+	void Usr(ActionEvent event) {
+		try {
+			Main.Usr();
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
 
 	@FXML
 	void ContactLoad(ActionEvent event) {
@@ -206,40 +220,74 @@ public class RootLayoutController {
 		}
 	}
 
+	public static boolean ReportsWin = true;
+
 	@FXML
 	void ap_print(ActionEvent event) throws Exception {
-		Task<Object> task = new Task<Object>() {
-			@Override
-			public Object call() throws Exception {
-				try {
-					ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", "start javaw -splash:"
-							+ System.getenv("TRANSACT_PATH") + "SPLASH/splash.gif -jar "
-							+ System.getenv("TRANSACT_PATH") + "/AP.jar 666 1 1 no " + Connect.userID_ + " "
-							+ Connect.userPassword_ + " " + Connect.connectionURL_
-									.substring(Connect.connectionURL_.indexOf("/") + 1, Connect.connectionURL_.length())
-							+ " J:\\dev6i\\NET80\\ADMIN");
-					builder.redirectErrorStream(true);
-					Process p;
-					p = builder.start();
-					BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
-					String line;
-					while (true) {
-						line = r.readLine();
-						if (line == null) {
-							break;
-						}
+		try {
+			if (ReportsWin) {
+				ReportsWin = false;
+				Stage stage = new Stage();
+				FXMLLoader loader = new FXMLLoader(Main.class.getResource("/app/report/Report.fxml"));
 
+				Report controller = new Report();
+				controller.setId(666l);
+				loader.setController(controller);
+
+				Parent root = loader.load();
+				stage.setScene(new Scene(root));
+				stage.getIcons().add(new Image("/icon.png"));
+				stage.setTitle("(" + controller.getId() + ") Печать");
+				stage.initOwner(Main.primaryStage);
+
+				stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+					@Override
+					public void handle(WindowEvent paramT) {
+						controller.dbDisconnect();
+						ReportsWin = true;
 					}
-				} catch (IOException e) {
-					Msg.Message(ExceptionUtils.getStackTrace(e));
-				}
-				return null;
+				});
+				stage.show();
 			}
-		};
-		task.setOnFailed(e -> Msg.Message(task.getException().getMessage()));
-		/* task.setOnSucceeded(e -> ); */
-		exec.execute(task);
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
 	}
+
+//	@FXML
+//	void ap_print(ActionEvent event) throws Exception {
+//		Task<Object> task = new Task<Object>() {
+//			@Override
+//			public Object call() throws Exception {
+//				try {
+//					ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", "start javaw -splash:"
+//							+ System.getenv("TRANSACT_PATH") + "SPLASH/splash.gif -jar "
+//							+ System.getenv("TRANSACT_PATH") + "/AP.jar 666 1 1 no " + Connect.userID_ + " "
+//							+ Connect.userPassword_ + " " + Connect.connectionURL_
+//									.substring(Connect.connectionURL_.indexOf("/") + 1, Connect.connectionURL_.length())
+//							+ " J:\\dev6i\\NET80\\ADMIN");
+//					builder.redirectErrorStream(true);
+//					Process p;
+//					p = builder.start();
+//					BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+//					String line;
+//					while (true) {
+//						line = r.readLine();
+//						if (line == null) {
+//							break;
+//						}
+//
+//					}
+//				} catch (IOException e) {
+//					Msg.Message(ExceptionUtils.getStackTrace(e));
+//				}
+//				return null;
+//			}
+//		};
+//		task.setOnFailed(e -> Msg.Message(task.getException().getMessage()));
+//		/* task.setOnSucceeded(e -> ); */
+//		exec.execute(task);
+//	}
 
 	@FXML
 	void ap_printfmx(ActionEvent event) throws Exception {
@@ -290,7 +338,7 @@ public class RootLayoutController {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
-	
+
 	@FXML
 	void AccessGroup(ActionEvent event) {
 		try {
@@ -336,7 +384,6 @@ public class RootLayoutController {
 		return ret;
 	}
 
-	
 	/**
 	 * Проверка прав доступа к меню
 	 * 
@@ -348,7 +395,8 @@ public class RootLayoutController {
 		Long ret = 0l;
 		Connection conn = DBUtil.conn;
 		try {
-			PreparedStatement prepStmt = conn.prepareStatement("SELECT MJUsers.MNU_ACCESS(MNU_ID => ?, USR_LOGIN => ?) CNT FROM DUAL");
+			PreparedStatement prepStmt = conn
+					.prepareStatement("SELECT MJUsers.MNU_ACCESS(MNU_ID => ?, USR_LOGIN => ?) CNT FROM DUAL");
 			prepStmt.setLong(1, FORM_NAME);
 			prepStmt.setString(2, CUSRLOGNAME);
 			ResultSet rs = prepStmt.executeQuery();
@@ -362,7 +410,7 @@ public class RootLayoutController {
 		}
 		return ret;
 	}
-	
+
 	/**
 	 * Проверка прав доступа к меню
 	 * 
@@ -434,6 +482,6 @@ public class RootLayoutController {
 				}
 			});
 		});
-		
+
 	}
 }

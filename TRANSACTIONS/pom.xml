@@ -329,6 +329,11 @@
 			<version>8.0-r6</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.sun.jna</groupId>
+			<artifactId>jna</artifactId>
+			<version>3.0.9</version>
+		</dependency>
 
 
 	</dependencies>

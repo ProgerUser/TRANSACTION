@@ -3,10 +3,6 @@ package app.admin.rescron;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-
-import org.apache.commons.validator.routines.UrlValidator;
-
-import app.sbalert.Msg;
 import app.tr.pl.ConvConst;
 import app.util.DBUtil;
 import app.utils.DbUtil;
@@ -76,12 +72,12 @@ public class Add_Res {
 	void Ok(ActionEvent event) {
 		try {
 			
-			UrlValidator urlValidator = new UrlValidator();
-			
-			if(!urlValidator.isValid(RES_F_CERTRES.getText())) {
-				Msg.Message(RES_F_CERTRES.getText()+" не сайт!");
-				return;
-			}
+//			UrlValidator urlValidator = new UrlValidator();
+//			
+//			if(!urlValidator.isValid(RES_F_CERTRES.getText())) {
+//				Msg.Message(RES_F_CERTRES.getText()+" не сайт!");
+//				return;
+//			}
 			
 			PreparedStatement prp = DBUtil.conn.prepareStatement("" + "insert into sb_cert_exp\r\n" + "  ("
 					+ "certname, \r\n" + "certbeg, \r\n" + "certend, \r\n" + "certres, \r\n" + "certgrp, \r\n"

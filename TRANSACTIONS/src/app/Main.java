@@ -5,10 +5,13 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 
+import com.jyloo.syntheticafx.RootPane;
+
 import app.access.action.OdbActions;
 import app.access.grp.GrpController;
 import app.access.menu.OdbMNU;
 import app.admin.rescron.SBResJob;
+import app.admin.usr.UsrC;
 import app.contact.ContactC;
 import app.model.Connect;
 import app.pensia.PensC;
@@ -76,7 +79,7 @@ public class Main extends Application {
 			{
 //				Connect.connectionURL_ = "10.111.64.21:1521/ODB";
 //				Connect.userID_ = "saidp";
-//				Connect.userPassword_ = "xxx";
+//				Connect.userPassword_ = "";
 //				DbUtil.Db_Connect();
 //				DBUtil.dbConnect();
 //				initRootLayout();
@@ -177,6 +180,37 @@ public class Main extends Application {
 			stage.setTitle("Псевдонимы");
 			stage.initOwner(primaryStage);
 			stage.show();
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+	
+	/**
+	 * Пользователи
+	 */
+	public static boolean UsrWin = true;
+	public static void Usr() {
+		try {
+			if (UsrWin) {
+				UsrWin = false;
+				Stage stage = new Stage();
+				FXMLLoader loader = new FXMLLoader(Main.class.getResource("/app/admin/usr/Usr.fxml"));
+				Parent root = loader.load();
+				stage.getIcons().add(new Image("/icon.png"));
+				stage.setTitle("Пользователи");
+				stage.initOwner(primaryStage);
+				UsrC controller = loader.getController();
+				Scene scene = new Scene(new RootPane(stage, root, true, true));
+				stage.setScene(scene);
+				stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+					@Override
+					public void handle(WindowEvent paramT) {
+						UsrWin = true;
+						controller.dbDisconnect();
+					}
+				});
+				stage.show();
+			}
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}

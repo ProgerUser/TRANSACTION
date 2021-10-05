@@ -4,8 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import org.apache.commons.validator.routines.UrlValidator;
-
 import app.sbalert.Msg;
 import app.tr.pl.ConvConst;
 import app.util.DBUtil;
@@ -15,13 +13,13 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.StringConverter;
@@ -114,12 +112,12 @@ public class Edit_Res {
 				OnClose();
 			}
 			
-			UrlValidator urlValidator = new UrlValidator();
-
-			if (!urlValidator.isValid(RES_F_CERTRES.getText())) {
-				Msg.Message(RES_F_CERTRES.getText() + " не сайт!");
-				return;
-			}
+//			UrlValidator urlValidator = new UrlValidator();
+//
+//			if (!urlValidator.isValid(RES_F_CERTRES.getText())) {
+//				Msg.Message(RES_F_CERTRES.getText() + " не сайт!");
+//				return;
+//			}
 
 			PreparedStatement prp = DBUtil.conn.prepareStatement(""
 					+ "update sb_cert_exp set certname = ?, certbeg = ?, certend =?, certres = ?, certgrp = ?,certstat = ? where crtid = ?");

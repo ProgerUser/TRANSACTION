@@ -326,7 +326,7 @@ public class OdbMNU {
 			Stage stage_ = (Stage) Users.getScene().getWindow();
 
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("/access/menu/IUMnu.fxml"));
+			loader.setLocation(getClass().getResource("/app/access/menu/IUMnu.fxml"));
 
 			// System.out.println(MNU.getSelectionModel().getSelectedItem().getValue().getMNU_ID());
 
@@ -462,33 +462,6 @@ public class OdbMNU {
 		}
 	}
 
-	/*
-	 * void fillTree2() { Map<Integer, TreeItem<String>> itemById = new HashMap<>();
-	 * Map<Integer, Long> parents = new HashMap<>(); String query =
-	 * "select * from ODB_MNU"; try { PreparedStatement pstmt =
-	 * conn.prepareStatement(query); ResultSet rs = pstmt.executeQuery(); while
-	 * (rs.next()) { adb_act = new ODB_MNU();
-	 * adb_act.setMNU_ID(rs.getLong("MNU_ID"));
-	 * adb_act.setMNU_NPP(rs.getLong("MNU_NPP"));
-	 * adb_act.setMNU_PARENT(rs.getLong("MNU_PARENT"));
-	 * adb_act.setMNU_NAME(rs.getString("MNU_NAME"));
-	 * itemById.put(rs.getLong("MNU_ID"), new
-	 * TreeItem<>(String.valueOf(rs.getLong("MNU_ID")) + ":" +
-	 * rs.getString("MNU_NAME"))); parents.put(rs.getLong("MNU_ID"),
-	 * rs.getLong("MNU_PARENT")); } pstmt.close(); rs.close(); } catch (SQLException
-	 * e) { e.printStackTrace(); }
-	 * 
-	 * for (Map.Entry<Integer, TreeItem<String>> entry : itemById.entrySet()) {
-	 * Integer key = entry.getKey(); Integer parent = parents.get(key); if
-	 * (parent.equals(key)) { // in case the root item points to itself, this is it
-	 * root = entry.getValue(); } else { TreeItem<String> parentItem =
-	 * itemById.get(parent); if (parentItem == null) { // in case the root item has
-	 * no parent in the result set, this is it root = entry.getValue(); } else { //
-	 * add to parent tree item parentItem.getChildren().add(entry.getValue()); }
-	 * parentItem.setExpanded(true); } } root.setExpanded(true); MNU.setRoot(root);
-	 * 
-	 * }
-	 */
 	void fillTree() {
 		Map<Long, TreeItem<ODB_MNU>> itemById = new HashMap<>();
 		Map<Long, Long> parents = new HashMap<>();
@@ -527,7 +500,9 @@ public class OdbMNU {
 					// add to parent tree item
 					parentItem.getChildren().add(entry.getValue());
 				}
-				parentItem.setExpanded(true);
+				if (parentItem != null && parentItem.getValue().getMNU_ID() == 0) {
+					parentItem.setExpanded(true);
+				}
 			}
 		}
 		// root.setExpanded(true);

@@ -26,7 +26,7 @@
 						<MenuItem fx:id="14" mnemonicParsing="false" onAction="#service" text="Сервисы" />
 						<MenuItem fx:id="15" mnemonicParsing="false" onAction="#Sverka" text="Сверка" />
 						<MenuItem fx:id="16" mnemonicParsing="false" onAction="#ap_print" text="Печать" />
-						<MenuItem fx:id="17" mnemonicParsing="false" onAction="#ap_printfmx" text="Печать AP_MAIN" />
+<!-- 					<MenuItem fx:id="17" mnemonicParsing="false" onAction="#ap_printfmx" text="Печать AP_MAIN" /> -->
 					</items>
 				</Menu>
 
@@ -51,6 +51,7 @@
 						<MenuItem fx:id="3" mnemonicParsing="false" onAction="#access_menuitems" text="Доступность пунктов меню" />
 						<MenuItem fx:id="24" mnemonicParsing="false" onAction="#AccessGroup" text="Группы доступа" />
 						<MenuItem fx:id="61" mnemonicParsing="false" onAction="#ResMon" text="Мониторинг ресурсов" />
+						<MenuItem fx:id="81" mnemonicParsing="false" onAction="#Usr" text="Пользователи" />
 					</items>
 				</Menu>
 			</menus>
