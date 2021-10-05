@@ -269,7 +269,7 @@ public class OdbMNU {
 			Stage stage_ = (Stage) Users.getScene().getWindow();
 
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("/access/menu/IUMnu.fxml"));
+			loader.setLocation(getClass().getResource("/app/access/menu/IUMnu.fxml"));
 
 			EditMnu controller = new EditMnu();
 			loader.setController(controller);

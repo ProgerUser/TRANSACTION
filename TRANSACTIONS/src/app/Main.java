@@ -12,6 +12,8 @@ import app.access.grp.GrpController;
 import app.access.menu.OdbMNU;
 import app.admin.rescron.SBResJob;
 import app.admin.usr.UsrC;
+import app.audit.trigger.AuList;
+import app.audit.view.Audit;
 import app.contact.ContactC;
 import app.model.Connect;
 import app.pensia.PensC;
@@ -59,31 +61,31 @@ public class Main extends Application {
 			Main.primaryStage.setTitle("Транзакции");
 			logger.setLevel(Level.INFO);
 
-			if (MODULE == null) {
-				Enter();
-			} else if (MODULE.equals("DEBTINFO")) {
-				DBUtil.dbConnect();
-				Debtinfo();
-			} else if (MODULE.equals("BUH")) {
-				DBUtil.dbConnect();
-				initRootLayout();
-				showFirst();
-			} else if (MODULE.equals("SWIFT")) {
-				DBUtil.dbConnect();
-				swift2();
-			} else if (MODULE.equals("VTB_CONV")) {
-				DBUtil.dbConnect();
-				ConvVal();
-			}
-			
-			{
-//				Connect.connectionURL_ = "10.111.64.21:1521/ODB";
-//				Connect.userID_ = "saidp";
-//				Connect.userPassword_ = "";
-//				DbUtil.Db_Connect();
+//			if (MODULE == null) {
+//				Enter();
+//			} else if (MODULE.equals("DEBTINFO")) {
+//				DBUtil.dbConnect();
+//				Debtinfo();
+//			} else if (MODULE.equals("BUH")) {
 //				DBUtil.dbConnect();
 //				initRootLayout();
 //				showFirst();
+//			} else if (MODULE.equals("SWIFT")) {
+//				DBUtil.dbConnect();
+//				swift2();
+//			} else if (MODULE.equals("VTB_CONV")) {
+//				DBUtil.dbConnect();
+//				ConvVal();
+//			}
+			
+			{
+				Connect.connectionURL_ = "10.111.64.21:1521/ODB";
+				Connect.userID_ = "saidp";
+				Connect.userPassword_ = "vector165";
+				DbUtil.Db_Connect();
+				DBUtil.dbConnect();
+				initRootLayout();
+				showFirst();
 //				swift2();
 //				ResMon();
 			}
@@ -221,12 +223,6 @@ public class Main extends Application {
 	 */
 	public static void PlastRash() {
 		try {
-			
-			if (DbUtil.Odb_Action(14l) == 0) {
-				Msg.Message("Нет доступа!");
-				return;
-			}
-			
 			Stage stage = new Stage();
 			Stage stage_ = (Stage) primaryStage.getScene().getWindow();
 			FXMLLoader loader = new FXMLLoader();
@@ -252,6 +248,71 @@ public class Main extends Application {
 		}
 	}
 
+	
+	public static boolean AuSetupWin = true;
+	/**
+	 * Настройка аудита
+	 */
+	public static void AudSet() {
+		try {
+			if (AuSetupWin) {
+				AuSetupWin = false;
+				Stage stage = new Stage();
+				FXMLLoader loader = new FXMLLoader(Main.class.getResource("/app/audit/trigger/AuList.fxml"));
+				Parent root = loader.load();
+				stage.setScene(new Scene(root));
+				stage.getIcons().add(new Image("/icon.png"));
+				stage.setTitle("Настройка аудита");
+				stage.initOwner(primaryStage);
+				AuList controller = loader.getController();
+				stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+					@Override
+					public void handle(WindowEvent paramT) {
+						controller.dbDisconnect();
+						AuSetupWin = true;
+					}
+				});
+				stage.show();
+
+			}
+		} catch (Exception e) {
+			DbUtil.Log_Error(e);
+		}
+	}
+	
+	public static boolean AuditWin = true;
+	/**
+	 * Форма аудита
+	 */
+	public static void AudView() {
+		try {
+			if (AuditWin) {
+				AuditWin = false;
+				Stage stage = new Stage();
+
+				FXMLLoader loader = new FXMLLoader(Main.class.getResource("/app/audit/view/Audit.fxml"));
+
+				Audit controller = new Audit();
+				loader.setController(controller);
+				Parent root = loader.load();
+
+				stage.setScene(new Scene(root));
+				stage.getIcons().add(new Image("/icon.png"));
+				stage.setTitle("Аудит");
+				stage.initOwner(primaryStage);
+				stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+					@Override
+					public void handle(WindowEvent paramT) {
+						AuditWin = true;
+					}
+				});
+				stage.show();
+			}
+
+		} catch (Exception e) {
+			DbUtil.Log_Error(e);
+		}
+	}
 	/**
 	 * Contact
 	 */

@@ -49,6 +49,54 @@ select nvl(CTRNACCD, g.account_payer) debet,
             ]]></value>
 		</entry>
 		<entry>
+			<key>AUDIT_REPORT</key>
+			<value>
+				<![CDATA[
+select d.IACTION_ID,
+       CFIELD,
+       AUP_UTIL.Get_Col_Comment(Tab_Name   => CTABLE,
+                                Tab_Owner  => 'XXI',
+                                Field_Name => CFIELD) CFIELDNAME,
+       CNEWDATA,
+       COLDDATA,
+       DAUDDATE,
+       CTABLE,
+       AUP_UTIL.Get_Tab_Comment(Tab_Name => CTABLE, Tab_Owner => 'XXI') CTABLENAME,
+       CAUDMACHINE,
+       CAUDPROGRAM,
+       CAUDOPERATION
+  from AU_DATA d, AU_ACTION a
+ where d.iaction_id = a.iaction_id
+   and a.ctable = ?
+   and d.IACTION_ID = ?
+   ]]>
+			</value>
+		</entry>
+		<entry>
+			<key>AUDIT_REPORT2</key>
+			<value>
+				<![CDATA[
+select d.IACTION_ID,
+       CFIELD,
+       AUP_UTIL.Get_Col_Comment(Tab_Name   => CTABLE,
+                                Tab_Owner  => 'XXI',
+                                Field_Name => CFIELD) CFIELDNAME,
+       CNEWDATA,
+       COLDDATA,
+       DAUDDATE,
+       CTABLE,
+       AUP_UTIL.Get_Tab_Comment(Tab_Name => CTABLE, Tab_Owner => 'XXI') CTABLENAME,
+       CAUDMACHINE,
+       CAUDPROGRAM,
+       CAUDOPERATION
+  from AU_DATA d, AU_ACTION a
+ where d.iaction_id = a.iaction_id
+   and a.ctable = ?
+   and d.IACTION_ID = 3247
+   ]]>
+			</value>
+		</entry>
+		<entry>
 			<key>PensRa</key>
 			<value><![CDATA[
 declare

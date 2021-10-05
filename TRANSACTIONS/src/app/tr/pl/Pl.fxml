@@ -10,18 +10,18 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.291" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" VBox.vgrow="ALWAYS">
          <VBox.margin>
             <Insets />
          </VBox.margin>
          <children>
-            <TitledPane alignment="CENTER" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Пользователи" HBox.hgrow="ALWAYS">
+            <TitledPane alignment="CENTER" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-border-color: black;" text="Пользователи" HBox.hgrow="ALWAYS">
                <content>
                   <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <children>
-                        <TableView fx:id="UsrLst" styleClass="mylistview" stylesheets="/TableView.css" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="300.0" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="UsrLst" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="300.0" styleClass="mylistview" stylesheets="/TableView.css" VBox.vgrow="ALWAYS">
                           <columns>
                             <TableColumn fx:id="Login" prefWidth="75.0" text="Логин" />
                             <TableColumn fx:id="Fio" prefWidth="170.0" text="ФИО" />
@@ -32,9 +32,9 @@
                   </VBox>
                </content>
             </TitledPane>
-            <TitledPane alignment="CENTER" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Доступные счета" HBox.hgrow="ALWAYS">
+            <TitledPane alignment="CENTER" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-border-color: black;" text="Доступные счета" HBox.hgrow="ALWAYS">
                <content>
-                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="600.0" spacing="5.0">
                      <children>
                         <ToolBar VBox.vgrow="ALWAYS">
                           <items>
@@ -53,7 +53,7 @@
                               <Insets left="-10.0" right="-10.0" top="-10.0" />
                            </VBox.margin>
                         </ToolBar>
-                        <TableView fx:id="ExAcc" maxHeight="1.7976931348623157E308" styleClass="mylistview" stylesheets="/TableView.css" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="ExAcc" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="mylistview" stylesheets="/TableView.css" VBox.vgrow="ALWAYS">
                            <columns>
                               <TableColumn fx:id="cardnum" prefWidth="120.0" text="Карта" />
                               <TableColumn fx:id="ExAccount" prefWidth="150.0" text="Счет" />
@@ -64,6 +64,7 @@
                                     <TableColumn fx:id="D_END" prefWidth="120.0" text="Дата по" />
                                  </columns>
                               </TableColumn>
+                              <TableColumn fx:id="USRS" prefWidth="150.0" text="Пользователь" />
                            </columns>
                         </TableView>
                      </children>

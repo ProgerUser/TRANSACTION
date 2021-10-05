@@ -52,6 +52,8 @@
 						<MenuItem fx:id="24" mnemonicParsing="false" onAction="#AccessGroup" text="Группы доступа" />
 						<MenuItem fx:id="61" mnemonicParsing="false" onAction="#ResMon" text="Мониторинг ресурсов" />
 						<MenuItem fx:id="81" mnemonicParsing="false" onAction="#Usr" text="Пользователи" />
+						<MenuItem fx:id="101" mnemonicParsing="false" onAction="#AudSet" text="Настройка аудита" />
+						<MenuItem fx:id="102" mnemonicParsing="false" onAction="#AudView" text="Просмотр аудита" />
 					</items>
 				</Menu>
 			</menus>

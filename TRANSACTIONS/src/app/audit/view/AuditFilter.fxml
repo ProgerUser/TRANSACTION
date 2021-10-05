@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+		<TitledPane animated="false" text="Параметры из таблицы">
+			<content>
+				<VBox>
+					<children>
+						<GridPane>
+							<columnConstraints>
+								<ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="67.0" prefWidth="113.0" />
+								<ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" />
+								<ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="-Infinity" />
+							</columnConstraints>
+							<rowConstraints>
+								<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+								<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+								<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+								<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+							</rowConstraints>
+							<children>
+								<CheckBox fx:id="CHDAUDDATE" mnemonicParsing="false" onAction="#ACTDAUDDATE" GridPane.columnIndex="2" GridPane.halignment="LEFT" />
+								<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Дата изменения с: " GridPane.halignment="LEFT" GridPane.valignment="CENTER" />
+								<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Действие   " GridPane.halignment="LEFT" GridPane.rowIndex="2" />
+								<CheckBox fx:id="CHCAUDOPERATION" mnemonicParsing="false" onAction="#ACTCAUDOPERATION" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
+								<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Идентификатор   " GridPane.halignment="LEFT" GridPane.rowIndex="3" />
+								<TextField fx:id="IACTION_ID" maxWidth="120.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3" />
+								<CheckBox fx:id="CHIACTION_ID" layoutX="393.0" layoutY="54.0" mnemonicParsing="false" onAction="#ACTIACTION_ID" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="3" />
+								<TextField fx:id="datefinal" maxHeight="30.0" visible="false" GridPane.columnIndex="1" />
+								<ComboBox fx:id="CAUDOPERATION" prefWidth="70.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+									<tooltip>
+										<Tooltip text="I-созд.,U-обновл.,D-удал." />
+									</tooltip>
+								</ComboBox>
+								<DatePicker fx:id="DAUDDATE1" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+								<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Дата изменения по: " GridPane.rowIndex="1" />
+								<DatePicker fx:id="DAUDDATE" prefWidth="100.0" GridPane.columnIndex="1" />
+							</children>
+						</GridPane>
+					</children>
+				</VBox>
+			</content>
+		</TitledPane>
+		<TitledPane animated="false" text="Информационные параметры">
+			<content>
+				<VBox>
+					<children>
+						<GridPane>
+							<children>
+								<CheckBox fx:id="CHCTABLE" mnemonicParsing="false" onAction="#ACTCTABLE" GridPane.columnIndex="2" GridPane.halignment="LEFT">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin></CheckBox>
+								<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Таблица   " GridPane.halignment="LEFT" GridPane.valignment="CENTER" />
+								<Text strokeType="OUTSIDE" strokeWidth="0.0" text="ROWID   " GridPane.halignment="LEFT" GridPane.rowIndex="1" />
+								<TextField fx:id="RROWID" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
+								<CheckBox fx:id="CHRROWID" mnemonicParsing="false" onAction="#ACTRROWID" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin></CheckBox>
+								<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ключ 1   " GridPane.halignment="LEFT" GridPane.rowIndex="2" />
+								<TextField fx:id="ID_NUM" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
+								<CheckBox fx:id="CHID_ANUM" layoutX="393.0" layoutY="54.0" mnemonicParsing="false" onAction="#ACTID_ANUM" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="3">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin></CheckBox>
+								<CheckBox fx:id="CHID_NUM" layoutX="393.0" layoutY="124.0" mnemonicParsing="false" onAction="#ACTID_NUM" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="2">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin></CheckBox>
+								<Text layoutX="61.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ключ 2   " GridPane.halignment="LEFT" GridPane.rowIndex="3" />
+								<TextField fx:id="ID_ANUM" layoutX="110.0" layoutY="83.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+								<Text layoutX="61.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Оператор   " GridPane.halignment="LEFT" GridPane.rowIndex="4" />
+								<TextField fx:id="CAUDUSER" layoutX="110.0" layoutY="118.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+								<TextField fx:id="CAUDIP_ADDRESS" layoutX="110.0" layoutY="153.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+								<TextField fx:id="IAUDSESSION" layoutX="110.0" layoutY="188.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+								<TextField fx:id="CAUDPROGRAM" layoutX="110.0" layoutY="223.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+								<TextField fx:id="CAUDMACHINE" layoutX="110.0" layoutY="257.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+								<CheckBox fx:id="CHCAUDUSER" layoutX="393.0" layoutY="124.0" mnemonicParsing="false" onAction="#ACTCAUDUSER" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="4">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin></CheckBox>
+								<CheckBox fx:id="CHCAUDIP_ADDRESS" layoutX="393.0" layoutY="124.0" mnemonicParsing="false" onAction="#ACTCAUDIP_ADDRESS" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="5">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin></CheckBox>
+								<CheckBox fx:id="CHIAUDSESSION" layoutX="388.0" layoutY="159.0" mnemonicParsing="false" onAction="#ACTIAUDSESSION" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="6">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin></CheckBox>
+								<CheckBox fx:id="CHCAUDPROGRAM" layoutX="388.0" layoutY="229.0" mnemonicParsing="false" onAction="#ACTCAUDPROGRAM" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="7">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin></CheckBox>
+								<CheckBox fx:id="CHCAUDMACHINE" layoutX="388.0" layoutY="264.0" mnemonicParsing="false" onAction="#ACTCAUDMACHINE" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="8">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin></CheckBox>
+								<Text layoutX="46.0" layoutY="172.0" strokeType="OUTSIDE" strokeWidth="0.0" text="IP адрес   " GridPane.halignment="LEFT" GridPane.rowIndex="5" />
+								<Text layoutX="46.0" layoutY="207.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Сессия   " GridPane.halignment="LEFT" GridPane.rowIndex="6" />
+								<Text layoutX="46.0" layoutY="242.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Программа   " GridPane.halignment="LEFT" GridPane.rowIndex="7" />
+								<Text layoutX="46.0" layoutY="277.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Машина   " GridPane.halignment="LEFT" GridPane.rowIndex="8" />
+								<ComboBox fx:id="CTABLE" editable="true" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" />
+							</children>
+							<columnConstraints>
+								<ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="-Infinity" />
+								<ColumnConstraints hgrow="SOMETIMES" maxWidth="210.0" minWidth="171.0" prefWidth="210.0" />
+								<ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" />
+							</columnConstraints>
+							<rowConstraints>
+								<RowConstraints vgrow="SOMETIMES" />
+								<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+								<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+								<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+								<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+								<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+								<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+								<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+								<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+							</rowConstraints>
+						</GridPane>
+					</children>
+				</VBox>
+			</content>
+		</TitledPane>
+      <GridPane>
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="169.0" minWidth="10.0" prefWidth="91.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="258.0" minWidth="10.0" prefWidth="258.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+      				<Button mnemonicParsing="false" onAction="#EXECFILTER" prefHeight="25.0" prefWidth="80.0" text="OK" />
+      				<Button maxWidth="80.0" mnemonicParsing="false" onAction="#cencel" text="Отмена" GridPane.columnIndex="1" />
+         </children>
+         <VBox.margin>
+            <Insets top="5.0" />
+         </VBox.margin>
+      </GridPane>
+	</children>
+	<padding>
+		<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+	</padding>
+</VBox>

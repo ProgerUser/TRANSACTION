@@ -15,15 +15,31 @@ public class PlAccIn {
 	/** Нет данных */
 	private SimpleObjectProperty<LocalDateTime> D_START;
 	private StringProperty cardnum;
+	private StringProperty USRS;
 
 	public PlAccIn() {
 		this.CACCNAME = new SimpleStringProperty();
 		this.CACCACC = new SimpleStringProperty();
 		this.cardnum = new SimpleStringProperty();
+		this.USRS = new SimpleStringProperty();
 		this.D_END = new SimpleObjectProperty<>();
 		this.D_START = new SimpleObjectProperty<>();
 	}
 
+	
+	public void setUSRS(String USRS) {
+		this.USRS.set(USRS);
+	}
+	
+	public StringProperty USRSProperty() {
+		return USRS;
+	}
+
+	
+	public String getUSRS() {
+		return USRS.get();
+	}
+	
 	public void setcardnum(String cardnum) {
 		this.cardnum.set(cardnum);
 	}

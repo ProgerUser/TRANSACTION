@@ -152,8 +152,8 @@
                                                 <Insets />
                                              </GridPane.margin>
                                           </RadioButton>
-                                          <RadioButton fx:id="Ack" mnemonicParsing="false" text="Ack" GridPane.rowIndex="5" />
-                                          <RadioButton fx:id="Kvt" mnemonicParsing="false" text="Kvt" GridPane.rowIndex="6" />
+                                          <RadioButton fx:id="Ack" mnemonicParsing="false" text="Ack" visible="false" GridPane.rowIndex="5" />
+                                          <RadioButton fx:id="Kvt" mnemonicParsing="false" text="Kvt" visible="false" GridPane.rowIndex="6" />
                                        </children>
                                        <HBox.margin>
                                           <Insets />

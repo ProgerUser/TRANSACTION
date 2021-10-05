@@ -55,6 +55,8 @@ public class Pl {
 	@FXML
 	private TableColumn<PlAccIn, String> cardnum;
 	@FXML
+	private TableColumn<PlAccIn, String> USRS;
+	@FXML
 	private TableColumn<Object, LocalDateTime> D_START;
 	@FXML
 	private TableColumn<Object, LocalDateTime> D_END;
@@ -220,7 +222,7 @@ public class Pl {
 			String selectStmt = "select acc.CACCACC,\r\n" + "       acc.CACCNAME,\r\n" + "       gr.d_start,\r\n"
 					+ "       gr.d_end,\r\n" + "       (SELECT CPLCNUM\r\n" + "          FROM v_PLA\r\n"
 					+ "         WHERE V_PLA.IPLATYPE in (1, 2)\r\n" + "           and iplastatus != 6\r\n"
-					+ "           and v_PLA.caccacc = pl_ca.caccacc) cardnum\r\n"
+					+ "           and v_PLA.caccacc = pl_ca.caccacc) cardnum,USRS\r\n"
 					+ "  from acc, pl_ca, SBRA_PL_RASH_USR gr\r\n" + " where acc.CACCACC = gr.acc\r\n"
 					+ "   and pl_ca.caccacc = acc.caccacc\r\n" + "   and pl_ca.iplscatype = 14\r\n"
 					+ "   and gr.usr = ?\r\n" + "";
@@ -231,6 +233,7 @@ public class Pl {
 			while (rs.next()) {
 				PlAccIn list = new PlAccIn();
 				list.setcardnum(rs.getString("cardnum"));
+				list.setUSRS(rs.getString("USRS"));
 				list.setCACCACC(rs.getString("CACCACC"));
 				list.setCACCNAME(rs.getString("CACCNAME"));
 				list.setD_END((rs.getDate("D_END") != null) ? LocalDateTime.parse(
@@ -271,6 +274,7 @@ public class Pl {
 			cardnum.setCellValueFactory(cellData -> cellData.getValue().cardnumProperty());
 			ExAccount.setCellValueFactory(cellData -> cellData.getValue().CACCACCProperty());
 			ExFio.setCellValueFactory(cellData -> cellData.getValue().CACCNAMEProperty());
+			USRS.setCellValueFactory(cellData -> cellData.getValue().USRSProperty());
 			// --
 			InitUsr();
 			// --

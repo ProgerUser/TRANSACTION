@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<StackPane stylesheets="/borderpane.css" xmlns="http://javafx.com/javafx/8.0.291" xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+      <VBox fx:id="SplitPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+         <StackPane.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </StackPane.margin>
+         <children>
+            <ToolBar maxHeight="1.7976931348623157E308">
+               <items>
+										<Button fx:id="AUFILTER" mnemonicParsing="false" onAction="#filter">
+											<tooltip>
+												<Tooltip text="Фильтр">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Tooltip>
+											</tooltip>
+                     <graphic>
+                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILTER" size="16" />
+                     </graphic>
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+										</Button>
+                  <Separator />
+										<Button mnemonicParsing="false" onAction="#Print">
+                     <tooltip>
+                        <Tooltip text="Печать">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Tooltip>
+                     </tooltip>
+                     <graphic>
+                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="PRINT" size="16" />
+                     </graphic>
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+										</Button>
+               </items>
+               <VBox.margin>
+                  <Insets left="-5.0" right="-5.0" top="-5.0" />
+               </VBox.margin>
+            </ToolBar>
+            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" VBox.vgrow="ALWAYS">
+               <children>
+										<TableView fx:id="AU_ACTION" editable="true" maxHeight="1.7976931348623157E308" maxWidth="160.0" styleClass="mylistview" stylesheets="/ScrPane.css" HBox.hgrow="ALWAYS">
+											<columns>
+												<TableColumn fx:id="DAUDDATE" minWidth="-1.0" prefWidth="117.0" text="Дата изменения" />
+												<TableColumn fx:id="CAUDOPERATION" prefWidth="37.0" text="Д" />
+											</columns>
+											<contextMenu>
+												<ContextMenu>
+													<items>
+														<MenuItem mnemonicParsing="false" onAction="#Print" text="Печать" />
+													</items>
+												</ContextMenu>
+											</contextMenu>
+										</TableView>
+										<TableView fx:id="V_AU_DATA" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="600.0" styleClass="mylistview" stylesheets="/ScrPane.css" HBox.hgrow="ALWAYS">
+											<columns>
+												<TableColumn fx:id="CFIELD" prefWidth="113.0" text="Поле" />
+												<TableColumn fx:id="COLDDATA" prefWidth="165.0" text="Старые данные" />
+												<TableColumn fx:id="CNEWDATA" prefWidth="136.0" text="Новые данные" />
+											</columns>
+										</TableView>
+               </children>
+            </HBox>
+						<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-border-color: silver;">
+							<columnConstraints>
+								<ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="-Infinity" />
+								<ColumnConstraints hgrow="SOMETIMES" />
+								<ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="-Infinity" />
+								<ColumnConstraints hgrow="SOMETIMES" />
+							</columnConstraints>
+							<rowConstraints>
+								<RowConstraints maxHeight="35.0" minHeight="33.0" percentHeight="0.0" prefHeight="35.0" vgrow="SOMETIMES" />
+								<RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+								<RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+								<RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+								<RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+							</rowConstraints>
+							<children>
+								<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ключ 1" />
+								<TextField fx:id="ID_NUM" GridPane.columnIndex="1">
+									<GridPane.margin>
+										<Insets />
+									</GridPane.margin>
+								</TextField>
+								<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Таблица" GridPane.rowIndex="1" />
+								<TextField fx:id="CTABLE" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+								<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Сессия" GridPane.rowIndex="2" />
+								<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Пользователь" GridPane.rowIndex="4">
+                     <GridPane.margin>
+                        <Insets right="5.0" />
+                     </GridPane.margin>
+                  </Text>
+								<TextField fx:id="CAUDUSER" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+								<TextField fx:id="IAUDSESSION" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+								<Text layoutX="10.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ROWID" GridPane.rowIndex="3" />
+								<TextField fx:id="RROWID" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+								<TextField fx:id="ID_ANUM" GridPane.columnIndex="3">
+									<GridPane.margin>
+										<Insets />
+									</GridPane.margin>
+								</TextField>
+								<Text strokeType="OUTSIDE" strokeWidth="0.0" text="О колонке" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </GridPane.margin>
+                  </Text>
+								<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Программа" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                     <GridPane.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </GridPane.margin>
+                  </Text>
+								<TextField fx:id="Get_Col_Comment" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+								<TextField fx:id="CAUDPROGRAM" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+								<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Компьютер" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                     <GridPane.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </GridPane.margin>
+                  </Text>
+								<TextField fx:id="CAUDMACHINE" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+								<Text strokeType="OUTSIDE" strokeWidth="0.0" text="IP адрес" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                     <GridPane.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </GridPane.margin>
+                  </Text>
+								<TextField fx:id="CAUDIP_ADDRESS" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+								<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ключ 2" GridPane.columnIndex="2">
+                     <GridPane.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </GridPane.margin>
+                  </Text>
+							</children>
+							<VBox.margin>
+								<Insets />
+							</VBox.margin>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+						</GridPane>
+         </children>
+      </VBox>
+		<ProgressIndicator fx:id="PB" maxHeight="50.0" maxWidth="50.0" visible="false" />
+	</children>
+</StackPane>

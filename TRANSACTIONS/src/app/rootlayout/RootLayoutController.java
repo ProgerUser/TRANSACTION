@@ -92,6 +92,24 @@ public class RootLayoutController {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
+	
+	@FXML
+	void AudView(ActionEvent event) {
+		try {
+			Main.AudView();
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+	
+	@FXML
+	void AudSet(ActionEvent event) {
+		try {
+			Main.AudSet();
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
 
 	@FXML
 	void chektransact(ActionEvent event) {
