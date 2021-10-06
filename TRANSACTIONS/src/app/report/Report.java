@@ -29,6 +29,7 @@ import app.Main;
 import app.model.Connect;
 import app.sbalert.Msg;
 import app.utils.DbUtil;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -41,13 +42,18 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -63,27 +69,48 @@ import javafx.util.StringConverter;
 public class Report {
 
 	
-	@FXML private Button List;
-	@FXML private Button Design;
-	@FXML private Button Clone;
-	@FXML private Button New;
-	
-    @FXML private CheckBox USE_CONVERTATION;
-    @FXML private CheckBox LOW_REGIM;
-    @FXML private CheckBox EDIT_ENABLE;
-    
-    @FXML private ComboBox<String> PRINTER_ID;
-    @FXML private ComboBox<AP_REPORT_CAT> ComboList;
-    
-    @FXML private TextField FILE_NAME;
-    
-    @FXML private RadioButton Display;
-    @FXML private RadioButton GENERATE_TYPE;
-    @FXML private RadioButton ToPrinter;
-    @FXML private RadioButton ToFile;
-    @FXML private RadioButton DIR_MANUAL;
-    @FXML private RadioButton DIR_USER_OUT;
-    @FXML private RadioButton DIR_TEMP;
+	@FXML
+	private Button List;
+	@FXML
+	private Button Design;
+	@FXML
+	private Button Clone;
+	@FXML
+	private Button New;
+	@FXML
+	private CheckBox USE_CONVERTATION;
+	@FXML
+	private CheckBox LOW_REGIM;
+	@FXML
+	private CheckBox EDIT_ENABLE;
+	@FXML
+	private ComboBox<String> PRINTER_ID;
+	@FXML
+	private ComboBox<AP_REPORT_CAT> ComboList;
+	@FXML
+	private TableView<V_AP_REPORT_CAT_PARAM> PARAMS;
+    @FXML
+    private TableColumn<V_AP_REPORT_CAT_PARAM, Long> IPARAMNUM;
+    @FXML
+    private TableColumn<V_AP_REPORT_CAT_PARAM, String> CPARAMDESCR;
+    @FXML
+    private TableColumn<V_AP_REPORT_CAT_PARAM, String> CPARAMDEFAULT;
+	@FXML
+	private TextField FILE_NAME;
+	@FXML
+	private RadioButton Display;
+	@FXML
+	private RadioButton GENERATE_TYPE;
+	@FXML
+	private RadioButton ToPrinter;
+	@FXML
+	private RadioButton ToFile;
+	@FXML
+	private RadioButton DIR_MANUAL;
+	@FXML
+	private RadioButton DIR_USER_OUT;
+	@FXML
+	private RadioButton DIR_TEMP;
     
 	@FXML
 	void Display(ActionEvent event) {
@@ -105,6 +132,60 @@ public class Report {
 		ParamRep();
 	}
 
+	@FXML
+	void SetDef(ActionEvent event) {
+		try {
+			if (ComboList.getSelectionModel().getSelectedItem() != null) {
+				AP_REPORT_CAT sel = ComboList.getSelectionModel().getSelectedItem();
+				final Alert alert = new Alert(AlertType.CONFIRMATION,
+						"Сделать  \"" + ComboList.getValue().getREPORT_ID() + "."
+								+ ComboList.getValue().getREPORT_NAME() + "\" отчетом по умолчанию?",
+						ButtonType.YES, ButtonType.NO);
+				if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
+				String pl_sql = "BEGIN\r\n"
+						+ "  DELETE FROM AP_USER_REPORT_TYPE\r\n"
+						+ "   WHERE USER_ID =\r\n"
+						+ "         (SELECT USR.IUSRID FROM USR WHERE USR.CUSRLOGNAME = USER)\r\n"
+						+ "     AND REPORT_TYPE_ID = ?;\r\n"
+						+ "  INSERT INTO AP_USER_REPORT_TYPE\r\n"
+						+ "    (USER_ID,\r\n"
+						+ "     REPORT_TYPE_ID,\r\n"
+						+ "     REPORT_ID,\r\n"
+						+ "     FILE_NAME,\r\n"
+						+ "     GENERATE_TYPE,\r\n"
+						+ "     USE_OUT_DIR,\r\n"
+						+ "     USE_CONVERTATION,\r\n"
+						+ "     USE_SETUP,\r\n"
+						+ "     PRINTER_ID,\r\n"
+						+ "     COPIES)\r\n"
+						+ "  VALUES\r\n"
+						+ "    ((SELECT USR.IUSRID FROM USR WHERE USR.CUSRLOGNAME = USER),\r\n"
+						+ "     ?,\r\n"
+						+ "     ?,\r\n"
+						+ "     ?,\r\n"
+						+ "     'U',\r\n"
+						+ "     'T',\r\n"
+						+ "     'N',\r\n"
+						+ "     'U',\r\n"
+						+ "     -1,\r\n"
+						+ "     1);\r\n"
+						+ "END;\r\n"
+						+ "";
+					PreparedStatement prp = conn.prepareStatement(pl_sql);
+					prp.setLong(1, sel.getREPORT_TYPE_ID());
+					prp.setLong(2, sel.getREPORT_TYPE_ID());
+					prp.setLong(3, sel.getREPORT_ID());
+					prp.setString(4, sel.getREPORT_UFS());
+					prp.execute();
+					prp.close();
+					conn.commit();
+				}
+			}
+		} catch (Exception e) {
+			DbUtil.Log_Error(e);
+		}
+	}
+	
 	void onclose() {
 		Stage stage = (Stage) List.getScene().getWindow();
 		stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
@@ -115,6 +196,7 @@ public class Report {
 		try {
 			AP_REPORT_CAT rep_cat = ComboList.getSelectionModel().getSelectedItem();
 			if (rep_cat != null) {
+				{
 			String viewer = "";
 			PreparedStatement prp = conn.prepareStatement("select lower(decode(replace(CNAME, 'FRREP ', ''),\n" + 
 					"                    'Отсутствует',\n" + 
@@ -140,7 +222,35 @@ public class Report {
 			} else {
 				GENERATE_TYPE.setText(viewer);
 				GENERATE_TYPE.setDisable(true);
-			}}
+			}
+				}
+			//prm
+			{
+				PreparedStatement prp = conn.prepareStatement("select *\r\n"
+						+ "  from V_AP_REPORT_CAT_PARAM t\r\n"
+						+ " where (report_type_id = ?)\r\n"
+						+ "   and (report_id = ?)");
+				prp.setLong(1, rep_cat.getREPORT_TYPE_ID());
+				prp.setLong(2, rep_cat.getREPORT_ID());
+				ResultSet rs = prp.executeQuery();
+				ObservableList<V_AP_REPORT_CAT_PARAM> prm_lst = FXCollections.observableArrayList();
+				while(rs.next()) {
+					V_AP_REPORT_CAT_PARAM list = new V_AP_REPORT_CAT_PARAM();
+					list.setREPORT_ID(rs.getLong("REPORT_ID"));
+					list.setREPORT_TYPE_ID(rs.getLong("REPORT_TYPE_ID"));
+					list.setIPARAMNUM(rs.getLong("IPARAMNUM"));
+					list.setCPARAMDESCR(rs.getString("CPARAMDESCR"));
+					list.setCPARAMDEFAULT(rs.getString("CPARAMDEFAULT"));
+					list.setCURSOR_ID(rs.getLong("CURSOR_ID"));
+					list.setSAVE(rs.getString("SAVE"));
+					list.setCURSOR_NAME(rs.getString("CURSOR_NAME"));
+					prm_lst.add(list);
+				}
+				prp.close();
+				rs.close();
+				PARAMS.setItems(prm_lst);
+			}
+			}
 		} catch (Exception e) {
 			DbUtil.Log_Error(e);
 		}
@@ -388,6 +498,11 @@ public class Report {
 	private void initialize() {
 		// ResourceManager.addBundle();
 		try {
+			
+			IPARAMNUM.setCellValueFactory(cellData -> cellData.getValue().IPARAMNUMProperty().asObject());
+			CPARAMDESCR.setCellValueFactory(cellData -> cellData.getValue().CPARAMDESCRProperty());
+			CPARAMDEFAULT.setCellValueFactory(cellData -> cellData.getValue().CPARAMDEFAULTProperty());
+			
 			ToggleGroup toggleGroup = new ToggleGroup();
 			GENERATE_TYPE.setToggleGroup(toggleGroup);
 			ToFile.setToggleGroup(toggleGroup);
@@ -405,6 +520,8 @@ public class Report {
 			
 			
 			dbConnect();
+			
+			
 			// установить svg как иконку для кнопки
 //			{
 //				InputStream svgFile = getClass().getResourceAsStream("/table2.svg");
@@ -466,7 +583,7 @@ public class Report {
 				ObservableList<AP_REPORT_CAT> rep = FXCollections.observableArrayList();
 				while (rs.next()) {
 					AP_REPORT_CAT list = new AP_REPORT_CAT();
-					//list.setAVAILABLE_SQL(rs.getString("AVAILABLE_SQL"));
+					// list.setAVAILABLE_SQL(rs.getString("AVAILABLE_SQL"));
 					list.setOEM_DATA(rs.getString("OEM_DATA"));
 					list.setEDIT_PARAM(rs.getString("EDIT_PARAM"));
 					list.setREPORT_COMMENT(rs.getString("REPORT_COMMENT"));
@@ -481,11 +598,32 @@ public class Report {
 
 				stmt.close();
 				rs.close();
-
 				ComboList.setItems(rep);
-				ComboList.getSelectionModel().select(0);
 				CombRep(ComboList);
 			}
+			//по умолчанию отчеты
+			{
+				PreparedStatement prp = conn
+						.prepareStatement("select t.report_id\r\n" + "  from AP_User_Report_Type t\r\n"
+								+ " where USER_ID = (SELECT USR.IUSRID FROM USR WHERE USR.CUSRLOGNAME = USER)\r\n"
+								+ "   and t.REPORT_TYPE_ID = ?\r\n" + "");
+				prp.setLong(1, getId());
+				ResultSet rs = prp.executeQuery();
+				if (rs.next()) {
+					for (AP_REPORT_CAT cl : ComboList.getItems()) {
+						if (cl.getREPORT_ID().equals(rs.getLong(1))) {
+							ComboList.getSelectionModel().select(cl);
+							break;
+						}
+					}
+				} else {
+					ComboList.getSelectionModel().select(0);
+				}
+			}
+				
+				
+				
+			
 			
 			//Template
 			{
@@ -532,7 +670,51 @@ public class Report {
 				cst.close();
 				DIR_USER_OUT.setText(UserDir);
 				DIR_USER_OUT.setSelected(true);
+				
+				//prm
+				{
+					PreparedStatement prp = conn.prepareStatement("select *\r\n"
+							+ "  from V_AP_REPORT_CAT_PARAM t\r\n"
+							+ " where (report_type_id = ?)\r\n"
+							+ "   and (report_id = ?)");
+					prp.setLong(1, rep_cat.getREPORT_TYPE_ID());
+					prp.setLong(2, rep_cat.getREPORT_ID());
+					ResultSet rs = prp.executeQuery();
+					ObservableList<V_AP_REPORT_CAT_PARAM> prm_lst = FXCollections.observableArrayList();
+					while(rs.next()) {
+						V_AP_REPORT_CAT_PARAM list = new V_AP_REPORT_CAT_PARAM();
+						list.setREPORT_ID(rs.getLong("REPORT_ID"));
+						list.setREPORT_TYPE_ID(rs.getLong("REPORT_TYPE_ID"));
+						list.setIPARAMNUM(rs.getLong("IPARAMNUM"));
+						list.setCPARAMDESCR(rs.getString("CPARAMDESCR"));
+						list.setCPARAMDEFAULT(rs.getString("CPARAMDEFAULT"));
+						list.setCURSOR_ID(rs.getLong("CURSOR_ID"));
+						list.setSAVE(rs.getString("SAVE"));
+						list.setCURSOR_NAME(rs.getString("CURSOR_NAME"));
+						prm_lst.add(list);
+					}
+					prp.close();
+					rs.close();
+					PARAMS.setItems(prm_lst);
+				}
+				Platform.runLater(() -> {
+					try {
+						PreparedStatement prp = conn.prepareStatement(
+								"select REPORT_TYPE_NAME from AP_REPORT_TYPE t where REPORT_TYPE_ID = ?");
+						prp.setLong(1, getId());
+						ResultSet rs = prp.executeQuery();
+						if(rs.next()) {
+							Stage stage = (Stage) PARAMS.getScene().getWindow();
+							stage.setTitle("("+getId() + ") " + rs.getString(1));
+						}
+						prp.close();
+						rs.close();
+					} catch (SQLException e) {
+						DbUtil.Log_Error(e);
+					}
+				});
 			}
+
 		} catch (Exception e) {
 			DbUtil.Log_Error(e);
 		}

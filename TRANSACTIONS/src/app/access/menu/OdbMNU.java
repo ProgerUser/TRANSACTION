@@ -500,7 +500,7 @@ public class OdbMNU {
 					// add to parent tree item
 					parentItem.getChildren().add(entry.getValue());
 				}
-				if (parentItem != null && parentItem.getValue().getMNU_ID() == 0) {
+				if (parentItem != null /*&& parentItem.getValue().getMNU_ID() == 0*/) {
 					parentItem.setExpanded(true);
 				}
 			}

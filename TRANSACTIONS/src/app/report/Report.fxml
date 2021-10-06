@@ -23,7 +23,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="PANE" prefHeight="330.0" prefWidth="640.0" spacing="5.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="PANE" prefHeight="330.0" prefWidth="640.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.291" xmlns:fx="http://javafx.com/fxml/1">
 	<children>
 		<HBox alignment="CENTER_LEFT" spacing="5.0">
 			<children>
@@ -38,12 +38,27 @@
 						</Tooltip>
 					</tooltip>
                <font>
-                  <Font size="10.0" />
+                  <Font size="8.0" />
                </font>
                <graphic>
                   <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TABLE" size="18" />
                </graphic>
 				</Button>
+            <Button layoutX="611.0" layoutY="10.0" mnemonicParsing="false" onAction="#SetDef">
+               <tooltip>
+                  <Tooltip text="Список">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Tooltip>
+               </tooltip>
+               <font>
+                  <Font size="8.0" />
+               </font>
+               <graphic>
+                  <FontAwesomeIconView fontSmoothingType="LCD" glyphName="CHECK_SQUARE_ALT" size="18" />
+               </graphic>
+            </Button>
 			</children>
 		</HBox>
 		<TabPane prefHeight="200.0" prefWidth="200.0" styleClass="floating" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
@@ -116,11 +131,11 @@
                <content>
                   <VBox>
                      <children>
-      								<TableView fx:id="PARAMS1" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#clickItem" styleClass="mylistview" stylesheets="/ScrPane.css" VBox.vgrow="ALWAYS">
+      								<TableView fx:id="PARAMS" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#clickItem" styleClass="mylistview" stylesheets="/ScrPane.css" VBox.vgrow="ALWAYS">
       									<columns>
-      										<TableColumn fx:id="PRM_ID1" prefWidth="164.0" text="Номер" />
-      										<TableColumn fx:id="NAME1" prefWidth="252.0" text="Название" />
-      										<TableColumn fx:id="VALUE1" prefWidth="187.0" text="Значение" />
+      										<TableColumn fx:id="IPARAMNUM" prefWidth="164.0" text="Номер" />
+      										<TableColumn fx:id="CPARAMDESCR" prefWidth="252.0" text="Название" />
+      										<TableColumn fx:id="CPARAMDEFAULT" prefWidth="187.0" text="Значение" />
       									</columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -146,7 +161,7 @@
                   </Tooltip>
                </tooltip>
                <graphic>
-                  <FontAwesomeIconView fill="BLACK" fontSmoothingType="LCD" glyphName="FILE_ALT" size="18.0" />
+                  <FontAwesomeIconView fill="BLACK" fontSmoothingType="LCD" glyphName="FILE_ALT" size="15" />
                </graphic>
             </Button>
 				<Button fx:id="Clone" maxWidth="30.0" mnemonicParsing="false" onAction="#Clone">
@@ -158,12 +173,12 @@
 						</Tooltip>
 					</tooltip>
 					<graphic>
-						<FontAwesomeIconView fill="BLACK" fontSmoothingType="LCD" glyphName="COPY" size="18.0" />
+						<FontAwesomeIconView fill="BLACK" fontSmoothingType="LCD" glyphName="COPY" size="15" />
 					</graphic>
 				</Button>
 				<Button fx:id="Design" maxWidth="30.0" mnemonicParsing="false" onAction="#Design">
 					<graphic>
-						<FontAwesomeIconView fill="BLACK" fontSmoothingType="LCD" glyphName="WRENCH" size="18.0" />
+						<FontAwesomeIconView fill="BLACK" fontSmoothingType="LCD" glyphName="EDIT" size="15" />
 					</graphic>
 					<tooltip>
 						<Tooltip text="Редактировать">

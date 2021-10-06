@@ -20,7 +20,6 @@
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -30,7 +29,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane fx:id="StPn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane fx:id="StPn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.291" xmlns:fx="http://javafx.com/fxml/1">
 <children>
       <TabPane fx:id="RootTab" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="floating" tabClosingPolicy="UNAVAILABLE">
         <tabs>
@@ -68,14 +67,16 @@
                                     <Font size="10.0" />
                                  </font>
                               </Button>
-                              <Text fx:id="FolderN" strokeType="OUTSIDE" strokeWidth="0.0" />
                   			</items>
                            <VBox.margin>
                               <Insets left="-5.0" right="-5.0" top="-5.0" />
                            </VBox.margin>
                   		</ToolBar>
                         <ToolBar>
-                          <items>
+                           <VBox.margin>
+                              <Insets left="-5.0" right="-5.0" top="-5.0" />
+                           </VBox.margin>
+                           <items>
                             <Button mnemonicParsing="false" onAction="#RefreshTable">
                                  <font>
                                     <Font size="10.0" />
@@ -110,6 +111,7 @@
                                     </Tooltip>
                                  </tooltip>
                               </DatePicker>
+                              <Separator orientation="VERTICAL" />
                               <DatePicker fx:id="DT2" maxWidth="120.0" prefHeight="25.0" promptText="ПО">
                                  <tooltip>
                                     <Tooltip text="Дата создания файлов">
@@ -119,11 +121,7 @@
                                     </Tooltip>
                                  </tooltip>
                               </DatePicker>
-                              <Separator layoutX="83.0" layoutY="10.0" orientation="VERTICAL" />
-                          </items>
-                           <VBox.margin>
-                              <Insets left="-5.0" right="-5.0" top="-5.0" />
-                           </VBox.margin>
+                           </items>
                         </ToolBar>
                         <SplitPane dividerPositions="0.6843137254901961" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL" VBox.vgrow="ALWAYS">
                            <items>
@@ -303,9 +301,12 @@
                   </Tooltip>
                </tooltip>
                <content>
-                  <BorderPane>
-                     <top>
-                        <ToolBar style="-fx-border-color: silver;" stylesheets="/borderpane.css" BorderPane.alignment="CENTER">
+                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                     <children>
+                        <ToolBar stylesheets="/borderpane.css">
                            <items>
                               <Button fx:id="RefreshDB" mnemonicParsing="false" onAction="#RefreshDB" styleClass="Reload">
                                  <graphic>
@@ -421,16 +422,11 @@
                                  </tooltip>
                               </Button>
                            </items>
-                           <BorderPane.margin>
-                              <Insets bottom="5.0" />
-                           </BorderPane.margin>
+                           <VBox.margin>
+                              <Insets left="-5.0" right="-5.0" top="-5.0" />
+                           </VBox.margin>
                         </ToolBar>
-                     </top>
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                     <center>
-                        <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
+                        <SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL" VBox.vgrow="ALWAYS">
                            <items>
                               <TableView fx:id="Achive" editable="true" styleClass="mylistview" stylesheets="/TableView.css" tableMenuButtonVisible="true">
                                  <columns>
@@ -463,8 +459,8 @@
                               </TextArea>
                            </items>
                         </SplitPane>
-                     </center>
-                  </BorderPane>
+                     </children>
+                  </VBox>
                </content>
             </Tab>
             <Tab fx:id="CONV_VAL" text="Конверсия валюты">
@@ -473,7 +469,7 @@
                      <content>
                         <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
                            <children>
-                              <ToolBar style="-fx-border-color: silver;" VBox.vgrow="ALWAYS">
+                              <ToolBar VBox.vgrow="ALWAYS">
                                 <items>
                                   <Button mnemonicParsing="false" onAction="#REFR_CONV">
                                        <graphic>

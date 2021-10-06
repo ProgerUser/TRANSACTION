@@ -568,7 +568,7 @@ public class OdbActions {
 					// add to parent tree item
 					parentItem.getChildren().add(entry.getValue());
 				}
-				if (parentItem != null && parentItem.getValue().getACT_ID() == 0) {
+				if (parentItem != null /*&& parentItem.getValue().getACT_ID() == 0*/) {
 					parentItem.setExpanded(true);
 				}
 			}

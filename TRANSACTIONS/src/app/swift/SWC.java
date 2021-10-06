@@ -193,8 +193,8 @@ public class SWC {
 	/**
 	 * Расшифровка типа каталога
 	 */
-	@FXML
-	private Text FolderN;
+	//@FXML
+	//private Text FolderN;
 
 	/**
 	 * Дата с
@@ -1704,7 +1704,12 @@ public class SWC {
 				FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
 				ModeINbox.setDisable(false);
 
-				FolderN.setText("Входящие документы ВТБ " + System.getenv("SWIFT_MSG"));
+				//FolderN.setText("Входящие документы ВТБ " + System.getenv("SWIFT_MSG"));
+				
+				String title = " Входящие документы ВТБ " + System.getenv("SWIFT_MSG");
+				Stage stage = (Stage) BIK_TO_SW_VTB.getScene().getWindow();
+				stage.setTitle("<S.W.I.F.T> Folder (" + title+")");
+				
 				InitTable();
 			} else if (DIRNAME.getValue().toUpperCase().equals("ACK")) {
 
@@ -1718,7 +1723,12 @@ public class SWC {
 				FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
 				ModeINbox.setDisable(true);
 
-				FolderN.setText("Входящие документы ВТБ " + System.getenv("SWIFT_ACK"));
+				//FolderN.setText("Входящие документы ВТБ " + System.getenv("SWIFT_ACK"));
+				
+				String title = " Входящие документы ВТБ " + System.getenv("SWIFT_ACK");
+				Stage stage = (Stage) BIK_TO_SW_VTB.getScene().getWindow();
+				stage.setTitle("<S.W.I.F.T> Folder (" + title+")");
+				
 				InitTable();
 			} else if (DIRNAME.getValue().toUpperCase().equals("KVT")) {
 
@@ -1732,7 +1742,11 @@ public class SWC {
 				FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
 				ModeINbox.setDisable(true);
 
-				FolderN.setText("Входящие документы ВТБ для квитанции " + System.getenv("SWIFT_KVT"));
+				//FolderN.setText("Входящие документы ВТБ для квитанции " + System.getenv("SWIFT_KVT"));
+				String title = " Входящие документы ВТБ для квитанции " + System.getenv("SWIFT_KVT");
+				Stage stage = (Stage) BIK_TO_SW_VTB.getScene().getWindow();
+				stage.setTitle("<S.W.I.F.T> Folder (" + title+")");
+				
 				InitTable();
 			} else if (DIRNAME.getValue().toUpperCase().equals("OTHER")) {
 
@@ -1746,8 +1760,11 @@ public class SWC {
 				FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
 				ModeINbox.setDisable(true);
 
-				FolderN.setText("Входящие документы ВТБ, другие=" + System.getenv("SWIFT_OTHER"));
-
+				//FolderN.setText("Входящие документы ВТБ, другие=" + System.getenv("SWIFT_OTHER"));
+				String title = " Входящие документы ВТБ, другие=" + System.getenv("SWIFT_OTHER");
+				Stage stage = (Stage) BIK_TO_SW_VTB.getScene().getWindow();
+				stage.setTitle("<S.W.I.F.T> Folder (" + title+")");
+				
 			} else if (DIRNAME.getValue().toUpperCase().equals("OUT")) {
 
 				MTTYPE.setVisible(true);
@@ -1760,7 +1777,11 @@ public class SWC {
 				FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
 				ModeINbox.setDisable(true);
 
-				FolderN.setText("Исходящие документы ВТБ " + System.getenv("SWIFT_OUT"));
+				//FolderN.setText("Исходящие документы ВТБ " + System.getenv("SWIFT_OUT"));
+				String title = " Исходящие документы ВТБ " + System.getenv("SWIFT_OUT");
+				Stage stage = (Stage) BIK_TO_SW_VTB.getScene().getWindow();
+				stage.setTitle("<S.W.I.F.T> Folder (" + title+")");
+				
 				InitTable();
 			} else if (DIRNAME.getValue().toUpperCase().equals("INLOCAL")) {
 
@@ -1774,7 +1795,11 @@ public class SWC {
 				FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
 				ModeINbox.setDisable(true);
 
-				FolderN.setText("Входящие,локальный каталог " + System.getenv("SWIFT_INLOCAL"));
+				//FolderN.setText("Входящие,локальный каталог " + System.getenv("SWIFT_INLOCAL"));
+				String title = " Входящие,локальный каталог " + System.getenv("SWIFT_INLOCAL");
+				Stage stage = (Stage) BIK_TO_SW_VTB.getScene().getWindow();
+				stage.setTitle("<S.W.I.F.T> Folder (" + title+")");
+				
 				InitTable();
 			}
 
@@ -1790,7 +1815,11 @@ public class SWC {
 				FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
 				ModeINbox.setDisable(false);
 
-				FolderN.setText("Исходящие, локальный каталог " + System.getenv("SWIFT_OUTLOCAL"));
+				//FolderN.setText("Исходящие, локальный каталог " + System.getenv("SWIFT_OUTLOCAL"));
+				String title = " Исходящие, локальный каталог " + System.getenv("SWIFT_OUTLOCAL");
+				Stage stage = (Stage) BIK_TO_SW_VTB.getScene().getWindow();
+				stage.setTitle("<S.W.I.F.T> Folder (" + title+")");
+				
 				InitTable();
 			}
 
@@ -2137,7 +2166,16 @@ public class SWC {
 					DIRNAME.getSelectionModel().select(0);
 					FolderName = "SWIFT_MSG";
 					INOUT.setText("Входящие");
-					FolderN.setText("Входящие документы ВТБ " + System.getenv("SWIFT_MSG"));
+					//FolderN.setText("Входящие документы ВТБ " + System.getenv("SWIFT_MSG"));
+					
+
+					String title = " Входящие документы ВТБ " + System.getenv("SWIFT_MSG");
+					
+					Platform.runLater(() -> {
+						Stage stage = (Stage) BIK_TO_SW_VTB.getScene().getWindow();
+						stage.setTitle("<S.W.I.F.T> Folder (" + title+")");
+					});
+					
 
 				} else if (cl.getInt(1) == 1) {
 					DIRNAME.getItems().addAll("Msg", "Out", "Ack", "Kvt", "Other", "InLocal", "OutLocal");
@@ -2156,8 +2194,15 @@ public class SWC {
 					OutLocal.setSelected(true);
 
 					FolderName = "SWIFT_" + DIRNAME.getValue().toUpperCase();
-
-					FolderN.setText("Исходящие, локальный каталог " + System.getenv("SWIFT_OUTLOCAL"));
+					
+					String title = " Исходящие, локальный каталог " + System.getenv("SWIFT_OUTLOCAL");
+					
+					Platform.runLater(() -> {
+						Stage stage = (Stage) BIK_TO_SW_VTB.getScene().getWindow();
+						stage.setTitle("<S.W.I.F.T> Folder (" + title+")");
+					});
+					
+					//FolderN.setText("Исходящие, локальный каталог " + System.getenv("SWIFT_OUTLOCAL"));
 				}
 				cl.close();
 			}
