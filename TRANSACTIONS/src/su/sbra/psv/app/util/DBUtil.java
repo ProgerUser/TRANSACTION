@@ -1,5 +1,7 @@
 package su.sbra.psv.app.util;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,13 +14,13 @@ import java.util.Properties;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
+
 import com.sun.rowset.CachedRowSetImpl;
 
 import su.sbra.psv.app.main.Main;
 import su.sbra.psv.app.model.Connect;
 import su.sbra.psv.app.model.SqlMap;
 import su.sbra.psv.app.sbalert.Msg;
-import su.sbra.psv.app.utils.DbUtil;
 
 @SuppressWarnings("restriction")
 public class DBUtil {
@@ -29,16 +31,20 @@ public class DBUtil {
 	public static Connection conn = null;
 
 	// Connect to DB
-	public static void dbConnect() throws ClassNotFoundException, SQLException {
+	public static void dbConnect() throws ClassNotFoundException, SQLException, UnknownHostException {
 			// Setting Oracle JDBC Driver
 			Class.forName(JDBC_DRIVER);
 			Main.logger = Logger.getLogger(DBUtil.class);
 			// Establish the Oracle Connection using Connection String
+			
 			Properties props = new Properties();
-			props.put("v$session.program", DbUtil.class.getName());
-			conn = DriverManager.getConnection(
-					"jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_ + "@" + Connect.connectionURL_,
-					props);
+			props.setProperty("password", Connect.userPassword_);
+			props.setProperty("user", Connect.userID_);
+			props.put("v$session.osuser", System.getProperty("user.name").toString());
+			props.put("v$session.machine", InetAddress.getLocalHost().getCanonicalHostName());
+			props.put("v$session.program", DBUtil.class.getName());
+			conn  = DriverManager.getConnection("jdbc:oracle:thin:@" + Connect.connectionURL_, props);
+			
 			conn.setAutoCommit(false);
 	}
 
@@ -56,7 +62,7 @@ public class DBUtil {
 	}
 
 	// DB Execute Query Operation
-	public static ResultSet dbExecuteQuery(String queryStmt) throws ClassNotFoundException {
+	public static ResultSet dbExecuteQuery(String queryStmt) throws ClassNotFoundException, UnknownHostException {
 		// Declare statement, resultSet and CachedResultSet as null
 		Statement stmt = null;
 		ResultSet resultSet = null;

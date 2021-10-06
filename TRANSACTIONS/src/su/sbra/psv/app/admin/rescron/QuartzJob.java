@@ -2,6 +2,7 @@ package su.sbra.psv.app.admin.rescron;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.InetAddress;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -28,18 +29,23 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
+import su.sbra.psv.app.model.Connect;
+
 public class QuartzJob implements Job {
 	/**
 	 * Логин в XXI
 	 */
+	@SuppressWarnings("unused")
 	private static String DBUsername;
 	/**
 	 * Пароль в XXI
 	 */
+	@SuppressWarnings("unused")
 	private static String DBUserpass;
 	/**
 	 * Строка подключения в XXI
 	 */
+	@SuppressWarnings("unused")
 	private static String DBUrl;
 	/**
 	 * Адрес получателя
@@ -170,10 +176,16 @@ public class QuartzJob implements Job {
 	void dbConnect() {
 		try {
 			Class.forName("oracle.jdbc.OracleDriver");
+			
+			
 			Properties props = new Properties();
+			props.setProperty("password", Connect.userPassword_);
+			props.setProperty("user", Connect.userID_);
+			props.put("v$session.osuser", System.getProperty("user.name").toString());
+			props.put("v$session.machine", InetAddress.getLocalHost().getCanonicalHostName());
 			props.put("v$session.program", getClass().getName());
-			conn = DriverManager.getConnection("jdbc:oracle:thin:" + DBUsername + "/" + DBUserpass + "@" + DBUrl,
-					props);
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@" + Connect.connectionURL_, props);
+			
 			conn.setAutoCommit(false);
 		} catch (Exception e) {
 			MYLogger.error(ExceptionUtils.getStackTrace(e));

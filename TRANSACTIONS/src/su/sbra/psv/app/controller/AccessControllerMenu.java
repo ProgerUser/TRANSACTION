@@ -1,5 +1,7 @@
 package su.sbra.psv.app.controller;
 
+import java.net.UnknownHostException;
+
 import org.controlsfx.control.table.TableFilter;
 
 import javafx.collections.ObservableList;
@@ -63,7 +65,7 @@ public class AccessControllerMenu {
 	private TableColumn<User_in, String> TYPE_ACCESS_I;
 
 	@FXML
-	private void change_acc_type() throws ClassNotFoundException {
+	private void change_acc_type() throws ClassNotFoundException, UnknownHostException {
 		if (USERS_IN.getSelectionModel().getSelectedItem() == null) {
 			this.altert("Выберите сначала данные из таблицы!");
 		} else {
@@ -86,7 +88,7 @@ public class AccessControllerMenu {
 		}
 	}
 
-	public void upd_usr_in() throws ClassNotFoundException {
+	public void upd_usr_in() throws ClassNotFoundException, UnknownHostException {
 		MenuItems forms = MENU.getSelectionModel().getSelectedItem();
 		ObservableList<User_in> empData_2 = TerminalDAO.User_in_menu(forms.getID_MENU());
 		populate_user_in(empData_2);
@@ -94,7 +96,7 @@ public class AccessControllerMenu {
 		TableFilter.forTableView(USERS_IN).apply();
 	}
 
-	public void upd_usr_out() throws ClassNotFoundException {
+	public void upd_usr_out() throws ClassNotFoundException, UnknownHostException {
 		int form_id = MENU.getSelectionModel().getSelectedItem().getID_MENU();
 
 		ObservableList<User_out> empData_2 = TerminalDAO.User_out_menu(form_id);
@@ -115,7 +117,7 @@ public class AccessControllerMenu {
 	}
 
 	@FXML
-	private void initialize() throws ClassNotFoundException {
+	private void initialize() throws ClassNotFoundException, UnknownHostException {
 		ID_MENU.setCellValueFactory(cellData -> cellData.getValue().ID_MENUProperty().asObject());
 		MENU_NAME.setCellValueFactory(cellData -> cellData.getValue().MENU_NAMEProperty());
 		MENU_DESC.setCellValueFactory(cellData -> cellData.getValue().MENU_DESCProperty());
@@ -142,10 +144,16 @@ public class AccessControllerMenu {
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+				} catch (UnknownHostException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 				try {
 					upd_usr_out();
 				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (UnknownHostException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -176,7 +184,7 @@ public class AccessControllerMenu {
 	}
 
 	@FXML
-	private void insert() throws ClassNotFoundException {
+	private void insert() throws ClassNotFoundException, UnknownHostException {
 		if (MENU.getSelectionModel().getSelectedItem() == null
 				| USER_OUT.getSelectionModel().getSelectedItem() == null) {
 			this.altert("Выберите сначала данные из таблицы!");
@@ -195,7 +203,7 @@ public class AccessControllerMenu {
 	}
 
 	@FXML
-	private void delete() throws ClassNotFoundException {
+	private void delete() throws ClassNotFoundException, UnknownHostException {
 		if (USERS_IN.getSelectionModel().getSelectedItem() == null) {
 			this.altert("Выберите сначала данные из таблицы!");
 		} else {

@@ -9,6 +9,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
@@ -2814,15 +2816,20 @@ public class SWC2 {
 
 	/**
 	 * Открыть сессию
+	 * @throws UnknownHostException 
 	 */
-	private void dbConnect() {
+	private void dbConnect() throws UnknownHostException {
 		try {
 			Class.forName("oracle.jdbc.OracleDriver");
+			
 			Properties props = new Properties();
-			props.put("v$session.program", "SWIFT_VTB");
-			conn = DriverManager.getConnection(
-					"jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_ + "@" + Connect.connectionURL_,
-					props);
+			props.setProperty("password", Connect.userPassword_);
+			props.setProperty("user", Connect.userID_);
+			props.put("v$session.osuser", System.getProperty("user.name").toString());
+			props.put("v$session.machine", InetAddress.getLocalHost().getCanonicalHostName());
+			props.put("v$session.program", getClass().getName());
+			conn  = DriverManager.getConnection("jdbc:oracle:thin:@" + Connect.connectionURL_, props);
+			
 			conn.setAutoCommit(false);
 		} catch (SQLException | ClassNotFoundException e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));

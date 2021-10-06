@@ -47,6 +47,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.UnknownHostException;
 //import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -96,7 +97,7 @@ public class DealCintroller {
 	private Executor exec;
 
 	@FXML
-	private void initialize() throws ClassNotFoundException {
+	private void initialize() throws ClassNotFoundException, UnknownHostException {
 		trans_table.setEditable(true);
 		exec = Executors.newCachedThreadPool((runnable) -> {
 			Thread t = new Thread(runnable);

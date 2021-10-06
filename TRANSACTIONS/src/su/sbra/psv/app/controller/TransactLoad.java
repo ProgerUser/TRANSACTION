@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringWriter;
+import java.net.InetAddress;
 import java.sql.CallableStatement;
 import java.sql.Clob;
 import java.sql.Connection;
@@ -21,6 +22,7 @@ import java.sql.Types;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Properties;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.mozilla.universalchardet.UniversalDetector;
@@ -123,8 +125,13 @@ public class TransactLoad {
 
 				String strDate = dateFormat.format(date);
 
-				Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
-						+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
+				Properties props = new Properties();
+				props.setProperty("password", Connect.userPassword_);
+				props.setProperty("user", Connect.userID_);
+				props.put("v$session.osuser", System.getProperty("user.name").toString());
+				props.put("v$session.machine", InetAddress.getLocalHost().getCanonicalHostName());
+				props.put("v$session.program", getClass().getName());
+				Connection conn  = DriverManager.getConnection("jdbc:oracle:thin:@" + Connect.connectionURL_, props);
 
 				CallableStatement callStmt = null;
 				String reviewContent = null;
@@ -243,8 +250,14 @@ public class TransactLoad {
 			Date date = new Date();
 			DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH-mm-ss");
 			String strDate = dateFormat.format(date);
-			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
-					+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
+			
+			Properties props = new Properties();
+			props.setProperty("password", Connect.userPassword_);
+			props.setProperty("user", Connect.userID_);
+			props.put("v$session.osuser", System.getProperty("user.name").toString());
+			props.put("v$session.machine", InetAddress.getLocalHost().getCanonicalHostName());
+			props.put("v$session.program", getClass().getName());
+			Connection conn  = DriverManager.getConnection("jdbc:oracle:thin:@" + Connect.connectionURL_, props);
 
 			Statement sqlStatement = conn.createStatement();
 
@@ -330,8 +343,14 @@ public class TransactLoad {
 				Clob reviewContent = null;
 				Connection conn;
 
-				conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_
-						+ "@" + Connect.connectionURL_ + "");
+				Properties props = new Properties();
+				props.setProperty("password", Connect.userPassword_);
+				props.setProperty("user", Connect.userID_);
+				props.put("v$session.osuser", System.getProperty("user.name").toString());
+				props.put("v$session.machine", InetAddress.getLocalHost().getCanonicalHostName());
+				props.put("v$session.program", getClass().getName());
+				conn  = DriverManager.getConnection("jdbc:oracle:thin:@" + Connect.connectionURL_, props);
+				
 				callStmt = conn.prepareCall(sql_calc);
 
 				callStmt.registerOutParameter(1, Types.CLOB);

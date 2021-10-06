@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
+import java.net.InetAddress;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -212,11 +213,15 @@ public class ConvVal {
 	private void dbConnect() {
 		try {
 			Class.forName("oracle.jdbc.OracleDriver");
+			
 			Properties props = new Properties();
-			props.put("v$session.program", "CONS_VAL");
-			conn = DriverManager.getConnection(
-					"jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_ + "@" + Connect.connectionURL_,
-					props);
+			props.setProperty("password", Connect.userPassword_);
+			props.setProperty("user", Connect.userID_);
+			props.put("v$session.osuser", System.getProperty("user.name").toString());
+			props.put("v$session.machine", InetAddress.getLocalHost().getCanonicalHostName());
+			props.put("v$session.program", getClass().getName());
+			conn  = DriverManager.getConnection("jdbc:oracle:thin:@" + Connect.connectionURL_, props);
+			
 			conn.setAutoCommit(false);
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));

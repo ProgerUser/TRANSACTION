@@ -76,6 +76,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -292,7 +293,7 @@ public class Tr_Am_View_con_from_show {
 	private DatePicker dt2;
 
 	@FXML
-	private void initialize() throws ClassNotFoundException {
+	private void initialize() throws ClassNotFoundException, UnknownHostException {
 		trans_table.setEditable(true);
 
 		exec = Executors.newCachedThreadPool((runnable) -> {
@@ -1127,10 +1128,7 @@ public class Tr_Am_View_con_from_show {
 				statusabs_c.setCellStyle(cellStyle_border_for_cell);
 				sess_id_c.setCellStyle(cellStyle_border_for_cell);
 				Connection conn = DBUtil.conn;
-				/*
-				Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
-						+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
-*/
+				
 				// id_sess.getText(), dt1.getValue(),
 				// dt2.getValue()
 
@@ -1458,7 +1456,7 @@ public class Tr_Am_View_con_from_show {
 	}
 
 	@FXML
-	private void term_view_(ActionEvent actionEvent) throws ClassNotFoundException {
+	private void term_view_(ActionEvent actionEvent) throws ClassNotFoundException, UnknownHostException {
 		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(),
 				dt2.getValue(),"",false,false,"Все",false);
 		populate_fn_sess(empData);
@@ -1508,7 +1506,7 @@ public class Tr_Am_View_con_from_show {
 
 	// Найти загрузки
 	@FXML
-	private void filter(ActionEvent actionEvent) throws ClassNotFoundException {
+	private void filter(ActionEvent actionEvent) throws ClassNotFoundException, UnknownHostException {
 		trans_table.setEditable(true);
 		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(),
 				dt2.getValue(),"",false,false,"Все",false);

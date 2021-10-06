@@ -58,6 +58,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.UnknownHostException;
 //import java.sql.Date;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -313,7 +314,7 @@ public class ShowHistoryController {
 
 	// Найти загрузки
 	@FXML
-	void Search(ActionEvent actionEvent) throws ClassNotFoundException {
+	void Search(ActionEvent actionEvent) throws ClassNotFoundException, UnknownHostException {
 		search.setDisable(true);
 		// Get all Employees information
 		ObservableList<FN_SESS_AMRA> empData = TerminalDAO.srch_fn_sess(sess_id_t.getText(), trnumber.getText(),

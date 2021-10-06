@@ -20,6 +20,7 @@ import su.sbra.psv.app.model.Transact;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.UnknownHostException;
 //import java.sql.Date;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -138,7 +139,7 @@ public class EmployeeController {
 
 	// Search an transact
 	@FXML
-	private void searchEmployees(ActionEvent actionEvent) throws ClassNotFoundException {
+	private void searchEmployees(ActionEvent actionEvent) throws ClassNotFoundException, UnknownHostException {
 		// Get Employee information
 		Transact emp = TerminalDAO.searchTransact(fio.getText());
 		// Populate Employee on TableView and Display on TextArea
@@ -147,7 +148,7 @@ public class EmployeeController {
 
 	// Search all transacts
 	@FXML
-	private void searchEmployee(ActionEvent actionEvent) throws ClassNotFoundException {
+	private void searchEmployee(ActionEvent actionEvent) throws ClassNotFoundException, UnknownHostException {
 		if (fio.getText().equals("")) {
 			resultArea.setText("Поле ФИО пустое, введите значение!\n");
 			return;
@@ -165,7 +166,7 @@ public class EmployeeController {
 	private void fillEmployeeTable(ActionEvent event) {
 		Task<List<Transact>> task = new Task<List<Transact>>() {
 			@Override
-			public ObservableList<Transact> call() throws ClassNotFoundException {
+			public ObservableList<Transact> call() throws ClassNotFoundException, UnknownHostException {
 				return TerminalDAO.searchEmployees(fio.getText(), trnumber.getText(), datestart.getText(),
 						dateend.getText());
 			}

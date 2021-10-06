@@ -48,10 +48,7 @@ public class PrintReport extends JFrame {
 
 			/* Create Items */
 			Item list = null;
-/*
-			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ + "/"
-					+ Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
-					*/
+
 			Connection conn = DBUtil.conn;
 			Statement sqlStatement = conn.createStatement();
 			String readRecordSQL = "select acc,\r\n" + 

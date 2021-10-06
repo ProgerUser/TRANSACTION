@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Blob;
@@ -58,6 +60,8 @@ import org.quartz.JobExecutionException;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import su.sbra.psv.app.model.Connect;
 
 public class QuartzJob implements Job {
 
@@ -463,14 +467,19 @@ public class QuartzJob implements Job {
 
 	/**
 	 * Открыть сессию
+	 * @throws UnknownHostException 
 	 */
-	void dbConnect() {
+	void dbConnect() throws UnknownHostException {
 		try {
 			Class.forName("oracle.jdbc.OracleDriver");
 			Properties props = new Properties();
-			props.put("v$session.program", "CertsAdminsJAVAFX");
-			conn = DriverManager.getConnection("jdbc:oracle:thin:" + DBUsername + "/" + DBUserpass + "@" + DBUrl,
-					props);
+			props.setProperty("password", Connect.userPassword_);
+			props.setProperty("user", Connect.userID_);
+			props.put("v$session.osuser", System.getProperty("user.name").toString());
+			props.put("v$session.machine", InetAddress.getLocalHost().getCanonicalHostName());
+			props.put("v$session.program", getClass().getName());
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@" + Connect.connectionURL_, props);
+			
 			conn.setAutoCommit(false);
 		} catch (SQLException | ClassNotFoundException e) {
 			MYLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName() + " line = "

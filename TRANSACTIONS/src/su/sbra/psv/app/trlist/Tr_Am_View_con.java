@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -2127,7 +2128,7 @@ public class Tr_Am_View_con {
 	}
 
 	@FXML
-	void show_rel(ActionEvent event) throws ClassNotFoundException {
+	void show_rel(ActionEvent event) throws ClassNotFoundException, UnknownHostException {
 		Amra_Trans fn = trans_table.getSelectionModel().getSelectedItem();
 		if (!(fn.get_checkparent() == null)) {
 			ObservableList<Amra_Trans> trData = TerminalDAO.Amra_Trans_rel(fn.get_checknumber(), fn.get_checkparent());

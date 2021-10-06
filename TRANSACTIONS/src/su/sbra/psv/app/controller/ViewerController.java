@@ -26,6 +26,7 @@ import su.sbra.psv.app.model.ViewerDAO;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -172,7 +173,7 @@ public class ViewerController {
 
 	// Search all transacts
 	@FXML
-	private void searchEmployee(ActionEvent actionEvent) throws ClassNotFoundException {
+	private void searchEmployee(ActionEvent actionEvent) throws ClassNotFoundException, UnknownHostException {
 		if (fio.getText().equals("")) {
 			resultArea.setText("Поле ФИО пустое, введите значение!\n");
 			return;
@@ -189,7 +190,7 @@ public class ViewerController {
 	private void fillEmployeeTable(ActionEvent event) {
 		Task<List<TransactClass>> task = new Task<List<TransactClass>>() {
 			@Override
-			public ObservableList<TransactClass> call() throws ClassNotFoundException {
+			public ObservableList<TransactClass> call() throws ClassNotFoundException, UnknownHostException {
 				return ViewerDAO.searchEmployees(fio.getText(), trnumber.getText(), datestart.getText(),
 						dateend.getText());
 			}

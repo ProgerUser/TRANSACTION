@@ -1,5 +1,7 @@
 package su.sbra.psv.app.controller;
 
+import java.net.UnknownHostException;
+
 import org.controlsfx.control.table.TableFilter;
 
 import javafx.collections.ObservableList;
@@ -51,7 +53,7 @@ public class AccessController {
 
 	
 	@FXML
-	private void change_acc_type() throws ClassNotFoundException {
+	private void change_acc_type() throws ClassNotFoundException, UnknownHostException {
 		if (USERS_IN.getSelectionModel().getSelectedItem() == null) {
 			this.altert("Выберите сначала данные из таблицы!");
 		}else
@@ -81,7 +83,7 @@ public class AccessController {
 		}
 	}
 	
-	public void upd_usr_in() throws ClassNotFoundException {
+	public void upd_usr_in() throws ClassNotFoundException, UnknownHostException {
 		Forms forms = FORMS.getSelectionModel().getSelectedItem();
 		ObservableList<User_in> empData_2 = TerminalDAO.User_in(forms.get_ID_FORM());
 		populate_user_in(empData_2);
@@ -89,7 +91,7 @@ public class AccessController {
 		TableFilter.forTableView(USERS_IN).apply();
 	}
 	
-	public void upd_usr_out() throws ClassNotFoundException {
+	public void upd_usr_out() throws ClassNotFoundException, UnknownHostException {
 		int form_id = FORMS.getSelectionModel().getSelectedItem().get_ID_FORM();
 		
 		ObservableList<User_out> empData_2 = TerminalDAO.User_out(form_id);
@@ -110,7 +112,7 @@ public class AccessController {
 	}
 	
 	@FXML
-	private void initialize() throws ClassNotFoundException {
+	private void initialize() throws ClassNotFoundException, UnknownHostException {
 		ID_FORM.setCellValueFactory(cellData -> cellData.getValue().ID_FORM_Property().asObject());
 		FORM_NAME.setCellValueFactory(cellData -> cellData.getValue().FORM_NAME_Property());
 		FORMN_DESC.setCellValueFactory(cellData -> cellData.getValue().FORMN_DESC_Property());
@@ -135,10 +137,16 @@ public class AccessController {
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+				} catch (UnknownHostException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 				try {
 					upd_usr_out();
 				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (UnknownHostException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -147,7 +155,7 @@ public class AccessController {
 	}
 
 	@FXML
-	private void insert() throws ClassNotFoundException {
+	private void insert() throws ClassNotFoundException, UnknownHostException {
 		if (FORMS.getSelectionModel().getSelectedItem() == null | 
 				USER_OUT.getSelectionModel().getSelectedItem() == null) {
 			this.altert("Выберите сначала данные из таблицы!");
@@ -168,7 +176,7 @@ public class AccessController {
 	}
 	
 	@FXML
-	private void delete() throws ClassNotFoundException {
+	private void delete() throws ClassNotFoundException, UnknownHostException {
 		if (USERS_IN.getSelectionModel().getSelectedItem() == null) {
 			this.altert("Выберите сначала данные из таблицы!");
 		} else {

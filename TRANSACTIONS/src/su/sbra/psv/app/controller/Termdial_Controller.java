@@ -44,6 +44,7 @@ import su.sbra.psv.app.termserv.Z_SB_TERMSERV_AMRA_DBT;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.UnknownHostException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -233,7 +234,7 @@ public class Termdial_Controller {
 	}
 
 	@FXML
-	void termdial_srch(ActionEvent actionEvent) throws ClassNotFoundException {
+	void termdial_srch(ActionEvent actionEvent) throws ClassNotFoundException, UnknownHostException {
 
 		ObservableList<Termdial> empData = null;
 		if (feb.isSelected()) {

@@ -1,5 +1,7 @@
 package su.sbra.psv.app.admin.usr;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -264,15 +266,20 @@ public class UsrC {
 
 	/**
 	 * Открыть сессию
+	 * @throws UnknownHostException 
 	 */
-	private void dbConnect() {
+	private void dbConnect() throws UnknownHostException {
 		try {
 			Class.forName("oracle.jdbc.OracleDriver");
+			
 			Properties props = new Properties();
-			props.put("v$session.program",getClass().getName());
-			conn = DriverManager.getConnection(
-					"jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_ + "@" + Connect.connectionURL_,
-					props);
+			props.setProperty("password", Connect.userPassword_);
+			props.setProperty("user", Connect.userID_);
+			props.put("v$session.osuser", System.getProperty("user.name").toString());
+			props.put("v$session.machine", InetAddress.getLocalHost().getCanonicalHostName());
+			props.put("v$session.program", getClass().getName());
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@" + Connect.connectionURL_, props);
+			
 			conn.setAutoCommit(false);
 		} catch (SQLException | ClassNotFoundException e) {
 			DbUtil.Log_Error(e);
@@ -493,7 +500,7 @@ public class UsrC {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@FXML
-	private void initialize() {
+	private void initialize() throws UnknownHostException {
 		SyntheticaFX.init("com.jyloo.syntheticafx.SyntheticaFXModena");
 		ObservableList rules = FXCollections.observableArrayList(ComparisonType.values());
 

@@ -1,11 +1,14 @@
 package su.sbra.psv.app.ibank;
 
+import java.net.InetAddress;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 import org.controlsfx.control.table.TableFilter;
@@ -22,6 +25,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import su.sbra.psv.app.main.Main;
+import su.sbra.psv.app.model.Connect;
 import su.sbra.psv.app.sbalert.Msg;
 import su.sbra.psv.app.util.DBUtil;
 
@@ -51,8 +55,13 @@ public class Ibank {
 	public void dbConnect() {
 		try {
 			Class.forName("oracle.jdbc.OracleDriver");
-			conn = DriverManager.getConnection(
-					"jdbc:oracle:thin:" + login.getText() + "/" + password.getText() + "@" + db.getText() + "");
+			Properties props = new Properties();
+			props.setProperty("password", Connect.userPassword_);
+			props.setProperty("user", Connect.userID_);
+			props.put("v$session.osuser", System.getProperty("user.name").toString());
+			props.put("v$session.machine", InetAddress.getLocalHost().getCanonicalHostName());
+			props.put("v$session.program", getClass().getName());
+			conn  = DriverManager.getConnection("jdbc:oracle:thin:@" + Connect.connectionURL_, props);
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}

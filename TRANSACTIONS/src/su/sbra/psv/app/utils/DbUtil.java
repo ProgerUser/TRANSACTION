@@ -2,6 +2,8 @@ package su.sbra.psv.app.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -42,15 +44,19 @@ public class DbUtil {
 	public static Connection conn = null;
 
 	// Connect to DB
-	public static void Db_Connect() throws ClassNotFoundException, SQLException {
+	public static void Db_Connect() throws ClassNotFoundException, SQLException, UnknownHostException {
 			// Setting Oracle JDBC Driver
 			Class.forName(JDBC_DRIVER);
 			// Establish the Oracle Connection using Connection String
+			
 			Properties props = new Properties();
+			props.setProperty("password", Connect.userPassword_);
+			props.setProperty("user", Connect.userID_);
+			props.put("v$session.osuser", System.getProperty("user.name").toString());
+			props.put("v$session.machine", InetAddress.getLocalHost().getCanonicalHostName());
 			props.put("v$session.program", DbUtil.class.getName());
-			conn = DriverManager.getConnection(
-					"jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_ + "@" + Connect.connectionURL_,
-					props);
+			conn  = DriverManager.getConnection("jdbc:oracle:thin:@" + Connect.connectionURL_, props);
+			
 			conn.setAutoCommit(false);
 	}
 
@@ -84,8 +90,15 @@ public class DbUtil {
 		boolean ret = true;
 		try {
 			Class.forName(JDBC_DRIVER);
-			Connection conn = DriverManager.getConnection(
-					"jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_ + "@" + Connect.connectionURL_);
+			
+			Properties props = new Properties();
+			props.setProperty("password", Connect.userPassword_);
+			props.setProperty("user", Connect.userID_);
+			props.put("v$session.osuser", System.getProperty("user.name").toString());
+			props.put("v$session.machine", InetAddress.getLocalHost().getCanonicalHostName());
+			props.put("v$session.program", DbUtil.class.getName());
+			conn  = DriverManager.getConnection("jdbc:oracle:thin:@" + Connect.connectionURL_, props);
+			
 			conn.close();
 		} catch (Exception e) {
 			ret = false;

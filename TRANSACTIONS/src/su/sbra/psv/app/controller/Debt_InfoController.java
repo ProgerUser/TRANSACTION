@@ -1,5 +1,6 @@
 package su.sbra.psv.app.controller;
 
+import java.net.UnknownHostException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -240,7 +241,7 @@ public class Debt_InfoController {
 	}
 
 	@FXML
-	void b101(ActionEvent event) throws ClassNotFoundException {
+	void b101(ActionEvent event) throws ClassNotFoundException, UnknownHostException {
 		Button Update = new Button();
 		Update.setText("Выбрать");
 		Update.setLayoutX(29.0);
@@ -305,7 +306,7 @@ public class Debt_InfoController {
 	}
 
 	@FXML
-	void b104(ActionEvent event) throws ClassNotFoundException {
+	void b104(ActionEvent event) throws ClassNotFoundException, UnknownHostException {
 
 		Button Update = new Button();
 		Update.setText("Выбрать");
@@ -369,7 +370,7 @@ public class Debt_InfoController {
 	}
 
 	@FXML
-	void b106(ActionEvent event) throws ClassNotFoundException {
+	void b106(ActionEvent event) throws ClassNotFoundException, UnknownHostException {
 		Button Update = new Button();
 		Update.setText("Выбрать");
 		Update.setLayoutX(29.0);
@@ -432,7 +433,7 @@ public class Debt_InfoController {
 	}
 
 	@FXML
-	void b107(ActionEvent event) throws ClassNotFoundException {
+	void b107(ActionEvent event) throws ClassNotFoundException, UnknownHostException {
 		Button Update = new Button();
 		Update.setText("Выбрать");
 		Update.setLayoutX(29.0);
@@ -503,7 +504,7 @@ public class Debt_InfoController {
 	}
 	
 	@FXML
-	void b110(ActionEvent event) throws ClassNotFoundException {
+	void b110(ActionEvent event) throws ClassNotFoundException, UnknownHostException {
 		Button Update = new Button();
 		Update.setText("Выбрать");
 		Update.setLayoutX(29.0);
@@ -656,10 +657,6 @@ public class Debt_InfoController {
 		// Connection conn;
 		Connection conn = DBUtil.conn;
 		try {
-			/*
-			 * conn = DriverManager.getConnection("jdbc:oracle:thin:" + Connect.userID_ +
-			 * "/" + Connect.userPassword_ + "@" + Connect.connectionURL_ + "");
-			 */
 
 			SqlMap s = new SqlMap().load("/SQL.xml");
 			String readRecordSQL = s.getSql("acces_menu");

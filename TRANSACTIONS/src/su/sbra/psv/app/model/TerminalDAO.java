@@ -1,5 +1,6 @@
 package su.sbra.psv.app.model;
 
+import java.net.UnknownHostException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -23,7 +24,7 @@ public class TerminalDAO {
 	// *******************************
 	// SELECT an Employee
 	// *******************************
-	public static Transact searchTransact(String fio) throws ClassNotFoundException {
+	public static Transact searchTransact(String fio) throws ClassNotFoundException, UnknownHostException {
 		// Declare a SELECT statement
 		String selectStmt = "SELECT * FROM Z_SB_TRANSACT_DBT WHERE lower(FIO) like '" + fio + "'";
 
@@ -69,7 +70,7 @@ public class TerminalDAO {
 	// *******************************
 	// SELECT Transact
 	// *******************************
-	public static ObservableList<Transact> searchEmployees(String FIO, String PAYMENTNUMBER, String DT1, String DT2) throws ClassNotFoundException {
+	public static ObservableList<Transact> searchEmployees(String FIO, String PAYMENTNUMBER, String DT1, String DT2) throws ClassNotFoundException, UnknownHostException {
 		// Declare a SELECT statement
 		String dt_betw = "\n";
 		String p_n = "\n";
@@ -107,7 +108,7 @@ public class TerminalDAO {
 	// SELECT FN_SESS
 	// *******************************
 	public static ObservableList<FN_SESS_AMRA> srch_fn_sess(String SESS_ID, String PAYMENTNUMBER, LocalDate dt1,
-			LocalDate dt2) throws ClassNotFoundException {
+			LocalDate dt2) throws ClassNotFoundException, UnknownHostException {
 		String p_n = "\n";
 		String clob = "\n";
 
@@ -190,7 +191,7 @@ public class TerminalDAO {
 	// *******************************
 	// SELECT FN_SESS
 	// *******************************
-	public static ObservableList<Add_File> add_file_(String SESS_ID, LocalDate dt) throws ClassNotFoundException {
+	public static ObservableList<Add_File> add_file_(String SESS_ID, LocalDate dt) throws ClassNotFoundException, UnknownHostException {
 
 		String ldt = "\n";
 		String ldt_ = "\n";
@@ -234,7 +235,7 @@ public class TerminalDAO {
 	// *******************************
 	// SELECT FN_SESS
 	// *******************************
-	public static ObservableList<Add_File> add_file_d_(LocalDate Date) throws ClassNotFoundException {
+	public static ObservableList<Add_File> add_file_d_(LocalDate Date) throws ClassNotFoundException, UnknownHostException {
 		String p_n = "\n";
 		String dd = "\n";
 		if (Date != null)
@@ -263,7 +264,7 @@ public class TerminalDAO {
 	// *******************************
 	// SELECT REL
 	// *******************************
-	public static ObservableList<Amra_Trans> Amra_Trans_rel(String chk, String chkper) throws ClassNotFoundException {
+	public static ObservableList<Amra_Trans> Amra_Trans_rel(String chk, String chkper) throws ClassNotFoundException, UnknownHostException {
 
 		String selectStmt = "select rownum,t.*\n" + "  from Z_SB_TRANSACT_AMRA_DBT t\n" + " where t.checknumber = '"
 				+ chk + "'\n" + "    or t.checknumber = '" + chkper + "'";
@@ -309,7 +310,7 @@ public class TerminalDAO {
 	// SELECT FN_SESS
 	// *******************************
 	public static ObservableList<Amra_Trans> Amra_Trans_(String SESS_ID, LocalDate dt1, LocalDate dt2, String FIO,
-			boolean chk, boolean chk_pay, String terminal,boolean DOKATKA ) throws ClassNotFoundException {
+			boolean chk, boolean chk_pay, String terminal,boolean DOKATKA ) throws ClassNotFoundException, UnknownHostException {
 
 		String ldt1 = null;
 		String ldt2 = null;
@@ -383,7 +384,7 @@ public class TerminalDAO {
 	// *******************************
 	// SELECT Attributes
 	// *******************************
-	public static ObservableList<Attributes> Attributes_() throws ClassNotFoundException {
+	public static ObservableList<Attributes> Attributes_() throws ClassNotFoundException, UnknownHostException {
 
 		String selectStmt = "";
 		if (Connect.SESSID != null) {
@@ -420,7 +421,7 @@ public class TerminalDAO {
 	// *******************************
 	// SELECT Dealss
 	// *******************************
-	public static ObservableList<Deal> Deals() throws ClassNotFoundException {
+	public static ObservableList<Deal> Deals() throws ClassNotFoundException, UnknownHostException {
 		String selectStmt = "select ROW_NO rownumber,\n" + "       COLUMN1 cheknumber,\n"
 				+ "       to_number(replace(replace(COLUMN2, ' ', ''), '.', ',')) summa,\n"
 				+ "       COLUMN3 terminal,\n" + "       to_date(COLUMN4,'dd.mm.yyyy hh24:mi:ss') dateoperation\n"
@@ -448,7 +449,7 @@ public class TerminalDAO {
 	// *******************************
 	// SELECT Forms
 	// *******************************
-	public static ObservableList<Forms> User_Forms() throws ClassNotFoundException {
+	public static ObservableList<Forms> User_Forms() throws ClassNotFoundException, UnknownHostException {
 		String selectStmt = "select id_form, form_name, formn_desc from Z_SB_ACCESS_AMRA order by id_form\n";
 
 		// Execute SELECT statement
@@ -466,7 +467,7 @@ public class TerminalDAO {
 	// *******************************
 	// SELECT Menu
 	// *******************************
-	public static ObservableList<MenuItems> User_Menu() throws ClassNotFoundException {
+	public static ObservableList<MenuItems> User_Menu() throws ClassNotFoundException, UnknownHostException {
 		String selectStmt = "select * from z_sb_menu_amra ORDER BY MENU_I, MENU_POS\n";
 
 		// Execute SELECT statement
@@ -484,7 +485,7 @@ public class TerminalDAO {
 	// *******************************
 	// SELECT Menu
 	// *******************************
-	public static ObservableList<BUDCODE> bud(String query) throws ClassNotFoundException {
+	public static ObservableList<BUDCODE> bud(String query) throws ClassNotFoundException, UnknownHostException {
 		String selectStmt = query;
 
 		// Execute SELECT statement
@@ -502,7 +503,7 @@ public class TerminalDAO {
 	// *******************************
 	// SELECT Z_SB_PENS_4FILE
 	// *******************************
-	public static ObservableList<pensmodel> Z_SB_PENS_4FILE() throws ClassNotFoundException {
+	public static ObservableList<pensmodel> Z_SB_PENS_4FILE() throws ClassNotFoundException, UnknownHostException {
 		String selectStmt = "select DATE_LOAD,ID,FILENAME from Z_SB_PENS_4FILE t order by DATE_LOAD desc";
 
 		// Execute SELECT statement
@@ -520,7 +521,7 @@ public class TerminalDAO {
 	// *******************************
 	// SELECT ibank2.CLIENTS
 	// *******************************
-	public static ObservableList<Ibank2> CLIENTS(String db, String login, String pass) throws ClassNotFoundException {
+	public static ObservableList<Ibank2> CLIENTS(String db, String login, String pass) throws ClassNotFoundException, UnknownHostException {
 		String selectStmt = "select CLIENT_ID, NAME_CLN\n" + "  from ibank2.CLIENTS t";
 
 		// Execute SELECT statement
@@ -538,7 +539,7 @@ public class TerminalDAO {
 	// *******************************
 	// SELECT User_in
 	// *******************************
-	public static ObservableList<User_in> User_in(Integer form_name) throws ClassNotFoundException {
+	public static ObservableList<User_in> User_in(Integer form_name) throws ClassNotFoundException, UnknownHostException {
 		String selectStmt = "select CUSRLOGNAME, CUSRNAME, T_NAME\n" + "  from z_sb_access_amra a,\n"
 				+ "       z_sb_access_gr_amra b,\n" + "       z_sb_access_gr_type_amra c,\n"
 				+ "       (select t.cusrlogname, t.iusrid, t.CUSRNAME from usr t) d\n"
@@ -560,7 +561,7 @@ public class TerminalDAO {
 	// *******************************
 	// SELECT User_in_Menu
 	// *******************************
-	public static ObservableList<User_in> User_in_menu(Integer form_name) throws ClassNotFoundException {
+	public static ObservableList<User_in> User_in_menu(Integer form_name) throws ClassNotFoundException, UnknownHostException {
 		String selectStmt = "select CUSRLOGNAME, CUSRNAME, T_NAME\n" + "  from z_sb_menu_amra a,\n"
 				+ "       z_sb_access_gr_menu_amra b,\n" + "       z_sb_access_gr_type_amra c,\n"
 				+ "       (select t.cusrlogname, t.iusrid, t.CUSRNAME from usr t) d\n"
@@ -582,7 +583,7 @@ public class TerminalDAO {
 	// *******************************
 	// SELECT User_out
 	// *******************************
-	public static ObservableList<User_out> User_out(Integer form_id) throws ClassNotFoundException {
+	public static ObservableList<User_out> User_out(Integer form_id) throws ClassNotFoundException, UnknownHostException {
 		String selectStmt = "select CUSRLOGNAME, CUSRNAME\n" + "  from usr\n" + " where usr.dusrfire is null\n"
 				+ "   and CUSRLOGNAME not in\n" + "       (select CUSRLOGNAME\n"
 				+ "          from z_sb_access_amra a,\n" + "               z_sb_access_gr_amra b,\n"
@@ -607,7 +608,7 @@ public class TerminalDAO {
 	// *******************************
 	// SELECT User_out
 	// *******************************
-	public static ObservableList<User_out> User_out_menu(Integer form_id) throws ClassNotFoundException {
+	public static ObservableList<User_out> User_out_menu(Integer form_id) throws ClassNotFoundException, UnknownHostException {
 		String selectStmt = "select CUSRLOGNAME, CUSRNAME\n" + "  from usr\n" + " where usr.dusrfire is null\n"
 				+ "   and CUSRLOGNAME not in\n" + "       (select CUSRLOGNAME\n" + "          from z_sb_menu_amra a,\n"
 				+ "               z_sb_access_gr_menu_amra b,\n" + "               z_sb_access_gr_type_amra c,\n"
@@ -677,7 +678,7 @@ public class TerminalDAO {
 	// SELECT Termdial_
 	// *******************************
 	public static ObservableList<Termdial> Termdial_(LocalDate dt1, LocalDate dt2, String pnmb, String sess_id,
-			boolean chk) throws ClassNotFoundException {
+			boolean chk) throws ClassNotFoundException, UnknownHostException {
 		String pnmb_ = "\n";
 		String sess_id_ = "\n";
 
