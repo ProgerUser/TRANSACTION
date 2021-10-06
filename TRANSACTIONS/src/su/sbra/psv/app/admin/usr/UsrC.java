@@ -181,7 +181,7 @@ public class UsrC {
 			Stage stage = new Stage();
 			Stage stage_ = (Stage) USRLST.getScene().getWindow();
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("/app/users/AddUser.fxml"));
+			loader.setLocation(getClass().getResource("/su/sbra/psv/app/users/AddUser.fxml"));
 
 			AddUser controller = new AddUser();
 			loader.setController(controller);
@@ -223,7 +223,7 @@ public class UsrC {
 				Stage stage = new Stage();
 				Stage stage_ = (Stage) USRLST.getScene().getWindow();
 				FXMLLoader loader = new FXMLLoader();
-				loader.setLocation(getClass().getResource("/app/users/Set_Up_Pass.fxml"));
+				loader.setLocation(getClass().getResource("/su/sbra/psv/app/users/Set_Up_Pass.fxml"));
 
 				Set_Up_Pass controller = new Set_Up_Pass();
 				controller.setUsr(USRLST.getSelectionModel().getSelectedItem().getCUSRLOGNAME());

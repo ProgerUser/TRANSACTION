@@ -96,7 +96,7 @@ public class Pl {
 				Stage stage = new Stage();
 				Stage stage_ = (Stage) ExAcc.getScene().getWindow();
 				FXMLLoader loader = new FXMLLoader();
-				loader.setLocation(getClass().getResource("/app/tr/pl/ParamList.fxml"));
+				loader.setLocation(getClass().getResource("/su/sbra/psv/app/tr/pl/ParamList.fxml"));
 
 				Accs controller = new Accs();
 				loader.setController(controller);

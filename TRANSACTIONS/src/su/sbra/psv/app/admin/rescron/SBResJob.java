@@ -385,7 +385,7 @@ public class SBResJob {
 			Stage stage = new Stage();
 			Stage stage_ = (Stage) SB_CERT_EXP.getScene().getWindow();
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("/app/admin/rescron/IU_Res.fxml"));
+			loader.setLocation(getClass().getResource("/su/sbra/psv/app/admin/rescron/IU_Res.fxml"));
 
 			Add_Res controller = new Add_Res();
 			loader.setController(controller);
@@ -448,7 +448,7 @@ public class SBResJob {
 				Stage stage = new Stage();
 				Stage stage_ = (Stage) SB_CERT_EXP.getScene().getWindow();
 				FXMLLoader loader = new FXMLLoader();
-				loader.setLocation(getClass().getResource("/app/admin/rescron/IU_Res.fxml"));
+				loader.setLocation(getClass().getResource("/su/sbra/psv/app/admin/rescron/IU_Res.fxml"));
 
 				Edit_Res controller = new Edit_Res();
 				controller.SetClass(sel);
@@ -590,7 +590,7 @@ public class SBResJob {
 			Stage stage = new Stage();
 			Stage stage_ = (Stage) SB_CERT_EXP.getScene().getWindow();
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("/app/admin/rescron/IU_Prm.fxml"));
+			loader.setLocation(getClass().getResource("/su/sbra/psv/app/admin/rescron/IU_Prm.fxml"));
 
 			Add_Prm controller = new Add_Prm();
 			loader.setController(controller);
@@ -654,7 +654,7 @@ public class SBResJob {
 			Stage stage = new Stage();
 			Stage stage_ = (Stage) SB_CERT_EXP.getScene().getWindow();
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("/app/admin/rescron/IU_Grp.fxml"));
+			loader.setLocation(getClass().getResource("/su/sbra/psv/app/admin/rescron/IU_Grp.fxml"));
 
 			Add_Grp controller = new Add_Grp();
 			loader.setController(controller);
@@ -717,7 +717,7 @@ public class SBResJob {
 				Stage stage = new Stage();
 				Stage stage_ = (Stage) SB_CERT_EXP_GRP.getScene().getWindow();
 				FXMLLoader loader = new FXMLLoader();
-				loader.setLocation(getClass().getResource("/app/admin/rescron/IU_Grp.fxml"));
+				loader.setLocation(getClass().getResource("/su/sbra/psv/app/admin/rescron/IU_Grp.fxml"));
 
 				Edit_Grp controller = new Edit_Grp();
 				controller.SetClass(sel);
@@ -767,7 +767,7 @@ public class SBResJob {
 				Stage stage = new Stage();
 				Stage stage_ = (Stage) SB_CERT_EXP_PRM.getScene().getWindow();
 				FXMLLoader loader = new FXMLLoader();
-				loader.setLocation(getClass().getResource("/app/admin/rescron/IU_Prm.fxml"));
+				loader.setLocation(getClass().getResource("/su/sbra/psv/app/admin/rescron/IU_Prm.fxml"));
 
 				Edit_Prm controller = new Edit_Prm();
 				controller.SetClass(sel);

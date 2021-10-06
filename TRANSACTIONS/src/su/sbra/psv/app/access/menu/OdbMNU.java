@@ -269,7 +269,7 @@ public class OdbMNU {
 			Stage stage_ = (Stage) Users.getScene().getWindow();
 
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("/app/access/menu/IUMnu.fxml"));
+			loader.setLocation(getClass().getResource("/su/sbra/psv/app/access/menu/IUMnu.fxml"));
 
 			EditMnu controller = new EditMnu();
 			loader.setController(controller);
@@ -326,7 +326,7 @@ public class OdbMNU {
 			Stage stage_ = (Stage) Users.getScene().getWindow();
 
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("/app/access/menu/IUMnu.fxml"));
+			loader.setLocation(getClass().getResource("/su/sbra/psv/app/access/menu/IUMnu.fxml"));
 
 			// System.out.println(MNU.getSelectionModel().getSelectedItem().getValue().getMNU_ID());
 

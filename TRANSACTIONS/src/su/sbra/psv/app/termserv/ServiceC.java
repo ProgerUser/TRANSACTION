@@ -330,7 +330,7 @@ public class ServiceC {
 				Stage stage = new Stage();
 				Stage stage_ = (Stage) Service.getScene().getWindow();
 				FXMLLoader loader = new FXMLLoader();
-				loader.setLocation(getClass().getResource("/app/termserv/IUService.fxml"));
+				loader.setLocation(getClass().getResource("/su/sbra/psv/app/termserv/IUService.fxml"));
 
 				EditServ controller = new EditServ();
 				controller.SetClass(sel);
@@ -404,7 +404,7 @@ public class ServiceC {
 			Stage stage = new Stage();
 			Stage stage_ = (Stage) Service.getScene().getWindow();
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("/app/termserv/IUService.fxml"));
+			loader.setLocation(getClass().getResource("/su/sbra/psv/app/termserv/IUService.fxml"));
 
 			AddServ controller = new AddServ();
 			loader.setController(controller);

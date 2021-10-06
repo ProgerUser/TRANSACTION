@@ -295,7 +295,7 @@ public class TerminalC {
 				Stage stage = new Stage();
 				Stage stage_ = (Stage) vbox.getScene().getWindow();
 				FXMLLoader loader = new FXMLLoader();
-				loader.setLocation(getClass().getResource("/app/terminals/IUTerminal.fxml"));
+				loader.setLocation(getClass().getResource("/su/sbra/psv/app/terminals/IUTerminal.fxml"));
 
 				EditTerm controller = new EditTerm();
 				controller.SetClass(sel);
@@ -333,7 +333,7 @@ public class TerminalC {
 			Stage stage = new Stage();
 			Stage stage_ = (Stage) vbox.getScene().getWindow();
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("/app/terminals/IUTerminal.fxml"));
+			loader.setLocation(getClass().getResource("/su/sbra/psv/app/terminals/IUTerminal.fxml"));
 
 			AddTerm controller = new AddTerm();
 			loader.setController(controller);

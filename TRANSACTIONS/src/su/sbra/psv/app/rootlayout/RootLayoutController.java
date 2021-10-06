@@ -247,7 +247,7 @@ public class RootLayoutController {
 			if (ReportsWin) {
 				ReportsWin = false;
 				Stage stage = new Stage();
-				FXMLLoader loader = new FXMLLoader(Main.class.getResource("/app/report/Report.fxml"));
+				FXMLLoader loader = new FXMLLoader(Main.class.getResource("/su/sbra/psv/app/report/Report.fxml"));
 
 				Report controller = new Report();
 				controller.setId(666l);

@@ -110,7 +110,7 @@ public class Main extends Application {
 	public static void initRootLayout() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("/app/rootlayout/RootLayout.fxml"));
+			loader.setLocation(Main.class.getResource("/su/sbra/psv/app/rootlayout/RootLayout.fxml"));
 			rootLayout = (BorderPane) loader.load();
 			Scene scene = new Scene(rootLayout);
 			primaryStage.setScene(scene);
@@ -128,7 +128,7 @@ public class Main extends Application {
 	public static void showEmployeeView() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("/app/view/Viewer.fxml"));
+			loader.setLocation(Main.class.getResource("/su/sbra/psv/app/view/Viewer.fxml"));
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 
 			rootLayout.setCenter(employeeOperationsView);
@@ -147,7 +147,7 @@ public class Main extends Application {
 			if (MenuWin) {
 				MenuWin = false;
 				Stage stage = new Stage();
-				FXMLLoader loader = new FXMLLoader(Main.class.getResource("/app/access/menu/ODB_MNU.fxml"));
+				FXMLLoader loader = new FXMLLoader(Main.class.getResource("/su/sbra/psv/app/access/menu/ODB_MNU.fxml"));
 				Parent root = loader.load();
 				stage.setScene(new Scene(root));
 				stage.getIcons().add(new Image("/icon.png"));
@@ -176,7 +176,7 @@ public class Main extends Application {
 		try {
 			Stage stage = new Stage();
 			Parent root;
-			root = FXMLLoader.load(Main.class.getResource("/app/view/Kash.fxml"));
+			root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/view/Kash.fxml"));
 			stage.setScene(new Scene(root));
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("Псевдонимы");
@@ -196,7 +196,7 @@ public class Main extends Application {
 			if (UsrWin) {
 				UsrWin = false;
 				Stage stage = new Stage();
-				FXMLLoader loader = new FXMLLoader(Main.class.getResource("/app/admin/usr/Usr.fxml"));
+				FXMLLoader loader = new FXMLLoader(Main.class.getResource("/su/sbra/psv/app/admin/usr/Usr.fxml"));
 				Parent root = loader.load();
 				stage.getIcons().add(new Image("/icon.png"));
 				stage.setTitle("Пользователи");
@@ -226,7 +226,7 @@ public class Main extends Application {
 			Stage stage = new Stage();
 			Stage stage_ = (Stage) primaryStage.getScene().getWindow();
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("/app/tr/pl/Pl.fxml"));
+			loader.setLocation(Main.class.getResource("/su/sbra/psv/app/tr/pl/Pl.fxml"));
 
 			Pl controller = new Pl();
 			loader.setController(controller);
@@ -258,7 +258,7 @@ public class Main extends Application {
 			if (AuSetupWin) {
 				AuSetupWin = false;
 				Stage stage = new Stage();
-				FXMLLoader loader = new FXMLLoader(Main.class.getResource("/app/audit/trigger/AuList.fxml"));
+				FXMLLoader loader = new FXMLLoader(Main.class.getResource("/su/sbra/psv/app/audit/trigger/AuList.fxml"));
 				Parent root = loader.load();
 				stage.setScene(new Scene(root));
 				stage.getIcons().add(new Image("/icon.png"));
@@ -290,7 +290,7 @@ public class Main extends Application {
 				AuditWin = false;
 				Stage stage = new Stage();
 
-				FXMLLoader loader = new FXMLLoader(Main.class.getResource("/app/audit/view/Audit.fxml"));
+				FXMLLoader loader = new FXMLLoader(Main.class.getResource("/su/sbra/psv/app/audit/view/Audit.fxml"));
 
 				Audit controller = new Audit();
 				loader.setController(controller);
@@ -321,7 +321,7 @@ public class Main extends Application {
 			Stage stage = new Stage();
 
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("/app/contact/Contact.fxml"));
+			loader.setLocation(Main.class.getResource("/su/sbra/psv/app/contact/Contact.fxml"));
 
 			ContactC controller = new ContactC();
 
@@ -354,7 +354,7 @@ public class Main extends Application {
 		try {
 			Stage stage = new Stage();
 			Parent root;
-			root = FXMLLoader.load(Main.class.getResource("/app/view/Termdial.fxml"));
+			root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/view/Termdial.fxml"));
 			stage.setScene(new Scene(root));
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("Сдачи");
@@ -371,7 +371,7 @@ public class Main extends Application {
 	public static void showAmTr() {
 		try {
 			Stage stage = new Stage();
-			Parent root = FXMLLoader.load(Main.class.getResource("/app/trlist/Transact_Amra_viewer.fxml"));
+			Parent root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/trlist/Transact_Amra_viewer.fxml"));
 			stage.setScene(new Scene(root));
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("Загруженные транзакции");
@@ -389,7 +389,7 @@ public class Main extends Application {
 	public static void Ibankk() {
 		try {
 			Stage stage = new Stage();
-			Parent root = FXMLLoader.load(Main.class.getResource("/app/ibank/Ibank.fxml"));
+			Parent root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/ibank/Ibank.fxml"));
 			stage.setScene(new Scene(root));
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("Клиенты");
@@ -408,7 +408,7 @@ public class Main extends Application {
 			Stage stage = new Stage();
 			Stage stage_ = (Stage) primaryStage.getScene().getWindow();
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("/app/swift/SWTR.fxml"));
+			loader.setLocation(Main.class.getResource("/su/sbra/psv/app/swift/SWTR.fxml"));
 
 			SWC controller = new SWC();
 			controller.SetStageForClose(stage);
@@ -445,7 +445,7 @@ public class Main extends Application {
 			controller.SetStageForClose(primaryStage);
 			loader.setController(controller);
 
-			loader.setLocation(Main.class.getResource("/app/swift/SWTR.fxml"));
+			loader.setLocation(Main.class.getResource("/su/sbra/psv/app/swift/SWTR.fxml"));
 			StackPane employeeOperationsView = (StackPane) loader.load();
 
 			Scene scene = new Scene(employeeOperationsView); // We are sending rootLayout to the Scene.
@@ -476,7 +476,7 @@ public class Main extends Application {
 			FXMLLoader loader = new FXMLLoader();
 			ConvVal controller = new ConvVal();
 			loader.setController(controller);
-			loader.setLocation(Main.class.getResource("/app/valconv/ConvVal.fxml"));
+			loader.setLocation(Main.class.getResource("/su/sbra/psv/app/valconv/ConvVal.fxml"));
 			VBox employeeOperationsView = (VBox) loader.load();
 			Scene scene = new Scene(employeeOperationsView);
 			primaryStage.setTitle("CONV_VAL " + Connect.userID_ + "@" + Connect.connectionURL_);
@@ -503,7 +503,7 @@ public class Main extends Application {
 			Stage stage = new Stage();
 			Stage stage_ = (Stage) primaryStage.getScene().getWindow();
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("/app/sverka/Sverka.fxml"));
+			loader.setLocation(Main.class.getResource("/su/sbra/psv/app/sverka/Sverka.fxml"));
 
 			SverkaC controller = new SverkaC();
 			loader.setController(controller);
@@ -535,7 +535,7 @@ public class Main extends Application {
 			Stage stage = new Stage();
 			Stage stage_ = (Stage) primaryStage.getScene().getWindow();
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("/app/admin/rescron/SBResJob.fxml"));
+			loader.setLocation(Main.class.getResource("/su/sbra/psv/app/admin/rescron/SBResJob.fxml"));
 
 			SBResJob controller = new SBResJob();
 			loader.setController(controller);
@@ -565,7 +565,7 @@ public class Main extends Application {
 	public static void Load_Hist() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("/app/view/LoadHist.fxml"));
+			loader.setLocation(Main.class.getResource("/su/sbra/psv/app/view/LoadHist.fxml"));
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (Exception e) {
@@ -579,7 +579,7 @@ public class Main extends Application {
 	public static void showFirst() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("/app/view/First.fxml"));
+			loader.setLocation(Main.class.getResource("/su/sbra/psv/app/view/First.fxml"));
 			BorderPane employeeOperationsView = (BorderPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (Exception e) {
@@ -593,7 +593,7 @@ public class Main extends Application {
 	public static void RT() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("/app/view/RootLayout.fxml"));
+			loader.setLocation(Main.class.getResource("/su/sbra/psv/app/view/RootLayout.fxml"));
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (Exception e) {
@@ -605,7 +605,7 @@ public class Main extends Application {
 	public void Enter() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("/app/view/Enter.fxml"));
+			loader.setLocation(Main.class.getResource("/su/sbra/psv/app/view/Enter.fxml"));
 			Parent root = loader.load();
 			Scene scene = new Scene(root); // We are sending rootLayout to the Scene.
 			primaryStage.setScene(scene); // Set the scene in primary stage.
@@ -623,7 +623,7 @@ public class Main extends Application {
 
 			Stage stage = new Stage();
 			Parent root;
-			root = FXMLLoader.load(Main.class.getResource("/app/terminals/Terminal.fxml"));
+			root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/terminals/Terminal.fxml"));
 			stage.setScene(new Scene(root));
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("Терминалы");
@@ -647,7 +647,7 @@ public class Main extends Application {
 
 			Stage stage = new Stage();
 			Parent root;
-			root = FXMLLoader.load(Main.class.getResource("/app/view/ShowHist.fxml"));
+			root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/view/ShowHist.fxml"));
 			stage.setScene(new Scene(root));
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("История загрузок");
@@ -662,7 +662,7 @@ public class Main extends Application {
 	public static void Service() {
 		try {
 			Stage stage = new Stage();
-			Parent root= FXMLLoader.load(Main.class.getResource("/app/termserv/Service.fxml"));
+			Parent root= FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/termserv/Service.fxml"));
 			stage.setScene(new Scene(root));
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("Сервисы");
@@ -682,7 +682,7 @@ public class Main extends Application {
 			if (ActWin) {
 				ActWin = false;
 				Stage stage = new Stage();
-				FXMLLoader loader = new FXMLLoader(Main.class.getResource("/app/access/action/ODB_ACTION.fxml"));
+				FXMLLoader loader = new FXMLLoader(Main.class.getResource("/su/sbra/psv/app/access/action/ODB_ACTION.fxml"));
 				Parent root = loader.load();
 				stage.setScene(new Scene(root));
 				stage.getIcons().add(new Image("/icon.png"));
@@ -712,7 +712,7 @@ public class Main extends Application {
 			if (GrpAccessWin) {
 				GrpAccessWin = false;
 				Stage stage = new Stage();
-				FXMLLoader loader = new FXMLLoader(Main.class.getResource("/app/access/grp/GrpMember.fxml"));
+				FXMLLoader loader = new FXMLLoader(Main.class.getResource("/su/sbra/psv/app/access/grp/GrpMember.fxml"));
 
 				GrpController controller = new GrpController();
 				loader.setController(controller);
@@ -744,7 +744,7 @@ public class Main extends Application {
 	public static void Debtinfo() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("/app/view/DebtInfo.fxml"));
+			loader.setLocation(Main.class.getResource("/su/sbra/psv/app/view/DebtInfo.fxml"));
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			Scene scene = new Scene(employeeOperationsView, 600, 450); // We are sending rootLayout to the Scene.
 			primaryStage.setScene(scene); // Set the scene in primary stage.
@@ -760,7 +760,7 @@ public class Main extends Application {
 	public static void CopyDover() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("/app/view/CopyDover.fxml"));
+			loader.setLocation(Main.class.getResource("/su/sbra/psv/app/view/CopyDover.fxml"));
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			Scene scene = new Scene(employeeOperationsView, 600, 450); // We are sending rootLayout to the Scene.
 			primaryStage.setScene(scene); // Set the scene in primary stage.
@@ -780,7 +780,7 @@ public class Main extends Application {
 			if (PensWin) {
 				PensWin = false;
 				Stage stage = new Stage();
-				FXMLLoader loader = new FXMLLoader(Main.class.getResource("/app/pensia/Pens_divide.fxml"));
+				FXMLLoader loader = new FXMLLoader(Main.class.getResource("/su/sbra/psv/app/pensia/Pens_divide.fxml"));
 				Parent root = loader.load();
 				stage.setScene(new Scene(root));
 				stage.getIcons().add(new Image("/icon.png"));
@@ -808,7 +808,7 @@ public class Main extends Application {
 		try {
 			Stage stage = new Stage();
 			Parent root;
-			root = FXMLLoader.load(Main.class.getResource("/app/view/Pens_RA.fxml"));
+			root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/view/Pens_RA.fxml"));
 			stage.setScene(new Scene(root));
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("Пенсия РА");
@@ -826,7 +826,7 @@ public class Main extends Application {
 	public static void Transact() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("/app/trload/TransactLoad.fxml"));
+			loader.setLocation(Main.class.getResource("/su/sbra/psv/app/trload/TransactLoad.fxml"));
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (Exception e) {
@@ -841,7 +841,7 @@ public class Main extends Application {
 		try {
 			Stage stage = new Stage();
 			Parent root;
-			root = FXMLLoader.load(Main.class.getResource("/app/loadamra/Amra_Trans.fxml"));
+			root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/loadamra/Amra_Trans.fxml"));
 			stage.setScene(new Scene(root));
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("Загрузка транзакции");
