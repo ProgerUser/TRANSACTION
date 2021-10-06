@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox fx:id="ap" stylesheets="@../../transact.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controller.KashController">
+<VBox fx:id="ap" stylesheets="@../../transact.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="su.sbra.psv.app.controller.KashController">
 	<children>
       <ToolBar>
         <items>

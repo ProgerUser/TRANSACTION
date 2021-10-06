@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane prefHeight="565.0" prefWidth="954.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controller.ShowHistoryController">
+<BorderPane prefHeight="565.0" prefWidth="954.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="su.sbra.psv.app.controller.ShowHistoryController">
 	<center>
 		<GridPane prefHeight="555.0" prefWidth="598.0">
 			<children>

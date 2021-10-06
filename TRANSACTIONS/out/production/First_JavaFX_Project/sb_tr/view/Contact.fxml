@@ -10,7 +10,7 @@
 
 <AnchorPane prefHeight="336.0" prefWidth="790.0"
 	xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="app.controller.ContactC">
+	fx:controller="su.sbra.psv.app.controller.ContactC">
 	<!-- TODO Add Nodes -->
 	<children>
 		<Button id="find" layoutX="536.0" layoutY="24.0"

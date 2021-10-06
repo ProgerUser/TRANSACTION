@@ -7,7 +7,7 @@
 
 <BorderPane prefHeight="526.0" prefWidth="800.0"
 	xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="app.controller.Termdial_Controller">
+	fx:controller="su.sbra.psv.app.controller.Termdial_Controller">
 	<center>
 		<GridPane prefHeight="555.0" prefWidth="598.0">
 			<children>

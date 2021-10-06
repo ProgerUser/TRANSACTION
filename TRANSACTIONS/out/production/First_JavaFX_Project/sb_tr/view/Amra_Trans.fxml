@@ -10,7 +10,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane fx:id="ap1" stylesheets="@../../borderpane.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controller.Amra_Transact">
+<BorderPane fx:id="ap1" stylesheets="@../../borderpane.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="su.sbra.psv.app.controller.Amra_Transact">
 	<center>
 
 	</center>

@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.*?>
 
-<BorderPane fx:id="ap" stylesheets="@../../borderpane.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controller.EnterC">
+<BorderPane fx:id="ap" stylesheets="@../../borderpane.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="su.sbra.psv.app.controller.EnterC">
    <top>
       <GridPane BorderPane.alignment="CENTER">
         <columnConstraints>

@@ -8,7 +8,7 @@
 
 <BorderPane fx:id="bp" prefHeight="649.0" prefWidth="1017.0"
 	xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="app.controller.TerminalController">
+	fx:controller="su.sbra.psv.app.controller.TerminalController">
 	<center>
 		<GridPane prefHeight="555.0" prefWidth="598.0">
 			<children>
