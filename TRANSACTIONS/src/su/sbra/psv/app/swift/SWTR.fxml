@@ -29,7 +29,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane fx:id="StPn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.291" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane fx:id="StPn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1">
 <children>
       <TabPane fx:id="RootTab" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="floating" tabClosingPolicy="UNAVAILABLE">
         <tabs>
@@ -465,64 +465,64 @@
             </Tab>
             <Tab fx:id="CONV_VAL" text="Конверсия валюты">
                <content>
-                  <TitledPane alignment="CENTER" animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Сформированные">
-                     <content>
-                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
-                           <children>
-                              <ToolBar VBox.vgrow="ALWAYS">
-                                <items>
-                                  <Button mnemonicParsing="false" onAction="#REFR_CONV">
-                                       <graphic>
-                                          <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="15" />
-                                       </graphic>
-                                       <tooltip>
-                                          <Tooltip text="Обновить" />
-                                       </tooltip>
-                                    </Button>
-                                    <Button mnemonicParsing="false" onAction="#AUDIT_CONV">
-                                       <graphic>
-                                          <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EDIT" size="15" />
-                                       </graphic>
-                                       <tooltip>
-                                          <Tooltip text="Редактировать" />
-                                       </tooltip>
-                                    </Button>
-                                    <Separator orientation="VERTICAL" />
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="С:" />
-                                    <DatePicker fx:id="ConvFrom" prefWidth="120.0" />
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="По:" />
-                                    <DatePicker fx:id="ConvTo" layoutX="147.0" layoutY="11.0" prefWidth="120.0" />
-                                    <Separator orientation="VERTICAL" />
-                                    <Button mnemonicParsing="false" onAction="#ClearFilterConv" textFill="WHITE">
-                                       <graphic>
-                                          <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TIMES" size="15" />
-                                       </graphic>
-                                       <font>
-                                          <Font size="10.0" />
-                                       </font>
-                                    </Button>
-                                </items>
-                                 <VBox.margin>
-                                    <Insets left="-10.0" right="-10.0" top="-10.0" />
-                                 </VBox.margin>
-                              </ToolBar>
-                              <TableView fx:id="CONV_TBL" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="mylistview" stylesheets="/TableView.css" VBox.vgrow="ALWAYS">
-                                 <columns>
-                                    <TableColumn fx:id="CONV_ID" prefWidth="75.0" text="ИД" />
-                                    <TableColumn fx:id="CONV_REF" prefWidth="120.0" text="Референс" />
-                                    <TableColumn fx:id="CONV_FL32A_DATE" prefWidth="97.0" text="Дата вал." />
-                                    <TableColumn fx:id="CONV_FL32A_CUR" prefWidth="45.0" text="Вал." />
-                                    <TableColumn fx:id="CONV_FL32A_SUM" prefWidth="99.0" text="Сумма" />
-                                    <TableColumn fx:id="CONV_F53B" prefWidth="160.0" text="Поле 53" />
-                                    <TableColumn fx:id="CONV_F58A" prefWidth="150.0" text="Поле 58" />
-                                    <TableColumn fx:id="CONV_F72" prefWidth="250.0" text="Поле 72" />
-                                    <TableColumn fx:id="CONV_DATETIME" prefWidth="120.0" text="Дата создания" />
-                                    <TableColumn fx:id="CONV_OPER" prefWidth="77.0" text="Опер." />
-                                 </columns>
-                              </TableView>
-                           </children>
-                        </VBox>
-                     </content></TitledPane>
+                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+                     <children>
+                        <ToolBar VBox.vgrow="ALWAYS">
+                          <items>
+                            <Button mnemonicParsing="false" onAction="#REFR_CONV">
+                                 <graphic>
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="15" />
+                                 </graphic>
+                                 <tooltip>
+                                    <Tooltip text="Обновить" />
+                                 </tooltip>
+                              </Button>
+                              <Button mnemonicParsing="false" onAction="#AUDIT_CONV">
+                                 <graphic>
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EDIT" size="15" />
+                                 </graphic>
+                                 <tooltip>
+                                    <Tooltip text="Редактировать" />
+                                 </tooltip>
+                              </Button>
+                              <Separator orientation="VERTICAL" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="С:" />
+                              <DatePicker fx:id="ConvFrom" prefWidth="120.0" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="По:" />
+                              <DatePicker fx:id="ConvTo" layoutX="147.0" layoutY="11.0" prefWidth="120.0" />
+                              <Separator orientation="VERTICAL" />
+                              <Button mnemonicParsing="false" onAction="#ClearFilterConv" textFill="WHITE">
+                                 <graphic>
+                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TIMES" size="15" />
+                                 </graphic>
+                                 <font>
+                                    <Font size="10.0" />
+                                 </font>
+                              </Button>
+                          </items>
+                           <VBox.margin>
+                              <Insets left="-5.0" right="-5.0" top="-5.0" />
+                           </VBox.margin>
+                        </ToolBar>
+                        <TableView fx:id="CONV_TBL" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="mylistview" stylesheets="/TableView.css" VBox.vgrow="ALWAYS">
+                           <columns>
+                              <TableColumn fx:id="CONV_ID" prefWidth="75.0" text="ИД" />
+                              <TableColumn fx:id="CONV_REF" prefWidth="120.0" text="Референс" />
+                              <TableColumn fx:id="CONV_FL32A_DATE" prefWidth="97.0" text="Дата вал." />
+                              <TableColumn fx:id="CONV_FL32A_CUR" prefWidth="45.0" text="Вал." />
+                              <TableColumn fx:id="CONV_FL32A_SUM" prefWidth="99.0" text="Сумма" />
+                              <TableColumn fx:id="CONV_F53B" prefWidth="160.0" text="Поле 53" />
+                              <TableColumn fx:id="CONV_F58A" prefWidth="150.0" text="Поле 58" />
+                              <TableColumn fx:id="CONV_F72" prefWidth="250.0" text="Поле 72" />
+                              <TableColumn fx:id="CONV_DATETIME" prefWidth="120.0" text="Дата создания" />
+                              <TableColumn fx:id="CONV_OPER" prefWidth="77.0" text="Опер." />
+                           </columns>
+                        </TableView>
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </VBox>
                </content></Tab>
             <Tab fx:id="SETTINGS" text="Настройки">
                <content>

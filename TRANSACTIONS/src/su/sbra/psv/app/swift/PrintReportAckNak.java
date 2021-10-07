@@ -34,7 +34,7 @@ public class PrintReportAckNak extends JFrame {
 
 	public void showReport(String ref) {
 		try {
-			InputStream input = this.getClass().getResourceAsStream("/swift/AckNak.jrxml");
+			InputStream input = this.getClass().getResourceAsStream("/su/sbra/psv/app/swift/AckNak.jrxml");
 			JasperDesign design = JRXmlLoader.load(input);
 			JasperReport jasperReport = JasperCompileManager.compileReport(design);
 

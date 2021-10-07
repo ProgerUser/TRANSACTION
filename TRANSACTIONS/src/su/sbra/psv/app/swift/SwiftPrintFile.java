@@ -34,7 +34,7 @@ public class SwiftPrintFile extends JFrame {
 		try {
 			Main.logger = Logger.getLogger(getClass());
 			Main.logger.setLevel(Level.INFO);
-			InputStream input = this.getClass().getResourceAsStream("/swift/SwRep.jrxml");
+			InputStream input = this.getClass().getResourceAsStream("/su/sbra/psv/app/swift/SwRep.jrxml");
 			JasperDesign design = JRXmlLoader.load(input);
 			JasperReport jasperReport = JasperCompileManager.compileReport(design);
 

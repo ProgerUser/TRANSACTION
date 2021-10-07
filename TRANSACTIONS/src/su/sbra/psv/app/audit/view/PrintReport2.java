@@ -33,7 +33,7 @@ public class PrintReport2 extends JFrame {
 	public void showReport(String tablename, Long actid) {
 		try {
 			Main.logger = Logger.getLogger(getClass());
-			InputStream input = this.getClass().getResourceAsStream("/app/audit/view/Audit.jrxml");
+			InputStream input = this.getClass().getResourceAsStream("/su/sbra/psv/app/audit/view/Audit.jrxml");
 			JasperDesign design = JRXmlLoader.load(input);
 			JasperReport jasperReport = JasperCompileManager.compileReport(design);
 			/* List to hold Items */

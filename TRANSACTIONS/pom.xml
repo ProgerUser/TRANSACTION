@@ -94,7 +94,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>app.Main</mainClass>
+							<mainClass>su.sbra.psv.app.main.Main</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
