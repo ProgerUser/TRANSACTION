@@ -32,19 +32,22 @@ public class DBUtil {
 
 	// Connect to DB
 	public static void dbConnect() throws ClassNotFoundException, SQLException, UnknownHostException {
-			// Setting Oracle JDBC Driver
-			Class.forName(JDBC_DRIVER);
-			Main.logger = Logger.getLogger(DBUtil.class);
-			// Establish the Oracle Connection using Connection String
-			
-			Properties props = new Properties();
-			props.setProperty("password", Connect.userPassword_);
-			props.setProperty("user", Connect.userID_);
-			props.put("v$session.osuser", System.getProperty("user.name").toString());
-			props.put("v$session.machine", InetAddress.getLocalHost().getCanonicalHostName());
-			props.put("v$session.program", DBUtil.class.getName());
-			conn  = DriverManager.getConnection("jdbc:oracle:thin:@" + Connect.connectionURL_, props);
-			conn.setAutoCommit(false);
+		// Setting Oracle JDBC Driver
+		Class.forName(JDBC_DRIVER);
+		Main.logger = Logger.getLogger(DBUtil.class);
+		// Establish the Oracle Connection using Connection String
+
+		Properties props = new Properties();
+		props.setProperty("password", Connect.userPassword_);
+		props.setProperty("user", Connect.userID_);
+		props.put("v$session.osuser", System.getProperty("user.name").toString());
+		props.put("v$session.action", "DDD");
+		props.put("v$session.machine", InetAddress.getLocalHost().getCanonicalHostName());
+		props.put("v$session.program", DBUtil.class.getName());
+		conn = DriverManager.getConnection("jdbc:oracle:thin:@" + Connect.connectionURL_, props);
+		conn.setAutoCommit(false);
+		DBUtil.ExecPlSql("begin dbms_application_info.set_action('q'); end;",conn);
+
 	}
 
 	// Close Connection
@@ -52,6 +55,7 @@ public class DBUtil {
 		try {
 			Main.logger = Logger.getLogger(DBUtil.class);
 			if (conn != null && !conn.isClosed()) {
+				conn.rollback();
 				conn.close();
 			}
 		} catch (Exception e) {
@@ -120,7 +124,7 @@ public class DBUtil {
 		}
 		return ret;
 	}
-	
+
 	public static Integer OdbAction(Integer actid) {
 		Main.logger = Logger.getLogger(DBUtil.class);
 		Integer ret = 0;
@@ -212,6 +216,26 @@ public class DBUtil {
 				} catch (SQLException e) {
 					Msg.Message(ExceptionUtils.getStackTrace(e));
 					Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+				}
+			}
+		}
+	}
+
+	public static void ExecPlSql(String sqlStmt, Connection conn) {
+		Statement stmt = null;
+		Main.logger = Logger.getLogger(DBUtil.class);
+		try {
+			stmt = conn.createStatement();
+			stmt.executeUpdate(sqlStmt);
+			conn.commit();
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		} finally {
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					Msg.Message(ExceptionUtils.getStackTrace(e));
 				}
 			}
 		}

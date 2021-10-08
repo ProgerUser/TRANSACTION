@@ -65,6 +65,7 @@ public class DbUtil {
 		try {
 			Main.logger = Logger.getLogger(DbUtil.class);
 			if (conn != null && !conn.isClosed()) {
+				conn.rollback();
 				conn.close();
 			}
 		} catch (Exception e) {
