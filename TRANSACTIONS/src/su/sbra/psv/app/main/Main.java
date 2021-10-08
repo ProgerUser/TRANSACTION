@@ -1,5 +1,7 @@
 package su.sbra.psv.app.main;
 
+import java.sql.ResultSet;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -35,6 +37,7 @@ import su.sbra.psv.app.sverka.SverkaC;
 import su.sbra.psv.app.swift.SWC;
 import su.sbra.psv.app.tr.pl.Pl;
 import su.sbra.psv.app.util.DBUtil;
+import su.sbra.psv.app.util.NamedParamStatement;
 import su.sbra.psv.app.utils.DbUtil;
 import su.sbra.psv.app.valconv.ConvVal;
 
@@ -88,6 +91,16 @@ public class Main extends Application {
 				showFirst();
 //				swift2();
 //				ResMon();
+			}
+			{
+				String sql;
+				sql = "SELECT :name from dual";
+				NamedParamStatement stmt = new NamedParamStatement(DbUtil.conn, sql);
+				stmt.setString("name", "Said");
+				ResultSet rs = stmt.executeQuery();
+				if(rs.next())
+					System.out.println(rs.getString(1));
+				stmt.close();
 			}
 			
 			primaryStage.setOnCloseRequest(e -> {

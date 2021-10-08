@@ -1,6 +1,8 @@
 package su.sbra.psv.ispirer.test;
-import java.sql.*;
-import java.math.*;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class ZSbCardIden {
 
