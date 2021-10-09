@@ -97,243 +97,165 @@ public class Tr_Am_View_con {
 
 	@FXML
 	private VBox CONTROL;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> filetransactions;
-
 	@FXML
 	private CheckBox inkass;
-
 	@FXML
 	private CheckBox DOKATKA;
-
 	@FXML
 	private CheckBox ret_pay;
-
 	@FXML
 	private Button search;
-
 	@FXML
 	private TableColumn<Amra_Trans, Boolean> chk_row;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> fio;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> rewardamount;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> operationnumber;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> detailing;
-
 	@FXML
 	private TableColumn<Amra_Trans, Integer> sess_id;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> valuenotfound;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> counterchecks;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> walletreceiver;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> dataps;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> barcode;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> purposeofpayment;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> terminalnetwork;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> owninown;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> id_;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> amountintermediary;
-
 	@FXML
 	private TableColumn<Amra_Trans, Double> commissionamount;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> vk;
-
 	@FXML
 	private TableColumn<Amra_Trans, Double> sumnalprimal;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> dateofoperation;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> amountofscs;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> cardnumber;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> accountpayer;
-
 	@FXML
 	private TableColumn<Amra_Trans, LocalDateTime> recdate;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> checknumber;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> status;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> mincommissionamount;
-
 	@FXML
 	private TableColumn<Amra_Trans, Integer> rownum;
-
 	@FXML
 	private TableColumn<Amra_Trans, Double> amounttocheck;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> dateclearing;
-
 	@FXML
 	private TableColumn<Amra_Trans, LocalDateTime> paydate;
-
 	@FXML
 	private TextField summa_plat;
-
 	@FXML
 	private TextField nk_summ_;
-
 	@FXML
 	private TextField nk_summ_1;
-
 	@FXML
 	private TextField summa_nal;
-
 	@FXML
 	private TextField cnt_all_;
-
 	@FXML
 	private Button xlsx;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> ownerincomeamount;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> maxcommissionamount;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> transactiontype;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> isaresident;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> countercheck;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> operationnumberdelivery;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> provider;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> currency;
-
 	@FXML
 	private TableColumn<Amra_Trans, Double> amountwithchecks;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> statusabs;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> walletpayer;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> sumofsplitting;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> providertariff;
-
 	@FXML
 	private TableColumn<Amra_Trans, Double> nkamount;
-
 	@FXML
 	private TableColumn<Amra_Trans, Double> amountofpayment;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> counter;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> terminal;
-
 	@FXML
 	private ProgressBar progress_export;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> checksincoming;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> corrected;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> stringfromfile;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> checkparent;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> commissionrate;
-
 	@FXML
 	private TableColumn<Amra_Trans, Double> cashamount;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> service;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> dealer;
-
 	@FXML
 	private TableView<Amra_Trans> trans_table;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> paymenttype;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> dataprovider;
-
 	@FXML
 	private TextField id_sess;
-
 	@FXML
 	private TextField FIO;
-
 	@FXML
 	private TableColumn<Amra_Trans, String> orderofprovidence;
-
 	private Executor exec;
-
 	@FXML
 	private DatePicker dt1;
-
 	@FXML
 	private DatePicker dt2;
-
 	@FXML
 	private ProgressIndicator pb;
-
 	@FXML
 	private ComboBox<String> terminal_name;
 
+	
 	@FXML
 	void show_(ActionEvent l) {
 
@@ -1709,7 +1631,7 @@ public class Tr_Am_View_con {
 				Stage stage = new Stage();
 				Parent root;
 
-				root = FXMLLoader.load(Main.class.getResource("view/Attributes_.fxml"));
+				root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/view/Attributes_.fxml"));
 
 				stage.setScene(new Scene(root));
 				stage.getIcons().add(new Image("icon.png"));
@@ -1734,7 +1656,7 @@ public class Tr_Am_View_con {
 				Connect.PNMB_ = fn.get_checknumber();
 				Stage stage = new Stage();
 				Parent root;
-				root = FXMLLoader.load(Main.class.getResource("view/Deals.fxml"));
+				root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/view/Deals.fxml"));
 				stage.setScene(new Scene(root));
 				stage.getIcons().add(new Image("icon.png"));
 				stage.setTitle("Чеки оплаты транзакции " + fn.get_checknumber());
@@ -2154,7 +2076,7 @@ public class Tr_Am_View_con {
 				Connect.PNMB_ = fn.get_checknumber();
 				Stage stage = new Stage();
 				Parent root;
-				root = FXMLLoader.load(Main.class.getResource("view/Transact_Unpiv.fxml"));
+				root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/view/Transact_Unpiv.fxml"));
 				stage.setScene(new Scene(root));
 				stage.getIcons().add(new Image("icon.png"));
 				stage.setTitle("Подробно " + fn.get_checknumber());
@@ -2177,7 +2099,7 @@ public class Tr_Am_View_con {
 				Connect.PNMB_ = fn.get_checknumber();
 				Stage stage = new Stage();
 				Parent root;
-				root = FXMLLoader.load(Main.class.getResource("view/Deals.fxml"));
+				root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/view/Deals.fxml"));
 				stage.setScene(new Scene(root));
 				stage.getIcons().add(new Image("icon.png"));
 				stage.setTitle("Подробно " + fn.get_checknumber());
@@ -2200,7 +2122,7 @@ public class Tr_Am_View_con {
 				Connect.PNMB_ = fn.get_checknumber();
 				Stage stage = new Stage();
 				Parent root;
-				root = FXMLLoader.load(Main.class.getResource("view/Attributes_.fxml"));
+				root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/view/Attributes_.fxml"));
 				stage.setScene(new Scene(root));
 				stage.getIcons().add(new Image("icon.png"));
 				stage.setTitle("Подробно " + fn.get_checknumber());
@@ -2333,7 +2255,7 @@ public class Tr_Am_View_con {
 				Stage stage = new Stage();
 				Parent root;
 
-				root = FXMLLoader.load(Main.class.getResource("view/Transact_Unpiv.fxml"));
+				root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/view/Transact_Unpiv.fxml"));
 
 				stage.setScene(new Scene(root));
 				stage.getIcons().add(new Image("icon.png"));

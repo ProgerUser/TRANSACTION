@@ -14,6 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import su.sbra.psv.app.main.Main;
@@ -70,7 +71,11 @@ public class Msg {
 
 			TextArea textArea = new TextArea(mess);
 			textArea.setEditable(false);
+			textArea.setFont(Font.font(14));
 			textArea.setWrapText(true);
+			
+			textArea.getStyleClass().add("mylistview");
+			textArea.getStylesheets().add("/ScrPane.css");
 
 			textArea.setMaxWidth(Double.MAX_VALUE);
 			textArea.setMaxHeight(Double.MAX_VALUE);

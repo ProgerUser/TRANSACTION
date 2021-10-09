@@ -447,7 +447,7 @@ public class GrpController {
 				Stage stage = new Stage();
 				FXMLLoader loader = new FXMLLoader();
 				
-				loader.setLocation(getClass().getResource("/access/grp/IUGrp.fxml"));
+				loader.setLocation(getClass().getResource("/su/sbra/psv/app/access/grp/IUGrp.fxml"));
 				EditGrp controller = new EditGrp();
 				controller.setConn(conn, group);
 				

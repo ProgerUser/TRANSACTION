@@ -188,78 +188,6 @@ public class TerminalDAO {
 		return empList;
 	}
 
-	// *******************************
-	// SELECT FN_SESS
-	// *******************************
-	public static ObservableList<Add_File> add_file_(String SESS_ID, LocalDate dt) throws ClassNotFoundException, UnknownHostException {
-
-		String ldt = "\n";
-		String ldt_ = "\n";
-		String p_n = "\n";
-		if (SESS_ID.equals("")) {
-
-		} else {
-			p_n = "and SESS_ID = '" + SESS_ID + "'\n";
-		}
-		if (dt != null)
-			ldt_ = dt.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-
-		if (dt != null) {
-			ldt = " and trunc(date_time) = to_date('" + ldt_ + "','dd.mm.yyyy')\n";
-		}
-		String selectStmt = "select sess_id,\n" + 
-		"       file_name,\n" + 
-				"       date_time,\n" 
-		+"       fileclob,\n"
-				+ "       case\n" + 
-		"         when status = 0 then\n" + 
-				"          'Загружен'\n"
-				+ "         when status = 1 then\n" +
-				"          'Разобран'\n" +
-				"         when status = 2 then\n"
-				+ "          'Рассчитан'\n" + 
-				"       end status,\n" + 
-				"       path,\n"
-				+ "       user_ from Z_SB_FN_SESS_AMRA \n" + "where 1=1" + p_n + ldt + "order by date_time desc";
-
-		// Get ResultSet from dbExecuteQuery method
-		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
-
-		// Send ResultSet to the getEmployeeList method and get employee object
-		ObservableList<Add_File> empList = get_file_(rsEmps);
-
-		// Return employee object
-		return empList;
-	}
-
-	// *******************************
-	// SELECT FN_SESS
-	// *******************************
-	public static ObservableList<Add_File> add_file_d_(LocalDate Date) throws ClassNotFoundException, UnknownHostException {
-		String p_n = "\n";
-		String dd = "\n";
-		if (Date != null)
-			dd = Date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-
-		if (Date != null) {
-			p_n = "and trunc(DATE_TIME) = to_date('" + dd + "','dd.mm.yyyy')\n";
-		}
-
-		String selectStmt = "select sess_id,\n" + "       file_name,\n" + "       date_time,\n" + "       fileclob,\n"
-				+ "       case\n" + "         when status = 0 then\n" + "          'Загружен'\n"
-				+ "         when status = 1 then\n" + "          'Разобран'\n" + "         when status = 2 then\n"
-				+ "          'Рассчитан'\n" + "       end status,\n" + "       path,\n"
-				+ "       user_ from Z_SB_FN_SESS_AMRA \n" + "where 1=1" + p_n + "order by date_time desc";
-
-		// Get ResultSet from dbExecuteQuery method
-		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
-
-		// Send ResultSet to the getEmployeeList method and get employee object
-		ObservableList<Add_File> empList = get_file_(rsEmps);
-
-		// Return employee object
-		return empList;
-	}
 
 	// *******************************
 	// SELECT REL
@@ -772,27 +700,6 @@ public class TerminalDAO {
 		return null;
 	}
 
-	// Select * from fn_sess operation
-	private static ObservableList<Add_File> get_file_(ResultSet rs) {
-		try {
-			ObservableList<Add_File> fn_list = FXCollections.observableArrayList();
-			while (rs.next()) {
-				Add_File adf = new Add_File();
-				String date_ = new SimpleDateFormat("dd.MM.yy HH:mm:ss").format(rs.getTimestamp("date_time"));
-				adf.set_FileName(rs.getString("file_name"));
-				adf.set_Status(rs.getString("status"));
-				adf.set_Date(date_);
-				adf.set_User(rs.getString("user_"));
-				adf.set_FileId(rs.getString("sess_id"));
-				adf.set_Path(rs.getString("path"));
-				fn_list.add(adf);
-			}
-			return fn_list;
-		} catch (SQLException e) {
-			alert(ExceptionUtils.getStackTrace(e));
-		}
-		return null;
-	}
 
 	// Select * from fn_sess operation
 	private static ObservableList<Termdial> get_term(ResultSet rs) {

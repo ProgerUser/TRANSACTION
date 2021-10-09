@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import de.jensd.fx.glyphs.octicons.OctIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -23,7 +24,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="PANE" prefHeight="330.0" prefWidth="640.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.291" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="PANE" prefHeight="330.0" prefWidth="640.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1">
 	<children>
 		<HBox alignment="CENTER_LEFT" spacing="5.0">
 			<children>
@@ -177,9 +178,6 @@
 					</graphic>
 				</Button>
 				<Button fx:id="Design" maxWidth="30.0" mnemonicParsing="false" onAction="#Design">
-					<graphic>
-						<FontAwesomeIconView fill="BLACK" fontSmoothingType="LCD" glyphName="EDIT" size="15" />
-					</graphic>
 					<tooltip>
 						<Tooltip text="Редактировать">
 							<font>
@@ -187,6 +185,9 @@
 							</font>
 						</Tooltip>
 					</tooltip>
+               <graphic>
+                  <OctIconView glyphName="TOOLS" size="15" />
+               </graphic>
 				</Button>
 				<Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#Run" prefWidth="80.0" text="OK" />
 				<Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#Cencel" text="Отмена" />

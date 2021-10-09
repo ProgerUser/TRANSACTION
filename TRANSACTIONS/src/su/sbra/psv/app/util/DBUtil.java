@@ -46,8 +46,7 @@ public class DBUtil {
 		props.put("v$session.program", DBUtil.class.getName());
 		conn = DriverManager.getConnection("jdbc:oracle:thin:@" + Connect.connectionURL_, props);
 		conn.setAutoCommit(false);
-		DBUtil.ExecPlSql("begin dbms_application_info.set_action('q'); end;",conn);
-
+		//DBUtil.ExecPlSql("begin dbms_application_info.set_action('q'); end;",conn);
 	}
 
 	// Close Connection

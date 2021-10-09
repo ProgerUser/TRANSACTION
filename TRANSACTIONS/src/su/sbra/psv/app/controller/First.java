@@ -43,7 +43,7 @@ public class First {
 			}
 			rs.close();
 			prp.close();
-			Main.primaryStage.setTitle("(" + usrlogin + ") " + Connect.connectionURL_);
+			Main.primaryStage.setTitle("(" + usrlogin + ") (" + Connect.connectionURL_+")");
 			//картинка в центр
 			Image image = new Image(getClass().getResourceAsStream("/logo.png"));
 			imageView.setImage(image);

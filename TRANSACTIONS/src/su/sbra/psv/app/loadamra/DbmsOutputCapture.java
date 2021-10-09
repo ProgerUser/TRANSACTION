@@ -4,9 +4,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class DbmsOutputCapture implements AutoCloseable {
-	private static final int DEFAULT_LINE_BUF_SZ = 999999999;
+	private static final int DEFAULT_LINE_BUF_SZ = 1024;
 	private int lineBufferSize;
 	private CallableStatement enableStmt;
 	private CallableStatement readLineStmt;
@@ -23,7 +22,7 @@ public class DbmsOutputCapture implements AutoCloseable {
 		readLineStmt = dbConn.prepareCall("begin dbms_output.get_lines(?, ?); end;");
 		readLineStmt.registerOutParameter(1, Types.ARRAY, "DBMSOUTPUT_LINESARRAY");
 		readLineStmt.registerOutParameter(2, Types.INTEGER, "INTEGER");
-		readLineStmt.setLong(2, lineBufferSize);
+		readLineStmt.setInt(2, lineBufferSize);
 	}
 
 	public List<String> execute(CallableStatement userCall) throws SQLException {
@@ -31,10 +30,10 @@ public class DbmsOutputCapture implements AutoCloseable {
 		try {
 			enableStmt.executeUpdate();
 			userCall.execute();
-			Long fetchedLines;
+			int fetchedLines;
 			do {
 				readLineStmt.execute();
-				fetchedLines = readLineStmt.getLong(2);
+				fetchedLines = readLineStmt.getInt(2);
 				Array array = null;
 				try {
 					array = readLineStmt.getArray(1);
@@ -42,7 +41,7 @@ public class DbmsOutputCapture implements AutoCloseable {
 					/* loop over number of returned lines, not array size */
 					for (int i = 0; i < fetchedLines; i++) {
 						String line = lines[i];
-						retLines.add(line != null ? line : "");
+						retLines.add(line != null ? i+": "+line+"\r\n" : "");
 					}
 				} finally {
 					if (array != null) {

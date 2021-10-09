@@ -244,7 +244,7 @@ public class ShowHistoryController {
 				Stage stage = new Stage();
 				Parent root;
 
-				root = FXMLLoader.load(Main.class.getResource("view/Transact_Amra_viewer_from_show.fxml"));
+				root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/view/Transact_Amra_viewer_from_show.fxml"));
 
 				stage.setScene(new Scene(root));
 				stage.getIcons().add(new Image("icon.png"));

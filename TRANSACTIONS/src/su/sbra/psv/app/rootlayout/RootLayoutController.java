@@ -55,7 +55,7 @@ public class RootLayoutController {
 	@FXML
 	void Sverka(ActionEvent event) {
 		try {
-			Main.Sverka();
+			Main.TermClBkSverka();
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
@@ -64,7 +64,7 @@ public class RootLayoutController {
 	@FXML
 	void ResMon(ActionEvent event) {
 		try {
-			Main.ResMon();
+			Main.SbraResourcesMonitor();
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
@@ -79,7 +79,7 @@ public class RootLayoutController {
 	@FXML
 	void swift(ActionEvent event) {
 		try {
-			Main.swift();
+			Main.SwiftFromAbs();
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
@@ -88,7 +88,7 @@ public class RootLayoutController {
 	@FXML
 	void PlastRash(ActionEvent event) {
 		try {
-			Main.PlastRash();
+			Main.PlAccessRashod();
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
@@ -112,14 +112,14 @@ public class RootLayoutController {
 		}
 	}
 
-	@FXML
-	void chektransact(ActionEvent event) {
-		try {
-			Main.showEmployeeView();
-		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
-		}
-	}
+//	@FXML
+//	void chektransact(ActionEvent event) {
+//		try {
+//			Main.showEmployeeView();
+//		} catch (Exception e) {
+//			Msg.Message(ExceptionUtils.getStackTrace(e));
+//		}
+//	}
 
 	@FXML
 	void save_budcode(ActionEvent event) {
@@ -152,7 +152,7 @@ public class RootLayoutController {
 	@FXML
 	void Ibank(ActionEvent event) {
 		try {
-			Main.Ibankk();
+			Main.BkIbank();
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
@@ -161,7 +161,7 @@ public class RootLayoutController {
 	@FXML
 	void access_menuitems(ActionEvent event) {
 		try {
-			Main.Admin_Menu();
+			Main.GrantAccessMenu();
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
@@ -170,7 +170,7 @@ public class RootLayoutController {
 	@FXML
 	void term_view(ActionEvent event) {
 		try {
-			Main.showAmTr();
+			Main.TermTrView();
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
@@ -179,16 +179,16 @@ public class RootLayoutController {
 	@FXML
 	void loadhistory(ActionEvent event) {
 		try {
-			Main.Show_Hist();
+			Main.TermTrLoadHist();
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
 	@FXML
-	void Termdial_view(ActionEvent event) {
+	void TermDealView(ActionEvent event) {
 		try {
-			Main.Termdial_view_();
+			Main.TermDealView();;
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
@@ -197,16 +197,16 @@ public class RootLayoutController {
 	@FXML
 	void amra_trans(ActionEvent event) {
 		try {
-			Main.Transact_Amra();
+			Main.TermTrLoad();
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
 	@FXML
-	void termview(ActionEvent event) {
+	void TerminalControl(ActionEvent event) {
 		try {
-			Main.Terminal();
+			Main.TerminalControl();
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
@@ -215,7 +215,7 @@ public class RootLayoutController {
 	@FXML
 	void KashPsevdo(ActionEvent event) {
 		try {
-			Main.showKash();
+			Main.CassaOvPlat();
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
@@ -224,7 +224,7 @@ public class RootLayoutController {
 	@FXML
 	void Usr(ActionEvent event) {
 		try {
-			Main.Usr();
+			Main.UserControl();
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
@@ -233,7 +233,7 @@ public class RootLayoutController {
 	@FXML
 	void ContactLoad(ActionEvent event) {
 		try {
-			Main.Contact();
+			Main.ContactComiss();
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
@@ -352,7 +352,7 @@ public class RootLayoutController {
 	@FXML
 	void Access(ActionEvent event) {
 		try {
-			Main.Admin();
+			Main.GrantAccessAction();
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
@@ -361,7 +361,7 @@ public class RootLayoutController {
 	@FXML
 	void AccessGroup(ActionEvent event) {
 		try {
-			Main.AccessGroup();
+			Main.GrantAccessGrp();
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
@@ -370,7 +370,7 @@ public class RootLayoutController {
 	@FXML
 	void service(ActionEvent event) {
 		try {
-			Main.Service();
+			Main.TermServiceCtrl();
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
@@ -457,14 +457,14 @@ public class RootLayoutController {
 		return ret;
 	}
 
-	@FXML
-	void divide_RA(ActionEvent event) {
-		try {
-			Main.sepRA();
-		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
-		}
-	}
+//	@FXML
+//	void divide_RA(ActionEvent event) {
+//		try {
+//			Main.PensiaRa();
+//		} catch (Exception e) {
+//			Msg.Message(ExceptionUtils.getStackTrace(e));
+//		}
+//	}
 
 	@FXML
 	void divide(ActionEvent event) {

@@ -21,8 +21,8 @@
 						<MenuItem fx:id="9" mnemonicParsing="false" onAction="#amra_trans" text="Загрузка Транзакции" />
 						<MenuItem fx:id="10" mnemonicParsing="false" onAction="#loadhistory" text="История загрузок" />
 						<MenuItem fx:id="11" mnemonicParsing="false" onAction="#term_view" text="Загруженные транзакции" />
-						<MenuItem fx:id="12" mnemonicParsing="false" onAction="#Termdial_view" text="Сдачи" />
-						<MenuItem fx:id="13" mnemonicParsing="false" onAction="#termview" text="Терминалы" />
+						<MenuItem fx:id="12" mnemonicParsing="false" onAction="#TermDealView" text="Сдачи" />
+						<MenuItem fx:id="13" mnemonicParsing="false" onAction="#TerminalControl" text="Терминалы" />
 						<MenuItem fx:id="14" mnemonicParsing="false" onAction="#service" text="Сервисы" />
 						<MenuItem fx:id="15" mnemonicParsing="false" onAction="#Sverka" text="Сверка" />
 						<MenuItem fx:id="16" mnemonicParsing="false" onAction="#ap_print" text="Печать" />

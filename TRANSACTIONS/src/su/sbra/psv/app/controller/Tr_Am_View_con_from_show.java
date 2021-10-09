@@ -1484,7 +1484,7 @@ public class Tr_Am_View_con_from_show {
 				Stage stage = new Stage();
 				Parent root;
 
-				root = FXMLLoader.load(Main.class.getResource("view/Attributes_.fxml"));
+				root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/view/Attributes_.fxml"));
 
 				stage.setScene(new Scene(root));
 				stage.getIcons().add(new Image("icon.png"));

@@ -789,7 +789,7 @@ public class PensC {
 			DateTimeFormatter formatterwt = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 			// Prepared Statement
 			PreparedStatement prepStmt = conn
-					.prepareStatement(DbUtil.Sql_From_Prop("/app/pensia/SQL.properties", "RefreshError"));
+					.prepareStatement(DbUtil.Sql_From_Prop("/su/sbra/psv/app/pensia/SQL.properties", "RefreshError"));
 			prepStmt.setLong(1, ids);
 			prepStmt.setLong(2, ids);
 			ResultSet rs = prepStmt.executeQuery();
@@ -853,14 +853,14 @@ public class PensC {
 			ResultSet rs = null;
 
 			if (idss.equals("null")) {
-				prepStmt = conn.prepareStatement(DbUtil.Sql_From_Prop("/app/pensia/SQL.properties", "PensStat"));
+				prepStmt = conn.prepareStatement(DbUtil.Sql_From_Prop("/su/sbra/psv/app/pensia/SQL.properties", "PensStat"));
 				prepStmt.setLong(1, ids);
 				rs = prepStmt.executeQuery();
 			} else {
-				System.out.println(DbUtil.Sql_From_Prop("/app/pensia/SQL.properties", "PensStatList")
+				System.out.println(DbUtil.Sql_From_Prop("/su/sbra/psv/app/pensia/SQL.properties", "PensStatList")
 						.replace("$list$", idss).replace("$list2$", idss2));
 
-				prepStmt = conn.prepareStatement(DbUtil.Sql_From_Prop("/app/pensia/SQL.properties", "PensStatList")
+				prepStmt = conn.prepareStatement(DbUtil.Sql_From_Prop("/su/sbra/psv/app/pensia/SQL.properties", "PensStatList")
 						.replace("$list$", idss).replace("$list2$", idss2));
 				rs = prepStmt.executeQuery();
 			}
@@ -1929,7 +1929,7 @@ public class PensC {
 					PrintWriter writer = new PrintWriter(createfolder);
 
 					PreparedStatement prepStmt = conn
-							.prepareStatement(DbUtil.Sql_From_Prop("/app/pensia/SQL.properties", "RefreshError"));
+							.prepareStatement(DbUtil.Sql_From_Prop("/su/sbra/psv/app/pensia/SQL.properties", "RefreshError"));
 					prepStmt.setLong(1, penssel.getLOAD_ID());
 					prepStmt.setLong(2, penssel.getLOAD_ID());
 					ResultSet rs = prepStmt.executeQuery();

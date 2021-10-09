@@ -1,6 +1,6 @@
 package su.sbra.psv.app.main;
 
-import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Level;
@@ -30,6 +30,7 @@ import su.sbra.psv.app.admin.usr.UsrC;
 import su.sbra.psv.app.audit.trigger.AuList;
 import su.sbra.psv.app.audit.view.Audit;
 import su.sbra.psv.app.contact.ContactC;
+import su.sbra.psv.app.loadamra.Amra_Transact;
 import su.sbra.psv.app.model.Connect;
 import su.sbra.psv.app.pensia.PensC;
 import su.sbra.psv.app.sbalert.Msg;
@@ -37,7 +38,6 @@ import su.sbra.psv.app.sverka.SverkaC;
 import su.sbra.psv.app.swift.SWC;
 import su.sbra.psv.app.tr.pl.Pl;
 import su.sbra.psv.app.util.DBUtil;
-import su.sbra.psv.app.util.NamedParamStatement;
 import su.sbra.psv.app.utils.DbUtil;
 import su.sbra.psv.app.valconv.ConvVal;
 
@@ -64,45 +64,44 @@ public class Main extends Application {
 			Main.primaryStage.setTitle("Транзакции");
 			logger.setLevel(Level.INFO);
 
-//			if (MODULE == null) {
-//				Enter();
-//			} else if (MODULE.equals("DEBTINFO")) {
-//				DBUtil.dbConnect();
-//				Debtinfo();
-//			} else if (MODULE.equals("BUH")) {
-//				DBUtil.dbConnect();
-//				initRootLayout();
-//				showFirst();
-//			} else if (MODULE.equals("SWIFT")) {
-//				DBUtil.dbConnect();
-//				swift2();
-//			} else if (MODULE.equals("VTB_CONV")) {
-//				DBUtil.dbConnect();
-//				ConvVal();
-//			}
-			
-			{
-				Connect.connectionURL_ = "10.111.64.21:1521/ODB";
-				Connect.userID_ = "saidp";
-				Connect.userPassword_ = "vector165";
-				DbUtil.Db_Connect();
+			if (MODULE == null) {
+				Logon();
+			} else if (MODULE.equals("DEBTINFO")) {
 				DBUtil.dbConnect();
-				initRootLayout();
-				showFirst();
+				Debtinfo();
+			} else if (MODULE.equals("BUH")) {
+				DBUtil.dbConnect();
+				InitAppRootLayout();
+				ShFirstView();
+			} else if (MODULE.equals("SWIFT")) {
+				DBUtil.dbConnect();
+				SwiftFromAbs();
+			} else if (MODULE.equals("VTB_CONV")) {
+				DBUtil.dbConnect();
+				ConvVal();
+			}
+
+			{
+//				Connect.connectionURL_ = "10.111.64.21:1521/ODB";
+//				Connect.userID_ = "saidp";
+//				Connect.userPassword_ = "";
+//				DbUtil.Db_Connect();
+//				DBUtil.dbConnect();
+//				InitAppRootLayout();
+//				ShFirstView();
 //				swift2();
 //				ResMon();
 			}
-			{
-				String sql;
-				sql = "SELECT :name from dual";
-				NamedParamStatement stmt = new NamedParamStatement(DbUtil.conn, sql);
-				stmt.setString("name", "Said");
-				ResultSet rs = stmt.executeQuery();
-				if(rs.next())
-					System.out.println(rs.getString(1));
-				stmt.close();
-			}
-			
+//			{
+//				String sql = "SELECT :name from dual";
+//				NamedParamStatement stmt = new NamedParamStatement(DbUtil.conn, sql);
+//				stmt.setString("name", "Said");
+//				ResultSet rs = stmt.executeQuery();
+//				if (rs.next())
+//					System.out.println(rs.getString(1));
+//				stmt.close();
+//			}
+
 			primaryStage.setOnCloseRequest(e -> {
 				DBUtil.dbDisconnect();
 				DbUtil.Db_Disconnect();
@@ -120,7 +119,7 @@ public class Main extends Application {
 	/**
 	 * Initializes the root layout.
 	 */
-	public static void initRootLayout() {
+	public static void InitAppRootLayout() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("/su/sbra/psv/app/rootlayout/RootLayout.fxml"));
@@ -138,6 +137,7 @@ public class Main extends Application {
 	/**
 	 * Не используется
 	 */
+	@Deprecated
 	public static void showEmployeeView() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
@@ -155,7 +155,7 @@ public class Main extends Application {
 	/**
 	 * Доступ по действиям
 	 */
-	public static void Admin_Menu() {
+	public static void GrantAccessMenu() {
 		try {
 			if (MenuWin) {
 				MenuWin = false;
@@ -185,7 +185,7 @@ public class Main extends Application {
 	/**
 	 * Формирование псевдонимов
 	 */
-	public static void showKash() {
+	public static void CassaOvPlat() {
 		try {
 			Stage stage = new Stage();
 			Parent root;
@@ -199,12 +199,13 @@ public class Main extends Application {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
-	
+
 	/**
 	 * Пользователи
 	 */
 	public static boolean UsrWin = true;
-	public static void Usr() {
+
+	public static void UserControl() {
 		try {
 			if (UsrWin) {
 				UsrWin = false;
@@ -230,11 +231,11 @@ public class Main extends Application {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
-	
+
 	/**
-	 * Формирование псевдонимов
+	 * Разрешить расход с пластика
 	 */
-	public static void PlastRash() {
+	public static void PlAccessRashod() {
 		try {
 			Stage stage = new Stage();
 			Stage stage_ = (Stage) primaryStage.getScene().getWindow();
@@ -252,7 +253,7 @@ public class Main extends Application {
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				@Override
 				public void handle(WindowEvent paramT) {
-					
+
 				}
 			});
 			stage.show();
@@ -261,8 +262,8 @@ public class Main extends Application {
 		}
 	}
 
-	
 	public static boolean AuSetupWin = true;
+
 	/**
 	 * Настройка аудита
 	 */
@@ -271,7 +272,8 @@ public class Main extends Application {
 			if (AuSetupWin) {
 				AuSetupWin = false;
 				Stage stage = new Stage();
-				FXMLLoader loader = new FXMLLoader(Main.class.getResource("/su/sbra/psv/app/audit/trigger/AuList.fxml"));
+				FXMLLoader loader = new FXMLLoader(
+						Main.class.getResource("/su/sbra/psv/app/audit/trigger/AuList.fxml"));
 				Parent root = loader.load();
 				stage.setScene(new Scene(root));
 				stage.getIcons().add(new Image("/icon.png"));
@@ -292,8 +294,9 @@ public class Main extends Application {
 			DbUtil.Log_Error(e);
 		}
 	}
-	
+
 	public static boolean AuditWin = true;
+
 	/**
 	 * Форма аудита
 	 */
@@ -326,10 +329,11 @@ public class Main extends Application {
 			DbUtil.Log_Error(e);
 		}
 	}
+
 	/**
 	 * Contact
 	 */
-	public static void Contact() {
+	public static void ContactComiss() {
 		try {
 			Stage stage = new Stage();
 
@@ -363,7 +367,7 @@ public class Main extends Application {
 	/**
 	 * Сдачи Амра
 	 */
-	public static void Termdial_view_() {
+	public static void TermDealView() {
 		try {
 			Stage stage = new Stage();
 			Parent root;
@@ -381,7 +385,7 @@ public class Main extends Application {
 	/**
 	 * Транзакции просмотр Амра
 	 */
-	public static void showAmTr() {
+	public static void TermTrView() {
 		try {
 			Stage stage = new Stage();
 			Parent root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/trlist/Transact_Amra_viewer.fxml"));
@@ -399,7 +403,7 @@ public class Main extends Application {
 	/**
 	 * Банк-Клиент
 	 */
-	public static void Ibankk() {
+	public static void BkIbank() {
 		try {
 			Stage stage = new Stage();
 			Parent root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/ibank/Ibank.fxml"));
@@ -416,7 +420,7 @@ public class Main extends Application {
 	/**
 	 * swift
 	 */
-	public static void swift() {
+	public static void SwiftFromAbs() {
 		try {
 			Stage stage = new Stage();
 			Stage stage_ = (Stage) primaryStage.getScene().getWindow();
@@ -450,7 +454,7 @@ public class Main extends Application {
 	/**
 	 * swift
 	 */
-	public static void swift2() {
+	public static void SwiftFromMenu() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 
@@ -511,7 +515,7 @@ public class Main extends Application {
 	/**
 	 * Сверка
 	 */
-	public static void Sverka() {
+	public static void TermClBkSverka() {
 		try {
 			Stage stage = new Stage();
 			Stage stage_ = (Stage) primaryStage.getScene().getWindow();
@@ -539,11 +543,11 @@ public class Main extends Application {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
-	
+
 	/**
 	 * Сверка
 	 */
-	public static void ResMon() {
+	public static void SbraResourcesMonitor() {
 		try {
 			Stage stage = new Stage();
 			Stage stage_ = (Stage) primaryStage.getScene().getWindow();
@@ -563,7 +567,7 @@ public class Main extends Application {
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				@Override
 				public void handle(WindowEvent paramT) {
-					//controller.dbDisconnect();
+					// controller.dbDisconnect();
 				}
 			});
 			stage.show();
@@ -575,6 +579,7 @@ public class Main extends Application {
 	/**
 	 * История загрузок Квант
 	 */
+	@Deprecated
 	public static void Load_Hist() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
@@ -589,7 +594,7 @@ public class Main extends Application {
 	/**
 	 * Первая форма
 	 */
-	public static void showFirst() {
+	public static void ShFirstView() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("/su/sbra/psv/app/view/First.fxml"));
@@ -615,7 +620,7 @@ public class Main extends Application {
 	}
 
 	/* Вход */
-	public void Enter() {
+	public void Logon() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("/su/sbra/psv/app/view/Enter.fxml"));
@@ -631,7 +636,7 @@ public class Main extends Application {
 	}
 
 	/* Терминалы */
-	public static void Terminal() {
+	public static void TerminalControl() {
 		try {
 
 			Stage stage = new Stage();
@@ -648,16 +653,11 @@ public class Main extends Application {
 		}
 	}
 
-	/* История загрузок */
-	public static void Show_Hist() {
+	/**
+	 * История загрузок
+	 */
+	public static void TermTrLoadHist() {
 		try {
-			/*
-			 * FXMLLoader loader = new FXMLLoader();
-			 * loader.setLocation(Main.class.getResource("view/ShowHist.fxml")); BorderPane
-			 * employeeOperationsView = (BorderPane) loader.load();
-			 * rootLayout.setCenter(employeeOperationsView);
-			 */
-
 			Stage stage = new Stage();
 			Parent root;
 			root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/view/ShowHist.fxml"));
@@ -671,11 +671,13 @@ public class Main extends Application {
 		}
 	}
 
-	/* Услуги */
-	public static void Service() {
+	/**
+	 * Услуги
+	 */
+	public static void TermServiceCtrl() {
 		try {
 			Stage stage = new Stage();
-			Parent root= FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/termserv/Service.fxml"));
+			Parent root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/termserv/Service.fxml"));
 			stage.setScene(new Scene(root));
 			stage.getIcons().add(new Image("icon.png"));
 			stage.setTitle("Сервисы");
@@ -689,13 +691,16 @@ public class Main extends Application {
 
 	public static boolean ActWin = true;
 
-	/* Доступ не используется */
-	public static void Admin() {
+	/**
+	 * Доступ не используется
+	 */
+	public static void GrantAccessAction() {
 		try {
 			if (ActWin) {
 				ActWin = false;
 				Stage stage = new Stage();
-				FXMLLoader loader = new FXMLLoader(Main.class.getResource("/su/sbra/psv/app/access/action/ODB_ACTION.fxml"));
+				FXMLLoader loader = new FXMLLoader(
+						Main.class.getResource("/su/sbra/psv/app/access/action/ODB_ACTION.fxml"));
 				Parent root = loader.load();
 				stage.setScene(new Scene(root));
 				stage.getIcons().add(new Image("/icon.png"));
@@ -719,20 +724,20 @@ public class Main extends Application {
 
 	public static boolean GrpAccessWin = true;
 
-	/* Доступ не используется */
-	public static void AccessGroup() {
+	public static void GrantAccessGrp() {
 		try {
 			if (GrpAccessWin) {
 				GrpAccessWin = false;
 				Stage stage = new Stage();
-				FXMLLoader loader = new FXMLLoader(Main.class.getResource("/su/sbra/psv/app/access/grp/GrpMember.fxml"));
+				FXMLLoader loader = new FXMLLoader(
+						Main.class.getResource("/su/sbra/psv/app/access/grp/GrpMember.fxml"));
 
 				GrpController controller = new GrpController();
 				loader.setController(controller);
 
 				Parent root = loader.load();
 				stage.setScene(new Scene(root));
-				stage.setResizable(false);
+				stage.setResizable(true);
 				stage.getIcons().add(new Image("/icon.png"));
 				stage.setTitle("Группы доступа по функционалу");
 				stage.initOwner(primaryStage);
@@ -770,6 +775,7 @@ public class Main extends Application {
 	/**
 	 * Копировать доверенность Не используется
 	 */
+	@Deprecated
 	public static void CopyDover() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
@@ -817,7 +823,8 @@ public class Main extends Application {
 	/**
 	 * Пенсия
 	 */
-	public static void sepRA() {
+	@Deprecated
+	public static void PensiaRa() {
 		try {
 			Stage stage = new Stage();
 			Parent root;
@@ -847,26 +854,53 @@ public class Main extends Application {
 		}
 	}
 
+	public static boolean Tr = true;
+
 	/**
 	 * Загрузка транзакции
 	 */
-	public static void Transact_Amra() {
+	public static void TermTrLoad() {
 		try {
-			Stage stage = new Stage();
-			Parent root;
-			root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/loadamra/Amra_Trans.fxml"));
-			stage.setScene(new Scene(root));
-			stage.getIcons().add(new Image("icon.png"));
-			stage.setTitle("Загрузка транзакции");
-			stage.setResizable(true);
-			stage.initOwner(primaryStage);
-			stage.show();
+			if (Tr) {
+				Tr = false;
+				Stage stage = new Stage();
+				// Stage stage_ = (Stage) primaryStage.getScene().getWindow();
+				FXMLLoader loader = new FXMLLoader();
+				loader.setLocation(Main.class.getResource("/su/sbra/psv/app/loadamra/Amra_Trans.fxml"));
+
+				Amra_Transact controller = new Amra_Transact();
+				loader.setController(controller);
+
+				Parent root = loader.load();
+				stage.setScene(new Scene(root));
+				stage.getIcons().add(new Image("icon.png"));
+				stage.setTitle("Загрузка транзакции:");
+				// stage.initOwner(stage_);
+				stage.setResizable(true);
+
+				stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+					@Override
+					public void handle(WindowEvent paramT) {
+						try {
+							Tr = true;
+							controller.dbDisconnect();
+						} catch (SQLException e) {
+							Msg.Message(ExceptionUtils.getStackTrace(e));
+						}
+					}
+				});
+				stage.show();
+			}
 		} catch (Exception e) {
-			e.printStackTrace();
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
+	/**
+	 * Точка входа
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		try {
 			if (args.length != 0 & args.length == 5) {

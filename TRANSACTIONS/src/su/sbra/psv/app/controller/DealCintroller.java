@@ -263,7 +263,7 @@ public class DealCintroller {
 			 * Attributes fn = trans_table.getSelectionModel().getSelectedItem();
 			 * 
 			 * Stage stage = new Stage(); Parent root =
-			 * FXMLLoader.load(Main.class.getResource("view/Attributes.fxml"));
+			 * FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/view/Attributes.fxml"));
 			 * stage.setScene(new Scene(root)); stage.getIcons().add(new Image("icon.png"));
 			 * stage.setTitle("Атрибуты"); stage.initModality(Modality.WINDOW_MODAL);
 			 * stage.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());

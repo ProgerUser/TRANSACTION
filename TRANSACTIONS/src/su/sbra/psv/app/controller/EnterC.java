@@ -69,8 +69,8 @@ public class EnterC {
 						if (rs.next()) {
 							Msg.Message("Необходимо изменить пароль!");
 						} else {
-							Main.initRootLayout();
-							Main.showFirst();
+							Main.InitAppRootLayout();
+							Main.ShFirstView();
 						}
 						stsmt.close();
 						rs.close();
