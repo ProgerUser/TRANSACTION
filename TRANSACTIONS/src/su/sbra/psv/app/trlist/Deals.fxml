@@ -1,36 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity"
-	minHeight="-Infinity" minWidth="-Infinity" prefHeight="649.0"
-	prefWidth="1017.0" xmlns="http://javafx.com/javafx/8"
-	xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="su.sbra.psv.app.trlist.DealCintroller">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1" fx:controller="su.sbra.psv.app.trlist.DealCintroller">
 	<children>
-		<VBox layoutX="97.0" layoutY="24.0" spacing="4.0" />
-		<VBox layoutX="1.0" layoutY="45.0" prefWidth="67.0"
-			spacing="12.0" />
-		<TableView fx:id="trans_table" layoutX="12.0" layoutY="57.0"
-			prefHeight="561.0" prefWidth="994.0" tableMenuButtonVisible="true">
+      <ToolBar>
+        <items>
+      		<Button disable="false" mnemonicParsing="false" onAction="#view_attr">
+               <graphic>
+                  <FontAwesomeIconView glyphName="FILE_EXCEL_ALT" size="15" />
+               </graphic>
+            </Button>
+        </items>
+         <VBox.margin>
+            <Insets left="-5.0" right="-5.0" top="-5.0" />
+         </VBox.margin>
+      </ToolBar>
+		<TableView fx:id="trans_table" layoutX="12.0" styleClass="mylistview" stylesheets="/TableView.css" layoutY="57.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="700.0" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
 			<columns>
-				<TableColumn fx:id="ROWNUMBER" prefWidth="167.0"
-					text="Номер строки" />
-				<TableColumn fx:id="CHEKNUMBER" prefWidth="144.0"
-					text="НомерЧека" />
-				<TableColumn fx:id="SUMMA" prefWidth="167.0"
-					text="Сумма" />
-				<TableColumn fx:id="TERMINAL" prefWidth="171.0"
-					text="Номер терминала" />
-				<TableColumn fx:id="DATEOPERATION" prefWidth="171.0"
-					text="Дата оплаты" />
+				<TableColumn fx:id="ROWNUMBER" prefWidth="167.0" text="Номер строки" />
+				<TableColumn fx:id="CHEKNUMBER" prefWidth="144.0" text="НомерЧека" />
+				<TableColumn fx:id="SUMMA" prefWidth="167.0" text="Сумма" />
+				<TableColumn fx:id="TERMINAL" prefWidth="171.0" text="Номер терминала" />
+				<TableColumn fx:id="DATEOPERATION" prefWidth="171.0" text="Дата оплаты" />
 			</columns>
 		</TableView>
-		<Button disable="false" layoutX="14.0" layoutY="14.0"
-			mnemonicParsing="false" onAction="#view_attr"
-			text="Выгрузить в EXCEL" />
 	</children>
-</AnchorPane>
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+   </padding>
+</VBox>

@@ -42,6 +42,7 @@ import su.sbra.psv.app.model.FN_SESS_AMRA;
 import su.sbra.psv.app.model.TerminalDAO;
 import su.sbra.psv.app.model.Transact;
 import su.sbra.psv.app.model.TransactClass;
+import su.sbra.psv.app.sbalert.Msg;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -78,16 +79,12 @@ public class DealCintroller {
 
 	@FXML
 	private TableColumn<Deal, Integer> ROWNUMBER;
-
 	@FXML
 	private TableColumn<Deal, String> CHEKNUMBER;
-
 	@FXML
 	private TableView<Deal> trans_table;
-
 	@FXML
 	private TableColumn<Deal, Double> SUMMA;
-
 	@FXML
 	private TableColumn<Deal, String> TERMINAL;
 
@@ -173,8 +170,7 @@ public class DealCintroller {
 				} else {
 					setText(item.toString());
 					if (item.contains("SB")) {
-						setStyle("-fx-background-color: rgb(162, 189, 48);" + "-fx-border-color:black;"
-								+ " -fx-border-width :  1 1 1 1 ");
+						setStyle("-fx-text-fill: rgb(162, 189, 48);");
 					} else {
 						setStyle("");
 					}
@@ -221,56 +217,21 @@ public class DealCintroller {
 				}
 				workbook.write(new FileOutputStream(file.getPath()));
 				workbook.close();
-				Alerts("Файл сформирован в папку " + file.getPath());
+				Msg.Message("Файл сформирован в папку " + file.getPath());
 			}
 		} catch (Exception e) {
-			Alerts(ExceptionUtils.getStackTrace(e));
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
-
 	}
 
-	private void Alerts(String mess) {
-		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-		stage.getIcons().add(new Image("terminal.png"));
-		alert.setTitle("Внимание");
-		alert.setHeaderText(null);
-		alert.setContentText(mess);
-		alert.showAndWait();
-	}
 
 	@FXML
 	private void view_attr_(ActionEvent actionEvent) {
 		if (trans_table.getSelectionModel().getSelectedItem() == null) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText("Выберите сначала данные из таблицы!\n");
-			alert.showAndWait();
-
+			Msg.Message("Выберите сначала данные из таблицы!\n");
 		} else {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText("Не реализовано!\n");
-			alert.showAndWait();
-
-			/*
-			 * Attributes fn = trans_table.getSelectionModel().getSelectedItem();
-			 * 
-			 * Stage stage = new Stage(); Parent root =
-			 * FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/view/Attributes.fxml"));
-			 * stage.setScene(new Scene(root)); stage.getIcons().add(new Image("icon.png"));
-			 * stage.setTitle("Атрибуты"); stage.initModality(Modality.WINDOW_MODAL);
-			 * stage.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
-			 * stage.show();
-			 */
+			Msg.Message("Не реализовано!");
 		}
-
 	}
 
 	public static void autoResizeColumns(TableView<?> table) {
@@ -296,7 +257,7 @@ public class DealCintroller {
 					}
 				}
 				// set the new max-widht with some extra space
-				column.setPrefWidth(max + 10.0d);
+				column.setPrefWidth(max + 20.0d);
 			}
 		});
 	}

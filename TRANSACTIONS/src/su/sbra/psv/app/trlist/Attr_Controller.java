@@ -38,6 +38,7 @@ import su.sbra.psv.app.model.FN_SESS_AMRA;
 import su.sbra.psv.app.model.TerminalDAO;
 import su.sbra.psv.app.model.Transact;
 import su.sbra.psv.app.model.TransactClass;
+import su.sbra.psv.app.sbalert.Msg;
 import su.sbra.psv.app.sverka.AMRA_STMT_CALC;
 
 import java.io.File;
@@ -75,22 +76,16 @@ public class Attr_Controller {
 
 	@FXML
 	private TableColumn<Attributes, String> AttributeValue;
-
 	@FXML
 	private TableColumn<Attributes, String> Service;
-
 	@FXML
 	private TableView<Attributes> trans_table;
-
 	@FXML
 	private TableColumn<Attributes, String> AttributeName;
-
 	@FXML
 	private TableColumn<Attributes, String> CheckNumber;
-
 	@FXML
 	private TextField summ;
-
 	@FXML
 	private TextField counts;
 
@@ -167,11 +162,9 @@ public class Attr_Controller {
 				} else {
 					setText(item.toString());
 					if (item.equals("Сумма")) {
-						setStyle("-fx-background-color: rgb(162, 189, 48);" + "-fx-border-color:black;"
-								+ " -fx-border-width :  1 1 1 1 ");
+						setStyle("-fx-text-fill: rgb(162, 189, 48);");
 					} else if (item.equals("Основание")) {
-						setStyle("-fx-background-color:#96C2D2;" + "-fx-border-color:black;"
-								+ " -fx-border-width :  1 1 1 1 ");
+						setStyle("-fx-text-fill: #96C2D2;" );
 					} else {
 						setStyle("");
 					}
@@ -218,10 +211,10 @@ public class Attr_Controller {
 				}
 				workbook.write(new FileOutputStream(file.getPath()));
 				workbook.close();
-				Alerts("Файл сформирован в папку " + file.getPath());
+				Msg.Message("Файл сформирован в папку " + file.getPath());
 			}
 		} catch (Exception e) {
-			Alerts(ExceptionUtils.getStackTrace(e));
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 
 	}
@@ -256,48 +249,14 @@ public class Attr_Controller {
 		cnt = 0;
 	}
 
-	private void Alerts(String mess) {
-		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-		stage.getIcons().add(new Image("terminal.png"));
-		alert.setTitle("Внимание");
-		alert.setHeaderText(null);
-		alert.setContentText(mess);
-		alert.showAndWait();
-	}
 
 	@FXML
 	private void view_attr_(ActionEvent actionEvent) {
 		if (trans_table.getSelectionModel().getSelectedItem() == null) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText("Выберите сначала данные из таблицы!\n");
-			alert.showAndWait();
-
+			Msg.Message("Выберите сначала данные из таблицы!\n");
 		} else {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText("Не реализовано!\n");
-			alert.showAndWait();
-
-			/*
-			 * Attributes fn = trans_table.getSelectionModel().getSelectedItem();
-			 * 
-			 * Stage stage = new Stage(); Parent root =
-			 * FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/view/Attributes.fxml"));
-			 * stage.setScene(new Scene(root)); stage.getIcons().add(new Image("icon.png"));
-			 * stage.setTitle("Атрибуты"); stage.initModality(Modality.WINDOW_MODAL);
-			 * stage.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
-			 * stage.show();
-			 */
+			Msg.Message("Не реализовано!");
 		}
-
 	}
 
 	public static void autoResizeColumns(TableView<?> table) {
@@ -305,7 +264,7 @@ public class Attr_Controller {
 		table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
 		table.getColumns().stream().forEach((column) -> {
 			// System.out.println(column.getText());
-			if (column.getText().equals("sess_id")) {
+			if (column.getText().equals("")) {
 
 			} else {
 				// Minimal width = columnheader
@@ -323,7 +282,7 @@ public class Attr_Controller {
 					}
 				}
 				// set the new max-widht with some extra space
-				column.setPrefWidth(max + 10.0d);
+				column.setPrefWidth(max + 20.0d);
 			}
 		});
 	}

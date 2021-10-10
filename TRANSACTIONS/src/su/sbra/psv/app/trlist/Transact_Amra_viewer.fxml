@@ -9,21 +9,29 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="600.0" xmlns="http://javafx.com/javafx/8.0.261" xmlns:fx="http://javafx.com/fxml/1" fx:controller="su.sbra.psv.app.trlist.Tr_Am_View_con">
+<BorderPane prefHeight="600.0" xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1" fx:controller="su.sbra.psv.app.trlist.Tr_Am_View_con">
 	<center>
 		<StackPane BorderPane.alignment="CENTER">
 			<children>
-				<TableView fx:id="trans_table" onKeyPressed="#show_" prefWidth="900.0" styleClass="mylistview" stylesheets="/TableView.css" tableMenuButtonVisible="true">
+				<TableView fx:id="trans_table" prefWidth="900.0" styleClass="mylistview" stylesheets="/TableView.css" tableMenuButtonVisible="true">
 					<columns>
 						<TableColumn fx:id="chk_row" prefWidth="60.0" text="Выбор" />
 						<TableColumn fx:id="checkparent" prefWidth="135.0" text="ЧекРодитель" />
@@ -74,30 +82,10 @@
 		</StackPane>
 	</center>
 	<top>
-		<VBox fx:id="CONTROL" BorderPane.alignment="CENTER">
+		<VBox fx:id="CONTROL" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" BorderPane.alignment="CENTER">
 			<children>
 				<ToolBar>
 					<items>
-						<DatePicker fx:id="dt1" prefWidth="100.0" promptText="Дата с:">
-							<tooltip>
-								<Tooltip text="Дата с" />
-							</tooltip>
-						</DatePicker>
-						<DatePicker fx:id="dt2" prefWidth="100.0" promptText="Дата по:">
-							<tooltip>
-								<Tooltip text="Дата по" />
-							</tooltip>
-						</DatePicker>
-						<TextField fx:id="id_sess" prefWidth="100.0" promptText="ИД загрузки">
-							<tooltip>
-								<Tooltip text="Идентификатор загрузки" />
-							</tooltip>
-						</TextField>
-						<TextField fx:id="FIO" maxHeight="25.0" prefWidth="211.0" promptText="ФИО, тел., и т.д.">
-							<tooltip>
-								<Tooltip text="ФИО, тел., и т.д." />
-							</tooltip>
-						</TextField>
 						<Button fx:id="search" mnemonicParsing="false" onAction="#filter">
 							<tooltip>
 								<Tooltip text="Поиск">
@@ -112,7 +100,25 @@
                         <Font size="10.0" />
                      </font>
 						</Button>
-						<Button fx:id="view" mnemonicParsing="false" onAction="#view_unpivot">
+                  <Separator layoutX="572.0" layoutY="10.0" orientation="VERTICAL" />
+						<Button mnemonicParsing="false" onAction="#chk_all" text="VVV">
+							<tooltip>
+								<Tooltip text="Отметить все" />
+							</tooltip>
+							<font>
+								<Font name="System Bold" size="12.0" />
+							</font>
+						</Button>
+						<Button mnemonicParsing="false" onAction="#unchk_all" text="OOO">
+							<tooltip>
+								<Tooltip text="Убрать пометки" />
+							</tooltip>
+							<font>
+								<Font name="System Bold" size="12.0" />
+							</font>
+						</Button>
+                  <Separator layoutX="42.0" layoutY="10.0" orientation="VERTICAL" />
+						<Button mnemonicParsing="false" onAction="#view_unpivot">
 							<tooltip>
 								<Tooltip text="Показать транзакцию">
                            <font>
@@ -126,7 +132,7 @@
                         <Font size="10.0" />
                      </font>
 						</Button>
-						<Button fx:id="attributes" mnemonicParsing="false" onAction="#view_attr">
+						<Button mnemonicParsing="false" onAction="#view_attr">
 							<tooltip>
 								<Tooltip text="Показать дополнительные атрибуты">
                            <font>
@@ -140,6 +146,30 @@
                         <Font size="10.0" />
                      </font>
 						</Button>
+						<Button ellipsisString="" mnemonicParsing="false" onAction="#showdeal">
+							<tooltip>
+								<Tooltip text="Показать сдачи">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Tooltip>
+							</tooltip>
+                     <graphic>
+                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="LIST" size="15" />
+                     </graphic>
+						</Button>
+                  <Separator layoutX="572.0" layoutY="10.0" orientation="VERTICAL" />
+						<Button mnemonicParsing="false" onAction="#view_trn">
+							<tooltip>
+								<Tooltip text="Реестр документов">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Tooltip>
+							</tooltip>
+                     <graphic>
+                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="LIST_OL" size="15" />
+                     </graphic>
+						</Button>
+                  <Separator layoutX="774.0" layoutY="10.0" orientation="VERTICAL" />
 						<Button mnemonicParsing="false" onAction="#excel_export" fx:id="xlsx">
 							<tooltip>
 								<Tooltip text="Выгрузка в Excel">
@@ -154,7 +184,8 @@
                         <Font size="10.0" />
                      </font>
 						</Button>
-						<Button fx:id="post" mnemonicParsing="false" onAction="#view_post">
+                  <Separator layoutX="692.0" layoutY="10.0" orientation="VERTICAL" />
+						<Button mnemonicParsing="false" onAction="#view_post">
 							<tooltip>
 								<Tooltip text="Показать проводки">
                            <font>
@@ -162,13 +193,14 @@
                            </font></Tooltip>
 							</tooltip>
                      <graphic>
-                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TABLE" size="15" />
+                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EXTERNAL_LINK" size="15" />
                      </graphic>
                      <font>
                         <Font size="10.0" />
                      </font>
 						</Button>
-						<Button fx:id="print_check" mnemonicParsing="false" onAction="#print_">
+                  <Separator layoutX="239.0" layoutY="10.0" orientation="VERTICAL" />
+						<Button mnemonicParsing="false" onAction="#print_">
 							<tooltip>
 								<Tooltip text="Печать чека JasperReport">
                            <font>
@@ -179,105 +211,253 @@
                         <FontAwesomeIconView fontSmoothingType="LCD" glyphName="PRINT" size="15" />
                      </graphic>
 						</Button>
-						<Button fx:id="chk_nmbers" ellipsisString="" mnemonicParsing="false" onAction="#showdeal">
-							<tooltip>
-								<Tooltip text="Показать сдачи">
-                           <font>
-                              <Font size="14.0" />
-                           </font></Tooltip>
-							</tooltip>
-                     <graphic>
-                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="LIST" size="15" />
-                     </graphic>
-						</Button>
-						<Button fx:id="trn_" mnemonicParsing="false" onAction="#view_trn">
-							<tooltip>
-								<Tooltip text="Реестр документов">
-                           <font>
-                              <Font size="14.0" />
-                           </font></Tooltip>
-							</tooltip>
-                     <graphic>
-                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="LIST_OL" size="15" />
-                     </graphic>
-						</Button>
 					</items>
+               <VBox.margin>
+                  <Insets left="-5.0" right="-5.0" top="-5.0" />
+               </VBox.margin>
+				</ToolBar>
+            <HBox maxHeight="170.0" maxWidth="1.7976931348623157E308" spacing="5.0" styleClass="mylistview" stylesheets="/TableView.css" VBox.vgrow="ALWAYS">
                <VBox.margin>
                   <Insets />
                </VBox.margin>
-				</ToolBar>
-				<ToolBar>
-					<items>
-						<Button mnemonicParsing="false" onAction="#chk_all" prefHeight="25.0" prefWidth="44.0" text="VVV">
-							<tooltip>
-								<Tooltip text="Отметить все" />
-							</tooltip>
-							<font>
-								<Font name="System Bold" size="12.0" />
-							</font>
-						</Button>
-						<Button mnemonicParsing="false" onAction="#unchk_all" prefHeight="25.0" prefWidth="44.0" text="OOO">
-							<tooltip>
-								<Tooltip text="Убрать пометки" />
-							</tooltip>
-							<font>
-								<Font name="System Bold" size="12.0" />
-							</font>
-						</Button>
-						<TextField fx:id="summa_plat" prefHeight="25.0" prefWidth="100.0" promptText="Σ платежа">
-							<tooltip>
-								<Tooltip text="Сумма платежа" />
-							</tooltip>
-						</TextField>
-						<TextField fx:id="summa_nal" prefHeight="25.0" prefWidth="100.0" promptText="Σ наличных">
-							<tooltip>
-								<Tooltip text="Сумма наличных" />
-							</tooltip>
-						</TextField>
-                  <TextField fx:id="nk_summ_" layoutX="210.0" layoutY="10.0" prefHeight="25.0" prefWidth="100.0" promptText="Σ НК списали">
-                     <tooltip>
-                        <Tooltip text="Сумма НК списанных" />
-                     </tooltip>
-                  </TextField>
-                  <TextField fx:id="nk_summ_1" layoutX="314.0" layoutY="10.0" prefHeight="25.0" prefWidth="100.0" promptText="Σ НК зачислили">
-                     <tooltip>
-                        <Tooltip text="Сумма НК зачисленных" />
-                     </tooltip>
-                  </TextField>
-						<TextField fx:id="cnt_all_" prefHeight="25.0" prefWidth="100.0" promptText="Кол-во ">
-							<tooltip>
-								<Tooltip text="Количество" />
-							</tooltip>
-						</TextField>
-
-						<ComboBox fx:id="terminal_name" editable="true" prefHeight="25.0" prefWidth="105.0" promptText="Терминал">
-							<tooltip>
-								<Tooltip text="Выбор терминала" />
-							</tooltip>
-						</ComboBox>
-						<CheckBox fx:id="inkass" mnemonicParsing="false" onAction="#check_table" prefHeight="20.0" prefWidth="68.0" text="Инкасс.">
-							<tooltip>
-								<Tooltip text="Показать инкассации" />
-							</tooltip>
-						</CheckBox>
-						<CheckBox fx:id="ret_pay" mnemonicParsing="false" onAction="#check_table_ret" prefHeight="20.0" prefWidth="78.0" text="Возвраты">
-							<tooltip>
-								<Tooltip text="Показать возвраты" />
-							</tooltip>
-						</CheckBox>
-                  <CheckBox fx:id="DOKATKA" layoutX="807.0" layoutY="13.0" mnemonicParsing="false" onAction="#DOKATKA" prefHeight="20.0" prefWidth="105.0" text="Докат. Ошибка">
-                     <tooltip>
-                        <Tooltip text="Показать возвраты" />
-                     </tooltip>
-                  </CheckBox>
-					</items>
-					<VBox.margin>
-						<Insets />
-					</VBox.margin>
-				</ToolBar>
+               <children>
+                  <TitledPane alignment="CENTER" collapsible="false" layoutX="427.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Фильтр" HBox.hgrow="ALWAYS">
+                     <content>
+                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                           <children>
+                              <ScrollPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                                 <content>
+                                    <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </padding>
+                                       <children>
+                                          <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                                            <columnConstraints>
+                                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" />
+                                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                             <children>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ИД загрузки" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+                                                   <GridPane.margin>
+                                                      <Insets right="5.0" />
+                                                   </GridPane.margin>
+                                                </Text>
+                              						<TextField fx:id="id_sess" maxWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                              							<tooltip>
+                              								<Tooltip text="Идентификатор загрузки" />
+                              							</tooltip>
+                                                   <GridPane.margin>
+                                                      <Insets left="5.0" />
+                                                   </GridPane.margin>
+                              						</TextField>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ФИО, тел., и т.д." GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+                                                   <GridPane.margin>
+                                                      <Insets right="5.0" />
+                                                   </GridPane.margin>
+                                                </Text>
+                              						<TextField fx:id="FIO" maxHeight="25.0" maxWidth="500.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                              							<tooltip>
+                              								<Tooltip text="ФИО, тел., и т.д." />
+                              							</tooltip>
+                                                   <GridPane.margin>
+                                                      <Insets left="5.0" />
+                                                   </GridPane.margin>
+                              						</TextField>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Дата с" GridPane.halignment="RIGHT">
+                                                   <GridPane.margin>
+                                                      <Insets right="5.0" />
+                                                   </GridPane.margin>
+                                                </Text>
+                                                <Text layoutX="62.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Дата по" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                                                   <GridPane.margin>
+                                                      <Insets right="5.0" />
+                                                   </GridPane.margin>
+                                                </Text>
+                              						<DatePicker fx:id="dt1" prefWidth="120.0" GridPane.columnIndex="1">
+                              							<tooltip>
+                              								<Tooltip text="Дата с" />
+                              							</tooltip>
+                                                   <GridPane.margin>
+                                                      <Insets left="5.0" />
+                                                   </GridPane.margin>
+                              						</DatePicker>
+                              						<DatePicker fx:id="dt2" prefWidth="120.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                              							<tooltip>
+                              								<Tooltip text="Дата по" />
+                              							</tooltip>
+                                                   <GridPane.margin>
+                                                      <Insets left="5.0" />
+                                                   </GridPane.margin>
+                              						</DatePicker>
+                              
+                              						<ComboBox fx:id="terminal_name" editable="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                              							<tooltip>
+                              								<Tooltip text="Выбор терминала" />
+                              							</tooltip>
+                                                   <GridPane.margin>
+                                                      <Insets left="5.0" />
+                                                   </GridPane.margin>
+                              						</ComboBox>
+                                                <Text layoutX="53.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Терминал" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                                                   <GridPane.margin>
+                                                      <Insets right="5.0" />
+                                                   </GridPane.margin>
+                                                </Text>
+                              						<CheckBox fx:id="inkass" mnemonicParsing="false" onAction="#check_table" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                              							<tooltip>
+                              								<Tooltip text="Показать инкассации" />
+                              							</tooltip>
+                                                   <GridPane.margin>
+                                                      <Insets left="5.0" />
+                                                   </GridPane.margin>
+                              						</CheckBox>
+                              						<CheckBox fx:id="ret_pay" mnemonicParsing="false" onAction="#check_table_ret" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                              							<tooltip>
+                              								<Tooltip text="Показать возвраты" />
+                              							</tooltip>
+                                                   <GridPane.margin>
+                                                      <Insets left="5.0" />
+                                                   </GridPane.margin>
+                              						</CheckBox>
+                                                <CheckBox fx:id="DOKATKA" mnemonicParsing="false" onAction="#DOKATKA" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                                                   <tooltip>
+                                                      <Tooltip text="Показать возвраты" />
+                                                   </tooltip>
+                                                   <GridPane.margin>
+                                                      <Insets left="5.0" />
+                                                   </GridPane.margin>
+                                                </CheckBox>
+                                                <Text layoutX="10.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Инкасс." GridPane.halignment="RIGHT" GridPane.rowIndex="5">
+                                                   <GridPane.margin>
+                                                      <Insets right="5.0" />
+                                                   </GridPane.margin>
+                                                </Text>
+                                                <Text layoutX="10.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Возвраты" GridPane.halignment="RIGHT" GridPane.rowIndex="6">
+                                                   <GridPane.margin>
+                                                      <Insets right="5.0" />
+                                                   </GridPane.margin>
+                                                </Text>
+                                                <Text layoutX="10.0" layoutY="210.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Докат. Ошибка" GridPane.halignment="RIGHT" GridPane.rowIndex="7">
+                                                   <GridPane.margin>
+                                                      <Insets right="5.0" />
+                                                   </GridPane.margin>
+                                                </Text>
+                                             </children>
+                                          </GridPane>
+                                       </children>
+                                    </VBox>
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </VBox>
+                     </content>
+                  </TitledPane>
+                  <TitledPane alignment="CENTER" collapsible="false" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Итоги" HBox.hgrow="ALWAYS">
+                     <content>
+                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                           <children>
+                              <ScrollPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                                 <content>
+                                    <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                                       <children>
+                                          <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                                             <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" />
+                                             </columnConstraints>
+                                             <rowConstraints>
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                             </rowConstraints>
+                                             <children>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Σ НК списали" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                                                   <GridPane.margin>
+                                                      <Insets right="5.0" />
+                                                   </GridPane.margin>
+                                                </Text>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Σ НК зачислили" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+                                                   <GridPane.margin>
+                                                      <Insets right="5.0" />
+                                                   </GridPane.margin>
+                                                </Text>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Σ платежа" GridPane.halignment="RIGHT">
+                                                   <GridPane.margin>
+                                                      <Insets right="5.0" />
+                                                   </GridPane.margin>
+                                                </Text>
+                                                <Text layoutX="62.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Σ наличных" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                                                   <GridPane.margin>
+                                                      <Insets right="5.0" />
+                                                   </GridPane.margin>
+                                                </Text>
+                              						<TextField fx:id="summa_plat" GridPane.columnIndex="1">
+                              							<tooltip>
+                              								<Tooltip text="Сумма платежа" />
+                              							</tooltip>
+                              						</TextField>
+                              						<TextField fx:id="summa_nal" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                              							<tooltip>
+                              								<Tooltip text="Сумма наличных" />
+                              							</tooltip>
+                              						</TextField>
+                                                <TextField fx:id="nk_summ_" prefHeight="25.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                                   <tooltip>
+                                                      <Tooltip text="Сумма НК списанных" />
+                                                   </tooltip>
+                                                </TextField>
+                                                <TextField fx:id="nk_summ_1" prefHeight="25.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                                   <tooltip>
+                                                      <Tooltip text="Сумма НК зачисленных" />
+                                                   </tooltip>
+                                                </TextField>
+                              						<TextField fx:id="cnt_all_" prefHeight="25.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                              							<tooltip>
+                              								<Tooltip text="Количество" />
+                              							</tooltip>
+                              						</TextField>
+                                                <Text layoutX="10.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Кол-во " GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+                                                   <GridPane.margin>
+                                                      <Insets right="5.0" />
+                                                   </GridPane.margin>
+                                                </Text>
+                                             </children>
+                                          </GridPane>
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </padding>
+                                    </VBox>
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </VBox>
+                     </content>
+                  </TitledPane>
+               </children>
+            </HBox>
 			</children>
 			<BorderPane.margin>
-				<Insets bottom="5.0" />
+				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 			</BorderPane.margin>
 		</VBox>
 	</top>

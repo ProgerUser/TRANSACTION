@@ -15,8 +15,10 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -255,16 +257,11 @@ public class Tr_Am_View_con {
 	@FXML
 	private ComboBox<String> terminal_name;
 
-	
-	@FXML
-	void show_(ActionEvent l) {
-
-	}
 
 	@FXML
 	private BorderPane pane_;
 
-	private void validate(CheckBox checkBox, Amra_Trans item, Event event) throws Exception {
+	void validate(CheckBox checkBox, Amra_Trans item, Event event) throws Exception {
 		event.consume();
 		String pattern = "###,###.###";
 		DecimalFormat decimalFormat = new DecimalFormat(pattern);
@@ -393,10 +390,25 @@ public class Tr_Am_View_con {
 			}
 		}
 	}
+	
+	/**
+	 * Текущий день
+	 * 
+	 * @return
+	 */
+	public LocalDate NOW_LOCAL_DATE() {
+		String date = new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance().getTime());
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+		LocalDate localDate = LocalDate.parse(date, formatter);
+		return localDate;
+	}
 
 	@FXML
 	private void initialize() throws Exception {
 		try {
+			
+			dt1.setValue(NOW_LOCAL_DATE());
+			dt2.setValue(NOW_LOCAL_DATE());
 			
 			new ConvConst().FormatDatePiker(dt1);
 			new ConvConst().FormatDatePiker(dt2);
@@ -1501,7 +1513,7 @@ public class Tr_Am_View_con {
 	}
 
 	@FXML
-	private void view_post(ActionEvent actionEvent) {
+	void view_post(ActionEvent actionEvent) {
 		try {
 			if (trans_table.getSelectionModel().getSelectedItem() == null) {
 				Msg.Message("Выберите сначала данные из таблицы!\n");
@@ -1526,7 +1538,7 @@ public class Tr_Am_View_con {
 	}
 
 	@FXML
-	private void print_(ActionEvent actionEvent) {
+	void print_(ActionEvent actionEvent) {
 		try {
 			if (trans_table.getSelectionModel().getSelectedItem() == null) {
 				Msg.Message("Выберите сначала данные из таблицы!");
@@ -1583,7 +1595,7 @@ public class Tr_Am_View_con {
 	}
 
 	@FXML
-	private void term_view_(ActionEvent actionEvent) {
+	void term_view_(ActionEvent actionEvent) {
 		try {
 			ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(),
 					dt2.getValue(), "", false, false, terminal_name.getValue().toString(), false);
@@ -1619,7 +1631,7 @@ public class Tr_Am_View_con {
 	}
 
 	@FXML
-	private void view_attr(ActionEvent actionEvent) {
+	void view_attr(ActionEvent actionEvent) {
 		try {
 			if (trans_table.getSelectionModel().getSelectedItem() == null) {
 				Msg.Message("Выберите сначала данные из таблицы!");
@@ -1631,7 +1643,7 @@ public class Tr_Am_View_con {
 				Stage stage = new Stage();
 				Parent root;
 
-				root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/view/Attributes_.fxml"));
+				root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/trlist/Attributes.fxml"));
 
 				stage.setScene(new Scene(root));
 				stage.getIcons().add(new Image("icon.png"));
@@ -1645,9 +1657,11 @@ public class Tr_Am_View_con {
 		}
 	}
 
-	/* Показать сдачи */
+	/**
+	 *  Показать сдачи
+	 */
 	@FXML
-	private void showdeal(ActionEvent actionEvent) {
+	void showdeal(ActionEvent actionEvent) {
 		try {
 			if (trans_table.getSelectionModel().getSelectedItem() == null) {
 				Msg.Message("Выберите сначала данные из таблицы!");
@@ -1656,7 +1670,7 @@ public class Tr_Am_View_con {
 				Connect.PNMB_ = fn.get_checknumber();
 				Stage stage = new Stage();
 				Parent root;
-				root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/view/Deals.fxml"));
+				root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/trlist/Deals.fxml"));
 				stage.setScene(new Scene(root));
 				stage.getIcons().add(new Image("icon.png"));
 				stage.setTitle("Чеки оплаты транзакции " + fn.get_checknumber());
@@ -1850,13 +1864,7 @@ public class Tr_Am_View_con {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				Alert alert = new Alert(Alert.AlertType.INFORMATION);
-				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-				stage.getIcons().add(new Image("terminal.png"));
-				alert.setTitle("Внимание");
-				alert.setHeaderText(null);
-				alert.setContentText(mes);
-				alert.showAndWait();
+				Msg.Message(mes);
 			}
 		});
 	}
@@ -2243,7 +2251,7 @@ public class Tr_Am_View_con {
 	}
 
 	@FXML
-	private void view_unpivot(ActionEvent actionEvent) {
+	void view_unpivot(ActionEvent actionEvent) {
 		try {
 			if (trans_table.getSelectionModel().getSelectedItem() == null) {
 				Msg.Message("Выберите сначала данные из таблицы!");
@@ -2255,7 +2263,7 @@ public class Tr_Am_View_con {
 				Stage stage = new Stage();
 				Parent root;
 
-				root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/view/Transact_Unpiv.fxml"));
+				root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/trlist/Transact_Unpiv.fxml"));
 
 				stage.setScene(new Scene(root));
 				stage.getIcons().add(new Image("icon.png"));

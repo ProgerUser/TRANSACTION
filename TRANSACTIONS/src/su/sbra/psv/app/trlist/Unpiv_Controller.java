@@ -38,6 +38,7 @@ import su.sbra.psv.app.model.TerminalDAO;
 import su.sbra.psv.app.model.Transact;
 import su.sbra.psv.app.model.TransactClass;
 import su.sbra.psv.app.model.Unpiv;
+import su.sbra.psv.app.sbalert.Msg;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -64,6 +65,7 @@ import java.util.Date;
 
 /**
  * Саид 04.04.2019.
+ * 101021
  */
 
 @SuppressWarnings("unused")
@@ -71,10 +73,8 @@ public class Unpiv_Controller {
 
 	@FXML
 	private TableColumn<Unpiv, String> COL;
-
 	@FXML
 	private TableColumn<Unpiv, String> COLVALUE;
-
 	@FXML
 	private TableView<Unpiv> trans_table;
 
@@ -126,68 +126,42 @@ public class Unpiv_Controller {
 				} else {
 					setText(item.toString());  
 					if (item.equals("ДатаОперации=DATEOFOPERATION")) {
-						setStyle("-fx-background-color: #8B9FFA;"+
-					                "-fx-border-color:black;"
-								+ " -fx-border-width :  1 1 1 1 ");
+						setStyle("-fx-text-fill: #8B9FFA;");
 					} else if (item.equals("Дилер=DEALER")) {
-						setStyle("-fx-background-color: rgb(162, 189, 48);"+ 
-					             "-fx-border-color:black;"+ 
-								 "-fx-border-width :  1 1 1 1 ");
+						setStyle("-fx-text-fill: rgb(162, 189, 48);");
 					}
 					else if (item.equals("НомерЧека=CHECKNUMBER")) {
-						setStyle("-fx-background-color: #E6F06E;"+ 
-					             "-fx-border-color:black;"+ 
-								 "-fx-border-width :  1 1 1 1 ");
+						setStyle("-fx-text-fill: #E6F06E;");
 					}
 					else if (item.equals("Провайдер=PROVIDER")) {
-						setStyle("-fx-background-color: #D0D1BF;"+ 
-					             "-fx-border-color:black;"+ 
-								 "-fx-border-width :  1 1 1 1 ");
+						setStyle("-fx-text-fill: #D0D1BF;");
 					}
 					else if (item.equals("Статус=STATUS")) {
-						setStyle("-fx-background-color: #E6B2F6 ;"+ 
-					             "-fx-border-color:black;"+ 
-								 "-fx-border-width :  1 1 1 1 ");
+						setStyle("-fx-text-fill: #E6B2F6 ;");
 					}
 					else if (item.equals("СуммаКомиссии=COMMISSIONAMOUNT")) {
-						setStyle("-fx-background-color: #83C0F2;"+ 
-					             "-fx-border-color:black;"+ 
-								 "-fx-border-width :  1 1 1 1 ");
+						setStyle("-fx-text-fill: #83C0F2;");
 					}
 					else if (item.equals("СуммаНК=NKAMOUNT")) {
-						setStyle("-fx-background-color: #5EC395;"+ 
-					             "-fx-border-color:black;"+ 
-								 "-fx-border-width :  1 1 1 1 ");
+						setStyle("-fx-text-fill: #5EC395;");
 					}
 					else if (item.equals("СуммаНаличных=CASHAMOUNT")) {
-						setStyle("-fx-background-color: #CAA2E5;"+ 
-					             "-fx-border-color:black;"+ 
-								 "-fx-border-width :  1 1 1 1 ");
+						setStyle("-fx-text-fill: #CAA2E5;");
 					}
 					else if (item.equals("СуммаНаЧек=AMOUNTTOCHECK")) {
-						setStyle("-fx-background-color: #EECCAF;"+ 
-					             "-fx-border-color:black;"+ 
-								 "-fx-border-width :  1 1 1 1 ");
+						setStyle("-fx-text-fill: #EECCAF;");
 					}
 					else if (item.equals("СуммаПлатежа=AMOUNTOFPAYMENT")) {
-						setStyle("-fx-background-color: #C3F19A;"+ 
-					             "-fx-border-color:black;"+ 
-								 "-fx-border-width :  1 1 1 1 ");
+						setStyle("-fx-text-fill: #C3F19A;");
 					}
 					else if (item.equals("СуммаСЧеков=AMOUNTWITHCHECKS")) {
-						setStyle("-fx-background-color: #B2EFD1;"+ 
-					             "-fx-border-color:black;"+ 
-								 "-fx-border-width :  1 1 1 1 ");
+						setStyle("-fx-text-fill: #B2EFD1;");
 					}
 					else if (item.equals("Услуга=SERVICE")) {
-						setStyle("-fx-background-color: #ACCCE8;"+ 
-					             "-fx-border-color:black;"+ 
-								 "-fx-border-width :  1 1 1 1 ");
+						setStyle("-fx-text-fill: #ACCCE8;");
 					}
 					else if (item.equals("statusabs")) {
-						setStyle("-fx-background-color: #CCC7DD;"+ 
-					             "-fx-border-color:black;"+ 
-								 "-fx-border-width :  1 1 1 1 ");
+						setStyle("-fx-text-fill: #CCC7DD;");
 					}
 					else
 					{
@@ -236,57 +210,23 @@ public class Unpiv_Controller {
 				}
 				workbook.write(new FileOutputStream(file.getPath()));
 				workbook.close();
-				Alerts("Файл сформирован в папку "+file.getPath());
+				Msg.Message("Файл сформирован в папку "+file.getPath());
 			}
 		} catch (Exception e) {
-			Alerts(ExceptionUtils.getStackTrace(e));
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
-
 	}
 
 
-	private void Alerts(String mess) {
-		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-		stage.getIcons().add(new Image("terminal.png"));
-		alert.setTitle("Внимание");
-		alert.setHeaderText(null);
-		alert.setContentText(mess);
-		alert.showAndWait();
-	}
 	@FXML
 	private void view_attr_(ActionEvent actionEvent) {
 		if (trans_table.getSelectionModel().getSelectedItem() == null) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText("Выберите сначала данные из таблицы!\n");
-			alert.showAndWait();
-
+			Msg.Message("Выберите сначала данные из таблицы!\n");
 		} else {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(new Image("terminal.png"));
-			alert.setTitle("Внимание");
-			alert.setHeaderText(null);
-			alert.setContentText("Не реализовано!\n");
-			alert.showAndWait();
-
-			/*
-			 * Attributes fn = trans_table.getSelectionModel().getSelectedItem();
-			 * 
-			 * Stage stage = new Stage(); Parent root =
-			 * FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/view/Attributes.fxml"));
-			 * stage.setScene(new Scene(root)); stage.getIcons().add(new Image("icon.png"));
-			 * stage.setTitle("Атрибуты"); stage.initModality(Modality.WINDOW_MODAL);
-			 * stage.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
-			 * stage.show();
-			 */
+			Msg.Message("Не реализовано!");
 		}
-
 	}
+	
 	public static void autoResizeColumns(TableView<?> table) {
 		// Set the right policy
 		table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
@@ -310,7 +250,7 @@ public class Unpiv_Controller {
 					}
 				}
 				// set the new max-widht with some extra space
-				column.setPrefWidth(max + 10.0d);
+				column.setPrefWidth(max + 20.0d);
 			}
 		});
 	}

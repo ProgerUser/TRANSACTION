@@ -89,6 +89,7 @@ public class Main extends Application {
 				DBUtil.dbConnect();
 				InitAppRootLayout();
 				ShFirstView();
+				TermTrView();
 //				swift2();
 //				ResMon();
 			}
