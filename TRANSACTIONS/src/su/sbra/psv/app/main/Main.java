@@ -64,31 +64,31 @@ public class Main extends Application {
 			Main.primaryStage.setTitle("Транзакции");
 			logger.setLevel(Level.INFO);
 
-			if (MODULE == null) {
-				Logon();
-			} else if (MODULE.equals("DEBTINFO")) {
-				DBUtil.dbConnect();
-				Debtinfo();
-			} else if (MODULE.equals("BUH")) {
-				DBUtil.dbConnect();
-				InitAppRootLayout();
-				ShFirstView();
-			} else if (MODULE.equals("SWIFT")) {
-				DBUtil.dbConnect();
-				SwiftFromAbs();
-			} else if (MODULE.equals("VTB_CONV")) {
-				DBUtil.dbConnect();
-				ConvVal();
-			}
-
-			{
-//				Connect.connectionURL_ = "10.111.64.21:1521/ODB";
-//				Connect.userID_ = "saidp";
-//				Connect.userPassword_ = "";
-//				DbUtil.Db_Connect();
+//			if (MODULE == null) {
+//				Logon();
+//			} else if (MODULE.equals("DEBTINFO")) {
+//				DBUtil.dbConnect();
+//				Debtinfo();
+//			} else if (MODULE.equals("BUH")) {
 //				DBUtil.dbConnect();
 //				InitAppRootLayout();
 //				ShFirstView();
+//			} else if (MODULE.equals("SWIFT")) {
+//				DBUtil.dbConnect();
+//				SwiftFromAbs();
+//			} else if (MODULE.equals("VTB_CONV")) {
+//				DBUtil.dbConnect();
+//				ConvVal();
+//			}
+
+			{
+				Connect.connectionURL_ = "10.111.64.21:1521/ODB";
+				Connect.userID_ = "saidp";
+				Connect.userPassword_ = "vector165";
+				DbUtil.Db_Connect();
+				DBUtil.dbConnect();
+				InitAppRootLayout();
+				ShFirstView();
 //				swift2();
 //				ResMon();
 			}

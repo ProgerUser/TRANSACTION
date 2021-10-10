@@ -1,4 +1,4 @@
-package su.sbra.psv.app.controller;
+package su.sbra.psv.app.trlist;
 
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -33,23 +33,19 @@ import su.sbra.psv.app.main.Main;
 import su.sbra.psv.app.model.Amra_Trans;
 import su.sbra.psv.app.model.Attributes;
 import su.sbra.psv.app.model.Connect;
-import su.sbra.psv.app.model.Deal;
 import su.sbra.psv.app.model.FN_SESS_AMRA;
 import su.sbra.psv.app.model.TerminalDAO;
 import su.sbra.psv.app.model.Transact;
 import su.sbra.psv.app.model.TransactClass;
-import su.sbra.psv.app.sverka.AMRA_STMT_CALC;
+import su.sbra.psv.app.model.Unpiv;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.UnknownHostException;
-//import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -71,92 +67,55 @@ import java.util.Date;
  */
 
 @SuppressWarnings("unused")
-public class Attr_Controller {
+public class Unpiv_Controller {
 
 	@FXML
-	private TableColumn<Attributes, String> AttributeValue;
+	private TableColumn<Unpiv, String> COL;
 
 	@FXML
-	private TableColumn<Attributes, String> Service;
+	private TableColumn<Unpiv, String> COLVALUE;
 
 	@FXML
-	private TableView<Attributes> trans_table;
-
-	@FXML
-	private TableColumn<Attributes, String> AttributeName;
-
-	@FXML
-	private TableColumn<Attributes, String> CheckNumber;
-
-	@FXML
-	private TextField summ;
-
-	@FXML
-	private TextField counts;
+	private TableView<Unpiv> trans_table;
 
 	// For MultiThreading
 	private Executor exec;
 
 	@FXML
-	private void initialize() throws ClassNotFoundException, UnknownHostException {
+	private void initialize() {
 		trans_table.setEditable(true);
 		exec = Executors.newCachedThreadPool((runnable) -> {
 			Thread t = new Thread(runnable);
 			t.setDaemon(true);
 			return t;
 		});
-		Service.setCellValueFactory(cellData -> cellData.getValue().ServiceProperty());
-		AttributeName.setCellValueFactory(cellData -> cellData.getValue().AttributeNameProperty());
-		CheckNumber.setCellValueFactory(cellData -> cellData.getValue().CheckNumberProperty());
-		AttributeValue.setCellValueFactory(cellData -> cellData.getValue().AttributeValueProperty());
+		COL.setCellValueFactory(cellData -> cellData.getValue().COLProperty());
+		COLVALUE.setCellValueFactory(cellData -> cellData.getValue().COLVALUEProperty());
 
-		Service.setCellFactory(TextFieldTableCell.forTableColumn());
-		AttributeName.setCellFactory(TextFieldTableCell.forTableColumn());
-		CheckNumber.setCellFactory(TextFieldTableCell.forTableColumn());
-		AttributeValue.setCellFactory(TextFieldTableCell.forTableColumn());
+		//COL.setCellFactory(TextFieldTableCell.forTableColumn());
+		COLVALUE.setCellFactory(TextFieldTableCell.forTableColumn());
 
-		Service.setOnEditCommit(new EventHandler<CellEditEvent<Attributes, String>>() {
+		COL.setOnEditCommit(new EventHandler<CellEditEvent<Unpiv, String>>() {
 			@Override
-			public void handle(CellEditEvent<Attributes, String> t) {
-				((Attributes) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-						.set_Service(t.getNewValue());
+			public void handle(CellEditEvent<Unpiv, String> t) {
+				((Unpiv) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_COL(t.getNewValue());
 			}
 		});
-		AttributeName.setOnEditCommit(new EventHandler<CellEditEvent<Attributes, String>>() {
+		COLVALUE.setOnEditCommit(new EventHandler<CellEditEvent<Unpiv, String>>() {
 			@Override
-			public void handle(CellEditEvent<Attributes, String> t) {
-				((Attributes) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-						.set_AttributeName(t.getNewValue());
+			public void handle(CellEditEvent<Unpiv, String> t) {
+				((Unpiv) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.set_COLVALUE(t.getNewValue());
 			}
 		});
-		CheckNumber.setOnEditCommit(new EventHandler<CellEditEvent<Attributes, String>>() {
-			@Override
-			public void handle(CellEditEvent<Attributes, String> t) {
-				((Attributes) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-						.set_CheckNumber(t.getNewValue());
-			}
-		});
-		AttributeValue.setOnEditCommit(new EventHandler<CellEditEvent<Attributes, String>>() {
-			@Override
-			public void handle(CellEditEvent<Attributes, String> t) {
-				((Attributes) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-						.set_AttributeValue(t.getNewValue());
-			}
-		});
-
-		ObservableList<Attributes> empData = TerminalDAO.Attributes_();
+		ObservableList<Unpiv> empData = TerminalDAO.Unpiv_View();
 		populate_attr(empData);
 		autoResizeColumns(trans_table);
-	
-		TableFilter<Attributes> tableFilter = TableFilter.forTableView(trans_table).apply();
-		tableFilter.setSearchStrategy((input, target) -> {
-			try {
-				return target.toLowerCase().contains(input.toLowerCase());
-			} catch (Exception e) {
-				return false;
-			}
-		});
-		AttributeName.setCellFactory(col -> new TextFieldTableCell<Attributes, String>() {
+		@SuppressWarnings("deprecation")
+		TableFilter<Unpiv> filter = new TableFilter<>(trans_table);
+		
+		COL.setCellFactory(col -> new TextFieldTableCell<Unpiv, String>() {
 			@Override
 			public void updateItem(String item, boolean empty) {
 				super.updateItem(item, empty);
@@ -165,21 +124,80 @@ public class Attr_Controller {
 					setGraphic(null);
 					setStyle("");
 				} else {
-					setText(item.toString());
-					if (item.equals("Сумма")) {
-						setStyle("-fx-background-color: rgb(162, 189, 48);" + "-fx-border-color:black;"
+					setText(item.toString());  
+					if (item.equals("ДатаОперации=DATEOFOPERATION")) {
+						setStyle("-fx-background-color: #8B9FFA;"+
+					                "-fx-border-color:black;"
 								+ " -fx-border-width :  1 1 1 1 ");
-					} else if (item.equals("Основание")) {
-						setStyle("-fx-background-color:#96C2D2;" + "-fx-border-color:black;"
-								+ " -fx-border-width :  1 1 1 1 ");
-					} else {
+					} else if (item.equals("Дилер=DEALER")) {
+						setStyle("-fx-background-color: rgb(162, 189, 48);"+ 
+					             "-fx-border-color:black;"+ 
+								 "-fx-border-width :  1 1 1 1 ");
+					}
+					else if (item.equals("НомерЧека=CHECKNUMBER")) {
+						setStyle("-fx-background-color: #E6F06E;"+ 
+					             "-fx-border-color:black;"+ 
+								 "-fx-border-width :  1 1 1 1 ");
+					}
+					else if (item.equals("Провайдер=PROVIDER")) {
+						setStyle("-fx-background-color: #D0D1BF;"+ 
+					             "-fx-border-color:black;"+ 
+								 "-fx-border-width :  1 1 1 1 ");
+					}
+					else if (item.equals("Статус=STATUS")) {
+						setStyle("-fx-background-color: #E6B2F6 ;"+ 
+					             "-fx-border-color:black;"+ 
+								 "-fx-border-width :  1 1 1 1 ");
+					}
+					else if (item.equals("СуммаКомиссии=COMMISSIONAMOUNT")) {
+						setStyle("-fx-background-color: #83C0F2;"+ 
+					             "-fx-border-color:black;"+ 
+								 "-fx-border-width :  1 1 1 1 ");
+					}
+					else if (item.equals("СуммаНК=NKAMOUNT")) {
+						setStyle("-fx-background-color: #5EC395;"+ 
+					             "-fx-border-color:black;"+ 
+								 "-fx-border-width :  1 1 1 1 ");
+					}
+					else if (item.equals("СуммаНаличных=CASHAMOUNT")) {
+						setStyle("-fx-background-color: #CAA2E5;"+ 
+					             "-fx-border-color:black;"+ 
+								 "-fx-border-width :  1 1 1 1 ");
+					}
+					else if (item.equals("СуммаНаЧек=AMOUNTTOCHECK")) {
+						setStyle("-fx-background-color: #EECCAF;"+ 
+					             "-fx-border-color:black;"+ 
+								 "-fx-border-width :  1 1 1 1 ");
+					}
+					else if (item.equals("СуммаПлатежа=AMOUNTOFPAYMENT")) {
+						setStyle("-fx-background-color: #C3F19A;"+ 
+					             "-fx-border-color:black;"+ 
+								 "-fx-border-width :  1 1 1 1 ");
+					}
+					else if (item.equals("СуммаСЧеков=AMOUNTWITHCHECKS")) {
+						setStyle("-fx-background-color: #B2EFD1;"+ 
+					             "-fx-border-color:black;"+ 
+								 "-fx-border-width :  1 1 1 1 ");
+					}
+					else if (item.equals("Услуга=SERVICE")) {
+						setStyle("-fx-background-color: #ACCCE8;"+ 
+					             "-fx-border-color:black;"+ 
+								 "-fx-border-width :  1 1 1 1 ");
+					}
+					else if (item.equals("statusabs")) {
+						setStyle("-fx-background-color: #CCC7DD;"+ 
+					             "-fx-border-color:black;"+ 
+								 "-fx-border-width :  1 1 1 1 ");
+					}
+					else
+					{
 						setStyle("");
 					}
 				}
 			}
 		});
 	}
-
+	
 	@FXML
 	public void view_attr(ActionEvent event) throws IOException {
 		try {
@@ -189,10 +207,10 @@ public class Attr_Controller {
 			// Set extension filter for text files
 			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel File", "*.xls");
 			fileChooser.getExtensionFilters().add(extFilter);
-			fileChooser.setInitialFileName("Атрибуты " + Connect.PNMB_);
+			fileChooser.setInitialFileName("Транзакция "+Connect.PNMB_);
 			// Show save file dialog
 			File file = fileChooser.showSaveDialog(null);
-
+			
 			if (file != null) {
 				Workbook workbook = new HSSFWorkbook();
 				Sheet spreadsheet = workbook.createSheet("Таблица");
@@ -206,8 +224,8 @@ public class Attr_Controller {
 				for (int i = 0; i < trans_table.getItems().size(); i++) {
 					row = spreadsheet.createRow(i + 1);
 					for (int j = 0; j < trans_table.getColumns().size(); j++) {
-						if (trans_table.getColumns().get(j).getText() == "") {
-
+						if (trans_table.getColumns().get(j).getText() == ""){
+							
 						}
 						if (trans_table.getColumns().get(j).getCellData(i) != null) {
 							row.createCell(j).setCellValue(trans_table.getColumns().get(j).getCellData(i).toString());
@@ -218,7 +236,7 @@ public class Attr_Controller {
 				}
 				workbook.write(new FileOutputStream(file.getPath()));
 				workbook.close();
-				Alerts("Файл сформирован в папку " + file.getPath());
+				Alerts("Файл сформирован в папку "+file.getPath());
 			}
 		} catch (Exception e) {
 			Alerts(ExceptionUtils.getStackTrace(e));
@@ -226,35 +244,6 @@ public class Attr_Controller {
 
 	}
 
-	double all_sum = 0;
-	int cnt = 0;
-
-	@FXML
-	void chk_sum(ActionEvent event) {
-		trans_table.getColumns().stream().forEach((column) -> {
-			if (column.getText().equals("ЗначениеАтрибута")) {
-				for (int i = 0; i < trans_table.getItems().size(); i++) {
-					// System.out.println(trans_table.getColumns().get(2).getCellData(i).toString());
-					if (column.getCellData(i) != null
-							& trans_table.getColumns().get(2).getCellData(i).toString().equals("Сумма")) {
-						all_sum = all_sum
-								+ Double.valueOf(column.getCellData(i).toString().replace(",", ".").replace(" ", ""));
-						cnt++;
-					}
-				}
-			}
-
-		});
-
-		String pattern = "###,###.###";
-		DecimalFormat decimalFormat = new DecimalFormat(pattern);
-		String format = decimalFormat.format(all_sum);
-		counts.setText(String.valueOf(cnt));
-		summ.setText(String.valueOf(format));
-
-		all_sum = 0;
-		cnt = 0;
-	}
 
 	private void Alerts(String mess) {
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -265,7 +254,6 @@ public class Attr_Controller {
 		alert.setContentText(mess);
 		alert.showAndWait();
 	}
-
 	@FXML
 	private void view_attr_(ActionEvent actionEvent) {
 		if (trans_table.getSelectionModel().getSelectedItem() == null) {
@@ -299,7 +287,6 @@ public class Attr_Controller {
 		}
 
 	}
-
 	public static void autoResizeColumns(TableView<?> table) {
 		// Set the right policy
 		table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
@@ -329,7 +316,7 @@ public class Attr_Controller {
 	}
 
 	// Заполнить таблицу
-	private void populate_attr(ObservableList<Attributes> trData) {
+	private void populate_attr(ObservableList<Unpiv> trData) {
 		// Set items to the employeeTable
 		trans_table.setItems(trData);
 	}

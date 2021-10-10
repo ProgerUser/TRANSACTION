@@ -1,4 +1,4 @@
-package su.sbra.psv.app.controller;
+package su.sbra.psv.app.trlist;
 
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;

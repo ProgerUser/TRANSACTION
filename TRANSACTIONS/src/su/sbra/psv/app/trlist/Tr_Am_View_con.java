@@ -2076,7 +2076,7 @@ public class Tr_Am_View_con {
 				Connect.PNMB_ = fn.get_checknumber();
 				Stage stage = new Stage();
 				Parent root;
-				root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/view/Transact_Unpiv.fxml"));
+				root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/trlist/Transact_Unpiv.fxml"));
 				stage.setScene(new Scene(root));
 				stage.getIcons().add(new Image("icon.png"));
 				stage.setTitle("Подробно " + fn.get_checknumber());
@@ -2099,7 +2099,7 @@ public class Tr_Am_View_con {
 				Connect.PNMB_ = fn.get_checknumber();
 				Stage stage = new Stage();
 				Parent root;
-				root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/view/Deals.fxml"));
+				root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/trlist/Deals.fxml"));
 				stage.setScene(new Scene(root));
 				stage.getIcons().add(new Image("icon.png"));
 				stage.setTitle("Подробно " + fn.get_checknumber());
@@ -2122,7 +2122,7 @@ public class Tr_Am_View_con {
 				Connect.PNMB_ = fn.get_checknumber();
 				Stage stage = new Stage();
 				Parent root;
-				root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/view/Attributes_.fxml"));
+				root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/trlist/Attributes.fxml"));
 				stage.setScene(new Scene(root));
 				stage.getIcons().add(new Image("icon.png"));
 				stage.setTitle("Подробно " + fn.get_checknumber());

@@ -12,6 +12,7 @@ import java.util.Properties;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 import org.controlsfx.control.table.TableFilter;
+
 import com.sun.rowset.CachedRowSetImpl;
 
 import javafx.collections.FXCollections;
@@ -25,9 +26,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import su.sbra.psv.app.main.Main;
-import su.sbra.psv.app.model.Connect;
 import su.sbra.psv.app.sbalert.Msg;
-import su.sbra.psv.app.util.DBUtil;
 
 /**
  * Пачулия Саид 04.06.2020.
@@ -56,12 +55,12 @@ public class Ibank {
 		try {
 			Class.forName("oracle.jdbc.OracleDriver");
 			Properties props = new Properties();
-			props.setProperty("password", Connect.userPassword_);
-			props.setProperty("user", Connect.userID_);
+			props.setProperty("password", password.getText());
+			props.setProperty("user", login.getText());
 			props.put("v$session.osuser", System.getProperty("user.name").toString());
 			props.put("v$session.machine", InetAddress.getLocalHost().getCanonicalHostName());
 			props.put("v$session.program", getClass().getName());
-			conn  = DriverManager.getConnection("jdbc:oracle:thin:@" + Connect.connectionURL_, props);
+			conn  = DriverManager.getConnection("jdbc:oracle:thin:@" + db.getText(), props);
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
@@ -92,6 +91,7 @@ public class Ibank {
 							+ "            else\n"
 							+ "             2\n"
 							+ "          end";
+					//Main.logger.info(readRecordSQL);
 					PreparedStatement sqlStatement = conn.prepareStatement(readRecordSQL);
 					sqlStatement.setInt(1, IbMod.get_CLIENT_ID());
 					ResultSet myResultSet = sqlStatement.executeQuery();
@@ -190,7 +190,7 @@ public class Ibank {
 		ResultSet resultSet = null;
 		CachedRowSetImpl crs = null;
 		try {
-			Main.logger = Logger.getLogger(DBUtil.class);
+			Main.logger = Logger.getLogger(getClass());
 			// Connect to DB (Establish Oracle Connection)
 			if (conn == null && !conn.isClosed()) {
 				dbConnect();
