@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -407,8 +408,8 @@ public class Tr_Am_View_con {
 	@FXML
 	private void initialize() throws Exception {
 		try {
-			
-			dt1.setValue(NOW_LOCAL_DATE());
+			LocalDate start = NOW_LOCAL_DATE().minusMonths(1).with(TemporalAdjusters.firstDayOfMonth());
+			dt1.setValue(start);
 			dt2.setValue(NOW_LOCAL_DATE());
 			
 			new ConvConst().FormatDatePiker(dt1);

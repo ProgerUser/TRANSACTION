@@ -7,7 +7,7 @@
 		class="org.apache.log4j.ConsoleAppender">
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
-				value="%d{dd.MM.yyyy HH:mm:ss}$Sep$%c%x$Sep$%p$Sep$%L$Sep$%m%n$End$" />
+				value="[%d{dd.MM.yyyy HH:mm:ss}]$Sep$[%c%x]$Sep$[%p]$Sep$[%L]$Sep$[%m%n]$End$" />
 		</layout>
 	</appender>
 
@@ -16,7 +16,7 @@
 		<param name="File" value="//fsrv/obmen/TR/trapp.txt" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
-				value="%d{dd.MM.yyyy HH:mm:ss}$Sep$%c%x$Sep$%p|%L$Sep$%m%n$End$" />
+				value="[%d{dd.MM.yyyy HH:mm:ss}]$Sep$[%c%x]$Sep$[%p]$Sep$[%L]$Sep$[%m%n]$End$" />
 		</layout>
 	</appender>
 
@@ -28,7 +28,7 @@
 		<param name="file" value="//fsrv/obmen/TR/trapp.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
-				value="%d{dd.MM.yyyy HH:mm:ss}$Sep$%c%x$Sep$%p|%L$Sep$%m%n$End$" />
+				value="[%d{dd.MM.yyyy HH:mm:ss}]$Sep$[%c%x]$Sep$[%p]$Sep$[%L]$Sep$[%m%n]$End$" />
 		</layout>
 	</appender>
 

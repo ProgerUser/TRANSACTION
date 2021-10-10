@@ -32,7 +32,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Map;
@@ -2132,6 +2134,19 @@ public class SWC {
 	@FXML
 	private Tab CONV_VAL;
 
+	
+	/**
+	 * Текущий день
+	 * 
+	 * @return
+	 */
+	public LocalDate NOW_LOCAL_DATE() {
+		String date = new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance().getTime());
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+		LocalDate localDate = LocalDate.parse(date, formatter);
+		return localDate;
+	}
+	
 	/**
 	 * Инициализация
 	 */
@@ -2139,7 +2154,36 @@ public class SWC {
 	@FXML
 	private void initialize() {
 		try {
-
+			LocalDate start = NOW_LOCAL_DATE().minusMonths(1).with(TemporalAdjusters.firstDayOfMonth());
+			dt1.setValue(start);
+			dt2.setValue(NOW_LOCAL_DATE());
+			
+			ConvFrom.setValue(start);
+			ConvTo.setValue(NOW_LOCAL_DATE());
+			
+			
+			FileDate.setValue(start);
+			//LocalDate end = NOW_LOCAL_DATE().with(TemporalAdjusters.lastDayOfMonth());
+			
+			DT2.setValue(NOW_LOCAL_DATE());
+//			//LocalDate now = NOW_LOCAL_DATE();
+//			LocalDate lastDayPreviousMonth = YearMonth
+//					// current year/month
+//					.now()
+//					// previous month
+//					.minusMonths(1)
+//					// last day of month
+//					.atEndOfMonth();
+//			DayOfWeek dayOfWeek = lastDayPreviousMonth.getDayOfWeek();
+//			// check if it's weekend
+//			if (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) {
+//				// adjust to previous friday
+//				lastDayPreviousMonth = lastDayPreviousMonth.with(TemporalAdjusters.previous(DayOfWeek.FRIDAY));
+//			}
+			
+			
+			
+			
 			new ConvConst().FormatDatePiker(dt1);
 			new ConvConst().FormatDatePiker(dt2);
 			new ConvConst().FormatDatePiker(ConvFrom);

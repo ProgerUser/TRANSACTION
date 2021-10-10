@@ -21,6 +21,7 @@
                   <Text layoutX="10.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ПО:" />
                   <DatePicker fx:id="DT2" layoutX="25.0" layoutY="10.0" onAction="#DT2" prefHeight="25.0" prefWidth="100.0" />
                   <Button mnemonicParsing="false" onAction="#Clear" text="Очистить" />
+                  <Button layoutX="258.0" layoutY="10.0" mnemonicParsing="false" onAction="#OpenFile" text="Открыть файл" />
               </items>
                <VBox.margin>
                   <Insets left="-5.0" right="-5.0" top="-5.0" />

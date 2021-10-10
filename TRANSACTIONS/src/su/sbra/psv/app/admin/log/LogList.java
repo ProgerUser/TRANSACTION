@@ -144,6 +144,18 @@ public class LogList {
 		Init();
 	}
 
+	@FXML
+	private void OpenFile() {
+		try {
+			ProcessBuilder pb = new ProcessBuilder("Notepad.exe","//fsrv/obmen/TR/trapp.txt");
+			pb.start();
+		} catch (Exception e) {
+			DbUtil.Log_Error(e);
+		}
+
+	}
+	
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@FXML
 	private void initialize() {
