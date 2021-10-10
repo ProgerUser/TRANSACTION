@@ -84,6 +84,7 @@ import javafx.util.Callback;
 import javafx.util.Pair;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LocalDateTimeStringConverter;
+import su.sbra.psv.app.main.Main;
 import su.sbra.psv.app.model.Connect;
 import su.sbra.psv.app.model.TerminalDAO;
 import su.sbra.psv.app.sbalert.Msg;
@@ -210,7 +211,7 @@ public class PensC {
 			} catch (SQLException e1) {
 				Msg.Message(ExceptionUtils.getStackTrace(e1));
 			}
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -245,7 +246,7 @@ public class PensC {
 					}
 				}
 			} catch (Exception e) {
-				Msg.Message(ExceptionUtils.getStackTrace(e));
+				DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 			}
 
 			sep_pens.setEditable(true);
@@ -498,7 +499,8 @@ public class PensC {
 			});
 
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); 
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -557,7 +559,7 @@ public class PensC {
 			// resize
 			autoResizeColumns(SBRA_YEAR_BET);
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -600,7 +602,7 @@ public class PensC {
 			// resize
 			autoResizeColumns(PENS_LOAD_ROWSUM);
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -840,7 +842,7 @@ public class PensC {
 			// resize
 			autoResizeColumns(SBRA_PENS_LOG);
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -890,7 +892,7 @@ public class PensC {
 				}
 			});
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -962,7 +964,7 @@ public class PensC {
 
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1015,7 +1017,7 @@ public class PensC {
 			bufferedInputStream.close();
 			return encoding;
 		} catch (IOException e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -1041,7 +1043,7 @@ public class PensC {
 			br.close();
 			return clobData;
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 		return "Error";
 	}
@@ -1130,7 +1132,7 @@ public class PensC {
 			} catch (SQLException e1) {
 				Msg.Message(ExceptionUtils.getStackTrace(e1));
 			}
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1161,7 +1163,7 @@ public class PensC {
 			pb.start();
 
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1201,7 +1203,7 @@ public class PensC {
 			} catch (SQLException e1) {
 				Msg.Message(ExceptionUtils.getStackTrace(e1));
 			}
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1212,7 +1214,7 @@ public class PensC {
 		try {
 			LoadTablePensExec();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1245,7 +1247,7 @@ public class PensC {
 			// service.setOnSucceeded(e -> TLB.setDisable(false));
 			service.start();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1338,14 +1340,14 @@ public class PensC {
 							// populate
 							LoadTableSet();
 						} catch (Exception e) {
-							Msg.Message(ExceptionUtils.getStackTrace(e));
+							DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 						}
 					}
 					System.out.println("From=" + pair.getKey() + ", To=" + pair.getValue());
 				});
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1415,7 +1417,7 @@ public class PensC {
 			});
 
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1477,7 +1479,7 @@ public class PensC {
 				exec.execute(task);
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1521,7 +1523,7 @@ public class PensC {
 							} catch (Exception e) {
 								conn.rollback();
 								callStmt_j.close();
-								Msg.Message(ExceptionUtils.getStackTrace(e));
+								DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 							}
 							callStmt_j.close();
 							conn.commit();
@@ -1540,7 +1542,7 @@ public class PensC {
 				}
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1681,7 +1683,7 @@ public class PensC {
 				}
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1759,7 +1761,7 @@ public class PensC {
 					} catch (Exception e) {
 						conn.rollback();
 						callStmt.close();
-						Msg.Message(ExceptionUtils.getStackTrace(e));
+						DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 					}
 					// return
 					String ret = callStmt.getString(1);
@@ -1785,7 +1787,7 @@ public class PensC {
 							} catch (Exception e) {
 								conn.rollback();
 								callStmt_j.close();
-								Msg.Message(ExceptionUtils.getStackTrace(e));
+								DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 							}
 							callStmt_j.close();
 							conn.commit();
@@ -1807,7 +1809,7 @@ public class PensC {
 				}
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1886,7 +1888,7 @@ public class PensC {
 				}
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1946,7 +1948,7 @@ public class PensC {
 				}
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1999,7 +2001,7 @@ public class PensC {
 			}
 
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -2037,7 +2039,7 @@ public class PensC {
 			} catch (SQLException e1) {
 				Msg.Message(ExceptionUtils.getStackTrace(e1));
 			}
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -2080,7 +2082,7 @@ public class PensC {
 			prepStmt.close();
 
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 		return str;
 	}
@@ -2122,7 +2124,7 @@ public class PensC {
 			rs.close();
 			sqlStatement.close();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -2303,7 +2305,7 @@ public class PensC {
 			service.start();
 
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -2344,7 +2346,7 @@ public class PensC {
 			
 			conn.setAutoCommit(false);
 		} catch (SQLException | ClassNotFoundException e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -2355,7 +2357,7 @@ public class PensC {
 				conn.close();
 			}
 		} catch (SQLException e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 }

@@ -85,7 +85,7 @@ public class EditAction {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 			String fullClassName = Thread.currentThread().getStackTrace()[2].getClassName();
 			String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
@@ -112,7 +112,7 @@ public class EditAction {
 			// FirstWUpp(ACT_NAME);
 
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 			String fullClassName = Thread.currentThread().getStackTrace()[2].getClassName();
 			String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
@@ -145,7 +145,7 @@ public class EditAction {
 			
 			conn.setAutoCommit(false);
 		} catch (SQLException | ClassNotFoundException e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 			String fullClassName = Thread.currentThread().getStackTrace()[2].getClassName();
 			String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
@@ -165,7 +165,7 @@ public class EditAction {
 			}
 
 		} catch (SQLException e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 			String fullClassName = Thread.currentThread().getStackTrace()[2].getClassName();
 			String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();

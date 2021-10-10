@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jyloo.syntheticafx.XTableColumn?>
+<?import com.jyloo.syntheticafx.XTableView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane fx:id="ROOT" xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" BorderPane.alignment="CENTER">
+         <children>
+            <ToolBar>
+              <items>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="С:" />
+                  <DatePicker fx:id="DT1" onAction="#DT1" prefHeight="25.0" prefWidth="100.0" />
+                  <Text layoutX="10.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ПО:" />
+                  <DatePicker fx:id="DT2" layoutX="25.0" layoutY="10.0" onAction="#DT2" prefHeight="25.0" prefWidth="100.0" />
+                  <Button mnemonicParsing="false" onAction="#Clear" text="Очистить" />
+              </items>
+               <VBox.margin>
+                  <Insets left="-5.0" right="-5.0" top="-5.0" />
+               </VBox.margin>
+            </ToolBar>
+            <XTableView fx:id="LOGS" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="900.0" styleClass="mylistview" stylesheets="ScrPane.css" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
+              <columns>
+                <XTableColumn fx:id="ID" prefWidth="100.0" text="Номер" />
+                <XTableColumn fx:id="LOGDATED" prefWidth="156.0" text="Время" />
+                  <XTableColumn fx:id="OPER" prefWidth="100.0" text="Пользователь" />
+                  <XTableColumn fx:id="LINENUMBER" prefWidth="100.0" text="Строка" />
+                  <XTableColumn fx:id="CLASSNAME" prefWidth="159.0" text="Класс" />
+                  <XTableColumn fx:id="METHODNAME" prefWidth="147.0" text="Метод" />
+                  <XTableColumn fx:id="ERROR" prefWidth="444.0" text="Текст ошибки" />
+              </columns>
+            </XTableView>
+         </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </VBox>
+   </center>
+</BorderPane>

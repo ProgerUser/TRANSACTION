@@ -30,7 +30,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.swing.JRViewer;
 import su.sbra.psv.app.main.Main;
-import su.sbra.psv.app.sbalert.Msg;
+import su.sbra.psv.app.utils.DbUtil;
 
 public class SwiftPrint extends JFrame {
 
@@ -102,7 +102,7 @@ public class SwiftPrint extends JFrame {
 			inputstream.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}

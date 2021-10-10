@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.201" fx:controller="su.sbra.psv.app.admin.log.LogC">
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+   </padding>
+   <children>
+      <ToolBar>
+        <items>
+          <Button mnemonicParsing="false" onAction="#Refresh">
+               <graphic>
+                  <FontAwesomeIconView glyphName="REFRESH" size="15" />
+               </graphic>
+            </Button>
+        </items>
+         <VBox.margin>
+            <Insets left="-5.0" right="-5.0" top="-5.0" />
+         </VBox.margin>
+      </ToolBar>
+      <TableView fx:id="LogTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="700.0" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="RowNumber" prefWidth="75.0" text="Номер строки" />
+          <TableColumn fx:id="DateTime" prefWidth="75.0" text="Дата и время" />
+          <TableColumn fx:id="Class" prefWidth="75.0" text="Класс" />
+            <TableColumn fx:id="TypeMessage" prefWidth="75.0" text="Тип" />
+            <TableColumn fx:id="ClassRowNumber" prefWidth="75.0" text="Строка" />
+            <TableColumn fx:id="Mesage" prefWidth="75.0" text="Сообщение" />
+        </columns>
+      </TableView>
+   </children>
+</VBox>

@@ -16,7 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import su.sbra.psv.app.main.Main;
-import su.sbra.psv.app.sbalert.Msg;
+import su.sbra.psv.app.utils.DbUtil;
 
 public class EditGrp {
 
@@ -63,7 +63,8 @@ public class EditGrp {
 			conn.commit();
 			onclose();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -85,7 +86,7 @@ public class EditGrp {
 			GRP_NAME.setText(grp.getGRP_NAME());
 			NAME.setText(grp.getNAME());
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 

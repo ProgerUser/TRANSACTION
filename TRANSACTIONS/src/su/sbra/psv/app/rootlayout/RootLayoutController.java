@@ -57,7 +57,21 @@ public class RootLayoutController {
 		try {
 			Main.TermClBkSverka();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+		}
+	}
+	
+	/**
+	 * Для сверки
+	 * 
+	 * @param event
+	 */
+	@FXML
+	void Log(ActionEvent event) {
+		try {
+			Main.Log();
+		} catch (Exception e) {
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -66,7 +80,7 @@ public class RootLayoutController {
 		try {
 			Main.SbraResourcesMonitor();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -81,7 +95,7 @@ public class RootLayoutController {
 		try {
 			Main.SwiftFromAbs();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -90,7 +104,7 @@ public class RootLayoutController {
 		try {
 			Main.PlAccessRashod();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 	
@@ -99,7 +113,7 @@ public class RootLayoutController {
 		try {
 			Main.AudView();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 	
@@ -108,7 +122,7 @@ public class RootLayoutController {
 		try {
 			Main.AudSet();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -117,7 +131,7 @@ public class RootLayoutController {
 //		try {
 //			Main.showEmployeeView();
 //		} catch (Exception e) {
-//			Msg.Message(ExceptionUtils.getStackTrace(e));
+//			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 //		}
 //	}
 
@@ -126,7 +140,7 @@ public class RootLayoutController {
 		try {
 			Main.Debtinfo();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -154,7 +168,7 @@ public class RootLayoutController {
 		try {
 			Main.BkIbank();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -163,7 +177,7 @@ public class RootLayoutController {
 		try {
 			Main.GrantAccessMenu();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -172,7 +186,7 @@ public class RootLayoutController {
 		try {
 			Main.TermTrView();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -181,7 +195,7 @@ public class RootLayoutController {
 		try {
 			Main.TermTrLoadHist();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -190,7 +204,7 @@ public class RootLayoutController {
 		try {
 			Main.TermDealView();;
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -199,7 +213,7 @@ public class RootLayoutController {
 		try {
 			Main.TermTrLoad();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -208,7 +222,7 @@ public class RootLayoutController {
 		try {
 			Main.TerminalControl();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -217,7 +231,7 @@ public class RootLayoutController {
 		try {
 			Main.CassaOvPlat();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 	
@@ -226,7 +240,7 @@ public class RootLayoutController {
 		try {
 			Main.UserControl();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -235,7 +249,7 @@ public class RootLayoutController {
 		try {
 			Main.ContactComiss();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -269,7 +283,7 @@ public class RootLayoutController {
 				stage.show();
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -298,7 +312,7 @@ public class RootLayoutController {
 //
 //					}
 //				} catch (IOException e) {
-//					Msg.Message(ExceptionUtils.getStackTrace(e));
+//					DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 //				}
 //				return null;
 //			}
@@ -339,7 +353,7 @@ public class RootLayoutController {
 					}
 				} catch (IOException e) {
 
-					Msg.Message(ExceptionUtils.getStackTrace(e));
+					DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 				}
 				return null;
 			}
@@ -354,7 +368,7 @@ public class RootLayoutController {
 		try {
 			Main.GrantAccessAction();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -363,7 +377,7 @@ public class RootLayoutController {
 		try {
 			Main.GrantAccessGrp();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -372,7 +386,7 @@ public class RootLayoutController {
 		try {
 			Main.TermServiceCtrl();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -398,7 +412,7 @@ public class RootLayoutController {
 			}
 			prepStmt.close();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 		return ret;
 	}
@@ -452,7 +466,7 @@ public class RootLayoutController {
 			}
 			prepStmt.close();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 		return ret;
 	}
@@ -462,7 +476,7 @@ public class RootLayoutController {
 //		try {
 //			Main.PensiaRa();
 //		} catch (Exception e) {
-//			Msg.Message(ExceptionUtils.getStackTrace(e));
+//			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 //		}
 //	}
 
@@ -471,7 +485,7 @@ public class RootLayoutController {
 		try {
 			Main.sep();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 

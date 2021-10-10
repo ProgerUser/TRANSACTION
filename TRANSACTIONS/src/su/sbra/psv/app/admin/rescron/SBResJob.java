@@ -35,6 +35,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import jfxtras.scene.control.LocalDateTimeTextField;
+import su.sbra.psv.app.main.Main;
 import su.sbra.psv.app.sbalert.Msg;
 import su.sbra.psv.app.tr.pl.ConvConst;
 import su.sbra.psv.app.util.DBUtil;
@@ -214,7 +215,7 @@ public class SBResJob {
 			// resize
 			autoResizeColumns(SB_CERT_EXP);
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -260,7 +261,7 @@ public class SBResJob {
 			// resize
 			autoResizeColumns(SB_CERT_EXP_JOB);
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -298,7 +299,7 @@ public class SBResJob {
 			// resize
 			autoResizeColumns(SB_CERT_EXP_GRP);
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -336,7 +337,7 @@ public class SBResJob {
 			// resize
 			autoResizeColumns(SB_CERT_EXP_PRM);
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 

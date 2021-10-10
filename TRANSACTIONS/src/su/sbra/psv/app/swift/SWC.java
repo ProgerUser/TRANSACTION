@@ -44,11 +44,6 @@ import java.util.concurrent.Executors;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
 import org.controlsfx.control.table.TableFilter;
 import org.mozilla.universalchardet.UniversalDetector;
 
@@ -124,6 +119,7 @@ import javafx.util.Pair;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.LocalDateStringConverter;
 import javafx.util.converter.LocalDateTimeStringConverter;
+import su.sbra.psv.app.main.Main;
 import su.sbra.psv.app.model.Connect;
 import su.sbra.psv.app.tr.pl.ConvConst;
 import su.sbra.psv.app.utils.DbUtil;
@@ -484,7 +480,7 @@ public class SWC {
 		} catch (Exception e) {
 			e.printStackTrace();
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
 
@@ -565,7 +561,7 @@ public class SWC {
 		} catch (Exception e) {
 			e.printStackTrace();
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
 
@@ -584,7 +580,7 @@ public class SWC {
 		} catch (Exception e) {
 			e.printStackTrace();
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
 
@@ -605,7 +601,7 @@ public class SWC {
 		} catch (Exception e) {
 			e.printStackTrace();
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
 
@@ -620,7 +616,7 @@ public class SWC {
 		} catch (Exception e) {
 			e.printStackTrace();
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
 
@@ -659,7 +655,7 @@ public class SWC {
 			}
 		} catch (Exception e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 		return ret;
 	}
@@ -699,7 +695,7 @@ public class SWC {
 			}
 		} catch (Exception e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 		return ret;
 	}
@@ -723,7 +719,7 @@ public class SWC {
 			}
 		} catch (Exception e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 		return ret;
 	}
@@ -747,7 +743,7 @@ public class SWC {
 			}
 		} catch (Exception e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 		return ret;
 	}
@@ -771,7 +767,7 @@ public class SWC {
 			}
 		} catch (Exception e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 		return ret;
 	}
@@ -795,7 +791,7 @@ public class SWC {
 			}
 		} catch (Exception e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 		return ret;
 	}
@@ -820,7 +816,7 @@ public class SWC {
 			}
 		} catch (Exception e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 		return ret;
 	}
@@ -862,7 +858,7 @@ public class SWC {
 		} catch (Exception e) {
 			e.printStackTrace();
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 		return ret;
 	}
@@ -911,7 +907,7 @@ public class SWC {
 			}
 		} catch (Exception e) {
 			// ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 		return ret;
 	}
@@ -934,7 +930,7 @@ public class SWC {
 			}
 		} catch (Exception e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 		return ret;
 	}
@@ -947,7 +943,7 @@ public class SWC {
 		try {
 			LoadTableMT202();
 		} catch (Exception e) {
-			su.sbra.psv.app.sbalert.Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1018,14 +1014,14 @@ public class SWC {
 						}
 						
 					} catch (Exception e) {
-						su.sbra.psv.app.sbalert.Msg.Message(ExceptionUtils.getStackTrace(e));
+						DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 					}
 				}
 
 			});
 
 		} catch (Exception e) {
-			su.sbra.psv.app.sbalert.Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1103,7 +1099,7 @@ public class SWC {
 								su.sbra.psv.app.sbalert.Msg.Message("Длина счета < 20 или пусто!");
 							}
 						} catch (Exception e) {
-							su.sbra.psv.app.sbalert.Msg.Message(ExceptionUtils.getStackTrace(e));
+							DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 						}
 					}
 
@@ -1111,7 +1107,7 @@ public class SWC {
 			}
 
 		} catch (Exception e) {
-			su.sbra.psv.app.sbalert.Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1148,7 +1144,7 @@ public class SWC {
 				}
 			}
 		} catch (Exception e) {
-			su.sbra.psv.app.sbalert.Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1193,7 +1189,7 @@ public class SWC {
 			// resize
 			autoResizeColumns(VTB_202_ACC);
 		} catch (Exception e) {
-			su.sbra.psv.app.sbalert.Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1243,7 +1239,7 @@ public class SWC {
 			is.close();
 		} catch (Exception e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 		return ret;
 	}
@@ -1319,7 +1315,7 @@ public class SWC {
 								prepStmt.close();
 							} catch (Exception e) {
 								ErrorMessage(ExceptionUtils.getStackTrace(e));
-								SWLogger.error(
+								Main.logger.error(
 										ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 							}
 						} else if (st.getVECTOR().equals("OUT")) {
@@ -1342,7 +1338,7 @@ public class SWC {
 								prepStmt.close();
 							} catch (Exception e) {
 								ErrorMessage(ExceptionUtils.getStackTrace(e));
-								SWLogger.error(
+								Main.logger.error(
 										ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 							}
 						}
@@ -1359,7 +1355,7 @@ public class SWC {
 			}
 		} catch (Exception e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
 
@@ -1413,7 +1409,7 @@ public class SWC {
 									ErrorMessage(ExceptionUtils.getStackTrace(e1));
 									e1.printStackTrace();
 								}
-								SWLogger.error(ExceptionUtils.getStackTrace(e) + "~"
+								Main.logger.error(ExceptionUtils.getStackTrace(e) + "~"
 										+ Thread.currentThread().getName());
 								ErrorMessage(ExceptionUtils.getStackTrace(e));
 							}
@@ -1437,7 +1433,7 @@ public class SWC {
 									ErrorMessage(ExceptionUtils.getStackTrace(e1));
 									e1.printStackTrace();
 								}
-								SWLogger.error(ExceptionUtils.getStackTrace(e) + "~"
+								Main.logger.error(ExceptionUtils.getStackTrace(e) + "~"
 										+ Thread.currentThread().getName());
 								ErrorMessage(ExceptionUtils.getStackTrace(e));
 							}
@@ -1510,7 +1506,7 @@ public class SWC {
 //											conn.commit();
 //										} catch (Exception e) {
 //											conn.rollback();
-//											SWLogger.error(ExceptionUtils.getStackTrace(e) + "~"
+//											Main.logger.error(ExceptionUtils.getStackTrace(e) + "~"
 //													+ Thread.currentThread().getName());
 //											//ErrorMessage(ExceptionUtils.getStackTrace(e));
 //										}
@@ -1531,7 +1527,7 @@ public class SWC {
 //											conn.commit();
 //										} catch (IOException e) {
 //											conn.rollback();
-//											SWLogger.error(ExceptionUtils.getStackTrace(e) + "~"
+//											Main.logger.error(ExceptionUtils.getStackTrace(e) + "~"
 //													+ Thread.currentThread().getName());
 //											//ErrorMessage(ExceptionUtils.getStackTrace(e));
 //										}
@@ -1550,7 +1546,7 @@ public class SWC {
 //			};
 //			task.setOnFailed(e -> {
 //				ErrorMessage(task.getException().getMessage());
-//				SWLogger.error(task.getException().getMessage() + "~" + Thread.currentThread().getName());
+//				Main.logger.error(task.getException().getMessage() + "~" + Thread.currentThread().getName());
 //			});
 //			task.setOnSucceeded(e -> {
 //				try {
@@ -1558,13 +1554,13 @@ public class SWC {
 //					PrgInd.setVisible(false);
 //				} catch (Exception e1) {
 //					ErrorMessage(e1.getMessage());
-//					SWLogger.error(e1.getMessage() + "~" + Thread.currentThread().getName());
+//					Main.logger.error(e1.getMessage() + "~" + Thread.currentThread().getName());
 //				}
 //			});
 //			exec.execute(task);
 		} catch (Exception e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
 
@@ -1654,7 +1650,7 @@ public class SWC {
 			return encoding;
 		} catch (Exception e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 		return null;
 	}
@@ -1680,7 +1676,7 @@ public class SWC {
 			return clobData;
 		} catch (Exception e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 		return null;
 	}
@@ -1827,7 +1823,7 @@ public class SWC {
 
 		} catch (Exception e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
 
@@ -1904,12 +1900,12 @@ public class SWC {
 
 						alert.showAndWait();
 					} catch (Exception e) {
-						SWLogger.error(ExceptionUtils.getStackTrace(e));
+						Main.logger.error(ExceptionUtils.getStackTrace(e));
 					}
 				});
 			}
 		} catch (Exception e) {
-			SWLogger.error(ExceptionUtils.getStackTrace(e));
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1939,7 +1935,7 @@ public class SWC {
 	/**
 	 * Логирование
 	 */
-	Logger SWLogger = Logger.getLogger(getClass());
+	//Logger SWLogger = Logger.getLogger(getClass());
 
 	Properties swift_mt;
 
@@ -1962,7 +1958,7 @@ public class SWC {
 		} catch (Exception e) {
 			e.printStackTrace();
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
 
@@ -2002,7 +1998,7 @@ public class SWC {
 				}
 			});
 		} catch (Exception e) {
-			SWLogger.error(ExceptionUtils.getStackTrace(e));
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
 		}
 	}
@@ -2085,7 +2081,7 @@ public class SWC {
 			}
 		} catch (Exception e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
 
@@ -2127,7 +2123,7 @@ public class SWC {
 			exec.execute(task);
 		} catch (Exception e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
 
@@ -2395,25 +2391,25 @@ public class SWC {
 			Ack.setToggleGroup(group);
 			Other.setToggleGroup(group);
 			// _____________________LOG______________________________
-			ConsoleAppender console = new ConsoleAppender(); // create appender
-			// configure the appender
-			String PATTERN = "%d [%p|%c|%C{1}] %m%n";
-			console.setLayout(new PatternLayout(PATTERN));
-			console.setThreshold(Level.DEBUG);
-			console.activateOptions();
-			// add appender to any Logger (here is root)
-			org.apache.log4j.Logger.getRootLogger().addAppender(console);
-
-			FileAppender fa = new FileAppender();
-			fa.setName("SWIFT");
-			fa.setFile("SWIFT.log");
-			fa.setLayout(new PatternLayout("%d %-5p [%c{1}] %m%n"));
-			fa.setThreshold(Level.DEBUG);
-			fa.setAppend(true);
-			fa.activateOptions();
-
-			// add appender to any Logger (here is root)
-			Logger.getRootLogger().addAppender(fa);
+//			ConsoleAppender console = new ConsoleAppender(); // create appender
+//			// configure the appender
+//			String PATTERN = "%d [%p|%c|%C{1}] %m%n";
+//			console.setLayout(new PatternLayout(PATTERN));
+//			console.setThreshold(Level.DEBUG);
+//			console.activateOptions();
+//			// add appender to any Logger (here is root)
+//			org.apache.log4j.Logger.getRootLogger().addAppender(console);
+//
+//			FileAppender fa = new FileAppender();
+//			fa.setName("SWIFT");
+//			fa.setFile("SWIFT.log");
+//			fa.setLayout(new PatternLayout("%d %-5p [%c{1}] %m%n"));
+//			fa.setThreshold(Level.DEBUG);
+//			fa.setAppend(true);
+//			fa.activateOptions();
+//
+//			// add appender to any Logger (here is root)
+//			Logger.getRootLogger().addAppender(fa);
 			// repeat with all other desired appenders
 			// ______________________________________________________
 			// Перемещение по Tab-ам
@@ -2482,7 +2478,7 @@ public class SWC {
 							prp.close();
 
 						} catch (Exception e) {
-							SWLogger.error(ExceptionUtils.getStackTrace(e));
+							Main.logger.error(ExceptionUtils.getStackTrace(e));
 							ErrorMessage(ExceptionUtils.getStackTrace(e));
 						}
 					}
@@ -2539,7 +2535,7 @@ public class SWC {
 							is.close();
 							buf.close();
 						} catch (Exception e) {
-							SWLogger.error(ExceptionUtils.getStackTrace(e));
+							Main.logger.error(ExceptionUtils.getStackTrace(e));
 							ErrorMessage(ExceptionUtils.getStackTrace(e));
 						}
 					} else {
@@ -2803,7 +2799,7 @@ public class SWC {
 			SWIFT_VTB.setDisable(true);
 			BK_VTB.setDisable(true);
 		} catch (Exception e) {
-			SWLogger.error(ExceptionUtils.getStackTrace(e));
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
 		}
 	}
@@ -2829,7 +2825,7 @@ public class SWC {
 			InitTable();
 		} catch (Exception e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
 
@@ -2941,7 +2937,7 @@ public class SWC {
 //			};
 //			task.setOnFailed(e -> {
 //				ErrorMessage(task.getException().getMessage());
-//				SWLogger.error(task.getException().getMessage() + "~" + Thread.currentThread().getName());
+//				Main.logger.error(task.getException().getMessage() + "~" + Thread.currentThread().getName());
 //			});
 //			task.setOnSucceeded(e -> {
 //				try {
@@ -2949,14 +2945,14 @@ public class SWC {
 //					PrgInd.setVisible(false);
 //				} catch (Exception e1) {
 //					ErrorMessage(e1.getMessage());
-//					SWLogger.error(e1.getMessage() + "~" + Thread.currentThread().getName());
+//					Main.logger.error(e1.getMessage() + "~" + Thread.currentThread().getName());
 //				}
 //			});
 //			exec.execute(task);
 
 		} catch (Exception e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
 
@@ -3077,7 +3073,7 @@ public class SWC {
 //			};
 //			task.setOnFailed(e -> {
 //				ErrorMessage(task.getException().getMessage());
-//				SWLogger.error(task.getException().getMessage() + "~" + Thread.currentThread().getName());
+//				Main.logger.error(task.getException().getMessage() + "~" + Thread.currentThread().getName());
 //			});
 //			task.setOnSucceeded(e -> {
 //				try {
@@ -3085,14 +3081,14 @@ public class SWC {
 //					PrgInd.setVisible(false);
 //				} catch (Exception e1) {
 //					ErrorMessage(e1.getMessage());
-//					SWLogger.error(e1.getMessage() + "~" + Thread.currentThread().getName());
+//					Main.logger.error(e1.getMessage() + "~" + Thread.currentThread().getName());
 //				}
 //			});
 //			exec.execute(task);
 
 		} catch (Exception e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
 
@@ -3139,7 +3135,7 @@ public class SWC {
 			prepStmt.close();
 		} catch (Exception e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 		return ret;
 	}
@@ -3173,7 +3169,7 @@ public class SWC {
 			}
 		} catch (Exception e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 		return ret;
 	}
@@ -3307,7 +3303,7 @@ public class SWC {
 							// dlist.clear();
 						} catch (Exception e) {
 							ErrorMessage(ExceptionUtils.getStackTrace(e));
-							SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+							Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 						}
 					});
 					// autoResizeColumns(STMT);
@@ -3316,7 +3312,7 @@ public class SWC {
 		} catch (Exception e) {
 			e.printStackTrace();
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
 
@@ -3382,7 +3378,7 @@ public class SWC {
 			conn.setAutoCommit(false);
 		} catch (SQLException | ClassNotFoundException e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
 
@@ -3396,7 +3392,7 @@ public class SWC {
 			}
 		} catch (SQLException e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
 
@@ -3427,7 +3423,7 @@ public class SWC {
 //				};
 //				task.setOnFailed(e -> {
 //					ErrorMessage(task.getException().getMessage());
-//					SWLogger.error(task.getException().getMessage() + "~" + Thread.currentThread().getName());
+//					Main.logger.error(task.getException().getMessage() + "~" + Thread.currentThread().getName());
 //				});
 //				task.setOnSucceeded(e -> {
 //					try {
@@ -3435,14 +3431,14 @@ public class SWC {
 //						PrgInd.setVisible(false);
 //					} catch (Exception e1) {
 //						ErrorMessage(e1.getMessage());
-//						SWLogger.error(e1.getMessage() + "~" + Thread.currentThread().getName());
+//						Main.logger.error(e1.getMessage() + "~" + Thread.currentThread().getName());
 //					}
 //				});
 //				exec.execute(task);
 			}
 		} catch (Exception e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
 
@@ -3486,7 +3482,7 @@ public class SWC {
 //				};
 //				task.setOnFailed(e -> {
 //					ErrorMessage(task.getException().getMessage());
-//					SWLogger.error(task.getException().getMessage() + "~" + Thread.currentThread().getName());
+//					Main.logger.error(task.getException().getMessage() + "~" + Thread.currentThread().getName());
 //				});
 //				task.setOnSucceeded(e -> {
 //					try {
@@ -3503,7 +3499,7 @@ public class SWC {
 			}
 		} catch (Exception e) {
 			ErrorMessage(ExceptionUtils.getStackTrace(e));
-			SWLogger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 
 	}

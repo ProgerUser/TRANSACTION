@@ -2,6 +2,7 @@ package su.sbra.psv.app.termserv;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import javafx.collections.FXCollections;
@@ -15,8 +16,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import su.sbra.psv.app.main.Main;
-import su.sbra.psv.app.sbalert.Msg;
 import su.sbra.psv.app.util.DBUtil;
+import su.sbra.psv.app.utils.DbUtil;
 
 public class EditServ {
 
@@ -60,7 +61,7 @@ public class EditServ {
 		try {
 			OnClose();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
@@ -115,7 +116,7 @@ public class EditServ {
 			//-----------------------------------
 			OnClose();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
@@ -129,7 +130,7 @@ public class EditServ {
 		try {
 			this.serv = serv;
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
@@ -152,7 +153,7 @@ public class EditServ {
 			rs.close();
 			prp.close();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 		return ret;
@@ -194,7 +195,7 @@ public class EditServ {
 			this.ACCOUNT_T.setText(GetAccName(serv.getACCOUNT()));
 			//----------------------------------------
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}

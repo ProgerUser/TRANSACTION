@@ -135,9 +135,9 @@ public class GrpController {
 			try {
 				conn.rollback();
 			} catch (SQLException e1) {
-				Msg.Message(ExceptionUtils.getStackTrace(e));
+				DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 			}
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -184,9 +184,9 @@ public class GrpController {
 			try {
 				conn.rollback();
 			} catch (SQLException e1) {
-				Msg.Message(ExceptionUtils.getStackTrace(e));
+				DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 			}
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 	
@@ -206,7 +206,7 @@ public class GrpController {
 			
 			conn.setAutoCommit(false);
 		} catch (SQLException | ClassNotFoundException e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -216,7 +216,7 @@ public class GrpController {
 				conn.close();
 			}
 		} catch (SQLException e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 	@FXML
@@ -260,7 +260,7 @@ public class GrpController {
 			} catch (SQLException e1) {
 				DbUtil.Log_Error(e1);
 			}
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -306,7 +306,7 @@ public class GrpController {
 			} catch (SQLException e1) {
 				DbUtil.Log_Error(e1);
 			}
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -347,7 +347,7 @@ public class GrpController {
 				InitUsrOut(grp_act.getGRP_ID());
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -382,7 +382,7 @@ public class GrpController {
 				InitUsrOut(grp_act.getGRP_ID());
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -425,7 +425,7 @@ public class GrpController {
 			});
 			stage.showAndWait();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -473,7 +473,7 @@ public class GrpController {
 				stage.showAndWait();
 			} 
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -540,7 +540,7 @@ public class GrpController {
 							} catch (SQLException e1) {
 								DbUtil.Log_Error(e1);
 							}
-							Msg.Message(ExceptionUtils.getStackTrace(e));
+							DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 						}
 						newWindow_yn.close();
 					}
@@ -557,7 +557,7 @@ public class GrpController {
 
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 	
@@ -695,7 +695,7 @@ public class GrpController {
 			REPORT_NAME_IN.setCellValueFactory(cellData -> cellData.getValue().REPORT_NAMEProperty());
 			InitRep();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -735,7 +735,7 @@ public class GrpController {
 				InitRepOut(rep_tp.getREPORT_TYPE_ID(), grp_act.getGRP_ID());
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
     }
 	
@@ -768,7 +768,7 @@ public class GrpController {
 				InitRepTpOut( grp_act.getGRP_ID());
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
     }
     
@@ -801,7 +801,7 @@ public class GrpController {
 				InitRepTpOut( grp_act.getGRP_ID());
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
     }
 	
@@ -837,7 +837,7 @@ public class GrpController {
 				InitRepOut(rep_tp.getREPORT_TYPE_ID(), grp_act.getGRP_ID());
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
     }
     
@@ -962,7 +962,7 @@ public class GrpController {
 				}
 			});
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -995,7 +995,7 @@ public class GrpController {
 				}
 			});
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1029,7 +1029,7 @@ public class GrpController {
 				}
 			});
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 	
@@ -1070,7 +1070,7 @@ public class GrpController {
 				}
 			});
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 	
@@ -1100,7 +1100,7 @@ public class GrpController {
 				}
 			});
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 	void InitRepTpOut(Long grp_id) {
@@ -1141,7 +1141,7 @@ public class GrpController {
 				}
 			});
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 	
@@ -1183,7 +1183,7 @@ public class GrpController {
 				}
 			});
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 	
@@ -1234,7 +1234,7 @@ public class GrpController {
 				}
 			});
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 	void RepIn() {
@@ -1272,7 +1272,7 @@ public class GrpController {
 				}
 			});
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 	
@@ -1292,7 +1292,7 @@ public class GrpController {
 			prepStmt.close();
 			rs.close();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 		return list;
 	}

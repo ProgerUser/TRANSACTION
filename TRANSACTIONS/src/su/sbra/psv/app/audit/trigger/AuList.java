@@ -451,7 +451,7 @@ public class AuList {
 													Main.logger.error(
 															ExceptionUtils.getStackTrace(e1) + "~" + Thread.currentThread().getName());
 												}
-												Msg.Message(ExceptionUtils.getStackTrace(e));
+												DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 												Main.logger
 														.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 											}

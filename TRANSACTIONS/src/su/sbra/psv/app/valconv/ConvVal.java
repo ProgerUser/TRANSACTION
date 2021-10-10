@@ -25,6 +25,7 @@ import javafx.stage.WindowEvent;
 import su.sbra.psv.app.main.Main;
 import su.sbra.psv.app.model.Connect;
 import su.sbra.psv.app.sbalert.Msg;
+import su.sbra.psv.app.utils.DbUtil;
 
 public class ConvVal {
 
@@ -183,13 +184,13 @@ public class ConvVal {
 			} catch (Exception e) {
 				// отмена транзакции
 				conn.rollback();
-				Msg.Message(ExceptionUtils.getStackTrace(e));
+				DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 				Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 			}
 			// закроем форму
 			onclose();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
@@ -224,7 +225,7 @@ public class ConvVal {
 			
 			conn.setAutoCommit(false);
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
@@ -238,7 +239,7 @@ public class ConvVal {
 				conn.close();
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
@@ -295,7 +296,7 @@ public class ConvVal {
 				clstmt.close();
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}

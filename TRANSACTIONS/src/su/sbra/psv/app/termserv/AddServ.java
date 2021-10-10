@@ -2,6 +2,7 @@ package su.sbra.psv.app.termserv;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import javafx.beans.value.ChangeListener;
@@ -17,8 +18,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import su.sbra.psv.app.main.Main;
-import su.sbra.psv.app.sbalert.Msg;
 import su.sbra.psv.app.util.DBUtil;
+import su.sbra.psv.app.utils.DbUtil;
 
 public class AddServ {
 
@@ -63,7 +64,7 @@ public class AddServ {
 		try {
 			OnClose();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
@@ -121,7 +122,7 @@ public class AddServ {
 			OnClose();
 			//-----------------------------------
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
@@ -146,7 +147,7 @@ public class AddServ {
 			rs.close();
 			prp.close();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 		return ret;
@@ -175,7 +176,7 @@ public class AddServ {
 			//----------------
 			AfterLosteFocus(ACCOUNT);
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
@@ -203,7 +204,7 @@ public class AddServ {
 				}
 			});
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}

@@ -40,6 +40,7 @@ import su.sbra.psv.app.model.Transact;
 import su.sbra.psv.app.model.TransactClass;
 import su.sbra.psv.app.sbalert.Msg;
 import su.sbra.psv.app.sverka.AMRA_STMT_CALC;
+import su.sbra.psv.app.utils.DbUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -214,7 +215,7 @@ public class Attr_Controller {
 				Msg.Message("Файл сформирован в папку " + file.getPath());
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 
 	}

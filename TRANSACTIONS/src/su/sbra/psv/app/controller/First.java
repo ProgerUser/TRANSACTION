@@ -12,8 +12,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import su.sbra.psv.app.main.Main;
 import su.sbra.psv.app.model.Connect;
-import su.sbra.psv.app.sbalert.Msg;
 import su.sbra.psv.app.util.DBUtil;
+import su.sbra.psv.app.utils.DbUtil;
 
 public class First {
 
@@ -55,7 +55,8 @@ public class First {
 			imageView.setPreserveRatio(true);
 			imageView.setPickOnBounds(true);
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); 
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 }

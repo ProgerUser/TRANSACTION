@@ -98,7 +98,7 @@ public class EnterC {
 				Check_Enter();
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -120,7 +120,7 @@ public class EnterC {
 		try {
 			OnClose();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 
 	}
@@ -131,7 +131,7 @@ public class EnterC {
 			try {
 				Enter(null);
 			} catch (Exception e) {
-				Msg.Message(ExceptionUtils.getStackTrace(e));
+				DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 			}
 		}
 	}
@@ -174,7 +174,7 @@ public class EnterC {
 			conurl.getEditor().textProperty().addListener(new InputFilter(conurl, filteredItems_2, false));
 			conurl.setItems(filteredItems_2);
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 		conurl.getSelectionModel().select(0);
 	}

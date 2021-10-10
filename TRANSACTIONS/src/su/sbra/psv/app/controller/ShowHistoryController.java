@@ -15,6 +15,7 @@ import su.sbra.psv.app.model.TerminalDAO;
 import su.sbra.psv.app.model.Transact;
 import su.sbra.psv.app.model.TransactClass;
 import su.sbra.psv.app.sbalert.Msg;
+import su.sbra.psv.app.utils.DbUtil;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -255,7 +256,8 @@ public class ShowHistoryController {
 
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -308,7 +310,7 @@ public class ShowHistoryController {
 				new PrintReport().showReport(fn.getsess_id());
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 

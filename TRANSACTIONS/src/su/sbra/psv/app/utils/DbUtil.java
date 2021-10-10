@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.CallableStatement;
+import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -82,7 +83,7 @@ public class DbUtil {
 			ret = props.getProperty(prpname);
 			is.close();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 		return ret;
 	}
@@ -115,25 +116,30 @@ public class DbUtil {
 		try {
 			if (linenumber != null & (classname != null && !classname.equals("")) & (error != null && !error.equals(""))
 					& (METHODNAME != null && !METHODNAME.equals(""))) {
-//				Class.forName(JDBC_DRIVER);
-//				Properties props = new Properties();
-//				props.put("v$session.program", DbUtil.class.getName());
-//				Connection conn = DriverManager.getConnection(
-//						"jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_ + "@" + Connect.connectionURL_,
-//						props);
-//				conn.setAutoCommit(false);
-//				PreparedStatement stmt = conn.prepareStatement(" declare\n" + "pragma autonomous_transaction; begin \n"
-//						+ " insert into logs (\n" + "linenumber, \n" + "classname, \n" + "error,METHODNAME) \n"
-//						+ "values\n" + "(?,?,?,?);\n" + "commit;\n" + "end;");
-//				stmt.setLong(1, linenumber);
-//				stmt.setString(2, classname);
-//				Clob lob = conn.createClob();
-//				lob.setString(1, error);
-//				stmt.setClob(3, lob);
-//				stmt.setString(4, METHODNAME);
-//				stmt.executeUpdate();
-//				stmt.close();
-//				conn.close();
+				Class.forName(JDBC_DRIVER);
+				Properties props = new Properties();
+				props.put("v$session.program", DbUtil.class.getName());
+				Connection conn = DriverManager.getConnection(
+						"jdbc:oracle:thin:" + Connect.userID_ + "/" + Connect.userPassword_ + "@" + Connect.connectionURL_,
+						props);
+				conn.setAutoCommit(false);
+				PreparedStatement stmt = conn.prepareStatement(
+						  "declare pragma autonomous_transaction;\r\n"
+						+ "begin \r\n"
+						+ "insert into SU_SBRA_ADMIN_LOG (linenumber, classname,error,METHODNAME)\r\n"
+						+ "values\r\n"
+						+ "(?,?,?,?);\n" 
+						+ "commit;\n"
+						+ "end;");
+				stmt.setLong(1, linenumber);
+				stmt.setString(2, classname);
+				Clob lob = conn.createClob();
+				lob.setString(1, error);
+				stmt.setClob(3, lob);
+				stmt.setString(4, METHODNAME);
+				stmt.executeUpdate();
+				stmt.close();
+				conn.close();
 			}
 		} catch (Exception e) {
 			DbUtil.Log_Error(e);
@@ -167,17 +173,19 @@ public class DbUtil {
 	public static void Log_Error(Exception e) {
 		// Если есть соединение или пока нет
 		if (conn != null || Check_Connect()) {
-			e.printStackTrace();
+
 			String fullClassName = Thread.currentThread().getStackTrace()[2].getClassName();
 			String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
 			Long lineNumber = (long) Thread.currentThread().getStackTrace()[2].getLineNumber();
+			
 			Msg.Message(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e));
-			if (!Connect.userID_.toLowerCase().equals("xxi")) {
+			
+			//if (!Connect.userID_.toLowerCase().equals("xxi")) {
 				Log_To_Db(lineNumber, fullClassName, ExceptionUtils.getStackTrace(e), methodName);
-			}
+			//}
 		} else {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); 
 			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
@@ -248,14 +256,14 @@ public class DbUtil {
 			stmt.close();
 			resultSet.close();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		} finally {
 			if (resultSet != null) {
 				// Close resultSet
 				try {
 					resultSet.close();
 				} catch (SQLException e) {
-					Msg.Message(ExceptionUtils.getStackTrace(e));
+					DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 				}
 			}
 			if (stmt != null) {

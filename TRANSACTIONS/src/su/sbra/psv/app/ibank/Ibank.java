@@ -27,6 +27,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import su.sbra.psv.app.main.Main;
 import su.sbra.psv.app.sbalert.Msg;
+import su.sbra.psv.app.utils.DbUtil;
 
 /**
  * Пачулия Саид 04.06.2020.
@@ -62,7 +63,7 @@ public class Ibank {
 			props.put("v$session.program", getClass().getName());
 			conn  = DriverManager.getConnection("jdbc:oracle:thin:@" + db.getText(), props);
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -104,7 +105,7 @@ public class Ibank {
 					}
 					acc.setText(acc_);
 				} catch (Exception e) {
-					Msg.Message(ExceptionUtils.getStackTrace(e));
+					DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 				}
 			}
 		});
@@ -177,7 +178,7 @@ public class Ibank {
 			});
 			
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 	
@@ -200,14 +201,14 @@ public class Ibank {
 			crs = new CachedRowSetImpl();
 			crs.populate(resultSet);
 		} catch (SQLException e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		} finally {
 			if (resultSet != null) {
 				// Close resultSet
 				try {
 					resultSet.close();
 				} catch (SQLException e) {
-					Msg.Message(ExceptionUtils.getStackTrace(e));
+					DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 				}
 			}
 			if (stmt != null) {
@@ -215,7 +216,7 @@ public class Ibank {
 				try {
 					stmt.close();
 				} catch (SQLException e) {
-					Msg.Message(ExceptionUtils.getStackTrace(e));
+					DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 				}
 			}
 		}

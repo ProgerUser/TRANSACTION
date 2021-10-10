@@ -70,7 +70,7 @@ public class AddAction {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 			String fullClassName = Thread.currentThread().getStackTrace()[2].getClassName();
 			String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
@@ -109,7 +109,7 @@ public class AddAction {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				Msg.Message(ExceptionUtils.getStackTrace(e));
+				DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 				Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 				String fullClassName = Thread.currentThread().getStackTrace()[2].getClassName();
 				String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
@@ -177,7 +177,7 @@ public class AddAction {
 				conn.close();
 			}
 		} catch (SQLException e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 			String fullClassName = Thread.currentThread().getStackTrace()[2].getClassName();
 			String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();

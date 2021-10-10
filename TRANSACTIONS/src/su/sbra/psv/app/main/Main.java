@@ -25,6 +25,7 @@ import javafx.stage.WindowEvent;
 import su.sbra.psv.app.access.action.OdbActions;
 import su.sbra.psv.app.access.grp.GrpController;
 import su.sbra.psv.app.access.menu.OdbMNU;
+import su.sbra.psv.app.admin.log.LogList;
 import su.sbra.psv.app.admin.rescron.SBResJob;
 import su.sbra.psv.app.admin.usr.UsrC;
 import su.sbra.psv.app.audit.trigger.AuList;
@@ -33,7 +34,6 @@ import su.sbra.psv.app.contact.ContactC;
 import su.sbra.psv.app.loadamra.Amra_Transact;
 import su.sbra.psv.app.model.Connect;
 import su.sbra.psv.app.pensia.PensC;
-import su.sbra.psv.app.sbalert.Msg;
 import su.sbra.psv.app.sverka.SverkaC;
 import su.sbra.psv.app.swift.SWC;
 import su.sbra.psv.app.tr.pl.Pl;
@@ -89,10 +89,11 @@ public class Main extends Application {
 				DBUtil.dbConnect();
 				InitAppRootLayout();
 				ShFirstView();
-				TermTrView();
 //				swift2();
 //				ResMon();
 			}
+//			logger.info("\r\nOsName=" + System.getProperty("user.name").toString() + "\r\nIP="
+//					+ InetAddress.getLocalHost().getCanonicalHostName());
 //			{
 //				String sql = "SELECT :name from dual";
 //				NamedParamStatement stmt = new NamedParamStatement(DbUtil.conn, sql);
@@ -131,7 +132,7 @@ public class Main extends Application {
 			primaryStage.setResizable(true);
 			primaryStage.show();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -147,7 +148,7 @@ public class Main extends Application {
 
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -197,7 +198,7 @@ public class Main extends Application {
 			stage.initOwner(primaryStage);
 			stage.show();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -229,7 +230,7 @@ public class Main extends Application {
 				stage.show();
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -259,7 +260,7 @@ public class Main extends Application {
 			});
 			stage.show();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -361,7 +362,7 @@ public class Main extends Application {
 
 			stage.show();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -379,7 +380,7 @@ public class Main extends Application {
 			stage.initOwner(primaryStage);
 			stage.show();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -396,8 +397,7 @@ public class Main extends Application {
 			stage.initOwner(primaryStage);
 			stage.show();
 		} catch (Exception e) {
-			e.printStackTrace();
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -414,7 +414,7 @@ public class Main extends Application {
 			stage.initOwner(primaryStage);
 			stage.show();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -448,7 +448,7 @@ public class Main extends Application {
 			});
 			stage.show();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -485,7 +485,7 @@ public class Main extends Application {
 			primaryStage.show(); // Display the primary stage
 
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -509,7 +509,7 @@ public class Main extends Application {
 			primaryStage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -541,7 +541,58 @@ public class Main extends Application {
 			});
 			stage.show();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+		}
+	}
+	
+	/**
+	 * Log
+	 */
+	public static void Log() {
+		try {
+			Stage stage = new Stage();
+			FXMLLoader loader = new FXMLLoader(Main.class.getResource("/su/sbra/psv/app/admin/log/LogList.fxml"));
+
+			LogList controller = new LogList();
+			loader.setController(controller);
+
+			Parent root = loader.load();
+			stage.setScene(new Scene(root));
+			stage.getIcons().add(new Image("/icon.png"));
+			stage.setTitle("Ëמד ןנמדנאללû");
+			stage.initOwner(primaryStage);
+
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent paramT) {
+					controller.dbDisconnect();
+				}
+			});
+			stage.show();
+//			Stage stage = new Stage();
+//			Stage stage_ = (Stage) primaryStage.getScene().getWindow();
+//			FXMLLoader loader = new FXMLLoader();
+//			loader.setLocation(Main.class.getResource("/su/sbra/psv/app/admin/log/Log.fxml"));
+//
+////			SverkaC controller = new SverkaC();
+////			loader.setController(controller);
+//
+//			Parent root = loader.load();
+//			stage.setScene(new Scene(root));
+//			stage.getIcons().add(new Image("icon.png"));
+//			stage.setTitle("Ëמד ןנמדנאללû");
+//			stage.initOwner(stage_);
+//			stage.setResizable(false);
+//
+//			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+//				@Override
+//				public void handle(WindowEvent paramT) {
+//					//controller.dbDisconnect();
+//				}
+//			});
+//			stage.show();
+		} catch (Exception e) {
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -573,7 +624,7 @@ public class Main extends Application {
 			});
 			stage.show();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -588,7 +639,7 @@ public class Main extends Application {
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -602,7 +653,7 @@ public class Main extends Application {
 			BorderPane employeeOperationsView = (BorderPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -616,7 +667,7 @@ public class Main extends Application {
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -632,7 +683,7 @@ public class Main extends Application {
 			primaryStage.centerOnScreen();
 			primaryStage.show(); // Display the primary stage
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -650,7 +701,7 @@ public class Main extends Application {
 			stage.show();
 
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -668,7 +719,7 @@ public class Main extends Application {
 			stage.initOwner(primaryStage);
 			stage.show();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -686,7 +737,7 @@ public class Main extends Application {
 			stage.show();
 
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -719,7 +770,7 @@ public class Main extends Application {
 				stage.show();
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -769,7 +820,7 @@ public class Main extends Application {
 			primaryStage.setScene(scene); // Set the scene in primary stage.
 			primaryStage.show(); // Display the primary stage
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -786,7 +837,7 @@ public class Main extends Application {
 			primaryStage.setScene(scene); // Set the scene in primary stage.
 			primaryStage.show(); // Display the primary stage
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -817,7 +868,7 @@ public class Main extends Application {
 				stage.show();
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -836,7 +887,7 @@ public class Main extends Application {
 			stage.initOwner(primaryStage);
 			stage.show();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -851,7 +902,7 @@ public class Main extends Application {
 			AnchorPane employeeOperationsView = (AnchorPane) loader.load();
 			rootLayout.setCenter(employeeOperationsView);
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -886,14 +937,14 @@ public class Main extends Application {
 							Tr = true;
 							controller.dbDisconnect();
 						} catch (SQLException e) {
-							Msg.Message(ExceptionUtils.getStackTrace(e));
+							DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 						}
 					}
 				});
 				stage.show();
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -928,7 +979,7 @@ public class Main extends Application {
 			launch(args);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 }

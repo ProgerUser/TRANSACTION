@@ -31,6 +31,7 @@ import javafx.stage.WindowEvent;
 import su.sbra.psv.app.main.Main;
 import su.sbra.psv.app.sbalert.Msg;
 import su.sbra.psv.app.util.DBUtil;
+import su.sbra.psv.app.utils.DbUtil;
 
 public class Pl {
 
@@ -82,7 +83,8 @@ public class Pl {
 				}
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -123,7 +125,7 @@ public class Pl {
 								InitUsr();
 								SelRow();
 							} catch (Exception e) {
-								Msg.Message(ExceptionUtils.getStackTrace(e));
+								DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 							}
 						}
 					}
@@ -131,7 +133,7 @@ public class Pl {
 				stage.show();
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -172,7 +174,7 @@ public class Pl {
 //				}
 //			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 

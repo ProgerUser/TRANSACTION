@@ -168,7 +168,7 @@ public class UsrC {
 		try {
 			IUSRBRANCH.getSelectionModel().select(null);
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 

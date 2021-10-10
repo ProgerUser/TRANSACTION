@@ -56,9 +56,11 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import su.sbra.psv.app.main.Main;
 import su.sbra.psv.app.model.Connect;
 import su.sbra.psv.app.sbalert.Msg;
 import su.sbra.psv.app.swift.ConvConst;
+import su.sbra.psv.app.utils.DbUtil;
 
 public class ContactC {
 
@@ -126,7 +128,7 @@ public class ContactC {
 					try {
 						callStmt.execute();
 					} catch (Exception e) {
-						Msg.Message(ExceptionUtils.getStackTrace(e));
+						DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 						conn.rollback();
 						callStmt.close();
 					}
@@ -154,7 +156,7 @@ public class ContactC {
 				}
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -190,7 +192,7 @@ public class ContactC {
 			}
 
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -212,7 +214,7 @@ public class ContactC {
 					try {
 						callStmt.execute();
 					} catch (Exception e) {
-						Msg.Message(ExceptionUtils.getStackTrace(e));
+						DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 						conn.rollback();
 						callStmt.close();
 					}
@@ -237,7 +239,7 @@ public class ContactC {
 			}
 
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -262,7 +264,7 @@ public class ContactC {
 			}
 
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -304,7 +306,7 @@ public class ContactC {
 			myResultSet.close();
 
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -369,7 +371,7 @@ public class ContactC {
 			
 			conn.setAutoCommit(false);
 		} catch (SQLException | ClassNotFoundException e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -383,7 +385,7 @@ public class ContactC {
 				conn.close();
 			}
 		} catch (SQLException e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -501,7 +503,7 @@ public class ContactC {
 			// resize
 			autoResizeColumns(SBRA_LOADF_CONTACT);
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -545,7 +547,7 @@ public class ContactC {
 			// resize
 			autoResizeColumns(SBRA_CONTACT_ACC_CODE);
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -561,7 +563,7 @@ public class ContactC {
 		try {
 			LoadTableContact();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -571,7 +573,7 @@ public class ContactC {
 			LoadDate.setValue(null);
 			LoadTableContact();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -620,7 +622,7 @@ public class ContactC {
 			//
 
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 }

@@ -90,6 +90,7 @@ import su.sbra.psv.app.model.TerminalForCombo;
 import su.sbra.psv.app.sbalert.Msg;
 import su.sbra.psv.app.swift.ConvConst;
 import su.sbra.psv.app.util.DBUtil;
+import su.sbra.psv.app.utils.DbUtil;
 
 /**
  * Саид 04.04.2019.
@@ -760,7 +761,7 @@ public class Tr_Am_View_con {
 				sqlStatement.close();
 
 			} catch (SQLException e) {
-				Msg.Message(ExceptionUtils.getStackTrace(e));
+				DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 			}
 
 			if (Connect.SESSID != null) {
@@ -777,7 +778,7 @@ public class Tr_Am_View_con {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -793,7 +794,7 @@ public class Tr_Am_View_con {
 			});
 		} catch (Exception e) {
 			e.printStackTrace();
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1533,7 +1534,7 @@ public class Tr_Am_View_con {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1574,7 +1575,7 @@ public class Tr_Am_View_con {
 								System.out.println(line);
 							}
 						} catch (Exception e) {
-							Msg.Message(ExceptionUtils.getStackTrace(e));
+							DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 						}
 						return null;
 					}
@@ -1590,7 +1591,7 @@ public class Tr_Am_View_con {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1602,7 +1603,7 @@ public class Tr_Am_View_con {
 			populate_fn_sess(empData);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1653,7 +1654,7 @@ public class Tr_Am_View_con {
 				stage.show();
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1678,7 +1679,7 @@ public class Tr_Am_View_con {
 				stage.show();
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1817,7 +1818,7 @@ public class Tr_Am_View_con {
 			CONTROL.setDisable(false);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -2174,7 +2175,7 @@ public class Tr_Am_View_con {
 						System.out.println(line);
 					}
 				} catch (Exception e) {
-					Msg.Message(ExceptionUtils.getStackTrace(e));
+					DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 				}
 				return null;
 			}
@@ -2239,7 +2240,7 @@ public class Tr_Am_View_con {
 						}
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
-						Msg.Message(ExceptionUtils.getStackTrace(e));
+						DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 					}
 					return null;
 				}
@@ -2273,7 +2274,7 @@ public class Tr_Am_View_con {
 				stage.show();
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 }

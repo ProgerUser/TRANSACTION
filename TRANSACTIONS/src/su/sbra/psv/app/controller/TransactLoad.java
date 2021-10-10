@@ -39,8 +39,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import su.sbra.psv.app.main.Main;
 import su.sbra.psv.app.model.Connect;
 import su.sbra.psv.app.sbalert.Msg;
+import su.sbra.psv.app.utils.DbUtil;
 import javafx.stage.Stage;
 
 public class TransactLoad {
@@ -63,7 +65,8 @@ public class TransactLoad {
 			String clobData = sb.toString();
 			return clobData;
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -220,7 +223,7 @@ public class TransactLoad {
 				Msg.Message("Выберите сначала файл для загрузки");
 			}
 		} catch (SQLException |IOException e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -239,7 +242,7 @@ public class TransactLoad {
 			bufferedInputStream.close();
 			return encoding;
 		} catch (IOException e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -325,7 +328,7 @@ public class TransactLoad {
 			pb.start();
 			myResultSet.close();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -407,7 +410,7 @@ public class TransactLoad {
 				Msg.Message("Все плохо");
 			}
 		} catch (SQLException | IOException e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -429,7 +432,7 @@ public class TransactLoad {
 			stage.setScene(scene);
 			stage.show();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 

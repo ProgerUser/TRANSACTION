@@ -54,6 +54,7 @@
 						<MenuItem fx:id="81" mnemonicParsing="false" onAction="#Usr" text="Пользователи" />
 						<MenuItem fx:id="101" mnemonicParsing="false" onAction="#AudSet" text="Настройка аудита" />
 						<MenuItem fx:id="102" mnemonicParsing="false" onAction="#AudView" text="Просмотр аудита" />
+						<MenuItem fx:id="121" mnemonicParsing="false" onAction="#Log" text="Показать лог" />
 					</items>
 				</Menu>
 			</menus>

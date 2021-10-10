@@ -82,6 +82,7 @@ import su.sbra.psv.app.report.Report;
 import su.sbra.psv.app.sbalert.Msg;
 import su.sbra.psv.app.swift.ConvConst;
 import su.sbra.psv.app.trlist.Tr_Am_View_con;
+import su.sbra.psv.app.utils.DbUtil;
 
 public class Amra_Transact {
 
@@ -188,7 +189,7 @@ public class Amra_Transact {
 			exec.execute(task);
 // --------------------------------------
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -239,7 +240,7 @@ public class Amra_Transact {
 				// --------------------------------------
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 	
@@ -273,7 +274,7 @@ public class Amra_Transact {
 				}
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 	
@@ -291,7 +292,7 @@ public class Amra_Transact {
 			String clobData = sb.toString();
 			return clobData;
 		} catch (IOException e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -304,6 +305,12 @@ public class Amra_Transact {
 	@FXML
 	void Choose(ActionEvent event) {
 		try {
+			
+			if (!Connect.userID_.equals("AMRA_IMPORT")) {
+				Msg.Message("Пользователь не AMRA_IMPORT!");
+				return;
+			}
+			
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Выбрать файл");
 			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("XML File", "*.xml"));
@@ -324,6 +331,8 @@ public class Amra_Transact {
 						@Override
 						public Object call() throws Exception {
 							try {
+								
+								
 								//--------------------------------------
 								CallableStatement callStmt = conn
 										.prepareCall("{ ? = call z_sb_create_tr_amra.fn_sess_add(?,?,?)}");
@@ -344,7 +353,7 @@ public class Amra_Transact {
 										System.out.println(lines);
 										Msg.Message(String.join("", lines));
 									} catch (Exception e) {
-										Msg.Message(ExceptionUtils.getStackTrace(e));
+										DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 									}
 								} else {
 									callStmt.execute();
@@ -381,7 +390,7 @@ public class Amra_Transact {
 				}
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -584,7 +593,7 @@ public class Amra_Transact {
 		});
 		
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -624,7 +633,7 @@ public class Amra_Transact {
 				stage.show();
 			}
 		} catch (IOException e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 			Connect.SESSID = null;
 		}
 	}
@@ -652,7 +661,7 @@ public class Amra_Transact {
 				}
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -688,6 +697,10 @@ public class Amra_Transact {
 	@FXML
 	void Load_Transact(ActionEvent event) {
 		try {
+			if (!Connect.userID_.equals("AMRA_IMPORT")) {
+				Msg.Message("Пользователь не AMRA_IMPORT!");
+				return;
+			}
 			Add_File sel = load_file.getSelectionModel().getSelectedItem();
 
 			if (sel != null) {
@@ -724,7 +737,7 @@ public class Amra_Transact {
 											List<String> lines = capture.execute(callStmt);
 											Msg.Message(String.join(", ", lines + "\r\n"));
 										} catch (Exception e) {
-											Msg.Message(ExceptionUtils.getStackTrace(e));
+											DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 										}
 									} else {
 										callStmt.execute();
@@ -805,7 +818,7 @@ public class Amra_Transact {
 				}
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 		rcff = 0;
 		rcft = 0;
@@ -887,7 +900,7 @@ public class Amra_Transact {
 			});
 			autoResizeColumns(load_file);
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -939,7 +952,7 @@ public class Amra_Transact {
 			});
 			autoResizeColumns(LogTr);
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 	
@@ -964,7 +977,7 @@ public class Amra_Transact {
 			bufferedInputStream.close();
 			return encoding;
 		} catch (IOException e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -1008,7 +1021,7 @@ public class Amra_Transact {
 			}
 			myResultSet.close();
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -1043,7 +1056,7 @@ public class Amra_Transact {
 				stage.show();
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 	
@@ -1055,6 +1068,10 @@ public class Amra_Transact {
 	@FXML
 	void Calc_Transact(ActionEvent event) {
 		try {
+			if (!Connect.userID_.equals("AMRA_IMPORT")) {
+				Msg.Message("Пользователь не AMRA_IMPORT!");
+				return;
+			}
 			Add_File sel = load_file.getSelectionModel().getSelectedItem();
 
 			if (sel != null) {
@@ -1091,7 +1108,7 @@ public class Amra_Transact {
 											List<String> lines = capture.execute(callStmt);
 											Msg.Message(String.join(", ", lines + "\r\n"));
 										} catch (Exception e) {
-											Msg.Message(ExceptionUtils.getStackTrace(e));
+											DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 										}
 									} else {
 										callStmt.execute();
@@ -1157,7 +1174,7 @@ public class Amra_Transact {
 				}
 			}
 		} catch (Exception e) {
-			Msg.Message(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 }
