@@ -1,71 +1,72 @@
-/*******************************************************************************
- *                                                                             *
- * ScrollBar		                                 						   *
- *                                                                             *
- ******************************************************************************/
-.scroll-bar{
-	-fx-background-color: white;
+
+
+/* The main scrollbar CSS class of ListView */
+
+.mylistview .scroll-bar:horizontal z,
+.mylistview  .scroll-bar:vertical{
+    -fx-background-color:transparent;
+ 
 }
-.scroll-bar:horizontal .track,
-.scroll-bar:vertical .track {
-	-fx-background-color: white;
-	-fx-border-color:transparent;
-	-fx-background-radius: 0em;	
+ 
+ 
+/* The increment and decrement button CSS class of scrollbar */
+
+.mylistview .increment-button ,.mylistview .decrement-button {
+    -fx-background-color:transparent;
+	-fx-border-color:derive(gray,80.0%);
 }
-.scroll-bar:vertical .track-background,
-.scroll-bar:horizontal .track-background {
-	-fx-background-color: white;
-	-fx-background-insets:  0;
-	-fx-background-radius: 0em;
+ 
+ 
+/* The main scrollbar **track** CSS class  */
+
+.mylistview .scroll-bar:horizontal .track ,
+.mylistview .scroll-bar:vertical .track{
+     -fx-background-color: transparent;
+	 -fx-border-color:derive(gray,80.0%);
+	 -fx-background-radius: 0.0em;
 }
-.scroll-bar:horizontal .thumb {
-    -fx-background-color: rgb(205,205,205);
-	-fx-background-insets: 2 0 2 0;
-	-fx-background-radius: 0em;
+ 
+/* The main scrollbar **thumb** CSS class which we drag every time (movable) */
+
+.mylistview .scroll-bar:horizontal .thumb,
+.mylistview .scroll-bar:vertical .thumb {
+    -fx-background-color:derive(black,90.0%);
+	-fx-background-insets: 0.0, 0.0, 0.0;
+	-fx-background-radius: 0.0em;
+ 
 }
-.scroll-bar:vertical .thumb {
-    -fx-background-color: rgb(205,205,205);
-	-fx-background-insets: 0 2 0 2;
-	-fx-background-radius: 0em;
+
+ 
+/* ------------------------------------------------------------------------------------- */
+/** EVENT CSS **/
+/* ------------------------------------------------------------------------------------- */
+ 
+/* The main scrollbar **track** CSS class on event of "hover" and "pressed" 
+ 
+.mylistview .scroll-bar:horizontal:hover .track ,
+.mylistview .scroll-bar:horizontal:pressed .track ,
+.mylistview .scroll-bar:vertical:hover .track,
+.mylistview .scroll-bar:vertical:pressed .track{
+     -fx-background-color: derive(#434343,20.0%);
+	 -fx-opacity: 0.2;
+	 -fx-background-radius: 0.0em;
+ 
 }
-.scroll-bar:horizontal .thumb:hover,
-.scroll-bar:vertical .thumb:hover {
-    -fx-background-color: rgb(215,215,215);	
+ */
+ 
+/* The main scrollbar **thumb** CSS class on event of "hover" and "pressed" 
+
+.mylistview .scroll-bar .thumb:hover,
+.mylistview .scroll-bar .thumb:pressed{
+    -fx-background-color: derive(black,50.0%);
 }
-.scroll-bar:horizontal .thumb:pressed,
-.scroll-bar:vertical .thumb:pressed {
-    -fx-background-color: rgb(96,96,96);	
+
+
+
+.mylistview .increment-button:hover ,.mylistview .decrement-button:hover {
+    -fx-background-color:derive(gray,100.0%);
+	-fx-border-color:derive(gray,80.0%);	
+	-fx-padding:10.0px;
 }
-.scroll-bar:vertical .increment-button, .scroll-bar:vertical .decrement-button {
-    -fx-background-color:transparent;  
-    -fx-background-radius: 0em;
-    -fx-padding: 5 5 5 5;
-}
-.scroll-bar:horizontal .increment-button, .scroll-bar:horizontal .decrement-button {	
-     -fx-background-color:transparent; 
-     -fx-background-radius: 0em;
-     -fx-padding: 5 5 5 5;    
-}
-.scroll-bar:horizontal .increment-arrow {	
-	-fx-shape: "M4,17v-2.889l4.124-3.86l4.125,3.86V17l-4.125-3.375L4,17z";
-	-fx-padding: 0.25em;
-	-fx-rotate: 90;
-}
-.scroll-bar:vertical .increment-arrow {
-	-fx-shape: "M4,17v-2.889l4.124-3.86l4.125,3.86V17l-4.125-3.375L4,17z";
-	-fx-padding: 0.25em;
-	-fx-rotate: 180;
-}
-.scroll-bar:horizontal .decrement-arrow {	
-	-fx-shape: "M4,17v-2.889l4.124-3.86l4.125,3.86V17l-4.125-3.375L4,17z";
-	-fx-padding: 0.25em;
-	-fx-rotate: -90;
-}
-.scroll-bar:vertical .decrement-arrow {
-	-fx-shape: "M4,17v-2.889l4.124-3.86l4.125,3.86V17l-4.125-3.375L4,17z";
-	-fx-padding: 0.25em;
-}
-.scroll-bar:vertical:focused,
-.scroll-bar:horizontal:focused {
-    -fx-background-color: -fx-box-border,-fx-box-border,white;    
-}
+*/
+
