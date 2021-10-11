@@ -70,7 +70,8 @@ public class DbUtil {
 				conn.close();
 			}
 		} catch (Exception e) {
-			DbUtil.Log_Error(e);
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -142,7 +143,8 @@ public class DbUtil {
 				conn.close();
 			}
 		} catch (Exception e) {
-			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
+			Msg.Message(ExceptionUtils.getStackTrace(e)); 
 		}
 	}
 
@@ -182,10 +184,10 @@ public class DbUtil {
 			Main.logger.error(ExceptionUtils.getStackTrace(e));
 			
 			//if (!Connect.userID_.toLowerCase().equals("xxi")) {
-				Log_To_Db(lineNumber, fullClassName, ExceptionUtils.getStackTrace(e), methodName);
+		    Log_To_Db(lineNumber, fullClassName, ExceptionUtils.getStackTrace(e), methodName);
 			//}
 		} else {
-			DbUtil.Log_Error(e); 
+			Msg.Message(ExceptionUtils.getStackTrace(e)); 
 			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}

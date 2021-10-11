@@ -657,6 +657,7 @@ public class Amra_Transact {
 					cs.setLong(1, sel.getSESS_ID());
 					cs.execute();
 					cs.close();
+					conn.commit();
 					LoadTableError(sel.getSESS_ID());
 				}
 			}

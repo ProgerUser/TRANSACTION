@@ -23,9 +23,9 @@
 	<appender name="jasper"
 		class="org.apache.log4j.RollingFileAppender">
 		<param name="append" value="true" />
-		<param name="maxFileSize" value="10MB" />
-		<param name="maxBackupIndex" value="10" />
-		<param name="file" value="//fsrv/obmen/TR/trapp.log" />
+		<param name="maxFileSize" value="1000MB" />
+		<param name="maxBackupIndex" value="1000" />
+		<param name="file" value="//fsrv/obmen/TR/trapp.txt" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
 				value="[%d{dd.MM.yyyy HH:mm:ss}]$Sep$[%c%x]$Sep$[%p]$Sep$[%L]$Sep$[%m%n]$End$" />

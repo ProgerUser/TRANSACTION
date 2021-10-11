@@ -78,7 +78,7 @@ public class Main extends Application {
 			} else if (MODULE.equals("SWIFT")) {
 				DBUtil.dbConnect();
 				DbUtil.Db_Connect();
-				SwiftFromAbs();
+				SwiftFromMenu();
 			} else if (MODULE.equals("VTB_CONV")) {
 				DBUtil.dbConnect();
 				DbUtil.Db_Connect();

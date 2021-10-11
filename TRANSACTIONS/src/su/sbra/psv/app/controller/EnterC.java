@@ -83,7 +83,8 @@ public class EnterC {
 				sqlStatement.close();
 			}
 		} catch (Exception e) {
-			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
+			Msg.Message(ExceptionUtils.getStackTrace(e)); 
 		}
 	}
 
@@ -98,7 +99,8 @@ public class EnterC {
 				Check_Enter();
 			}
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
+			Msg.Message(ExceptionUtils.getStackTrace(e)); 
 		}
 	}
 
@@ -131,7 +133,8 @@ public class EnterC {
 			try {
 				Enter(null);
 			} catch (Exception e) {
-				DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+				Main.logger.error(ExceptionUtils.getStackTrace(e));
+				Msg.Message(ExceptionUtils.getStackTrace(e)); 
 			}
 		}
 	}
