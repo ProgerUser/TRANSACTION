@@ -160,13 +160,13 @@
                   <Separator layoutX="572.0" layoutY="10.0" orientation="VERTICAL" />
 						<Button mnemonicParsing="false" onAction="#view_trn">
 							<tooltip>
-								<Tooltip text="Реестр документов">
+								<Tooltip text="Показать проводки">
                            <font>
                               <Font size="14.0" />
                            </font></Tooltip>
 							</tooltip>
                      <graphic>
-                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="LIST_OL" size="15" />
+                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EXTERNAL_LINK" size="15" />
                      </graphic>
 						</Button>
                   <Separator layoutX="774.0" layoutY="10.0" orientation="VERTICAL" />
@@ -187,13 +187,13 @@
                   <Separator layoutX="692.0" layoutY="10.0" orientation="VERTICAL" />
 						<Button mnemonicParsing="false" onAction="#view_post">
 							<tooltip>
-								<Tooltip text="Показать проводки">
+								<Tooltip text="Реестр документов">
                            <font>
                               <Font size="14.0" />
                            </font></Tooltip>
 							</tooltip>
                      <graphic>
-                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EXTERNAL_LINK" size="15" />
+                        <FontAwesomeIconView fontSmoothingType="LCD" glyphName="LIST_OL" size="15" />
                      </graphic>
                      <font>
                         <Font size="10.0" />

@@ -803,13 +803,7 @@ public class Tr_Am_View_con {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				Alert alert = new Alert(Alert.AlertType.INFORMATION);
-				Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-				stage.getIcons().add(new Image("terminal.png"));
-				alert.setTitle("Внимание");
-				alert.setHeaderText(null);
-				alert.setContentText(text);
-				alert.showAndWait();
+				Msg.Message(text);
 			}
 		});
 	}
