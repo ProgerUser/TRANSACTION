@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.301">
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+   </padding>
+   <children>
+      <ToolBar>
+         <VBox.margin>
+            <Insets left="-5.0" right="-5.0" top="-5.0" />
+         </VBox.margin>
+         <items>
+            <Button mnemonicParsing="false">
+               <graphic>
+                  <FontAwesomeIconView />
+               </graphic>
+            </Button>
+         </items>
+      </ToolBar>
+      <TableView fx:id="PensRow" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="800.0" VBox.vgrow="ALWAYS">
+        <columns>
+          <TableColumn fx:id="PART" prefWidth="75.0" text="PART" />
+            <TableColumn fx:id="ROW_NUM" prefWidth="75.0" text="ROW_NUM" />
+            <TableColumn fx:id="LAST_NAME" prefWidth="75.0" text="LAST_NAME" />
+            <TableColumn fx:id="FIRST_NAME" prefWidth="75.0" text="FIRST_NAME" />
+            <TableColumn fx:id="MIDDLE_NAME" prefWidth="75.0" text="MIDDLE_NAME" />
+            <TableColumn fx:id="COLUMN5" prefWidth="75.0" text="COLUMN5" />
+            <TableColumn fx:id="ACC" prefWidth="75.0" text="ACC" />
+            <TableColumn fx:id="SUMM" prefWidth="75.0" text="SUMM" />
+            <TableColumn fx:id="BDATE" prefWidth="75.0" text="BDATE" />
+            <TableColumn fx:id="COLUMN9" prefWidth="75.0" text="COLUMN9" />
+            <TableColumn fx:id="COLUMN10" prefWidth="75.0" text="COLUMN10" />
+            <TableColumn fx:id="ACC_VTB" prefWidth="75.0" text="ACC_VTB" />
+            <TableColumn fx:id="COLUMN12" prefWidth="75.0" text="COLUMN12" />
+            <TableColumn fx:id="SNILS" prefWidth="75.0" text="SNILS" />
+            <TableColumn fx:id="ABS_BDATE" prefWidth="75.0" text="ABS_BDATE" />
+            <TableColumn fx:id="CCUSSNILS" prefWidth="75.0" text="CCUSSNILS" />
+        </columns>
+      </TableView>
+   </children>
+</VBox>

@@ -19,75 +19,121 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox minHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1" fx:controller="su.sbra.psv.app.pensia.PensC">
+<VBox minHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.301" xmlns:fx="http://javafx.com/fxml/1" fx:controller="su.sbra.psv.app.pensia.PensC">
 	<children>
       <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="floating" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
         <tabs>
           <Tab text="Разделить файл">
                <content>
-                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+               <StackPane>
+                  <VBox fx:id="SepRoot" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
                      <children>
-                        <ToolBar fx:id="TLB" VBox.vgrow="ALWAYS">
-                           <items>
-                        		<Button fx:id="separate" disable="false" mnemonicParsing="false" onAction="#separate">
-                        			<tooltip>
-                        				<Tooltip text="Разделить файл">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font></Tooltip>
-                        			</tooltip>
-                                 <graphic>
-                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FOLDER_OPEN_ALT" size="15" />
-                                 </graphic>
-                                 <font>
-                                    <Font size="10.0" />
-                                 </font>
-                        		</Button>
-                              <Separator layoutX="275.0" layoutY="10.0" orientation="VERTICAL" />
-                        		<Button fx:id="save_sep" disable="false" mnemonicParsing="false" onAction="#save_seps">
-                        			<tooltip>
-                        				<Tooltip text="Сохранить файлы">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font></Tooltip>
-                        			</tooltip>
-                                 <graphic>
-                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILE_EXCEL_ALT" size="15" />
-                                 </graphic>
-                        		</Button>
-                              <Separator orientation="VERTICAL" />
-                              <Button disable="false" mnemonicParsing="false" onAction="#DeleteLoadSep">
-                                 <tooltip>
-                                    <Tooltip text="Удалить часть">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font></Tooltip>
-                                 </tooltip>
-                                 <graphic>
-                                    <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TRASH_ALT" size="15" />
-                                 </graphic>
-                              </Button>
-                              <Separator layoutX="86.0" layoutY="10.0" orientation="VERTICAL" />
-                              <CheckBox fx:id="pensrachk" mnemonicParsing="false" onAction="#pensrachk" text="Загрузка РА пенсии" />
-                              <Separator layoutX="131.0" layoutY="10.0" orientation="VERTICAL" />
-                           </items>
-                           <VBox.margin>
-                              <Insets left="-5.0" right="-5.0" top="-5.0" />
-                           </VBox.margin>
-                        </ToolBar>
-                  		<TableView fx:id="sep_pens" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="mylistview" stylesheets="/ScrPane.css" VBox.vgrow="ALWAYS">
-                  			<columns>
-                  				<TableColumn fx:id="ID" prefWidth="75.0" text="ИД" />
-                  				<TableColumn fx:id="DateLoad" prefWidth="109.0" text="Дата загрузки" />
-                  				<TableColumn fx:id="Filename" prefWidth="144.0" text="Название файла" />
-                  			</columns>
-                  		</TableView>
-                        <ProgressBar fx:id="Progress" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" progress="0.0" />
+                           <TitledPane alignment="CENTER" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-border-color: black;" text="Файлы" VBox.vgrow="ALWAYS">
+                              <content>
+                                 <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+                                    <padding>
+                                       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </padding>
+                                    <children>
+                                    <ToolBar fx:id="TLB" VBox.vgrow="ALWAYS">
+                                       <items>
+                                    		<Button fx:id="separate" disable="false" mnemonicParsing="false" onAction="#separate">
+                                    			<tooltip>
+                                    				<Tooltip text="Разделить файл">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                   </Tooltip>
+                                    			</tooltip>
+                                             <graphic>
+                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FOLDER_OPEN_ALT" size="15" />
+                                             </graphic>
+                                             <font>
+                                                <Font size="10.0" />
+                                             </font>
+                                    		</Button>
+                                          <Separator layoutX="275.0" layoutY="10.0" orientation="VERTICAL" />
+                                    		<Button fx:id="save_sep" disable="false" mnemonicParsing="false" onAction="#save_seps">
+                                    			<tooltip>
+                                    				<Tooltip text="Сохранить файлы">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                   </Tooltip>
+                                    			</tooltip>
+                                             <graphic>
+                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FILE_EXCEL_ALT" size="15" />
+                                             </graphic>
+                                    		</Button>
+                                          <Separator orientation="VERTICAL" />
+                                          <Button disable="false" mnemonicParsing="false" onAction="#DeleteLoadSep">
+                                             <tooltip>
+                                                <Tooltip text="Удалить часть">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                   </Tooltip>
+                                             </tooltip>
+                                             <graphic>
+                                                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TRASH_ALT" size="15" />
+                                             </graphic>
+                                          </Button>
+                                          <Separator layoutX="86.0" layoutY="10.0" orientation="VERTICAL" />
+                                          <CheckBox fx:id="pensrachk" mnemonicParsing="false" onAction="#pensrachk" text="Загрузка РА пенсии" />
+                                          <Separator layoutX="131.0" layoutY="10.0" orientation="VERTICAL" />
+                                             <Button disable="false" layoutX="98.0" layoutY="10.0" mnemonicParsing="false" onAction="#ViewList">
+                                                <tooltip>
+                                                   <Tooltip text="Удалить часть">
+                                                      <font>
+                                                         <Font size="14.0" />
+                                                      </font>
+                                                   </Tooltip>
+                                                </tooltip>
+                                                <graphic>
+                                                   <FontAwesomeIconView fontSmoothingType="LCD" glyphName="LIST_OL" size="15" />
+                                                </graphic>
+                                             </Button>
+                                       </items>
+                                       <VBox.margin>
+                                          <Insets left="-5.0" right="-5.0" top="-5.0" />
+                                       </VBox.margin>
+                                    </ToolBar>
+                              		<TableView fx:id="sep_pens" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="250.0" styleClass="mylistview" stylesheets="/ScrPane.css" VBox.vgrow="ALWAYS">
+                              			<columns>
+                              				<TableColumn fx:id="ID" prefWidth="75.0" text="ИД" />
+                              				<TableColumn fx:id="DateLoad" prefWidth="109.0" text="Дата загрузки" />
+                              				<TableColumn fx:id="Filename" prefWidth="144.0" text="Название файла" />
+                              			</columns>
+                              		</TableView>
+                                    <ProgressBar fx:id="Progress" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" progress="0.0" />
+                                    </children>
+                                 </VBox>
+                              </content>
+                           </TitledPane>
+                           <TitledPane alignment="CENTER" animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-border-color: black;" text="Части" VBox.vgrow="ALWAYS">
+                              <content>
+                                 <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+                                    <padding>
+                                       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </padding>
+                                    <children>
+                                       <TableView fx:id="PENSFILES" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="150.0" VBox.vgrow="ALWAYS">
+                                         <columns>
+                                           <TableColumn fx:id="PART_FILE" prefWidth="122.0" text="Часть" />
+                                             <TableColumn fx:id="FILE_KB" prefWidth="122.0" text="Килобайт" />
+                                         </columns>
+                                       </TableView>
+                                    </children>
+                                 </VBox>
+                              </content>
+                           </TitledPane>
                      </children>
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
+                        <padding>
+                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        </padding>
                   </VBox>
+                     <ProgressIndicator fx:id="ResPB" maxHeight="50.0" maxWidth="50.0" visible="false" />
+                  </StackPane>
                </content>
             </Tab>
           <Tab text="Загрузить">

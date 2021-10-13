@@ -52,8 +52,11 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -76,11 +79,13 @@ import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.Pair;
 import javafx.util.converter.IntegerStringConverter;
@@ -97,14 +102,19 @@ import su.sbra.psv.app.utils.DbUtil;
  */
 public class PensC {
 
+    @FXML
+    private TableView<PENSFILES> PENSFILES;
+    @FXML
+    private TableColumn<PENSFILES, Integer> PART_FILE;
+    @FXML
+    private TableColumn<PENSFILES, Double> FILE_KB;
+    
 	@FXML
 	private ToolBar TLB;
 	@FXML
 	private ToolBar PTLB;
-
 	@FXML
 	private ProgressBar Progress;
-
 	@FXML
 	private TableView<pensmodel> sep_pens;
 	@FXML
@@ -178,6 +188,11 @@ public class PensC {
 	private Button DelFilePens;
 	@FXML
 	private ProgressIndicator PrgInd;
+	
+	@FXML
+	private ProgressIndicator ResPB;
+	@FXML
+	private VBox SepRoot;
 
 	@FXML
 	void pensrachk(ActionEvent event) {
@@ -255,6 +270,10 @@ public class PensC {
 			NAMES.setCellValueFactory(cellData -> cellData.getValue().NAMESProperty());
 			CNT.setCellValueFactory(cellData -> cellData.getValue().CNTProperty().asObject());
 			SUMM.setCellValueFactory(cellData -> cellData.getValue().SUMMProperty().asObject());
+			
+			FILE_KB.setCellValueFactory(cellData -> cellData.getValue().FILE_KBProperty().asObject());
+			PART_FILE.setCellValueFactory(cellData -> cellData.getValue().PART_FILEProperty().asObject());
+			
 
 			ID.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
 			Filename.setCellValueFactory(cellData -> cellData.getValue().filenameProperty());
@@ -500,6 +519,26 @@ public class PensC {
 				}
 			});
 
+			//-------------
+			sep_pens.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> {
+				pensmodel sel = sep_pens.getSelectionModel().getSelectedItem();
+				if (sel != null) {
+					LoadTableParts(sel.getid());
+				}
+			});
+
+			FILE_KB.setCellFactory(tc -> new TableCell<PENSFILES, Double>() {
+
+				@Override
+				protected void updateItem(Double price, boolean empty) {
+					super.updateItem(price, empty);
+					if (empty) {
+						setText(null);
+					} else {
+						setText(currencyFormat.format(price));
+					}
+				}
+			});
 		} catch (Exception e) {
 			DbUtil.Log_Error(e); 
 			Main.logger.error(ExceptionUtils.getStackTrace(e));
@@ -607,6 +646,48 @@ public class PensC {
 			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
+	
+	/**
+	 * Initialize table
+	 */
+	void LoadTableParts(Integer id) {
+		try {
+			PreparedStatement prp = conn.prepareStatement(" select PART_FILE, DBMS_LOB.GetLength(FILE_CL) / 1024 File_Kb\n"
+					+ "  from Z_SB_PENS_4FILE_FILES t\n"
+					+ " where load_id = ?\n"
+					+ " order by PART_FILE asc");
+			prp.setInt(1, id);
+			ResultSet rs = prp.executeQuery();
+			ObservableList<PENSFILES> cus_list = FXCollections.observableArrayList();
+			// looping
+			while (rs.next()) {
+				PENSFILES list = new PENSFILES();
+				list.setPART_FILE(rs.getInt("PART_FILE"));
+				list.setFILE_KB(rs.getDouble("FILE_KB"));
+				cus_list.add(list);
+			}
+			// add data
+			PENSFILES.setItems(cus_list);
+			// close
+			prp.close();
+			rs.close();
+			// add filter
+			TableFilter<PENSFILES> tableFilter = TableFilter.forTableView(PENSFILES).apply();
+			tableFilter.setSearchStrategy((input, target) -> {
+				try {
+					return target.toLowerCase().contains(input.toLowerCase());
+				} catch (Exception e) {
+					return false;
+				}
+			});
+			// resize
+			autoResizeColumns(PENSFILES);
+		} catch (Exception e) {
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
+		}
+	}
+		
 
 	String PensCountS = "";
 	String PensSumS = "";
@@ -908,6 +989,45 @@ public class PensC {
 	}
 
 	/**
+	 * Показать форму со списком пенсионеров
+	 * @param event
+	 */
+	@FXML
+	void ViewList(ActionEvent event) {
+		try {
+			pensmodel pens = sep_pens.getSelectionModel().getSelectedItem();
+			if (pens != null) {
+//				Stage stage = new Stage();
+//				Stage stage_ = (Stage) sep_pens.getScene().getWindow();
+//				FXMLLoader loader = new FXMLLoader();
+//				loader.setLocation(getClass().getResource("/su/sbra/psv/app/pensia/ViewPensList.fxml"));
+//
+//				ViewPensList controller = new ViewPensList();
+//				controller.SetClass(pens);
+//				loader.setController(controller);
+//
+//				Parent root = loader.load();
+//				stage.setScene(new Scene(root));
+//				stage.getIcons().add(new Image("icon.png"));
+//				stage.setTitle("Список: " +pens.getfilename() );
+//				stage.initOwner(stage_);
+//				stage.setResizable(true);
+//				// stage.initModality(Modality.WINDOW_MODAL);
+//				stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+//					@Override
+//					public void handle(WindowEvent paramT) {
+//						
+//					}
+//				});
+//				stage.show();
+			}
+		} catch (Exception e) {
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+	/**
 	 * Сохранить
 	 * 
 	 * @param event
@@ -970,7 +1090,7 @@ public class PensC {
 		}
 	}
 
-	public static void autoResizeColumns(TableView<?> table) {
+	public void autoResizeColumns(TableView<?> table) {
 		// Set the right policy
 		table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
 		table.getColumns().stream().forEach((column) -> {
@@ -1072,61 +1192,91 @@ public class PensC {
 
 			File file = fileChooser.showOpenDialog(null);
 			if (file != null) {
+				// ----------------------------------
+				ResPB.setVisible(true);
+				SepRoot.setDisable(true);
+				Task<Object> task = new Task<Object>() {
+					@Override
+					public Object call() throws Exception {
+						try {
+							// --------------------------------------
+							CallableStatement callStmt = null;
+							String reviewContent = null;
+							callStmt = conn.prepareCall("{ ? = call z_sb_pens_sepfile.z_sb_pens_sepfile(?,?)}");
 
-				CallableStatement callStmt = null;
-				String reviewContent = null;
-				callStmt = conn.prepareCall("{ ? = call z_sb_pens_sepfile.z_sb_pens_sepfile(?,?)}");
-
-				String reviewStr = readFile(file.getParent() + "\\" + file.getName());
-				Clob clob = conn.createClob();
-				clob.setString(1, reviewStr);
-				callStmt.registerOutParameter(1, Types.VARCHAR);
+							String reviewStr = readFile(file.getParent() + "\\" + file.getName());
+							Clob clob = conn.createClob();
+							clob.setString(1, reviewStr);
+							callStmt.registerOutParameter(1, Types.VARCHAR);
 
 //				File blob = new File(file.getParent() + "\\" + file.getName());
 //				FileInputStream in = new FileInputStream(blob);
 //				callStmt.setBinaryStream(2, in, (int)blob.length());
-				callStmt.setClob(2, clob);
+							
+							callStmt.setClob(2, clob);
 
-				callStmt.setString(3, file.getName());
-				callStmt.execute();
-				reviewContent = callStmt.getString(1);
+							callStmt.setString(3, file.getName());
+							callStmt.execute();
+							reviewContent = callStmt.getString(1);
 
-				String[] parts = reviewContent.split(";");
-				String part1 = parts[0].trim();
-				String part2 = parts[1].trim();
-				System.out.println(part1);
-				System.out.println(part2);
+							String[] parts = reviewContent.split(";");
+							String part1 = parts[0].trim();
+							String part2 = parts[1].trim();
+							System.out.println(part1);
+							System.out.println(part2);
 
-				if (part2.equals("Error")) {
-					System.out.println("Error--");
-					write_error(conn, file, Integer.valueOf(part1));
-				} else if (part2.equals("ok")) {
-					System.out.println("OK--");
+							if (part2.equals("Error")) {
+								System.out.println("Error--");
+								write_error(conn, file, Integer.valueOf(part1));
+							} else if (part2.equals("ok")) {
+								System.out.println("OK--");
 
-					PreparedStatement prp_part = conn.prepareStatement("SELECT * FROM SBRA_YEAR_BET ORDER BY PART ASC");
-					ResultSet rs = prp_part.executeQuery();
-					while (rs.next()) {
-						String str = "";
-						Clob clobb = conn.createClob();
-						str = retclob(rs.getInt("PART"), Integer.valueOf(part1), conn, file);
-						clobb.setString(1, str);
-						String upd = "insert into Z_SB_PENS_4FILE_FILES (PART_FILE,FILE_CL,LOAD_ID) values  (?,?,?) ";
-						System.out.println(upd);
-						PreparedStatement prepStmt = conn.prepareStatement(upd);
-						prepStmt.setInt(1, rs.getInt("PART"));
-						prepStmt.setClob(2, clobb);
-						prepStmt.setInt(3, Integer.valueOf(part1));
-						prepStmt.executeUpdate();
+								PreparedStatement prp_part = conn
+										.prepareStatement("SELECT * FROM SBRA_YEAR_BET ORDER BY PART ASC");
+								ResultSet rs = prp_part.executeQuery();
+								while (rs.next()) {
+									String str = "";
+									Clob clobb = conn.createClob();
+									str = retclob(rs.getInt("PART"), Integer.valueOf(part1), conn, file);
+									clobb.setString(1, str);
+									String upd = "insert into Z_SB_PENS_4FILE_FILES (PART_FILE,FILE_CL,LOAD_ID) values  (?,?,?) ";
+									System.out.println(upd);
+									PreparedStatement prepStmt = conn.prepareStatement(upd);
+									prepStmt.setInt(1, rs.getInt("PART"));
+									prepStmt.setClob(2, clobb);
+									prepStmt.setInt(3, Integer.valueOf(part1));
+									prepStmt.executeUpdate();
+								}
+								conn.commit();
+								
+								/* Вывод сообщения */
+								
+								Platform.runLater(() -> {
+									try {
+										Msg.Message("Файлы сформированы в папку=" + file.getParent());
+										ObservableList<pensmodel> empData = TerminalDAO.Z_SB_PENS_4FILE();
+										populate(empData);
+										autoResizeColumns(sep_pens);
+										TableFilter.forTableView(sep_pens).apply();
+									} catch (Exception e) {
+										ShowMes(ExceptionUtils.getStackTrace(e));
+									}
+								});
+							}
+						} catch (Exception e) {
+							ShowMes(ExceptionUtils.getStackTrace(e));
+						}
+						// ----------------------------------
+						return null;
 					}
-
-					conn.commit();
-					/* Вывод сообщения */
-					Msg.Message("Файлы сформированы в папку=" + file.getParent());
-					ObservableList<pensmodel> empData = TerminalDAO.Z_SB_PENS_4FILE();
-					populate(empData);
-					autoResizeColumns(sep_pens);
-					TableFilter.forTableView(sep_pens).apply();
-				}
+				};
+				task.setOnFailed(e -> ShowMes(task.getException().getMessage()));
+				task.setOnSucceeded(e -> {
+					ResPB.setVisible(false);
+					SepRoot.setDisable(false);
+				});
+				exec.execute(task);
+				// ---------------
 			}
 		} catch (Exception e) {
 			try {
@@ -1134,7 +1284,8 @@ public class PensC {
 			} catch (SQLException e1) {
 				Msg.Message(ExceptionUtils.getStackTrace(e1));
 			}
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -2323,7 +2474,6 @@ public class PensC {
 				Msg.Message(error);
 			}
 		});
-
 	}
 
 	/**
