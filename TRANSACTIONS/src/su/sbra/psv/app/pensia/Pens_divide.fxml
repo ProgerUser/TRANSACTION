@@ -214,7 +214,7 @@
                                        <children>
                                           <StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
                                              <children>
-                                                <TableView fx:id="PENS_LOAD_ROWSUM" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" styleClass="mylistview" stylesheets="/ScrPane.css">
+                                                <TableView fx:id="PENS_LOAD_ROWSUM" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" styleClass="mylistview" stylesheets="/TableView.css">
                                                   <columns>
                                                       <TableColumn fx:id="CHK" prefWidth="50.0" />
                                                     <TableColumn fx:id="LOAD_ID" prefWidth="75.0" text="ИД" />

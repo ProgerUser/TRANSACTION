@@ -76,6 +76,7 @@ import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -494,6 +495,7 @@ public class PensC {
 				public TableCell<PENS_LOAD_ROWSUM, Boolean> call(TableColumn<PENS_LOAD_ROWSUM, Boolean> p) {
 					CheckBoxTableCell<PENS_LOAD_ROWSUM, Boolean> cell = new CheckBoxTableCell<PENS_LOAD_ROWSUM, Boolean>();
 					cell.setAlignment(Pos.CENTER);
+					cell.setFont(Font.font(16));
 					return cell;
 				}
 			});
