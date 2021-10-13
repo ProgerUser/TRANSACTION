@@ -11,19 +11,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.Properties;
-
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
-
 import com.sun.rowset.CachedRowSetImpl;
-
 import su.sbra.psv.app.main.Main;
 import su.sbra.psv.app.model.Connect;
 import su.sbra.psv.app.model.SqlMap;
 import su.sbra.psv.app.sbalert.Msg;
 import su.sbra.psv.app.utils.DbUtil;
 
-@SuppressWarnings("restriction")
+
 public class DBUtil {
 	// Declare JDBC Driver
 	private static final String JDBC_DRIVER = "oracle.jdbc.OracleDriver";

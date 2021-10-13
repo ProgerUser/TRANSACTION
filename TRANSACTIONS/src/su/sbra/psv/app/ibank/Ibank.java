@@ -32,7 +32,7 @@ import su.sbra.psv.app.utils.DbUtil;
 /**
  * Пачулия Саид 04.06.2020.
  */
-@SuppressWarnings({"restriction" })
+
 public class Ibank {
 
 	@FXML

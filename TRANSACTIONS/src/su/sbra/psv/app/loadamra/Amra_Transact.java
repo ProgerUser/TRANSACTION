@@ -71,8 +71,8 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.converter.LongStringConverter;
@@ -331,8 +331,6 @@ public class Amra_Transact {
 						@Override
 						public Object call() throws Exception {
 							try {
-								
-								
 								//--------------------------------------
 								CallableStatement callStmt = conn
 										.prepareCall("{ ? = call z_sb_create_tr_amra.fn_sess_add(?,?,?)}");
@@ -369,14 +367,30 @@ public class Amra_Transact {
 									Msg.Message(part2);
 								} else if (part1.equals("Inserted")) {
 									LoadTable("", date_load.getValue());
+									//---------------------------------
+									Long loadid = Long.valueOf(part2);
+									// Select Table Row
+									for (Add_File fl : load_file.getItems()) {
+										if (fl.getSESS_ID().equals(loadid)) {
+											Platform.runLater(new Runnable() {
+												@Override
+												public void run() {
+													load_file.requestFocus();
+													load_file.getSelectionModel().select(fl);
+													load_file.scrollTo(fl);
+												}
+											});
+										}
+									}
+									//----------------------------------
 								} else if (part1.equals("Dublicate")) {
 									Msg.Message("Файл был уже загружен!");
 								}
 								callStmt.close();
-								//----------------------------------
 							} catch (Exception e) {
 								ShowMes(ExceptionUtils.getStackTrace(e));
 							}
+							//----------------------------------
 							return null;
 						}
 					};

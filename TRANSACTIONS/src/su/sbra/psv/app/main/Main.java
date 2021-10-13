@@ -64,40 +64,40 @@ public class Main extends Application {
 			Main.primaryStage.setTitle("Транзакции");
 			logger.setLevel(Level.INFO);
 
-//			if (MODULE == null) {
-//				Logon();
-//			} else if (MODULE.equals("DEBTINFO")) {
-//				DBUtil.dbConnect();
-//				DbUtil.Db_Connect();
-//				Debtinfo();
-//			} else if (MODULE.equals("BUH")) {
-//				DBUtil.dbConnect();
-//				DbUtil.Db_Connect();
-//				InitAppRootLayout();
-//				ShFirstView();
-//			} else if (MODULE.equals("SWIFT")) {
-//				DBUtil.dbConnect();
-//				DbUtil.Db_Connect();
-//				SwiftFromMenu();
-//			} else if (MODULE.equals("VTB_CONV")) {
-//				DBUtil.dbConnect();
-//				DbUtil.Db_Connect();
-//				ConvVal();
-//			}
 
-			{
-				Connect.connectionURL_ = "10.111.64.21:1521/ODB";
-				Connect.userID_ = "saidp";
-				Connect.userPassword_ = "vector165";
-				DbUtil.Db_Connect();
+			if (MODULE == null) {
+				Logon();
+			} else if (MODULE.equals("DEBTINFO")) {
 				DBUtil.dbConnect();
+				DbUtil.Db_Connect();
+				Debtinfo();
+			} else if (MODULE.equals("BUH")) {
+				DBUtil.dbConnect();
+				DbUtil.Db_Connect();
 				InitAppRootLayout();
 				ShFirstView();
+			} else if (MODULE.equals("SWIFT")) {
+				DBUtil.dbConnect();
+				DbUtil.Db_Connect();
+				SwiftFromMenu();
+			} else if (MODULE.equals("VTB_CONV")) {
+				DBUtil.dbConnect(); 
+				DbUtil.Db_Connect();
+				ConvVal();
+			}
+
+			{
+//				Connect.connectionURL_ = "10.111.64.21:1521/ODB";
+//				Connect.userID_ = "saidp";
+//				Connect.userPassword_ = "";
+//				DbUtil.Db_Connect();
+//				DBUtil.dbConnect();
+//				InitAppRootLayout();
+//				ShFirstView();
 //				swift2();
 //				ResMon();
 			}
-//			logger.info("\r\nOsName=" + System.getProperty("user.name").toString() + "\r\nIP="
-//					+ InetAddress.getLocalHost().getCanonicalHostName());
+			//logger.info("??");
 //			{
 //				String sql = "SELECT :name from dual";
 //				NamedParamStatement stmt = new NamedParamStatement(DbUtil.conn, sql);
@@ -129,14 +129,22 @@ public class Main extends Application {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("/su/sbra/psv/app/rootlayout/RootLayout.fxml"));
+
+//			StackPane stp = (BorderPane) loader.load();
+//			Scene scene = new Scene(stp);
+
 			rootLayout = (BorderPane) loader.load();
 			Scene scene = new Scene(rootLayout);
+			BorderPane bp = (BorderPane) scene.lookup("#Root");
+			rootLayout = bp;
+
 			primaryStage.setScene(scene);
 			primaryStage.centerOnScreen();
 			primaryStage.setResizable(true);
 			primaryStage.show();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 

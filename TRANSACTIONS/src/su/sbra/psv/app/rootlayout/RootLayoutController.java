@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import javafx.application.Platform;
@@ -22,7 +23,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import su.sbra.psv.app.main.Main;
@@ -40,6 +43,10 @@ public class RootLayoutController {
 	private MenuItem adminmenuitems;
 	@FXML
 	private MenuBar menubar;
+	@FXML
+	private BorderPane Root;
+	@FXML
+	private ProgressIndicator PB;
 
 	/**
 	 * Для сверки
@@ -57,10 +64,11 @@ public class RootLayoutController {
 		try {
 			Main.TermClBkSverka();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
-	
+
 	/**
 	 * Для сверки
 	 * 
@@ -71,7 +79,8 @@ public class RootLayoutController {
 		try {
 			Main.Log();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -80,7 +89,8 @@ public class RootLayoutController {
 		try {
 			Main.SbraResourcesMonitor();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -95,7 +105,8 @@ public class RootLayoutController {
 		try {
 			Main.SwiftFromAbs();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -104,25 +115,28 @@ public class RootLayoutController {
 		try {
 			Main.PlAccessRashod();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
-	
+
 	@FXML
 	void AudView(ActionEvent event) {
 		try {
 			Main.AudView();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
-	
+
 	@FXML
 	void AudSet(ActionEvent event) {
 		try {
 			Main.AudSet();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -140,7 +154,8 @@ public class RootLayoutController {
 		try {
 			Main.Debtinfo();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -168,7 +183,8 @@ public class RootLayoutController {
 		try {
 			Main.BkIbank();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -177,7 +193,8 @@ public class RootLayoutController {
 		try {
 			Main.GrantAccessMenu();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -186,7 +203,8 @@ public class RootLayoutController {
 		try {
 			Main.TermTrView();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -195,16 +213,19 @@ public class RootLayoutController {
 		try {
 			Main.TermTrLoadHist();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
 	@FXML
 	void TermDealView(ActionEvent event) {
 		try {
-			Main.TermDealView();;
+			Main.TermDealView();
+			;
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -213,7 +234,8 @@ public class RootLayoutController {
 		try {
 			Main.TermTrLoad();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -222,7 +244,8 @@ public class RootLayoutController {
 		try {
 			Main.TerminalControl();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -231,16 +254,18 @@ public class RootLayoutController {
 		try {
 			Main.CassaOvPlat();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
-	
+
 	@FXML
 	void Usr(ActionEvent event) {
 		try {
 			Main.UserControl();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -249,7 +274,8 @@ public class RootLayoutController {
 		try {
 			Main.ContactComiss();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -283,7 +309,8 @@ public class RootLayoutController {
 				stage.show();
 			}
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -353,7 +380,8 @@ public class RootLayoutController {
 					}
 				} catch (IOException e) {
 
-					DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+					DbUtil.Log_Error(e);
+					Main.logger.error(ExceptionUtils.getStackTrace(e));
 				}
 				return null;
 			}
@@ -368,7 +396,8 @@ public class RootLayoutController {
 		try {
 			Main.GrantAccessAction();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -377,7 +406,8 @@ public class RootLayoutController {
 		try {
 			Main.GrantAccessGrp();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -386,7 +416,8 @@ public class RootLayoutController {
 		try {
 			Main.TermServiceCtrl();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -412,7 +443,8 @@ public class RootLayoutController {
 			}
 			prepStmt.close();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 		return ret;
 	}
@@ -466,7 +498,8 @@ public class RootLayoutController {
 			}
 			prepStmt.close();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 		return ret;
 	}
@@ -485,36 +518,79 @@ public class RootLayoutController {
 		try {
 			Main.sep();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
 	@FXML
 	private void initialize() {
-		final SplashScreen splash = SplashScreen.getSplashScreen();
-		if (splash != null) {
-			splash.close();
-		}
-		exec = Executors.newCachedThreadPool((runnable) -> {
-			Thread t = new Thread(runnable);
-			t.setDaemon(true);
-			return t;
-		});
-
-		menubar.getMenus().forEach(menu -> {
-			if (chk_menu(Long.valueOf(menu.getId()), Connect.userID_) == 1) {
-				menu.setVisible(true);
-			} else {
-				menu.setVisible(false);
+		try {
+			
+			final SplashScreen splash = SplashScreen.getSplashScreen();
+			if (splash != null) {
+				splash.close();
 			}
-			menu.getItems().forEach(menuItem -> {
-				if (chk_menu(Long.valueOf(menuItem.getId()), Connect.userID_) == 1) {
-					menuItem.setVisible(true);
-				} else {
-					menuItem.setVisible(false);
-				}
+			
+			exec = Executors.newCachedThreadPool((runnable) -> {
+				Thread t = new Thread(runnable);
+				t.setDaemon(true);
+				return t;
 			});
-		});
 
+			// ----------------------------------
+			PB.setVisible(true);
+			Root.setDisable(true);
+			Task<Object> task = new Task<Object>() {
+				@Override
+				public Object call() throws Exception {
+					try {
+						// --------------------------------------
+						Platform.runLater(() -> {
+							menubar.getMenus().forEach(menu -> {
+								if (chk_menu(Long.valueOf(menu.getId()), Connect.userID_) == 1) {
+									menu.setVisible(true);
+								} else {
+									menu.setVisible(false);
+								}
+								menu.getItems().forEach(menuItem -> {
+									if (chk_menu(Long.valueOf(menuItem.getId()), Connect.userID_) == 1) {
+										menuItem.setVisible(true);
+									} else {
+										menuItem.setVisible(false);
+									}
+								});
+							});
+						});
+						
+					} catch (Exception e) {
+						ShowMes(ExceptionUtils.getStackTrace(e));
+					}
+					// ----------------------------------
+					return null;
+				}
+			};
+			task.setOnFailed(e -> ShowMes(ExceptionUtils.getStackTrace(task.getException())));
+			task.setOnSucceeded(e -> {
+				PB.setVisible(false);
+				Root.setDisable(false);
+			});
+			exec.execute(task);
+			// ---------------
+		} catch (Exception e) {
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+	/**
+	 * Error message in new thread
+	 * 
+	 * @param error
+	 */
+	void ShowMes(String error) {
+		Platform.runLater(() -> {
+			Msg.Message(error);
+		});
 	}
 }
