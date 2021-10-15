@@ -3227,13 +3227,14 @@ public class SWC {
 	 */
 	Integer selrow;
 
+	BasicFileAttributes attr = null;
 	/**
 	 * Инициализация данных
 	 */
 	void InitTable() {
 		try {
 			if (System.getenv(FolderName) != null) {
-
+				
 				SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 				SimpleDateFormat formatdt = new SimpleDateFormat("dd.MM.yyyy");
 				DateTimeFormatter formatterwt = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
@@ -3250,9 +3251,17 @@ public class SWC {
 				if (directoryListing != null) {
 					for (File child : directoryListing) {
 						Path filePath = child.toPath();
+						attr = null;
 						// Атрибуты файла...
-						BasicFileAttributes attr = java.nio.file.Files.readAttributes(filePath,
-								BasicFileAttributes.class);
+						//-------------------
+						//Если ошибка нахождения файла
+						try {
+							attr = java.nio.file.Files.readAttributes(filePath,
+									BasicFileAttributes.class);
+						} catch (Exception e) {
+							break;//следующая итерация
+						}
+						//-------------------------------------
 						// если файл и если существует
 						if ((child.isFile() & child.exists()) & ((FileDate.getValue() != null &&
 						// FileDate.getValue().equals(LocalDate.parse(formatdt.format(new
