@@ -59,7 +59,7 @@ public class Ibank {
 			props.setProperty("password", password.getText());
 			props.setProperty("user", login.getText());
 			props.put("v$session.osuser", System.getProperty("user.name").toString());
-			props.put("v$session.machine", InetAddress.getLocalHost().getCanonicalHostName());
+			props.put("v$session.machine", InetAddress.getLocalHost().getHostAddress());
 			props.put("v$session.program", getClass().getName());
 			conn  = DriverManager.getConnection("jdbc:oracle:thin:@" + db.getText(), props);
 		} catch (Exception e) {

@@ -186,7 +186,7 @@ public class AAAAAAmra_Transact_ {
 					props.setProperty("password", Connect.userPassword_);
 					props.setProperty("user", Connect.userID_);
 					props.put("v$session.osuser", System.getProperty("user.name").toString());
-					props.put("v$session.machine", InetAddress.getLocalHost().getCanonicalHostName());
+					props.put("v$session.machine", InetAddress.getLocalHost().getHostAddress());
 					props.put("v$session.program", getClass().getName());
 					Connection conn  = DriverManager.getConnection("jdbc:oracle:thin:@" + Connect.connectionURL_, props);
 
@@ -353,7 +353,7 @@ public class AAAAAAmra_Transact_ {
 			props.setProperty("password", Connect.userPassword_);
 			props.setProperty("user", Connect.userID_);
 			props.put("v$session.osuser", System.getProperty("user.name").toString());
-			props.put("v$session.machine", InetAddress.getLocalHost().getCanonicalHostName());
+			props.put("v$session.machine", InetAddress.getLocalHost().getHostAddress());
 			props.put("v$session.program", getClass().getName());
 			Connection conn  = DriverManager.getConnection("jdbc:oracle:thin:@" + Connect.connectionURL_, props);
 
@@ -537,7 +537,7 @@ public class AAAAAAmra_Transact_ {
 				props.setProperty("password", Connect.userPassword_);
 				props.setProperty("user", Connect.userID_);
 				props.put("v$session.osuser", System.getProperty("user.name").toString());
-				props.put("v$session.machine", InetAddress.getLocalHost().getCanonicalHostName());
+				props.put("v$session.machine", InetAddress.getLocalHost().getHostAddress());
 				props.put("v$session.program", getClass().getName());
 				Connection conn  = DriverManager.getConnection("jdbc:oracle:thin:@" + Connect.connectionURL_, props);
 				

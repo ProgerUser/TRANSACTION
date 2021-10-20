@@ -636,7 +636,7 @@ public class OdbActions {
 			props.setProperty("password", Connect.userPassword_);
 			props.setProperty("user", Connect.userID_);
 			props.put("v$session.osuser", System.getProperty("user.name").toString());
-			props.put("v$session.machine", InetAddress.getLocalHost().getCanonicalHostName());
+			props.put("v$session.machine", InetAddress.getLocalHost().getHostAddress());
 			props.put("v$session.program", getClass().getName());
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@" + Connect.connectionURL_, props);
 			

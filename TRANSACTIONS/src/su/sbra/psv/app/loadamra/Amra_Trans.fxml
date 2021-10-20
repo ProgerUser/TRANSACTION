@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.301" xmlns:fx="http://javafx.com/fxml/1">
 <VBox fx:id="Root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="800.0" spacing="5.0">
 			<ToolBar>
 				<items>
@@ -191,7 +191,7 @@
                         </Button>
                      </items>
                   </ToolBar>
-                  <TableView fx:id="LogTr" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" VBox.vgrow="ALWAYS">
+                  <TableView fx:id="LogTr" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" VBox.vgrow="ALWAYS">
                     <columns>
                       <TableColumn fx:id="RECDATE" prefWidth="75.0" text="RECDATE" />
                       <TableColumn fx:id="PAYDATE" prefWidth="75.0" text="PAYDATE" />

@@ -88,19 +88,19 @@ public class Amra_Transact {
 
 	static int rcff = 0;
 	static int rcft = 0;
-	
-	//--------------------
-    @FXML
-    private TableView<TrLog> LogTr;
-    @FXML
-    private TableColumn<TrLog, LocalDateTime> RECDATE;
-    @FXML
-    private TableColumn<TrLog, LocalDateTime> PAYDATE;
-    @FXML
-    private TableColumn<TrLog, String> DESC_;
-    @FXML
-    private TableColumn<TrLog, String> DEB_CRED;
-	//--------------------
+
+	// --------------------
+	@FXML
+	private TableView<TrLog> LogTr;
+	@FXML
+	private TableColumn<TrLog, LocalDateTime> RECDATE;
+	@FXML
+	private TableColumn<TrLog, LocalDateTime> PAYDATE;
+	@FXML
+	private TableColumn<TrLog, String> DESC_;
+	@FXML
+	private TableColumn<TrLog, String> DEB_CRED;
+	// --------------------
 	@FXML
 	private CheckBox DBMS;
 	@FXML
@@ -121,18 +121,18 @@ public class Amra_Transact {
 	private TableView<Add_File> load_file;
 	@FXML
 	private VBox Root;
-    @FXML
-    private ProgressIndicator PB;
-    
-    @FXML
-    private Button DelLogB;
-    
+	@FXML
+	private ProgressIndicator PB;
+
+	@FXML
+	private Button DelLogB;
+
 	static PrintWriter writer;
 	static int rowline = 0;
 
 	// Connection
 	public Connection conn = null;
-		
+
 	void dbConnect() throws ClassNotFoundException, SQLException, UnknownHostException {
 		// Setting Oracle JDBC Driver
 		Class.forName("oracle.jdbc.OracleDriver");
@@ -144,7 +144,7 @@ public class Amra_Transact {
 		props.setProperty("user", Connect.userID_);
 		props.put("v$session.osuser", System.getProperty("user.name").toString());
 		props.put("v$session.action", "LoadTransact");
-		props.put("v$session.machine", InetAddress.getLocalHost().getCanonicalHostName());
+		props.put("v$session.machine", InetAddress.getLocalHost().getHostAddress());
 		props.put("v$session.program", getClass().getName());
 		conn = DriverManager.getConnection("jdbc:oracle:thin:@" + Connect.connectionURL_, props);
 		conn.setAutoCommit(false);
@@ -156,8 +156,7 @@ public class Amra_Transact {
 			conn.close();
 		}
 	}
-	
-	
+
 	/**
 	 * Удалить дату
 	 */
@@ -189,11 +188,11 @@ public class Amra_Transact {
 			exec.execute(task);
 // --------------------------------------
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
-	
 	@FXML
 	void OpenAbs() {
 		try {
@@ -240,10 +239,11 @@ public class Amra_Transact {
 				// --------------------------------------
 			}
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
-	
+
 	/**
 	 * Удалить file
 	 */
@@ -263,10 +263,10 @@ public class Amra_Transact {
 					cl.execute();
 					if (cl.getString(1) != null) {
 						conn.rollback();
-						Msg.Message(cl.getString(1));
+						ShowMes(cl.getString(1));
 					} else {
 						conn.commit();
-						Msg.Message("Файл " + sel.getFILE_NAME() + " удален!");
+						ShowMes("Файл " + sel.getFILE_NAME() + " удален!");
 					}
 					cl.close();
 					LoadTable("", date_load.getValue());
@@ -274,10 +274,11 @@ public class Amra_Transact {
 				}
 			}
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
-	
+
 	@SuppressWarnings("resource")
 	private static String readFile(String fileName) {
 		try {
@@ -292,11 +293,12 @@ public class Amra_Transact {
 			String clobData = sb.toString();
 			return clobData;
 		} catch (IOException e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Загрузить файл
 	 * 
@@ -305,12 +307,12 @@ public class Amra_Transact {
 	@FXML
 	void Choose(ActionEvent event) {
 		try {
-			
+
 			if (!Connect.userID_.equals("AMRA_IMPORT")) {
-				Msg.Message("Пользователь не AMRA_IMPORT!");
+				ShowMes("Пользователь не AMRA_IMPORT!");
 				return;
 			}
-			
+
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Выбрать файл");
 			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("XML File", "*.xml"));
@@ -323,15 +325,15 @@ public class Amra_Transact {
 						ButtonType.YES, ButtonType.NO);
 
 				if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
-					
-				//----------------------------------
+
+					// ----------------------------------
 					PB.setVisible(true);
 					Root.setDisable(true);
 					Task<Object> task = new Task<Object>() {
 						@Override
 						public Object call() throws Exception {
 							try {
-								//--------------------------------------
+								// --------------------------------------
 								CallableStatement callStmt = conn
 										.prepareCall("{ ? = call z_sb_create_tr_amra.fn_sess_add(?,?,?)}");
 								String reviewContent = null;
@@ -349,9 +351,10 @@ public class Amra_Transact {
 									try (DbmsOutputCapture capture = new DbmsOutputCapture(conn)) {
 										List<String> lines = capture.execute(callStmt);
 										System.out.println(lines);
-										Msg.Message(String.join("", lines));
+										ShowMes(String.join("", lines));
 									} catch (Exception e) {
-										DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+										DbUtil.Log_Error(e);
+										Main.logger.error(ExceptionUtils.getStackTrace(e));
 									}
 								} else {
 									callStmt.execute();
@@ -364,10 +367,10 @@ public class Amra_Transact {
 								String part1 = parts[0].trim();
 								String part2 = parts[1].trim();
 								if (part1.equals("Exception")) {
-									Msg.Message(part2);
+									ShowMes(part2);
 								} else if (part1.equals("Inserted")) {
 									LoadTable("", date_load.getValue());
-									//---------------------------------
+									// ---------------------------------
 									Long loadid = Long.valueOf(part2);
 									// Select Table Row
 									for (Add_File fl : load_file.getItems()) {
@@ -382,15 +385,15 @@ public class Amra_Transact {
 											});
 										}
 									}
-									//----------------------------------
+									// ----------------------------------
 								} else if (part1.equals("Dublicate")) {
-									Msg.Message("Файл был уже загружен!");
+									ShowMes("Файл был уже загружен!");
 								}
 								callStmt.close();
 							} catch (Exception e) {
 								ShowMes(ExceptionUtils.getStackTrace(e));
 							}
-							//----------------------------------
+							// ----------------------------------
 							return null;
 						}
 					};
@@ -400,11 +403,12 @@ public class Amra_Transact {
 						Root.setDisable(false);
 					});
 					exec.execute(task);
-					//---------------
+					// ---------------
 				}
 			}
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -417,11 +421,12 @@ public class Amra_Transact {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				Msg.Message(error);
+				ShowMes(error);
 			}
 		});
 
 	}
+
 	/**
 	 * Авто расширение столбцов
 	 * 
@@ -452,7 +457,6 @@ public class Amra_Transact {
 	@FXML
 	private DatePicker date_load;
 
-	
 	/**
 	 * Формат <br>
 	 * dd.MM.yyyy <br>
@@ -465,9 +469,9 @@ public class Amra_Transact {
 	 * dd.MM.yyyy <br>
 	 */
 	public static final DateTimeFormatter DateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-	
+
 	private Executor exec;
-	
+
 	@FXML
 	private void initialize() {
 		try {
@@ -478,136 +482,146 @@ public class Amra_Transact {
 				return t;
 			});
 			//
-		dbConnect();
-		// fast date
-		new ConvConst().FormatDatePiker(date_load);
+			dbConnect();
+			// fast date
+			new ConvConst().FormatDatePiker(date_load);
 
-		load_file.setEditable(true);
+			load_file.setEditable(true);
 
-		DATE_TIME.setCellValueFactory(cellData -> cellData.getValue().DATE_TIMEProperty());
-		FD.setCellValueFactory(cellData -> cellData.getValue().FDProperty());
-		FILE_NAME.setCellValueFactory(cellData -> cellData.getValue().FILE_NAMEProperty());
-		STATUS.setCellValueFactory(cellData -> cellData.getValue().STATUSProperty());
-		SESS_ID.setCellValueFactory(cellData -> cellData.getValue().SESS_IDProperty().asObject());
-		PATH.setCellValueFactory(cellData -> cellData.getValue().PATHProperty());
-		USER_.setCellValueFactory(cellData -> cellData.getValue().USER_Property());
-		
-		RECDATE.setCellValueFactory(cellData -> cellData.getValue().RECDATEProperty());
-		PAYDATE.setCellValueFactory(cellData -> cellData.getValue().PAYDATEProperty());
-		DESC_.setCellValueFactory(cellData -> cellData.getValue().DESC_Property());
-		DEB_CRED.setCellValueFactory(cellData -> cellData.getValue().DEB_CREDProperty());
-		
-		
-		
-		SESS_ID.setCellFactory(TextFieldTableCell.<Add_File, Long>forTableColumn(new LongStringConverter()));
-		SESS_ID.setOnEditCommit(new EventHandler<CellEditEvent<Add_File, Long>>() {
-			@Override
-			public void handle(CellEditEvent<Add_File, Long> t) {
-				((Add_File) t.getTableView().getItems().get(t.getTablePosition().getRow())).setSESS_ID(t.getNewValue());
-			}
-		});
-		
-		date_load.setValue(NOW_LOCAL_DATE());
+			DATE_TIME.setCellValueFactory(cellData -> cellData.getValue().DATE_TIMEProperty());
+			FD.setCellValueFactory(cellData -> cellData.getValue().FDProperty());
+			FILE_NAME.setCellValueFactory(cellData -> cellData.getValue().FILE_NAMEProperty());
+			STATUS.setCellValueFactory(cellData -> cellData.getValue().STATUSProperty());
+			SESS_ID.setCellValueFactory(cellData -> cellData.getValue().SESS_IDProperty().asObject());
+			PATH.setCellValueFactory(cellData -> cellData.getValue().PATHProperty());
+			USER_.setCellValueFactory(cellData -> cellData.getValue().USER_Property());
 
-		LoadTable("", date_load.getValue());
+			RECDATE.setCellValueFactory(cellData -> cellData.getValue().RECDATEProperty());
+			PAYDATE.setCellValueFactory(cellData -> cellData.getValue().PAYDATEProperty());
+			DESC_.setCellValueFactory(cellData -> cellData.getValue().DESC_Property());
+			DEB_CRED.setCellValueFactory(cellData -> cellData.getValue().DEB_CREDProperty());
 
-		STATUS.setCellFactory(col -> new TextFieldTableCell<Add_File, String>() {
-			@Override
-			public void updateItem(String item, boolean empty) {
-				super.updateItem(item, empty);
-				if (empty || item == null) {
-					setText(null);
-					setGraphic(null);
-				} else {
-					setText(item.toString());
-					if (item.equals("Рассчитан")) {
-						setStyle("-fx-text-fill: #7ede80;-fx-font-weight: bold;");
-					} else if (item.equals("Разобран")) {
-						setStyle("-fx-text-fill: #ebaf2f;-fx-font-weight: bold;");
-					} else {
-						setStyle("-fx-text-fill: #e65591;-fx-font-weight: bold;");
-					}
-				}
-			}
-		});
-		DATE_TIME.setCellFactory(column -> {
-			TableCell<Add_File, LocalDateTime> cell = new TableCell<Add_File, LocalDateTime>() {
+			SESS_ID.setCellFactory(TextFieldTableCell.<Add_File, Long>forTableColumn(new LongStringConverter()));
+			
+			SESS_ID.setOnEditCommit(new EventHandler<CellEditEvent<Add_File, Long>>() {
 				@Override
-				protected void updateItem(LocalDateTime item, boolean empty) {
+				public void handle(CellEditEvent<Add_File, Long> t) {
+					((Add_File) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+							.setSESS_ID(t.getNewValue());
+				}
+			});
+
+			DESC_.setCellFactory(TextFieldTableCell.forTableColumn());
+			
+			DESC_.setOnEditCommit(new EventHandler<CellEditEvent<TrLog, String>>() {
+				@Override
+				public void handle(CellEditEvent<TrLog, String> t) {
+					((TrLog) t.getTableView().getItems().get(t.getTablePosition().getRow())).setDESC_(t.getNewValue());
+				}
+			});
+
+			date_load.setValue(NOW_LOCAL_DATE());
+
+			LoadTable("", date_load.getValue());
+
+			STATUS.setCellFactory(col -> new TextFieldTableCell<Add_File, String>() {
+				@Override
+				public void updateItem(String item, boolean empty) {
 					super.updateItem(item, empty);
-					if (empty) {
+					if (empty || item == null) {
 						setText(null);
+						setGraphic(null);
 					} else {
-						if (item != null) {
-							setText(DateTimeFormat.format(item));
+						setText(item.toString());
+						if (item.equals("Рассчитан")) {
+							setStyle("-fx-text-fill: #7ede80;-fx-font-weight: bold;");
+						} else if (item.equals("Разобран")) {
+							setStyle("-fx-text-fill: #ebaf2f;-fx-font-weight: bold;");
+						} else {
+							setStyle("-fx-text-fill: #e65591;-fx-font-weight: bold;");
 						}
 					}
 				}
-			};
-			return cell;
-		});
-		
-		RECDATE.setCellFactory(column -> {
-			TableCell<TrLog, LocalDateTime> cell = new TableCell<TrLog, LocalDateTime>() {
-				@Override
-				protected void updateItem(LocalDateTime item, boolean empty) {
-					super.updateItem(item, empty);
-					if (empty) {
-						setText(null);
-					} else {
-						if (item != null) {
-							setText(DateTimeFormat.format(item));
+			});
+			DATE_TIME.setCellFactory(column -> {
+				TableCell<Add_File, LocalDateTime> cell = new TableCell<Add_File, LocalDateTime>() {
+					@Override
+					protected void updateItem(LocalDateTime item, boolean empty) {
+						super.updateItem(item, empty);
+						if (empty) {
+							setText(null);
+						} else {
+							if (item != null) {
+								setText(DateTimeFormat.format(item));
+							}
 						}
 					}
-				}
-			};
-			return cell;
-		});
-		
-		PAYDATE.setCellFactory(column -> {
-			TableCell<TrLog, LocalDateTime> cell = new TableCell<TrLog, LocalDateTime>() {
-				@Override
-				protected void updateItem(LocalDateTime item, boolean empty) {
-					super.updateItem(item, empty);
-					if (empty) {
-						setText(null);
-					} else {
-						if (item != null) {
-							setText(DateTimeFormat.format(item));
+				};
+				return cell;
+			});
+
+			RECDATE.setCellFactory(column -> {
+				TableCell<TrLog, LocalDateTime> cell = new TableCell<TrLog, LocalDateTime>() {
+					@Override
+					protected void updateItem(LocalDateTime item, boolean empty) {
+						super.updateItem(item, empty);
+						if (empty) {
+							setText(null);
+						} else {
+							if (item != null) {
+								setText(DateTimeFormat.format(item));
+							}
 						}
 					}
-				}
-			};
-			return cell;
-		});
-		
-		FD.setCellFactory(column -> {
-			TableCell<Add_File, LocalDate> cell = new TableCell<Add_File, LocalDate>() {
-				@Override
-				protected void updateItem(LocalDate item, boolean empty) {
-					super.updateItem(item, empty);
-					if (empty) {
-						setText(null);
-					} else {
-						if (item != null) {
-							setText(DateFormat.format(item));
+				};
+				return cell;
+			});
+
+			PAYDATE.setCellFactory(column -> {
+				TableCell<TrLog, LocalDateTime> cell = new TableCell<TrLog, LocalDateTime>() {
+					@Override
+					protected void updateItem(LocalDateTime item, boolean empty) {
+						super.updateItem(item, empty);
+						if (empty) {
+							setText(null);
+						} else {
+							if (item != null) {
+								setText(DateTimeFormat.format(item));
+							}
 						}
 					}
+				};
+				return cell;
+			});
+
+			FD.setCellFactory(column -> {
+				TableCell<Add_File, LocalDate> cell = new TableCell<Add_File, LocalDate>() {
+					@Override
+					protected void updateItem(LocalDate item, boolean empty) {
+						super.updateItem(item, empty);
+						if (empty) {
+							setText(null);
+						} else {
+							if (item != null) {
+								setText(DateFormat.format(item));
+							}
+						}
+					}
+				};
+				return cell;
+			});
+
+			// sel row
+			load_file.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> {
+				Add_File sel = load_file.getSelectionModel().getSelectedItem();
+				if (sel != null) {
+					LoadTableError(sel.getSESS_ID());
 				}
-			};
-			return cell;
-		});
-		
-		//sel row
-		load_file.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> {
-			Add_File sel = load_file.getSelectionModel().getSelectedItem();
-			if (sel != null) {
-				LoadTableError(sel.getSESS_ID());
-			}
-		});
-		
+			});
+
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -639,7 +653,8 @@ public class Amra_Transact {
 				Add_File fn = load_file.getSelectionModel().getSelectedItem();
 				Connect.SESSID = String.valueOf(fn.getSESS_ID());
 				Stage stage = new Stage();
-				Parent root = FXMLLoader.load(Main.class.getResource("/su/sbra/psv/app/trlist/Transact_Amra_viewer.fxml"));
+				Parent root = FXMLLoader
+						.load(Main.class.getResource("/su/sbra/psv/app/trlist/Transact_Amra_viewer.fxml"));
 				stage.setScene(new Scene(root));
 				stage.getIcons().add(new Image("icon.png"));
 				stage.setTitle("Подробно " + fn.getSESS_ID());
@@ -647,7 +662,8 @@ public class Amra_Transact {
 				stage.show();
 			}
 		} catch (IOException e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 			Connect.SESSID = null;
 		}
 	}
@@ -662,8 +678,8 @@ public class Amra_Transact {
 		try {
 			Add_File sel = load_file.getSelectionModel().getSelectedItem();
 			if (sel != null) {
-				final Alert alert = new Alert(AlertType.CONFIRMATION,
-						"Удалить лог \"" + sel.getFILE_NAME() + "\" ?", ButtonType.YES, ButtonType.NO);
+				final Alert alert = new Alert(AlertType.CONFIRMATION, "Удалить лог \"" + sel.getFILE_NAME() + "\" ?",
+						ButtonType.YES, ButtonType.NO);
 
 				if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
 					String sql_txt = "DELETE FROM Z_SB_LOG_AMRA WHERE SESS_ID = ?";
@@ -676,7 +692,8 @@ public class Amra_Transact {
 				}
 			}
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -713,7 +730,7 @@ public class Amra_Transact {
 	void Load_Transact(ActionEvent event) {
 		try {
 			if (!Connect.userID_.equals("AMRA_IMPORT")) {
-				Msg.Message("Пользователь не AMRA_IMPORT!");
+				ShowMes("Пользователь не AMRA_IMPORT!");
 				return;
 			}
 			Add_File sel = load_file.getSelectionModel().getSelectedItem();
@@ -722,8 +739,8 @@ public class Amra_Transact {
 
 				int SelInd = load_file.getSelectionModel().getSelectedIndex();
 
-				final Alert alert = new Alert(AlertType.CONFIRMATION,
-						"Разобрать файл \"" + sel.getFILE_NAME() + "\" ?", ButtonType.YES, ButtonType.NO);
+				final Alert alert = new Alert(AlertType.CONFIRMATION, "Разобрать файл \"" + sel.getFILE_NAME() + "\" ?",
+						ButtonType.YES, ButtonType.NO);
 				if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
 
 					if (sel.getSTATUS().equals("Загружен")) {
@@ -750,9 +767,10 @@ public class Amra_Transact {
 									if (DBMS.isSelected()) {
 										try (DbmsOutputCapture capture = new DbmsOutputCapture(conn)) {
 											List<String> lines = capture.execute(callStmt);
-											Msg.Message(String.join(", ", lines + "\r\n"));
+											ShowMes(String.join(", ", lines + "\r\n"));
 										} catch (Exception e) {
-											DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+											ShowMes(ExceptionUtils.getStackTrace(e));
+											Main.logger.error(ExceptionUtils.getStackTrace(e));
 										}
 									} else {
 										callStmt.execute();
@@ -767,7 +785,7 @@ public class Amra_Transact {
 									Integer rowid = 1;
 									if (part1.equals("1")) {
 
-										Msg.Message("Найдены ошибки, скоро откроется файл с описанием.");
+										ShowMes("Найдены ошибки, скоро откроется файл с описанием.");
 
 										Statement sqlStatement = conn.createStatement();
 										String readRecordSQL = "SELECT * FROM Z_SB_LOG_AMRA WHERE SESS_ID = " + part2
@@ -783,7 +801,7 @@ public class Amra_Transact {
 										if (!file.exists()) {
 											if (file.mkdir()) {
 											} else {
-												Msg.Message("Failed to create directory! = " + createfolder);
+												ShowMes("Failed to create directory! = " + createfolder);
 											}
 										}
 
@@ -828,12 +846,13 @@ public class Amra_Transact {
 						exec.execute(task);
 						// --------------------------------------
 					} else {
-						Msg.Message("Файле уже " + sel.getSTATUS());
+						ShowMes("Файле уже " + sel.getSTATUS());
 					}
 				}
 			}
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 		rcff = 0;
 		rcft = 0;
@@ -858,37 +877,26 @@ public class Amra_Transact {
 			if (dt != null) {
 				ldt = " and trunc(date_time) = to_date('" + ldt_ + "','dd.mm.yyyy')\n";
 			}
-			String selectStmt = "SELECT SESS_ID,\r\n"
-					+ "       FILE_NAME,\r\n"
-					+ "       DATE_TIME,\r\n"
-					//+ "       FILECLOB,\r\n"
-					+ "       CASE\r\n"
-					+ "         WHEN STATUS = 0 THEN\r\n"
-					+ "          'Загружен'\r\n"
-					+ "         WHEN STATUS = 1 THEN\r\n"
-					+ "          'Разобран'\r\n"
-					+ "         WHEN STATUS = 2 THEN\r\n"
-					+ "          'Рассчитан'\r\n"
-					+ "       END STATUS,\r\n"
-					+ "       PATH,\r\n"
-					+ "       USER_,\r\n"
-					+ "       cast(z_sb_fn_sess_getdate_clob(SESS_ID) as date) FD\r\n"
-					+ "  FROM Z_SB_FN_SESS_AMRA\r\n"
-					+ " WHERE 1 = 1 "+p_n+ldt+"\r\n"
-					+ " ORDER BY DATE_TIME DESC\r\n"
-					+ "";
+			String selectStmt = "SELECT SESS_ID,\r\n" + "       FILE_NAME,\r\n" + "       DATE_TIME,\r\n"
+			// + " FILECLOB,\r\n"
+					+ "       CASE\r\n" + "         WHEN STATUS = 0 THEN\r\n" + "          'Загружен'\r\n"
+					+ "         WHEN STATUS = 1 THEN\r\n" + "          'Разобран'\r\n"
+					+ "         WHEN STATUS = 2 THEN\r\n" + "          'Рассчитан'\r\n" + "       END STATUS,\r\n"
+					+ "       PATH,\r\n" + "       USER_,\r\n"
+					+ "       cast(z_sb_fn_sess_getdate_clob(SESS_ID) as date) FD\r\n" + "  FROM Z_SB_FN_SESS_AMRA\r\n"
+					+ " WHERE 1 = 1 " + p_n + ldt + "\r\n" + " ORDER BY DATE_TIME DESC\r\n" + "";
 			System.out.println(selectStmt);
 			PreparedStatement prp = conn.prepareStatement(selectStmt);
 			ResultSet rs = prp.executeQuery();
 			ObservableList<Add_File> trData = FXCollections.observableArrayList();
-			
+
 			while (rs.next()) {
 				Add_File list = new Add_File();
-				
+
 				list.setSESS_ID(rs.getLong("SESS_ID"));
 				list.setFILE_NAME(rs.getString("FILE_NAME"));
-				list.setDATE_TIME((rs.getDate("DATE_TIME") != null)
-						? LocalDateTime.parse(new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("DATE_TIME")), DateTimeFormat)
+				list.setDATE_TIME((rs.getDate("DATE_TIME") != null) ? LocalDateTime.parse(
+						new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("DATE_TIME")), DateTimeFormat)
 						: null);
 //				if (rs.getClob("FILECLOB") != null) {
 //					list.setFILECLOB(new ConvConst().ClobToString(rs.getClob("FILECLOB")));
@@ -915,7 +923,8 @@ public class Amra_Transact {
 			});
 			autoResizeColumns(load_file);
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -930,16 +939,18 @@ public class Amra_Transact {
 			prp.setLong(1, SessId);
 			ResultSet rs = prp.executeQuery();
 			ObservableList<TrLog> trData = FXCollections.observableArrayList();
-			
+
 			int row = 0;
 			while (rs.next()) {
 				row++;
 				TrLog list = new TrLog();
 				list.setRECDATE((rs.getDate("RECDATE") != null)
-						? LocalDateTime.parse(new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("RECDATE")), DateTimeFormat)
+						? LocalDateTime.parse(new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("RECDATE")),
+								DateTimeFormat)
 						: null);
 				list.setPAYDATE((rs.getDate("PAYDATE") != null)
-						? LocalDateTime.parse(new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("PAYDATE")), DateTimeFormat)
+						? LocalDateTime.parse(new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(rs.getDate("PAYDATE")),
+								DateTimeFormat)
 						: null);
 				list.setDESC_(rs.getString("DESC_"));
 				list.setSESS_ID(rs.getLong("SESS_ID"));
@@ -949,10 +960,10 @@ public class Amra_Transact {
 			}
 			rs.close();
 			prp.close();
-			
-			if(row==0) {
+
+			if (row == 0) {
 				DelLogB.setDisable(true);
-			}else {
+			} else {
 				DelLogB.setDisable(false);
 			}
 			LogTr.setItems(trData);
@@ -967,10 +978,11 @@ public class Amra_Transact {
 			});
 			autoResizeColumns(LogTr);
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
-	
+
 	/**
 	 * Кодировка
 	 * 
@@ -992,7 +1004,8 @@ public class Amra_Transact {
 			bufferedInputStream.close();
 			return encoding;
 		} catch (IOException e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -1036,10 +1049,10 @@ public class Amra_Transact {
 			}
 			myResultSet.close();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
-
 
 	public static boolean ReportsWin = true;
 
@@ -1060,7 +1073,7 @@ public class Amra_Transact {
 				stage.getIcons().add(new Image("/icon.png"));
 				stage.setTitle("(" + controller.getId() + ") Печать");
 				stage.initModality(Modality.WINDOW_MODAL);
-				
+
 				stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 					@Override
 					public void handle(WindowEvent paramT) {
@@ -1071,10 +1084,11 @@ public class Amra_Transact {
 				stage.show();
 			}
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
-	
+
 	/**
 	 * Расчет
 	 * 
@@ -1084,7 +1098,7 @@ public class Amra_Transact {
 	void Calc_Transact(ActionEvent event) {
 		try {
 			if (!Connect.userID_.equals("AMRA_IMPORT")) {
-				Msg.Message("Пользователь не AMRA_IMPORT!");
+				ShowMes("Пользователь не AMRA_IMPORT!");
 				return;
 			}
 			Add_File sel = load_file.getSelectionModel().getSelectedItem();
@@ -1121,9 +1135,10 @@ public class Amra_Transact {
 									if (DBMS.isSelected()) {
 										try (DbmsOutputCapture capture = new DbmsOutputCapture(conn)) {
 											List<String> lines = capture.execute(callStmt);
-											Msg.Message(String.join(", ", lines + "\r\n"));
+											ShowMes(String.join(", ", lines + "\r\n"));
 										} catch (Exception e) {
-											DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+											DbUtil.Log_Error(e);
+											Main.logger.error(ExceptionUtils.getStackTrace(e));
 										}
 									} else {
 										callStmt.execute();
@@ -1147,7 +1162,7 @@ public class Amra_Transact {
 									if (!file.exists()) {
 										if (file.mkdir()) {
 										} else {
-											Msg.Message("Failed to create directory! = " + createfolder);
+											ShowMes("Failed to create directory! = " + createfolder);
 										}
 									}
 
@@ -1182,14 +1197,15 @@ public class Amra_Transact {
 						exec.execute(task);
 						// --------------------------------------
 					} else if (sel.getSTATUS().equals("Загружен")) {
-						Msg.Message("Файл не разобран!");
+						ShowMes("Файл не разобран!");
 					} else if (sel.getSTATUS().equals("Рассчитан")) {
-						Msg.Message("Файл уже " + sel.getSTATUS() + "!");
+						ShowMes("Файл уже " + sel.getSTATUS() + "!");
 					}
 				}
 			}
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 }

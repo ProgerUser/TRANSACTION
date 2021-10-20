@@ -40,7 +40,7 @@ public class DBUtil {
 		props.setProperty("user", Connect.userID_);
 		props.put("v$session.osuser", System.getProperty("user.name").toString());
 		props.put("v$session.action", "DDD");
-		props.put("v$session.machine", InetAddress.getLocalHost().getCanonicalHostName());
+		props.put("v$session.machine", InetAddress.getLocalHost().getHostAddress());
 		props.put("v$session.program", DBUtil.class.getName());
 		conn = DriverManager.getConnection("jdbc:oracle:thin:@" + Connect.connectionURL_, props);
 		conn.setAutoCommit(false);
