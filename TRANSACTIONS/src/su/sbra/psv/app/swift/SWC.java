@@ -633,7 +633,13 @@ public class SWC {
 
 		try {
 			if (!getFExt(path).equals("xml")) {
-				InputStream inputstream = new FileInputStream(path);
+				InputStream inputstream = null;
+				try {
+					inputstream = new FileInputStream(path);
+				} catch (Exception e) {
+					ret = "";
+					return ret;
+				}
 				AbstractMT msg = AbstractMT.parse(inputstream);
 				if (msg != null && msg.isType(103)) {
 					MT103 mt = (MT103) msg;
@@ -670,10 +676,15 @@ public class SWC {
 	 */
 	String getMtDetail(String path) {
 		String ret = null;
-
 		try {
 			if (!getFExt(path).equals("xml")) {
-				InputStream inputstream = new FileInputStream(path);
+				InputStream inputstream = null;
+				try {
+					inputstream = new FileInputStream(path);
+				} catch (Exception e) {
+					ret = "";
+					return ret;
+				}
 				AbstractMT msg = AbstractMT.parse(inputstream);
 				if (msg != null && msg.isType(103)) {
 					MT103 mt = (MT103) msg;
@@ -706,7 +717,14 @@ public class SWC {
 		String ret = null;
 		try {
 			if (!getFExt(path).equals("xml")) {
-				InputStream inputstream = new FileInputStream(path);
+				InputStream inputstream = null;
+				try {
+					inputstream = new FileInputStream(path);
+				} catch (Exception e) {
+					ret = "";
+					return ret;
+				}
+				
 				AbstractMT msg = AbstractMT.parse(inputstream);
 				if (msg != null && msg.isType(103)) {
 					MT103 mt = (MT103) msg;
@@ -730,7 +748,13 @@ public class SWC {
 		String ret = null;
 		try {
 			if (!getFExt(path).equals("xml")) {
-				InputStream inputstream = new FileInputStream(path);
+				InputStream inputstream = null;
+				try {
+					inputstream = new FileInputStream(path);
+				} catch (Exception e) {
+					ret = "";
+					return ret;
+				}
 				AbstractMT msg = AbstractMT.parse(inputstream);
 				if (msg != null && msg.isType(103)) {
 					MT103 mt = (MT103) msg;
@@ -754,7 +778,13 @@ public class SWC {
 		String ret = null;
 		try {
 			if (!getFExt(path).equals("xml")) {
-				InputStream inputstream = new FileInputStream(path);
+				InputStream inputstream = null;
+				try {
+					inputstream = new FileInputStream(path);
+				} catch (Exception e) {
+					ret = "";
+					return ret;
+				}
 				AbstractMT msg = AbstractMT.parse(inputstream);
 				if (msg != null && msg.isType(103)) {
 					MT103 mt = (MT103) msg;
@@ -778,7 +808,13 @@ public class SWC {
 		String ret = null;
 		try {
 			if (!getFExt(path).equals("xml")) {
-				InputStream inputstream = new FileInputStream(path);
+				InputStream inputstream = null;
+				try {
+					inputstream = new FileInputStream(path);
+				} catch (Exception e) {
+					ret = "";
+					return ret;
+				}
 				AbstractMT msg = AbstractMT.parse(inputstream);
 				if (msg != null && msg.isType(103)) {
 					MT103 mt = (MT103) msg;
@@ -802,7 +838,13 @@ public class SWC {
 		String ret = null;
 		try {
 			if (!getFExt(path).equals("xml")) {
-				InputStream inputstream = new FileInputStream(path);
+				InputStream inputstream = null;
+				try {
+					inputstream = new FileInputStream(path);
+				} catch (Exception e) {
+					ret = "";
+					return ret;
+				}
 				AbstractMT msg = AbstractMT.parse(inputstream);
 				if (msg != null && msg.isType(103)) {
 					MT103 mt = (MT103) msg;
@@ -833,7 +875,13 @@ public class SWC {
 		String ret = null;
 		try {
 			if (!getFExt(path).equals("xml")) {
-				InputStream inputstream = new FileInputStream(path);
+				InputStream inputstream = null;
+				try {
+					inputstream = new FileInputStream(path);
+				} catch (Exception e) {
+					ret = "";
+					return ret;
+				}
 				AbstractMT msg = AbstractMT.parse(inputstream);
 				if (msg != null && msg.isType(103)) {
 					MT103 mt = (MT103) msg;
@@ -875,7 +923,13 @@ public class SWC {
 		String ret = null;
 		try {
 			if (!getFExt(path).toLowerCase().equals("xml")) {
-				InputStream inputstream = new FileInputStream(path);
+				InputStream inputstream = null;
+				try {
+					inputstream = new FileInputStream(path);
+				} catch (Exception e) {
+					ret = "";
+					return ret;
+				}
 				AbstractMT msg = AbstractMT.parse(inputstream);
 				SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 				if (msg != null && msg.isType(103)) {
@@ -924,7 +978,13 @@ public class SWC {
 		String ret = null;
 		try {
 			if (!getFExt(path).equals("xml")) {
-				InputStream inputstream = new FileInputStream(path);
+				InputStream inputstream = null;
+				try {
+					inputstream = new FileInputStream(path);
+				} catch (Exception e) {
+					ret = "";
+					return ret;
+				}
 				AbstractMT msg = AbstractMT.parse(inputstream);
 				if (msg != null)
 					ret = msg.getMessageType();
