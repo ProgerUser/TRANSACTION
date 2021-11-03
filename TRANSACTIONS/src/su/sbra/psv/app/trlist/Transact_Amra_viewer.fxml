@@ -6,7 +6,6 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ContextMenu?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.ScrollPane?>
@@ -26,8 +25,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import jfxtras.scene.control.LocalDateTimeTextField?>
 
-<BorderPane prefHeight="600.0" xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1" fx:controller="su.sbra.psv.app.trlist.Tr_Am_View_con">
+<BorderPane prefHeight="600.0" xmlns="http://javafx.com/javafx/8.0.301" xmlns:fx="http://javafx.com/fxml/1" fx:controller="su.sbra.psv.app.trlist.Tr_Am_View_con">
 	<center>
 		<StackPane BorderPane.alignment="CENTER">
 			<children>
@@ -277,32 +277,6 @@
                                                       <Insets left="5.0" />
                                                    </GridPane.margin>
                               						</TextField>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Дата с" GridPane.halignment="RIGHT">
-                                                   <GridPane.margin>
-                                                      <Insets right="5.0" />
-                                                   </GridPane.margin>
-                                                </Text>
-                                                <Text layoutX="62.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Дата по" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
-                                                   <GridPane.margin>
-                                                      <Insets right="5.0" />
-                                                   </GridPane.margin>
-                                                </Text>
-                              						<DatePicker fx:id="dt1" prefWidth="120.0" GridPane.columnIndex="1">
-                              							<tooltip>
-                              								<Tooltip text="Дата с" />
-                              							</tooltip>
-                                                   <GridPane.margin>
-                                                      <Insets left="5.0" />
-                                                   </GridPane.margin>
-                              						</DatePicker>
-                              						<DatePicker fx:id="dt2" prefWidth="120.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                              							<tooltip>
-                              								<Tooltip text="Дата по" />
-                              							</tooltip>
-                                                   <GridPane.margin>
-                                                      <Insets left="5.0" />
-                                                   </GridPane.margin>
-                              						</DatePicker>
                               
                               						<ComboBox fx:id="terminal_name" editable="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
                               							<tooltip>
@@ -356,6 +330,26 @@
                                                       <Insets right="5.0" />
                                                    </GridPane.margin>
                                                 </Text>
+                                                <Text layoutX="62.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Дата с" GridPane.halignment="RIGHT">
+                                                   <GridPane.margin>
+                                                      <Insets right="5.0" />
+                                                   </GridPane.margin>
+                                                </Text>
+                                                <Text layoutX="53.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Дата по" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                                                   <GridPane.margin>
+                                                      <Insets right="5.0" />
+                                                   </GridPane.margin>
+                                                </Text>
+                                                <LocalDateTimeTextField fx:id="dt1" GridPane.columnIndex="1">
+                                                   <GridPane.margin>
+                                                      <Insets left="5.0" />
+                                                   </GridPane.margin>
+                                                </LocalDateTimeTextField>
+                                                <LocalDateTimeTextField fx:id="dt2" layoutX="106.0" layoutY="70.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                   <GridPane.margin>
+                                                      <Insets left="5.0" />
+                                                   </GridPane.margin>
+                                                </LocalDateTimeTextField>
                                              </children>
                                           </GridPane>
                                        </children>

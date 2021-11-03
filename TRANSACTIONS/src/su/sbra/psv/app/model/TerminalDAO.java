@@ -237,7 +237,7 @@ public class TerminalDAO {
 	// *******************************
 	// SELECT FN_SESS
 	// *******************************
-	public static ObservableList<Amra_Trans> Amra_Trans_(String SESS_ID, LocalDate dt1, LocalDate dt2, String FIO,
+	public static ObservableList<Amra_Trans> Amra_Trans_(String SESS_ID, String dt1, String dt2, String FIO,
 			boolean chk, boolean chk_pay, String terminal,boolean DOKATKA ) throws ClassNotFoundException, UnknownHostException {
 
 		String ldt1 = null;
@@ -255,23 +255,36 @@ public class TerminalDAO {
 			table = "AMRA_ERROR_TR";
 		}
 
-		if (dt1 != null)
-			ldt1 = dt1.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-		if (dt2 != null)
-			ldt2 = dt2.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+		if (!dt1.equals(""))
+			ldt1 = dt1;//dt1.getValue().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+		if (!dt2.equals(""))
+			ldt2 = dt2;//dt2.getValue().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+		System.out.println(dt1);
+		System.out.println(dt2);
+		System.out.println(ldt1);
+		System.out.println(ldt2);
 
 		String sess = "\n";
 		String ldt1_ = "\n";
 		String ldt2_ = "\n";
 		String bt = "\n";
 		String FIO_ = "\n";
-		if (dt1 != null & dt2 != null) {
-			bt = " and trunc(paydate) between to_date('" + ldt1 + "','dd.mm.yyyy') and to_date('" + ldt2
-					+ "','dd.mm.yyyy') \n";
-		} else if (dt1 != null & dt2 == null) {
-			ldt1_ = " and trunc(paydate) >= to_date('" + ldt1 + "','dd.mm.yyyy')\n";
-		} else if (dt1 == null & dt2 != null) {
-			ldt2_ = " and trunc(paydate) <= to_date('" + ldt2 + "','dd.mm.yyyy')\n";
+//		
+//		if (dt1 != null & dt2 != null) {
+//			bt = " and trunc(paydate) between to_date('" + ldt1 + "','dd.mm.yyyy hh24:mi:ss') and to_date('" + ldt2
+//					+ "','dd.mm.yyyy') \n";
+//		} else if (dt1 != null & dt2 == null) {
+//			ldt1_ = " and trunc(paydate) >= to_date('" + ldt1 + "','dd.mm.yyyy hh24:mi:ss')\n";
+//		} else if (dt1 == null & dt2 != null) {
+//			ldt2_ = " and trunc(paydate) <= to_date('" + ldt2 + "','dd.mm.yyyy hh24:mi:ss')\n";
+//		}
+		if (!dt1.equals("") & !dt2.equals("")) {
+			bt = " and paydate between to_date('" + ldt1 + "','dd.mm.yyyy hh24:mi:ss') and to_date('" + ldt2
+					+ "','dd.mm.yyyy hh24:mi:ss') \n";
+		} else if (!dt1.equals("") & dt2.equals("")) {
+			ldt1_ = " and paydate >= to_date('" + ldt1 + "','dd.mm.yyyy hh24:mi:ss')\n";
+		} else if (dt1.equals("") & !dt2.equals("")) {
+			ldt2_ = " and paydate <= to_date('" + ldt2 + "','dd.mm.yyyy hh24:mi:ss')\n";
 		}
 
 		if (SESS_ID != null) {
@@ -298,7 +311,7 @@ public class TerminalDAO {
 				+ ldt2_ + bt + FIO_ + " order by PAYDATE desc) t";
 
 		// Execute SELECT statement
-
+		System.out.println(selectStmt);
 		// Get ResultSet from dbExecuteQuery method
 		ResultSet rsEmps = DBUtil.dbExecuteQuery(selectStmt);
 

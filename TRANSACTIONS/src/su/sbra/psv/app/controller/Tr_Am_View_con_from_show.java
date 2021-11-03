@@ -37,6 +37,7 @@ import javafx.util.Callback;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LocalDateTimeStringConverter;
+import jfxtras.scene.control.LocalDateTimeTextField;
 import su.sbra.psv.app.main.Main;
 import su.sbra.psv.app.model.Amra_Trans;
 import su.sbra.psv.app.model.Connect;
@@ -287,10 +288,9 @@ public class Tr_Am_View_con_from_show {
 	private Executor exec;
 
 	@FXML
-	private DatePicker dt1;
-
+	private LocalDateTimeTextField  dt1;
 	@FXML
-	private DatePicker dt2;
+	private LocalDateTimeTextField  dt2;
 
 	@FXML
 	private void initialize() throws ClassNotFoundException, UnknownHostException {
@@ -824,7 +824,7 @@ public class Tr_Am_View_con_from_show {
 			}
 		});
 
-		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(Connect.SESS_ID_, dt1.getValue(), dt2.getValue(),
+		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(Connect.SESS_ID_, dt1.getText(), dt2.getText(),
 				"", false, false, "Все",false);
 		populate_fn_sess(empData);
 
@@ -1136,22 +1136,22 @@ public class Tr_Am_View_con_from_show {
 				String ldt1 = null;
 				String ldt2 = null;
 
-				if (dt1.getValue() != null)
-					ldt1 = dt1.getValue().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-				if (dt2.getValue() != null)
-					ldt2 = dt2.getValue().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+				if (!dt1.getText().equals(""))
+					ldt1 = dt1.getText();//dt1.getValue().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+				if (!dt2.getText().equals(""))
+					ldt2 = dt2.getText();//dt2.getValue().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
 				String sess = "\n";
 				String ldt1_ = "\n";
 				String ldt2_ = "\n";
 				String bt = "\n";
-				if (dt1.getValue() != null & dt2.getValue() != null) {
-					bt = " and trunc(paydate) between to_date('" + ldt1 + "','dd.mm.yyyy') and to_date('" + ldt2
-							+ "','dd.mm.yyyy') \n";
-				} else if (dt1.getValue() != null & dt2.getValue() == null) {
-					ldt1_ = " and trunc(paydate) >= to_date('" + ldt1 + "','dd.mm.yyyy')\n";
-				} else if (dt1.getValue() == null & dt2.getValue() != null) {
-					ldt2_ = " and trunc(paydate) <= to_date('" + ldt2 + "','dd.mm.yyyy')\n";
+				if (!dt1.getText().equals("") & !dt2.getText().equals("")) {
+					bt = " and paydate between to_date('" + ldt1 + "','dd.mm.yyyy hh24:mi:ss') and to_date('" + ldt2
+							+ "','dd.mm.yyyy hh24:mi:ss') \n";
+				} else if (!dt1.getText().equals("") & dt2.getText().equals("")) {
+					ldt1_ = " and paydate >= to_date('" + ldt1 + "','dd.mm.yyyy hh24:mi:ss')\n";
+				} else if (dt1.getText().equals("") & !dt2.getText().equals("")) {
+					ldt2_ = " and paydate <= to_date('" + ldt2 + "','dd.mm.yyyy hh24:mi:ss')\n";
 				}
 
 				if (Connect.SESS_ID_ != null) {
@@ -1457,8 +1457,8 @@ public class Tr_Am_View_con_from_show {
 
 	@FXML
 	private void term_view_(ActionEvent actionEvent) throws ClassNotFoundException, UnknownHostException {
-		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(),
-				dt2.getValue(),"",false,false,"Все",false);
+		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getText(),
+				dt2.getText(),"",false,false,"Все",false);
 		populate_fn_sess(empData);
 
 		autoResizeColumns(trans_table);
@@ -1508,8 +1508,8 @@ public class Tr_Am_View_con_from_show {
 	@FXML
 	private void filter(ActionEvent actionEvent) throws ClassNotFoundException, UnknownHostException {
 		trans_table.setEditable(true);
-		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(),
-				dt2.getValue(),"",false,false,"Все",false);
+		ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getText(),
+				dt2.getText(),"",false,false,"Все",false);
 		populate_fn_sess(empData);
 		// autoResizeColumns(trans_table);
 	}

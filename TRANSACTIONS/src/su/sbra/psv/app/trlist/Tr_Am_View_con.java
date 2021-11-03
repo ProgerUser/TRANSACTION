@@ -18,7 +18,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAdjusters;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -60,7 +59,6 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableCell;
@@ -81,6 +79,7 @@ import javafx.stage.Stage;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LocalDateTimeStringConverter;
+import jfxtras.scene.control.LocalDateTimeTextField;
 import su.sbra.psv.app.controller.PrintCheck;
 import su.sbra.psv.app.controller.PrintReport2;
 import su.sbra.psv.app.main.Main;
@@ -89,7 +88,6 @@ import su.sbra.psv.app.model.Connect;
 import su.sbra.psv.app.model.TerminalDAO;
 import su.sbra.psv.app.model.TerminalForCombo;
 import su.sbra.psv.app.sbalert.Msg;
-import su.sbra.psv.app.swift.ConvConst;
 import su.sbra.psv.app.util.DBUtil;
 import su.sbra.psv.app.utils.DbUtil;
 
@@ -251,9 +249,9 @@ public class Tr_Am_View_con {
 	private TableColumn<Amra_Trans, String> orderofprovidence;
 	private Executor exec;
 	@FXML
-	private DatePicker dt1;
+	private LocalDateTimeTextField  dt1;
 	@FXML
-	private DatePicker dt2;
+	private LocalDateTimeTextField  dt2;
 	@FXML
 	private ProgressIndicator pb;
 	@FXML
@@ -408,12 +406,18 @@ public class Tr_Am_View_con {
 	@FXML
 	private void initialize() throws Exception {
 		try {
-			LocalDate start = NOW_LOCAL_DATE().minusMonths(1).with(TemporalAdjusters.firstDayOfMonth());
-			dt1.setValue(start);
-			dt2.setValue(NOW_LOCAL_DATE());
+//			LocalDate start = NOW_LOCAL_DATE().minusMonths(1).with(TemporalAdjusters.firstDayOfMonth());
+//			
+//			LocalDateTime localDate = LocalDateTime
+//					.parse(new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(cl.getDate(1)), formatterwt);
+//			JobStartDate.setDateTimeFormatter(formatterwt);
+//			JobStartDate.setText(localDate.format(formatterwt));
+//			
+//			dt1.setValue(start);
+//			dt2.setValue(NOW_LOCAL_DATE());
 			
-			new ConvConst().FormatDatePiker(dt1);
-			new ConvConst().FormatDatePiker(dt2);
+//			new ConvConst().FormatDatePiker(dt1);
+//			new ConvConst().FormatDatePiker(dt2);
 			
 			trans_table.setEditable(true);
 			exec = Executors.newCachedThreadPool((runnable) -> {
@@ -1031,22 +1035,22 @@ public class Tr_Am_View_con {
 				String ldt1 = null;
 				String ldt2 = null;
 
-				if (dt1.getValue() != null)
-					ldt1 = dt1.getValue().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-				if (dt2.getValue() != null)
-					ldt2 = dt2.getValue().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+				if (!dt1.getText().equals(""))
+					ldt1 = dt1.getText();//dt1.getValue().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+				if (!dt2.getText().equals(""))
+					ldt2 = dt2.getText();//dt2.getValue().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
 				String sess = "\n";
 				String ldt1_ = "\n";
 				String ldt2_ = "\n";
 				String bt = "\n";
-				if (dt1.getValue() != null & dt2.getValue() != null) {
-					bt = " and trunc(paydate) between to_date('" + ldt1 + "','dd.mm.yyyy') and to_date('" + ldt2
-							+ "','dd.mm.yyyy') \n";
-				} else if (dt1.getValue() != null & dt2.getValue() == null) {
-					ldt1_ = " and trunc(paydate) >= to_date('" + ldt1 + "','dd.mm.yyyy')\n";
-				} else if (dt1.getValue() == null & dt2.getValue() != null) {
-					ldt2_ = " and trunc(paydate) <= to_date('" + ldt2 + "','dd.mm.yyyy')\n";
+				if (!dt1.getText().equals("") & !dt2.getText().equals("")) {
+					bt = " and paydate between to_date('" + ldt1 + "','dd.mm.yyyy hh24:mi:ss') and to_date('" + ldt2
+							+ "','dd.mm.yyyy hh24:mi:ss') \n";
+				} else if (!dt1.getText().equals("") & dt2.getText().equals("")) {
+					ldt1_ = " and paydate >= to_date('" + ldt1 + "','dd.mm.yyyy hh24:mi:ss')\n";
+				} else if (dt1.getText().equals("") & !dt2.getText().equals("")) {
+					ldt2_ = " and paydate <= to_date('" + ldt2 + "','dd.mm.yyyy hh24:mi:ss')\n";
 				}
 
 				if (id_sess.getText().equals("")) {
@@ -1483,7 +1487,7 @@ public class Tr_Am_View_con {
 		// Set extension filter for text files
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel File", "*.xlsx");
 		fileChooser.getExtensionFilters().add(extFilter);
-		fileChooser.setInitialFileName("Транзакции " + dt1.getValue() + "-" + dt2.getValue());
+		fileChooser.setInitialFileName("Транзакции " + dt1.getText() + "-" + dt2.getText());
 		// Show save file dialog
 		File file = fileChooser.showSaveDialog(null);
 		if (file != null) {
@@ -1593,8 +1597,8 @@ public class Tr_Am_View_con {
 	@FXML
 	void term_view_(ActionEvent actionEvent) {
 		try {
-			ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(),
-					dt2.getValue(), "", false, false, terminal_name.getValue().toString(), false);
+			ObservableList<Amra_Trans> empData = TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getText(),
+					dt2.getText(), "", false, false, terminal_name.getValue().toString(), false);
 			populate_fn_sess(empData);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1832,13 +1836,13 @@ public class Tr_Am_View_con {
 			Task<List<Amra_Trans>> task = new Task<List<Amra_Trans>>() {
 				@Override
 				public ObservableList<Amra_Trans> call() throws Exception {
-					return TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getValue(), dt2.getValue(), FIO.getText(),
+					return TerminalDAO.Amra_Trans_(id_sess.getText(), dt1.getText(), dt2.getText(), FIO.getText(),
 							((inkass.isSelected()) ? true : false), ((ret_pay.isSelected()) ? true : false),
 							terminal_name.getValue().toString(), ((DOKATKA.isSelected()) ? true : false));
 				}
 			};
 
-			task.setOnFailed(e -> Alert(task.getException().getMessage()));
+			task.setOnFailed(e -> Alert( ExceptionUtils.getStackTrace(task.getException())));
 			task.setOnSucceeded(e -> {
 				try {
 					exec_filter((ObservableList<Amra_Trans>) task.getValue());
