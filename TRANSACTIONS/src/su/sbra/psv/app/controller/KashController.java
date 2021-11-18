@@ -204,6 +204,7 @@ public class KashController {
 						callStmt.setBlob(2, is, bytes.length);
 						callStmt.execute();
 						String ret = callStmt.getString(1);
+						System.out.println(ret);
 						if (!ret.equals("ok")) {
 							Msg.Message(ret);
 						} else {
@@ -218,6 +219,7 @@ public class KashController {
 						callStmt.setBlob(2, in, file.length());
 						callStmt.execute();
 						String ret = callStmt.getString(1);
+						System.out.println(ret);
 						if (!ret.equals("ok")) {
 							Msg.Message(ret);
 						} else {
@@ -228,7 +230,8 @@ public class KashController {
 				}
 			}
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -326,6 +329,7 @@ public class KashController {
 			String chek = "select count(*) from ov_plat where CPSEVDO is null";
 			ResultSet rs = chekStatement.executeQuery(chek);
 			if (rs.next() & rs.getInt(1) > 0) {
+				System.out.println(rs.getInt(1));
 				final Alert alert = new Alert(AlertType.CONFIRMATION, "—формировать псевдонимы?", ButtonType.YES,
 						ButtonType.NO);
 				if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
@@ -339,15 +343,17 @@ public class KashController {
 			rs.close();
 			// conn.close();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
 	void LoadTable() {
 		try {
-			String selectStmt = "select dp.cnameoper, dp.ckbk, dp.cpsevdo, a.C_CASHNAME \n"
-					+ "  from ov_plat dp, OV_VCPLAT a\n" + " where dp.IDOV_PLAT = a.IDOV_PLAT\n"
-					+ "   and dp.idov_plat in (SELECT idov_plat_ FROM z_sb_psevdo_aggregate)\n";
+			String selectStmt = 
+					"select dp.cnameoper, dp.ckbk, dp.cpsevdo, a.C_CASHNAME \n"+ 
+			          "  from ov_plat dp, OV_VCPLAT a\n" + " where dp.IDOV_PLAT = a.IDOV_PLAT\n"
+							+ "   and dp.idov_plat in (SELECT idov_plat_ FROM z_sb_psevdo_aggregate)\n";
 			PreparedStatement prepStmt = DBUtil.conn.prepareStatement(selectStmt);
 			ResultSet rs = prepStmt.executeQuery();
 			ObservableList<KashClass> cus_list = FXCollections.observableArrayList();
@@ -377,7 +383,8 @@ public class KashController {
 			});
 			autoResizeColumns(employeeTable);
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -407,12 +414,13 @@ public class KashController {
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				@Override
 				public void handle(WindowEvent paramT) {
-					
+
 				}
 			});
 			stage.show();
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 }
