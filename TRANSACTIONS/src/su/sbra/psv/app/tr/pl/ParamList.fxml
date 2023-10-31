@@ -46,6 +46,8 @@
           <TableColumn fx:id="Acc" prefWidth="200.0" text="Счет" />
           <TableColumn fx:id="Fio" prefWidth="250.0" text="ФИО" />
           <TableColumn fx:id="cardnum" prefWidth="250.0" text="Номер карты" />
+          <TableColumn fx:id="Dog" prefWidth="200.0" text="Договор" />
+          <TableColumn fx:id="Ostt" prefWidth="80.0" text="Остаток" />
         </columns>
       </TableView>
       <ButtonBar maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">

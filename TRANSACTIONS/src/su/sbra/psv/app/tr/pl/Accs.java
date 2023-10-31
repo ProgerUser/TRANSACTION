@@ -38,6 +38,10 @@ public class Accs {
 	private TableColumn<PlAccIn, String> cardnum;
 	@FXML
 	private TableColumn<PlAccIn, String> Fio;
+	@FXML
+	private TableColumn<PlAccIn, String> Dog;
+	@FXML
+	private TableColumn<PlAccIn, Double> Ostt;
 
 	@FXML
 	void Cencel(ActionEvent event) {
@@ -53,24 +57,19 @@ public class Accs {
 	void Search(ActionEvent event) {
 		try {
 			if (Search.getText().length() > 5) {
-//				String selectStmt = "select acc.CACCACC,\r\n"
-//						+ "       acc.CACCNAME,\r\n"
-//						+ "       (SELECT CPLCNUM\r\n"
-//						+ "          FROM v_PLA\r\n"
-//						+ "         WHERE V_PLA.IPLATYPE in (1, 2)\r\n"
-//						+ "           and iplastatus != 6\r\n"
-//						+ "           and v_PLA.caccacc = pl_ca.caccacc) cardnum\r\n"
-//						+ "  from acc, pl_ca\r\n"
-//						+ " where lower(acc.CACCNAME) like lower('%' || ? || '%')\r\n"
-//						+ "   and acc.CACCACC = pl_ca.caccacc\r\n"
-//						+ "   and pl_ca.iplscatype = 14\r\n"
-//						+ " order by CACCNAME";
-				String selectStmt ="SELECT CACCACC, CCUSNAME CACCNAME, CPLCNUM cardnum\r\n"
-						+ "  FROM v_PLA\r\n"
-						+ " WHERE V_PLA.IPLATYPE in (1, 2)\r\n"
-						+ "   and iplastatus != 6\r\n"
-						+ "   and lower(CCUSNAME) like lower('%' || ? || '%')";
-				//System.out.println(selectStmt);
+
+				String selectStmt = "WITH dat AS\n" + " (SELECT acc.caccacc,\n" + "         ccusname caccname,\n"
+						+ "         cplcnum cardnum,\n" + "         cmdpnum dogovor,\n"
+						+ "         util_dm2.acc_ostt(0,\n" + "                           acc.caccacc,\n"
+						+ "                           acc.cacccur,\n"
+						+ "                           trunc(SYSDATE) + 1,\n" + "                           'V',\n"
+						+ "                           1) ostt\n" + "    FROM v_pla, acc\n"
+						+ "   WHERE v_pla.iplatype IN (1, 2)\n" + "     AND acc.caccacc = v_pla.caccacc\n"
+						+ "     AND iplastatus != 6\n" + "     AND lower(ccusname) LIKE lower('%' || ? || '%')\n"
+						+ "     AND acc.caccacc NOT IN (SELECT g.acc FROM sbra_pl_rash_usr g))\n" + "\n"
+						+ "SELECT caccacc, caccname, cardnum, dogovor, ostt\n" + "  FROM dat\n"
+						+ " ORDER BY ostt DESC\n" + "";
+
 				PreparedStatement prepStmt = DBUtil.conn.prepareStatement(selectStmt);
 				prepStmt.setString(1, Search.getText());
 				ResultSet rs = prepStmt.executeQuery();
@@ -80,6 +79,8 @@ public class Accs {
 					list.setCACCACC(rs.getString("CACCACC"));
 					list.setCACCNAME(rs.getString("CACCNAME"));
 					list.setcardnum(rs.getString("cardnum"));
+					list.setDog(rs.getString("dogovor"));
+					list.setOstt(rs.getDouble("ostt"));
 					dlist.add(list);
 				}
 				prepStmt.close();
@@ -120,6 +121,8 @@ public class Accs {
 			cardnum.setCellValueFactory(cellData -> cellData.getValue().cardnumProperty());
 			Acc.setCellValueFactory(cellData -> cellData.getValue().CACCACCProperty());
 			Fio.setCellValueFactory(cellData -> cellData.getValue().CACCNAMEProperty());
+			Dog.setCellValueFactory(cellData -> cellData.getValue().DogProperty());
+			Ostt.setCellValueFactory(cellData -> cellData.getValue().OsttProperty().asObject());
 
 			List.setRowFactory(tv -> {
 				TableRow<PlAccIn> row = new TableRow<>();
@@ -130,7 +133,7 @@ public class Accs {
 				});
 				return row;
 			});
-			
+
 		} catch (Exception e) {
 			Msg.Message(ExceptionUtils.getMessage(e));
 		}

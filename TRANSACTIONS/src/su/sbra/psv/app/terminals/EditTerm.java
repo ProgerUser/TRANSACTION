@@ -93,7 +93,7 @@ public class EditTerm {
 	void Ok(ActionEvent event) {
 		try {
 			PreparedStatement prp = DBUtil.conn.prepareStatement(""
-					+ "update Z_SB_TERMINAL_AMRA_DBT "
+					+ "update Z_SB_TERMINAL_AMRA_DBT set "
 					+ "DEPARTMENT = ?,\r\n"
 					+ "ADDRESS = ?,\r\n"
 					+ "ACCOUNT = ?,\r\n"
@@ -103,7 +103,7 @@ public class EditTerm {
 					+ "GENERAL_COMIS = ?,\r\n"
 					+ "CLEAR_SUM = ?,\r\n"
 					+ "INCOME = ?,\r\n"
-					+ "SDNAME  = ? 'r'n"
+					+ "SDNAME  = ? \r\n"
 					+ "where NAME = ?");
 			prp.setInt(1, DEPARTMENT.getSelectionModel().getSelectedItem());
 			prp.setString(2, ADDRESS.getText());

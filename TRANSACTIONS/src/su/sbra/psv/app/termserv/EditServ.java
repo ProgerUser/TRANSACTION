@@ -180,7 +180,7 @@ public class EditServ {
 			// ------------------------
 			ObservableList<String> otd = FXCollections.observableArrayList();
 			{
-				PreparedStatement prp = DBUtil.conn.prepareStatement("select * from Z_SB_TERMINAL_AMRA_DBT");
+				PreparedStatement prp = DBUtil.conn.prepareStatement("select * from Z_SB_TERMINAL_AMRA_DBT order by NAME");
 				ResultSet rs = prp.executeQuery();
 				while (rs.next()) {
 					otd.add(rs.getString("NAME"));

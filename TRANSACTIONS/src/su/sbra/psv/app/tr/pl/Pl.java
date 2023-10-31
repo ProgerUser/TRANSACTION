@@ -125,7 +125,8 @@ public class Pl {
 								InitUsr();
 								SelRow();
 							} catch (Exception e) {
-								DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+								DbUtil.Log_Error(e);
+								Main.logger.error(ExceptionUtils.getStackTrace(e));
 							}
 						}
 					}
@@ -133,7 +134,8 @@ public class Pl {
 				stage.show();
 			}
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -154,7 +156,7 @@ public class Pl {
 					});
 				}
 			}
-			
+
 //			// Цикл по ячейкам
 //			for (int i = 0; i < UsrLst.getItems().size(); i++) {
 //				// Цикл по столбцам
@@ -174,23 +176,38 @@ public class Pl {
 //				}
 //			}
 		} catch (Exception e) {
-			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
-	
 	void InitUsr() {
 		try {
-			String selectStmt = "with dat as (\r\n" + "select cusrlogname login,\r\n" + "       cusrname fio,\r\n"
-					+ "       case\r\n" + "         when (select count(*)\r\n"
-					+ "                 from sbra_pl_rash_usr gr\r\n"
-					+ "                where usr.cusrlogname = gr.usr) > 0 then\r\n" + "          'Y'\r\n"
-					+ "         else\r\n" + "          'N'\r\n" + "       end stat\r\n" + "  from usr\r\n"
-					+ " where usr.dusrfire is null\r\n" + ")\r\n"
-					+ "select * from dat order by case when stat = 'Y' then 1 else 2 end";
-			// System.out.println(selectStmt);
+			String selectStmt = "WITH dat AS\n"
+					+ " (SELECT cusrlogname login,\n"
+					+ "         cusrname fio,\n"
+					+ "         CASE\n"
+					+ "           WHEN (SELECT COUNT(*)\n"
+					+ "                   FROM sbra_pl_rash_usr gr\n"
+					+ "                  WHERE usr.cusrlogname = gr.usr) > 0 THEN\n"
+					+ "            'Y'\n"
+					+ "           ELSE\n"
+					+ "            'N'\n"
+					+ "         END stat\n"
+					+ "    FROM usr\n"
+					+ "   WHERE usr.dusrfire IS NULL)\n"
+					+ "SELECT *\n"
+					+ "  FROM dat\n"
+					+ " ORDER BY CASE\n"
+					+ "            WHEN stat = 'Y' THEN\n"
+					+ "             1\n"
+					+ "            ELSE\n"
+					+ "             2\n"
+					+ "          END,fio\n"
+					+ "";
+			//System.out.println(selectStmt);
 			PreparedStatement prepStmt = DBUtil.conn.prepareStatement(selectStmt);
 			ResultSet rs = prepStmt.executeQuery();
 			ObservableList<PlModel> dlist = FXCollections.observableArrayList();
@@ -221,13 +238,21 @@ public class Pl {
 
 	void InitEx(String login) {
 		try {
-			String selectStmt = "select acc.CACCACC,\r\n" + "       acc.CACCNAME,\r\n" + "       gr.d_start,\r\n"
-					+ "       gr.d_end,\r\n" + "       (SELECT CPLCNUM\r\n" + "          FROM v_PLA\r\n"
-					+ "         WHERE V_PLA.IPLATYPE in (1, 2)\r\n" + "           and iplastatus != 6\r\n"
-					+ "           and v_PLA.caccacc = pl_ca.caccacc) cardnum,USRS\r\n"
-					+ "  from acc, pl_ca, SBRA_PL_RASH_USR gr\r\n" + " where acc.CACCACC = gr.acc\r\n"
-					+ "   and pl_ca.caccacc = acc.caccacc\r\n" + "   and pl_ca.iplscatype = 14\r\n"
-					+ "   and gr.usr = ?\r\n" + "";
+			String selectStmt = "select acc.CACCACC,\n"
+					+ "       acc.CACCNAME,\n"
+					+ "       gr.d_start,\n"
+					+ "       gr.d_end,\n"
+					+ "       (SELECT CPLCNUM\n"
+					+ "          FROM v_PLA\n"
+					+ "         WHERE V_PLA.IPLATYPE in (1, 2)\n"
+					+ "           and iplastatus != 6\n"
+					+ "           and v_PLA.caccacc = pl_ca.caccacc) cardnum,USRS\n"
+					+ "  from acc, pl_ca, SBRA_PL_RASH_USR gr\n"
+					+ " where acc.CACCACC = gr.acc\n"
+					+ "   and pl_ca.caccacc = acc.caccacc\n"
+					+ "   and pl_ca.iplscatype = 14\n"
+					+ "   and gr.usr = ? order by CACCNAME asc, d_start desc";
+			//System.out.println(selectStmt);
 			PreparedStatement prepStmt = DBUtil.conn.prepareStatement(selectStmt);
 			prepStmt.setString(1, login);
 			ResultSet rs = prepStmt.executeQuery();

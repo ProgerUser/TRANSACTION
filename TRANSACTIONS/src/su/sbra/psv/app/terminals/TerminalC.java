@@ -237,7 +237,7 @@ public class TerminalC {
 	 */
 	void LoadTable() {
 		try {
-			String selectStmt = "select * from Z_SB_TERMINAL_AMRA_DBT t order by DEPARTMENT";
+			String selectStmt = "select * from Z_SB_TERMINAL_AMRA_DBT t order by NAME";
 			PreparedStatement prepStmt = DBUtil.conn.prepareStatement(selectStmt);
 			ResultSet rs = prepStmt.executeQuery();
 			ObservableList<Z_SB_TERMINAL_AMRA_DBT> cus_list = FXCollections.observableArrayList();

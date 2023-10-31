@@ -749,10 +749,21 @@ public class Tr_Am_View_con {
 			try {
 				Connection conn = DBUtil.conn;
 				Statement sqlStatement = conn.createStatement();
-				String readRecordSQL = "select NAME\r\n" + "  from (select NAME\r\n"
-						+ "          from Z_SB_TERMINAL_AMRA_DBT t\r\n" + "        union all\r\n"
-						+ "        select 'Все' NAME\r\n" + "          from dual)\r\n"
-						+ " order by decode(NAME, 'Все', 0, substr(NAME, length(NAME), 1)) asc\r\n" + "";
+				String readRecordSQL = "SELECT NAME\r\n"
+						+ "  FROM (SELECT NAME\r\n"
+						+ "          FROM Z_SB_TERMINAL_AMRA_DBT t\r\n"
+						+ "        UNION ALL\r\n"
+						+ "        SELECT 'Все' NAME\r\n"
+						+ "          FROM dual)\r\n"
+						+ " ORDER BY CASE\r\n"
+						+ "            WHEN NAME = 'Все' THEN\r\n"
+						+ "             0\r\n"
+						+ "            ELSE\r\n"
+						+ "             1\r\n"
+						+ "          END,\r\n"
+						+ "          NAME\r\n"
+						+ "";
+				//System.out.println(readRecordSQL);
 				ResultSet rs = sqlStatement.executeQuery(readRecordSQL);
 				ObservableList<String> combolist = FXCollections.observableArrayList();
 				while (rs.next()) {
