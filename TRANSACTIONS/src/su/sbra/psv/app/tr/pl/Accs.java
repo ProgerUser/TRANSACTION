@@ -58,18 +58,30 @@ public class Accs {
 		try {
 			if (Search.getText().length() > 5) {
 
-				String selectStmt = "WITH dat AS\n" + " (SELECT acc.caccacc,\n" + "         ccusname caccname,\n"
-						+ "         cplcnum cardnum,\n" + "         cmdpnum dogovor,\n"
-						+ "         util_dm2.acc_ostt(0,\n" + "                           acc.caccacc,\n"
+				String selectStmt = "WITH dat AS\n"
+						+ " (SELECT acc.caccacc,\n"
+						+ "         cus.ccusname caccname,\n"
+						+ "         cplcnum cardnum,\n"
+						+ "         cmdpnum dogovor,\n"
+						+ "         util_dm2.acc_ostt(0,\n"
+						+ "                           acc.caccacc,\n"
 						+ "                           acc.cacccur,\n"
-						+ "                           trunc(SYSDATE) + 1,\n" + "                           'V',\n"
-						+ "                           1) ostt\n" + "    FROM v_pla, acc\n"
-						+ "   WHERE v_pla.iplatype IN (1, 2)\n" + "     AND acc.caccacc = v_pla.caccacc\n"
-						+ "     AND iplastatus != 6\n" + "     AND lower(ccusname) LIKE lower('%' || ? || '%')\n"
-						+ "     AND acc.caccacc NOT IN (SELECT g.acc FROM sbra_pl_rash_usr g))\n" + "\n"
-						+ "SELECT caccacc, caccname, cardnum, dogovor, ostt\n" + "  FROM dat\n"
-						+ " ORDER BY ostt DESC\n" + "";
-
+						+ "                           trunc(SYSDATE) + 1,\n"
+						+ "                           'V',\n"
+						+ "                           1) ostt\n"
+						+ "    FROM v_pla, acc, cus\n"
+						+ "   WHERE v_pla.iplatype IN (1, 2)\n"
+						+ "     AND acc.caccacc = v_pla.caccacc\n"
+						+ "     AND iplastatus != 6\n"
+						+ "     AND cus.icusnum = acc.iacccus\n"
+						+ "     AND lower(cus.ccusname) LIKE lower('%' || ? || '%')\n"
+						+ "     AND acc.caccacc NOT IN (SELECT g.acc FROM sbra_pl_rash_usr g))\n"
+						+ "\n"
+						+ "SELECT caccacc, caccname, cardnum, dogovor, ostt\n"
+						+ "  FROM dat\n"
+						+ " ORDER BY ostt DESC\n"
+						+ "";
+				//System.out.println(selectStmt);
 				PreparedStatement prepStmt = DBUtil.conn.prepareStatement(selectStmt);
 				prepStmt.setString(1, Search.getText());
 				ResultSet rs = prepStmt.executeQuery();

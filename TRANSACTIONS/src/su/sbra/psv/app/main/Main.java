@@ -72,6 +72,7 @@ public class Main extends Application {
 				splash.close();
 			}
 			
+			
 			if (MODULE == null) {
 				Logon();
 			} else if (MODULE.equals("DEBTINFO")) {
