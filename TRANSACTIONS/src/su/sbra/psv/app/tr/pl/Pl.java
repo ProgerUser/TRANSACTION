@@ -115,9 +115,14 @@ public class Pl {
 						if (controller.caccacc != null) {
 							try {
 								PreparedStatement prp = DBUtil.conn
-										.prepareStatement("insert into SBRA_PL_RASH_USR (USR,ACC) " + "values (?,?) ");
-								prp.setString(1, val.getLOGIN());
-								prp.setString(2, controller.caccacc);
+										.prepareStatement(
+												  "begin "
+														  + "delete from SBRA_PL_RASH_USR where ACC = ?; "
+														  + "insert into SBRA_PL_RASH_USR (USR,ACC) values (?,?); "
+												+ "end;");
+								prp.setString(1, controller.caccacc);
+								prp.setString(2, val.getLOGIN());
+								prp.setString(3, controller.caccacc);
 								prp.executeUpdate();
 								DBUtil.conn.commit();
 
