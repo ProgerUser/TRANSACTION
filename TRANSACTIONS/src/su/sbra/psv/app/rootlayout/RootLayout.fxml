@@ -62,6 +62,11 @@
 						<MenuItem fx:id="121" mnemonicParsing="false" onAction="#Log" text="Показать лог" />
 					</items>
 				</Menu>
+				<Menu fx:id="141" mnemonicParsing="false" text="POS-ы">
+					<items>
+						<MenuItem fx:id="161" mnemonicParsing="false" onAction="#TspLst" text="Список" />
+					</items>
+				</Menu>
 			</menus>
 		</MenuBar>
 	</top>

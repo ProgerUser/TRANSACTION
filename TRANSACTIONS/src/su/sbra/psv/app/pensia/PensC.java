@@ -5,7 +5,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -1122,7 +1121,8 @@ public class PensC {
 	 */
 	public String getFileCharset(String file) {
 		try {
-			byte[] buf = new byte[500000000];
+			int len = file.length();
+			byte[] buf = new byte[len / 2];
 			BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
 			final UniversalDetector universalDetector = new UniversalDetector(null);
 			int numberOfBytesRead;
@@ -1134,7 +1134,7 @@ public class PensC {
 			universalDetector.reset();
 			bufferedInputStream.close();
 			return encoding;
-		} catch (IOException e) {
+		} catch (Exception e) {
 			DbUtil.Log_Error(e); Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
@@ -1781,6 +1781,9 @@ public class PensC {
 								+ "       sum(MTRNRSUM) - count(MTRNRSUM) * 5 - count(MTRNRSUM) * 1 comm_sb\n"
 								+ "  from data_v\n" + " group by otd\n" + " order by otd\n";
 					}
+					
+					System.out.println(createfolder);
+					
 					PrgInd.setVisible(true);
 					PENS_LOAD_ROWSUM.setDisable(true);
 					Task<Object> task = new Task<Object>() {
