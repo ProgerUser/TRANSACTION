@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
+<?import su.sbra.psv.app.tsppos.MaskedTextField?>
 
 <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="480.0" prefWidth="650.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <padding>
@@ -45,11 +46,11 @@
                     </rowConstraints>
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ID терминала" GridPane.halignment="RIGHT" />
-                        <TextField fx:id="TERM_ID" editable="false" maxWidth="100.0" GridPane.columnIndex="1">
+                        <MaskedTextField fx:id="TERM_ID"  mask="####AAAA" maxWidth="100.0" GridPane.columnIndex="1">
                            <GridPane.margin>
                               <Insets left="5.0" />
                            </GridPane.margin>
-                        </TextField>
+                        </MaskedTextField>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Модель" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
                         <ComboBox fx:id="TERM_MODEL" editable="true" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <GridPane.margin>
@@ -85,11 +86,11 @@
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
                         </TextField>
-                        <TextField fx:id="TERM_SIM_NUMBER" maxWidth="120.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
+                        <MaskedTextField fx:id="TERM_SIM_NUMBER" mask="+7(940)###-##-##"  maxWidth="120.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
                            <GridPane.margin>
                               <Insets left="5.0" />
                            </GridPane.margin>
-                        </TextField>
+                        </MaskedTextField>
                         <CheckBox fx:id="TERM_INTEGRATION" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="3">
                            <GridPane.margin>
                               <Insets left="5.0" />

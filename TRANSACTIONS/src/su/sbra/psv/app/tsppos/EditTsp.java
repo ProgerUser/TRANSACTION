@@ -2,9 +2,7 @@ package su.sbra.psv.app.tsppos;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
 import org.apache.commons.lang3.exception.ExceptionUtils;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,6 +12,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import su.sbra.psv.app.main.Main;
@@ -23,7 +22,7 @@ import su.sbra.psv.app.utils.DbUtil;
 public class EditTsp {
 
 	@FXML
-	private TextField TERM_ID;
+	private MaskedTextField TERM_ID;
 	@FXML
 	private ComboBox<String> TERM_MODEL;
 	@FXML
@@ -43,7 +42,7 @@ public class EditTsp {
 	@FXML
 	private ComboBox<String> TERM_SIM_OPER;
 	@FXML
-	private TextField TERM_SIM_NUMBER;
+	private MaskedTextField TERM_SIM_NUMBER;
 	@FXML
 	private TextField TERM_SIM_IP;
 	@FXML
@@ -85,37 +84,39 @@ public class EditTsp {
 	@FXML
 	void Ok(ActionEvent event) {
 		try {
-			PreparedStatement prp = DBUtil.conn.prepareStatement("UPDATE SBRA_TSP_POS SET\r\n"
-					+ "TERM_MODEL = ? \r\n"
-					+ "TERM_ADDR = ? \r\n"
-					+ "TERM_INTEGRATION = ? \r\n"
-					+ "TERM_SERIAL = ? \r\n"
-					+ "TERM_ID = ? \r\n"
-					+ "TERM_SIM_NUMBER = ? \r\n"
-					+ "TERM_SIM_OPER = ? \r\n"
-					+ "TERM_SIM_IP = ? \r\n"
-					+ "TERM_REGDATE = ? \r\n"
-					+ "TERM_COMMENT = ? \r\n"
-					+ "TERM_GEO = ? \r\n"
-					+ "TERM_PORTHOST = ? \r\n"
+			PreparedStatement prp = DBUtil.conn.prepareStatement(
+					"UPDATE SBRA_TSP_POS SET\r\n"
+					+ "TERM_MODEL = ?, \r\n"
+					+ "TERM_ADDR = ?, \r\n"
+					+ "TERM_INTEGRATION = ?, \r\n"
+					+ "TERM_SERIAL = ?, \r\n"
+					+ "TERM_ID = ?, \r\n"
+					+ "TERM_SIM_NUMBER = ?, \r\n"
+					+ "TERM_SIM_OPER = ?, \r\n"
+					+ "TERM_SIM_IP = ?, \r\n"
+					+ "TERM_REGDATE = ?, \r\n"
+					+ "TERM_COMMENT = ?, \r\n"
+					+ "TERM_GEO = ?, \r\n"
+					+ "TERM_PORTHOST = ?, \r\n"
 					+ "TERM_IPIFNOTSIM =?\r\n"
 					+ "WHERE ID = ?");
 			
-			prp.setString(0, TERM_MODEL.getSelectionModel().getSelectedItem());
-			prp.setString(1, TERM_ADDR.getText());
-			prp.setInt(2, (TERM_INTEGRATION.isSelected()) ? 1:0);
-			prp.setString(3, TERM_SERIAL.getText());
-			prp.setString(4, TERM_ID.getText());
-			prp.setString(5, TERM_SIM_NUMBER.getText());
-			prp.setString(6, TERM_SIM_OPER.getSelectionModel().getSelectedItem());
-			prp.setString(7, TERM_SIM_IP.getText());
-			prp.setDate(8, java.sql.Date.valueOf(TERM_REGDATE.getValue()));
-			prp.setString(9, TERM_COMMENT.getText());
-			prp.setString(10, TERM_GEO.getText());
-			prp.setString(11, TERM_PORTHOST.getSelectionModel().getSelectedItem());
-			prp.setString(12, TERM_IPIFNOTSIM.getText());
-			prp.setLong(13, tsp.getID());
-			
+			prp.setString(1, TERM_MODEL.getSelectionModel().getSelectedItem());
+			prp.setString(2, TERM_ADDR.getText());
+			prp.setInt(3, (TERM_INTEGRATION.isSelected()) ? 1 : 0);
+			prp.setString(4, TERM_SERIAL.getText());
+			prp.setString(5, TERM_ID.getText());
+			prp.setString(6, TERM_SIM_NUMBER.getText());
+			prp.setString(7, TERM_SIM_OPER.getSelectionModel().getSelectedItem());
+			prp.setString(8, TERM_SIM_IP.getText());
+			prp.setDate(9,
+					((TERM_REGDATE.getValue()== null) ? null : java.sql.Date.valueOf(TERM_REGDATE.getValue())));
+			prp.setString(10, TERM_COMMENT.getText());
+			prp.setString(11, TERM_GEO.getText());
+			prp.setString(12, TERM_PORTHOST.getSelectionModel().getSelectedItem());
+			prp.setString(13, TERM_IPIFNOTSIM.getText());
+			prp.setLong(14, tsp.getID());
+
 			prp.executeUpdate();
 			prp.close();
 			DBUtil.conn.commit();
@@ -143,19 +144,28 @@ public class EditTsp {
 		}
 	}
 
+   
 	/**
 	 * Инициализация
 	 */
 	@FXML
 	private void initialize() {
 		try {
-
+			
+			TERM_ID.setTextFormatter(new TextFormatter<>((change) -> {
+			    change.setText(change.getText().toUpperCase());
+			    return change;
+			}));
+			
 			// ------------------------
 			ObservableList<String> model = FXCollections.observableArrayList();
 			{
 				PreparedStatement prp = DBUtil.conn
-						.prepareStatement("SELECT TERM_MODEL\r\n" + "  FROM SBRA_TSP_POS t\r\n"
-								+ " WHERE t.TERM_MODEL IS NOT NULL\r\n" + " GROUP BY TERM_MODEL");
+						.prepareStatement(
+								"SELECT TERM_MODEL\r\n" 
+						      + "  FROM SBRA_TSP_POS t\r\n"
+							  + " WHERE t.TERM_MODEL IS NOT NULL\r\n" 
+						      + " GROUP BY TERM_MODEL");
 				ResultSet rs = prp.executeQuery();
 				while (rs.next()) {
 					model.add(rs.getString("TERM_MODEL"));
@@ -166,8 +176,11 @@ public class EditTsp {
 			ObservableList<String> port = FXCollections.observableArrayList();
 			{
 				PreparedStatement prp = DBUtil.conn
-						.prepareStatement("SELECT t.TERM_PORTHOST\r\n" + "  FROM SBRA_TSP_POS t\r\n"
-								+ " WHERE t.TERM_PORTHOST IS NOT NULL\r\n" + " GROUP BY TERM_PORTHOST\r\n" + "");
+						.prepareStatement(
+								    "SELECT t.TERM_PORTHOST\r\n" 
+				                  + "  FROM SBRA_TSP_POS t\r\n"
+								  + " WHERE t.TERM_PORTHOST IS NOT NULL\r\n" 
+				                  + " GROUP BY TERM_PORTHOST");
 				ResultSet rs = prp.executeQuery();
 				while (rs.next()) {
 					port.add(rs.getString("TERM_PORTHOST"));

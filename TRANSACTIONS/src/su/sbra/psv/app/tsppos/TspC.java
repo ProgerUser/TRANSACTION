@@ -1,5 +1,6 @@
 package su.sbra.psv.app.tsppos;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -16,6 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -40,6 +42,8 @@ import su.sbra.psv.app.model.ViewerDAO;
 import su.sbra.psv.app.sbalert.Msg;
 import su.sbra.psv.app.sverka.SverkaC;
 import su.sbra.psv.app.termserv.Z_SB_TERMSERV_AMRA_DBT;
+import su.sbra.psv.app.tr.pl.ConvConst;
+import su.sbra.psv.app.tr.pl.PlModel;
 import su.sbra.psv.app.util.DBUtil;
 import su.sbra.psv.app.utils.DbUtil;
 
@@ -121,12 +125,43 @@ public class TspC {
 
 	private Executor exec;
 
+	
+	public void setId(Long temp) {
+		this.seltemp = temp;
+	}
+	
+	Long seltemp;
+	
+	/**
+	 * Выбор строки
+	 */
+	void SelRow() {
+		try {
+			for (SBRA_TSP_POS site : termList.getItems()) {
+				if (site.getID().equals(seltemp)) {
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							termList.requestFocus();
+							termList.getSelectionModel().select(site);
+							termList.scrollTo(site);
+						}
+					});
+				}
+			}
+		} catch (Exception e) {
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
+		}
+	}
+	
 	/**
 	 * Инициализация
 	 */
 	@FXML
 	private void initialize() {
 		try {
+
 			termList.setEditable(true);
 			// For multi threading: Create executor that uses daemon threads:
 			exec = Executors.newCachedThreadPool((runnable) -> {
@@ -164,10 +199,52 @@ public class TspC {
 				});
 				return row;
 			});
+			termList.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+				if (newSelection != null) {
+					seltemp = termList.getSelectionModel().getSelectedItem().getID();
+				}
+			});
+			TableColumnDate(TERM_REGDATE);
 		} catch (Exception e) {
 			DbUtil.Log_Error(e);
 			Main.logger.error(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
+		}
+	}
+	
+	/**
+	 * Формат <br>
+	 * dd.MM.yyyy
+	 */
+	public static final DateTimeFormatter DateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+	
+	/**
+	 * Форматирование столбцов <br>
+	 * dd.MM.yyyy
+	 * 
+	 * @param TC
+	 */
+	public void TableColumnDate(TableColumn<SBRA_TSP_POS, LocalDate> TC) {
+		try {
+			TC.setCellFactory(column -> {
+				TableCell<SBRA_TSP_POS, LocalDate> cell = new TableCell<SBRA_TSP_POS, LocalDate>() {
+					@Override
+					protected void updateItem(LocalDate item, boolean empty) {
+						super.updateItem(item, empty);
+						if (empty) {
+							setText(null);
+						} else {
+							if (item != null) {
+								setText(DateFormat.format(item));
+								setGraphic(null);
+							}
+						}
+					}
+				};
+				return cell;
+			});
+		} catch (Exception e) {
+			Msg.Message(ExceptionUtils.getMessage(e));
 		}
 	}
 
@@ -229,17 +306,25 @@ public class TspC {
 	void Delete(ActionEvent actionEvent_) {
 		try {
 
-			if (DbUtil.Odb_Action(104l) == 0) {
-				Msg.Message("Нет доступа!");
-				return;
-			}
+//			if (DbUtil.Odb_Action(104l) == 0) {
+//				Msg.Message("Нет доступа!");
+//				return;
+//			}
 
 			if (termList.getSelectionModel().getSelectedItem() != null) {
 				SBRA_TSP_POS sel = termList.getSelectionModel().getSelectedItem();
 				final Alert alert = new Alert(AlertType.CONFIRMATION, "Удалить \"" + sel.getTERM_ID() + "\" ?",
 						ButtonType.YES, ButtonType.NO);
 				if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
-
+					
+					PreparedStatement prp = DBUtil.conn.prepareStatement(
+							"delete from  SBRA_TSP_POS  WHERE ID = ?");
+					prp.setLong(1, sel.getID());
+					prp.executeUpdate();
+					prp.close();
+					
+					DBUtil.conn.commit();
+					LoadTable();
 				}
 			}
 
@@ -314,10 +399,10 @@ public class TspC {
 	void Edit(ActionEvent actionEvent_) {
 		try {
 
-			if (DbUtil.Odb_Action(103l) == 0) {
-				Msg.Message("Нет доступа!");
-				return;
-			}
+//			if (DbUtil.Odb_Action(103l) == 0) {
+//				Msg.Message("Нет доступа!");
+//				return;
+//			}
 
 			if (termList.getSelectionModel().getSelectedItem() != null) {
 
@@ -343,6 +428,7 @@ public class TspC {
 					@Override
 					public void handle(WindowEvent paramT) {
 						LoadTable();
+						SelRow();
 					}
 				});
 				stage.show();
@@ -357,15 +443,15 @@ public class TspC {
 	@FXML
 	void Add(ActionEvent actionEvent_) {
 		try {
-			if (DbUtil.Odb_Action(102l) == 0) {
-				Msg.Message("Нет доступа!");
-				return;
-			}
+//			if (DbUtil.Odb_Action(102l) == 0) {
+//				Msg.Message("Нет доступа!");
+//				return;
+//			}
 
 			Stage stage = new Stage();
 			Stage stage_ = (Stage) vbox.getScene().getWindow();
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("/su/sbra/psv/app/terminals/IUTerminal.fxml"));
+			loader.setLocation(getClass().getResource("/su/sbra/psv/app/tsppos/IUTsp.fxml"));
 
 			AddTsp controller = new AddTsp();
 			loader.setController(controller);
@@ -381,6 +467,8 @@ public class TspC {
 				@Override
 				public void handle(WindowEvent paramT) {
 					LoadTable();
+					setId(controller.getId());
+					SelRow();
 				}
 			});
 			stage.show();
