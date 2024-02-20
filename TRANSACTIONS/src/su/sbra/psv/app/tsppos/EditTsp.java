@@ -2,7 +2,9 @@ package su.sbra.psv.app.tsppos;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -49,6 +51,10 @@ public class EditTsp {
 	private TextField SDNAME;
 	@FXML
 	private TextField TERM_COMMENT;
+	@FXML
+	private MaskedTextField TERM_KTM;
+	@FXML
+	private ComboBox<String> TERM_TYPE;
 	@FXML
 	private Button Ok;
 
@@ -98,7 +104,9 @@ public class EditTsp {
 					+ "TERM_COMMENT = ?, \r\n"
 					+ "TERM_GEO = ?, \r\n"
 					+ "TERM_PORTHOST = ?, \r\n"
-					+ "TERM_IPIFNOTSIM =?\r\n"
+					+ "TERM_IPIFNOTSIM =?,\r\n"
+					+ "TERM_KTM =?,\r\n"
+					+ "TERM_TYPE =?\r\n"
 					+ "WHERE ID = ?");
 			
 			prp.setString(1, TERM_MODEL.getSelectionModel().getSelectedItem());
@@ -115,7 +123,19 @@ public class EditTsp {
 			prp.setString(11, TERM_GEO.getText());
 			prp.setString(12, TERM_PORTHOST.getSelectionModel().getSelectedItem());
 			prp.setString(13, TERM_IPIFNOTSIM.getText());
-			prp.setLong(14, tsp.getID());
+			
+			if (!TERM_KTM.getText().equals("")) {
+				prp.setLong(14, Long.valueOf(TERM_KTM.getText()));
+			} else {
+				prp.setNull(14, java.sql.Types.INTEGER);
+			}
+			
+			if (TERM_TYPE.getSelectionModel().getSelectedItem().equals("ÒÑÏ")) {
+				prp.setLong(15, 3);
+			} else if (TERM_TYPE.getSelectionModel().getSelectedItem().equals("ÏÂÍ")) {
+				prp.setLong(15, 2);
+			}
+			prp.setLong(16, tsp.getID());
 
 			prp.executeUpdate();
 			prp.close();
@@ -215,7 +235,18 @@ public class EditTsp {
 			this.TERM_SIM_IP.setText(tsp.getTERM_SIM_IP());
 			this.TERM_COMMENT.setText(tsp.getTERM_COMMENT());
 			
-
+			this.TERM_KTM.setText((tsp.getTERM_KTM() == 0) ? "" : String.valueOf(tsp.getTERM_KTM()));
+			
+			String types[] = { "ÒÑÏ", "ÏÂÍ" };
+			this.TERM_TYPE.setItems(FXCollections.observableArrayList(types));
+			
+			//System.out.println(tsp.getTERM_TYPE());
+			if (tsp.getTERM_TYPE() == 2) {
+				this.TERM_TYPE.getSelectionModel().select("ÏÂÍ");
+			} else if (tsp.getTERM_TYPE() == 3) {
+				this.TERM_TYPE.getSelectionModel().select("ÒÑÏ");
+			}
+			
 		} catch (Exception e) {
 			DbUtil.Log_Error(e);
 			Main.logger.error(ExceptionUtils.getStackTrace(e));

@@ -1,8 +1,12 @@
 package su.sbra.psv.app.tsppos;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.ListChangeListener.Change;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -63,6 +67,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.controlsfx.control.StatusBar;
 import org.controlsfx.control.table.TableFilter;
 
 import java.text.DateFormat;
@@ -121,6 +126,12 @@ public class TspC {
 	@FXML
 	private TableColumn<SBRA_TSP_POS, String> CLINAME;
 	@FXML
+	private TableColumn<SBRA_TSP_POS, String> TERM_TYPE;
+	@FXML
+	private TableColumn<SBRA_TSP_POS, Long> TERM_KTM;
+	@FXML
+	private StatusBar RowCount;
+	@FXML
 	private VBox vbox;
 
 	private Executor exec;
@@ -155,6 +166,18 @@ public class TspC {
 		}
 	}
 	
+
+	@FXML
+	private void Select() {
+		try {
+			setRowCount();
+		} catch (Exception e) {
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
+		}
+	}
+		
+		
 	/**
 	 * Инициализация
 	 */
@@ -185,7 +208,9 @@ public class TspC {
 			TERM_IPIFNOTSIM.setCellValueFactory(cellData -> cellData.getValue().TERM_IPIFNOTSIMProperty());
 			CLIACC.setCellValueFactory(cellData -> cellData.getValue().CLIACCProperty());
 			CLINAME.setCellValueFactory(cellData -> cellData.getValue().CLINAMEProperty());
-
+			TERM_KTM.setCellValueFactory(cellData -> cellData.getValue().TERM_KTMProperty().asObject());
+			TERM_TYPE.setCellValueFactory(cellData -> cellData.getValue().TERM_TYPE_SProperty());
+			
 			//
 			LoadTable();
 			//
@@ -205,6 +230,7 @@ public class TspC {
 				}
 			});
 			TableColumnDate(TERM_REGDATE);
+			
 		} catch (Exception e) {
 			DbUtil.Log_Error(e);
 			Main.logger.error(ExceptionUtils.getStackTrace(e));
@@ -337,6 +363,22 @@ public class TspC {
 	}
 
 	/**
+	 * Количество строк
+	 */
+	private void setRowCount() {
+		rowCount = 0;
+		termList.getItems().forEach(item -> {
+			rowCount++;
+		});
+		RowCount.setText("Кол-во строк: " + rowCount);
+	}
+	
+	/**
+	 * Количество строк
+	 */
+	private int rowCount = 0;
+	
+	/**
 	 * Initialize table
 	 */
 	void LoadTable() {
@@ -348,8 +390,6 @@ public class TspC {
 			while (rs.next()) {
 				SBRA_TSP_POS list = new SBRA_TSP_POS();
 
-				list.setCLINAME(rs.getString("CLINAME"));
-				list.setCLIACC(rs.getString("CLIACC"));
 				list.setID(rs.getLong("ID"));
 				list.setTERM_MODEL(rs.getString("TERM_MODEL"));
 				list.setTERM_ADDR(rs.getString("TERM_ADDR"));
@@ -368,6 +408,10 @@ public class TspC {
 				list.setTERM_GEO(rs.getString("TERM_GEO"));
 				list.setTERM_PORTHOST(rs.getString("TERM_PORTHOST"));
 				list.setTERM_IPIFNOTSIM(rs.getString("TERM_IPIFNOTSIM"));
+				list.setCLINAME(rs.getString("CLINAME"));
+				list.setCLIACC(rs.getString("CLIACC"));
+				list.setTERM_KTM(rs.getLong("TERM_KTM"));
+				list.setTERM_TYPE_S(rs.getString("TERM_TYPE_S"));
 
 				cus_list.add(list);
 			}
@@ -389,12 +433,18 @@ public class TspC {
 			});
 			// resize
 			autoResizeColumns(termList);
+			
+			setRowCount();
 		} catch (Exception e) {
 			DbUtil.Log_Error(e);
 			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
+	/**
+	 * Редактировать
+	 * @param actionEvent_
+	 */
 	@FXML
 	void Edit(ActionEvent actionEvent_) {
 		try {
@@ -440,6 +490,10 @@ public class TspC {
 		}
 	}
 
+	/**
+	 * Добавить терминал
+	 * @param actionEvent_
+	 */
 	@FXML
 	void Add(ActionEvent actionEvent_) {
 		try {
@@ -467,7 +521,9 @@ public class TspC {
 				@Override
 				public void handle(WindowEvent paramT) {
 					LoadTable();
-					setId(controller.getId());
+
+					if (controller.getId() != -1)
+						setId(controller.getId());
 					SelRow();
 				}
 			});

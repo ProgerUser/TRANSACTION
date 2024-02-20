@@ -9,6 +9,14 @@ import javafx.beans.property.StringProperty;
 
 public class SBRA_TSP_POS {
 	/** Нет данных */
+	private StringProperty TERM_TYPE_S;
+	/** Нет данных */
+	private LongProperty TERM_KTM;
+	/** Нет данных */
+	private StringProperty CLIACC;
+	/** Нет данных */
+	private StringProperty CLINAME;
+	/** Нет данных */
 	private StringProperty TERM_IPIFNOTSIM;
 	/** Нет данных */
 	private StringProperty TERM_PORTHOST;
@@ -38,12 +46,12 @@ public class SBRA_TSP_POS {
 	private StringProperty TERM_MODEL;
 	/** Нет данных */
 	private LongProperty ID;
-	/** Нет данных */
-	private StringProperty CLIACC;
-	/** Нет данных */
-	private StringProperty CLINAME;
 
 	public SBRA_TSP_POS() {
+		this.TERM_TYPE_S = new SimpleStringProperty();
+		this.TERM_KTM = new SimpleLongProperty();
+		this.CLIACC = new SimpleStringProperty();
+		this.CLINAME = new SimpleStringProperty();
 		this.TERM_IPIFNOTSIM = new SimpleStringProperty();
 		this.TERM_PORTHOST = new SimpleStringProperty();
 		this.TERM_GEO = new SimpleStringProperty();
@@ -59,8 +67,22 @@ public class SBRA_TSP_POS {
 		this.TERM_ADDR = new SimpleStringProperty();
 		this.TERM_MODEL = new SimpleStringProperty();
 		this.ID = new SimpleLongProperty();
-		this.CLIACC = new SimpleStringProperty();
-		this.CLINAME = new SimpleStringProperty();
+	}
+
+	public void setTERM_TYPE_S(String TERM_TYPE_S) {
+		this.TERM_TYPE_S.set(TERM_TYPE_S);
+	}
+
+	public void setTERM_KTM(Long TERM_KTM) {
+		this.TERM_KTM.set(TERM_KTM);
+	}
+
+	public void setCLIACC(String CLIACC) {
+		this.CLIACC.set(CLIACC);
+	}
+
+	public void setCLINAME(String CLINAME) {
+		this.CLINAME.set(CLINAME);
 	}
 
 	public void setTERM_IPIFNOTSIM(String TERM_IPIFNOTSIM) {
@@ -123,12 +145,20 @@ public class SBRA_TSP_POS {
 		this.ID.set(ID);
 	}
 
-	public void setCLIACC(String CLIACC) {
-		this.CLIACC.set(CLIACC);
+	public String getTERM_TYPE_S() {
+		return TERM_TYPE_S.get();
 	}
 
-	public void setCLINAME(String CLINAME) {
-		this.CLINAME.set(CLINAME);
+	public Long getTERM_KTM() {
+		return TERM_KTM.get();
+	}
+
+	public String getCLIACC() {
+		return CLIACC.get();
+	}
+
+	public String getCLINAME() {
+		return CLINAME.get();
 	}
 
 	public String getTERM_IPIFNOTSIM() {
@@ -191,12 +221,20 @@ public class SBRA_TSP_POS {
 		return ID.get();
 	}
 
-	public String getCLIACC() {
-		return CLIACC.get();
+	public StringProperty TERM_TYPE_SProperty() {
+		return TERM_TYPE_S;
 	}
 
-	public String getCLINAME() {
-		return CLINAME.get();
+	public LongProperty TERM_KTMProperty() {
+		return TERM_KTM;
+	}
+
+	public StringProperty CLIACCProperty() {
+		return CLIACC;
+	}
+
+	public StringProperty CLINAMEProperty() {
+		return CLINAME;
 	}
 
 	public StringProperty TERM_IPIFNOTSIMProperty() {
@@ -257,13 +295,5 @@ public class SBRA_TSP_POS {
 
 	public LongProperty IDProperty() {
 		return ID;
-	}
-
-	public StringProperty CLIACCProperty() {
-		return CLIACC;
-	}
-
-	public StringProperty CLINAMEProperty() {
-		return CLINAME;
 	}
 }

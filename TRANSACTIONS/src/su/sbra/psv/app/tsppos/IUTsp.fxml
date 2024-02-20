@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Text?>
 <?import su.sbra.psv.app.tsppos.MaskedTextField?>
 
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="480.0" prefWidth="650.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="500.0" prefWidth="650.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <padding>
       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
    </padding>
@@ -70,6 +70,7 @@
                         <Text layoutX="71.0" layoutY="210.0" strokeType="OUTSIDE" strokeWidth="0.0" text="IP lan" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
                         <Text layoutX="10.0" layoutY="240.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Дата регистрации" GridPane.halignment="RIGHT" GridPane.rowIndex="8" />
                         <Text layoutX="26.0" layoutY="270.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Сотовый оператор" GridPane.halignment="RIGHT" GridPane.rowIndex="9" />
+                        <Text layoutX="26.0" layoutY="270.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Тип устройства" GridPane.halignment="RIGHT" GridPane.rowIndex="14" />
                         <Text layoutX="12.0" layoutY="300.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Номер телефона" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
                         <TextField fx:id="TERM_SERIAL" maxWidth="200.0" minWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                            <GridPane.margin>
@@ -123,6 +124,17 @@
                               <Insets left="5.0" />
                            </GridPane.margin>
                         </TextField>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="КТМ" GridPane.halignment="RIGHT" GridPane.rowIndex="13" />
+                        <MaskedTextField fx:id="TERM_KTM" mask="####" maxWidth="200.0" minWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="13">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </MaskedTextField>
+                        <ComboBox fx:id="TERM_TYPE" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="14">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </ComboBox>
                      </children>
                      <opaqueInsets>
                         <Insets />

@@ -54,6 +54,10 @@ public class AddTsp {
 	@FXML
 	private TextField TERM_COMMENT;
 	@FXML
+	private MaskedTextField TERM_KTM;
+	@FXML
+	private ComboBox<String> TERM_TYPE;
+	@FXML
 	private Button Ok;
 
 	/**
@@ -85,9 +89,9 @@ public class AddTsp {
 	}
 	
 	public long getId() {
-		return this.seltemp;
+		return (this.seltemp == null) ? -1 : this.seltemp;
 	}
-	
+
 	Long seltemp;
 	
 	/**
@@ -113,8 +117,10 @@ public class AddTsp {
 					+ "   TERM_COMMENT,\r\n"
 					+ "   TERM_GEO,\r\n"
 					+ "   TERM_PORTHOST,\r\n"
-					+ "   TERM_IPIFNOTSIM)\r\n"
-					+ "  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) returning id into ?; "
+					+ "   TERM_IPIFNOTSIM,)\r\n"
+					+ "   TERM_KTM,)\r\n"
+					+ "   TERM_TYPE)\r\n"
+					+ "  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) returning id into ?; "
 					+ "end;");
 
 			callStmt.setString(1, TERM_MODEL.getSelectionModel().getSelectedItem());
@@ -131,11 +137,24 @@ public class AddTsp {
 			callStmt.setString(12, TERM_PORTHOST.getSelectionModel().getSelectedItem());
 			callStmt.setString(13, TERM_IPIFNOTSIM.getText());
 			
-			callStmt.registerOutParameter(14, Types.INTEGER);
+			if (!TERM_KTM.getText().equals("")) {
+				callStmt.setLong(14, Long.valueOf(TERM_KTM.getText()));
+			} else {
+				callStmt.setNull(14, java.sql.Types.INTEGER);
+			}
+			
+			if (TERM_TYPE.getSelectionModel().getSelectedItem().equals("ÒÑÏ")) {
+				callStmt.setLong(15, 3);
+			} else if (TERM_TYPE.getSelectionModel().getSelectedItem().equals("ÏÂÍ")) {
+				callStmt.setLong(15, 2);
+			}
+			
+			callStmt.registerOutParameter(16, Types.INTEGER);
 			callStmt.execute();
 			
 			
 			Long retid = callStmt.getLong(14);
+			
 			setId(retid);
 			
 			callStmt.close();
@@ -197,6 +216,9 @@ public class AddTsp {
 			this.TERM_PORTHOST.setItems(port);
 			String operators[] = { "Aquafon", "A-mobile" };
 			this.TERM_SIM_OPER.setItems(FXCollections.observableArrayList(operators));
+			
+			String types[] = { "ÒÑÏ", "ÏÂÍ" };
+			this.TERM_TYPE.setItems(FXCollections.observableArrayList(types));
 
 		} catch (Exception e) {
 			DbUtil.Log_Error(e);
