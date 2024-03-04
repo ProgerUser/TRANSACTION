@@ -103,8 +103,8 @@ public class AddTsp {
 	void Ok(ActionEvent event) {
 		try {
 			CallableStatement callStmt = DBUtil.conn.prepareCall(
-					" begin "
-					+ "INSERT INTO SBRA_TSP_POS\r\n"
+					  "begin "
+					+ "INSERT INTO SBRA_TSP_POS \r\n"
 					+ "  (TERM_MODEL,\r\n"
 					+ "   TERM_ADDR,\r\n"
 					+ "   TERM_INTEGRATION,\r\n"
@@ -117,8 +117,8 @@ public class AddTsp {
 					+ "   TERM_COMMENT,\r\n"
 					+ "   TERM_GEO,\r\n"
 					+ "   TERM_PORTHOST,\r\n"
-					+ "   TERM_IPIFNOTSIM,)\r\n"
-					+ "   TERM_KTM,)\r\n"
+					+ "   TERM_IPIFNOTSIM,\r\n"
+					+ "   TERM_KTM,\r\n"
 					+ "   TERM_TYPE)\r\n"
 					+ "  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) returning id into ?; "
 					+ "end;");
@@ -153,7 +153,7 @@ public class AddTsp {
 			callStmt.execute();
 			
 			
-			Long retid = callStmt.getLong(14);
+			Long retid = callStmt.getLong(16);
 			
 			setId(retid);
 			
