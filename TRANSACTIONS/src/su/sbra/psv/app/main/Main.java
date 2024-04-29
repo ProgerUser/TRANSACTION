@@ -90,21 +90,23 @@ public class Main extends Application {
 				DBUtil.dbConnect();
 				DbUtil.Db_Connect();
 				ConvVal();
-			} else if (MODULE.equals("VTB_CONV")) {
+			} else if (MODULE.equals("IBANK1C")) {
 				DBUtil.dbConnect();
 				DbUtil.Db_Connect();
-				ConvVal();
+				TermClBkSverkaMenu();
 			}
 
 			{
-				Connect.connectionURL_ = "10.111.64.21:1521/ODB";
-				Connect.userID_ = "SAIDP";
-				Connect.userPassword_ = "vector165";
-				DbUtil.Db_Connect();
-				DBUtil.dbConnect();
-				InitAppRootLayout();
-				ShFirstView();
-				TermClBkSverka();
+				//Connect.connectionURL_ = "10.111.64.21:1521/ODB";
+				//Connect.userID_ = "SAIDP";
+				//Connect.userPassword_ = "";
+				//DbUtil.Db_Connect();
+				//DBUtil.dbConnect();
+				// InitAppRootLayout();
+				// ShFirstView();
+				//InitAppRootLayout();
+				//TermClBkSverkaMenu();
+				//SwiftFromMenu();
 //				TspLst();
 
 //				swift2();
@@ -566,6 +568,36 @@ public class Main extends Application {
 			DbUtil.Log_Error(e);
 			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
+	}
+
+	public static void TermClBkSverkaMenu() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+
+			SverkaC controller = new SverkaC();
+			controller.SetStageForClose(primaryStage);
+			loader.setController(controller);
+
+			loader.setLocation(Main.class.getResource("/su/sbra/psv/app/sverka/Sverka.fxml"));
+			VBox employeeOperationsView = (VBox) loader.load();
+
+			Scene scene = new Scene(employeeOperationsView); // We are sending rootLayout to the Scene.
+			primaryStage.setTitle("IBank2Import " + Connect.userID_ + "@" + Connect.connectionURL_);
+			primaryStage.setScene(scene); // Set the scene in primary stage.
+			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent paramT) {
+					// controller.EndTask();
+					controller.dbDisconnect();
+				}
+			});
+			primaryStage.show(); // Display the primary stage
+
+		} catch (Exception e) {
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
+		}
+
 	}
 
 	/**

@@ -58,6 +58,7 @@ import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
@@ -106,6 +107,19 @@ public class SverkaC {
 	@FXML
 	private Button ExecButton;
 
+	
+	/**
+	 * Stage для закрытия
+	 */
+	@SuppressWarnings("unused")
+	private Stage STFCLS;
+	
+	/**
+	 * Инициализация Stage для закрытия
+	 */
+	public void SetStageForClose(Stage mnst) {
+		this.STFCLS = mnst;
+	}
 	/**
 	 * Загрузить файл
 	 * 
