@@ -37,7 +37,8 @@
 
 				<Menu fx:id="18" mnemonicParsing="false" text="Банк-Клиент">
 					<items>
-						<MenuItem fx:id="19" mnemonicParsing="false" onAction="#Ibank" text="Клиенты" />
+						<MenuItem fx:id="19" mnemonicParsing="false" onAction="#Ibank" text="Клиенты IBANK2" />
+						<MenuItem fx:id="181" mnemonicParsing="false" onAction="#Sverka" text="Загрузка из IBANK2" />
 					</items>
 				</Menu>
 				<Menu fx:id="20" mnemonicParsing="false" text="Пенсия РФ">

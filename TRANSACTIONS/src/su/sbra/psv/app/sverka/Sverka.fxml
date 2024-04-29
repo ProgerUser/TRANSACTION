@@ -3,6 +3,7 @@
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -13,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
 	<ToolBar>
 		<items>
 			<Button mnemonicParsing="false" onAction="#LoadFile">
@@ -21,34 +22,50 @@
                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="FOLDER_OPEN_ALT" size="15" />
             </graphic></Button>
          <Separator orientation="VERTICAL" />
-			<Button mnemonicParsing="false" onAction="#Check">
+			<Button fx:id="ExecButton" mnemonicParsing="false" onAction="#Exec">
             <graphic>
                <FontAwesomeIconView fontSmoothingType="LCD" glyphName="COGS" size="15" />
             </graphic>
             <tooltip>
-               <Tooltip text="Сверка">
+               <Tooltip text="Сформировать документы">
                   <font>
                      <Font size="14.0" />
                   </font>
                </Tooltip>
             </tooltip></Button>
+         <Separator layoutX="47.0" layoutY="10.0" orientation="VERTICAL" />
+         <DatePicker fx:id="dateLoad" onAction="#ChangeDate" prefWidth="120.0">
+            <tooltip>
+               <Tooltip text="Выбор даты">
+                  <font>
+                     <Font size="14.0" />
+                  </font>
+               </Tooltip>
+            </tooltip>
+         </DatePicker>
+         <Separator layoutX="94.0" layoutY="10.0" orientation="VERTICAL" />
+         <Button layoutX="57.0" layoutY="11.0" mnemonicParsing="false" onAction="#Delete">
+            <graphic>
+               <FontAwesomeIconView fontSmoothingType="LCD" glyphName="TRASH" size="15" />
+            </graphic>
+            <tooltip>
+               <Tooltip text="Удалить загрузку">
+                  <font>
+                     <Font size="14.0" />
+                  </font>
+               </Tooltip>
+            </tooltip>
+         </Button>
 		</items>
       <VBox.margin>
          <Insets left="-5.0" right="-5.0" top="-5.0" />
       </VBox.margin>
-      <tooltip>
-         <Tooltip text="Загрузить">
-            <font>
-               <Font size="14.0" />
-            </font>
-         </Tooltip>
-      </tooltip>
 	</ToolBar>
 	<TableView fx:id="STMT" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="466.0" tableMenuButtonVisible="true" BorderPane.alignment="CENTER" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS" VBox.vgrow="ALWAYS">
 		<columns>
 			<TableColumn fx:id="ID" prefWidth="61.0" text="ИД" />
-			<TableColumn fx:id="CREATION_DATETIME" prefWidth="113.0" text="Дата загрузки" />
-			<TableColumn fx:id="LOAD_DATE" prefWidth="113.0" text="Дата выгрузки" />
+			<TableColumn fx:id="CREATION_DATETIME" prefWidth="113.0" text="Дата выгрузки" />
+			<TableColumn fx:id="LOAD_DATE" prefWidth="113.0" text="Дата загрузки" />
 			<TableColumn fx:id="StatusFile" prefWidth="187.0" text="Даты">
 				<columns>
 					<TableColumn fx:id="STMT_BEGIN" prefWidth="100.0" text="С" />

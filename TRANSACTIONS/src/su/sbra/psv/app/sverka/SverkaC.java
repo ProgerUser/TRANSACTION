@@ -17,15 +17,17 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -46,21 +48,26 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.stage.Stage;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LocalDateStringConverter;
 import javafx.util.converter.LocalDateTimeStringConverter;
+import su.sbra.psv.app.main.Main;
 import su.sbra.psv.app.model.Connect;
-import su.sbra.psv.app.model.SqlMap;
+import su.sbra.psv.app.sbalert.Msg;
+import su.sbra.psv.app.swift.ConvConst;
+import su.sbra.psv.app.utils.DbUtil;
 
 /**
  * Сверка по Кор. счету, выгрузка в формате 1с
@@ -94,6 +101,10 @@ public class SverkaC {
 	private TableColumn<AMRA_STMT_CALC, LocalDateTime> LOAD_DATE;
 	@FXML
 	private TableColumn<AMRA_STMT_CALC, LocalDateTime> CREATION_DATETIME;
+	@FXML
+	private DatePicker dateLoad;
+	@FXML
+	private Button ExecButton;
 
 	/**
 	 * Загрузить файл
@@ -115,37 +126,50 @@ public class SverkaC {
 
 			File file = fileChooser.showOpenDialog(null);
 			if (file != null) {
-				String xml = CrXml(file.getParent() + "/" + file.getName());
-				String reviewStr = readFile(file.getParent() + "\\" + file.getName());
-				Clob TXT = conn.createClob();
-				TXT.setString(1, reviewStr);
-				Clob XML = conn.createClob();
-				XML.setString(1, xml);
-				CallableStatement callStmt = conn.prepareCall("{ ? = call z_sb_create_tr_amra.AMRA_STMT_EXEC(?,?,?,?)");
-				callStmt.registerOutParameter(1, Types.VARCHAR);
-				callStmt.setClob(2, TXT);
-				callStmt.registerOutParameter(3, Types.INTEGER);
-				callStmt.registerOutParameter(4, Types.VARCHAR);
-				callStmt.setClob(5, XML);
-				callStmt.execute();
-				if (callStmt.getString(1).equals("OK")) {
-					Message("Успешно");
-					conn.commit();
-					InitTable();
-				} else {
-					Message(callStmt.getString(4));
+
+				final Alert alert = new Alert(AlertType.CONFIRMATION, "Разобрать файл \"" + file.getName() + "\" ?",
+						ButtonType.YES, ButtonType.NO);
+				if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
+					String xml = CrXml(file.getParent() + "/" + file.getName());
+					String reviewStr = readFile(file.getParent() + "\\" + file.getName());
+					Clob TXT = conn.createClob();
+					TXT.setString(1, reviewStr);
+					Clob XML = conn.createClob();
+					XML.setString(1, xml);
+					CallableStatement callStmt = conn
+							.prepareCall("{ ? = call z_sb_create_tr_amra.AMRA_STMT_EXEC(?,?,?,?)");
+					callStmt.registerOutParameter(1, Types.VARCHAR);
+					callStmt.setClob(2, TXT);
+					callStmt.registerOutParameter(3, Types.INTEGER);
+					callStmt.registerOutParameter(4, Types.VARCHAR);
+					callStmt.setClob(5, XML);
+					callStmt.execute();
+					if (callStmt.getString(1).equals("OK")) {
+						Msg.Message("Успешно");
+						conn.commit();
+						InitTable(NOW_LOCAL_DATE());
+					} else {
+						Msg.Message(callStmt.getString(4));
+					}
+					callStmt.close();
 				}
-				callStmt.close();
+
 			}
 		} catch (
 
 		Exception e) {
 			e.printStackTrace();
-			Message(ExceptionUtils.getStackTrace(e));
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 
 	}
 
+	/**
+	 * Создание XML
+	 * 
+	 * @param path
+	 * @return
+	 */
 	String CrXml(String path) {
 		String ret = null;
 		try {
@@ -338,9 +362,24 @@ public class SverkaC {
 			ret = writer.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
-			Message(ExceptionUtils.getStackTrace(e));
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 		return ret;
+	}
+
+	/**
+	 * Открыть выписку
+	 * 
+	 * @param event
+	 */
+	@FXML
+	void ChangeDate(ActionEvent event) {
+		try {
+			InitTable(dateLoad.getValue());
+		} catch (Exception e) {
+			e.printStackTrace();
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
 	}
 
 	/**
@@ -353,16 +392,17 @@ public class SverkaC {
 
 	}
 
-	void InitTable() {
+	/**
+	 * 
+	 */
+	void InitTable(LocalDate dt) {
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 			DateTimeFormatter formatterwt = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
-			String selectStmt = "select id, \r\n" + "load_date, \r\n" + "creation_datetime, \r\n" + "stmt_begin, \r\n"
-					+ "stmt_end, \r\n" + "ch_account, \r\n" + "begin_rest, \r\n" + "cred_ob, \r\n" + "deb_ob, \r\n"
-					+ "end_rest, \r\n" + "file_cl, \r\n" + "oper, \r\n"
-					+ " decode(status,0,'Загружен') status from AMRA_STMT_CALC t " + "order by ID desc ";
-			PreparedStatement prepStmt = conn.prepareStatement(selectStmt);
-			ResultSet rs = prepStmt.executeQuery();
+			String selectStmt = "SELECT * FROM V_AMRA_STMT_CALC t where TRUNC(LOAD_DATE) = ?";
+			PreparedStatement prp = conn.prepareStatement(selectStmt);
+			prp.setDate(1, java.sql.Date.valueOf(dt));
+			ResultSet rs = prp.executeQuery();
 			ObservableList<AMRA_STMT_CALC> dlist = FXCollections.observableArrayList();
 			while (rs.next()) {
 				AMRA_STMT_CALC list = new AMRA_STMT_CALC();
@@ -388,7 +428,7 @@ public class SverkaC {
 
 				dlist.add(list);
 			}
-			prepStmt.close();
+			prp.close();
 			rs.close();
 
 			STMT.setItems(dlist);
@@ -403,7 +443,7 @@ public class SverkaC {
 			});
 		} catch (Exception e) {
 			e.printStackTrace();
-			Message(ExceptionUtils.getStackTrace(e));
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -476,7 +516,7 @@ public class SverkaC {
 			return clobData;
 		} catch (Exception e) {
 			e.printStackTrace();
-			Message(ExceptionUtils.getStackTrace(e));
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
 	}
@@ -503,9 +543,21 @@ public class SverkaC {
 			return encoding;
 		} catch (Exception e) {
 			e.printStackTrace();
-			Message(ExceptionUtils.getStackTrace(e));
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 		return null;
+	}
+
+	/**
+	 * Текущий день
+	 * 
+	 * @return
+	 */
+	public LocalDate NOW_LOCAL_DATE() {
+		String date = new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance().getTime());
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+		LocalDate localDate = LocalDate.parse(date, formatter);
+		return localDate;
 	}
 
 	/**
@@ -514,6 +566,10 @@ public class SverkaC {
 	@FXML
 	private void initialize() {
 		try {
+
+			new ConvConst().FormatDatePiker(dateLoad);
+			dateLoad.setValue(NOW_LOCAL_DATE());
+
 			STMT.setEditable(true);
 			dbConnect();
 
@@ -529,21 +585,30 @@ public class SverkaC {
 			CREATION_DATETIME.setCellValueFactory(cellData -> cellData.getValue().CREATION_DATETIMEProperty());
 
 			Status.setCellFactory(TextFieldTableCell.forTableColumn());
+
 			DEB_OB.setCellFactory(
 					TextFieldTableCell.<AMRA_STMT_CALC, Double>forTableColumn(new DoubleStringConverter()));
+
 			END_REST.setCellFactory(
 					TextFieldTableCell.<AMRA_STMT_CALC, Double>forTableColumn(new DoubleStringConverter()));
+
 			CRED_OB.setCellFactory(
 					TextFieldTableCell.<AMRA_STMT_CALC, Double>forTableColumn(new DoubleStringConverter()));
+
 			BEGIN_REST.setCellFactory(
 					TextFieldTableCell.<AMRA_STMT_CALC, Double>forTableColumn(new DoubleStringConverter()));
+
 			STMT_BEGIN.setCellFactory(
 					TextFieldTableCell.<AMRA_STMT_CALC, LocalDate>forTableColumn(new LocalDateStringConverter()));
+
 			STMT_END.setCellFactory(
 					TextFieldTableCell.<AMRA_STMT_CALC, LocalDate>forTableColumn(new LocalDateStringConverter()));
+
 			ID.setCellFactory(TextFieldTableCell.<AMRA_STMT_CALC, Integer>forTableColumn(new IntegerStringConverter()));
+
 			LOAD_DATE.setCellFactory(TextFieldTableCell
 					.<AMRA_STMT_CALC, LocalDateTime>forTableColumn(new LocalDateTimeStringConverter()));
+
 			CREATION_DATETIME.setCellFactory(TextFieldTableCell
 					.<AMRA_STMT_CALC, LocalDateTime>forTableColumn(new LocalDateTimeStringConverter()));
 
@@ -632,7 +697,7 @@ public class SverkaC {
 			DateFormatDT(STMT_BEGIN);
 			DateFormatDT(STMT_END);
 
-			InitTable();
+			InitTable(dateLoad.getValue());
 
 			Status.setCellFactory(col -> new TextFieldTableCell<AMRA_STMT_CALC, String>() {
 				@Override
@@ -643,35 +708,80 @@ public class SverkaC {
 						setGraphic(null);
 					} else {
 						setText(item.toString());
-						if (item.equals("OK")) {
+						if (item.equals("Разобран")) {
 							setStyle("-fx-text-fill: #7ede80;-fx-font-weight: bold;");
 						} else if (item.equals("Загружен")) {
 							setStyle("-fx-text-fill: #ebaf2f;-fx-font-weight: bold;");
-						} else {
+						} else if (item.equals("Ошибка")) {
 							setStyle("-fx-text-fill: #e65591;-fx-font-weight: bold;");
 						}
 					}
 				}
 			});
+
+			DEB_OB.setCellFactory(c -> new TableCell<AMRA_STMT_CALC, Double>() {
+				@Override
+				protected void updateItem(Double balance, boolean empty) {
+					super.updateItem(balance, empty);
+					if (balance == null || empty) {
+						setText(null);
+					} else {
+						setText(String.format("%.2f", balance.doubleValue()));
+					}
+				}
+			});
+
+			CRED_OB.setCellFactory(c -> new TableCell<AMRA_STMT_CALC, Double>() {
+				@Override
+				protected void updateItem(Double balance, boolean empty) {
+					super.updateItem(balance, empty);
+					if (balance == null || empty) {
+						setText(null);
+					} else {
+						setText(String.format("%.2f", balance.doubleValue()));
+					}
+				}
+			});
+
+			BEGIN_REST.setCellFactory(c -> new TableCell<AMRA_STMT_CALC, Double>() {
+				@Override
+				protected void updateItem(Double balance, boolean empty) {
+					super.updateItem(balance, empty);
+					if (balance == null || empty) {
+						setText(null);
+					} else {
+						setText(String.format("%.2f", balance.doubleValue()));
+					}
+				}
+			});
+			END_REST.setCellFactory(c -> new TableCell<AMRA_STMT_CALC, Double>() {
+				@Override
+				protected void updateItem(Double balance, boolean empty) {
+					super.updateItem(balance, empty);
+					if (balance == null || empty) {
+						setText(null);
+					} else {
+						setText(String.format("%.2f", balance.doubleValue()));
+					}
+				}
+			});
+
+			// sel row
+			STMT.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> {
+				AMRA_STMT_CALC sel = STMT.getSelectionModel().getSelectedItem();
+				if (sel != null) {
+					if (sel.getSTATUS().equals("Загружен")) {
+						ExecButton.setDisable(false);
+					} else {
+						ExecButton.setDisable(true);
+					}
+				}
+			});
+
 		} catch (Exception e) {
 			e.printStackTrace();
-			Message(ExceptionUtils.getStackTrace(e));
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
-	}
-
-	/**
-	 * Вывод сообщения
-	 * 
-	 * @param mess
-	 */
-	public static void Message(String mess) {
-		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-		stage.getIcons().add(new Image("icon.png"));
-		alert.setTitle("Внимание");
-		alert.setHeaderText(null);
-		alert.setContentText(mess);
-		alert.showAndWait();
 	}
 
 	/**
@@ -681,23 +791,24 @@ public class SverkaC {
 
 	/**
 	 * Открыть сессию
-	 * @throws UnknownHostException 
+	 * 
+	 * @throws UnknownHostException
 	 */
 	private void dbConnect() throws UnknownHostException {
 		try {
 			Class.forName("oracle.jdbc.OracleDriver");
-			
+
 			Properties props = new Properties();
 			props.setProperty("password", Connect.userPassword_);
 			props.setProperty("user", Connect.userID_);
 			props.put("v$session.osuser", System.getProperty("user.name").toString());
 			props.put("v$session.machine", InetAddress.getLocalHost().getHostAddress());
 			props.put("v$session.program", getClass().getName());
-			conn  = DriverManager.getConnection("jdbc:oracle:thin:@" + Connect.connectionURL_, props);
-			
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@" + Connect.connectionURL_, props);
+
 			conn.setAutoCommit(false);
 		} catch (SQLException | ClassNotFoundException e) {
-			Message(ExceptionUtils.getStackTrace(e));
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -710,75 +821,244 @@ public class SverkaC {
 				conn.close();
 			}
 		} catch (SQLException e) {
-			Message(ExceptionUtils.getStackTrace(e));
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+//	/**
+//	 * 
+//	 * @param event
+//	 */
+//	@FXML
+//	void Check(ActionEvent event) {
+//		try {
+//			if (STMT.getSelectionModel().getSelectedItem() != null) {
+//				String pattern_ = "###,###.###";
+//				DecimalFormat decimalFormat_ = new DecimalFormat(pattern_);
+//
+//				String error = "";
+//				AMRA_STMT_CALC rec = STMT.getSelectionModel().getSelectedItem();
+//				PreparedStatement prepStmt = conn.prepareStatement(
+//						"select distinct DT_DATE from AMRA_STMT_CALC_ROW where FILE_ID = ? order by DT_DATE");
+//				prepStmt.setInt(1, rec.getID());
+//				ResultSet rs = prepStmt.executeQuery();
+//				while (rs.next()) {
+//					{
+//						PreparedStatement prepStmt1 = conn.prepareStatement(
+//								"select ST_ID, ST_DATE, ST_SUM from table(z_sb_create_tr_amra.STMT_CHECK(?))");
+//						prepStmt1.setDate(1, rs.getDate("DT_DATE"));
+//						ResultSet rs1 = prepStmt1.executeQuery();
+//						while (rs1.next()) {
+//							error = error + "Ошибка за "
+//									+ new SimpleDateFormat("dd.MM.yyyy").format(rs1.getDate("ST_DATE")) + " на сумму "
+//									+ decimalFormat_.format(rs1.getDouble("ST_SUM")) + "\r\n";
+//						}
+//						prepStmt1.close();
+//						rs1.close();
+//					}
+//					{
+//						SqlMap sql = new SqlMap().load("/Sverka.xml");
+//						String readRecordSQL = sql.getSql("GetVector");
+//						PreparedStatement prepStmt1 = conn.prepareStatement(readRecordSQL);
+//						prepStmt1.setDate(1, rs.getDate("DT_DATE"));
+//						prepStmt1.setDate(2, rs.getDate("DT_DATE"));
+//						prepStmt1.setDate(3, rs.getDate("DT_DATE"));
+//						prepStmt1.setDate(4, rs.getDate("DT_DATE"));
+//						prepStmt1.setDate(5, rs.getDate("DT_DATE"));
+//						prepStmt1.setDate(6, rs.getDate("DT_DATE"));
+//						ResultSet rs1 = prepStmt1.executeQuery();
+//						while (rs1.next()) {
+//							error = error + "Расшифровка Дата "
+//									+ new SimpleDateFormat("dd.MM.yyyy").format(rs1.getDate("DT")) + " сумму "
+//									+ decimalFormat_.format(rs1.getDouble("SUMM")) + " Направление "
+//									+ rs1.getString("N") + "\r\n";
+//						}
+//						prepStmt1.close();
+//						rs1.close();
+//					}
+//				}
+//				prepStmt.close();
+//				rs.close();
+//
+//				if (!error.equals("")) {
+//
+//					ShowError(rec.getID(), error);
+//				}
+//			} else {
+//				Msg.Message("Выберите строку!");
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			Msg.Message(ExceptionUtils.getStackTrace(e));
+//		}
+//	}
+
+	/**
+	 * Открыть отложенные документы
+	 * 
+	 * @param event
+	 */
+	void OpenAbsForm2(int fileid) {
+		try {
+
+			String call = "ifrun60.exe I:/KERNEL/DP_DOC.fmx " + Connect.userID_ + "/" + Connect.userPassword_
+					+ "@ODB WHERE=\"" + "ID IN (SELECT trnnum FROM amra_stmt_calc_row WHERE file_id = " + fileid
+					+ ") \"";
+			ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", call);
+			System.out.println(call);
+			builder.redirectErrorStream(true);
+			Process p;
+			p = builder.start();
+			BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			String line;
+			while (true) {
+				line = r.readLine();
+				if (line == null) {
+					break;
+				}
+				System.out.println(line);
+			}
+
+		} catch (Exception e) {
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
 	/**
+	 * Сформировать проводки
 	 * 
 	 * @param event
 	 */
 	@FXML
-	void Check(ActionEvent event) {
+	void Exec(ActionEvent event) {
 		try {
 			if (STMT.getSelectionModel().getSelectedItem() != null) {
-				String pattern_ = "###,###.###";
-				DecimalFormat decimalFormat_ = new DecimalFormat(pattern_);
+				final Alert alert = new Alert(AlertType.CONFIRMATION,
+						"Разобрать файл \"" + STMT.getSelectionModel().getSelectedItem().getID() + "\" ?",
+						ButtonType.YES, ButtonType.NO);
+				if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
+					if (STMT.getSelectionModel().getSelectedItem().getSTATUS().equals("Загружен")) {
 
-				String error = "";
-				AMRA_STMT_CALC rec = STMT.getSelectionModel().getSelectedItem();
-				PreparedStatement prepStmt = conn.prepareStatement(
-						"select distinct DT_DATE from AMRA_STMT_CALC_ROW where FILE_ID = ? order by DT_DATE");
-				prepStmt.setInt(1, rec.getID());
-				ResultSet rs = prepStmt.executeQuery();
-				while (rs.next()) {
-					{
-						PreparedStatement prepStmt1 = conn.prepareStatement(
-								"select ST_ID, ST_DATE, ST_SUM from table(z_sb_create_tr_amra.STMT_CHECK(?))");
-						prepStmt1.setDate(1, rs.getDate("DT_DATE"));
-						ResultSet rs1 = prepStmt1.executeQuery();
-						while (rs1.next()) {
-							error = error + "Ошибка за "
-									+ new SimpleDateFormat("dd.MM.yyyy").format(rs1.getDate("ST_DATE")) + " на сумму "
-									+ decimalFormat_.format(rs1.getDouble("ST_SUM")) + "\r\n";
+						Date date = new Date();
+						DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH-mm-ss");
+						String strDate = dateFormat.format(date);
+
+						CallableStatement callStmt = conn.prepareCall("{ ? = call z_sb_create_tr_amra.Reg2DP(?)}");
+						callStmt.registerOutParameter(1, Types.VARCHAR);
+						callStmt.setLong(2, STMT.getSelectionModel().getSelectedItem().getID());
+						callStmt.execute();
+
+						Integer rowid = 1;
+
+						if (!callStmt.getString(1).equals("OK")) {
+
+							Msg.Message("Найдены ошибки, скоро откроется файл с описанием.");
+
+							Statement sqlStatement = conn.createStatement();
+							String readRecordSQL = "SELECT * FROM Z_SB_MMBANK_LOG WHERE sess_id = "
+									+ STMT.getSelectionModel().getSelectedItem().getID();
+							ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
+
+							DateFormat dateFormat_ = new SimpleDateFormat("dd.MM.yyyy HH");
+							String strDate_ = dateFormat_.format(date);
+							String createfolder = System.getenv("TRANSACT_PATH") + "Files/" + strDate_ + "_FileID_"
+									+ STMT.getSelectionModel().getSelectedItem().getID();
+
+							File file = new File(createfolder);
+							if (!file.exists()) {
+								if (file.mkdir()) {
+								} else {
+									Msg.Message("Ошибка формаирования папки! = " + createfolder);
+								}
+							}
+
+							String path_file = createfolder + "\\" + strDate + "_ERROR.txt";
+							PrintWriter writer = new PrintWriter(path_file);
+							while (myResultSet.next()) {
+								writer.write(rowid + " | " + myResultSet.getTimestamp("recdate") + " | "
+										+ myResultSet.getString("desc_") + " | " + myResultSet.getString("sess_id")
+										+ "\r\n");
+								rowid++;
+							}
+							writer.close();
+							ProcessBuilder pb = new ProcessBuilder("Notepad.exe",
+									createfolder + "\\" + strDate + "_ERROR.txt");
+							pb.start();
+							myResultSet.close();
+							callStmt.close();
+							conn.commit();
+
+							InitTable(dateLoad.getValue());
+
+						} else {
+							callStmt.close();
+							conn.commit();
+
+							OpenAbsForm2(STMT.getSelectionModel().getSelectedItem().getID());
+
+							InitTable(dateLoad.getValue());
 						}
-						prepStmt1.close();
-						rs1.close();
-					}
-					{
-						SqlMap sql = new SqlMap().load("/Sverka.xml");
-						String readRecordSQL = sql.getSql("GetVector");
-						PreparedStatement prepStmt1 = conn.prepareStatement(readRecordSQL);
-						prepStmt1.setDate(1, rs.getDate("DT_DATE"));
-						prepStmt1.setDate(2, rs.getDate("DT_DATE"));
-						prepStmt1.setDate(3, rs.getDate("DT_DATE"));
-						prepStmt1.setDate(4, rs.getDate("DT_DATE"));
-						prepStmt1.setDate(5, rs.getDate("DT_DATE"));
-						prepStmt1.setDate(6, rs.getDate("DT_DATE"));
-						ResultSet rs1 = prepStmt1.executeQuery();
-						while (rs1.next()) {
-							error = error + "Расшифровка Дата "
-									+ new SimpleDateFormat("dd.MM.yyyy").format(rs1.getDate("DT")) + " сумму "
-									+ decimalFormat_.format(rs1.getDouble("SUMM")) + " Направление "
-									+ rs1.getString("N") + "\r\n";
-						}
-						prepStmt1.close();
-						rs1.close();
-					}
-				}
-				prepStmt.close();
-				rs.close();
 
-				if (!error.equals("")) {
-
-					ShowError(rec.getID(), error);
+					} else {
+						Msg.Message("Файле уже " + STMT.getSelectionModel().getSelectedItem().getSTATUS());
+					}
 				}
 			} else {
-				Message("Выберите строку!");
+				Msg.Message("Выберите строку!");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			Message(ExceptionUtils.getStackTrace(e));
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+	@FXML
+	void Delete(ActionEvent event) {
+		try {
+			if (STMT.getSelectionModel().getSelectedItem() != null) {
+				AMRA_STMT_CALC selrow = STMT.getSelectionModel().getSelectedItem();
+
+				final Alert alert = new Alert(AlertType.CONFIRMATION,
+						"Удалить файл \"" + selrow.getID() + "\" ?", ButtonType.YES, ButtonType.NO);
+
+				if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
+
+					CallableStatement callStmt = conn.prepareCall("{ call z_sb_create_tr_amra.DEL_LOAD(?,?)}");
+					callStmt.registerOutParameter(1, Types.VARCHAR);
+					callStmt.setLong(2, selrow.getID());
+					// catch
+					try {
+						callStmt.execute();
+					} catch (Exception e) {
+						DbUtil.Log_Error(e);
+						Main.logger.error(ExceptionUtils.getStackTrace(e));
+						conn.rollback();
+						callStmt.close();
+					}
+
+					// return
+					String ret = callStmt.getString(1);
+					// check
+					if (ret != null) {
+						// roll back
+						conn.rollback();
+						Msg.Message(ret);
+
+					} else {
+						conn.commit();
+						Msg.Message("Файл " + selrow.getID() + " удален");
+						// reload
+						InitTable(dateLoad.getValue());
+					}
+					// close
+					callStmt.close();
+				}
+			}
+
+		} catch (Exception e) {
+			DbUtil.Log_Error(e);
+			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -815,7 +1095,7 @@ public class SverkaC {
 			pb.start();
 		} catch (Exception e) {
 			e.printStackTrace();
-			Message(ExceptionUtils.getStackTrace(e));
+			Msg.Message(ExceptionUtils.getStackTrace(e));
 		}
 	}
 }
