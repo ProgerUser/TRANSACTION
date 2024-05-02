@@ -999,7 +999,7 @@ public class SverkaC {
 
 						Date date = new Date();
 						// Create the custom dialog.
-						Dialog<Pair<String, String>> dialog = new Dialog<>();
+						Dialog<Pair<LocalDate, LocalDate>> dialog = new Dialog<>();
 						dialog.setTitle("Выбор даты!");
 
 						Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
@@ -1026,14 +1026,14 @@ public class SverkaC {
 						Platform.runLater(() -> dt.requestFocus());
 						// Convert the result to
 						// clicked.
-//						dialog.setResultConverter(dialogButton -> {
-//							if (dialogButton == loginButtonType) {
-//								return new Pair<>(dt.getValue(), dt.getValue());
-//							}
-//							return null;
-//						});
+						dialog.setResultConverter(dialogButton -> {
+							if (dialogButton == loginButtonType) {
+								return new Pair<>(dt.getValue(), dt.getValue());
+							}
+							return null;
+						});
 
-						Optional<Pair<String, String>> result = dialog.showAndWait();
+						Optional<Pair<LocalDate, LocalDate>> result = dialog.showAndWait();
 
 						result.ifPresent(pair -> {
 							final Alert alert2 = new Alert(AlertType.CONFIRMATION, "Сформировать ?", ButtonType.YES,
@@ -1080,7 +1080,7 @@ public class SverkaC {
 										PrintWriter writer = new PrintWriter(path_file);
 										while (myResultSet.next()) {
 											writer.write(rowid + " | " + myResultSet.getTimestamp("recdate") + " | "
-													+ myResultSet.getString("desc_") + " | "
+													+ myResultSet.getString("ERROR") + " | "
 													+ myResultSet.getString("sess_id") + "\r\n");
 											rowid++;
 										}
