@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Optional;
 import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -42,24 +43,32 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
+import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Stage;
+import javafx.util.Pair;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LocalDateStringConverter;
@@ -107,19 +116,19 @@ public class SverkaC {
 	@FXML
 	private Button ExecButton;
 
-	
 	/**
 	 * Stage для закрытия
 	 */
 	@SuppressWarnings("unused")
 	private Stage STFCLS;
-	
+
 	/**
 	 * Инициализация Stage для закрытия
 	 */
 	public void SetStageForClose(Stage mnst) {
 		this.STFCLS = mnst;
 	}
+
 	/**
 	 * Загрузить файл
 	 * 
@@ -413,7 +422,7 @@ public class SverkaC {
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 			DateTimeFormatter formatterwt = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
-			String selectStmt = "SELECT * FROM V_AMRA_STMT_CALC t where TRUNC(LOAD_DATE) = ?";
+			String selectStmt = "SELECT * FROM V_AMRA_STMT_CALC t where TRUNC(LOAD_DATE) = ? order by id desc";
 			PreparedStatement prp = conn.prepareStatement(selectStmt);
 			prp.setDate(1, java.sql.Date.valueOf(dt));
 			ResultSet rs = prp.executeQuery();
@@ -915,9 +924,9 @@ public class SverkaC {
 	void OpenAbsForm2(int fileid) {
 		try {
 
-			String call = "ifrun60.exe I:/KERNEL/DP_DOC.fmx " + Connect.userID_ + "/" + Connect.userPassword_
-					+ "@ODB WHERE=\"" + "ID IN (SELECT trnnum FROM amra_stmt_calc_row WHERE file_id = " + fileid
-					+ ") \"";
+			String call = "ifrun60.exe I:/KERNEL/OPERLIST.fmx " + Connect.userID_ + "/" + Connect.userPassword_
+					+ "@ODB WHERE=\"" + "ITRNNUM IN (SELECT trnnum FROM amra_stmt_calc_row WHERE file_id = " + fileid
+					+ " ) and ITRNANUM = 0\"";
 			ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", call);
 			System.out.println(call);
 			builder.redirectErrorStream(true);
@@ -940,6 +949,38 @@ public class SverkaC {
 	}
 
 	/**
+	 * Open ABS
+	 * 
+	 * @param event
+	 */
+	@FXML
+	void Link(ActionEvent event) {
+		try {
+			if (STMT.getSelectionModel().getSelectedItem() != null) {
+				OpenAbsForm2(STMT.getSelectionModel().getSelectedItem().getID());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+	/**
+	 * Open ABS
+	 * 
+	 * @param event
+	 */
+	@FXML
+	void Refresh(ActionEvent event) {
+		try {
+			InitTable(dateLoad.getValue());
+		} catch (Exception e) {
+			e.printStackTrace();
+			Msg.Message(ExceptionUtils.getStackTrace(e));
+		}
+	}
+
+	/**
 	 * Сформировать проводки
 	 * 
 	 * @param event
@@ -948,71 +989,126 @@ public class SverkaC {
 	void Exec(ActionEvent event) {
 		try {
 			if (STMT.getSelectionModel().getSelectedItem() != null) {
-				final Alert alert = new Alert(AlertType.CONFIRMATION,
-						"Разобрать файл \"" + STMT.getSelectionModel().getSelectedItem().getID() + "\" ?",
+
+				AMRA_STMT_CALC sel = STMT.getSelectionModel().getSelectedItem();
+
+				final Alert alert = new Alert(AlertType.CONFIRMATION, "Разобрать файл \"" + sel.getID() + "\" ?",
 						ButtonType.YES, ButtonType.NO);
 				if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
-					if (STMT.getSelectionModel().getSelectedItem().getSTATUS().equals("Загружен")) {
+					if (sel.getSTATUS().equals("Загружен")) {
 
 						Date date = new Date();
-						DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH-mm-ss");
-						String strDate = dateFormat.format(date);
+						// Create the custom dialog.
+						Dialog<Pair<String, String>> dialog = new Dialog<>();
+						dialog.setTitle("Выбор даты!");
 
-						CallableStatement callStmt = conn.prepareCall("{ ? = call z_sb_create_tr_amra.Reg2DP(?)}");
-						callStmt.registerOutParameter(1, Types.VARCHAR);
-						callStmt.setLong(2, STMT.getSelectionModel().getSelectedItem().getID());
-						callStmt.execute();
+						Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+						stage.getIcons().add(new Image(this.getClass().getResource("/icon.png").toString()));
 
-						Integer rowid = 1;
+						// Set the button types.
+						ButtonType loginButtonType = new ButtonType("OK", ButtonData.OK_DONE);
+						dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
 
-						if (!callStmt.getString(1).equals("OK")) {
+						GridPane gridPane = new GridPane();
+						gridPane.setHgap(10);
+						gridPane.setVgap(10);
+						gridPane.setPadding(new Insets(20, 150, 10, 10));
 
-							Msg.Message("Найдены ошибки, скоро откроется файл с описанием.");
+						DatePicker dt = new DatePicker();
+						dt.setPrefWidth(120);
+						dt.setValue(NOW_LOCAL_DATE());
 
-							Statement sqlStatement = conn.createStatement();
-							String readRecordSQL = "SELECT * FROM Z_SB_MMBANK_LOG WHERE sess_id = "
-									+ STMT.getSelectionModel().getSelectedItem().getID();
-							ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
+						gridPane.add(new Label("Дата проведения:"), 0, 0);
+						gridPane.add(dt, 1, 0);
 
-							DateFormat dateFormat_ = new SimpleDateFormat("dd.MM.yyyy HH");
-							String strDate_ = dateFormat_.format(date);
-							String createfolder = System.getenv("TRANSACT_PATH") + "Files/" + strDate_ + "_FileID_"
-									+ STMT.getSelectionModel().getSelectedItem().getID();
+						dialog.getDialogPane().setContent(gridPane);
 
-							File file = new File(createfolder);
-							if (!file.exists()) {
-								if (file.mkdir()) {
-								} else {
-									Msg.Message("Ошибка формаирования папки! = " + createfolder);
+						Platform.runLater(() -> dt.requestFocus());
+						// Convert the result to
+						// clicked.
+//						dialog.setResultConverter(dialogButton -> {
+//							if (dialogButton == loginButtonType) {
+//								return new Pair<>(dt.getValue(), dt.getValue());
+//							}
+//							return null;
+//						});
+
+						Optional<Pair<String, String>> result = dialog.showAndWait();
+
+						result.ifPresent(pair -> {
+							final Alert alert2 = new Alert(AlertType.CONFIRMATION, "Сформировать ?", ButtonType.YES,
+									ButtonType.NO);
+							if (su.sbra.psv.app.sbalert.Msg.setDefaultButton(alert2, ButtonType.NO).showAndWait()
+									.orElse(ButtonType.NO) == ButtonType.YES) {
+								try {
+
+									DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH-mm-ss");
+									String strDate = dateFormat.format(date);
+
+									CallableStatement callStmt = conn
+											.prepareCall("{ ? = call z_sb_create_tr_amra.Reg2DP(?,?)}");
+									callStmt.registerOutParameter(1, Types.VARCHAR);
+									callStmt.setLong(2, STMT.getSelectionModel().getSelectedItem().getID());
+									callStmt.setDate(3, java.sql.Date.valueOf(dt.getValue()));
+									callStmt.execute();
+
+									Integer rowid = 1;
+
+									if (!callStmt.getString(1).equals("OK")) {
+
+										Msg.Message("Найдены ошибки, скоро откроется файл с описанием.");
+
+										Statement sqlStatement = conn.createStatement();
+										String readRecordSQL = "SELECT * FROM Z_SB_MMBANK_LOG WHERE sess_id = "
+												+ STMT.getSelectionModel().getSelectedItem().getID();
+										ResultSet myResultSet = sqlStatement.executeQuery(readRecordSQL);
+
+										DateFormat dateFormat_ = new SimpleDateFormat("dd.MM.yyyy HH");
+										String strDate_ = dateFormat_.format(date);
+										String createfolder = System.getenv("TRANSACT_PATH") + "Files/" + strDate_
+												+ "_FileID_" + STMT.getSelectionModel().getSelectedItem().getID();
+
+										File file = new File(createfolder);
+										if (!file.exists()) {
+											if (file.mkdir()) {
+											} else {
+												Msg.Message("Ошибка формаирования папки! = " + createfolder);
+											}
+										}
+
+										String path_file = createfolder + "\\" + strDate + "_ERROR.txt";
+										PrintWriter writer = new PrintWriter(path_file);
+										while (myResultSet.next()) {
+											writer.write(rowid + " | " + myResultSet.getTimestamp("recdate") + " | "
+													+ myResultSet.getString("desc_") + " | "
+													+ myResultSet.getString("sess_id") + "\r\n");
+											rowid++;
+										}
+										writer.close();
+										ProcessBuilder pb = new ProcessBuilder("Notepad.exe",
+												createfolder + "\\" + strDate + "_ERROR.txt");
+										pb.start();
+										myResultSet.close();
+										callStmt.close();
+										conn.commit();
+
+										InitTable(dateLoad.getValue());
+
+									} else {
+										callStmt.close();
+										conn.commit();
+
+										OpenAbsForm2(STMT.getSelectionModel().getSelectedItem().getID());
+
+										InitTable(dateLoad.getValue());
+									}
+								} catch (Exception e) {
+									DbUtil.Log_Error(e);
+									Main.logger.error(ExceptionUtils.getStackTrace(e));
 								}
 							}
 
-							String path_file = createfolder + "\\" + strDate + "_ERROR.txt";
-							PrintWriter writer = new PrintWriter(path_file);
-							while (myResultSet.next()) {
-								writer.write(rowid + " | " + myResultSet.getTimestamp("recdate") + " | "
-										+ myResultSet.getString("desc_") + " | " + myResultSet.getString("sess_id")
-										+ "\r\n");
-								rowid++;
-							}
-							writer.close();
-							ProcessBuilder pb = new ProcessBuilder("Notepad.exe",
-									createfolder + "\\" + strDate + "_ERROR.txt");
-							pb.start();
-							myResultSet.close();
-							callStmt.close();
-							conn.commit();
-
-							InitTable(dateLoad.getValue());
-
-						} else {
-							callStmt.close();
-							conn.commit();
-
-							OpenAbsForm2(STMT.getSelectionModel().getSelectedItem().getID());
-
-							InitTable(dateLoad.getValue());
-						}
+						});
 
 					} else {
 						Msg.Message("Файле уже " + STMT.getSelectionModel().getSelectedItem().getSTATUS());
@@ -1033,8 +1129,8 @@ public class SverkaC {
 			if (STMT.getSelectionModel().getSelectedItem() != null) {
 				AMRA_STMT_CALC selrow = STMT.getSelectionModel().getSelectedItem();
 
-				final Alert alert = new Alert(AlertType.CONFIRMATION,
-						"Удалить файл \"" + selrow.getID() + "\" ?", ButtonType.YES, ButtonType.NO);
+				final Alert alert = new Alert(AlertType.CONFIRMATION, "Удалить файл \"" + selrow.getID() + "\" ?",
+						ButtonType.YES, ButtonType.NO);
 
 				if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
 

@@ -56,6 +56,32 @@
                </Tooltip>
             </tooltip>
          </Button>
+         <Separator layoutX="228.0" layoutY="10.0" orientation="VERTICAL" />
+         <Button layoutX="238.0" layoutY="11.0" mnemonicParsing="false" onAction="#Link">
+            <graphic>
+               <FontAwesomeIconView fontSmoothingType="LCD" glyphName="EXTERNAL_LINK" size="15" />
+            </graphic>
+            <tooltip>
+               <Tooltip text="Показать в отложенных">
+                  <font>
+                     <Font size="14.0" />
+                  </font>
+               </Tooltip>
+            </tooltip>
+         </Button>
+         <Separator layoutX="270.0" layoutY="10.0" orientation="VERTICAL" />
+         <Button layoutX="238.0" layoutY="11.0" mnemonicParsing="false" onAction="#Refresh">
+            <graphic>
+               <FontAwesomeIconView fontSmoothingType="LCD" glyphName="REFRESH" size="15" />
+            </graphic>
+            <tooltip>
+               <Tooltip text="Обновить">
+                  <font>
+                     <Font size="14.0" />
+                  </font>
+               </Tooltip>
+            </tooltip>
+         </Button>
 		</items>
       <VBox.margin>
          <Insets left="-5.0" right="-5.0" top="-5.0" />
