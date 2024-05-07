@@ -71,36 +71,36 @@ public class Main extends Application {
 				splash.close();
 			}
 
-//			if (MODULE == null) {
-//				Logon();
-//			} else if (MODULE.equals("DEBTINFO")) {
-//				DBUtil.dbConnect();
-//				DbUtil.Db_Connect();
-//				Debtinfo();
-//			} else if (MODULE.equals("BUH")) {
-//				DBUtil.dbConnect();
-//				DbUtil.Db_Connect();
-//				InitAppRootLayout();
-//				ShFirstView();
-//			} else if (MODULE.equals("SWIFT")) {
-//				DBUtil.dbConnect();
-//				DbUtil.Db_Connect();
-//				SwiftFromMenu();
-//			} else if (MODULE.equals("VTB_CONV")) {
-//				DBUtil.dbConnect();
-//				DbUtil.Db_Connect();
-//				ConvVal();
-//			} else if (MODULE.equals("IBANK1C")) {
-//				DBUtil.dbConnect();
-//				DbUtil.Db_Connect();
-//				TermClBkSverkaMenu();
-//			}
+			if (MODULE == null) {
+				Logon();
+			} else if (MODULE.equals("DEBTINFO")) {
+				DBUtil.dbConnect();
+				DbUtil.Db_Connect();
+				Debtinfo();
+			} else if (MODULE.equals("BUH")) {
+				DBUtil.dbConnect();
+				DbUtil.Db_Connect();
+				InitAppRootLayout();
+				ShFirstView();
+			} else if (MODULE.equals("SWIFT")) {
+				DBUtil.dbConnect();
+				DbUtil.Db_Connect();
+				SwiftFromMenu();
+			} else if (MODULE.equals("VTB_CONV")) {
+				DBUtil.dbConnect();
+				DbUtil.Db_Connect();
+				ConvVal();
+			} else if (MODULE.equals("IBANK1C")) {
+				DBUtil.dbConnect();
+				DbUtil.Db_Connect();
+				TermClBkSverkaMenu();
+			}
 
 			{
-				Connect.connectionURL_ = "10.111.64.21:1521/ODB";
-				Connect.userID_ = "SAIDP";
-				Connect.userPassword_ = "vector165";
-				TermClBkSverkaMenu();
+//				Connect.connectionURL_ = "10.111.64.21:1521/ODB";
+//				Connect.userID_ = "SAIDP";
+//				Connect.userPassword_ = "";
+//				TermClBkSverkaMenu();
 //				DbUtil.Db_Connect();
 //				DBUtil.dbConnect();
 //				InitAppRootLayout();

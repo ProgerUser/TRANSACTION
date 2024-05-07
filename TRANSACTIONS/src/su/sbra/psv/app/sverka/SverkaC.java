@@ -313,9 +313,11 @@ public class SverkaC {
 						attr.setValue(line.substring(line.indexOf("=") + 1, line.length()));
 						doc.setAttributeNode(attr);
 					} else if (line.contains("=") && line.substring(0, line.indexOf("=")).equals("Получатель")) {
-						Attr attr = document.createAttribute("Получатель");
-						attr.setValue(line.substring(line.indexOf("=") + 1, line.length()));
-						doc.setAttributeNode(attr);
+						if (!line.substring(line.indexOf("=") + 1, line.length()).equals("1С:Бухгалтерия")) {
+							Attr attr = document.createAttribute("Получатель");
+							attr.setValue(line.substring(line.indexOf("=") + 1, line.length()));
+							doc.setAttributeNode(attr);
+						}
 					} else if (line.contains("=") && line.substring(0, line.indexOf("=")).equals("Получатель1")) {
 						Attr attr = document.createAttribute("Получатель1");
 						attr.setValue(line.substring(line.indexOf("=") + 1, line.length()));
