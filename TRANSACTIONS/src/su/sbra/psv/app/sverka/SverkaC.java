@@ -159,8 +159,7 @@ public class SverkaC {
 					TXT.setString(1, reviewStr);
 					Clob XML = conn.createClob();
 					XML.setString(1, xml);
-					CallableStatement callStmt = conn
-							.prepareCall("{ ? = call z_sb_create_tr_amra.AMRA_STMT_EXEC(?,?,?,?)");
+					CallableStatement callStmt = conn.prepareCall("{ ? = call Calc1c.LoadFile(?,?,?,?)");
 					callStmt.registerOutParameter(1, Types.VARCHAR);
 					callStmt.setClob(2, TXT);
 					callStmt.registerOutParameter(3, Types.INTEGER);
@@ -850,74 +849,6 @@ public class SverkaC {
 		}
 	}
 
-//	/**
-//	 * 
-//	 * @param event
-//	 */
-//	@FXML
-//	void Check(ActionEvent event) {
-//		try {
-//			if (STMT.getSelectionModel().getSelectedItem() != null) {
-//				String pattern_ = "###,###.###";
-//				DecimalFormat decimalFormat_ = new DecimalFormat(pattern_);
-//
-//				String error = "";
-//				AMRA_STMT_CALC rec = STMT.getSelectionModel().getSelectedItem();
-//				PreparedStatement prepStmt = conn.prepareStatement(
-//						"select distinct DT_DATE from AMRA_STMT_CALC_ROW where FILE_ID = ? order by DT_DATE");
-//				prepStmt.setInt(1, rec.getID());
-//				ResultSet rs = prepStmt.executeQuery();
-//				while (rs.next()) {
-//					{
-//						PreparedStatement prepStmt1 = conn.prepareStatement(
-//								"select ST_ID, ST_DATE, ST_SUM from table(z_sb_create_tr_amra.STMT_CHECK(?))");
-//						prepStmt1.setDate(1, rs.getDate("DT_DATE"));
-//						ResultSet rs1 = prepStmt1.executeQuery();
-//						while (rs1.next()) {
-//							error = error + "Ошибка за "
-//									+ new SimpleDateFormat("dd.MM.yyyy").format(rs1.getDate("ST_DATE")) + " на сумму "
-//									+ decimalFormat_.format(rs1.getDouble("ST_SUM")) + "\r\n";
-//						}
-//						prepStmt1.close();
-//						rs1.close();
-//					}
-//					{
-//						SqlMap sql = new SqlMap().load("/Sverka.xml");
-//						String readRecordSQL = sql.getSql("GetVector");
-//						PreparedStatement prepStmt1 = conn.prepareStatement(readRecordSQL);
-//						prepStmt1.setDate(1, rs.getDate("DT_DATE"));
-//						prepStmt1.setDate(2, rs.getDate("DT_DATE"));
-//						prepStmt1.setDate(3, rs.getDate("DT_DATE"));
-//						prepStmt1.setDate(4, rs.getDate("DT_DATE"));
-//						prepStmt1.setDate(5, rs.getDate("DT_DATE"));
-//						prepStmt1.setDate(6, rs.getDate("DT_DATE"));
-//						ResultSet rs1 = prepStmt1.executeQuery();
-//						while (rs1.next()) {
-//							error = error + "Расшифровка Дата "
-//									+ new SimpleDateFormat("dd.MM.yyyy").format(rs1.getDate("DT")) + " сумму "
-//									+ decimalFormat_.format(rs1.getDouble("SUMM")) + " Направление "
-//									+ rs1.getString("N") + "\r\n";
-//						}
-//						prepStmt1.close();
-//						rs1.close();
-//					}
-//				}
-//				prepStmt.close();
-//				rs.close();
-//
-//				if (!error.equals("")) {
-//
-//					ShowError(rec.getID(), error);
-//				}
-//			} else {
-//				Msg.Message("Выберите строку!");
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			Msg.Message(ExceptionUtils.getStackTrace(e));
-//		}
-//	}
-
 	/**
 	 * Открыть отложенные документы
 	 * 
@@ -1047,8 +978,7 @@ public class SverkaC {
 									DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH-mm-ss");
 									String strDate = dateFormat.format(date);
 
-									CallableStatement callStmt = conn
-											.prepareCall("{ ? = call z_sb_create_tr_amra.Reg2DP(?,?)}");
+									CallableStatement callStmt = conn.prepareCall("{ ? = call Calc1c.Reg2DP(?,?)}");
 									callStmt.registerOutParameter(1, Types.VARCHAR);
 									callStmt.setLong(2, STMT.getSelectionModel().getSelectedItem().getID());
 									callStmt.setDate(3, java.sql.Date.valueOf(dt.getValue()));
@@ -1136,7 +1066,7 @@ public class SverkaC {
 
 				if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
 
-					CallableStatement callStmt = conn.prepareCall("{ call z_sb_create_tr_amra.DEL_LOAD(?,?)}");
+					CallableStatement callStmt = conn.prepareCall("{ call Calc1c.DEL_LOAD(?,?)}");
 					callStmt.registerOutParameter(1, Types.VARCHAR);
 					callStmt.setLong(2, selrow.getID());
 					// catch
