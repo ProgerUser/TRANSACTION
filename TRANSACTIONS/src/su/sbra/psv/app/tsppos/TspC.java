@@ -39,6 +39,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.util.converter.DoubleStringConverter;
+import javafx.util.converter.LocalDateStringConverter;
+import javafx.util.converter.LocalDateTimeStringConverter;
+import javafx.util.converter.LongStringConverter;
 import su.sbra.psv.app.contact.SBRA_CONTACT_ACC_CODE;
 import su.sbra.psv.app.main.Main;
 import su.sbra.psv.app.model.Amra_Trans;
@@ -130,19 +134,20 @@ public class TspC {
 	@FXML
 	private TableColumn<SBRA_TSP_POS, Long> TERM_KTM;
 	@FXML
+	private TableColumn<SBRA_TSP_POS, Long> ID;
+	@FXML
 	private StatusBar RowCount;
 	@FXML
 	private VBox vbox;
 
 	private Executor exec;
 
-	
 	public void setId(Long temp) {
 		this.seltemp = temp;
 	}
-	
+
 	Long seltemp;
-	
+
 	/**
 	 * Выбор строки
 	 */
@@ -165,7 +170,6 @@ public class TspC {
 			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
-	
 
 	@FXML
 	private void Select() {
@@ -176,8 +180,7 @@ public class TspC {
 			Main.logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
-		
-		
+
 	/**
 	 * Инициализация
 	 */
@@ -194,6 +197,7 @@ public class TspC {
 			});
 
 			TERM_ID.setCellValueFactory(cellData -> cellData.getValue().TERM_IDProperty());
+			ID.setCellValueFactory(cellData -> cellData.getValue().IDProperty().asObject());
 			TERM_MODEL.setCellValueFactory(cellData -> cellData.getValue().TERM_MODELProperty());
 			TERM_REGDATE.setCellValueFactory(cellData -> cellData.getValue().TERM_REGDATEProperty());
 			TERM_SERIAL.setCellValueFactory(cellData -> cellData.getValue().TERM_SERIALProperty());
@@ -210,9 +214,35 @@ public class TspC {
 			CLINAME.setCellValueFactory(cellData -> cellData.getValue().CLINAMEProperty());
 			TERM_KTM.setCellValueFactory(cellData -> cellData.getValue().TERM_KTMProperty().asObject());
 			TERM_TYPE.setCellValueFactory(cellData -> cellData.getValue().TERM_TYPE_SProperty());
-			
+
+			ID.setCellFactory(TextFieldTableCell.<SBRA_TSP_POS, Long>forTableColumn(new LongStringConverter()));
+			TERM_INTEGRATION
+					.setCellFactory(TextFieldTableCell.<SBRA_TSP_POS, Long>forTableColumn(new LongStringConverter()));
+			TERM_KTM.setCellFactory(TextFieldTableCell.<SBRA_TSP_POS, Long>forTableColumn(new LongStringConverter()));
+
+			TERM_REGDATE.setCellFactory(
+					TextFieldTableCell.<SBRA_TSP_POS, LocalDate>forTableColumn(new LocalDateStringConverter()));
+
+			TERM_MODEL.setCellFactory(TextFieldTableCell.forTableColumn());
+			TERM_ID.setCellFactory(TextFieldTableCell.forTableColumn());
+			TERM_SERIAL.setCellFactory(TextFieldTableCell.forTableColumn());
+			TERM_ADDR.setCellFactory(TextFieldTableCell.forTableColumn());
+			TERM_SERIAL.setCellFactory(TextFieldTableCell.forTableColumn());
+			TERM_SIM_OPER.setCellFactory(TextFieldTableCell.forTableColumn());
+			TERM_SIM_NUMBER.setCellFactory(TextFieldTableCell.forTableColumn());
+			TERM_SIM_IP.setCellFactory(TextFieldTableCell.forTableColumn());
+			TERM_COMMENT.setCellFactory(TextFieldTableCell.forTableColumn());
+			TERM_PORTHOST.setCellFactory(TextFieldTableCell.forTableColumn());
+			TERM_GEO.setCellFactory(TextFieldTableCell.forTableColumn());
+			TERM_IPIFNOTSIM.setCellFactory(TextFieldTableCell.forTableColumn());
+
+			TERM_IPIFNOTSIM.setCellFactory(TextFieldTableCell.forTableColumn());
+			CLIACC.setCellFactory(TextFieldTableCell.forTableColumn());
+			CLINAME.setCellFactory(TextFieldTableCell.forTableColumn());
+			TERM_TYPE.setCellFactory(TextFieldTableCell.forTableColumn());
+
 			//
-			LoadTable();
+
 			//
 			termList.setRowFactory(tv -> {
 				TableRow<SBRA_TSP_POS> row = new TableRow<>();
@@ -229,21 +259,47 @@ public class TspC {
 					seltemp = termList.getSelectionModel().getSelectedItem().getID();
 				}
 			});
-			TableColumnDate(TERM_REGDATE);
-			
+
+			// TableColumnDate(TERM_REGDATE);
+
+			/*TERM_REGDATE.setCellFactory(column -> {
+				TableCell<SBRA_TSP_POS, LocalDate> cell = new TableCell<SBRA_TSP_POS, LocalDate>() {
+					private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+
+					@Override
+					protected void updateItem(LocalDate item, boolean empty) {
+						super.updateItem(item, empty);
+						if (empty) {
+							setText(null);
+						} else {
+							setText(format.format(item));
+						}
+					}
+				};
+				return cell;
+			});*/
+
+			/*Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					LoadTable();
+				}
+			});*/
+			LoadTable();
+
 		} catch (Exception e) {
 			DbUtil.Log_Error(e);
 			Main.logger.error(ExceptionUtils.getStackTrace(e));
 			Main.logger.error(ExceptionUtils.getStackTrace(e) + "~" + Thread.currentThread().getName());
 		}
 	}
-	
+
 	/**
 	 * Формат <br>
 	 * dd.MM.yyyy
 	 */
 	public static final DateTimeFormatter DateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-	
+
 	/**
 	 * Форматирование столбцов <br>
 	 * dd.MM.yyyy
@@ -342,13 +398,12 @@ public class TspC {
 				final Alert alert = new Alert(AlertType.CONFIRMATION, "Удалить \"" + sel.getTERM_ID() + "\" ?",
 						ButtonType.YES, ButtonType.NO);
 				if (Msg.setDefaultButton(alert, ButtonType.NO).showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
-					
-					PreparedStatement prp = DBUtil.conn.prepareStatement(
-							"delete from  SBRA_TSP_POS  WHERE ID = ?");
+
+					PreparedStatement prp = DBUtil.conn.prepareStatement("delete from  SBRA_TSP_POS  WHERE ID = ?");
 					prp.setLong(1, sel.getID());
 					prp.executeUpdate();
 					prp.close();
-					
+
 					DBUtil.conn.commit();
 					LoadTable();
 				}
@@ -372,12 +427,12 @@ public class TspC {
 		});
 		RowCount.setText("Кол-во строк: " + rowCount);
 	}
-	
+
 	/**
 	 * Количество строк
 	 */
 	private int rowCount = 0;
-	
+
 	/**
 	 * Initialize table
 	 */
@@ -433,7 +488,7 @@ public class TspC {
 			});
 			// resize
 			autoResizeColumns(termList);
-			
+
 			setRowCount();
 		} catch (Exception e) {
 			DbUtil.Log_Error(e);
@@ -443,6 +498,7 @@ public class TspC {
 
 	/**
 	 * Редактировать
+	 * 
 	 * @param actionEvent_
 	 */
 	@FXML
@@ -492,6 +548,7 @@ public class TspC {
 
 	/**
 	 * Добавить терминал
+	 * 
 	 * @param actionEvent_
 	 */
 	@FXML

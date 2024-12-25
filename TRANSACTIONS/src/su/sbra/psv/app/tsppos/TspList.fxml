@@ -89,6 +89,7 @@
 					<columns>
 						<TableColumn prefWidth="507.0" text="Данные устройства">
             <columns>
+               <TableColumn fx:id="ID" text="ИД" />
                <TableColumn fx:id="TERM_ID" text="ID" />
                <TableColumn fx:id="TERM_MODEL" text="Модель" />
                <TableColumn fx:id="TERM_SERIAL" text="Серийный номер" />
