@@ -1766,7 +1766,8 @@ public class PensC {
 								+ "           where type_ = 'FIN'\n" + "             and ID_ = "+pens.getLOAD_ID()+")\n"
 								+ "     and ITRNBATNUM = 997)\n" + "select otd,\n" + "       sum(MTRNRSUM) comm,\n"
 								+ "       count(MTRNRSUM) * 5 comm_mt,\n" + "       count(MTRNRSUM) * 1 comm_ba,\n"
-								+ "       sum(MTRNRSUM) - count(MTRNRSUM) * 5 - count(MTRNRSUM) * 1 comm_sb\n"
+								+ "       sum(MTRNRSUM) - count(MTRNRSUM) * 5 - count(MTRNRSUM) * 1 comm_sb,\n"
+								+ "       COUNT(MTRNRSUM) CNT\n"
 								+ "  from data_v\n" + " group by otd\n" + " order by otd\n";
 					}else {
 						createfolder = file.getParent() + "\\Комиссия_" + load_id + ".xlsx";
@@ -1778,11 +1779,13 @@ public class PensC {
 								+ "           where type_ = 'FIN'\n" + "             and ID_ in "+load_id+")\n"
 								+ "     and ITRNBATNUM = 997)\n" + "select otd,\n" + "       sum(MTRNRSUM) comm,\n"
 								+ "       count(MTRNRSUM) * 5 comm_mt,\n" + "       count(MTRNRSUM) * 1 comm_ba,\n"
-								+ "       sum(MTRNRSUM) - count(MTRNRSUM) * 5 - count(MTRNRSUM) * 1 comm_sb\n"
+								+ "       sum(MTRNRSUM) - count(MTRNRSUM) * 5 - count(MTRNRSUM) * 1 comm_sb,\n"
+								+ "       COUNT(MTRNRSUM) CNT\n"
 								+ "  from data_v\n" + " group by otd\n" + " order by otd\n";
 					}
 					
 					System.out.println(createfolder);
+					System.out.println(sql);
 					
 					PrgInd.setVisible(true);
 					PENS_LOAD_ROWSUM.setDisable(true);
@@ -1803,6 +1806,7 @@ public class PensC {
 								row.createCell(2).setCellValue("COMM_MT");
 								row.createCell(3).setCellValue("COMM_BA");
 								row.createCell(4).setCellValue("COMM_SB");
+								row.createCell(5).setCellValue("CNT");
 
 								int i = 0;
 								while (rs.next()) {
@@ -1812,6 +1816,7 @@ public class PensC {
 									row.createCell(2).setCellValue(rs.getDouble("COMM_MT"));
 									row.createCell(3).setCellValue(rs.getDouble("COMM_BA"));
 									row.createCell(4).setCellValue(rs.getDouble("COMM_SB"));
+									row.createCell(5).setCellValue(rs.getInt("CNT"));
 									i++;
 								}
 
